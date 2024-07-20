@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/spotgradient"
+    tools:context=".login.StartLoginActivity">
+
+    <ImageView
+        android:id="@+id/startlogin_iv"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        android:src="@drawable/spot_logo"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/startstudy_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/studystart"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/startlogin_iv"/>
+
+    <TextView
+        android:id="@+id/studyrequest_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/startlogin"
+        android:text="스터디 신청 완료!"
+        android:alpha="0.5"
+        android:textSize="9sp"
+        android:textColor="#186AFF"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toBottomOf="@id/startstudy_tv"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/studyrecommand_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/startlogin"
+        android:text="오늘은 카공을 추천해요."
+        android:alpha="0.7"
+        android:textSize="10sp"
+        android:textColor="#186AFF"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/studyrequest_et"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/studyaccept_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/startlogin"
+        android:text="스터디 참여가 수락되었어요!"
+        android:textSize="13sp"
+        android:alpha="0.9"
+        android:textColor="#186AFF"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/studyrecommand_et"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <android.widget.Button
+        android:id="@+id/loginwithkakao_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="125dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/examplekakao"
+        android:text="카카오톡으로 계속하기"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/loginwithspot_bt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/studyaccept_et" />
+
+    <android.widget.Button
+        android:id="@+id/loginwithspot_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/loginspot"
+        android:text="회원가입"
+        android:textColor="#186AFF"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginwithkakao_bt" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

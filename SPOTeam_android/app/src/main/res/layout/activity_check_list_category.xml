@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_checklist_tb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        app:navigationIcon="@drawable/ic_arrow">
+
+        <TextView
+            android:id="@+id/activity_checklist_toolbar_title_tv"
+            android:text="체크리스트"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:id="@+id/activity_checklist_checklist_v"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#D8D8D8"
+        app:layout_constraintTop_toBottomOf="@id/activity_checklist_tb"/>
+
+    <TextView
+        android:id="@+id/activity_checklist_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="내가 원하는 스터디 분야는"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_checklist_checklist_v">
+
+    </TextView>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/activity_checklist_chipGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_checklist_tv"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        app:chipSpacingHorizontal="12dp"
+        app:singleLine="false">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_chip_language"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="어학"
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_chip_license"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="자격증"
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_chip_job"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취업"
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_chip_discussion"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="토론"
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_chip_news"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="시사/뉴스"
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_chip_selfstudy"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="자율 학습"
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_chip_project"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="프로젝트"
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_chip_exhibit"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="공모전"
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_chip_major"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전공/진로학습"
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_chip_etc"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기타"
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+    <android.widget.Button
+        android:id="@+id/checklistspot_next_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button_background"
+        android:enabled="false"
+        android:text="다음"
+        android:textColor="@drawable/button_textcolor"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

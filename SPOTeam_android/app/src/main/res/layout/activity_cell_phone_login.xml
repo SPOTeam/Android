@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_startlogin_tb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        app:navigationIcon="@drawable/ic_arrow">
+
+        <TextView
+            android:id="@+id/activity_startlogin_tbtitle_tv"
+            android:text="휴대폰 본인확인"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#D8D8D8"
+        app:layout_constraintTop_toBottomOf="@id/activity_startlogin_tb"/>
+
+
+
+    <TextView
+        android:id="@+id/authentication_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:text="안전한 서비스를 위해 전화번호를 인증해주세요"
+        android:textColor="#2D2D2D"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_startlogin_tb" />
+
+    <LinearLayout
+        android:id="@+id/activity_startlogin_id_text_input_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/authentication_tv"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/activity_startlogin_id_text_input_et"
+            android:hint="이름"
+            android:maxLines="1"
+            android:inputType="text"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:background="@drawable/edittext_rounded_corner_rectangle"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </EditText>
+        <Spinner
+            android:id="@+id/activity_startlogin_nationality_sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_spinner_foreigner"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/birth_text_input_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/activity_startlogin_id_text_input_ll"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/activity_birth_text_input_et"
+            android:hint="생년월일 (YYYYMMDD)"
+            android:maxLines="1"
+            android:inputType="number"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:background="@drawable/edittext_rounded_corner_rectangle"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </EditText>
+        <Spinner
+            android:id="@+id/activity_startlogin_mf_sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_spinner_foreigner"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_startlogin_agency_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/birth_text_input_ll"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/activity_startlogin_agency_sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_spinner_foreigner"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_startlogin_phonenumber_num_input_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/activity_startlogin_agency_ll"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/activity_startlogin_phonenumber_num_input_et"
+            android:hint="-없이 입력"
+            android:maxLines="1"
+            android:inputType="number"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:background="@drawable/edittext_rounded_corner_rectangle"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </EditText>
+
+        <android.widget.Button
+            android:id="@+id/activity_startlogin_authentication_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="인증번호 요청"
+            android:maxLines="1"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="13sp"
+            android:textColor="#186AFF"
+            android:background="@drawable/certification_number"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_startlogin_certificationnumber_num_input_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/activity_startlogin_phonenumber_num_input_ll"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/activity_startlogin_certificationnumber_num_input_et"
+            android:hint="문자로 전송된 4자리 입력"
+            android:maxLines="1"
+            android:inputType="number"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:background="@drawable/edittext_rounded_corner_rectangle"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </EditText>
+
+        <android.widget.Button
+            android:id="@+id/activity_startlogin_uthentication_result_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="인증번호 확인"
+            android:maxLines="1"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="13sp"
+            android:textColor="#186AFF"
+            android:background="@drawable/certification_number"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/activity_startlogin_check_certification_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인증번호를 다시 확인해주세요."
+        android:visibility="gone"
+        android:textSize="13sp"
+        android:textColor="#F46258"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_startlogin_certificationnumber_num_input_ll"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:background="#F8F8F8"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@id/activity_startlogin_circle_tv"/>
+
+    <TextView
+        android:id="@+id/activity_startlogin_circle_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="약관 동의"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/activity_startlogin_check_box1_ll"
+        android:layout_marginBottom="10dp"/>
+
+
+
+    <RelativeLayout
+        android:id="@+id/activity_startlogin_check_box1_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/edittext_rounded_corner_rectangle"
+        app:layout_constraintBottom_toTopOf="@id/activity_startlogin_check_box2_ll">
+
+        <CheckBox
+            android:id="@+id/activity_startlogin_check_box1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:button="@null"
+            android:layout_margin="7dp"
+            android:background="@drawable/custom_checkbox"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="개인정보 이용 및 활용 동의"
+            android:textColor="@color/black"
+            android:layout_toEndOf="@id/activity_startlogin_check_box1"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="7dp"
+            android:layout_marginEnd="7dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_down"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="7dp"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/activity_startlogin_check_box2_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/edittext_rounded_corner_rectangle"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintBottom_toTopOf="@id/activity_startlogin_loginwithspot_next_bt">
+
+        <CheckBox
+            android:id="@+id/activity_startlogin_check_box2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:button="@null"
+            android:layout_margin="7dp"
+            android:background="@drawable/custom_checkbox"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/activity_startlogin_text_view_checkbox2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="고유식별정보 처리동의"
+            android:textColor="@color/black"
+            android:layout_toEndOf="@id/activity_startlogin_check_box2"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="7dp"
+            android:layout_marginEnd="7dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_down"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="7dp"/>
+
+    </RelativeLayout>
+
+
+
+
+    <android.widget.Button
+        android:id="@+id/activity_startlogin_loginwithspot_next_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button_background"
+        android:enabled="false"
+        android:text="다음"
+        android:textColor="@drawable/button_textcolor"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_checklist_studypurpose_tb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        app:navigationIcon="@drawable/ic_arrow">
+
+        <TextView
+            android:id="@+id/activity_checklist_studypurpose_title_tv"
+            android:text="체크리스트"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:id="@+id/activity_checklist_studypurpose_checklist_v"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#D8D8D8"
+        app:layout_constraintTop_toBottomOf="@id/activity_checklist_studypurpose_tb"/>
+
+    <TextView
+        android:id="@+id/activity_checklist_studypurpose_checklist_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="내가 원하는 스터디 분야는"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_checklist_studypurpose_checklist_v"/>
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexbox_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_checklist_studypurpose_checklist_tv"
+        app:flexDirection="column"
+        app:justifyContent="flex_start"
+        app:flexWrap="nowrap">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_studypurpose_chip_language"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="동기부여가 필요해요."
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_studypurpose_chip_license"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="스터디원이 필요해요."
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_studypurpose_chip_job"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="혼자서 하기엔 의지가 부족해요."
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_studypurpose_chip_discussion"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="목표를 가진 사람들과 친해지고 싶어요."
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_studypurpose_chip_news"
+            style="@style/CustomChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="다양한 정보를 공유하고, 받고 싶어요."
+            android:textSize="16sp"
+            app:chipStartPadding="15dp"
+            app:chipEndPadding="15dp"
+            app:chipMinHeight="40dp"/>
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <android.widget.Button
+        android:id="@+id/activity_checklist_studypurpose_checklistspot_next_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button_background"
+        android:enabled="false"
+        android:text="다음"
+        android:textColor="@drawable/button_textcolor"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
