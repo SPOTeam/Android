@@ -1,0 +1,226 @@
+[
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-debug-4:/drawable_chip_background_selector.xml.flat",
+        "source": "com.example.spoteam_android.app-main-6:/drawable/chip_background_selector.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_fragment_house.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\fragment_house.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_ic_home.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\ic_home.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\menu_bottom_nav_menu.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\menu\\bottom_nav_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_ic_notifications_black_24dp.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\ic_notifications_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_chip_backgrond_selector.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\chip_backgrond_selector.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-anydpi\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_ic_dashboard_black_24dp.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\ic_dashboard_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_ic_home_black_24dp.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\ic_home_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_chip_text_selector.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\chip_text_selector.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_fragment_notifications.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\fragment_notifications.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_fragment_category.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\fragment_category.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_study_spot_logo.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\study_spot_logo.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_ic_jjim.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\ic_jjim.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_set_condition.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\set_condition.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_activity_interest.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\activity_interest.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_study_setcondition_activate.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\study_setcondition_activate.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_study_bar.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\study_bar.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_gender_spinner_background.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\gender_spinner_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_fragment_home.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-anydpi\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_fragment_study.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\fragment_study.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_item_recycler_view.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\item_recycler_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_fragment_dashboard.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\fragment_dashboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_set_condition_02.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\set_condition_02.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_study_view.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\study_view.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_ic_category.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\ic_category.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_ic_study.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\ic_study.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_round_background.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\round_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\menu_bottom_nav_menu2.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\menu\\bottom_nav_menu2.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_study_setcondition_deactivate.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\study_setcondition_deactivate.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_fragment_my_page.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\fragment_my_page.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_activity_interest_filter.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\activity_interest_filter.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\layout_fragment_bookmark.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\layout\\fragment_bookmark.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_ic_mypage.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\ic_mypage.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_study_big_people.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\study_big_people.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\navigation_mobile_navigation.xml.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\navigation\\mobile_navigation.xml"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_study_arrow_drop_down.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\study_arrow_drop_down.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_spotlogo.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\spotlogo.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_study_small_people.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\study_small_people.png"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-debug-4:\\drawable_study_like.png.flat",
+        "source": "C:\\Users\\veen0.DESKTOP-0RCOBHP\\.gradle\\daemon\\8.7\\com.example.spoteam_android.app-main-6:\\drawable\\study_like.png"
+    }
+]

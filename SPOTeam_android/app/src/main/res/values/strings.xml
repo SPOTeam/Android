@@ -1,6 +1,24 @@
 <resources>
-    <string name="app_name">SPOTeam_android</string>
+    <string name="app_name">Spot</string>
+    <string name="title_activity_interest_study">Interest_Study</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="interest_study">관심 지역 스터디</string>
+    <string-array name="signup_select_region">
+        <item>누구나</item>
+        <item>남성</item>
+        <item>여성</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_interest">InterestActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
