@@ -15,6 +15,9 @@
         android:theme="@style/Theme.SPOTeam_android"
         tools:targetApi="31">
         <activity
+            android:name=".InterestFilterActivity"
+            android:exported="false" />
+        <activity
             android:name=".login.LogoutActivity"
             android:exported="false">
             <meta-data
@@ -52,6 +55,15 @@
         <activity
             android:name=".login.StartLoginActivity"
             android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".InterestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InterestFilterActivity"
+            android:exported="true"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?attr/actionBarSize">
+
+
+    <ImageView
+        android:id="@+id/ImageView1"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/study_spot_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textview1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="250dp"
+        android:text="@string/interest_study"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tabs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ImageView1" />
+
+    <ImageView
+        android:id="@+id/ImageView2"
+        android:layout_width="64dp"
+        android:layout_height="33dp"
+        android:layout_gravity="end"
+        android:layout_marginStart="200dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="14dp"
+        android:src="@drawable/study_setcondition_deactivate"
+        app:layout_constraintBottom_toTopOf="@+id/rv_board"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabs" />
+
+    <ImageView
+        android:id="@+id/ImageView4"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end"
+        android:layout_marginBottom="14dp"
+        android:src="@drawable/study_bar"
+        app:layout_constraintBottom_toTopOf="@+id/rv_board"
+        app:layout_constraintEnd_toStartOf="@+id/textview2"
+        app:layout_constraintStart_toEndOf="@+id/ImageView2"
+        app:layout_constraintTop_toBottomOf="@+id/tabs" />
+
+    <TextView
+        android:id="@+id/textview2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="37dp"
+        android:text="전체"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/rv_board"
+        app:layout_constraintEnd_toStartOf="@+id/ImageView3"
+        app:layout_constraintStart_toEndOf="@+id/ImageView2"
+        app:layout_constraintTop_toBottomOf="@+id/tabs" />
+
+    <ImageView
+        android:id="@+id/ImageView3"
+        android:layout_width="64dp"
+        android:layout_height="33dp"
+        android:layout_gravity="end"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="14dp"
+        android:src="@drawable/study_arrow_drop_down"
+        app:layout_constraintBottom_toTopOf="@+id/rv_board"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ImageView2"
+        app:layout_constraintTop_toBottomOf="@+id/tabs" />
+
+
+
+    <!--    <androidx.appcompat.widget.Toolbar-->
+    <!--        android:id="@+id/toolbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:background="@color/white"-->
+    <!--        android:elevation="1dp"-->
+    <!--        android:theme="@style/ThemeOverlay.AppCompat.Dark"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/textview1">-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/titleText1"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:padding="10dp"-->
+    <!--            android:text="전체"-->
+    <!--            android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="15sp"-->
+    <!--            android:textStyle="bold" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/titleText2"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:padding="10dp"-->
+    <!--            android:text="경기 수원시"-->
+    <!--            android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="15sp"-->
+    <!--            android:textStyle="bold" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/titleText3"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:padding="10dp"-->
+    <!--            android:text="경기 안산시"-->
+    <!--            android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="15sp"-->
+    <!--            android:textStyle="bold" />-->
+
+    <!--    </androidx.appcompat.widget.Toolbar>-->
+
+    <!--    <com.google.android.material.appbar.AppBarLayout-->
+    <!--        android:id="@+id/appBarLayout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="2dp"-->
+    <!--        android:layout_marginBottom="30dp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/rv_board"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/ImageView1">-->
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="111dp"
+        app:layout_constraintBottom_toTopOf="@+id/ImageView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview1"
+        app:tabIndicatorColor="#1B78F2"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="4dp"
+        app:tabTextColor="@color/black">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전체"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="경기 수원시"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="경기 안산시"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+
+    <!--    </com.google.android.material.appbar.AppBarLayout>-->
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_board"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview1"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/item_recycler_view" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
