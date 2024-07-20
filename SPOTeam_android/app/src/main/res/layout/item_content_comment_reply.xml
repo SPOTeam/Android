@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/comment_reply"
+    android:paddingBottom="10dp">
+
+
+    <!--    화살표 이미지 변경    -->
+    <ImageView
+        android:id="@+id/community_content_comment_reply_arrow_iv"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@color/black"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <!--    프로필 이미지 변경    -->
+    <ImageView
+        android:id="@+id/community_content_comment_reply_profile_iv"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@color/black"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toEndOf="@id/community_content_comment_reply_arrow_iv"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/community_content_comment_reply_writer_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="익명"
+        android:textSize="19sp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toEndOf="@id/community_content_comment_reply_profile_iv"
+        app:layout_constraintTop_toTopOf="@id/community_content_comment_reply_profile_iv" />
+
+
+
+
+    <TextView
+        android:id="@+id/community_content_comment_reply_str_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="카카오 최종합격"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="25dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/community_content_comment_reply_profile_iv"
+        app:layout_constraintTop_toBottomOf="@id/community_content_comment_reply_profile_iv" />
+
+
+    <TextView
+        android:id="@+id/community_content_comment_reply_writeComment_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="답글쓰기"
+        android:textSize="13sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/community_content_comment_reply_str_tv"
+        app:layout_constraintTop_toBottomOf="@id/community_content_comment_reply_str_tv" />
+
+
+    <!--    비추천 이미지 변경    -->
+    <ImageView
+        android:id="@+id/community_content_comment_reply_bad_iv"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:src="@color/black"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/community_content_comment_reply_writeComment_tv" />
+
+
+    <TextView
+        android:id="@+id/community_content_comment_reply_goodNum_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="6"
+        android:textSize="10sp"
+        android:layout_marginEnd="15dp"
+        android:textColor="@color/selector_blue"
+        app:layout_constraintEnd_toStartOf="@id/community_content_comment_reply_bad_iv"
+        app:layout_constraintTop_toTopOf="@id/community_content_comment_reply_writeComment_tv" />
+
+
+    <!--    추천 이미지 변경    -->
+    <ImageView
+        android:id="@+id/community_content_comment_reply_good_iv"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:src="@color/black"
+        android:layout_marginEnd="2dp"
+        app:layout_constraintEnd_toStartOf="@id/community_content_comment_reply_goodNum_tv"
+        app:layout_constraintTop_toTopOf="@id/community_content_comment_reply_writeComment_tv" />
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
