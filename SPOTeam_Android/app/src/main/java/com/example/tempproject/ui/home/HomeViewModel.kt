@@ -1,4 +1,4 @@
-package com.example.spoteam_android.ui.home
+package com.example.tempproject.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

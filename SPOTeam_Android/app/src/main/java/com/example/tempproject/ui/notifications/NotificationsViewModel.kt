@@ -1,4 +1,4 @@
-package com.example.spoteam_android.ui.notifications
+package com.example.tempproject.ui.notifications
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
