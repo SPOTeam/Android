@@ -1,0 +1,50 @@
+[
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/activity_interest.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/activity_interest.xml"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/fragment_house.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/fragment_house.xml"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/fragment_home.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/item_recycler_view.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/item_recycler_view.xml"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/fragment_notifications.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/fragment_notifications.xml"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/fragment_study.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/fragment_study.xml"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/fragment_my_page.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/fragment_my_page.xml"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/activity_interest_filter.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/activity_interest_filter.xml"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/activity_main.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/fragment_bookmark.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/fragment_bookmark.xml"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/fragment_dashboard.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/fragment_dashboard.xml"
+    },
+    {
+        "merged": "com.example.spoteam_android.app-mergeDebugResources-3:/layout/fragment_category.xml",
+        "source": "com.example.spoteam_android.app-main-6:/layout/fragment_category.xml"
+    }
+]

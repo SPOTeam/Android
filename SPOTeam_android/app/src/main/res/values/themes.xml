@@ -12,5 +12,36 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
+    <style name="RangeSliderStyle" parent="Widget.MaterialComponents.Slider">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Slider</item>
+    </style>
+
+    <style name="ThemeOverlay.Slider" parent="">
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnBackground">@android:color/white</item>
+        <item name="colorSurface">@color/black</item>
+    </style>
+
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="itemIconSize">24dp</item> <!-- 아이콘 크기 설정 -->
+        <item name="itemTextAppearanceActive">@style/BottomNavigationViewTextAppearance</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationViewTextAppearance</item>
+    </style>
+
+    <!-- BottomNavigationView 텍스트 스타일 정의 -->
+    <style name="BottomNavigationViewTextAppearance" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">12sp</item> <!-- 텍스트 크기 설정 -->
+    </style>
+
+<!--    <style name="Theme.SPOT.NoActionBar">-->
+<!--        <item name="windowActionBar">false</item>-->
+<!--        <item name="windowNoTitle">true</item>-->
+<!--    </style>-->
+
+    <style name="Theme.SPOT.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.SPOT.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

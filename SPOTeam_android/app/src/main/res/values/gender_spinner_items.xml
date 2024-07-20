@@ -1,0 +1,8 @@
+<resources>
+    <string-array name="gender_array">
+        <item>누구나</item>
+        <item>남자</item>
+        <item>여자</item>
+    </string-array>
+</resources>
+
