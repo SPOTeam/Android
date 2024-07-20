@@ -13,7 +13,7 @@
         android:text="01"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/selector_blue"
+        android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:text="("
         android:textSize="20sp"
-        android:textColor="@color/selector_blue"
+        android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/content_commentNum_tv"/>
     <TextView
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="4"
         android:textSize="20sp"
-        android:textColor="@color/selector_blue"
+        android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/content_bracket_R"/>
     <TextView
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:text=")"
         android:textSize="20sp"
-        android:textColor="@color/selector_blue"
+        android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

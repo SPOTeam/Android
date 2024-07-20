@@ -18,18 +18,41 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val navView: BottomNavigationView = binding.navView
-
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+//        init()
     }
+
+//    private fun init() {
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.main_frm, HomeFragment())
+//            .commitAllowingStateLoss()
+//
+//        binding.mainBnv.setOnItemSelectedListener{ item ->
+//            when (item.itemId) {
+//
+//                R.id.home_fragment -> {
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.main_frm, HomeFragment())
+//                        .commitAllowingStateLoss()
+//                    return@setOnItemSelectedListener true
+//                }
+//
+//                R.id.dashboard_fragment -> {
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.main_frm, DashboardFragment())
+//                        .commitAllowingStateLoss()
+//                    return@setOnItemSelectedListener true
+//                }
+//                R.id.notifications_fragment -> {
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.main_frm, NotificationsFragment())
+//                        .commitAllowingStateLoss()
+//                    return@setOnItemSelectedListener true
+//                }
+//            }
+//            false
+//        }
+//    }
 }
