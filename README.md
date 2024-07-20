@@ -1,10 +1,12 @@
 # SPOTEAM_ANDROID
 
-## GITHUB
+## GITHUB 필독
 
-1. 프로젝트 commit은 무조건!! 자신의 Branch 에다가 올린 후 main으로 Pull Request 날리기!!
+1. 프로젝트 commit은 무조건!! 자신의 Branch 에다가 올린 후 dev으로 Pull Request 날리기!!
 
 2. Pull Request title은 닉네임/이름(ex 우연/추연우)와 함께 Discription에 구현 내용 작성해서 날리기
+
+3. dev branch에서 confilct 해결 후에 Main에 Merge할 것이기 때문에 꼭 dev로 PR 날려주세요!!
 
 # PROJECT 작명 규칙
 
