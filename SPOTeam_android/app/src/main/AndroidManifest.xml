@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -14,11 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SPOTeam_android"
         tools:targetApi="34">
-
+        <activity
+            android:name=".login.LocationSearchActivity"
+            android:exported="false" />
         <activity
             android:name=".InterestFilterActivity"
             android:exported="false" />
-
         <activity
             android:name=".login.LogoutActivity"
             android:exported="false">
@@ -26,7 +27,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".checklist.CheckListLocationActivity"
             android:exported="false">
@@ -34,7 +34,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".checklist.CheckListStudyPurposeActivity"
             android:exported="false">
@@ -42,7 +41,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".checklist.CheckListCategoryActivity"
             android:exported="false">
@@ -50,7 +48,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".login.RegisterInformation"
             android:exported="false">
@@ -58,7 +55,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".login.StartLoginActivity"
             android:exported="true">
@@ -68,12 +64,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".InterestActivity"
-            android:exported="false">
-        </activity>
-
+            android:exported="false"></activity>
         <activity
             android:name=".login.LoginActivity"
             android:exported="false">
@@ -81,7 +74,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="false">
@@ -89,7 +81,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -105,4 +96,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>
