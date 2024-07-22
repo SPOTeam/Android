@@ -61,7 +61,8 @@
         </activity>
         <activity
             android:name=".InterestActivity"
-            android:exported="false"></activity>
+            android:exported="false">
+        </activity>
         <activity
             android:name=".login.LoginActivity"
             android:exported="false">
@@ -75,11 +76,13 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+            <!--            해당 부분 옮기면 초기 실행 Activity 설정 가능      -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!--/////////////////////////////////////////////////////////-->
         </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"

@@ -6,6 +6,7 @@ import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.category.StudyFragment
 import com.example.spoteam_android.ui.home.HomeFragment
+import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.mypage.BookmarkFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
 
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
         val commitAllowingStateLoss = supportFragmentManager.beginTransaction()
-            .replace(R.id.main_frm, HomeFragment())
+            .replace(R.id.main_frm, CommunityHomeFragment())
             .commitAllowingStateLoss()
 
         binding.mainBnv.setOnItemSelectedListener{ item ->
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 //              HomeFragment
                 R.id.navigation_home -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_frm, HomeFragment())
+                        .replace(R.id.main_frm, CommunityHomeFragment())
                         .commitAllowingStateLoss()
                     return@setOnItemSelectedListener true
                 }
