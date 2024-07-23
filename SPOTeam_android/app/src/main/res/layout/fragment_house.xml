@@ -43,20 +43,18 @@
             android:id="@+id/ic_alarm"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@color/black"
+            android:src="@drawable/activity_main_ic_alaram"
             app:layout_constraintEnd_toStartOf="@+id/ic_find"
             app:layout_constraintTop_toTopOf="@+id/ic_spot_logo" />
-<!--        android:src="@drawable/activity_main_ic_alaram"-->
 
         <ImageView
             android:id="@+id/ic_sun"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="60dp"
-            android:src="@color/black"
+            android:src="@drawable/activity_main_ic_sun"
             app:layout_constraintStart_toStartOf="@+id/ic_spot_logo"
             app:layout_constraintTop_toBottomOf="@+id/ic_spot_logo" />
-<!--        android:src="@drawable/activity_main_ic_sun"-->
 
         <TextView
             android:id="@+id/tx_temperature"
@@ -88,10 +86,9 @@
             android:layout_height="73dp"
             android:layout_marginStart="50dp"
             android:background="@color/background_gray"
-            android:src="@color/black"
+            android:src="@drawable/activity_main_imgbtn_go_board"
             app:layout_constraintStart_toEndOf="@+id/tx_temperature"
             app:layout_constraintTop_toTopOf="@+id/tx_temperature"/>
-<!--        android:src="@drawable/activity_main_imgbtn_go_board"-->
 
         <ImageButton
             android:id="@+id/imgbtn_location"
@@ -99,10 +96,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@color/background_gray"
-            android:src="@color/black"
+            android:src="@drawable/activity_main_imgbtn_location"
             app:layout_constraintStart_toStartOf="@+id/tx_explain_weather"
             app:layout_constraintTop_toBottomOf="@+id/tx_explain_weather"/>
-<!--        android:src="@drawable/activity_main_imgbtn_location"-->
 
         <ImageButton
             android:id="@+id/imgbtn_board"
@@ -110,10 +106,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:background="@color/background_gray"
-            android:src="@color/black"
+            android:src="@drawable/activity_main_imgbtn_board"
             app:layout_constraintStart_toEndOf="@+id/imgbtn_location"
             app:layout_constraintTop_toTopOf="@+id/imgbtn_location"/>
-<!--        android:src="@drawable/activity_main_imgbtn_board"-->
 
         <ImageButton
             android:id="@+id/imgbtn_union"
@@ -121,10 +116,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:background="@color/background_gray"
-            android:src="@color/black"
+            android:src="@drawable/activity_main_imgbtn_union"
             app:layout_constraintStart_toEndOf="@+id/imgbtn_board"
             app:layout_constraintTop_toTopOf="@+id/imgbtn_location"/>
-<!--        android:src="@drawable/activity_main_imgbtn_union"-->
 
         <ImageButton
             android:id="@+id/imgbtn_jjim"
@@ -132,10 +126,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:background="@color/background_gray"
-            android:src="@color/black"
+            android:src="@drawable/activity_main_imgbtn_jjim"
             app:layout_constraintStart_toEndOf="@+id/imgbtn_union"
             app:layout_constraintTop_toTopOf="@+id/imgbtn_location"/>
-<!--        android:src="@drawable/activity_main_imgbtn_jjim"-->
 
         <TextView
             android:id="@+id/tx_interest_study"
@@ -154,10 +147,9 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="30dp"
-            android:src="@color/black"
+            android:src="@drawable/activity_main_navigate_before"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tx_interest_study" />
-<!--                    android:src="@drawable/activity_main_navigate_before"-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_board"
@@ -197,11 +189,10 @@
             android:layout_height="30dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="10dp"
-            android:src="@color/black"
+            android:src="@drawable/activity_main_navigate_before"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tx_recommendation_study"
             />
-        <!--            android:src="@drawable/activity_main_navigate_before"-->
 
 
         <!--    <FrameLayout-->
