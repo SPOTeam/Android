@@ -35,16 +35,36 @@
         <item name="colorSurface">@color/black</item>
     </style>
 
-    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
-        <item name="itemIconSize">24dp</item> <!-- 아이콘 크기 설정 -->
-        <item name="itemTextAppearanceActive">@style/BottomNavigationViewTextAppearance</item>
-        <item name="itemTextAppearanceInactive">@style/BottomNavigationViewTextAppearance</item>
+    <style name="BottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
+        <item name="itemIconSize">50dp</item> <!-- 아이콘 크기 -->
+        <item name="itemTextAppearanceActive">@style/BottomNavigationActiveText</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationInactiveText</item>
+        <item name="itemIconTint">@color/selector_nav_item_color</item> <!-- 아이콘 색상 -->
+        <item name="itemTextColor">@color/selector_nav_item_color</item> <!-- 텍스트 색상 -->
+        <item name="itemPaddingTop">0dp</item>
+        <item name="itemPaddingBottom">0dp</item>
     </style>
 
-    <!-- BottomNavigationView 텍스트 스타일 정의 -->
-    <style name="BottomNavigationViewTextAppearance" parent="TextAppearance.AppCompat.Small">
-        <item name="android:textSize">12sp</item> <!-- 텍스트 크기 설정 -->
+    <!-- Active Text Appearance -->
+    <style name="BottomNavigationActiveText" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">16sp</item> <!-- 활성화된 아이템의 글씨 크기 -->
     </style>
+
+    <!-- Inactive Text Appearance -->
+    <style name="BottomNavigationInactiveText" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">14sp</item> <!-- 비활성화된 아이템의 글씨 크기 -->
+    </style>
+
+<!--    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">-->
+<!--        <item name="itemIconSize">24dp</item> &lt;!&ndash; 아이콘 크기 설정 &ndash;&gt;-->
+<!--        <item name="itemTextAppearanceActive">@style/BottomNavigationViewTextAppearance</item>-->
+<!--        <item name="itemTextAppearanceInactive">@style/BottomNavigationViewTextAppearance</item>-->
+<!--    </style>-->
+
+<!--    &lt;!&ndash; BottomNavigationView 텍스트 스타일 정의 &ndash;&gt;-->
+<!--    <style name="BottomNavigationViewTextAppearance" parent="TextAppearance.AppCompat.Small">-->
+<!--        <item name="android:textSize">12sp</item> &lt;!&ndash; 텍스트 크기 설정 &ndash;&gt;-->
+<!--    </style>-->
 
 <!--    <style name="Theme.SPOT.NoActionBar">-->
 <!--        <item name="windowActionBar">false</item>-->
