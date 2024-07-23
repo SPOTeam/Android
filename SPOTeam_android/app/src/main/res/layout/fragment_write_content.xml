@@ -91,7 +91,7 @@
         android:layout_marginTop="10dp"
         android:text="완료"
         android:background="@drawable/button_background"
-        android:textColor="@color/selector_blue"
+        android:textColor="@color/active_blue"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/write_content_content_et"
