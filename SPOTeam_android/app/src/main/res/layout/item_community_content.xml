@@ -2,7 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingStart="20dp"
+    android:paddingTop="20dp"
+    android:paddingEnd="20dp">
 
     <LinearLayout
         android:id="@+id/content_ll"
@@ -30,17 +33,26 @@
 
         <!--    저장 아이콘 수정   -->
         <ImageView
-            android:layout_width="20dp"
+            android:id="@+id/content_bookmark_unchecked_iv"
+            android:layout_width="15dp"
             android:layout_height="30dp"
-            android:src="@color/black"
-            android:orientation="horizontal" />
+            android:src="@drawable/ic_bookmark_unchecked" />
+
+        <ImageView
+            android:id="@+id/content_bookmark_checked_iv"
+            android:layout_width="15dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_bookmark_checked" />
 
         <TextView
             android:id="@+id/content_saveNum_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_gravity="center"
             android:text="4"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:textColor="@color/selector_blue" />
 
     </LinearLayout>
@@ -68,10 +80,19 @@
 
         <!--    좋아요 아이콘 수정  -->
         <ImageView
-            android:id="@+id/content_likeNum_iv"
-            android:layout_width="10dp"
-            android:layout_height="18dp"
-            android:src="@color/black"
+            android:id="@+id/content_likeNum_unchecked_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_like_unchecked"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
+
+        <ImageView
+            android:id="@+id/content_likeNum_checked_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_like_checked"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
 
@@ -87,15 +108,16 @@
         <!--    댓글 아이콘 추가   -->
         <ImageView
             android:id="@+id/contetn_commentNum_iv"
-            android:layout_width="10dp"
+            android:layout_width="18dp"
             android:layout_height="18dp"
-            android:src="@color/black"
+            android:src="@drawable/ic_comment"
+            android:layout_gravity="center"
             android:layout_marginStart="18dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
 
         <TextView
-            android:id="@+id/content_contetnNum_tv"
+            android:id="@+id/content_commentNum_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
@@ -105,11 +127,12 @@
 
         <!--    시청 수 아이콘 추가   -->
         <ImageView
-            android:id="@+id/contetn_viewNum_iv"
-            android:layout_width="10dp"
-            android:layout_height="18dp"
-            android:src="@color/black"
+            android:id="@+id/content_viewNum_iv"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:src="@drawable/ic_view"
             android:layout_marginStart="18dp"
+            android:layout_gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
 
@@ -159,7 +182,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:src="@drawable/line_img"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/content_info_ll"/>

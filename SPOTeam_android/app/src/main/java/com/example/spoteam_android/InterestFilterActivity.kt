@@ -1,18 +1,14 @@
 package com.example.spoteam_android
 
-import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.RangeSlider
-import org.w3c.dom.Text
 
 class InterestFilterActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
@@ -119,37 +115,35 @@ class InterestFilterActivity : AppCompatActivity() {
                 }
             }
         }
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+//        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            var selectedFragment: Fragment? = null
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    selectedFragment = HouseFragment()
-                }
-                R.id.navigation_category -> {
-                    selectedFragment = CategoryFragment()
-                }
-                R.id.navigation_study -> {
-                    selectedFragment = StudyFragment()
-                }
-                R.id.navigation_bookmark -> {
-                    selectedFragment = BookmarkFragment()
-                }
-                R.id.navigation_mypage -> {
-                    selectedFragment = MyPageFragment()
-                }
-            }
-            if (selectedFragment != null) {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, selectedFragment).commit()
-            }
-            true
-        }
-
-        if (savedInstanceState == null) {
-            bottomNavigationView.selectedItemId = R.id.navigation_home
-        }
-
-
+//        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+//            var selectedFragment: Fragment? = null
+//            when (item.itemId) {
+//                R.id.navigation_home -> {
+//                    selectedFragment = HouseFragment()
+//                }
+//                R.id.navigation_category -> {
+//                    selectedFragment = CategoryFragment()
+//                }
+//                R.id.navigation_study -> {
+//                    selectedFragment = StudyFragment()
+//                }
+//                R.id.navigation_bookmark -> {
+//                    selectedFragment = BookmarkFragment()
+//                }
+//                R.id.navigation_mypage -> {
+//                    selectedFragment = MyPageFragment()
+//                }
+//            }
+//            if (selectedFragment != null) {
+//                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, selectedFragment).commit()
+//            }
+//            true
+//        }
+//
+//        if (savedInstanceState == null) {
+//            bottomNavigationView.selectedItemId = R.id.navigation_home
+//        }
     }
 }
