@@ -29,11 +29,13 @@ class CommunityFragment : Fragment() {
                 tab, position -> tab.text = tabList[position]
         }.attach()
 
-        binding.communityPrevIv.setOnClickListener {
+        binding.communityPrevIv.setOnClickListener{
             (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, CommunityHomeFragment()
+                .replace(
+                    R.id.main_frm, CommunityHomeFragment()
                 ).commitAllowingStateLoss()
         }
+
         return binding.root
     }
 }

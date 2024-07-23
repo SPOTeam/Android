@@ -10,6 +10,16 @@ import com.example.spoteam_android.databinding.ItemCommunityContentBinding
 
 class CommunityCategoryContentRVAdapter(private val dataList: ArrayList<communityData>) : RecyclerView.Adapter<CommunityCategoryContentRVAdapter.ViewHolder>() {
 
+    interface OnItemClickListener {
+        fun onItemClick(data : communityData)
+    }
+
+    private lateinit var itemClickListener : OnItemClickListener
+
+    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.itemClickListener = onItemClickListener
+    }
+
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemCommunityContentBinding = ItemCommunityContentBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
 
@@ -18,6 +28,10 @@ class CommunityCategoryContentRVAdapter(private val dataList: ArrayList<communit
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(dataList[position])
+
+        holder.itemView.setOnClickListener {
+            itemClickListener.onItemClick(dataList[position])
+        }
 
         holder.binding.contentLikeNumCheckedIv.setOnClickListener{
             holder.binding.contentLikeNumCheckedIv.visibility = View.GONE
