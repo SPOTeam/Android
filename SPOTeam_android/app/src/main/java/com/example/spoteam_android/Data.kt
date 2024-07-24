@@ -22,3 +22,10 @@ data class communityData(
     val writer : String,
     val date : String
 )
+
+data class BoardItem(val studyname: String,
+                     val studyobject: String,
+                     val studyto: Int,
+                     val studypo: Int,
+                     val like: Int,
+                     val watch:Int )

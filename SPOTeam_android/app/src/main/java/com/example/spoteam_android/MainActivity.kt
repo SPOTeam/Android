@@ -1,6 +1,8 @@
 package com.example.spoteam_android
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -17,23 +19,40 @@ import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.category.StudyFragment
 import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
+import com.example.spoteam_android.ui.community.WriteContentFragment
 import com.example.spoteam_android.ui.mypage.BookmarkFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val bottomSheetView = layoutInflater.inflate(R.layout.fragment_write_content, null)
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        binding.mainFloatingButton.setOnClickListener {
+            val bottomSheetDialog = WriteContentFragment()
+            bottomSheetDialog.show(supportFragmentManager, bottomSheetDialog.tag)
+        }
+
         init()
-//        navController = findNavController(R.id.nav_host_fragment)
-//        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-//        bottomNavigationView.setupWithNavController(navController)
+        isOnCommunityHome(HouseFragment())
+    }
+
+    fun isOnCommunityHome(fragment : Fragment){
+        if (fragment is CommunityHomeFragment) {
+            binding.mainFloatingButton.visibility = View.VISIBLE
+        } else {
+            binding.mainFloatingButton.visibility = View.GONE
+        }
     }
 
     private fun init() {
@@ -49,6 +68,7 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, HouseFragment())
                         .commitAllowingStateLoss()
+                    isOnCommunityHome(HouseFragment())
                     return@setOnItemSelectedListener true
                 }
 //              categoryFragment
@@ -56,6 +76,7 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, CategoryFragment())
                         .commitAllowingStateLoss()
+                    isOnCommunityHome(CategoryFragment())
                     return@setOnItemSelectedListener true
                 }
 //              StudyFragment
@@ -63,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, StudyFragment())
                         .commitAllowingStateLoss()
+                    isOnCommunityHome(StudyFragment())
                     return@setOnItemSelectedListener true
                 }
 
@@ -71,6 +93,7 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, BookmarkFragment())
                         .commitAllowingStateLoss()
+                    isOnCommunityHome(BookmarkFragment())
                     return@setOnItemSelectedListener true
                 }
 
@@ -79,42 +102,11 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, MyPageFragment())
                         .commitAllowingStateLoss()
+                    isOnCommunityHome(MyPageFragment())
                     return@setOnItemSelectedListener true
                 }
             }
             false
         }
     }
-
-//    private fun init() {
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.main_frm, HomeFragment())
-//            .commitAllowingStateLoss()
-//
-//        binding.mainBnv.setOnItemSelectedListener{ item ->
-//            when (item.itemId) {
-//
-//                R.id.home_fragment -> {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.main_frm, HomeFragment())
-//                        .commitAllowingStateLoss()
-//                    return@setOnItemSelectedListener true
-//                }
-//
-//                R.id.dashboard_fragment -> {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.main_frm, DashboardFragment())
-//                        .commitAllowingStateLoss()
-//                    return@setOnItemSelectedListener true
-//                }
-//                R.id.notifications_fragment -> {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.main_frm, NotificationsFragment())
-//                        .commitAllowingStateLoss()
-//                    return@setOnItemSelectedListener true
-//                }
-//            }
-//            false
-//        }
-//    }
 }
