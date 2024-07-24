@@ -33,10 +33,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/activity_main_study"
         android:padding="10dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginStart="60dp"
         android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@id/main_floatingButton"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/main_bnv">
 

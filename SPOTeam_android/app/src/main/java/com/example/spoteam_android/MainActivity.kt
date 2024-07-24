@@ -19,33 +19,38 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    val bottomSheetView = layoutInflater.inflate(R.layout.fragment_write_content, null)
-    val bottomSheetDialog = BottomSheetDialog(this)
+    private lateinit var bottomSheetView: View
+    private lateinit var bottomSheetDialog: BottomSheetDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        //다른 아무 화면 클릭시 스터디 화면 사라지도록
+        setContentView(binding.root)
+
+        // 다른 아무 화면 클릭시 스터디 화면 사라지도록
         binding.root.setOnTouchListener { _, _ ->
             showStudyFrameLayout(false)
             true
         }
-        setContentView(binding.root)
-        init()
+
+        // BottomSheetDialog 초기화
+        bottomSheetView = layoutInflater.inflate(R.layout.fragment_write_content, null)
+        bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.setContentView(bottomSheetView)
 
         binding.mainFloatingButton.setOnClickListener {
-            val bottomSheetDialog = WriteContentFragment()
-            bottomSheetDialog.show(supportFragmentManager, bottomSheetDialog.tag)
+            val writeContentFragment = WriteContentFragment()
+            writeContentFragment.show(supportFragmentManager, writeContentFragment.tag)
         }
+
+        init()
         isOnCommunityHome(HouseFragment())
     }
 
-
     private fun init() {
-        // 초기 화면 설정: 기본으로 HomeFragment를 보이도록 설정
+        // 초기 화면 설정: 기본으로 HouseFragment를 보이도록 설정
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_frm, HouseFragment())
             .commitAllowingStateLoss()
@@ -81,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                     showFragment(MyPageFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(MyPageFragment())
-                 return@setOnItemSelectedListener true
+                    return@setOnItemSelectedListener true
                 }
                 else -> false
             }
@@ -115,45 +120,12 @@ class MainActivity : AppCompatActivity() {
             showStudyFrameLayout(false) // RegisterFragment를 보이도록 하되 FrameLayout은 숨김
         }
     }
-    
-    private fun isOnCommunityHome(fragment : Fragment){
+
+    fun isOnCommunityHome(fragment: Fragment) {
         if (fragment is CommunityHomeFragment) {
             binding.mainFloatingButton.visibility = View.VISIBLE
         } else {
             binding.mainFloatingButton.visibility = View.GONE
         }
     }
-
 }
-
-//    private fun init() {
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.main_frm, HomeFragment())
-//            .commitAllowingStateLoss()
-//
-//        binding.mainBnv.setOnItemSelectedListener{ item ->
-//            when (item.itemId) {
-//
-//                R.id.home_fragment -> {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.main_frm, HomeFragment())
-//                        .commitAllowingStateLoss()
-//                    return@setOnItemSelectedListener true
-//                }
-//
-//                R.id.dashboard_fragment -> {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.main_frm, DashboardFragment())
-//                        .commitAllowingStateLoss()
-//                    return@setOnItemSelectedListener true
-//                }
-//                R.id.notifications_fragment -> {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.main_frm, NotificationsFragment())
-//                        .commitAllowingStateLoss()
-//                    return@setOnItemSelectedListener true
-//                }
-//            }
-//            false
-//        }
-//    }
