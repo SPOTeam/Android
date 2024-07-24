@@ -55,6 +55,32 @@
         <item name="android:textSize">14sp</item> <!-- 비활성화된 아이템의 글씨 크기 -->
     </style>
 
+    <style name="find_ChipStyle" parent="Widget.MaterialComponents.Chip.Entry">
+        <!-- Chip의 배경 색상 -->
+        <item name="chipBackgroundColor">@color/white</item>
+        <!-- Chip의 텍스트 색상 -->
+        <item name="android:textColor">@color/active_blue</item>
+        <!-- Chip의 텍스트 크기 -->
+        <item name="android:textSize">16sp</item>
+        <!-- Chip의 테두리 색상 -->
+        <item name="chipStrokeColor">@color/active_blue</item>
+        <!-- Chip의 테두리 두께 -->
+        <item name="chipStrokeWidth">1dp</item>
+        <!-- Chip의 아이콘 표시 여부 -->
+        <item name="chipIconVisible">false</item>
+        <!-- Chip의 닫기 아이콘 표시 여부 -->
+        <item name="closeIconVisible">true</item>
+        <!-- Chip의 아이콘 -->
+    </style>
+
+    <style name="CustomSearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="queryBackground">@color/active_blue</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="searchIcon">@drawable/location_search_resize</item>
+        <item name="submitBackground">@color/active_blue</item>
+    </style>
+
 <!--    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">-->
 <!--        <item name="itemIconSize">24dp</item> &lt;!&ndash; 아이콘 크기 설정 &ndash;&gt;-->
 <!--        <item name="itemTextAppearanceActive">@style/BottomNavigationViewTextAppearance</item>-->

@@ -17,9 +17,6 @@
         <activity
             android:name=".login.LocationSearchActivity"
             android:exported="false" />
-        <activity
-            android:name=".InterestFilterActivity"
-            android:exported="false" />
 
         <activity
             android:name=".login.LogoutActivity"
@@ -67,10 +64,7 @@
 
         </activity>
 
-        <activity
-            android:name=".InterestActivity"
-            android:exported="false">
-        </activity>
+
 
         <activity
             android:name=".login.LoginActivity"

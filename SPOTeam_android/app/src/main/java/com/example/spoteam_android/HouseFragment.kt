@@ -5,9 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.spoteam_android.SearchFragment
 
 class HouseFragment : Fragment() {
 
@@ -16,7 +19,24 @@ class HouseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_house, container, false)
+        val view = inflater.inflate(R.layout.fragment_house, container, false)
+        val icFindButton: ImageView = view.findViewById(R.id.ic_find)
+        icFindButton.setOnClickListener {
+            // MainActivity의 switchFragment 메서드를 호출하여 SearchFragment로 전환
+            (activity as MainActivity).switchFragment(SearchFragment())
+        }
+        val icAlarmButton: ImageView = view.findViewById(R.id.ic_alarm)
+        icAlarmButton.setOnClickListener {
+            // MainActivity의 switchFragment 메서드를 호출하여 SearchFragment로 전환
+            (activity as MainActivity).switchFragment(InterestFragment())
+        }
+        val spoticon: ImageView = view.findViewById(R.id.ic_spot_logo)
+        spoticon.setOnClickListener {
+            // MainActivity의 switchFragment 메서드를 호출하여 SearchFragment로 전환
+            (activity as MainActivity).switchFragment(InterestFilterFragment())
+        }
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,38 +70,6 @@ class HouseFragment : Fragment() {
         rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         rv_board2.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-
-
-
-//        val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottom_navigation)
-//        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-//            var selectedFragment: Fragment? = null
-//            when (item.itemId) {
-//                R.id.navigation_home -> {
-//                    selectedFragment = HouseFragment()
-//                }
-//                R.id.navigation_category -> {
-//                    selectedFragment = CategoryFragment()
-//                }
-//                R.id.navigation_study -> {
-//                    selectedFragment = StudyFragment()
-//                }
-//                R.id.navigation_bookmark -> {
-//                    selectedFragment = BookmarkFragment()
-//                }
-//                R.id.navigation_mypage -> {
-//                    selectedFragment = MyPageFragment()
-//                }
-//            }
-//            if (selectedFragment != null) {
-//                requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, selectedFragment).commit()
-//            }
-//            true
-//        }
-//
-//        if (savedInstanceState == null) {
-//            bottomNavigationView.selectedItemId = R.id.navigation_home
-//        }
     }
 
 

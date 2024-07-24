@@ -53,6 +53,9 @@ dependencies {
     implementation(libs.flexbox)
     implementation(libs.kakaoSdkAll)
     implementation(libs.kakaoSdkUser)
+//    07/23 추가
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.viewpager2)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,40 +1,43 @@
 package com.example.spoteam_android
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.spoteam_android.databinding.ItemRecyclerViewBinding
 
-class BoardAdapter(val itemList: ArrayList<BoardItem>) :
+class BoardAdapter(private val itemList: ArrayList<BoardItem>) :
     RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_recycler_view, parent, false)
-        return BoardViewHolder(view)
+        val binding = ItemRecyclerViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return BoardViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: BoardViewHolder, position: Int) {
-        holder.tv_time.text = itemList[position].studyname
-        holder.tv_title.text = itemList[position].studyobject
-        holder.tv_name.text = itemList[position].studyto.toString()
-        holder.tv_name2.text = itemList[position].studypo.toString()
-        holder.tv_name3.text = itemList[position].like.toString()
-        holder.tv_name4.text = itemList[position].watch.toString()
+        val currentItem = itemList[position]
+        holder.bind(currentItem)
     }
 
     override fun getItemCount(): Int {
-        return itemList.count()
+        return itemList.size
     }
 
+    inner class BoardViewHolder(private val binding: ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    inner class BoardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tv_time = itemView.findViewById<TextView>(R.id.tv_time)
-        val tv_title = itemView.findViewById<TextView>(R.id.tv_title)
-        val tv_name = itemView.findViewById<TextView>(R.id.tv_name)
-        val tv_name2 = itemView.findViewById<TextView>(R.id.tv_name2)
-        val tv_name3  = itemView.findViewById<TextView>(R.id.tv_name3)
-        val tv_name4 = itemView.findViewById<TextView>(R.id.tv_name4)
+        fun bind(item: BoardItem) {
+            binding.tvTime.text = item.studyname
+            binding.tvTitle.text = item.studyobject
+            binding.tvName.text = item.studyto.toString()
+            binding.tvName2.text = item.studypo.toString()
+            binding.tvName3.text = item.like.toString()
+            binding.tvName4.text = item.watch.toString()
+        }
     }
 
+    fun filterList(filteredList: ArrayList<BoardItem>) {
+        itemList.clear()
+        itemList.addAll(filteredList)
+        notifyDataSetChanged()
+    }
 }
+
