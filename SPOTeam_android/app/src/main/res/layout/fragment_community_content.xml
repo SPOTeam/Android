@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/community_title"
@@ -45,8 +38,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/community_title"/>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/community_sp_iv">
 
-
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <!--    프로필 이미지 변경    -->
         <ImageView
             android:id="@+id/community_content_profile_iv"
@@ -56,7 +57,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/community_sp_iv" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/community_content_writer_tv"
@@ -235,7 +236,7 @@
             app:layout_constraintTop_toBottomOf="@id/community_content_content_info_ll"/>
 
 <!--        댓글 구현 흠..   -->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
