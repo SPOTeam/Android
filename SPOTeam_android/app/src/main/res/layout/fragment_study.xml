@@ -2,18 +2,49 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/communityHome_title_tv"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/fragment_study_ll"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Stydy"
-        android:textSize="40sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <TextView
+            android:id="@+id/fragment_study_tv"
+            android:text="내 스터디"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:drawableStart="@drawable/ic_arrow"
+            android:drawablePadding="20dp"/>
+    </LinearLayout>
 
+    <View
+        android:id="@+id/fragment_study_v"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#D8D8D8"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_study_ll"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_study_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_study_v"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/item_recycler_view"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
