@@ -1,5 +1,6 @@
 package com.example.spoteam_android
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -9,13 +10,17 @@ import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.category.StudyFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
+import com.example.spoteam_android.ui.community.WriteContentFragment
 import com.example.spoteam_android.ui.mypage.BookmarkFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    val bottomSheetView = layoutInflater.inflate(R.layout.fragment_write_content, null)
+    val bottomSheetDialog = BottomSheetDialog(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +34,15 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(binding.root)
         init()
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        binding.mainFloatingButton.setOnClickListener {
+            val bottomSheetDialog = WriteContentFragment()
+            bottomSheetDialog.show(supportFragmentManager, bottomSheetDialog.tag)
+        }
+        isOnCommunityHome(HouseFragment())
     }
+
 
     private fun init() {
         // 초기 화면 설정: 기본으로 HomeFragment를 보이도록 설정
@@ -43,27 +56,32 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home -> {
                     showFragment(HouseFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
+                    isOnCommunityHome(HouseFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_category -> {
                     showFragment(CategoryFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
+                    isOnCommunityHome(CategoryFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_study -> {
                     // StudyFragment로의 전환 없이 FrameLayout의 visibility만 변경
                     showStudyFrameLayout(true)
+                    isOnCommunityHome(StudyFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_bookmark -> {
                     showFragment(BookmarkFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
+                    isOnCommunityHome(BookmarkFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_mypage -> {
                     showFragment(MyPageFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
-                    return@setOnItemSelectedListener true
+                    isOnCommunityHome(MyPageFragment())
+                 return@setOnItemSelectedListener true
                 }
                 else -> false
             }
@@ -95,6 +113,14 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.activity_main_registerstudy_ib).setOnClickListener {
             showFragment(RegisterStudyFragment())
             showStudyFrameLayout(false) // RegisterFragment를 보이도록 하되 FrameLayout은 숨김
+        }
+    }
+    
+    private fun isOnCommunityHome(fragment : Fragment){
+        if (fragment is CommunityHomeFragment) {
+            binding.mainFloatingButton.visibility = View.VISIBLE
+        } else {
+            binding.mainFloatingButton.visibility = View.GONE
         }
     }
 

@@ -6,25 +6,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.spoteam_android.databinding.FragmentHouseBinding
+import com.example.spoteam_android.ui.community.CommunityHomeFragment
 
 class HouseFragment : Fragment() {
 
+    private lateinit var binding: FragmentHouseBinding
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_house, container, false)
+        binding = FragmentHouseBinding.inflate(inflater, container, false)
+
+        initRecyclerView()
+
+        binding.imgbtnBoard.setOnClickListener{
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, CommunityHomeFragment())
+                .commitAllowingStateLoss()
+            (activity as? MainActivity)?.isOnCommunityHome(CommunityHomeFragment())
+        }
+
+        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val rv_board = view.findViewById<RecyclerView>(R.id.rv_board)
-        val rv_board2 = view.findViewById<RecyclerView>(R.id.rv_board2)
-
+    private fun initRecyclerView() {
 
         val itemList = ArrayList<BoardItem>()
         val itemList2 = ArrayList<BoardItem>()
@@ -37,53 +45,13 @@ class HouseFragment : Fragment() {
         itemList2.add(BoardItem("태권도 스터디","스터디 목표",10,2,1,500))
         itemList2.add(BoardItem("보컬 스터디","스터디 목표",10,3,1,400))
 
-
         val boardAdapter = BoardAdapter(itemList)
         val boardAdapter2 = BoardAdapter(itemList2)
 
-        boardAdapter.notifyDataSetChanged()
-        boardAdapter2.notifyDataSetChanged()
+        binding.rvBoard.adapter = boardAdapter
+        binding.rvBoard2.adapter = boardAdapter2
 
-        rv_board.adapter = boardAdapter
-        rv_board2.adapter = boardAdapter2
-
-        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        rv_board2.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-
-
-
-//        val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottom_navigation)
-//        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-//            var selectedFragment: Fragment? = null
-//            when (item.itemId) {
-//                R.id.navigation_home -> {
-//                    selectedFragment = HouseFragment()
-//                }
-//                R.id.navigation_category -> {
-//                    selectedFragment = CategoryFragment()
-//                }
-//                R.id.navigation_study -> {
-//                    selectedFragment = StudyFragment()
-//                }
-//                R.id.navigation_bookmark -> {
-//                    selectedFragment = BookmarkFragment()
-//                }
-//                R.id.navigation_mypage -> {
-//                    selectedFragment = MyPageFragment()
-//                }
-//            }
-//            if (selectedFragment != null) {
-//                requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, selectedFragment).commit()
-//            }
-//            true
-//        }
-//
-//        if (savedInstanceState == null) {
-//            bottomNavigationView.selectedItemId = R.id.navigation_home
-//        }
+        binding.rvBoard.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvBoard2.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
-
-
-
 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
+    android:shape="rectangle"
+    android:elevation="10dp">
 
-        <solid android:color="@color/selector_blue"/>
+        <solid android:color="#26588FF2"/>
         <corners android:radius="10dp" /> <!-- 둥근 모서리의 반지름 설정 -->
 
 </shape>

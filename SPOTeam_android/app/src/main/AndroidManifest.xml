@@ -30,6 +30,10 @@
         </activity>
 
         <activity
+            android:name=".ui.community.CommunityContentActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".checklist.CheckListLocationActivity"
             android:exported="false">
             <meta-data
