@@ -68,7 +68,7 @@
         </activity>
 
         <activity
-            android:name=".login.StartLoginActivity"
+            android:name=".MainActivity"
             android:exported="false">
 
         </activity>
@@ -87,7 +87,7 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".login.StartLoginActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
