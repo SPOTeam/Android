@@ -11,14 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.spoteam_android.SearchFragment
+import com.example.spoteam_android.databinding.FragmentHouseBinding
+import com.example.spoteam_android.ui.community.CommunityHomeFragment
 
 
 class HouseFragment : Fragment() {
 
+    private lateinit var binding: FragmentHouseBinding
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_house, container, false)
         val icFindButton: ImageView = view.findViewById(R.id.ic_find)
@@ -45,12 +51,20 @@ class HouseFragment : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        val rv_board = view.findViewById<RecyclerView>(R.id.rv_board)
-        val rv_board2 = view.findViewById<RecyclerView>(R.id.rv_board2)
+        initRecyclerView()
 
+        binding.imgbtnBoard.setOnClickListener{
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, CommunityHomeFragment())
+                .commitAllowingStateLoss()
+            (activity as? MainActivity)?.isOnCommunityHome(CommunityHomeFragment())
+        }
+
+        return binding.root
+    }
+
+    private fun initRecyclerView() {
 
         val itemList = ArrayList<BoardItem>()
         val itemList2 = ArrayList<BoardItem>()
@@ -63,9 +77,9 @@ class HouseFragment : Fragment() {
         itemList2.add(BoardItem("태권도 스터디", "스터디 목표", 10, 2, 1, 500))
         itemList2.add(BoardItem("보컬 스터디", "스터디 목표", 10, 3, 1, 400))
 
-
         val boardAdapter = BoardAdapter(itemList)
         val boardAdapter2 = BoardAdapter(itemList2)
+
 
         boardAdapter.notifyDataSetChanged()
         boardAdapter2.notifyDataSetChanged()

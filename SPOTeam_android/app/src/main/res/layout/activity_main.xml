@@ -27,6 +27,49 @@
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav_menu" />
 
+    <FrameLayout
+        android:id="@+id/activity_main_study_fl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/activity_main_study"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/main_bnv">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/activity_main_mystudy_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/activity_main_mystudy_resize"
+                android:background="@drawable/activity_main_mystudy_background"
+                android:layout_marginEnd="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingStart="13dp"
+                android:paddingEnd="13dp"/>
+
+            <ImageButton
+                android:id="@+id/activity_main_registerstudy_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/activity_main_register_study_resize"
+                android:background="@drawable/activity_main_registerstudy_background"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingStart="13dp"
+                android:paddingEnd="13dp"/>
+        </LinearLayout>
+    </FrameLayout>
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/main_floatingButton"
         android:layout_width="wrap_content"

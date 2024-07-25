@@ -1,10 +1,15 @@
+package com.example.spoteam_android
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemLocationSearchBinding
 import com.example.spoteam_android.login.LocationItem
 
-class LocationSearchAdapter(private val dataList: List<LocationItem>) : RecyclerView.Adapter<LocationSearchAdapter.ViewHolder>() {
+class LocationSearchAdapter(
+    private val dataList: List<LocationItem>,
+    private val onItemClick: (LocationItem) -> Unit
+) : RecyclerView.Adapter<LocationSearchAdapter.ViewHolder>() {
 
     private var filteredList: MutableList<LocationItem> = dataList.toMutableList()
 
@@ -12,6 +17,10 @@ class LocationSearchAdapter(private val dataList: List<LocationItem>) : Recycler
         fun bind(item: LocationItem) {
             binding.itemLocationSearchTv.text = item.name
             binding.itemLocationConcreteTv.text = item.address
+
+            binding.root.setOnClickListener {
+                onItemClick(item)
+            }
         }
     }
 

@@ -2,248 +2,73 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.community.CommunityContentActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/community_content_write_comment_cl"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
+
+    <LinearLayout
+        android:id="@+id/content_write_ll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/comment_reply"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/community_comment_content_tv"
+        <CheckBox
+            android:id="@+id/write_comment_anonymous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="댓글 내용"
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:textStyle="bold"
+            android:text="익명"
+            android:layout_marginStart="5dp"/>
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <EditText
+            android:id="@+id/write_comment_content_et"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/comment_reply"
-            android:layout_marginEnd="20dp"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="@id/community_comment_content_tv"
-            app:layout_constraintTop_toBottomOf="@id/community_comment_content_tv"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:hint="댓글을 입력해주세요"
+            android:background="@null"
+            android:layout_marginStart="10dp"
+            android:inputType="none"/>
 
-            <CheckBox
-                android:id="@+id/write_comment_anonymous"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="익명"
-                android:layout_marginStart="5dp"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-            <EditText
-                android:id="@+id/write_comment_content_et"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="내용을 입력해주세요"
-                android:gravity="top"
-                android:background="@null"
-                android:layout_marginStart="5dp"
-                android:inputType="none"/>
+        <!--    전송 이미지 변경    -->
+        <ImageView
+            android:id="@+id/apply_comment_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_send"
+            android:layout_marginEnd="20dp"/>
+    </LinearLayout>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+    <TextView
+        android:id="@+id/community_comment_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="댓글 내용"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintStart_toStartOf="@id/content_write_ll"
+        app:layout_constraintBottom_toTopOf="@id/content_write_ll"/>
 
-            <!--    전송 이미지 변경    -->
-            <ImageView
-                android:id="@+id/apply_comment_iv"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@color/black"
-                android:layout_marginEnd="20dp"/>
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/community_content_comment_frm"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/community_content_write_comment_cl">
+        app:layout_constraintBottom_toTopOf="@id/community_comment_content_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <!--    프로필 이미지 변경    -->
-            <ImageView
-                android:id="@+id/community_content_profile_iv"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@color/black"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/community_content_writer_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="익명"
-                android:textSize="17sp"
-                android:layout_marginStart="5dp"
-                app:layout_constraintStart_toEndOf="@id/community_content_profile_iv"
-                app:layout_constraintTop_toTopOf="@id/community_content_profile_iv" />
-
-            <TextView
-                android:id="@+id/community_content_date_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="2024.05.31 17:31"
-                android:textSize="10sp"
-                android:layout_marginTop="5dp"
-                app:layout_constraintStart_toStartOf="@id/community_content_writer_tv"
-                app:layout_constraintTop_toBottomOf="@id/community_content_writer_tv" />
-
-            <!--    점3개 이미지 변경    -->
-            <ImageView
-                android:id="@+id/community_content_more_iv"
-                android:layout_width="10dp"
-                android:layout_height="40dp"
-                android:src="@color/black"
-                android:layout_marginEnd="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/community_content_profile_iv" />
-
-            <!--    저장 이미지 변경    -->
-            <ImageView
-                android:id="@+id/community_content_save_iv"
-                android:layout_width="15dp"
-                android:layout_height="30dp"
-                android:src="@color/black"
-                android:layout_marginEnd="20dp"
-                app:layout_constraintEnd_toStartOf="@id/community_content_more_iv"
-                app:layout_constraintTop_toTopOf="@id/community_content_profile_iv" />
-
-            <TextView
-                android:id="@+id/community_content_saveNum_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="20"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/selector_blue"
-                app:layout_constraintStart_toStartOf="@id/community_content_save_iv"
-                app:layout_constraintTop_toBottomOf="@id/community_content_save_iv" />
-
-
-            <TextView
-                android:id="@+id/community_content_title_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="카카오 최종합격"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:layout_marginTop="25dp"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
-                app:layout_constraintTop_toBottomOf="@id/community_content_profile_iv" />
-
-            <TextView
-                android:id="@+id/community_content_content_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="카카오 최종합격했습니다!\n 면접 후기랑 자소서 풀어볼게요\n자소서 문항 :\n 1.지원동기와 성장과정, 문제해결과정을 중심으로 작성하시오"
-                android:textSize="10sp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/black"
-                android:lineSpacingMultiplier="1.5"
-                app:layout_constraintStart_toStartOf="@id/community_content_title_tv"
-                app:layout_constraintTop_toBottomOf="@id/community_content_title_tv" />
-
-            <LinearLayout
-                android:id="@+id/community_content_content_info_ll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/community_content_content_tv"
-                app:layout_constraintStart_toStartOf="@id/community_content_profile_iv">
-
-                <!--    좋아요 아이콘 수정  -->
-                <ImageView
-                    android:id="@+id/community_content_likeNum_iv"
-                    android:layout_width="10dp"
-                    android:layout_height="18dp"
-                    android:src="@color/black"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
-
-                <TextView
-                    android:id="@+id/community_content_likeNum_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textSize="13sp"
-                    android:layout_marginStart="5dp"
-                    android:textColor="@color/selector_blue" />
-
-                <!--    댓글 아이콘 추가   -->
-                <ImageView
-                    android:id="@+id/community_content_commentNum_iv"
-                    android:layout_width="10dp"
-                    android:layout_height="18dp"
-                    android:src="@color/black"
-                    android:layout_marginStart="18dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
-
-                <TextView
-                    android:id="@+id/community_content_contentNum_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textSize="13sp"
-                    android:layout_marginStart="5dp"
-                    android:textColor="@color/selector_blue" />
-
-                <!--    시청 수 아이콘 추가   -->
-                <ImageView
-                    android:id="@+id/community_content_viewNum_iv"
-                    android:layout_width="10dp"
-                    android:layout_height="18dp"
-                    android:src="@color/black"
-                    android:layout_marginStart="18dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
-
-                <TextView
-                    android:id="@+id/community_content_viewNum_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textSize="13sp"
-                    android:layout_marginStart="5dp"
-                    android:textColor="@color/selector_blue" />
-
-            </LinearLayout>
-
-            <FrameLayout
-                android:id="@+id/community_content_comment_frm"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@id/community_content_content_info_ll"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
