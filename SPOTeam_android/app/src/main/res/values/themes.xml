@@ -25,6 +25,19 @@
         <item name="windowNoTitle">true</item>
 
     </style>
+
+    <style name="CustomChipCloseStyle" parent="Widget.MaterialComponents.Chip.Entry">
+        <item name="chipBackgroundColor">@color/white</item>
+        <item name="chipStrokeColor">#588FFE</item>
+        <item name="chipStrokeWidth">2dp</item>
+        <item name="android:textColor">#588FFE</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="closeIcon">@drawable/ic_close</item>
+        <item name="closeIconTint">#588FFE</item>
+    </style>
+
+
     <style name="RangeSliderStyle" parent="Widget.MaterialComponents.Slider">
         <item name="materialThemeOverlay">@style/ThemeOverlay.Slider</item>
     </style>

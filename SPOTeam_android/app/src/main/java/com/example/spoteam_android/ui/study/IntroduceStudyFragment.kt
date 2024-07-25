@@ -10,23 +10,33 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import com.example.spoteam_android.HouseFragment
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentIntroduceStudyBinding
+import com.example.spoteam_android.ui.category.StudyFragment
+
 
 class IntroduceStudyFragment : Fragment() {
 
     private lateinit var binding: FragmentIntroduceStudyBinding
     private lateinit var getImageLauncher: ActivityResultLauncher<Intent>
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var  navController : NavController
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +52,9 @@ class IntroduceStudyFragment : Fragment() {
 
         binding.fragmentIntroduceStudyBt.setOnClickListener {
             goToNextFragment()
+        }
+        binding.fragmentIntroduceStudyBackBt.setOnClickListener {
+            goToPreviusFragment()
         }
 
         return binding.root
@@ -141,7 +154,15 @@ class IntroduceStudyFragment : Fragment() {
 
     private fun goToNextFragment() {
         val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, HouseFragment()) // 변경할 Fragment로 교체
+        transaction.replace(R.id.main_frm, OnlineStudyFragment()) // 변경할 Fragment로 교체
         transaction.commit()
     }
+
+    private fun goToPreviusFragment() {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.main_frm, RegisterStudyFragment()) // 변경할 Fragment로 교체
+        transaction.addToBackStack(null) // 백스택에 추가
+        transaction.commit()
+    }
+
 }

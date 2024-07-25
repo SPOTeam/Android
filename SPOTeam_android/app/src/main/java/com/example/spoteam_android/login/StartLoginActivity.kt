@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.checklist.CheckListCategoryActivity
 import com.example.spoteam_android.databinding.ActivityStartLoginBinding
@@ -63,14 +64,16 @@ class StartLoginActivity : AppCompatActivity() {
 //                UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
 //            }
 
-            val intent = Intent(this, CheckListCategoryActivity::class.java)
+//            val intent = Intent(this, CheckListCategoryActivity::class.java)
+//            startActivity(intent)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
 
 
         }
 
         binding.loginwithspotBt.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, CheckListCategoryActivity::class.java)
             startActivity(intent)
         }
     }

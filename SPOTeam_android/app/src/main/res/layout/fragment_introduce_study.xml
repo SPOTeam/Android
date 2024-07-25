@@ -21,6 +21,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
+            <ImageButton
+                android:id="@+id/fragment_introduce_study_back_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_resize"
+                android:background="@color/white"/>
+
+
             <TextView
                 android:id="@+id/fragment_introduce_study_tv"
                 android:text="스터디 등록"
@@ -28,9 +36,7 @@
                 android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:drawableStart="@drawable/ic_arrow"
-                android:drawablePadding="20dp"/>
+                android:layout_marginStart="15dp" />
         </LinearLayout>
 
         <ProgressBar
