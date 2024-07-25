@@ -14,10 +14,10 @@ import com.example.spoteam_android.SearchFragment
 import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 
-
 class HouseFragment : Fragment() {
 
-    private lateinit var binding: FragmentHouseBinding
+    private var _binding: FragmentHouseBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,46 +26,45 @@ class HouseFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_house, container, false)
+        _binding = FragmentHouseBinding.inflate(inflater, container, false)
+        val view = binding.root
+
         val icFindButton: ImageView = view.findViewById(R.id.ic_find)
         icFindButton.setOnClickListener {
             // MainActivity의 switchFragment 메서드를 호출하여 SearchFragment로 전환
             (activity as MainActivity).switchFragment(SearchFragment())
         }
+
         val icAlarmButton: ImageView = view.findViewById(R.id.ic_alarm)
         icAlarmButton.setOnClickListener {
-            // MainActivity의 switchFragment 메서드를 호출하여 SearchFragment로 전환
+            // MainActivity의 switchFragment 메서드를 호출하여 InterestFragment로 전환
             (activity as MainActivity).switchFragment(InterestFragment())
         }
+
         val spoticon: ImageView = view.findViewById(R.id.ic_spot_logo)
         spoticon.setOnClickListener {
-            // MainActivity의 switchFragment 메서드를 호출하여 SearchFragment로 전환
+            // MainActivity의 switchFragment 메서드를 호출하여 InterestFilterFragment로 전환
             (activity as MainActivity).switchFragment(InterestFilterFragment())
         }
+
         val showPopupImage = view.findViewById<ImageView>(R.id.ic_go_interest)
         showPopupImage.setOnClickListener {
             val popupFragment = StudyRegisterPopupFragment()
             popupFragment.show(childFragmentManager, "popupFragment")
-
         }
-        return view
-    }
 
-
-        initRecyclerView()
-
-        binding.imgbtnBoard.setOnClickListener{
+        binding.imgbtnBoard.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, CommunityHomeFragment())
                 .commitAllowingStateLoss()
             (activity as? MainActivity)?.isOnCommunityHome(CommunityHomeFragment())
         }
 
-        return binding.root
+        initRecyclerView()
+        return view
     }
 
     private fun initRecyclerView() {
-
         val itemList = ArrayList<BoardItem>()
         val itemList2 = ArrayList<BoardItem>()
 
@@ -80,19 +79,18 @@ class HouseFragment : Fragment() {
         val boardAdapter = BoardAdapter(itemList)
         val boardAdapter2 = BoardAdapter(itemList2)
 
-
         boardAdapter.notifyDataSetChanged()
         boardAdapter2.notifyDataSetChanged()
 
-        rv_board.adapter = boardAdapter
-        rv_board2.adapter = boardAdapter2
+        binding.rvBoard.adapter = boardAdapter
+        binding.rvBoard2.adapter = boardAdapter2
 
-        rv_board.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        rv_board2.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
+        binding.rvBoard.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvBoard2.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
