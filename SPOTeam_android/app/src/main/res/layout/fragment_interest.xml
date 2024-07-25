@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?attr/actionBarSize">
+
+    <ImageView
+        android:id="@+id/spot_logo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/study_spot_logo"
+        app:layout_constraintStart_toStartOf="@+id/interest_study_bold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ic_alarm_interest"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="30dp"
+        android:src="@drawable/activity_main_ic_alaram"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ic_find_interest" />
+
+    <ImageView
+        android:id="@+id/ic_find_interest"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/activity_main_ic_find"
+        app:layout_constraintEnd_toStartOf="@+id/ic_alarm_interest"
+        app:layout_constraintTop_toTopOf="@+id/spot_logo" />
+
+    <TextView
+        android:id="@+id/interest_study_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="250dp"
+        android:text="@string/interest_study"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tabs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spot_logo" />
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="111dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/interest_study_bold"
+        app:tabIndicatorColor="#1B78F2"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="4dp"
+        app:tabTextColor="@color/black">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전체"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="경기 수원시"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="경기 안산시"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <TextView
+        android:id="@+id/check_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="--건"
+        android:textColor="@color/gray_03"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabs" />
+
+
+    <ImageView
+        android:id="@+id/ic_filter"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="130dp"
+        android:src="@drawable/interest_fragment_study_setcondition_deactivate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/check_amount" />
+
+    <Spinner
+        android:id="@+id/filter_toggle"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/gender_spinner_background"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="@+id/ic_filter"
+        app:layout_constraintStart_toEndOf="@+id/ic_filter" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/interest_area_study_reyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/check_amount"
+        tools:listitem="@layout/item_recycler_view" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
