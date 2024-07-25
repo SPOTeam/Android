@@ -101,8 +101,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.ui.category.CategoryFragment
@@ -117,10 +115,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
-    private lateinit var navController: NavController
-    private lateinit var recentSearchAdapter: RecentSearchAdapter
-    private lateinit var recentSearchList: MutableList<String>
     private lateinit var bottomSheetView: View
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var navController: NavController
@@ -134,7 +128,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-
 
         // 다른 아무 화면 클릭시 스터디 화면 사라지도록
         binding.root.setOnTouchListener { _, _ ->
@@ -234,15 +227,19 @@ class MainActivity : AppCompatActivity() {
             .replace(binding.mainFrm.id, fragment)
             .addToBackStack(null)
             .commitAllowingStateLoss()
-
-    fun isOnCommunityHome(fragment: Fragment) {
-        if (fragment is CommunityHomeFragment) {
-            binding.mainFloatingButton.visibility = View.VISIBLE
-        } else {
-            binding.mainFloatingButton.visibility = View.GONE
-        }
     }
+
+        fun isOnCommunityHome(fragment: Fragment) {
+            if (fragment is CommunityHomeFragment) {
+                binding.mainFloatingButton.visibility = View.VISIBLE
+            } else {
+                binding.mainFloatingButton.visibility = View.GONE
+            }
+        }
+
+
 }
+
     
 //대니/김빈
 
