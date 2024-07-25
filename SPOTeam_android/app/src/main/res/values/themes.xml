@@ -26,7 +26,7 @@
 
     </style>
 
-    <style name="CustomChipCloseStyle" parent="Widget.MaterialComponents.Chip.Entry">
+    <style name="CustomChipCloseStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/white</item>
         <item name="chipStrokeColor">#588FFE</item>
         <item name="chipStrokeWidth">2dp</item>

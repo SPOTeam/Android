@@ -129,6 +129,7 @@
                 android:layout_height="wrap_content"
                 android:text="경기 안산시 상록구 사동"
                 android:layout_marginEnd="100dp"
+                app:closeIconVisible="true"
                 android:visibility="gone"/>
 
             <android.widget.Button

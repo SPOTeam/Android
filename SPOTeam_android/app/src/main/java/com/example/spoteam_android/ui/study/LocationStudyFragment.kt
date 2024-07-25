@@ -1,6 +1,5 @@
 package com.example.spoteam_android.ui.study
 
-import LocationSearchAdapter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spoteam_android.LocationSearchAdapter
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentLocationStudyBinding
 import com.example.spoteam_android.login.LocationItem
 
@@ -34,7 +35,10 @@ class LocationStudyFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        locationSearchAdapter = LocationSearchAdapter(locationItemList)
+        locationSearchAdapter = LocationSearchAdapter(locationItemList) { item ->
+            // 아이템 클릭 시 처리
+            openOnlineStudyFragment(item.address)
+        }
         binding.activityLocationRv.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = locationSearchAdapter
@@ -43,12 +47,10 @@ class LocationStudyFragment : Fragment() {
     }
 
     private fun setupSearchFunctionality() {
-        // 드로어블 클릭 리스너 설정
         binding.activityLocationSearchEt.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 val drawableEnd = binding.activityLocationSearchEt.compoundDrawables[2]
                 if (drawableEnd != null && event.rawX >= (binding.activityLocationSearchEt.right - drawableEnd.bounds.width())) {
-                    // 드로어블 클릭 시 검색 수행
                     performSearch()
                     return@setOnTouchListener true
                 }
@@ -56,27 +58,33 @@ class LocationStudyFragment : Fragment() {
             false
         }
 
-        // 텍스트 변경 감지 및 필터링 설정
         binding.activityLocationSearchEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
+            override fun afterTextChanged(s: Editable?) {}
         })
     }
 
     private fun performSearch() {
         val query = binding.activityLocationSearchEt.text.toString()
         locationSearchAdapter.filter(query)
-
-        // 검색 결과가 있을 때만 RecyclerView를 보이게 함
         binding.activityLocationRv.visibility = if (locationSearchAdapter.itemCount > 0) {
             View.VISIBLE
         } else {
             View.GONE
         }
+    }
+
+    private fun openOnlineStudyFragment(address: String) {
+        val fragment = OnlineStudyFragment()
+        val bundle = Bundle().apply {
+            putString("ADDRESS", address)
+            putBoolean("IS_OFFLINE", true) // "오프라인" 버튼 클릭 상태로 설정
+        }
+        fragment.arguments = bundle
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

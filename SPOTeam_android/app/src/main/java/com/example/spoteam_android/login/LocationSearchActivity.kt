@@ -1,6 +1,5 @@
 package com.example.spoteam_android.login
 
-import LocationSearchAdapter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spoteam_android.LocationSearchAdapter
 import com.example.spoteam_android.databinding.ActivityLocationSearchBinding
 
 class LocationSearchActivity : AppCompatActivity() {
@@ -25,7 +25,7 @@ class LocationSearchActivity : AppCompatActivity() {
         binding = ActivityLocationSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = LocationSearchAdapter(dataList)
+//        adapter = LocationSearchAdapter(dataList)
         binding.activityLocationRv.layoutManager = LinearLayoutManager(this)
         binding.activityLocationRv.adapter = adapter
 
