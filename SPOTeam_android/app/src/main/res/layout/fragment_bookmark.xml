@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
+        android:fontFeatureSettings=""
         android:text="찜한 스터디"
         android:textStyle="bold"
         android:textColor="@color/black"
