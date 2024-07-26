@@ -216,7 +216,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // 기타 관련 동작
             }
         }
-        showFragment(HomeFragment())
+        showFragment(CategoryFragment())
         binding.main.closeDrawers()
     }
 
