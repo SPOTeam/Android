@@ -1,0 +1,14 @@
+<resources>
+    <string-array name="fragment_study_num_spinner_array">
+        <item>2명</item>
+        <item>3명</item>
+        <item>4명</item>
+        <item>5명</item>
+        <item>6명</item>
+        <item>7명</item>
+        <item>8명</item>
+        <item>9명</item>
+        <item>10명</item>
+    </string-array>
+</resources>
+
