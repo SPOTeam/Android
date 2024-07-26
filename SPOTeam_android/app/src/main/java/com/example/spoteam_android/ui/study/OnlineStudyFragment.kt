@@ -36,7 +36,7 @@ class OnlineStudyFragment : Fragment() {
         setupChipGroupListener()
         setupChipCloseListener()
 
-        binding.fragmentOnlineStudyLocationPlusBt.setOnClickListener {
+        binding.fragmentOnlineStudyBt.setOnClickListener {
             goToNextFragment()
         }
 
@@ -87,7 +87,7 @@ class OnlineStudyFragment : Fragment() {
 
     private fun goToNextFragment() {
         val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, LocationStudyFragment()) // 변경할 Fragment로 교체
+        transaction.replace(R.id.main_frm, MemberStudyFragment()) // 변경할 Fragment로 교체
         transaction.commit()
     }
 
