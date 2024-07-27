@@ -23,6 +23,7 @@ data class CommunityData(
     val date : String
 )
 
+
 data class BoardItem (
     val studyName : String,
     val studyObject : String,

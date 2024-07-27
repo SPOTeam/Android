@@ -1,17 +1,25 @@
 package com.example.spoteam_android.ui.study
 
+import LocationStudyFragment
+import MemberStudyFragment
+import StudyRequest
+import StudyViewModel
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentOnlineStudyBinding
 
 class OnlineStudyFragment : Fragment() {
     private lateinit var binding: FragmentOnlineStudyBinding
-    private var isOffline: Boolean = false
+    private val viewModel: StudyViewModel by activityViewModels()
+
     private var isLocationPlusVisible: Boolean = false
+    private var selectedLocationCode: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,13 +29,13 @@ class OnlineStudyFragment : Fragment() {
 
         arguments?.let {
             val address = it.getString("ADDRESS")
-            isOffline = it.getBoolean("IS_OFFLINE", false)
+            val isOffline = it.getBoolean("IS_OFFLINE", false)
+            selectedLocationCode = it.getString("CODE")
 
             address?.let { addr ->
                 updateChip(addr)
             }
 
-            // 상태에 따라 초기 설정
             setChipState(isOffline)
             isLocationPlusVisible = isOffline
             updateLocationPlusLayoutVisibility(isLocationPlusVisible)
@@ -37,7 +45,12 @@ class OnlineStudyFragment : Fragment() {
         setupChipCloseListener()
 
         binding.fragmentOnlineStudyBt.setOnClickListener {
+            saveData()
             goToNextFragment()
+        }
+
+        binding.fragmentOnlineStudyLocationPlusBt.setOnClickListener {
+            goToLocationFragment()
         }
 
         return binding.root
@@ -45,27 +58,69 @@ class OnlineStudyFragment : Fragment() {
 
     private fun setupChipGroupListener() {
         binding.fragmentOnlineStudyChipgroup.setOnCheckedChangeListener { group, checkedId ->
+            val currentStudyRequest = viewModel.studyRequest.value ?: StudyRequest(
+                themes = listOf("어학"),
+                title = "",
+                goal = "",
+                introduction = "",
+                isOnline = true,
+                profileImage = null,
+                regions = null, // 기본값을 null로 설정
+                maxPeople = 0,
+                gender = Gender.UNKNOWN,
+                minAge = 0,
+                maxAge = 0,
+                fee = 0
+            )
+
             when (checkedId) {
                 R.id.fragment_online_study_chip_online -> {
-                    binding.fragmentOnlineStudyLocationPlusCl.visibility = View.GONE
                     isLocationPlusVisible = false
+                    viewModel.setStudyData(
+                        title = currentStudyRequest.title,
+                        goal = currentStudyRequest.goal,
+                        introduction = currentStudyRequest.introduction,
+                        isOnline = true,
+                        profileImage = currentStudyRequest.profileImage,
+                        regions = null, // online 선택 시 regions를 null로 설정
+                        maxPeople = currentStudyRequest.maxPeople,
+                        gender = currentStudyRequest.gender,
+                        minAge = currentStudyRequest.minAge,
+                        maxAge = currentStudyRequest.maxAge,
+                        fee = currentStudyRequest.fee
+                    )
                 }
                 R.id.fragment_online_study_chip_offline -> {
-                    binding.fragmentOnlineStudyLocationPlusCl.visibility = View.VISIBLE
                     isLocationPlusVisible = true
+                    viewModel.setStudyData(
+                        title = currentStudyRequest.title,
+                        goal = currentStudyRequest.goal,
+                        introduction = currentStudyRequest.introduction,
+                        isOnline = false,
+                        profileImage = currentStudyRequest.profileImage,
+                        regions = currentStudyRequest.regions ?: mutableListOf(), // offline 선택 시 regions에 값을 설정
+                        maxPeople = currentStudyRequest.maxPeople,
+                        gender = currentStudyRequest.gender,
+                        minAge = currentStudyRequest.minAge,
+                        maxAge = currentStudyRequest.maxAge,
+                        fee = currentStudyRequest.fee
+                    )
                 }
             }
+            updateLocationPlusLayoutVisibility(isLocationPlusVisible)
             updateNextButtonState()
         }
     }
 
+
+
+
     private fun setupChipCloseListener() {
         binding.locationChip.setOnCloseIconClickListener {
             binding.locationChip.visibility = View.GONE
-            updateNextButtonState() // Chip 삭제 시 버튼 비활성화
+            updateNextButtonState()
         }
     }
-
 
     private fun setChipState(isOffline: Boolean) {
         if (isOffline) {
@@ -85,9 +140,59 @@ class OnlineStudyFragment : Fragment() {
                     || binding.locationChip.visibility == View.VISIBLE)
     }
 
+    private fun saveData() {
+        // 현재 StudyRequest 값을 가져오거나 기본 값을 설정
+        val currentStudyRequest = viewModel.studyRequest.value ?: StudyRequest(
+            themes = listOf("어학"),
+            title = "",
+            goal = "",
+            introduction = "",
+            isOnline = true,
+            profileImage = null,
+            regions = null, // 기본값을 null로 설정
+            maxPeople = 0,
+            gender = Gender.UNKNOWN,
+            minAge = 0,
+            maxAge = 0,
+            fee = 0
+        )
+
+        // regions가 null인 경우를 처리하여 mutableListOf()를 사용
+        val currentRegions = currentStudyRequest.regions?.toMutableList() ?: mutableListOf()
+
+        // 선택된 위치 코드가 있으면 regions에 추가
+        selectedLocationCode?.let { code ->
+            if (code !in currentRegions) {
+                currentRegions.add(code)
+            }
+        }
+
+        viewModel.setStudyData(
+            title = currentStudyRequest.title,
+            goal = currentStudyRequest.goal,
+            introduction = currentStudyRequest.introduction,
+            isOnline = currentStudyRequest.isOnline,
+            profileImage = currentStudyRequest.profileImage,
+            regions = if (currentStudyRequest.isOnline) null else currentRegions, // 온라인일 때는 null, 오프라인일 때는 regions 설정
+            maxPeople = currentStudyRequest.maxPeople,
+            gender = currentStudyRequest.gender,
+            minAge = currentStudyRequest.minAge,
+            maxAge = currentStudyRequest.maxAge,
+            fee = currentStudyRequest.fee
+        )
+    }
+
+
     private fun goToNextFragment() {
+        Log.d("OnlineStudyFragment", "Selected Location Code: $selectedLocationCode")
         val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, MemberStudyFragment()) // 변경할 Fragment로 교체
+        transaction.replace(R.id.main_frm, MemberStudyFragment())
+        transaction.commit()
+    }
+
+    private fun goToLocationFragment() {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.main_frm, LocationStudyFragment())
         transaction.commit()
     }
 
@@ -106,6 +211,6 @@ class OnlineStudyFragment : Fragment() {
             visibility = View.VISIBLE
             text = truncatedAddress
         }
-        updateNextButtonState() // 주소 업데이트 후 버튼 상태 재조정
+        updateNextButtonState()
     }
 }
