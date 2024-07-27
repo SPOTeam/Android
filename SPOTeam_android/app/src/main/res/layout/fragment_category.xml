@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/category_spot_logo_iv"
@@ -51,21 +51,28 @@
             app:layout_constraintStart_toStartOf="@id/category_spot_logo_iv"
             app:layout_constraintTop_toBottomOf="@id/category_spot_logo_iv" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/category_tl"
-            android:layout_width="match_parent"
+        <HorizontalScrollView
+            android:id="@+id/category_tl_sv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
-            app:tabSelectedTextColor="#186AFF"
-            app:tabIndicatorFullWidth="false"
-            app:tabIndicatorColor="#186AFF"
-            app:tabRippleColor="#FFFFFFFF"
             android:layout_marginTop="15dp"
+            android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/category_title">
 
-        </com.google.android.material.tabs.TabLayout>
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/category_tl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    app:tabIndicatorColor="#186AFF"
+                    app:tabIndicatorFullWidth="false"
+                    app:tabRippleColor="#FFFFFFFF"
+                    app:tabSelectedTextColor="#186AFF">
+                </com.google.android.material.tabs.TabLayout>
+
+        </HorizontalScrollView>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/category_content_vp"
@@ -75,6 +82,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/category_tl"/>
+            app:layout_constraintTop_toBottomOf="@id/category_tl_sv"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

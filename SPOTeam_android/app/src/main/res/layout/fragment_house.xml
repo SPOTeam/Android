@@ -30,20 +30,20 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/ic_find"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="30dp"
-            android:src="@drawable/activity_main_ic_find"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ic_alarm" />
-
-        <ImageView
             android:id="@+id/ic_alarm"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginEnd="30dp"
             android:src="@drawable/activity_main_ic_alaram"
-            app:layout_constraintEnd_toStartOf="@+id/ic_find"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ic_find" />
+
+        <ImageView
+            android:id="@+id/ic_find"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/activity_main_ic_find"
+            app:layout_constraintEnd_toStartOf="@+id/ic_alarm"
             app:layout_constraintTop_toTopOf="@+id/ic_spot_logo" />
 
         <ImageView
@@ -91,19 +91,21 @@
 
         <ImageButton
             android:id="@+id/imgbtn_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_marginTop="20dp"
             android:background="@color/background_gray"
+            android:scaleType="centerCrop"
             android:src="@drawable/activity_main_imgbtn_location"
             app:layout_constraintStart_toStartOf="@+id/tx_explain_weather"
             app:layout_constraintTop_toBottomOf="@+id/tx_explain_weather"/>
 
         <ImageButton
             android:id="@+id/imgbtn_board"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_marginStart="3dp"
+            android:scaleType="centerCrop"
             android:background="@color/background_gray"
             android:src="@drawable/activity_main_imgbtn_board"
             app:layout_constraintStart_toEndOf="@+id/imgbtn_location"
@@ -111,19 +113,21 @@
 
         <ImageButton
             android:id="@+id/imgbtn_union"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_marginStart="3dp"
             android:background="@color/background_gray"
+            android:scaleType="centerCrop"
             android:src="@drawable/activity_main_imgbtn_union"
             app:layout_constraintStart_toEndOf="@+id/imgbtn_board"
             app:layout_constraintTop_toTopOf="@+id/imgbtn_location"/>
 
         <ImageButton
             android:id="@+id/imgbtn_jjim"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_marginStart="3dp"
+            android:scaleType="centerCrop"
             android:background="@color/background_gray"
             android:src="@drawable/activity_main_imgbtn_jjim"
             app:layout_constraintStart_toEndOf="@+id/imgbtn_union"
@@ -156,7 +160,6 @@
             android:layout_height="360dp"
             android:layout_marginTop="15dp"
             app:layout_constraintTop_toBottomOf="@+id/tx_interest_study"
-            tools:layout_editor_absoluteX="-20dp"
             tools:listitem="@layout/item_recycler_view" />
 
         <TextView
@@ -180,7 +183,7 @@
             android:nestedScrollingEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tx_recommendation_study"
-            />
+            tools:listitem="@layout/item_recycler_view"/>
 
         <ImageView
             android:id="@+id/ic_go_recommendation"
