@@ -29,3 +29,4 @@ data class BoardItem(val studyname: String,
                      val studypo: Int,
                      val like: Int,
                      val watch:Int )
+

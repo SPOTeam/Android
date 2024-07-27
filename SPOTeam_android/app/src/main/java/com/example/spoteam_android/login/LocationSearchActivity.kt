@@ -1,5 +1,6 @@
 package com.example.spoteam_android.login
 
+import LocationSearchAdapter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,30 +8,23 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.LocationSearchAdapter
 import com.example.spoteam_android.databinding.ActivityLocationSearchBinding
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 class LocationSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLocationSearchBinding
     private lateinit var adapter: LocationSearchAdapter
-    // 예시 데이터
-    private val dataList = listOf(
-        LocationItem("유원빌딩", "서울특별시 중구 서소문동 서소문로 116"),
-        LocationItem("대한항공빌딩", "서울특별시 중구 서소문동 서소문로 117")
-    )
+    private val locationItemList = mutableListOf<LocationItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLocationSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        adapter = LocationSearchAdapter(dataList)
-        binding.activityLocationRv.layoutManager = LinearLayoutManager(this)
-        binding.activityLocationRv.adapter = adapter
-
-        // RecyclerView를 처음에는 숨기기
-        binding.activityLocationRv.visibility = View.GONE
+        setupRecyclerView()
+        loadLocalTsvFile() // TSV 파일을 읽어 데이터 초기화
 
         // 드로어블 클릭 리스너 설정
         binding.activityLocationSearchEt.setOnTouchListener { v, event ->
@@ -52,13 +46,56 @@ class LocationSearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                // 텍스트 변경 시 필터링은 하지 않음
+                // 텍스트 변경 시 자동으로 검색 수행
+                performSearch()
             }
         })
     }
 
+    private fun setupRecyclerView() {
+        adapter = LocationSearchAdapter(locationItemList) { item ->
+            // 아이템 클릭 시 처리
+            // 예를 들어, 아이템 클릭 시 어떤 액션을 수행할 수 있습니다.
+        }
+        binding.activityLocationRv.layoutManager = LinearLayoutManager(this)
+        binding.activityLocationRv.adapter = adapter
+
+        // RecyclerView를 처음에는 숨기기
+        binding.activityLocationRv.visibility = View.GONE
+    }
+
+    private fun loadLocalTsvFile() {
+        val inputStream = assets.open("region_data_processed.tsv")
+        val reader = BufferedReader(InputStreamReader(inputStream))
+        val tsvData = reader.use { it.readText() }
+        parseTsvData(tsvData)
+    }
+
+    private fun parseTsvData(tsvData: String) {
+        val rows = tsvData.split("\n").drop(1) // 첫 번째 줄은 헤더이므로 제외
+
+        locationItemList.clear()
+        for (row in rows) {
+            val columns = row.split("\t")
+            if (columns.size >= 5) {
+                val item = LocationItem(
+                    code = columns[0],
+                    city = columns[1],
+                    districtCity = columns[2],
+                    districtGu = columns[3],
+                    subdistrict = columns[4]
+                )
+                locationItemList.add(item)
+            }
+        }
+
+        adapter.notifyDataSetChanged()
+
+        // 검색 결과가 있을 때 RecyclerView를 보이게 함
+        binding.activityLocationRv.visibility = if (adapter.itemCount > 0) View.VISIBLE else View.GONE
+    }
+
     private fun performSearch() {
-        // 검색 수행 로직
         val query = binding.activityLocationSearchEt.text.toString()
         adapter.filter(query)
 

@@ -14,6 +14,10 @@ navigationFragmentKtx = "2.7.7"
 navigationUiKtx = "2.7.7"
 activity = "1.8.0"
 viewpager2 = "1.1.0"
+okhttp = "4.9.3"
+retrofit = "2.9.0"
+
+
 #0723추가
 androidx-recyclerview = "1.2.1"
 
@@ -34,9 +38,13 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 #0723추가
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "androidx-recyclerview" }
 
+#0727추가
+
 flexbox = "com.google.android.flexbox:flexbox:3.0.0"
 kakaoSdkAll = "com.kakao.sdk:v2-all:2.20.3"
 kakaoSdkUser = "com.kakao.sdk:v2-user:2.20.3"
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

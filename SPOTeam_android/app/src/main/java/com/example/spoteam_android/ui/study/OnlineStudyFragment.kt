@@ -1,17 +1,25 @@
 package com.example.spoteam_android.ui.study
 
+import LocationStudyFragment
+import StudyRequest
+import StudyViewModel
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentOnlineStudyBinding
+import com.example.spoteam_android.ui.study.MemberStudyFragment
 
 class OnlineStudyFragment : Fragment() {
     private lateinit var binding: FragmentOnlineStudyBinding
-    private var isOffline: Boolean = false
+    private val viewModel: StudyViewModel by activityViewModels()
+
     private var isLocationPlusVisible: Boolean = false
+    private var selectedLocationCode: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,13 +29,13 @@ class OnlineStudyFragment : Fragment() {
 
         arguments?.let {
             val address = it.getString("ADDRESS")
-            isOffline = it.getBoolean("IS_OFFLINE", false)
+            val isOffline = it.getBoolean("IS_OFFLINE", false)
+            selectedLocationCode = it.getString("CODE")
 
             address?.let { addr ->
                 updateChip(addr)
             }
 
-            // 상태에 따라 초기 설정
             setChipState(isOffline)
             isLocationPlusVisible = isOffline
             updateLocationPlusLayoutVisibility(isLocationPlusVisible)
@@ -37,7 +45,12 @@ class OnlineStudyFragment : Fragment() {
         setupChipCloseListener()
 
         binding.fragmentOnlineStudyBt.setOnClickListener {
+            saveData()
             goToNextFragment()
+        }
+
+        binding.fragmentOnlineStudyLocationPlusBt.setOnClickListener {
+            goToLocationFragment()
         }
 
         return binding.root
@@ -47,14 +60,39 @@ class OnlineStudyFragment : Fragment() {
         binding.fragmentOnlineStudyChipgroup.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 R.id.fragment_online_study_chip_online -> {
-                    binding.fragmentOnlineStudyLocationPlusCl.visibility = View.GONE
                     isLocationPlusVisible = false
+                    viewModel.setStudyData(
+                        title = "",
+                        goal = "",
+                        introduction = "",
+                        isOnline = true,
+                        profileImage = viewModel.studyRequest.value?.profileImage,
+                        regions = viewModel.studyRequest.value?.regions ?: emptyList(),
+                        maxPeople = 0,
+                        gender = Gender.UNKNOWN,
+                        minAge = 0,
+                        maxAge = 0,
+                        fee = 0
+                    )
                 }
                 R.id.fragment_online_study_chip_offline -> {
-                    binding.fragmentOnlineStudyLocationPlusCl.visibility = View.VISIBLE
                     isLocationPlusVisible = true
+                    viewModel.setStudyData(
+                        title = "",
+                        goal = "",
+                        introduction = "",
+                        isOnline = false,
+                        profileImage = viewModel.studyRequest.value?.profileImage,
+                        regions = viewModel.studyRequest.value?.regions ?: emptyList(),
+                        maxPeople = 0,
+                        gender = Gender.UNKNOWN,
+                        minAge = 0,
+                        maxAge = 0,
+                        fee = 0
+                    )
                 }
             }
+            updateLocationPlusLayoutVisibility(isLocationPlusVisible)
             updateNextButtonState()
         }
     }
@@ -62,10 +100,9 @@ class OnlineStudyFragment : Fragment() {
     private fun setupChipCloseListener() {
         binding.locationChip.setOnCloseIconClickListener {
             binding.locationChip.visibility = View.GONE
-            updateNextButtonState() // Chip 삭제 시 버튼 비활성화
+            updateNextButtonState()
         }
     }
-
 
     private fun setChipState(isOffline: Boolean) {
         if (isOffline) {
@@ -85,9 +122,54 @@ class OnlineStudyFragment : Fragment() {
                     || binding.locationChip.visibility == View.VISIBLE)
     }
 
+    private fun saveData() {
+        val currentStudyRequest = viewModel.studyRequest.value ?: StudyRequest(
+            themes = listOf("어학"),
+            title = "",
+            goal = "",
+            introduction = "",
+            isOnline = true,
+            profileImage = null, // 기본값
+            regions = mutableListOf(),
+            maxPeople = 0,
+            gender = Gender.UNKNOWN,
+            minAge = 0,
+            maxAge = 0,
+            fee = 0
+        )
+
+        val currentRegions = currentStudyRequest.regions.toMutableList()
+        selectedLocationCode?.let { code ->
+            if (code !in currentRegions) {
+                currentRegions.add(code)
+            }
+        }
+
+        viewModel.setStudyData(
+            title = currentStudyRequest.title,
+            goal = currentStudyRequest.goal,
+            introduction = currentStudyRequest.introduction,
+            isOnline = currentStudyRequest.isOnline,
+            profileImage = currentStudyRequest.profileImage, // 설정
+            regions = currentRegions,
+            maxPeople = currentStudyRequest.maxPeople,
+            gender = currentStudyRequest.gender,
+            minAge = currentStudyRequest.minAge,
+            maxAge = currentStudyRequest.maxAge,
+            fee = currentStudyRequest.fee
+        )
+    }
+
     private fun goToNextFragment() {
+        Log.d("OnlineStudyFragment", "Selected Location Code: $selectedLocationCode")
         val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, MemberStudyFragment()) // 변경할 Fragment로 교체
+        transaction.replace(R.id.main_frm, MemberStudyFragment())
+        transaction.commit()
+    }
+
+    private fun goToLocationFragment() {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.main_frm, LocationStudyFragment())
         transaction.commit()
     }
 
@@ -106,6 +188,6 @@ class OnlineStudyFragment : Fragment() {
             visibility = View.VISIBLE
             text = truncatedAddress
         }
-        updateNextButtonState() // 주소 업데이트 후 버튼 상태 재조정
+        updateNextButtonState()
     }
 }

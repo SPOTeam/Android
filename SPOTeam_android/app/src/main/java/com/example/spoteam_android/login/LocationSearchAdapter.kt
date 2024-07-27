@@ -1,5 +1,3 @@
-package com.example.spoteam_android
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,13 +10,13 @@ class LocationSearchAdapter(
 ) : RecyclerView.Adapter<LocationSearchAdapter.ViewHolder>() {
 
     private var filteredList: MutableList<LocationItem> = dataList.toMutableList()
+    private var selectedItem: LocationItem? = null // 선택된 아이템을 저장하는 변수
 
     inner class ViewHolder(val binding: ItemLocationSearchBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: LocationItem) {
-            binding.itemLocationSearchTv.text = item.name
             binding.itemLocationConcreteTv.text = item.address
-
             binding.root.setOnClickListener {
+                selectedItem = item // 아이템 클릭 시 선택된 아이템 저장
                 onItemClick(item)
             }
         }
@@ -43,11 +41,15 @@ class LocationSearchAdapter(
         } else {
             val lowerCaseQuery = query.lowercase()
             for (item in dataList) {
-                if (item.address.lowercase().contains(lowerCaseQuery)) {
+                if (item.address.lowercase().startsWith(lowerCaseQuery)) { // 시작 문자만 필터링
                     filteredList.add(item)
                 }
             }
         }
         notifyDataSetChanged()
+    }
+
+    fun getSelectedItem(): LocationItem? {
+        return selectedItem
     }
 }
