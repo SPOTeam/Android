@@ -99,7 +99,7 @@
             android:background="@drawable/category_appbar_btn_up_right"
             android:orientation="vertical">
 
-            <Button
+            <TextView
                 android:id="@+id/language_btn"
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
