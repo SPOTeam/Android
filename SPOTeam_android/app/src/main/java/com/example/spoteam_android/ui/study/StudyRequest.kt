@@ -20,7 +20,7 @@ data class StudyRequest(
     val profileImage: String? = null, // profileImage는 선택적입니다.
 
     @SerializedName("regions")
-    val regions: List<String>,
+    val regions: List<String>? = null,
 
     @SerializedName("maxPeople")
     val maxPeople: Int,

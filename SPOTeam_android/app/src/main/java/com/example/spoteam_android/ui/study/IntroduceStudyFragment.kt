@@ -153,7 +153,7 @@ class IntroduceStudyFragment : Fragment() {
         val goal = binding.fragmentIntroduceStudypurposeEt.text.toString()
         val introduction = binding.fragmentIntroduceStudyEt.text.toString()
         val isOnline = true // 예시로 true로 설정, 실제로는 사용자가 선택한 값을 사용해야 합니다
-        val regions = listOf("1111068000") // 예시로 하드코딩된 값
+        val regions: List<String>? = null
         val maxPeople = 0 // 사용자가 입력한 값
         val gender = Gender.MALE // 예시로 MALE, 실제로는 사용자가 선택한 값을 사용해야 합니다
         val minAge = 0 // 사용자가 입력한 값
@@ -174,6 +174,8 @@ class IntroduceStudyFragment : Fragment() {
             maxAge = maxAge,
             fee = fee
         )
+
+        Log.d("IntroduceStudyFragment", "ViewModel Study Request: ${viewModel.studyRequest.value}")
     }
 
     private fun goToNextFragment() {

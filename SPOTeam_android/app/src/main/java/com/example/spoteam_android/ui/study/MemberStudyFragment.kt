@@ -1,8 +1,5 @@
-package com.example.spoteam_android.ui.study
-
-import ActivityFeeStudyFragment
-import StudyViewModel
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -104,6 +101,7 @@ class MemberStudyFragment : Fragment() {
             fee = viewModel.studyRequest.value?.fee ?: 0,
             profileImage = profileImage // profileImage 파라미터 추가
         )
+
     }
 
     private fun goToNextFragment() {

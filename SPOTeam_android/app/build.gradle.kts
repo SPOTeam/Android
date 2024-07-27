@@ -62,5 +62,7 @@ dependencies {
     implementation(libs.androidx.viewpager2)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.scalars)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.gson)
 
 }

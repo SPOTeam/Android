@@ -1,15 +1,13 @@
-import com.example.spoteam_android.login.LocationApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "https://www.teamspot.site/" // 여기에 실제 서버 URL을 입력하세요
+    private const val BASE_URL = "https://www.teamspot.site/"  // 실제 API의 베이스 URL
 
-    val apiService: LocationApiService by lazy {
+    val instance: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create()) // Gson 변환기 설정
             .build()
-            .create(LocationApiService::class.java)
     }
 }

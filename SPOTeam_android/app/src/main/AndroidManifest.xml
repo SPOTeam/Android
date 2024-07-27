@@ -16,9 +16,13 @@
         android:theme="@style/Theme.SPOTeam_android"
         tools:targetApi="34">
         <service
-            android:name=".login.LoginAPiService"
+            android:name=".ui.study.StudyRegisterApiService"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".login.LoginAPiService"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
             android:name=".login.LocationSearchActivity"

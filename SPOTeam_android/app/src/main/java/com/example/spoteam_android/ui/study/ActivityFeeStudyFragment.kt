@@ -1,6 +1,7 @@
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentActivityFeeStudyBinding
+import com.google.gson.Gson
 
 class ActivityFeeStudyFragment : Fragment() {
     private lateinit var binding: FragmentActivityFeeStudyBinding
     private val viewModel: StudyViewModel by activityViewModels()
+    private val gson = Gson()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +39,7 @@ class ActivityFeeStudyFragment : Fragment() {
                         goal = viewModel.studyRequest.value?.goal.orEmpty(),
                         introduction = viewModel.studyRequest.value?.introduction.orEmpty(),
                         isOnline = viewModel.studyRequest.value?.isOnline ?: true,
-                        profileImage = viewModel.studyRequest.value?.profileImage,
+                        profileImage = viewModel.studyRequest.value?.profileImage ?: "null", // null 가능성 유지
                         regions = viewModel.studyRequest.value?.regions ?: emptyList(),
                         maxPeople = viewModel.studyRequest.value?.maxPeople ?: 0,
                         gender = viewModel.studyRequest.value?.gender ?: Gender.UNKNOWN,
@@ -44,6 +47,7 @@ class ActivityFeeStudyFragment : Fragment() {
                         maxAge = viewModel.studyRequest.value?.maxAge ?: 0,
                         fee = 0 // 활동비 없음
                     )
+                    binding.fragmentActivityFeeStudyPreviewBt.isEnabled = true // 버튼 활성화
                 }
                 R.id.fragment_activity_fee_study_chip_true -> {
                     binding.fragmentActivityFeeStudyNumFl.visibility = View.VISIBLE
@@ -69,6 +73,7 @@ class ActivityFeeStudyFragment : Fragment() {
         val feeText = binding.fragmentActivityFeeStudyEt.text.toString()
         val fee = feeText.toIntOrNull() ?: 0
 
+
         if (fee > 10000) {
             binding.fragmentActivityFeeStudyEt.error = "최대 10,000원까지 입력 가능합니다."
             binding.fragmentActivityFeeStudyPreviewBt.isEnabled = false
@@ -80,7 +85,7 @@ class ActivityFeeStudyFragment : Fragment() {
                 goal = viewModel.studyRequest.value?.goal.orEmpty(),
                 introduction = viewModel.studyRequest.value?.introduction.orEmpty(),
                 isOnline = viewModel.studyRequest.value?.isOnline ?: true,
-                profileImage = viewModel.studyRequest.value?.profileImage,
+                profileImage = viewModel.studyRequest.value?.profileImage, // null 가능성 유지
                 regions = viewModel.studyRequest.value?.regions ?: emptyList(),
                 maxPeople = viewModel.studyRequest.value?.maxPeople ?: 0,
                 gender = viewModel.studyRequest.value?.gender ?: Gender.UNKNOWN,
@@ -93,9 +98,13 @@ class ActivityFeeStudyFragment : Fragment() {
 
     private fun setupPreviewButtonListener() {
         binding.fragmentActivityFeeStudyPreviewBt.setOnClickListener {
+            // ViewModel에 저장된 데이터 JSON으로 변환하여 로그 출력
+            val studyData = viewModel.studyRequest.value
+            val studyDataJson = gson.toJson(studyData)
+            Log.d("ActivityFeeStudyFragment", "Study Data JSON: $studyDataJson")
+
             viewModel.submitStudyData()
             // 서버 전송 후 사용자에게 알림을 추가하거나 다른 액션을 수행할 수 있습니다.
         }
     }
 }
-
