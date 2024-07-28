@@ -27,6 +27,10 @@ class OnlineStudyFragment : Fragment() {
     ): View? {
         binding = FragmentOnlineStudyBinding.inflate(inflater, container, false)
 
+        // 새로 추가된 코드: regions 리스트 초기화
+        selectedLocationCode = null
+        viewModel.clearRegions()
+
         arguments?.let {
             val address = it.getString("ADDRESS")
             val isOffline = it.getBoolean("IS_OFFLINE", false)
@@ -53,8 +57,13 @@ class OnlineStudyFragment : Fragment() {
             goToLocationFragment()
         }
 
+        binding.fragmentOnlineStudyBackBt.setOnClickListener {
+            goToPreviusFragment()
+        }
+
         return binding.root
     }
+
 
     private fun setupChipGroupListener() {
         binding.fragmentOnlineStudyChipgroup.setOnCheckedChangeListener { group, checkedId ->
@@ -141,7 +150,6 @@ class OnlineStudyFragment : Fragment() {
     }
 
     private fun saveData() {
-        // 현재 StudyRequest 값을 가져오거나 기본 값을 설정
         val currentStudyRequest = viewModel.studyRequest.value ?: StudyRequest(
             themes = listOf("어학"),
             title = "",
@@ -149,7 +157,7 @@ class OnlineStudyFragment : Fragment() {
             introduction = "",
             isOnline = true,
             profileImage = null,
-            regions = null, // 기본값을 null로 설정
+            regions = null,
             maxPeople = 0,
             gender = Gender.UNKNOWN,
             minAge = 0,
@@ -157,10 +165,8 @@ class OnlineStudyFragment : Fragment() {
             fee = 0
         )
 
-        // regions가 null인 경우를 처리하여 mutableListOf()를 사용
         val currentRegions = currentStudyRequest.regions?.toMutableList() ?: mutableListOf()
 
-        // 선택된 위치 코드가 있으면 regions에 추가
         selectedLocationCode?.let { code ->
             if (code !in currentRegions) {
                 currentRegions.add(code)
@@ -173,7 +179,7 @@ class OnlineStudyFragment : Fragment() {
             introduction = currentStudyRequest.introduction,
             isOnline = currentStudyRequest.isOnline,
             profileImage = currentStudyRequest.profileImage,
-            regions = if (currentStudyRequest.isOnline) null else currentRegions, // 온라인일 때는 null, 오프라인일 때는 regions 설정
+            regions = if (currentStudyRequest.isOnline) null else currentRegions,
             maxPeople = currentStudyRequest.maxPeople,
             gender = currentStudyRequest.gender,
             minAge = currentStudyRequest.minAge,
@@ -183,10 +189,17 @@ class OnlineStudyFragment : Fragment() {
     }
 
 
+
     private fun goToNextFragment() {
-        Log.d("OnlineStudyFragment", "Selected Location Code: $selectedLocationCode")
         val transaction = parentFragmentManager.beginTransaction()
         transaction.replace(R.id.main_frm, MemberStudyFragment())
+        transaction.commit()
+    }
+
+    private fun goToPreviusFragment() {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.main_frm, IntroduceStudyFragment()) // 변경할 Fragment로 교체
+        transaction.addToBackStack(null) // 백스택에 추가
         transaction.commit()
     }
 

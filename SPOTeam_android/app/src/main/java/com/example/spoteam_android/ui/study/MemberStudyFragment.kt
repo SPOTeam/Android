@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentMemberStudyBinding
+import com.example.spoteam_android.ui.study.IntroduceStudyFragment
+import com.example.spoteam_android.ui.study.OnlineStudyFragment
 
 class MemberStudyFragment : Fragment() {
     private lateinit var binding: FragmentMemberStudyBinding
@@ -25,6 +27,9 @@ class MemberStudyFragment : Fragment() {
         binding.fragmentMemberStudyBt.setOnClickListener {
             saveData()
             goToNextFragment()
+        }
+        binding.fragmentMemberStudyBackBt.setOnClickListener {
+            goToPreviusFragment()
         }
 
         return binding.root
@@ -108,6 +113,12 @@ class MemberStudyFragment : Fragment() {
         val transaction = parentFragmentManager.beginTransaction()
         transaction.replace(R.id.main_frm, ActivityFeeStudyFragment())
         transaction.addToBackStack(null) // 뒤로 가기 스택에 추가
+        transaction.commit()
+    }
+    private fun goToPreviusFragment() {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.main_frm, OnlineStudyFragment()) // 변경할 Fragment로 교체
+        transaction.addToBackStack(null) // 백스택에 추가
         transaction.commit()
     }
 }

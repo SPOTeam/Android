@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentActivityFeeStudyBinding
+import com.example.spoteam_android.ui.study.OnlineStudyFragment
 import com.google.gson.Gson
 
 class ActivityFeeStudyFragment : Fragment() {
@@ -25,6 +26,9 @@ class ActivityFeeStudyFragment : Fragment() {
         setupChipGroupListener()
         setupFeeEditTextListener()
         setupPreviewButtonListener()
+        binding.fragmentActivityFeeStudyBackBt.setOnClickListener {
+            goToPreviusFragment()
+        }
 
         return binding.root
     }
@@ -101,10 +105,17 @@ class ActivityFeeStudyFragment : Fragment() {
             // ViewModel에 저장된 데이터 JSON으로 변환하여 로그 출력
             val studyData = viewModel.studyRequest.value
             val studyDataJson = gson.toJson(studyData)
-            Log.d("ActivityFeeStudyFragment", "Study Data JSON: $studyDataJson")
+            Log.d("ActivityFeeStudyFragment", "$studyDataJson")
 
             viewModel.submitStudyData()
             // 서버 전송 후 사용자에게 알림을 추가하거나 다른 액션을 수행할 수 있습니다.
         }
+    }
+
+    private fun goToPreviusFragment() {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.main_frm, MemberStudyFragment()) // 변경할 Fragment로 교체
+        transaction.addToBackStack(null) // 백스택에 추가
+        transaction.commit()
     }
 }
