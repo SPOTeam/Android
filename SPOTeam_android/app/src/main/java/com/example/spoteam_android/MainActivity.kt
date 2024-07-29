@@ -19,7 +19,7 @@ import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomSheetView: View
@@ -208,14 +208,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             binding.mainFloatingButton.visibility = View.GONE
         }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-
-            // 다른 메뉴 아이템에 대한 처리 추가
-        }
-        return false
     }
 }
 
