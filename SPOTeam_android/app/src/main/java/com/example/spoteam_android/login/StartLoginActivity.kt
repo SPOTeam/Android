@@ -69,7 +69,6 @@ class StartLoginActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
 
-
         }
 
         binding.loginwithspotBt.setOnClickListener {
