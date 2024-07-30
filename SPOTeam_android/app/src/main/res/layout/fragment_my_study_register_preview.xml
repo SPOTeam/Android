@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools">
+
+        <LinearLayout
+            android:id="@+id/fragment_my_study_register_preview_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/fragment_my_study_register_preview_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_resize"
+                android:background="@color/white"/>
+
+
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_tv"
+                android:text="내 스터디"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp" />
+
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_my_study_register_preview_fl"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_ll"
+            android:background="#DBE5FF">
+
+
+            <ImageView
+                android:id="@+id/fragment_my_study_register_preview_user_iv"
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:src="@drawable/ic_profile"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_gravity="bottom"/>
+
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_username_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이윤정"
+                android:textColor="#2D2D2D"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="80dp"
+                android:layout_marginBottom="45dp"
+                android:layout_gravity="bottom"/>
+
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_temperature_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="37.5°C"
+                android:textColor="#186AFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginStart="80dp"
+                android:layout_marginBottom="25dp"
+                android:layout_gravity="bottom"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/fragment_my_study_register_preview_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="토익 스피킹 IH 스터디"
+            android:textColor="#2D2D2D"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_fl"/>
+
+        <LinearLayout
+            android:id="@+id/fragment_my_study_register_preview_member_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_title_tv">
+
+            <ImageView
+                android:layout_width="18sp"
+                android:layout_height="18sp"
+                android:src="@drawable/ic_preview_view"
+                android:layout_gravity="center"/>
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_view_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="1"
+                android:textSize="16sp"
+                android:textColor="#2D2D2D"/>
+
+            <ImageView
+                android:layout_width="18sp"
+                android:layout_height="18sp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/ic_preview_bookmark"
+                android:layout_gravity="center"/>
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_bookmark_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="16sp"
+                android:textColor="#2D2D2D"
+                android:layout_marginStart="5dp"/>
+            <ImageView
+                android:layout_width="18sp"
+                android:layout_height="18sp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/ic_preview_member"
+                android:layout_gravity="center"/>
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_member_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1/10"
+                android:textSize="16sp"
+                android:textColor="#2D2D2D"
+                android:layout_marginStart="5dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fragment_my_study_register_preview_introduction_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="우리 스터디의 목표 한 문장"
+            android:textSize="14sp"
+            android:textColor="#D8D8D8"
+            android:padding="10dp"
+            android:background="@drawable/edittext_rounded_corner_rectangle"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_member_ll"/>
+
+        <LinearLayout
+            android:id="@+id/fragment_my_study_register_preview_group_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_introduction_tv">
+
+
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_chip_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="취업/프로젝트"
+                android:textSize="12sp"
+                android:padding="10dp"
+                android:textColor="#2D2D2D"
+                android:background="@drawable/fragment_my_study_register_preview_background"/>
+
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_online_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오프라인"
+                android:textSize="12sp"
+                android:padding="10dp"
+                android:textColor="#2D2D2D"
+                android:background="@drawable/fragment_my_study_register_preview_background"
+                android:layout_marginStart="10dp"/>
+
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_fee_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="무료"
+                android:textSize="12sp"
+                android:padding="10dp"
+                android:textColor="#2D2D2D"
+                android:background="@drawable/fragment_my_study_register_preview_background"
+                android:layout_marginStart="10dp"/>
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_age_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18-25세"
+                android:textSize="12sp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:textColor="#2D2D2D"
+                android:background="@drawable/fragment_my_study_register_preview_background"
+                android:layout_marginStart="10dp"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/fragment_my_study_register_preview_tl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_group_ll"
+            android:layout_marginTop="15dp"
+            app:tabIndicatorColor="#186AFF"
+            app:tabIndicatorFullWidth="false"
+            app:tabRippleColor="#FFFFFFFF"
+            app:tabSelectedTextColor="#186AFF">
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/fragment_my_study_register_preview_vp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_tl"/>
+
+        <android.widget.Button
+            android:id="@+id/fragment_activity_fee_study_preview_bt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_background"
+            android:text="스터디 등록하기"
+            android:textColor="@drawable/button_textcolor"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

@@ -64,5 +64,6 @@ dependencies {
     implementation(libs.retrofit.converter.scalars)
     implementation(libs.kotlin.stdlib)
     implementation(libs.gson)
+    implementation(libs.glide)
 
 }
