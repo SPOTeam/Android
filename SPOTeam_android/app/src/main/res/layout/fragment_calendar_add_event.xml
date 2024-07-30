@@ -41,13 +41,12 @@
         app:layout_constraintTop_toBottomOf="@+id/eventTitleEditText"
         tools:layout_editor_absoluteX="4dp" />
 
-
     <TextView
-        android:id="@+id/tx_date"
+        android:id="@+id/tx_start_date_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="일시"
+        android:hint="시작 일시"
         android:padding="8dp"
         android:textColor="@color/black"
         android:textSize="20dp"
@@ -55,17 +54,43 @@
         app:layout_constraintTop_toBottomOf="@+id/eventPositionEditText" />
 
     <TextView
-        android:id="@+id/eventDateTextView"
+        android:id="@+id/startDateTimeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/edittext_rounded_corner_rectangle"
-        android:hint="날짜를 입력해주세요"
+        android:hint="시작 날짜와 시간을 입력해주세요"
         android:padding="10dp"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/tx_date"
+        app:layout_constraintTop_toBottomOf="@+id/tx_start_date_time"
+        tools:layout_editor_absoluteX="4dp" />
+
+    <TextView
+        android:id="@+id/tx_end_date_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="종료 일시"
+        android:padding="8dp"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/startDateTimeTextView" />
+
+    <TextView
+        android:id="@+id/endDateTimeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edittext_rounded_corner_rectangle"
+        android:hint="종료 날짜와 시간을 입력해주세요"
+        android:padding="10dp"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/tx_end_date_time"
         tools:layout_editor_absoluteX="4dp" />
 
     <ImageButton
@@ -80,6 +105,5 @@
         android:src="@drawable/fragment_calendar_add_event_btn_add"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="10dp" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

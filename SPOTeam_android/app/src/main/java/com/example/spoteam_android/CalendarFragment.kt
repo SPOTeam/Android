@@ -21,6 +21,10 @@ class CalendarFragment : Fragment() {
     private lateinit var eventsTextView: TextView
     private lateinit var icBar: ImageView
     private lateinit var icCheck: ImageView
+    private lateinit var tx_startdate: TextView
+    private lateinit var tx_enddate: TextView
+    private lateinit var tx_date: TextView
+    private lateinit var tx_tilde: TextView
     private val eventViewModel: EventViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -32,6 +36,10 @@ class CalendarFragment : Fragment() {
         eventsTextView = view.findViewById(R.id.eventsTextView)
         icBar = view.findViewById(R.id.ic_bar)
         icCheck = view.findViewById(R.id.ic_check)
+        tx_startdate = view.findViewById(R.id.tx_startdate)
+        tx_enddate = view.findViewById(R.id.tx_enddate)
+        tx_date = view.findViewById(R.id.tx_date)
+        tx_tilde = view.findViewById(R.id.tx_tilde)
 
 
 
@@ -59,17 +67,38 @@ class CalendarFragment : Fragment() {
         return view
     }
 
+//    private fun displayEvents(events: List<Event>) {
+//        Log.d("CalendarFragment", "Displaying ${events.size} events")
+//        eventsTextView.text = events.joinToString("\n") { "${it.title}" }
+//    }
+
     private fun displayEvents(events: List<Event>) {
         Log.d("CalendarFragment", "Displaying ${events.size} events")
-        eventsTextView.text = events.joinToString("\n") { "${it.title}" }
+        eventsTextView.text = events.joinToString("\n") { event ->
+            " ${event.title}"
+        }
+
+        tx_startdate.text = events.joinToString("\n") { event ->
+            " ${event.startDateTime}"
+        }
+        tx_enddate.text = events.joinToString("\n") { event ->
+            " ${event.endDateTime}"
+        }
+
+
     }
+
     private fun updateEventIconsVisibility(events: List<Event>) {
         if (events.isNotEmpty()) {
-            icBar.visibility = View.VISIBLE
-            icCheck.visibility = View.VISIBLE
+//            icBar.visibility = View.VISIBLE
+//            icCheck.visibility = View.VISIBLE
+            tx_date.visibility = View.VISIBLE
+            tx_tilde.visibility = View.VISIBLE
         } else {
-            icBar.visibility = View.GONE
-            icCheck.visibility = View.GONE
+//            icBar.visibility = View.GONE
+//            icCheck.visibility = View.GONE
+            tx_date.visibility = View.GONE
+            tx_tilde.visibility = View.GONE
         }
     }
 }

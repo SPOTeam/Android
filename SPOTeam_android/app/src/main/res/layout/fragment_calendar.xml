@@ -46,6 +46,8 @@
             android:layout_margin="20dp"
             android:src="@drawable/fragment_calendar_spot_logo" />
 
+
+
     </FrameLayout>
 
     <TextView
@@ -176,12 +178,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:text="할 일"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+        app:layout_constraintTop_toTopOf="@+id/tx_date" />
 
     <ImageView
         android:id="@+id/ic_check"
@@ -197,15 +198,48 @@
         android:id="@+id/tx_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="200dp"
         android:background="#F8F8F8"
         android:text="일시"
         android:textColor="#186AFF"
         android:textSize="13dp"
-        app:layout_constraintBottom_toBottomOf="@+id/eventsTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+
+    <TextView
+        android:id="@+id/tx_startdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="시작 시간"
+        android:textColor="#555555"
+        android:textSize="13dp"
+        app:layout_constraintStart_toEndOf="@+id/tx_date"
+        app:layout_constraintTop_toTopOf="@+id/tx_date" />
+
+    <TextView
+        android:id="@+id/tx_tilde"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="~"
+        android:textColor="#555555"
+        android:textSize="13dp"
+        app:layout_constraintStart_toEndOf="@+id/tx_startdate"
+        app:layout_constraintTop_toTopOf="@+id/tx_startdate" />
+
+
+    <TextView
+        android:id="@+id/tx_enddate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="끝나는 시간"
+        android:textColor="#555555"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tx_startdate"
+        app:layout_constraintStart_toEndOf="@+id/tx_tilde" />
 
     <TextView
         android:id="@+id/tx_expalin_study1"
@@ -262,6 +296,8 @@
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/tx_expalin_study3"
         app:layout_constraintTop_toTopOf="@+id/tx_expalin_study3" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
