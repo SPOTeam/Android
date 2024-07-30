@@ -103,10 +103,10 @@
                 android:id="@+id/language_btn"
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
-                android:background="@drawable/category_background"
+                android:background="@drawable/selector_category_background_u_r"
                 android:textSize="15sp"
                 android:text="어학"
-                android:textColor="@drawable/button_textcolor"
+                android:textColor="@drawable/selector_button_text"
                 android:gravity="center"
                 android:layout_marginBottom="2dp"/>
 
@@ -115,9 +115,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:text="자격증"
-                android:textColor="@drawable/button_textcolor"
+                android:textColor="@drawable/selector_category_text"
                 android:gravity="center"
-                android:background="@drawable/category_background"
+                android:background="@drawable/selector_category_background"
                 android:layout_marginBottom="2dp"/>
 
             <TextView
@@ -125,9 +125,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:text="취업"
-                android:textColor="@drawable/button_textcolor"
+                android:textColor="@drawable/selector_category_text"
                 android:gravity="center"
-                android:background="@drawable/category_background"
+                android:background="@drawable/selector_category_background"
                 android:layout_marginBottom="2dp"/>
 
             <TextView
@@ -135,9 +135,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:text="토론"
-                android:textColor="@drawable/button_textcolor"
+                android:textColor="@drawable/selector_category_text"
                 android:gravity="center"
-                android:background="@drawable/category_background"
+                android:background="@drawable/selector_category_background"
                 android:layout_marginBottom="2dp"/>
 
             <TextView
@@ -145,9 +145,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:text="시사/뉴스"
-                android:textColor="@drawable/button_textcolor"
+                android:textColor="@drawable/selector_category_text"
                 android:gravity="center"
-                android:background="@drawable/category_background"
+                android:background="@drawable/selector_category_background"
                 android:layout_marginBottom="2dp"/>
 
             <TextView
@@ -155,9 +155,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:text="자율 학습"
-                android:textColor="@drawable/button_textcolor"
+                android:textColor="@drawable/selector_category_text"
                 android:gravity="center"
-                android:background="@drawable/category_background"
+                android:background="@drawable/selector_category_background"
                 android:layout_marginBottom="2dp"/>
 
             <TextView
@@ -165,9 +165,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:text="프로젝트"
-                android:textColor="@drawable/button_textcolor"
+                android:textColor="@drawable/selector_category_text"
                 android:gravity="center"
-                android:background="@drawable/category_background"
+                android:background="@drawable/selector_category_background"
                 android:layout_marginBottom="2dp"/>
 
             <TextView
@@ -175,9 +175,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:text="공모전"
-                android:textColor="@drawable/button_textcolor"
+                android:textColor="@drawable/selector_category_text"
                 android:gravity="center"
-                android:background="@drawable/category_background"
+                android:background="@drawable/selector_category_background"
                 android:layout_marginBottom="2dp"/>
 
             <TextView
@@ -185,9 +185,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:text="전공/진로 학습"
-                android:textColor="@drawable/button_textcolor"
+                android:textColor="@drawable/selector_category_text"
                 android:gravity="center"
-                android:background="@drawable/category_background"
+                android:background="@drawable/selector_category_background"
                 android:layout_marginBottom="2dp"/>
 
             <TextView
@@ -195,9 +195,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:text="기타"
-                android:textColor="@drawable/button_textcolor"
+                android:textColor="@drawable/selector_category_text"
                 android:gravity="center"
-                android:background="@drawable/category_background" />
+                android:background="@drawable/selector_category_background_d_r" />
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 

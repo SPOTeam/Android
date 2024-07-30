@@ -17,6 +17,7 @@ viewpager2 = "1.1.0"
 okhttp = "4.9.3"
 retrofit = "2.9.0"
 gson = "2.10.1"
+glide = "4.14.2"
 
 
 #0723추가
@@ -48,6 +49,8 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+glideCompiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

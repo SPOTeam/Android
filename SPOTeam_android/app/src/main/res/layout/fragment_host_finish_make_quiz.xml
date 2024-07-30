@@ -73,8 +73,7 @@
                     android:id="@+id/host_profile"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile"
-                    android:background="@"/>
+                    android:src="@drawable/ic_host_profile" />
 
                 <TextView
                     android:id="@+id/host_name"
