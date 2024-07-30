@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?attr/actionBarSize">
+
+    <FrameLayout
+        android:id="@+id/frameLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#D6E5FF"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/tx_user"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:layout_marginLeft="90dp"
+            android:layout_marginBottom="50dp"
+            android:text="반가워요, 이윤정님"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tx_temperature"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:layout_marginLeft="92dp"
+            android:layout_marginBottom="35dp"
+            android:text="37.5°C"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="start|bottom"
+            android:layout_margin="20dp"
+            android:src="@drawable/fragment_calendar_spot_logo" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tx_study_name"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="토익 스피킹 IH 스터디"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout5" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tx_study_name">
+
+        <ImageView
+            android:id="@+id/ic_view"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/fragment_calendar_ic_view" />
+
+        <TextView
+            android:id="@+id/tx_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1.2k"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/ic_like"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/fragment_calendar_ic_like" />
+
+        <TextView
+            android:id="@+id/tx_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="like"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/ic_group"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/fragment_calendar_ic_group" />
+
+        <TextView
+            android:id="@+id/tx_po"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tx_divide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tx_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/popup_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/edittext_rounded_corner_rectangle"
+        android:hint="우리 스터디의 목표 한 문장"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="70dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/ic_bar"
+        android:layout_width="5dp"
+        android:layout_height="23dp"
+        android:layout_marginEnd="5dp"
+        android:background="#D6E5FF"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/eventsTextView"
+        app:layout_constraintEnd_toStartOf="@+id/eventsTextView" />
+
+
+    <TextView
+        android:id="@+id/eventsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="할 일"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+
+    <ImageView
+        android:id="@+id/ic_check"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="5dp"
+        android:src="@drawable/fragment_calendar_ic_check"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/eventsTextView"
+        app:layout_constraintTop_toTopOf="@+id/eventsTextView" />
+
+    <TextView
+        android:id="@+id/tx_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="5dp"
+        android:background="#F8F8F8"
+        android:text="일시"
+        android:textColor="#186AFF"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toBottomOf="@+id/eventsTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tx_expalin_study1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/textview_rounded_corners"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="10dp"
+        android:text="취업/프로젝트"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/popup_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/popup_edit_text" />
+
+    <TextView
+        android:id="@+id/tx_expalin_study2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/textview_rounded_corners"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="10dp"
+        android:text="오프라인"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/tx_expalin_study1"
+        app:layout_constraintTop_toTopOf="@+id/tx_expalin_study1" />
+
+    <TextView
+        android:id="@+id/tx_expalin_study3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/textview_rounded_corners"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="10dp"
+        android:text="무료"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/tx_expalin_study2"
+        app:layout_constraintTop_toTopOf="@+id/tx_expalin_study2" />
+
+    <TextView
+        android:id="@+id/tx_expalin_study4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/textview_rounded_corners"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="10dp"
+        android:text="25세 이하"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/tx_expalin_study3"
+        app:layout_constraintTop_toTopOf="@+id/tx_expalin_study3" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
