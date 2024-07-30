@@ -6,7 +6,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class StudyViewModel : ViewModel() {
 
     private val _studyRequest = MutableLiveData<StudyRequest>()
@@ -20,7 +19,7 @@ class StudyViewModel : ViewModel() {
     }
 
     fun setStudyData(
-        title: String, goal: String, introduction: String, isOnline: Boolean,profileImage: String?,
+        title: String, goal: String, introduction: String, isOnline: Boolean, profileImage: String?,
         regions: List<String>?, maxPeople: Int, gender: Gender, minAge: Int, maxAge: Int, fee: Int
     ) {
         _studyRequest.value = StudyRequest(
@@ -47,31 +46,33 @@ class StudyViewModel : ViewModel() {
 
     fun submitStudyData() {
         // Retrofit 인스턴스와 API 서비스 가져오기
-        val apiService = RetrofitClient.instance.create(StudyApiService::class.java)
-
+        // val apiService = RetrofitClient.instance.create(StudyApiService::class.java)
         // 현재 저장된 StudyRequest 데이터 가져오기
-        val studyData = _studyRequest.value
+        // val studyData = _studyRequest.value
 
-        if (studyData != null) {
-            // POST 요청 수행
-            apiService.submitStudyData(studyData).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        // 성공적으로 데이터가 전송된 경우
-                        Log.d("StudyViewModel", "Study data submitted successfully.")
-                    } else {
-                        // 서버 응답이 성공적이지 않은 경우
-                        Log.e("StudyViewModel", "Failed to submit study data. Response code: ${response.code()}")
-                    }
-                }
+        // if (studyData != null) {
+        //     POST 요청 수행
+        //     apiService.submitStudyData(studyData).enqueue(object : Callback<Void> {
+        //         override fun onResponse(call: Call<Void>, response: Response<Void>) {
+        //             if (response.isSuccessful) {
+        //                 성공적으로 데이터가 전송된 경우
+        //                 Log.d("StudyViewModel", "Study data submitted successfully.")
+        //             } else {
+        //                 서버 응답이 성공적이지 않은 경우
+        //                 Log.e("StudyViewModel", "Failed to submit study data. Response code: ${response.code()}")
+        //             }
+        //         }
+        //         override fun onFailure(call: Call<Void>, t: Throwable) {
+        //             네트워크 요청 실패
+        //             Log.e("StudyViewModel", "Error submitting study data: ${t.message}")
+        //         }
+        //     })
+        // } else {
+        //     Log.e("StudyViewModel", "No study data available to submit.")
+        // }
+    }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    // 네트워크 요청 실패
-                    Log.e("StudyViewModel", "Error submitting study data: ${t.message}")
-                }
-            })
-        } else {
-            Log.e("StudyViewModel", "No study data available to submit.")
-        }
+    fun clearRegions() {
+        _studyRequest.value = _studyRequest.value?.copy(regions = null)
     }
 }
