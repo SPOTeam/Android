@@ -17,7 +17,7 @@ data class StudyRequest(
     val isOnline: Boolean,
 
     @SerializedName("profileImage")
-    val profileImage: String? = null, // profileImage는 선택적입니다.
+    val profileImage: String? = null,
 
     @SerializedName("regions")
     val regions: List<String>? = null,
