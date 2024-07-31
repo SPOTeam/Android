@@ -2,9 +2,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class StudyViewModel : ViewModel() {
 
@@ -12,6 +9,10 @@ class StudyViewModel : ViewModel() {
     val studyRequest: LiveData<StudyRequest> = _studyRequest
 
     private val _profileImageUri = MutableLiveData<String?>()
+    val profileImageUri: LiveData<String?> = _profileImageUri
+
+    private val _themes = MutableLiveData<List<String>>()
+    val themes: LiveData<List<String>> = _themes
 
     fun setProfileImageUri(uri: String?) {
         _profileImageUri.value = uri
@@ -23,7 +24,7 @@ class StudyViewModel : ViewModel() {
         regions: List<String>?, maxPeople: Int, gender: Gender, minAge: Int, maxAge: Int, fee: Int
     ) {
         _studyRequest.value = StudyRequest(
-            themes = listOf("어학"), // 예시로 추가된 값
+            themes = _themes.value ?: listOf(), // 현재 themes 값을 사용
             title = title,
             goal = goal,
             introduction = introduction,
@@ -40,8 +41,14 @@ class StudyViewModel : ViewModel() {
 
     private fun updateStudyRequest() {
         _studyRequest.value = _studyRequest.value?.copy(
-            profileImage = _profileImageUri.value
+            profileImage = _profileImageUri.value,
+            themes = _themes.value ?: listOf()
         )
+    }
+
+    fun updateThemes(newThemes: List<String>) {
+        _themes.value = newThemes
+        updateStudyRequest()
     }
 
     fun submitStudyData() {

@@ -2,8 +2,10 @@ package com.example.spoteam_android.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -72,8 +74,8 @@ class StartLoginActivity : AppCompatActivity() {
         }
 
         binding.loginwithspotBt.setOnClickListener {
-            val intent = Intent(this, CheckListCategoryActivity::class.java)
             startActivity(intent)
+
         }
     }
 }

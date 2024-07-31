@@ -6,6 +6,8 @@
     <string name="title_notifications">Notifications</string>
     <string name="studystart">스터디 모집과 관리\n똑똑한 취준 생활 시작, SPOT</string>
     <string name="locationcaution">위치 노출의 위험을 방지하기 위해 구체적인\n지역은 스터디원 확정 후 협의하시기 바랍니다.</string>
+    <string name="complete_message">스터디 모집이 시작됩니다!</string>
+    <string name="complete1_message">내 스터디에서 신청자들을 수락해주세요.</string>
 
     <string name="interest_study">관심 지역 스터디</string>
     <string-array name="signup_select_region">
