@@ -25,10 +25,10 @@ class BoardAdapter(private val itemList: ArrayList<BoardItem>) :
     inner class BoardViewHolder(private val binding: ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: BoardItem) {
-            binding.tvTime.text = item.studyname
-            binding.tvTitle.text = item.studyobject
-            binding.tvName.text = item.studyto.toString()
-            binding.tvName2.text = item.studypo.toString()
+            binding.tvTime.text = item.studyName
+            binding.tvTitle.text = item.studyObject
+            binding.tvName.text = item.studyTO.toString()
+            binding.tvName2.text = item.studyPO.toString()
             binding.tvName3.text = item.like.toString()
             binding.tvName4.text = item.watch.toString()
         }

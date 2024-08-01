@@ -4,14 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Visibility
-import com.example.spoteam_android.communityData
+import com.example.spoteam_android.CommunityData
 import com.example.spoteam_android.databinding.ItemCommunityContentBinding
 
-class CommunityCategoryContentRVAdapter(private val dataList: ArrayList<communityData>) : RecyclerView.Adapter<CommunityCategoryContentRVAdapter.ViewHolder>() {
+class CommunityCategoryContentRVAdapter(private val dataList: ArrayList<CommunityData>) : RecyclerView.Adapter<CommunityCategoryContentRVAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(data : communityData)
+        fun onItemClick(data : CommunityData)
     }
 
     private lateinit var itemClickListener : OnItemClickListener
@@ -55,7 +54,7 @@ class CommunityCategoryContentRVAdapter(private val dataList: ArrayList<communit
     override fun getItemCount() = dataList.size
 
     inner class ViewHolder(val binding : ItemCommunityContentBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: communityData){
+        fun bind(data: CommunityData){
             binding.contentTitleTv.text = data.title
             binding.contentSaveNumTv.text = data.bookmarkNum
             binding.contentSummaryTv.text = data.content

@@ -1,11 +1,13 @@
 package com.example.spoteam_android.ui.study
 
+import StudyViewModel
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentRegisterStudyBinding
 
@@ -13,6 +15,7 @@ class RegisterStudyFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterStudyBinding
     private var currentStep = 1 // 현재 단계
+    private val viewModel: StudyViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,12 +44,25 @@ class RegisterStudyFragment : Fragment() {
             val isAnyChipChecked =
                 binding.fragmentRegisterStudyChipgroup.checkedChipIds.isNotEmpty()
             binding.fragmentRegisterStudyBt.isEnabled = isAnyChipChecked
+
+            updateSelectedThemes()
         }
 
         for (i in 0 until binding.fragmentRegisterStudyChipgroup.childCount) {
             val chip = binding.fragmentRegisterStudyChipgroup.getChildAt(i) as? CompoundButton
             chip?.setOnCheckedChangeListener(chipCheckedChangeListener)
         }
+    }
+
+    private fun updateSelectedThemes() {
+        val selectedThemes = mutableListOf<String>()
+        for (i in 0 until binding.fragmentRegisterStudyChipgroup.childCount) {
+            val chip = binding.fragmentRegisterStudyChipgroup.getChildAt(i) as? CompoundButton
+            if (chip?.isChecked == true) {
+                selectedThemes.add(chip.text.toString())
+            }
+        }
+        viewModel.updateThemes(selectedThemes)
     }
 
     private fun updateProgressBar() {

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--연우 코드-->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,352 +7,198 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/main_frm"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/main_bnv"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/main_bnv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
-        app:labelVisibilityMode="unlabeled"
-        app:itemIconSize="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        <FrameLayout
+            android:id="@+id/main_frm"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/main_bnv"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    <FrameLayout
-        android:id="@+id/activity_main_study_fl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/activity_main_study"
-        android:padding="10dp"
-        android:visibility="gone"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/main_bnv">
-
-        <LinearLayout
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/main_floatingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:backgroundTint="@color/white"
+            android:src="@drawable/icon_write"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/main_bnv"/>
 
-            <ImageButton
-                android:id="@+id/activity_main_mystudy_ib"
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/main_bnv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/windowBackground"
+            app:labelVisibilityMode="unlabeled"
+            app:itemIconSize="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
+
+        <FrameLayout
+            android:id="@+id/activity_main_study_fl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/activity_main_study"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/main_bnv">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/activity_main_mystudy_resize"
-                android:background="@drawable/activity_main_mystudy_background"
-                android:layout_marginEnd="10dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingStart="13dp"
-                android:paddingEnd="13dp"/>
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/activity_main_registerstudy_ib"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/activity_main_register_study_resize"
-                android:background="@drawable/activity_main_registerstudy_background"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingStart="13dp"
-                android:paddingEnd="13dp"/>
-        </LinearLayout>
-    </FrameLayout>
+                <ImageButton
+                    android:id="@+id/activity_main_mystudy_ib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/activity_main_mystudy_resize"
+                    android:background="@drawable/activity_main_mystudy_background"
+                    android:layout_marginEnd="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="13dp"
+                    android:paddingEnd="13dp"/>
 
+                <ImageButton
+                    android:id="@+id/activity_main_registerstudy_ib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/activity_main_register_study_resize"
+                    android:background="@drawable/activity_main_registerstudy_background"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="13dp"
+                    android:paddingEnd="13dp"/>
+            </LinearLayout>
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/main_floatingButton"
-        android:layout_width="wrap_content"
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/mainCategoryBar"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:src="@drawable/icon_write"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/main_bnv"/>
+        android:layout_marginTop="125dp"
+        android:layout_gravity="start"
+        android:background="@drawable/category_appbar_btn_up_right">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".MainActivity">-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/category_appbar_btn_up_right"
+            android:orientation="vertical">
 
-<!--    <fragment-->
-<!--        android:id="@+id/nav_host_fragment"-->
-<!--        android:name="androidx.navigation.fragment.NavHostFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_above="@id/bottom_navigation"-->
-<!--        app:navGraph="@navigation/main_navigation"-->
-<!--        app:defaultNavHost="true"/>-->
+            <TextView
+                android:id="@+id/language_btn"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:background="@drawable/selector_category_background_u_r"
+                android:textSize="15sp"
+                android:text="어학"
+                android:textColor="@drawable/selector_button_text"
+                android:gravity="center"
+                android:layout_marginBottom="2dp"/>
 
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/bottom_navigation"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="72dp"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        app:menu="@menu/bottom_nav_menu"-->
-<!--        app:labelVisibilityMode="unlabeled"-->
-<!--        style="@style/BottomNavigationViewStyle"/>-->
-<!--</RelativeLayout>-->
+            <TextView
+                android:id="@+id/license_btn"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="자격증"
+                android:textColor="@drawable/selector_category_text"
+                android:gravity="center"
+                android:background="@drawable/selector_category_background"
+                android:layout_marginBottom="2dp"/>
 
-    <!--<?xml version="1.0" encoding="utf-8"?>-->
-    <!--<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--    xmlns:tools="http://schemas.android.com/tools"-->
-    <!--    android:layout_width="match_parent"-->
-    <!--    android:layout_height="match_parent"-->
-    <!--    android:paddingBottom="30dp"-->
-    <!--    android:fillViewport="true"-->
-    <!--    android:background="@color/background_gray"-->
-    <!--    android:scrollbars="none">-->
+            <TextView
+                android:id="@+id/job_btn"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="취업"
+                android:textColor="@drawable/selector_category_text"
+                android:gravity="center"
+                android:background="@drawable/selector_category_background"
+                android:layout_marginBottom="2dp"/>
 
-    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--        android:id="@+id/main"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:orientation="vertical"-->
-    <!--        tools:context=".MainActivity">-->
+            <TextView
+                android:id="@+id/discuss_btn"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="토론"
+                android:textColor="@drawable/selector_category_text"
+                android:gravity="center"
+                android:background="@drawable/selector_category_background"
+                android:layout_marginBottom="2dp"/>
 
-    <!--        <ImageView-->
-    <!--            android:id="@+id/ic_spot_logo"-->
-    <!--            android:layout_width="35dp"-->
-    <!--            android:layout_height="35dp"-->
-    <!--            android:layout_marginStart="20dp"-->
-    <!--            android:layout_marginTop="30dp"-->
-    <!--            android:src="@drawable/study_spot_logo"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintHorizontal_bias="0.0"-->
-    <!--            app:layout_constraintStart_toStartOf="parent"-->
-    <!--            app:layout_constraintTop_toTopOf="parent"-->
-    <!--            app:layout_constraintVertical_bias="0.0" />-->
+            <TextView
+                android:id="@+id/news_btn"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="시사/뉴스"
+                android:textColor="@drawable/selector_category_text"
+                android:gravity="center"
+                android:background="@drawable/selector_category_background"
+                android:layout_marginBottom="2dp"/>
 
-    <!--        <ImageView-->
-    <!--            android:id="@+id/ic_find"-->
-    <!--            android:layout_width="40dp"-->
-    <!--            android:layout_height="40dp"-->
-    <!--            android:layout_marginEnd="30dp"-->
-    <!--            android:src="@drawable/activity_main_ic_find"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/ic_alarm" />-->
+            <TextView
+                android:id="@+id/freeStudy_btn"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="자율 학습"
+                android:textColor="@drawable/selector_category_text"
+                android:gravity="center"
+                android:background="@drawable/selector_category_background"
+                android:layout_marginBottom="2dp"/>
 
-    <!--        <ImageView-->
-    <!--            android:id="@+id/ic_alarm"-->
-    <!--            android:layout_width="40dp"-->
-    <!--            android:layout_height="40dp"-->
-    <!--            android:src="@drawable/activity_main_ic_alaram"-->
-    <!--            app:layout_constraintEnd_toStartOf="@+id/ic_find"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/ic_spot_logo" />-->
+            <TextView
+                android:id="@+id/project_btn"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="프로젝트"
+                android:textColor="@drawable/selector_category_text"
+                android:gravity="center"
+                android:background="@drawable/selector_category_background"
+                android:layout_marginBottom="2dp"/>
 
-    <!--        <ImageView-->
-    <!--            android:id="@+id/ic_sun"-->
-    <!--            android:layout_width="50dp"-->
-    <!--            android:layout_height="50dp"-->
-    <!--            android:layout_marginTop="60dp"-->
-    <!--            android:src="@drawable/activity_main_ic_sun"-->
-    <!--            app:layout_constraintStart_toStartOf="@+id/ic_spot_logo"-->
-    <!--            app:layout_constraintTop_toBottomOf="@+id/ic_spot_logo" />-->
+            <TextView
+                android:id="@+id/competition_btn"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="공모전"
+                android:textColor="@drawable/selector_category_text"
+                android:gravity="center"
+                android:background="@drawable/selector_category_background"
+                android:layout_marginBottom="2dp"/>
 
-    <!--        <TextView-->
-    <!--            android:id="@+id/tx_temperature"-->
-    <!--            android:layout_width="70dp"-->
-    <!--            android:layout_height="30dp"-->
-    <!--            android:layout_marginStart="20dp"-->
-    <!--            android:text="31.0°C"-->
-    <!--            android:textColor="@color/black"-->
-    <!--            android:textSize="20dp"-->
-    <!--            android:textStyle="bold"-->
-    <!--            app:layout_constraintStart_toEndOf="@+id/ic_sun"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/ic_sun" />-->
+            <TextView
+                android:id="@+id/majorStudy_btn"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="전공/진로 학습"
+                android:textColor="@drawable/selector_category_text"
+                android:gravity="center"
+                android:background="@drawable/selector_category_background"
+                android:layout_marginBottom="2dp"/>
 
-    <!--        <TextView-->
-    <!--            android:id="@+id/tx_explain_weather"-->
-    <!--            android:layout_width="100dp"-->
-    <!--            android:layout_height="30dp"-->
-    <!--            android:layout_marginTop="4dp"-->
-    <!--            android:text="너무 덥네요!\n오늘은 카공을 추천해요"-->
-    <!--            android:textColor="@color/black"-->
-    <!--            android:textSize="10dp"-->
-    <!--            app:layout_constraintStart_toStartOf="@+id/ic_sun"-->
-    <!--            app:layout_constraintTop_toBottomOf="@+id/ic_sun" />-->
+            <TextView
+                android:id="@+id/rest_btn"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="기타"
+                android:textColor="@drawable/selector_category_text"
+                android:gravity="center"
+                android:background="@drawable/selector_category_background_d_r" />
+        </LinearLayout>
+    </com.google.android.material.navigation.NavigationView>
 
-
-    <!--        <ImageButton-->
-    <!--            android:id="@+id/imgbtn_go_board"-->
-    <!--            android:layout_width="172dp"-->
-    <!--            android:layout_height="73dp"-->
-    <!--            android:layout_marginStart="50dp"-->
-    <!--            android:background="@color/white"-->
-    <!--            android:src="@drawable/activity_main_imgbtn_go_board"-->
-    <!--            app:layout_constraintStart_toEndOf="@+id/tx_temperature"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/tx_temperature">-->
-    <!--        </ImageButton>-->
-
-    <!--        <ImageButton-->
-    <!--            android:id="@+id/imgbtn_location"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginTop="20dp"-->
-    <!--            android:background="@color/white"-->
-    <!--            android:src="@drawable/activity_main_imgbtn_location"-->
-    <!--            app:layout_constraintStart_toStartOf="@+id/tx_explain_weather"-->
-    <!--            app:layout_constraintTop_toBottomOf="@+id/tx_explain_weather">-->
-    <!--        </ImageButton>-->
-
-    <!--        <ImageButton-->
-    <!--            android:id="@+id/imgbtn_board"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginStart="3dp"-->
-    <!--            android:background="@color/white"-->
-    <!--            android:src="@drawable/activity_main_imgbtn_board"-->
-    <!--            app:layout_constraintStart_toEndOf="@+id/imgbtn_location"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/imgbtn_location">-->
-
-    <!--        </ImageButton>-->
-
-    <!--        <ImageButton-->
-    <!--            android:id="@+id/imgbtn_union"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginStart="3dp"-->
-    <!--            android:background="@color/white"-->
-    <!--            android:src="@drawable/activity_main_imgbtn_union"-->
-    <!--            app:layout_constraintStart_toEndOf="@+id/imgbtn_board"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/imgbtn_location">-->
-    <!--        </ImageButton>-->
-
-    <!--        <ImageButton-->
-    <!--            android:id="@+id/imgbtn_jjim"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginStart="3dp"-->
-    <!--            android:background="@color/white"-->
-    <!--            android:src="@drawable/activity_main_imgbtn_jjim"-->
-    <!--            app:layout_constraintStart_toEndOf="@+id/imgbtn_union"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/imgbtn_location">-->
-    <!--        </ImageButton>-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/tx_interest_study"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginTop="15dp"-->
-    <!--            android:text="관심지역 스터디 BEST"-->
-    <!--            android:textColor="@color/black"-->
-    <!--            android:textSize="20sp"-->
-    <!--            android:textStyle="bold"-->
-    <!--            app:layout_constraintStart_toStartOf="@+id/imgbtn_location"-->
-    <!--            app:layout_constraintTop_toBottomOf="@+id/imgbtn_location" />-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/ic_go_interest"-->
-    <!--            android:layout_width="30dp"-->
-    <!--            android:layout_height="30dp"-->
-    <!--            android:layout_marginEnd="30dp"-->
-    <!--            android:src="@drawable/activity_main_navigate_before"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/tx_interest_study" />-->
-
-    <!--        <androidx.recyclerview.widget.RecyclerView-->
-    <!--            android:id="@+id/rv_board"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="360dp"-->
-    <!--            android:layout_marginTop="15dp"-->
-    <!--            app:layout_constraintTop_toBottomOf="@+id/tx_interest_study"-->
-    <!--            tools:layout_editor_absoluteX="-20dp"-->
-    <!--            tools:listitem="@layout/item_recycler_view" />-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/tx_recommendation_study"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginTop="20dp"-->
-    <!--            android:text="추천 스터디"-->
-    <!--            android:textColor="@color/black"-->
-    <!--            android:textSize="20sp"-->
-    <!--            android:textStyle="bold"-->
-    <!--            app:layout_constraintStart_toStartOf="@+id/tx_interest_study"-->
-    <!--            app:layout_constraintTop_toBottomOf="@+id/rv_board" />-->
-
-
-    <!--        <androidx.recyclerview.widget.RecyclerView-->
-    <!--            android:id="@+id/rv_board2"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="360dp"-->
-    <!--            android:nestedScrollingEnabled="false"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintTop_toBottomOf="@+id/tx_recommendation_study" />-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/ic_go_recommendation"-->
-    <!--            android:layout_width="30dp"-->
-    <!--            android:layout_height="30dp"-->
-    <!--            android:layout_marginEnd="30dp"-->
-    <!--            android:layout_marginBottom="10dp"-->
-    <!--            android:src="@drawable/activity_main_navigate_before"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/tx_recommendation_study" />-->
-
-
-
-    <!--        @@@@@@@@@@@-->
-    <!--        <FrameLayout-->
-    <!--            android:id="@+id/fragment_container"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_alignParentTop="true"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintTop_toTopOf="parent">-->
-
-    <!--        </FrameLayout>-->
-
-
-    <!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
-    <!--            android:id="@+id/bottom_navigation"-->
-    <!--            style="@style/BottomNavigationViewStyle"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_alignParentBottom="true"-->
-    <!--            android:background="@color/background_gray"-->
-    <!--            app:menu="@navigation/main_navigation" />-->
-
-
-
-
-
-    <!--    <FrameLayout-->
-    <!--        android:id="@+id/main_frm"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="0dp"-->
-    <!--        app:layout_constraintBottom_toTopOf="@id/main_bnv"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:layout_constraintVertical_bias="1.0"-->
-    <!--        tools:layout_editor_absoluteX="130dp" />-->
-
-    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-    <!--        android:id="@+id/main_bnv"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:background="?android:attr/windowBackground"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--        app:layout_constraintRight_toRightOf="parent"-->
-    <!--        app:menu="@menu/bottom_nav_menu" />-->
-
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--    </androidx.core.widget.NestedScrollView>-->
+</androidx.drawerlayout.widget.DrawerLayout>

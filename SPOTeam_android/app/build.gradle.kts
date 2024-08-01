@@ -60,5 +60,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.viewpager2)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.scalars)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.gson)
+    implementation(libs.glide)
 
 }

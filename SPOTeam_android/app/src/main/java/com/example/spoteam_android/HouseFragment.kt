@@ -1,23 +1,18 @@
 package com.example.spoteam_android
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.example.spoteam_android.SearchFragment
 import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 
 class HouseFragment : Fragment() {
 
-    private var _binding: FragmentHouseBinding? = null
-    private val binding get() = _binding!!
+    lateinit var binding: FragmentHouseBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,28 +21,27 @@ class HouseFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        _binding = FragmentHouseBinding.inflate(inflater, container, false)
-        val view = binding.root
+        binding = FragmentHouseBinding.inflate(inflater, container, false)
 
-        val icFindButton: ImageView = view.findViewById(R.id.ic_find)
+        val icFindButton: ImageView = binding.root.findViewById(R.id.ic_find)
         icFindButton.setOnClickListener {
             // MainActivity의 switchFragment 메서드를 호출하여 SearchFragment로 전환
             (activity as MainActivity).switchFragment(SearchFragment())
         }
 
-        val icAlarmButton: ImageView = view.findViewById(R.id.ic_alarm)
+        val icAlarmButton: ImageView = binding.root.findViewById(R.id.ic_alarm)
         icAlarmButton.setOnClickListener {
             // MainActivity의 switchFragment 메서드를 호출하여 InterestFragment로 전환
             (activity as MainActivity).switchFragment(CalendarAddEventFragment())
         }
 
-        val spoticon: ImageView = view.findViewById(R.id.ic_spot_logo)
+        val spoticon: ImageView = binding.root.findViewById(R.id.ic_spot_logo)
         spoticon.setOnClickListener {
             // MainActivity의 switchFragment 메서드를 호출하여 InterestFilterFragment로 전환
             (activity as MainActivity).switchFragment(CalendarFragment())
         }
 
-        val showPopupImage = view.findViewById<ImageView>(R.id.ic_go_interest)
+        val showPopupImage = binding.root.findViewById<ImageView>(R.id.ic_go_interest)
         showPopupImage.setOnClickListener {
             val popupFragment = StudyRegisterPopupFragment()
             popupFragment.show(childFragmentManager, "popupFragment")
@@ -61,7 +55,7 @@ class HouseFragment : Fragment() {
         }
 
         initRecyclerView()
-        return view
+        return binding.root
     }
 
     private fun initRecyclerView() {
@@ -87,10 +81,5 @@ class HouseFragment : Fragment() {
 
         binding.rvBoard.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvBoard2.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
