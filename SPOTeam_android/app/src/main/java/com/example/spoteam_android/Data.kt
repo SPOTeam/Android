@@ -32,3 +32,7 @@ data class BoardItem (
     val like: Int,
     val watch : Int
 )
+
+data class GalleryItem (
+    val imgId : Int
+)
