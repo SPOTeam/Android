@@ -203,6 +203,8 @@ class MainActivity : AppCompatActivity() {
     fun isOnCommunityHome(fragment: Fragment) {
         if (fragment is CommunityHomeFragment) {
             binding.mainFloatingButton.visibility = View.VISIBLE
+        } else if(fragment is MyPageFragment) {
+            binding.mainFloatingButton.visibility = View.VISIBLE
         } else {
             binding.mainFloatingButton.visibility = View.GONE
         }

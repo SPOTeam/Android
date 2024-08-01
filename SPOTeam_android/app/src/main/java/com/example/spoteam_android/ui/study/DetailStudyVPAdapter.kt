@@ -17,9 +17,9 @@ class DetailStudyVPAdapter(fragment : Fragment) : FragmentStateAdapter(fragment)
             //캘린더
             1 -> CalendarFragment()
             //게시판
-            2 -> HomeFragment()
+            2 -> MyStudyCommunityFragment()
             //갤러리
-            3 -> HomeFragment()
+            3 -> MyStudyGalleryFragment()
             //투표
             else -> HomeFragment()
         }
