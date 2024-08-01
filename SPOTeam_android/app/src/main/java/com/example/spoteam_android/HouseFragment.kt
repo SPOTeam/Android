@@ -32,13 +32,13 @@ class HouseFragment : Fragment() {
         val icAlarmButton: ImageView = binding.root.findViewById(R.id.ic_alarm)
         icAlarmButton.setOnClickListener {
             // MainActivity의 switchFragment 메서드를 호출하여 InterestFragment로 전환
-            (activity as MainActivity).switchFragment(InterestFragment())
+            (activity as MainActivity).switchFragment(CalendarAddEventFragment())
         }
 
         val spoticon: ImageView = binding.root.findViewById(R.id.ic_spot_logo)
         spoticon.setOnClickListener {
             // MainActivity의 switchFragment 메서드를 호출하여 InterestFilterFragment로 전환
-            (activity as MainActivity).switchFragment(InterestFilterFragment())
+            (activity as MainActivity).switchFragment(CalendarFragment())
         }
 
         val showPopupImage = binding.root.findViewById<ImageView>(R.id.ic_go_interest)
