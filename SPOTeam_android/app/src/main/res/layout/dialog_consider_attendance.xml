@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="368dp"
+    android:layout_height="292dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingHorizontal="20dp"
+    android:paddingTop="18dp"
+    android:paddingBottom="18dp"
+    android:background="@drawable/alert_background">
+
+    <ImageView
+        android:id="@+id/ic_check_iv"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_check_alert"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/nickname_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ic_check_iv">
+
+        <TextView
+            android:id="@+id/nickname_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="닉네임"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_marginEnd="5dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/temperature_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="37.5"
+            android:textSize="18sp"
+            android:textColor="@color/active_blue" />
+
+        <TextView
+            android:id="@+id/temperature_unit_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="°C"
+            android:textSize="18sp"
+            android:textColor="@color/active_blue" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/attendance_message_tv"
+        android:layout_width="288dp"
+        android:layout_height="76dp"
+        android:text="신청 메시지"
+        android:gravity="center"
+        android:background="@drawable/button_background"
+        android:textSize="14sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nickname_ll" />
+
+
+    <TextView
+        android:id="@+id/reject_tv"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:text="거절"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="@drawable/button_disabled"
+        android:textColor="@color/button_disabled_text"
+        android:gravity="center"
+        android:paddingVertical="6dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintStart_toStartOf="@id/attendance_message_tv"
+        app:layout_constraintTop_toBottomOf="@id/attendance_message_tv"/>
+
+    <TextView
+        android:id="@+id/accept_tv"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:text="수락"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="@drawable/button_background"
+        android:textColor="@drawable/button_textcolor"
+        android:gravity="center"
+        android:paddingVertical="6dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintEnd_toEndOf="@id/attendance_message_tv"
+        app:layout_constraintTop_toBottomOf="@id/attendance_message_tv"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

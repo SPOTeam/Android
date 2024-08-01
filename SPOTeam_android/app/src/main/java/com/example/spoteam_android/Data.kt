@@ -33,7 +33,6 @@ data class BoardItem (
     val watch : Int
 )
 
-
 data class SceduleItem (
     val dday: String,
     val day: String,
@@ -43,5 +42,11 @@ data class SceduleItem (
 )
 
 data class ProfileItem(
-    val profileImage: Int, val nickname: String)
+    val profileImage: Int,
+    val nickname: String
+)
+
+data class GalleryItem (
+    val imgId : Int
+)
 
