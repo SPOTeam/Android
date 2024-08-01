@@ -1,5 +1,4 @@
-package com.example.spoteam_android.ui.category
-
+package com.example.spoteam_android.ui.study
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

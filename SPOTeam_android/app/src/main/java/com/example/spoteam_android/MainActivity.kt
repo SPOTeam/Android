@@ -11,10 +11,11 @@ import androidx.navigation.NavController
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
-import com.example.spoteam_android.ui.category.StudyFragment
+import com.example.spoteam_android.ui.study.StudyFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.WriteContentFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
+import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
@@ -190,7 +191,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.activity_main_registerstudy_ib).setOnClickListener {
-            showFragment(RegisterStudyFragment())
+//            showFragment(RegisterStudyFragment())
+            showFragment(DetailStudyFragment())
             showStudyFrameLayout(false) // RegisterFragment를 보이도록 하되 FrameLayout은 숨김
         }
     }
