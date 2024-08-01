@@ -1,13 +1,11 @@
 package com.example.spoteam_android
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
@@ -15,6 +13,7 @@ import com.example.spoteam_android.ui.category.StudyFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.WriteContentFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
+import com.example.spoteam_android.ui.study.MyStudyGalleryFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
@@ -24,9 +23,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomSheetView: View
     private lateinit var bottomSheetDialog: BottomSheetDialog
-    private lateinit var navController: NavController
-    private lateinit var recentSearchAdapter: RecentSearchAdapter
-    private lateinit var recentSearchList: MutableList<String>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

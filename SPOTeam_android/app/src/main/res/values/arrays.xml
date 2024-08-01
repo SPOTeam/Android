@@ -21,4 +21,12 @@
         <item>관심순</item>
     </string-array>
 
+    <string-array name="thema_list">
+        <item>가입인사</item>
+        <item>정보공유</item>
+        <item>스터디후기</item>
+        <item>자유</item>
+        <item>Q&amp;A</item>
+    </string-array>
+
 </resources>

@@ -16,7 +16,7 @@ class MyStudyRegisterPreviewVPAdapter(fragment: Fragment) : FragmentStateAdapter
         return when (position) {
             0 -> IntroduceStudyShortFragment()
             1 -> HomeFragment()
-            2 -> HomeFragment()
+            2 -> HomeFragment() // MyStudyCommunityFragment()
             3 -> HomeFragment()
             4 -> HomeFragment()
             else -> throw IllegalArgumentException("Invalid position")
