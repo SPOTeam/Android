@@ -1,5 +1,6 @@
 package com.example.spoteam_android
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -14,7 +15,10 @@ import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.WriteContentFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.example.spoteam_android.ui.study.MyStudyCommunityFragment
 import com.example.spoteam_android.ui.study.MyStudyGalleryFragment
+import com.example.spoteam_android.ui.study.MyStudyRegisterPreviewFragment
+import com.example.spoteam_android.ui.study.MyStudyWriteContentFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
@@ -22,10 +26,12 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var bottomSheetView: View
+    private lateinit var bottomSheetView1: View
+    private lateinit var bottomSheetView2: View
     private lateinit var bottomSheetDialog: BottomSheetDialog
 
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,23 +43,30 @@ class MainActivity : AppCompatActivity() {
         binding.root.setOnTouchListener { _, _ ->
             showStudyFrameLayout(false)
             binding.main.closeDrawers()
+            getCurrentFragment()?.let { isOnCommunityHome(it) }
             true
         }
 
-        initCategoryNavigationView()
-
-        // BottomSheetDialog 초기화
-        bottomSheetView = layoutInflater.inflate(R.layout.fragment_write_content, null)
-        bottomSheetDialog = BottomSheetDialog(this)
-        bottomSheetDialog.setContentView(bottomSheetView)
-
         binding.mainFloatingButton.setOnClickListener {
-            val writeContentFragment = WriteContentFragment()
-            writeContentFragment.show(supportFragmentManager, writeContentFragment.tag)
+            getCurrentFragment()?.let {
+                if(it is DetailStudyFragment) {
+                    val myStudyWriteCommunityFragment = MyStudyWriteContentFragment()
+                    myStudyWriteCommunityFragment.show(supportFragmentManager, "My Study Write Content")
+                }
+                if(it is CommunityHomeFragment) {
+                    val writeCommunityFragment = WriteContentFragment()
+                    writeCommunityFragment.show(supportFragmentManager, "Write Content")
+                }
+            }
         }
 
+        initCategoryNavigationView()
         init()
         isOnCommunityHome(HouseFragment())
+    }
+
+    private fun getCurrentFragment(): Fragment? {
+        return supportFragmentManager.findFragmentById(R.id.main_frm)
     }
 
     private fun initCategoryNavigationView() {
@@ -203,7 +216,7 @@ class MainActivity : AppCompatActivity() {
     fun isOnCommunityHome(fragment: Fragment) {
         if (fragment is CommunityHomeFragment) {
             binding.mainFloatingButton.visibility = View.VISIBLE
-        } else if(fragment is MyPageFragment) {
+        } else if(fragment is MyStudyCommunityFragment) {
             binding.mainFloatingButton.visibility = View.VISIBLE
         } else {
             binding.mainFloatingButton.visibility = View.GONE
