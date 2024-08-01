@@ -2,7 +2,6 @@ package com.example.spoteam_android.ui.study
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.spoteam_android.ui.study.StudyFragment
 import com.example.spoteam_android.ui.home.HomeFragment
 
 class MyStudyRegisterPreviewVPAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
@@ -16,7 +15,7 @@ class MyStudyRegisterPreviewVPAdapter(fragment: Fragment) : FragmentStateAdapter
         return when (position) {
             0 -> IntroduceStudyShortFragment()
             1 -> HomeFragment()
-            2 -> HomeFragment() // MyStudyCommunityFragment()
+            2 -> HomeFragment()
             3 -> HomeFragment()
             4 -> HomeFragment()
             else -> throw IllegalArgumentException("Invalid position")
