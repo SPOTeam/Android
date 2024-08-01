@@ -7,19 +7,19 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.example.spoteam_android.R
-import com.example.spoteam_android.databinding.FragmentMypageWriteContentBinding
+import com.example.spoteam_android.databinding.FragmentMystudyWriteContentBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
 
-    lateinit var binding: FragmentMypageWriteContentBinding
+    lateinit var binding: FragmentMystudyWriteContentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMypageWriteContentBinding.inflate(inflater, container, false)
+        binding = FragmentMystudyWriteContentBinding.inflate(inflater, container, false)
 
         binding.writeContentFinishBtn.setOnClickListener{
             dismiss()
@@ -44,4 +44,5 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
     override fun onNothingSelected(parent: AdapterView<*>?) {
         TODO("Not yet implemented")
     }
+
 }

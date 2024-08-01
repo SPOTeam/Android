@@ -6,7 +6,8 @@
     android:paddingHorizontal="16dp"
     android:paddingVertical="25dp"
     android:background="@drawable/bottomsheetfragment_style"
-    app:layout_behavior="@string/bottom_sheet_behavior">
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    android:tag="writeContent">
 
     <TextView
         android:id="@+id/write_content_title_tv"

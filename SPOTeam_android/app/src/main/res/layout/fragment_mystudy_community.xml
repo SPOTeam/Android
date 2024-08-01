@@ -132,7 +132,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/item_mypage_community_content"/>
+            tools:listitem="@layout/item_mystudy_community_content"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
