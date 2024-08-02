@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity() {
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_mypage -> {
-                    showFragment(ParticipatingStudyFragment())
+                    showFragment(DetailStudyFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(MyPageFragment())
                     return@setOnItemSelectedListener true
