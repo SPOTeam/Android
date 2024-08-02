@@ -13,13 +13,13 @@ class DetailStudyVPAdapter(fragment : Fragment) : FragmentStateAdapter(fragment)
     override fun createFragment(position: Int): Fragment {
         return when(position){
             //홈
-            0 -> HomeFragment()
+            0 -> DetailStudyHomeFragment()
             //캘린더
-            1 -> HomeFragment()
+            1 -> CalendarFragment()
             //게시판
-            2 -> HomeFragment()
+            2 -> MyStudyCommunityFragment()
             //갤러리
-            3 -> HomeFragment()
+            3 -> MyStudyGalleryFragment()
             //투표
             else -> HomeFragment()
         }

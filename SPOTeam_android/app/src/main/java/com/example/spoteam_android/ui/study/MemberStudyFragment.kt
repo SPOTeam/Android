@@ -1,5 +1,4 @@
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentMemberStudyBinding
-import com.example.spoteam_android.ui.study.IntroduceStudyFragment
 import com.example.spoteam_android.ui.study.OnlineStudyFragment
 
 class MemberStudyFragment : Fragment() {
@@ -19,7 +17,7 @@ class MemberStudyFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMemberStudyBinding.inflate(inflater, container, false)
 
         setupSpinners()

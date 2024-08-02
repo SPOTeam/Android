@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:scrollbars="none">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <HorizontalScrollView
+            android:id="@+id/category_hsv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            android:scrollbars="none"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/communityHome_BestPopularity_tv"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:checked="true"
+                    android:id="@+id/all_rb"
+                    android:layout_width="45dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="전체"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/noti_rb"
+                    android:layout_width="45dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="공지"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/intro_hello_rb"
+                    android:layout_width="69dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="가입인사"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/share_info_rb"
+                    android:layout_width="69dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="정보공유"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/after_study_rb"
+                    android:layout_width="84dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="스터디후기"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/free_talk_rb"
+                    android:layout_width="45dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="자유"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/qna_tb"
+                    android:layout_width="45dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="Q&amp;A"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:layout_marginEnd="16dp"/>
+
+            </RadioGroup>
+        </HorizontalScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/community_category_content_rv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/category_hsv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:listitem="@layout/item_mystudy_community_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

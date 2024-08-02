@@ -2,7 +2,6 @@ package com.example.spoteam_android.ui.study
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.spoteam_android.ui.category.StudyFragment
 import com.example.spoteam_android.ui.home.HomeFragment
 
 class MyStudyRegisterPreviewVPAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

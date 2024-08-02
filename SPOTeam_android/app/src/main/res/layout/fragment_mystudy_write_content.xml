@@ -7,7 +7,7 @@
     android:paddingVertical="25dp"
     android:background="@drawable/bottomsheetfragment_style"
     app:layout_behavior="@string/bottom_sheet_behavior"
-    android:tag="writeContent">
+    android:tag="MyStudyWriteContent">
 
     <TextView
         android:id="@+id/write_content_title_tv"
@@ -33,25 +33,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/write_content_title_tv" />
 
+    <ImageView
+        android:id="@+id/fragment_introduce_study_iv"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:padding="23dp"
+        android:src="@drawable/fragment_introduce_study_gallery"
+        android:background="@drawable/fragment_introduce_study_background"
+        android:layout_marginTop="28dp"
+        android:clipToOutline="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="@id/write_content_prev_iv"
+        app:layout_constraintTop_toBottomOf="@id/write_content_prev_iv"/>
+
     <EditText
         android:id="@+id/write_content_title_et"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="제목"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:textStyle="bold"
         android:background="@android:color/transparent"
         android:textColorHint="#8E8E8E"
         android:inputType="none"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@id/write_content_prev_iv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/write_content_title_tv"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_iv"/>
 
     <ImageView
         android:id="@+id/community_sp_iv"
         android:layout_width="0dp"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:src="@drawable/line_img"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="@id/write_content_title_et"
@@ -84,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:text="게시판" />
+            android:text="테마" />
 
         <Spinner
             android:id="@+id/category_spinner"
@@ -101,15 +115,16 @@
             android:button="@null"
             android:layout_marginStart="24dp"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-            android:text="익명"/>
+            android:text="공지"/>
 
     </LinearLayout>
+
 
     <TextView
         android:id="@+id/write_content_finish_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="10dp"
         android:text="완료"
         android:background="@drawable/button_background"
         android:textColor="@drawable/button_textcolor"
