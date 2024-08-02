@@ -15,6 +15,8 @@ import com.example.spoteam_android.ui.category.StudyFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.WriteContentFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
+import com.example.spoteam_android.ui.mypage.ParticipatingStudyFragment
+import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
@@ -157,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_mypage -> {
-                    showFragment(MyPageFragment())
+                    showFragment(ParticipatingStudyFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(MyPageFragment())
                     return@setOnItemSelectedListener true
