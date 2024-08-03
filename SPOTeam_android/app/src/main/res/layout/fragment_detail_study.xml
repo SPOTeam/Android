@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:fillViewport="true"
-    android:scrollbars="none">
+    android:scrollbars="none"
+    android:id="@+id/fragment_detail_study">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

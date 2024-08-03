@@ -30,6 +30,7 @@
        app:layout_constraintTop_toTopOf="@id/alert_start_iv"/>
 
    <TextView
+       android:id="@+id/alert_live_content_tv"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:text= "&quot;카카오 최종 합격 후기 &quot;"
