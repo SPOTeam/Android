@@ -11,6 +11,8 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.CategoryData
 import com.example.spoteam_android.databinding.FragmentCommunityHomeBinding
 import com.example.spoteam_android.IndexData
+import com.example.spoteam_android.ui.alert.AlertFragment
+import com.example.spoteam_android.ui.home.HomeFragment
 
 class CommunityHomeFragment : Fragment() {
 
@@ -30,7 +32,19 @@ class CommunityHomeFragment : Fragment() {
                 ).commitAllowingStateLoss()
         }
 
+        binding.communityHomeAlertIv.setOnClickListener{
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, AlertFragment()).addToBackStack(null)
+                .commitAllowingStateLoss()
+            (context as MainActivity).isOnCommunityHome(HomeFragment())
+        }
+
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).isOnCommunityHome(CommunityHomeFragment())
     }
 
     private fun initRecyclerview(){

@@ -33,6 +33,4 @@ class MyStudyCommunityFragment : Fragment() {
         super.onResume()
         (activity as? MainActivity)?.isOnCommunityHome(MyStudyCommunityFragment())
     }
-
-
 }

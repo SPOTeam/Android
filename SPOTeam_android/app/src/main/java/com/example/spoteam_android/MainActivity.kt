@@ -27,10 +27,6 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var bottomSheetView1: View
-    private lateinit var bottomSheetView2: View
-    private lateinit var bottomSheetDialog: BottomSheetDialog
-
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,19 +40,23 @@ class MainActivity : AppCompatActivity() {
         binding.root.setOnTouchListener { _, _ ->
             showStudyFrameLayout(false)
             binding.main.closeDrawers()
-            getCurrentFragment()?.let { isOnCommunityHome(it) }
+            getCurrentFragment()?.let {
+                if(it is CommunityHomeFragment){
+                    isOnCommunityHome(it)
+                }
+            }
             true
         }
 
         binding.mainFloatingButton.setOnClickListener {
             getCurrentFragment()?.let {
-                if(it is DetailStudyFragment) {
-                    val myStudyWriteCommunityFragment = MyStudyWriteContentFragment()
-                    myStudyWriteCommunityFragment.show(supportFragmentManager, "My Study Write Content")
-                }
                 if(it is CommunityHomeFragment) {
                     val writeCommunityFragment = WriteContentFragment()
                     writeCommunityFragment.show(supportFragmentManager, "Write Content")
+                }
+                if(it is DetailStudyFragment) {
+                    val myStudyWriteCommunityFragment = MyStudyWriteContentFragment()
+                    myStudyWriteCommunityFragment.show(supportFragmentManager, "My Study Write Content")
                 }
             }
         }
@@ -217,7 +217,7 @@ class MainActivity : AppCompatActivity() {
     fun isOnCommunityHome(fragment: Fragment) {
         if (fragment is CommunityHomeFragment) {
             binding.mainFloatingButton.visibility = View.VISIBLE
-        } else if(fragment is MyStudyCommunityFragment) {
+        } else if (fragment is MyStudyCommunityFragment){
             binding.mainFloatingButton.visibility = View.VISIBLE
         } else {
             binding.mainFloatingButton.visibility = View.GONE
