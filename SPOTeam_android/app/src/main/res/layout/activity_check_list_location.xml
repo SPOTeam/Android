@@ -44,18 +44,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checklist_v"/>
 
-    <FrameLayout
-        android:id="@+id/interest_area_frame"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="20dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/checklist_tv"
-        app:layout_constraintBottom_toTopOf="@id/button_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/ic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/activity_main_ic_location"/>
+
 
 
         <TextView
@@ -65,8 +66,9 @@
             android:text="관심 지역을 하나 이 설정해주세요"
             android:textSize="13sp"
             android:textColor="#9A9A9A"
-            android:layout_gravity="center"/>
-    </FrameLayout>
+            app:layout_constraintTop_toBottomOf="@id/ic"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/button_layout"
@@ -86,7 +88,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/category_background"
+            android:background="@drawable/button_background"
             android:enabled="true"
             android:text="추가"
             android:textColor="@drawable/button_textcolor"

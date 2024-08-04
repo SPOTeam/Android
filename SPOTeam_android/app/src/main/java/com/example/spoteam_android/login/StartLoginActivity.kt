@@ -74,6 +74,7 @@ class StartLoginActivity : AppCompatActivity() {
         }
 
         binding.loginwithspotBt.setOnClickListener {
+            val intent = Intent(this, CheckListCategoryActivity::class.java)
             startActivity(intent)
 
         }
