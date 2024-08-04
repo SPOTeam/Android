@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
+import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
+import com.example.spoteam_android.ui.mypage.ParticipatingStudyFragment
 
 class HouseFragment : Fragment() {
 
@@ -35,17 +37,14 @@ class HouseFragment : Fragment() {
             (activity as MainActivity).switchFragment(CalendarAddEventFragment())
         }
 
+        val register = StudyRegisterPopupFragment(requireContext())
+
         val spoticon: ImageView = binding.root.findViewById(R.id.ic_spot_logo)
         spoticon.setOnClickListener {
-            // MainActivity의 switchFragment 메서드를 호출하여 InterestFilterFragment로 전환
-            (activity as MainActivity).switchFragment(CalendarFragment())
+            //스터디 참여하기 팝업으로 이동
+            register.start()
         }
 
-        val showPopupImage = binding.root.findViewById<ImageView>(R.id.ic_go_interest)
-        showPopupImage.setOnClickListener {
-            val popupFragment = StudyRegisterPopupFragment()
-            popupFragment.show(childFragmentManager, "popupFragment")
-        }
 
         binding.imgbtnBoard.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()

@@ -39,14 +39,12 @@ class CalendarFragment : Fragment() {
         tx_startdate = view.findViewById(R.id.tx_startdate)
         tx_enddate = view.findViewById(R.id.tx_enddate)
         tx_date = view.findViewById(R.id.tx_date)
-        tx_tilde = view.findViewById(R.id.tx_tilde)
 
 
 
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             Log.d("CalendarFragment", "Date selected: $year-${month + 1}-$dayOfMonth")
             eventViewModel.loadEvents(year, month + 1, dayOfMonth)
-
         }
 
 
@@ -67,13 +65,7 @@ class CalendarFragment : Fragment() {
         return view
     }
 
-//    private fun displayEvents(events: List<Event>) {
-//        Log.d("CalendarFragment", "Displaying ${events.size} events")
-//        eventsTextView.text = events.joinToString("\n") { "${it.title}" }
-//    }
-
     private fun displayEvents(events: List<Event>) {
-        Log.d("CalendarFragment", "Displaying ${events.size} events")
         eventsTextView.text = events.joinToString("\n") { event ->
             " ${event.title}"
         }
@@ -93,12 +85,10 @@ class CalendarFragment : Fragment() {
 //            icBar.visibility = View.VISIBLE
 //            icCheck.visibility = View.VISIBLE
             tx_date.visibility = View.VISIBLE
-            tx_tilde.visibility = View.VISIBLE
         } else {
 //            icBar.visibility = View.GONE
 //            icCheck.visibility = View.GONE
             tx_date.visibility = View.GONE
-            tx_tilde.visibility = View.GONE
         }
     }
 }

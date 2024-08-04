@@ -5,6 +5,10 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.runtime.Composable
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
@@ -28,7 +32,7 @@ class BoardAdapter(private val itemList: ArrayList<BoardItem>) :
         return itemList.size
     }
 
-    inner class BoardViewHolder(private val binding: ItemRecyclerViewPlusToggleBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class BoardViewHolder(val binding: ItemRecyclerViewPlusToggleBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: BoardItem) {
             binding.tvTime.text = item.studyName
@@ -46,16 +50,17 @@ class BoardAdapter(private val itemList: ArrayList<BoardItem>) :
         private fun showPopupMenu(view: View) {
             val popupMenu = PopupMenu(view.context, view)
             val inflater: MenuInflater = popupMenu.menuInflater
+            val exit = ExitStudyPopupFragment(view.context)
+            val report = ReportStudymemberFragment(view.context)
             inflater.inflate(R.menu.menu_item_options, popupMenu.menu)
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.exit_study -> {
-                        val dialog = ExitStudyPopupFragment(view.context)
-                        dialog.start()
+                        exit.start()
                         true
                     }
                     R.id.report_study -> {
-                        // Option 2 클릭 처리
+                        report.start()
                         true
                     }
                     else -> false

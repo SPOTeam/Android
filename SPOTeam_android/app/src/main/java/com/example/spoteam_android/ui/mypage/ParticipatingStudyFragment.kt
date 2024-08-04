@@ -1,21 +1,15 @@
 package com.example.spoteam_android.ui.mypage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.BoardItem
-import com.example.spoteam_android.R
-import com.example.spoteam_android.databinding.FragmentInterestBinding
 import com.example.spoteam_android.databinding.FragmentParticipatingStudyBinding
-import com.example.spoteam_android.ui.study.StudyRegisterCompleteDialog
+import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 
 
 class ParticipatingStudyFragment : Fragment(){
@@ -43,11 +37,20 @@ class ParticipatingStudyFragment : Fragment(){
 
         val boardAdapter = BoardAdapter(itemList)
 
-        boardAdapter.notifyDataSetChanged()
+        participatingboard.post {
+            for (i in 0 until boardAdapter.itemCount) {
+                val holder = participatingboard.findViewHolderForAdapterPosition(i) as? BoardAdapter.BoardViewHolder
+                holder?.binding?.toggle?.visibility = View.VISIBLE
+            }
+        }
+
+
 
         participatingboard.adapter = boardAdapter
         participatingboard.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        boardAdapter.notifyDataSetChanged()
     }
 }
 

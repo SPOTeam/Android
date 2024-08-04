@@ -15,7 +15,7 @@ data class Event(
     val endMinute: Int,
 ){
     val startDateTime: String
-        get() = String.format("%02d-%02d %02d:%02d", startMonth, startDay, startHour, startMinute)
+        get() = String.format("%02d-%02d %02d:%02d ~ ", startMonth, startDay, startHour, startMinute)
 
     val endDateTime: String
         get() = String.format("%02d-%02d %02d:%02d", endMonth, endDay, endHour, endMinute)
