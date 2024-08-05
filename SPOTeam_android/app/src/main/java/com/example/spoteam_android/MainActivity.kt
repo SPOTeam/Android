@@ -10,18 +10,15 @@ import androidx.fragment.app.Fragment
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
-import com.example.spoteam_android.ui.study.StudyFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.WriteContentFragment
 import com.example.spoteam_android.ui.mypage.ConsiderAttendanceMemberFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.MyStudyCommunityFragment
-import com.example.spoteam_android.ui.study.MyStudyGalleryFragment
-import com.example.spoteam_android.ui.study.MyStudyRegisterPreviewFragment
 import com.example.spoteam_android.ui.study.MyStudyWriteContentFragment
-import com.example.spoteam_android.ui.study.RegisterStudyFragment
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.example.spoteam_android.ui.study.StudyFragment
+import com.example.spoteam_android.ui.study.quiz.HostFinishMakeQuizFragment
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
