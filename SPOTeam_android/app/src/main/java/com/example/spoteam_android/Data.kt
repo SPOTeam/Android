@@ -65,3 +65,9 @@ data class StudyInfo(
     val studyName : String,
 )
 
+data class CommentInfo(
+    val commentWriter : String,
+    val Comment : String,
+    val commentType : Int
+)
+
