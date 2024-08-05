@@ -198,8 +198,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.activity_main_registerstudy_ib).setOnClickListener {
-//            showFragment(RegisterStudyFragment())
-            showFragment(DetailStudyFragment())
+            showFragment(RegisterStudyFragment())
             showStudyFrameLayout(false) // RegisterFragment를 보이도록 하되 FrameLayout은 숨김
         }
     }

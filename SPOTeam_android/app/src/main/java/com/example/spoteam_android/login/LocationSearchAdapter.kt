@@ -41,13 +41,14 @@ class LocationSearchAdapter(
         } else {
             val lowerCaseQuery = query.lowercase()
             for (item in dataList) {
-                if (item.address.lowercase().startsWith(lowerCaseQuery)) { // 시작 문자만 필터링
+                if (item.address.lowercase().contains(lowerCaseQuery)) { // 텍스트 포함 여부로 필터링
                     filteredList.add(item)
                 }
             }
         }
         notifyDataSetChanged()
     }
+
 
     fun getSelectedItem(): LocationItem? {
         return selectedItem
