@@ -37,6 +37,12 @@ class CommunityHomeFragment : Fragment() {
                 .commitAllowingStateLoss()
         }
 
+        binding.communityMoveNotificationIv.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, CommunityFragment())
+                .commitAllowingStateLoss()
+        }
+
         binding.communityHomeAlertIv.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, AlertFragment()).addToBackStack(null)

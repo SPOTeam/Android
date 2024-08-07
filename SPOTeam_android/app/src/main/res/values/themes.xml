@@ -86,6 +86,18 @@
         <!-- Chip의 아이콘 -->
     </style>
 
+    <!-- bottomSheetFragment border 20dp 전용 테마 -->
+    <style name="AppBottomSheetDialogBorder20WhiteTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalBorder20WhiteStyle</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="AppModalBorder20WhiteStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottomsheetfragment_style</item>
+    </style>
+
     <style name="CustomSearchViewStyle" parent="Widget.AppCompat.SearchView">
         <item name="queryBackground">@color/active_blue</item>
         <item name="android:textColor">@color/black</item>

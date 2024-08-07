@@ -6,8 +6,7 @@
     android:paddingHorizontal="16dp"
     android:paddingVertical="25dp"
     android:background="@drawable/bottomsheetfragment_style"
-    app:layout_behavior="@string/bottom_sheet_behavior"
-    android:tag="writeContent">
+    app:layout_behavior="@string/bottom_sheet_behavior">
 
     <TextView
         android:id="@+id/write_content_title_tv"
@@ -90,8 +89,8 @@
             android:id="@+id/category_spinner"
             android:layout_centerHorizontal="true"
             android:background="@drawable/gender_spinner_background"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="111dp"
+            android:layout_height="34dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="10dp" />
 
