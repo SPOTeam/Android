@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/community_content_comment_reply_writer_tv"
+        android:id="@+id/community_content_comment_writer_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="익명"

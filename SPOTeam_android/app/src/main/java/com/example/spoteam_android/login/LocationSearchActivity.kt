@@ -1,6 +1,7 @@
 package com.example.spoteam_android.login
 
 import LocationSearchAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,7 +16,7 @@ import java.io.InputStreamReader
 class LocationSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLocationSearchBinding
-    private lateinit var adapter: LocationSearchAdapter
+    private lateinit var locationSearchAdapter: LocationSearchAdapter
     private val locationItemList = mutableListOf<LocationItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,14 +25,32 @@ class LocationSearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupRecyclerView()
+        setupSearchFunctionality()
         loadLocalTsvFile() // TSV 파일을 읽어 데이터 초기화
+    }
 
-        // 드로어블 클릭 리스너 설정
+    private fun setupRecyclerView() {
+        locationSearchAdapter = LocationSearchAdapter(locationItemList) { item ->
+            // 아이템 클릭 시 CheckListLocationActivity에 결과 반환
+            val resultIntent = Intent().apply {
+                putExtra("SELECTED_ADDRESS", item.address)
+                putExtra("SELECTED_CODE", item.code)
+            }
+            setResult(RESULT_OK, resultIntent)
+            finish()
+        }
+        binding.activityLocationRv.apply {
+            layoutManager = LinearLayoutManager(this@LocationSearchActivity)
+            adapter = locationSearchAdapter
+            visibility = View.GONE // 초기에는 RecyclerView를 숨김
+        }
+    }
+
+    private fun setupSearchFunctionality() {
         binding.activityLocationSearchEt.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 val drawableEnd = binding.activityLocationSearchEt.compoundDrawables[2]
                 if (drawableEnd != null && event.rawX >= (binding.activityLocationSearchEt.right - drawableEnd.bounds.width())) {
-                    // 드로어블 클릭 시 검색 수행
                     performSearch()
                     return@setOnTouchListener true
                 }
@@ -39,29 +58,14 @@ class LocationSearchActivity : AppCompatActivity() {
             false
         }
 
-        // 텍스트 변경 감지 및 필터링 설정
         binding.activityLocationSearchEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
             override fun afterTextChanged(s: Editable?) {
-                // 텍스트 변경 시 자동으로 검색 수행
+                // 텍스트가 변경될 때마다 자동으로 검색 수행
                 performSearch()
             }
         })
-    }
-
-    private fun setupRecyclerView() {
-        adapter = LocationSearchAdapter(locationItemList) { item ->
-            // 아이템 클릭 시 처리
-            // 예를 들어, 아이템 클릭 시 어떤 액션을 수행할 수 있습니다.
-        }
-        binding.activityLocationRv.layoutManager = LinearLayoutManager(this)
-        binding.activityLocationRv.adapter = adapter
-
-        // RecyclerView를 처음에는 숨기기
-        binding.activityLocationRv.visibility = View.GONE
     }
 
     private fun loadLocalTsvFile() {
@@ -89,21 +93,19 @@ class LocationSearchActivity : AppCompatActivity() {
             }
         }
 
-        adapter.notifyDataSetChanged()
+        locationSearchAdapter.notifyDataSetChanged()
 
         // 검색 결과가 있을 때 RecyclerView를 보이게 함
-        binding.activityLocationRv.visibility = if (adapter.itemCount > 0) View.VISIBLE else View.GONE
+        binding.activityLocationRv.visibility = if (locationSearchAdapter.itemCount > 0) View.VISIBLE else View.GONE
     }
 
     private fun performSearch() {
         val query = binding.activityLocationSearchEt.text.toString()
-        adapter.filter(query)
-
-        // 검색 결과가 있을 때 RecyclerView를 보이게 함
-        if (adapter.itemCount > 0) {
-            binding.activityLocationRv.visibility = View.VISIBLE
+        locationSearchAdapter.filter(query)
+        binding.activityLocationRv.visibility = if (locationSearchAdapter.itemCount > 0) {
+            View.VISIBLE
         } else {
-            binding.activityLocationRv.visibility = View.GONE
+            View.GONE
         }
     }
 }

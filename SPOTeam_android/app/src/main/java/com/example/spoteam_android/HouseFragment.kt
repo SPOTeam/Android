@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.ui.calendar.CalendarAddEventFragment
+import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 
 class HouseFragment : Fragment() {
@@ -20,7 +21,7 @@ class HouseFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // Inflate the layout for this fragment
         binding = FragmentHouseBinding.inflate(inflater, container, false)
@@ -33,8 +34,9 @@ class HouseFragment : Fragment() {
 
         val icAlarmButton: ImageView = binding.root.findViewById(R.id.ic_alarm)
         icAlarmButton.setOnClickListener {
-            // MainActivity의 switchFragment 메서드를 호출하여 InterestFragment로 전환
-            (activity as MainActivity).switchFragment(CalendarAddEventFragment())
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, AlertFragment()).addToBackStack(null)
+                .commitAllowingStateLoss()
         }
 
         val register = StudyRegisterPopupFragment(requireContext())

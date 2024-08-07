@@ -15,17 +15,16 @@ import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
-import com.example.spoteam_android.ui.study.StudyFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.WriteContentFragment
+import com.example.spoteam_android.ui.mypage.ConsiderAttendanceMemberFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.MyStudyCommunityFragment
-import com.example.spoteam_android.ui.study.MyStudyGalleryFragment
-import com.example.spoteam_android.ui.study.MyStudyRegisterPreviewFragment
 import com.example.spoteam_android.ui.study.MyStudyWriteContentFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.example.spoteam_android.ui.study.StudyFragment
+import com.example.spoteam_android.ui.study.quiz.HostFinishMakeQuizFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 
@@ -36,10 +35,6 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var bottomSheetView1: View
-    private lateinit var bottomSheetView2: View
-    private lateinit var bottomSheetDialog: BottomSheetDialog
-
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,19 +67,23 @@ class MainActivity : AppCompatActivity() {
         binding.root.setOnTouchListener { _, _ ->
             showStudyFrameLayout(false)
             binding.main.closeDrawers()
-            getCurrentFragment()?.let { isOnCommunityHome(it) }
+            getCurrentFragment()?.let {
+                if(it is CommunityHomeFragment){
+                    isOnCommunityHome(it)
+                }
+            }
             true
         }
 
         binding.mainFloatingButton.setOnClickListener {
             getCurrentFragment()?.let {
-                if(it is DetailStudyFragment) {
-                    val myStudyWriteCommunityFragment = MyStudyWriteContentFragment()
-                    myStudyWriteCommunityFragment.show(supportFragmentManager, "My Study Write Content")
-                }
                 if(it is CommunityHomeFragment) {
                     val writeCommunityFragment = WriteContentFragment()
                     writeCommunityFragment.show(supportFragmentManager, "Write Content")
+                }
+                if(it is DetailStudyFragment) {
+                    val myStudyWriteCommunityFragment = MyStudyWriteContentFragment()
+                    myStudyWriteCommunityFragment.show(supportFragmentManager, "My Study Write Content")
                 }
             }
         }
@@ -196,7 +195,7 @@ class MainActivity : AppCompatActivity() {
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_mypage -> {
-                    showFragment(DetailStudyFragment())
+                    showFragment(ConsiderAttendanceMemberFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(MyPageFragment())
                     return@setOnItemSelectedListener true
@@ -229,8 +228,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.activity_main_registerstudy_ib).setOnClickListener {
-//            showFragment(RegisterStudyFragment())
-            showFragment(DetailStudyFragment())
+            showFragment(RegisterStudyFragment())
             showStudyFrameLayout(false) // RegisterFragment를 보이도록 하되 FrameLayout은 숨김
         }
     }
@@ -245,7 +243,7 @@ class MainActivity : AppCompatActivity() {
     fun isOnCommunityHome(fragment: Fragment) {
         if (fragment is CommunityHomeFragment) {
             binding.mainFloatingButton.visibility = View.VISIBLE
-        } else if(fragment is MyStudyCommunityFragment) {
+        } else if (fragment is MyStudyCommunityFragment){
             binding.mainFloatingButton.visibility = View.VISIBLE
         } else {
             binding.mainFloatingButton.visibility = View.GONE
