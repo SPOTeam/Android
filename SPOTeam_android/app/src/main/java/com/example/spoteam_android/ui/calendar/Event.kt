@@ -1,4 +1,4 @@
-package com.example.spoteam_android
+package com.example.spoteam_android.ui.calendar
 
 data class Event(
     val id: Int,

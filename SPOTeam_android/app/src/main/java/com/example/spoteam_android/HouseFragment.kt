@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentHouseBinding
+import com.example.spoteam_android.ui.calendar.CalendarAddEventFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
-import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
-import com.example.spoteam_android.ui.mypage.ParticipatingStudyFragment
 
 class HouseFragment : Fragment() {
 
@@ -42,7 +42,19 @@ class HouseFragment : Fragment() {
         val spoticon: ImageView = binding.root.findViewById(R.id.ic_spot_logo)
         spoticon.setOnClickListener {
             //스터디 참여하기 팝업으로 이동
-            register.start()
+            (activity as MainActivity).switchFragment(RecruitingStudyFragment())
+        }
+
+        val txintereststudy: TextView = binding.root.findViewById(R.id.tx_interest_study)
+        txintereststudy.setOnClickListener {
+            //스터디 참여하기 팝업으로 이동
+            (activity as MainActivity).switchFragment(InterestFragment())
+        }
+
+        val icgointerest: ImageView = binding.root.findViewById(R.id.ic_go_interest)
+        icgointerest.setOnClickListener {
+            //스터디 참여하기 팝업으로 이동
+            (activity as MainActivity).switchFragment(InterestFragment())
         }
 
 
