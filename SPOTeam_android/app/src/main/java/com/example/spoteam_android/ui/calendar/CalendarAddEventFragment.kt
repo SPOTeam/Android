@@ -1,4 +1,4 @@
-package com.example.spoteam_android
+package com.example.spoteam_android.ui.calendar
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.spoteam_android.R
 import java.util.*
 
 class CalendarAddEventFragment : Fragment() {
@@ -63,6 +63,7 @@ class CalendarAddEventFragment : Fragment() {
             val endDay = endParts[2].toInt()
             val endHour = endParts[3].toInt()
             val endMinute = endParts[4].toInt()
+
 
             val event = Event(
                 id = EventRepository.getNextId(),

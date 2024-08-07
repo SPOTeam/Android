@@ -1,35 +1,3 @@
-//package com.example.spoteam_android
-//
-//import android.view.View
-//import android.view.ViewGroup
-//import android.widget.TextView
-//import androidx.recyclerview.widget.RecyclerView
-//
-//class RecentSearchAdapter(private val searchList: List<String>, private val clickListener: (String) -> Unit) :
-//    RecyclerView.Adapter<RecentSearchAdapter.SearchViewHolder>() {
-//
-//    class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        val searchText: TextView = itemView.findViewById(R.id.searchText)
-//    }
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-//        val itemView = LayoutInflater.from(parent.context)
-//            .inflate(R.layout.recent_search_item, parent, false)
-//        return SearchViewHolder(itemView)
-//    }
-//
-//    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-//        val currentSearch = searchList[position]
-//        holder.searchText.text = currentSearch
-//        holder.itemView.setOnClickListener {
-//            clickListener(currentSearch)
-//        }
-//    }
-//
-//    override fun getItemCount() = searchList.size
-//}
-
-
 package com.example.spoteam_android
 
 import android.view.LayoutInflater

@@ -1,6 +1,6 @@
 package com.example.spoteam_android
 
-import android.content.Intent
+import RecruitingStudyFilterFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,19 +11,18 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.spoteam_android.databinding.FragmentInterestBinding
-import com.example.spoteam_android.databinding.FragmentSearchBinding
+import com.example.spoteam_android.databinding.FragmentRecruitingStudyBinding
 
-class InterestFragment : Fragment() {
+class RecruitingStudyFragment : Fragment() {
 
-    lateinit var binding: FragmentInterestBinding
+    lateinit var binding: FragmentRecruitingStudyBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentInterestBinding.inflate(inflater, container, false)
+        binding = FragmentRecruitingStudyBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -43,10 +42,10 @@ class InterestFragment : Fragment() {
 
         val filter: ImageView = binding.icFilter
         filter.setOnClickListener{
-            (activity as MainActivity).switchFragment(InterestFilterFragment())
+            (activity as MainActivity).switchFragment(RecruitingStudyFilterFragment())
         }
 
-        val interest_area_board = binding.interestAreaStudyReyclerview
+        val recruiting_board = binding.recruitingStudyReyclerview
 
         val itemList = ArrayList<BoardItem>()
 
@@ -65,8 +64,8 @@ class InterestFragment : Fragment() {
         val boardAdapter = BoardAdapter(itemList)
         boardAdapter.notifyDataSetChanged()
 
-        interest_area_board.adapter = boardAdapter
-        interest_area_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        recruiting_board.adapter = boardAdapter
+        recruiting_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
 
     }

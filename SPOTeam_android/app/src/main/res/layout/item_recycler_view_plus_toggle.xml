@@ -130,6 +130,7 @@
         android:layout_marginEnd="7dp"
         android:scaleType="fitCenter"
         android:src="@drawable/fragment_participating_study_ic_toggle"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
         app:layout_constraintTop_toTopOf="@+id/linearLayout" />
 

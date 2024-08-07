@@ -1,12 +1,17 @@
 package com.example.spoteam_android
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
@@ -21,6 +26,11 @@ import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.example.spoteam_android.ui.study.StudyFragment
 import com.example.spoteam_android.ui.study.quiz.HostFinishMakeQuizFragment
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
+
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,6 +43,25 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
+        val requestData = ApiModels.RequestData(
+            regions = ApiModels.Regions(regions = listOf("1111054000")),
+            themes = ApiModels.Themes(themes = listOf("어학"))
+        )
+        logAllSharedPreferences(this)
+        // API 호출
+//        ApiManager.sendRequestData(requestData,
+//            onSuccess = { responseData ->
+//                // UI 업데이트 등의 작업 수행
+//                Toast.makeText(this, "응답 성공: ${responseData.message}", Toast.LENGTH_SHORT).show()
+//                // saveToSharedPreferences(this,responseData)
+//            },
+//            onFailure = { throwable ->
+//                // 오류 처리
+//                Toast.makeText(this, "요청 실패: ${throwable.message}", Toast.LENGTH_SHORT).show()
+//            }
+//        )
+
 
         // 다른 아무 화면 클릭시 스터디 화면 사라지도록
         binding.root.setOnTouchListener { _, _ ->
@@ -218,6 +247,26 @@ class MainActivity : AppCompatActivity() {
             binding.mainFloatingButton.visibility = View.VISIBLE
         } else {
             binding.mainFloatingButton.visibility = View.GONE
+        }
+    }
+
+    private fun readFromSharedPreferences(context: Context): ApiModels.ResponseData? {
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        println("readFromSharedPreferences()이 성공적으로 수행되었습니다.")
+
+        // JSON 문자열로 변환하여 저장한 데이터 읽기
+        val jsonString = sharedPreferences.getString("responseData", null)
+        return if (jsonString != null) {
+            Gson().fromJson(jsonString, ApiModels.ResponseData::class.java)
+        } else {
+            null
+        }
+    }
+    private fun logAllSharedPreferences(context: Context) {
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val allEntries: Map<String, *> = sharedPreferences.all
+        for ((key, value) in allEntries) {
+            Log.d("showkey", "$key: $value")
         }
     }
 }
