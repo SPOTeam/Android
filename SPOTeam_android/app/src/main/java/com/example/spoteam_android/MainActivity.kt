@@ -17,6 +17,7 @@ import com.example.spoteam_android.ui.mypage.MyPageFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.MyStudyCommunityFragment
 import com.example.spoteam_android.ui.study.MyStudyWriteContentFragment
+import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.example.spoteam_android.ui.study.StudyFragment
 import com.example.spoteam_android.ui.study.quiz.HostFinishMakeQuizFragment
 import com.google.android.material.navigation.NavigationView
