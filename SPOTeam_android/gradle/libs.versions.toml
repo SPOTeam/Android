@@ -18,6 +18,8 @@ okhttp = "4.9.3"
 retrofit = "2.9.0"
 gson = "2.10.1"
 glide = "4.14.2"
+androidx_lifecycle_runtime_ktx = "2.6.1"
+kotlinx_coroutines_android = "1.7.0"
 
 
 #0723추가
@@ -39,9 +41,7 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 #0723추가
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "androidx-recyclerview" }
-
 #0727추가
-
 flexbox = "com.google.android.flexbox:flexbox:3.0.0"
 kakaoSdkAll = "com.kakao.sdk:v2-all:2.20.3"
 kakaoSdkUser = "com.kakao.sdk:v2-user:2.20.3"
@@ -51,7 +51,8 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glideCompiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
-
+androidx_lifecycle_runtime_ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx_lifecycle_runtime_ktx" }
+kotlinx_coroutines_android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx_coroutines_android" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

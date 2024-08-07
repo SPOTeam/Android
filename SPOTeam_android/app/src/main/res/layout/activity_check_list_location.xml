@@ -44,17 +44,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checklist_v"/>
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/location_chip"
-        style="@style/CustomChipCloseStyle"
-        android:layout_width="wrap_content"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_group"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="경기 안산시 상록구 사동"
-        android:layout_marginEnd="100dp"
-        app:closeIconVisible="true"
-        android:visibility="gone"
         android:layout_marginTop="10dp"
         android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checklist_tv"/>
 
