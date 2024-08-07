@@ -50,26 +50,6 @@ data class GalleryItem (
     val imgId : Int
 )
 
-data class ProfileTemperatureItem(
-    val profileImage: Int,
-    val nickname: String,
-    val temperature: String
-)
-
-data class AlertInfo(
-    val contentText : String,
-    val type : Int
-)
-
-data class StudyInfo(
-    val studyName : String,
-)
-
-data class CommentInfo(
-    val commentWriter : String,
-    val Comment : String,
-    val commentType : Int
-)
 
 data class ThemePreferences(
     val themes: List<String>

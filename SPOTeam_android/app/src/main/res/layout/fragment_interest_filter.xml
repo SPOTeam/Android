@@ -5,21 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/recruiting_study_toolbar" />
+
     <TextView
         android:id="@+id/tx_alarm"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_marginTop="30dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:textAlignment="center"
         android:background="@color/gray"
         android:text="검색 결과는 모든 지역에 공통 반영됩니다."
+        android:textAlignment="center"
         android:textColor="@color/gray_03"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 
     <FrameLayout

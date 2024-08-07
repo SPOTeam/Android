@@ -1,4 +1,4 @@
-package com.example.spoteam_android
+package com.example.spoteam_android.ui.calendar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

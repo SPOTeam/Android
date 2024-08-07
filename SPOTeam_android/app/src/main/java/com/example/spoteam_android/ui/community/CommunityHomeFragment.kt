@@ -1,42 +1,59 @@
 package com.example.spoteam_android.ui.community
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
-import com.example.spoteam_android.CategoryData
 import com.example.spoteam_android.databinding.FragmentCommunityHomeBinding
-import com.example.spoteam_android.IndexData
 import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.home.HomeFragment
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CommunityHomeFragment : Fragment() {
 
-    lateinit var binding: FragmentCommunityHomeBinding
+    private lateinit var binding: FragmentCommunityHomeBinding
+
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCommunityHomeBinding.inflate(inflater, container, false)
 
-        initRecyclerview()
+        fetchBestCommunityContent(sortType = "")
+        fetchAnnouncementContent()
+        fetchRepresentativeContent()
 
         binding.communityMoveCommunityIv.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, CommunityFragment()
-                ).commitAllowingStateLoss()
+                .replace(R.id.main_frm, CommunityFragment())
+                .commitAllowingStateLoss()
         }
 
-        binding.communityHomeAlertIv.setOnClickListener{
+        binding.communityHomeAlertIv.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, AlertFragment()).addToBackStack(null)
                 .commitAllowingStateLoss()
             (context as MainActivity).isOnCommunityHome(HomeFragment())
+        }
+
+        binding.communityHomeRealTimeTv.setOnClickListener {
+            fetchBestCommunityContent(sortType = "REAL_TIME")
+        }
+
+        binding.communityHomeRecommendTv.setOnClickListener {
+            fetchBestCommunityContent(sortType = "RECOMMEND")
+        }
+
+        binding.communityHomeCommentTv.setOnClickListener {
+            fetchBestCommunityContent(sortType = "COMMENT")
         }
 
         return binding.root
@@ -47,51 +64,120 @@ class CommunityHomeFragment : Fragment() {
         (context as MainActivity).isOnCommunityHome(CommunityHomeFragment())
     }
 
-    private fun initRecyclerview(){
-        binding.communityHomeBestPopularityContentRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.communityHomeNotificationContentRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    private fun fetchBestCommunityContent(sortType: String) {
+        CommunityRetrofitClient.instance.getBestCommunityContent(sortType)
+            .enqueue(object : Callback<CommunityResponse> {
+                override fun onResponse(
+                    call: Call<CommunityResponse>,
+                    response: Response<CommunityResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val communityResponse = response.body()
+                        if (communityResponse?.isSuccess == "true") {
+                            val contentList = communityResponse.result?.postBest5Responses
+                            Log.d("BestCommunity", "items: $contentList")
+                            if (contentList != null) {
+                                initBestRecyclerview(contentList)
+                            }
 
-        val dataList1: ArrayList<IndexData> = arrayListOf()
+                        } else {
+                            showError(communityResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
 
-        // arrayList 에 데이터 삽입
-        dataList1.apply{
-            // arrayList 타입이 Data 객체이다. | 데이터 삽입 시 Data 객체 타입으로 넣어줌.
-            add(IndexData("01", "first", "10"))
-            add(IndexData("02", "second", "9"))
-            add(IndexData("03", "third", "8"))
-            add(IndexData("04", "fourth", "7"))
-            add(IndexData("05", "fifth", "6"))
-            add(IndexData("06", "sixth", "5"))
-            add(IndexData("07", "seventh", "4"))
-            add(IndexData("08", "eighth", "3"))
-            add(IndexData("09", "ninth", "2"))
-            add(IndexData("10", "tenth", "1"))
-        }
-
-        val dataRVAdapter1 = CommunityHomeRVAdapterWithIndex(dataList1)
-
-        binding.communityHomeBestPopularityContentRv.adapter = dataRVAdapter1
-        binding.communityHomeNotificationContentRv.adapter = dataRVAdapter1
-
-
-        binding.communityHomeCommunityContentRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-
-        val dataList2: ArrayList<CategoryData> = arrayListOf()
-
-        // arrayList 에 데이터 삽입
-        dataList2.apply{
-            // arrayList 타입이 Data 객체이다. | 데이터 삽입 시 Data 객체 타입으로 넣어줌.
-            add(CategoryData("합격후기", "카카오 최종합격 후기", "10"))
-            add(CategoryData("정보공유", "5월 공모전 추천 zip", "9"))
-            add(CategoryData("고민상담", "게시글 제목", "8"))
-            add(CategoryData("취준토크", "스펙 이정도면 괜찮을까", "7"))
-            add(CategoryData("자유토크", "4학년 취준생들 요즘 뭐해", "6"))
-        }
-
-        val dataRVAdapter2 = CommunityHomeRVAdapterWithCategory(dataList2)
-
-        binding.communityHomeCommunityContentRv.adapter = dataRVAdapter2
-
+                override fun onFailure(call: Call<CommunityResponse>, t: Throwable) {
+                    Log.e("CommunityHomeFragment", "Failure: ${t.message}", t)
+                }
+            })
     }
 
+    private fun fetchAnnouncementContent() {
+        CommunityRetrofitClient.instance.getAnnouncementContent()
+            .enqueue(object : Callback<AnnouncementResponse> {
+                override fun onResponse(
+                    call: Call<AnnouncementResponse>,
+                    response: Response<AnnouncementResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val announcementResponse = response.body()
+                        if (announcementResponse?.isSuccess == "true") {
+                            val announcementList = announcementResponse.result?.responses
+                            Log.d("Announcement", "items: $announcementList")
+                            if (announcementList != null) {
+                                initAnnouncementRecyclerview(announcementList)
+                            }
+
+                        } else {
+                            showError(announcementResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<AnnouncementResponse>, t: Throwable) {
+                    Log.e("CommunityHomeFragment", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun fetchRepresentativeContent() {
+        CommunityRetrofitClient.instance.getRepresentativeContent()
+            .enqueue(object : Callback<RepresentativeResponse> {
+                override fun onResponse(
+                    call: Call<RepresentativeResponse>,
+                    response: Response<RepresentativeResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val representativeResponse = response.body()
+                        if (representativeResponse?.isSuccess == "true") {
+                            val representativeList = representativeResponse.result?.responses
+                            Log.d("Representative", "items: $representativeList")
+                            if (representativeList != null) {
+                                initRepresentativeRecyclerview(representativeList)
+                            }
+                        } else {
+                            showError(representativeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<RepresentativeResponse>, t: Throwable) {
+                    Log.e("CommunityHomeFragment", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun showError(message: String?) {
+        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun initBestRecyclerview(contentList: List<ContentDetailInfo>) {
+        binding.communityHomeBestPopularityContentRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        val dataRVAdapter = CommunityHomeRVAdapterWithIndex(contentList)
+        binding.communityHomeBestPopularityContentRv.adapter = dataRVAdapter
+    }
+
+    private fun initRepresentativeRecyclerview(representativeList: List<RepresentativeDetailInfo>) {
+        binding.communityHomeCommunityContentRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        val dataRVAdapter = CommunityHomeRVAdapterWithCategory(representativeList)
+        binding.communityHomeCommunityContentRv.adapter = dataRVAdapter
+    }
+
+    private fun initAnnouncementRecyclerview(announcementList: List<AnnouncementDetailInfo>) {
+        binding.communityHomeNotificationContentRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        val dataRVAdapter = CommunityHomeRVAdapterAnnouncement(announcementList)
+        binding.communityHomeNotificationContentRv.adapter = dataRVAdapter
+    }
 }

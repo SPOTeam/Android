@@ -1,6 +1,3 @@
-package com.example.spoteam_android
-
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,23 +6,28 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.fragment.app.Fragment
+import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.R
+import com.example.spoteam_android.RecruitingStudyFragment
 import com.example.spoteam_android.databinding.FragmentInterestFilterBinding
+import com.example.spoteam_android.databinding.FragmentRecruitingStudyFilterBinding
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.RangeSlider
 
 
-class InterestFilterFragment : Fragment() {
+class RecruitingStudyFilterFragment : Fragment() {
 
-    lateinit var binding: FragmentInterestFilterBinding
+    lateinit var binding: FragmentRecruitingStudyFilterBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentInterestFilterBinding.inflate(inflater, container, false)
+        binding = FragmentRecruitingStudyFilterBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -38,7 +40,7 @@ class InterestFilterFragment : Fragment() {
         val toolbar = binding.toolbar
 
         toolbar.icBack.setOnClickListener() {
-            (activity as MainActivity).switchFragment(InterestFragment())
+            (activity as MainActivity).switchFragment(RecruitingStudyFragment())
         }
 
         val adapter = ArrayAdapter.createFromResource(

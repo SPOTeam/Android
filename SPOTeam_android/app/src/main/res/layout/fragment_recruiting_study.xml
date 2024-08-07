@@ -16,20 +16,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/ic_alarm_interest"
+        android:id="@+id/ic_alarm_recruiting"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="30dp"
         android:src="@drawable/activity_main_ic_alaram"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ic_find_interest" />
+        app:layout_constraintTop_toTopOf="@+id/ic_find_recruiting" />
 
     <ImageView
-        android:id="@+id/ic_find_interest"
+        android:id="@+id/ic_find_recruiting"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/activity_main_ic_find"
-        app:layout_constraintEnd_toStartOf="@+id/ic_alarm_interest"
+        app:layout_constraintEnd_toStartOf="@+id/ic_alarm_recruiting"
         app:layout_constraintTop_toTopOf="@+id/spot_logo" />
 
     <TextView
@@ -37,67 +37,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="250dp"
-        android:text="@string/interest_study"
+        android:text="모집중 스터디"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tabs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spot_logo" />
 
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="111dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/interest_study_bold"
-        app:tabIndicatorColor="#1B78F2"
-        app:tabIndicatorFullWidth="false"
-        app:tabIndicatorHeight="4dp"
-        app:tabTextColor="@color/black">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="전체"
-            android:textColor="@color/black"
-            android:textSize="11sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="경기 수원시"
-            android:textColor="@color/black"
-            android:textSize="11sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="경기 안산시"
-            android:textColor="@color/black"
-            android:textSize="11sp"
-            android:textStyle="bold" />
-
-    </com.google.android.material.tabs.TabLayout>
 
     <TextView
         android:id="@+id/check_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:text="--건"
         android:textColor="@color/gray_03"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabs" />
+        app:layout_constraintTop_toBottomOf="@+id/interest_study_bold" />
 
 
     <ImageView
@@ -121,7 +81,7 @@
         app:layout_constraintStart_toEndOf="@+id/ic_filter" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/interest_area_study_reyclerview"
+        android:id="@+id/recruiting_study_reyclerview"
         android:layout_width="match_parent"
         android:layout_height="450dp"
         android:layout_marginTop="30dp"
