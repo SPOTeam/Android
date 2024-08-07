@@ -51,3 +51,10 @@ data class GalleryItem (
 )
 
 
+data class ThemePreferences(
+    val themes: List<String>
+)
+
+data class RegionsPreferences(
+    val regions: List<String>
+)
