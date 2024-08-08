@@ -1,5 +1,7 @@
 package com.example.spoteam_android
 
+import com.google.gson.annotations.SerializedName
+
 data class IndexData(
     val index : String,
     val content : String,
@@ -50,11 +52,38 @@ data class GalleryItem (
     val imgId : Int
 )
 
+data class ProfileTemperatureItem(
+    val profileImage: Int,
+    val nickname: String,
+    val temperature: String
+)
+
+data class AlertInfo(
+    val contentText : String,
+    val type : Int
+)
+
+data class StudyInfo(
+    val studyName : String,
+)
+
+data class CommentInfo(
+    val commentWriter : String,
+    val Comment : String,
+    val commentType : Int
+)
 
 data class ThemePreferences(
+    @SerializedName("themes")
     val themes: List<String>
 )
 
+data class StudyReasons(
+    @SerializedName("reasons")
+    val reasons: List<String>
+)
+
 data class RegionsPreferences(
+    @SerializedName("regions")
     val regions: List<String>
 )
