@@ -1,5 +1,7 @@
 package com.example.spoteam_android.ui.community
 
+import java.util.Date
+
 data class CommunityResponse(
     val isSuccess: String,
     val code: String,
@@ -50,4 +52,31 @@ data class AnnouncementDetailInfo(
     val rank: Int,
     val postTitle: String,
     val commentCount: Int
+)
+/**************************************/
+data class CategoryPagesResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: CategoryPagesInfo
+)
+
+data class CategoryPagesInfo(
+    val postType : String,
+    val postResponses: List<CategoryPagesDetail>,
+    val totalPages : Int,
+    val totalElements : Int,
+    val isFirst : String,
+    val isLast : String
+)
+
+data class CategoryPagesDetail(
+    val writer : String,
+    val writtenTime : String,
+    val scrapCount : Int,
+    val title : String,
+    val content : String,
+    val likeCount : Int,
+    val commentCount : Int,
+    val viewCount : Int
 )

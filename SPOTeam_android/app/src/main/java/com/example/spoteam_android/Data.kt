@@ -58,14 +58,17 @@ data class ProfileTemperatureItem(
     val temperature: String
 )
 
+
 data class AlertInfo(
     val contentText : String,
     val type : Int
 )
 
+
 data class StudyInfo(
-    val studyName : String,
+    val studyName : String
 )
+
 
 data class CommentInfo(
     val commentWriter : String,

@@ -5,15 +5,9 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.runtime.Composable
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
-import com.example.spoteam_android.ui.mypage.ParticipatingStudyFragment
 
 class BoardAdapter(private val itemList: ArrayList<BoardItem>) :
     RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {

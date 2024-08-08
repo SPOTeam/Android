@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         binding.mainFloatingButton.setOnClickListener {
             getCurrentFragment()?.let {
                 if(it is CommunityHomeFragment) {
-                    val writeCommunityFragment = WriteContentFragment()
+                    val writeCommunityFragment = WriteContentFragment(this)
                     writeCommunityFragment.show(supportFragmentManager, "Write Content")
                 }
                 if(it is DetailStudyFragment) {
