@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/startlogin_iv"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
+        android:layout_width="266dp"
+        android:layout_height="266dp"
         android:src="@drawable/spot_logo"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -87,16 +87,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="125dp"
         android:layout_marginEnd="15dp"
         android:background="@drawable/examplekakao"
         android:text="메인으로 가기"
         android:textSize="17sp"
         android:textStyle="bold"
+        android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toTopOf="@id/loginwithspot_bt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/studyaccept_et" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <android.widget.Button
         android:id="@+id/loginwithspot_bt"
@@ -109,10 +108,10 @@
         android:textColor="#186AFF"
         android:textSize="17sp"
         android:textStyle="bold"
+        android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginwithkakao_bt" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

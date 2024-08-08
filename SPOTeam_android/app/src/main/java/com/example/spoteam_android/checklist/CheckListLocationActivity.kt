@@ -15,7 +15,7 @@ import com.google.android.material.chip.ChipDrawable
 
 class CheckListLocationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCheckListLocationBinding
-    private val selectedLocations = mutableListOf<String>()
+    private val selectedLocations = mutableListOf<String>() // 여기에 저장되는 것은 코드입니다
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
@@ -32,6 +32,12 @@ class CheckListLocationActivity : AppCompatActivity() {
         binding = ActivityCheckListLocationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val selectedThemes = intent.getStringArrayListExtra("selectedThemes")
+        val selectedPurpose = intent.getStringArrayListExtra("selectedPurpose")
+
+        Log.d("CheckListLocationActivity", "Received Themes: $selectedThemes")
+        Log.d("CheckListLocationActivity", "Received Purpose: $selectedPurpose")
+
         setSupportActionBar(binding.activityChecklistLocationTb)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = ""
@@ -44,12 +50,16 @@ class CheckListLocationActivity : AppCompatActivity() {
                 val intent = Intent(this, LocationSearchActivity::class.java)
                 startForResult.launch(intent)
             } else {
-
+                // 최대 선택 개수를 초과한 경우 처리 로직
             }
         }
 
         binding.checklistspotLocationFinishBt.setOnClickListener {
-            val intent = Intent(this, RegisterInformation::class.java)
+            val intent = Intent(this, RegisterInformation::class.java).apply {
+                putStringArrayListExtra("selectedThemes", ArrayList(selectedThemes))
+                putStringArrayListExtra("selectedPurpose", ArrayList(selectedPurpose))
+                putStringArrayListExtra("selectedLocations", ArrayList(selectedLocations)) // 코드 리스트 전달
+            }
             startActivity(intent)
         }
 
@@ -57,8 +67,10 @@ class CheckListLocationActivity : AppCompatActivity() {
     }
 
     private fun addLocationChip(address: String?, code: String?) {
-        if (!address.isNullOrEmpty() && !selectedLocations.contains(address)) {
-            selectedLocations.add(address)
+        if (!address.isNullOrEmpty() && !selectedLocations.contains(code)) {
+            code?.let {
+                selectedLocations.add(it) // 코드 저장
+            }
 
             val chip = Chip(this).apply {
                 text = address
@@ -67,11 +79,10 @@ class CheckListLocationActivity : AppCompatActivity() {
                 isCloseIconVisible = true
                 setOnCloseIconClickListener {
                     binding.chipGroup.removeView(this)
-                    selectedLocations.remove(address)
+                    code?.let { code -> selectedLocations.remove(code) } // 코드 삭제
                     if (selectedLocations.isEmpty()) {
                         binding.activityChecklistLocationCl.visibility = View.VISIBLE
                     }
-
                     updateButtonStates()
                 }
             }
@@ -86,5 +97,5 @@ class CheckListLocationActivity : AppCompatActivity() {
         binding.checklistspotLocationPlusBt.isEnabled = selectedLocations.size < 5
         binding.checklistspotLocationFinishBt.isEnabled = selectedLocations.isNotEmpty()
     }
-
 }
+
