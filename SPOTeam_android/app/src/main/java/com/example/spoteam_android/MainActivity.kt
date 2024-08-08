@@ -17,7 +17,7 @@ import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.WriteContentFragment
-import com.example.spoteam_android.ui.mypage.ConsiderAttendanceMemberFragment
+//import com.example.spoteam_android.ui.mypage.ConsiderAttendanceMemberFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.MyStudyCommunityFragment
@@ -195,7 +195,7 @@ class MainActivity : AppCompatActivity() {
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_mypage -> {
-                    showFragment(ConsiderAttendanceMemberFragment())
+                    showFragment(MypageFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(MyPageFragment())
                     return@setOnItemSelectedListener true
