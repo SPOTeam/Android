@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.ui.calendar.CalendarAddEventFragment
-import com.example.spoteam_android.ui.alert.AlertFragment
+//import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 
 class HouseFragment : Fragment() {
@@ -32,12 +32,12 @@ class HouseFragment : Fragment() {
             (activity as MainActivity).switchFragment(SearchFragment())
         }
 
-        val icAlarmButton: ImageView = binding.root.findViewById(R.id.ic_alarm)
-        icAlarmButton.setOnClickListener {
-            (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, AlertFragment()).addToBackStack(null)
-                .commitAllowingStateLoss()
-        }
+//        val icAlarmButton: ImageView = binding.root.findViewById(R.id.ic_alarm)
+//        icAlarmButton.setOnClickListener {
+//            (activity as MainActivity).supportFragmentManager.beginTransaction()
+//                .replace(R.id.main_frm, AlertFragment()).addToBackStack(null)
+//                .commitAllowingStateLoss()
+//        }
 
         val register = StudyRegisterPopupFragment(requireContext())
 

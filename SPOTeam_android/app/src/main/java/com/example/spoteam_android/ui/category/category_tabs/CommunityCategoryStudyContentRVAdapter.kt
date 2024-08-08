@@ -8,15 +8,15 @@ import com.example.spoteam_android.databinding.ItemRecyclerViewBinding
 
 class CommunityCategoryStudyContentRVAdapter(private val dataList: ArrayList<BoardItem>) : RecyclerView.Adapter<CommunityCategoryStudyContentRVAdapter.ViewHolder>() {
 
-//    interface OnItemClickListener {
-//        fun onItemClick(data : BoardItem)
-//    }
-//
-//    private lateinit var itemClickListener : OnItemClickListener
-//
-//    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
-//        this.itemClickListener = onItemClickListener
-//    }
+    interface OnItemClickListener {
+        fun onItemClick(data : BoardItem)
+    }
+
+    private lateinit var itemClickListener : OnItemClickListener
+
+    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.itemClickListener = onItemClickListener
+    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemRecyclerViewBinding = ItemRecyclerViewBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
