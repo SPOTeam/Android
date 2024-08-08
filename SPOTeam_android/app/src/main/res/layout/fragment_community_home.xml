@@ -149,7 +149,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/communityHome_Community_content_rv"
             android:layout_width="0dp"
-            android:layout_height="175dp"
+            android:layout_height="180dp"
             android:background="@drawable/content_tmpl"
             android:paddingHorizontal="16dp"
             android:paddingVertical="18dp"

@@ -1,5 +1,7 @@
 package com.example.spoteam_android.ui.community
 
+import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +12,7 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentWriteContentBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class WriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
+class WriteContentFragment(val mContext : Context) : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
 
     lateinit var binding: FragmentWriteContentBinding
 

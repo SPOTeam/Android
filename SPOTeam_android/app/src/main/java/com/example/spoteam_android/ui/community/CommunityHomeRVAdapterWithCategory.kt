@@ -25,9 +25,30 @@ class CommunityHomeRVAdapterWithCategory(private val dataList: List<Representati
 
     inner class ViewHolder(val binding : ItemCommunityhomeContentWithCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: RepresentativeDetailInfo){
-            binding.contentCategoryTv.text = data.postType
+            binding.contentCategoryTv.text = checkType(data.postType)
             binding.contentTitleTv.text = data.postTitle
             binding.contentCommentNumTv.text = data.commentCount.toString()
+        }
+
+        private fun checkType(postType: String): String {
+            when(postType){
+                "COUNSELING" -> {
+                    return "고민상담"
+                }
+                "FREE_TALK" -> {
+                    return "자유토크"
+                }
+                "INFORMATION_SHARING" -> {
+                    return "정보공유"
+                }
+                "JOB_TALK" -> {
+                    return "취준토크"
+                }
+                "PASS_EXPERIENCE" -> {
+                    return "합격후기"
+                }
+                else -> return ""
+            }
         }
     }
 }

@@ -1,13 +1,23 @@
 package com.example.spoteam_android.ui.community.communityContent
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.CommunityData
 import com.example.spoteam_android.databinding.FragmentCommunityCategoryContentBinding
+import com.example.spoteam_android.ui.community.CategoryPagesDetail
+import com.example.spoteam_android.ui.community.CategoryPagesResponse
+import com.example.spoteam_android.ui.community.CommunityContentActivity
+import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ShareInfoFragment : Fragment() {
 
@@ -19,35 +29,59 @@ class ShareInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCommunityCategoryContentBinding.inflate(inflater, container, false)
-
-        initRecyclerview()
+        fetchPages("INFORMATION_SHARING", 0)
 
         return binding.root
     }
 
-    private fun initRecyclerview(){
-        binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    private fun fetchPages(type: String, pageNum: Int) {
+        CommunityRetrofitClient.instance.getCategoryPagesContent(type, pageNum)
+            .enqueue(object : Callback<CategoryPagesResponse> {
+                override fun onResponse(
+                    call: Call<CategoryPagesResponse>,
+                    response: Response<CategoryPagesResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val pagesResponse = response.body()
+                        if (pagesResponse?.isSuccess == "true") {
+                            val pagesResponseList = pagesResponse.result?.postResponses
+                            Log.d("PASS_EXPERIENCE", "items: $pagesResponseList")
+                            if (pagesResponseList != null) {
+                                initRecyclerview(pagesResponseList)
+                            }
+                        } else {
+                            showError(pagesResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
 
-        val dataList: ArrayList<CommunityData> = arrayListOf()
+                override fun onFailure(call: Call<CategoryPagesResponse>, t: Throwable) {
+                    Log.e("PASS_EXPERIENCE", "Failure: ${t.message}", t)
+                }
+            })
+    }
 
-        // arrayList 에 데이터 삽입
-        dataList.apply{
-            // arrayList 타입이 Data 객체이다. | 데이터 삽입 시 Data 객체 타입으로 넣어줌.
-            add(CommunityData("첫번째 게시글", "첫번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(CommunityData("두번째 게시글", "두번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(CommunityData("세번째 게시글", "세번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(CommunityData("네번째 게시글", "네번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(CommunityData("다섯번째 게시글", "다섯번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(CommunityData("여섯번째 게시글", "여섯번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(CommunityData("일곱번째 게시글", "일곱번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(CommunityData("여덟번째 게시글", "여덟번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(CommunityData("아홉번째 게시글", "아홉번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-        }
+    private fun showError(message: String?) {
+        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+    }
 
-        val dataRVAdapter = CommunityCategoryContentRVAdapter(dataList)
+    private fun initRecyclerview(pageContent: List<CategoryPagesDetail>) {
+        binding.communityCategoryContentRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        val dataRVAdapter = CommunityCategoryContentRVAdapter(pageContent)
         //리스너 객체 생성 및 전달
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
 
+        dataRVAdapter.setItemClickListener(object :
+            CommunityCategoryContentRVAdapter.OnItemClickListener {
+            override fun onItemClick(data: CategoryPagesDetail) {
+                startActivity(Intent(requireContext(), CommunityContentActivity::class.java))
+            }
+
+        })
     }
 }
