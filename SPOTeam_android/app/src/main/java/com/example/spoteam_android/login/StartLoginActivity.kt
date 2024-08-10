@@ -25,9 +25,16 @@ class StartLoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding = ActivityStartLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        val currentEmail = sharedPreferences.getString("currentEmail", null)
+        val isLoggedIn = currentEmail != null && sharedPreferences.getBoolean("${currentEmail}_isLoggedIn", false)
+
+        // 현재 로그인된 사용자 정보를 로그
+        val memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
+        Log.d("SharedPreferences", "MemberId: $memberId")
 
         if (isLoggedIn) {
             // 이미 로그인된 경우 MainActivity로 이동
@@ -36,9 +43,6 @@ class StartLoginActivity : AppCompatActivity() {
             finish()  // 현재 Activity를 종료
             return
         }
-
-        binding = ActivityStartLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
@@ -92,17 +96,24 @@ class StartLoginActivity : AppCompatActivity() {
                         // SharedPreferences에 데이터 저장
                         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
                         with(sharedPreferences.edit()) {
-                            putBoolean("isLoggedIn", true)
-                            putString("email", userInfo.email)
-                            putString("accessToken", accessToken)
-                            putInt("memberId", userInfo.memberId)
-                            apply()  // 비동기 저장
+                            putBoolean("${userInfo.email}_isLoggedIn", true)
+                            putString("${userInfo.email}_accessToken", accessToken)
+                            putInt("${userInfo.email}_memberId", userInfo.memberId)
+                            putString("currentEmail", userInfo.email)
+                            apply()
                         }
 
+                        // 가입 여부 확인
+                        val existingMemberId = sharedPreferences.getInt("${userInfo.email}_memberId", -1)
 
-                        val intent = Intent(this@StartLoginActivity, MainActivity::class.java)
+                        // 가입했던 적이 있으면 MainActivity로, 없으면 CheckListCategoryActivity로 이동
+                        val intent = if (existingMemberId != -1) {
+                            Intent(this@StartLoginActivity, CheckListCategoryActivity::class.java)
+                        } else {
+                            Intent(this@StartLoginActivity, CheckListCategoryActivity::class.java)
+                        }
                         startActivity(intent)
-                        finish()  // 로그인 완료 후 현재 Activity 종료
+                        finish() // 로그인 완료 후 현재 Activity 종료
                     }
                 } else {
                     Log.e("Token", "토큰 전송 실패: ${response.errorBody()?.string()}")

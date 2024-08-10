@@ -8,9 +8,7 @@ import com.kakao.sdk.common.util.Utility
 class GlobalApplication: Application() {
     override fun onCreate() {
         super.onCreate()
-        KakaoSdk.init(this, "dbd5ca7007d0fdd0b1b705db749a86f3")
-        var keyHash = Utility.getKeyHash(this)
-        Log.i("GlobalApplication", "$keyHash")
+        KakaoSdk.init(this, "7878cb24cec56458df067991de5e7786")
 
     }
 }
