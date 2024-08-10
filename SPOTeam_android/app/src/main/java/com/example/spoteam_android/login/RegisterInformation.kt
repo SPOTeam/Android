@@ -47,7 +47,7 @@ class RegisterInformation : ComponentActivity() {
         lifecycleScope.launch {
             val totalSteps = 5
             for (i in 1..totalSteps) {
-                delay(1000)
+                delay(500)
                 updateProgressBar(i * 20)
             }
             navigateToMainScreen()
@@ -207,7 +207,7 @@ class RegisterInformation : ComponentActivity() {
 //        val memberId = 12345 // 실제 멤버아이디로 변경
 //
 //        val themePreferences = ThemePreferences(themes)
-//        val purposePreferences = StudyPurpose(purposes)
+//        val purposePreferences = StudyReasons(purposes)
 //        val regionsPreferences = RegionsPreferences(regions)
 //
 //        // Gson 인스턴스 생성
