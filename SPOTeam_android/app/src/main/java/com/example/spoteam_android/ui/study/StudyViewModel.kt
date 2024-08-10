@@ -2,6 +2,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class StudyViewModel : ViewModel() {
 
@@ -51,32 +56,39 @@ class StudyViewModel : ViewModel() {
         updateStudyRequest()
     }
 
-    fun submitStudyData() {
+    fun submitStudyData(memberId: Int) {
         // Retrofit 인스턴스와 API 서비스 가져오기
-        // val apiService = RetrofitClient.instance.create(StudyApiService::class.java)
-        // 현재 저장된 StudyRequest 데이터 가져오기
-        // val studyData = _studyRequest.value
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://www.teamspot.site/") // 실제 서버의 URL로 변경
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
-        // if (studyData != null) {
-        //     POST 요청 수행
-        //     apiService.submitStudyData(studyData).enqueue(object : Callback<Void> {
-        //         override fun onResponse(call: Call<Void>, response: Response<Void>) {
-        //             if (response.isSuccessful) {
-        //                 성공적으로 데이터가 전송된 경우
-        //                 Log.d("StudyViewModel", "Study data submitted successfully.")
-        //             } else {
-        //                 서버 응답이 성공적이지 않은 경우
-        //                 Log.e("StudyViewModel", "Failed to submit study data. Response code: ${response.code()}")
-        //             }
-        //         }
-        //         override fun onFailure(call: Call<Void>, t: Throwable) {
-        //             네트워크 요청 실패
-        //             Log.e("StudyViewModel", "Error submitting study data: ${t.message}")
-        //         }
-        //     })
-        // } else {
-        //     Log.e("StudyViewModel", "No study data available to submit.")
-        // }
+        val apiService = retrofit.create(StudyApiService::class.java)
+
+        // 현재 저장된 StudyRequest 데이터 가져오기
+        val studyData = _studyRequest.value
+
+        if (studyData != null) {
+            // POST 요청 수행
+            apiService.submitStudyData(memberId, studyData).enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        // 성공적으로 데이터가 전송된 경우
+                        Log.d("StudyViewModel", "Study data submitted successfully.")
+                    } else {
+                        // 서버 응답이 성공적이지 않은 경우
+                        Log.e("StudyViewModel", "Failed to submit study data. Response code: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    // 네트워크 요청 실패
+                    Log.e("StudyViewModel", "Error submitting study data: ${t.message}")
+                }
+            })
+        } else {
+            Log.e("StudyViewModel", "No study data available to submit.")
+        }
     }
 
     fun clearRegions() {
