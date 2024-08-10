@@ -307,11 +307,12 @@
 
             <ImageView
                 android:id="@+id/iv_why_spot"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/fragment_mypage_ic_spot_logo"
-                android:layout_gravity="start|center"/>
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/fragment_mypage_ic_spot_logo" />
 
             <ImageView
                 android:id="@+id/go_why_spot_arrow"
