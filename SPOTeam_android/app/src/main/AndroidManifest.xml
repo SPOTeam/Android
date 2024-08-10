@@ -102,13 +102,12 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="oauth"
-                    android:scheme="dbd5ca7007d0fdd0b1b705db749a86f3" />
+                    android:scheme="kakaofe65b6d5ea91f00e2268b47ba13661df" />
             </intent-filter>
         </activity>
     </application>
