@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.checklist.CheckListCategoryActivity
 import com.example.spoteam_android.databinding.ActivityStartLoginBinding
 import com.kakao.sdk.auth.model.OAuthToken
@@ -23,6 +24,19 @@ class StartLoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+
+        if (isLoggedIn) {
+            // 이미 로그인된 경우 MainActivity로 이동
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()  // 현재 Activity를 종료
+            return
+        }
+
         binding = ActivityStartLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -75,11 +89,20 @@ class StartLoginActivity : AppCompatActivity() {
                     if (userInfo != null) {
                         Log.d("UserInfo", "memberId: ${userInfo.memberId}, email: ${userInfo.email}")
 
-                        // 여기서 memberId와 email을 사용해 필요한 작업 수행
-                        // SharedPreferences에 저장 로직 추가 예정 - fred
+                        // SharedPreferences에 데이터 저장
+                        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+                        with(sharedPreferences.edit()) {
+                            putBoolean("isLoggedIn", true)
+                            putString("email", userInfo.email)
+                            putString("accessToken", accessToken)
+                            putInt("memberId", userInfo.memberId)
+                            apply()  // 비동기 저장
+                        }
 
-                        val intent = Intent(this@StartLoginActivity, CheckListCategoryActivity::class.java)
+
+                        val intent = Intent(this@StartLoginActivity, MainActivity::class.java)
                         startActivity(intent)
+                        finish()  // 로그인 완료 후 현재 Activity 종료
                     }
                 } else {
                     Log.e("Token", "토큰 전송 실패: ${response.errorBody()?.string()}")
