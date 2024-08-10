@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -24,13 +23,8 @@ import com.example.spoteam_android.ui.study.MyStudyCommunityFragment
 import com.example.spoteam_android.ui.study.MyStudyWriteContentFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.example.spoteam_android.ui.study.StudyFragment
-import com.example.spoteam_android.ui.study.quiz.HostFinishMakeQuizFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
-
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,23 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val requestData = ApiModels.RequestData(
-            regions = ApiModels.Regions(regions = listOf("1111054000")),
-            themes = ApiModels.Themes(themes = listOf("어학"))
-        )
-        logAllSharedPreferences(this)
-        // API 호출
-//        ApiManager.sendRequestData(requestData,
-//            onSuccess = { responseData ->
-//                // UI 업데이트 등의 작업 수행
-//                Toast.makeText(this, "응답 성공: ${responseData.message}", Toast.LENGTH_SHORT).show()
-//                // saveToSharedPreferences(this,responseData)
-//            },
-//            onFailure = { throwable ->
-//                // 오류 처리
-//                Toast.makeText(this, "요청 실패: ${throwable.message}", Toast.LENGTH_SHORT).show()
-//            }
-//        )
+
 
 
         // 다른 아무 화면 클릭시 스터디 화면 사라지도록
@@ -269,6 +247,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("showkey", "$key: $value")
         }
     }
+
 }
 
 

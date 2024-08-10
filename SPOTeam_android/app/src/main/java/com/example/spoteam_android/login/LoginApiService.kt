@@ -9,7 +9,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface LoginApiService {
-    @POST("spot/member/{memberId}/themes")
+        @POST("spot/member/{memberId}/themes")
     fun postThemes(@Path("memberId") memberId: Int, @Body themePreferences: ThemePreferences): Call<Void>
 
     @POST("spot/member/{memberId}/regions")

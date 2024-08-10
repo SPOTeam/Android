@@ -39,12 +39,12 @@ class HouseFragment : Fragment() {
 //                .commitAllowingStateLoss()
 //        }
 
-        val register = StudyRegisterPopupFragment(requireContext())
 
         val spoticon: ImageView = binding.root.findViewById(R.id.ic_spot_logo)
         spoticon.setOnClickListener {
             //스터디 참여하기 팝업으로 이동
-            (activity as MainActivity).switchFragment(RecruitingStudyFragment())
+            val reportStudymemberFragment = ReportStudymemberFragment(requireContext())
+            reportStudymemberFragment.start()
         }
 
         val txintereststudy: TextView = binding.root.findViewById(R.id.tx_interest_study)
