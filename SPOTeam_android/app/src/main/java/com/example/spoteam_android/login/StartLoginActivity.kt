@@ -28,8 +28,6 @@ class StartLoginActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
-        val accessToken = sharedPreferences.getString("accessToken", "No AccessToken Found")
-        Log.d("SharedPreferences", "AccessToken: $accessToken")
 
         if (isLoggedIn) {
             // 이미 로그인된 경우 MainActivity로 이동
