@@ -89,3 +89,6 @@ data class RegionsPreferences(
     @SerializedName("regions")
     val regions: List<String>
 )
+
+
+
