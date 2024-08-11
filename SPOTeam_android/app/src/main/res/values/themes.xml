@@ -37,6 +37,19 @@
         <item name="closeIconTint">#588FFE</item>
     </style>
 
+    <style name="CustomChipthemeStyle" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/custom_chip</item>
+        <item name="chipStrokeColor">@color/custom_chip_stroke</item>
+        <item name="chipStrokeWidth">2dp</item>
+        <item name="android:textColor">@color/custom_chip_text</item>
+        <item name="android:textSize">16sp</item>
+        <item name="paddingStart">10dp</item>
+        <item name="paddingEnd">10dp</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+    </style>
+
 
     <style name="RangeSliderStyle" parent="Widget.MaterialComponents.Slider">
         <item name="materialThemeOverlay">@style/ThemeOverlay.Slider</item>

@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentLocationStudyBinding
 import com.example.spoteam_android.login.LocationItem
+import com.example.spoteam_android.ui.study.IntroduceStudyFragment
 import com.example.spoteam_android.ui.study.OnlineStudyFragment
+import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -28,6 +30,10 @@ class LocationStudyFragment : Fragment() {
         setupRecyclerView()
         setupSearchFunctionality()
         loadLocalTsvFile() // TSV 파일을 읽어 데이터 초기화
+
+        binding.fragmentIntroduceStudyBackBt.setOnClickListener {
+            goToPreviusFragment()
+        }
         return binding.root
     }
 
@@ -120,5 +126,12 @@ class LocationStudyFragment : Fragment() {
             .replace(R.id.main_frm, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    private fun goToPreviusFragment() {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.main_frm, OnlineStudyFragment()) // 변경할 Fragment로 교체
+        transaction.addToBackStack(null) // 백스택에 추가
+        transaction.commit()
     }
 }

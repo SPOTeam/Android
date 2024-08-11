@@ -81,7 +81,6 @@ class ActivityFeeStudyFragment : Fragment() {
         val feeText = binding.fragmentActivityFeeStudyEt.text.toString()
         val fee = feeText.toIntOrNull() ?: 0
 
-
         if (fee > 10000) {
             binding.fragmentActivityFeeStudyEt.error = "최대 10,000원까지 입력 가능합니다."
             binding.fragmentActivityFeeStudyPreviewBt.isEnabled = false
@@ -93,7 +92,7 @@ class ActivityFeeStudyFragment : Fragment() {
                 goal = viewModel.studyRequest.value?.goal.orEmpty(),
                 introduction = viewModel.studyRequest.value?.introduction.orEmpty(),
                 isOnline = viewModel.studyRequest.value?.isOnline ?: true,
-                profileImage = viewModel.studyRequest.value?.profileImage, // null 가능성 유지
+                profileImage = viewModel.studyRequest.value?.profileImage,
                 regions = viewModel.studyRequest.value?.regions ?: emptyList(),
                 maxPeople = viewModel.studyRequest.value?.maxPeople ?: 0,
                 gender = viewModel.studyRequest.value?.gender ?: Gender.UNKNOWN,
@@ -103,6 +102,7 @@ class ActivityFeeStudyFragment : Fragment() {
             )
         }
     }
+
 
     private fun setupPreviewButtonListener() {
 

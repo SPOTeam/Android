@@ -11,9 +11,11 @@ import com.example.spoteam_android.StudyReasons
 import com.example.spoteam_android.ThemePreferences
 import com.example.spoteam_android.databinding.ActivityRegisterInformationBinding
 import com.example.spoteam_android.login.LoginApiService
+import com.example.spoteam_android.ui.mypage.ThemePreferenceFragment.LoginchecklistAuthInterceptor
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -90,10 +92,7 @@ class RegisterInformation : ComponentActivity() {
         purposes: List<String>,
         regions: List<String>
     ) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = getRetrofit()
 
         val service = retrofit.create(LoginApiService::class.java)
 
@@ -143,6 +142,19 @@ class RegisterInformation : ComponentActivity() {
                 Log.e("RegisterInformation", "Regions POST request failure", t)
             }
         })
+    }
+
+    private fun getRetrofit(): Retrofit {
+        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzMzc2NDk3LCJleHAiOjE3MjMzODAwOTd9.xxtr97HO-u1VW1dAu8fRyobh8D7KywUk-6akBE4RE1U"
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(LoginchecklistAuthInterceptor(authToken))
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl("https://www.teamspot.site/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
     private fun generateRandomNickname(): String {

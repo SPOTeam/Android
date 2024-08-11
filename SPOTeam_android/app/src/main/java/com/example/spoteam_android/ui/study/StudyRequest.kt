@@ -35,7 +35,10 @@ data class StudyRequest(
     val maxAge: Int,
 
     @SerializedName("fee")
-    val fee: Int
+    val fee: Int,
+
+    @SerializedName("hasfee")
+    val hasfee: Boolean
 )
 
 enum class Gender {
