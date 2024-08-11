@@ -59,10 +59,16 @@ class RegisterStudyFragment : Fragment() {
         for (i in 0 until binding.fragmentRegisterStudyChipgroup.childCount) {
             val chip = binding.fragmentRegisterStudyChipgroup.getChildAt(i) as? CompoundButton
             if (chip?.isChecked == true) {
-                selectedThemes.add(chip.text.toString())
+
+                val chipText = chip.text.toString()
+                val processedText = when {
+                    chipText.contains("전공") -> chipText.replace("/", "및") //
+                    else -> chipText.replace("/", "").replace(" ", "") // 공백 및 슬래시를 제거
+                }
+                selectedThemes.add(processedText)
             }
+            viewModel.updateThemes(selectedThemes)
         }
-        viewModel.updateThemes(selectedThemes)
     }
 
     private fun updateProgressBar() {

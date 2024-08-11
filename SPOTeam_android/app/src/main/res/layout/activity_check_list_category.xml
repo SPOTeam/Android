@@ -49,6 +49,7 @@
 
     </TextView>
 
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/activity_checklist_chipGroup"
         android:layout_width="wrap_content"
@@ -115,6 +116,7 @@
             app:chipStartPadding="15dp"
             app:chipEndPadding="15dp"
             app:chipMinHeight="40dp"/>
+
 
 
         <com.google.android.material.chip.Chip

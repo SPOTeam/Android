@@ -2,6 +2,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.spoteam_android.ui.mypage.ThemePreferenceFragment.LoginchecklistAuthInterceptor
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,6 +30,7 @@ class StudyViewModel : ViewModel() {
         title: String, goal: String, introduction: String, isOnline: Boolean, profileImage: String?,
         regions: List<String>?, maxPeople: Int, gender: Gender, minAge: Int, maxAge: Int, fee: Int
     ) {
+        val hasfee = fee > 0
         _studyRequest.value = StudyRequest(
             themes = _themes.value ?: listOf(), // 현재 themes 값을 사용
             title = title,
@@ -40,7 +43,8 @@ class StudyViewModel : ViewModel() {
             gender = gender,
             minAge = minAge,
             maxAge = maxAge,
-            fee = fee
+            fee = fee,
+            hasfee = hasfee
         )
     }
 
@@ -58,10 +62,7 @@ class StudyViewModel : ViewModel() {
 
     fun submitStudyData(memberId: Int) {
         // Retrofit 인스턴스와 API 서비스 가져오기
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/") // 실제 서버의 URL로 변경
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = getRetrofit()
 
         val apiService = retrofit.create(StudyApiService::class.java)
 
@@ -93,5 +94,18 @@ class StudyViewModel : ViewModel() {
 
     fun clearRegions() {
         _studyRequest.value = _studyRequest.value?.copy(regions = null)
+    }
+
+    private fun getRetrofit(): Retrofit {
+        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzMzc3ODk5LCJleHAiOjE3MjMzODE0OTl9.pe2trdaOvCD-OHt640kqX10umJ-WHiRezN42fzIZXgI"
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(LoginchecklistAuthInterceptor(authToken))
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl("https://www.teamspot.site/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 }
