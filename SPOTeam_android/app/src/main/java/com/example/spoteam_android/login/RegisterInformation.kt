@@ -6,19 +6,22 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.spoteam_android.MainActivity
-import com.example.spoteam_android.R
 import com.example.spoteam_android.RegionsPreferences
 import com.example.spoteam_android.StudyReasons
 import com.example.spoteam_android.ThemePreferences
 import com.example.spoteam_android.databinding.ActivityRegisterInformationBinding
+import com.example.spoteam_android.login.LoginApiService
+import com.example.spoteam_android.ui.mypage.ThemePreferenceFragment.LoginchecklistAuthInterceptor
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Random
 
 class RegisterInformation : ComponentActivity() {
     private lateinit var binding: ActivityRegisterInformationBinding
@@ -32,9 +35,29 @@ class RegisterInformation : ComponentActivity() {
         val selectedPurpose = intent.getStringArrayListExtra("selectedPurpose")
         val selectedLocations = intent.getStringArrayListExtra("selectedLocations")
 
+        // SharedPreferences에서 현재 이메일을 가져오기
+        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+
+        if (email == null) {
+            Log.e("RegisterInformation", "Current email not found in SharedPreferences")
+            return
+        }
+
+        val memberId = sharedPreferences.getInt("${email}_memberId", -1)
+
+        if (memberId == -1) {
+            Log.e("RegisterInformation", "Member ID not found in SharedPreferences")
+            return
+        }
+
+        // 닉네임 생성 및 저장
+        val nickname = generateRandomNickname()
+        saveNicknameToPreferences(email, nickname)
 
         // 서버에 POST 요청 보내기
         postPreferencesToServer(
+            memberId = memberId,
             themes = selectedThemes ?: listOf(),
             purposes = selectedPurpose ?: listOf(),
             regions = selectedLocations ?: listOf()
@@ -64,17 +87,14 @@ class RegisterInformation : ComponentActivity() {
     }
 
     private fun postPreferencesToServer(
+        memberId: Int,
         themes: List<String>,
         purposes: List<String>,
         regions: List<String>
     ) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = getRetrofit()
 
         val service = retrofit.create(LoginApiService::class.java)
-        val memberId = 12345 // 실제 멤버아이디로 변경
 
         val themePreferences = ThemePreferences(themes)
         val purposePreferences = StudyReasons(purposes)
@@ -124,140 +144,36 @@ class RegisterInformation : ComponentActivity() {
         })
     }
 
+    private fun getRetrofit(): Retrofit {
+        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzMzc2NDk3LCJleHAiOjE3MjMzODAwOTd9.xxtr97HO-u1VW1dAu8fRyobh8D7KywUk-6akBE4RE1U"
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(LoginchecklistAuthInterceptor(authToken))
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl("https://www.teamspot.site/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    private fun generateRandomNickname(): String {
+        val letters = "abcdefghijklmnopqrstuvwxyz"
+        val numbers = "0123456789"
+        val random = Random()
+
+        val letterPart = (1..4).map { letters[random.nextInt(letters.length)] }.joinToString("")
+        val numberPart = (1..2).map { numbers[random.nextInt(numbers.length)] }.joinToString("")
+
+        return "$letterPart$numberPart"
+    }
+
+    private fun saveNicknameToPreferences(email: String, nickname: String) {
+        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putString("${email}_nickname", nickname)
+            apply()  // 비동기 저장
+        }
+    }
+
 }
-//package com.example.spoteam_android.login
-//
-//import android.content.Intent
-//import android.os.Bundle
-//import android.util.Log
-//import androidx.activity.ComponentActivity
-//import androidx.lifecycle.lifecycleScope
-//import com.example.spoteam_android.MainActivity
-//import com.example.spoteam_android.R
-//import com.example.spoteam_android.RegionsPreferences
-//import com.example.spoteam_android.StudyPurpose
-//import com.example.spoteam_android.ThemePreferences
-//import com.example.spoteam_android.databinding.ActivityRegisterInformationBinding
-//import com.google.gson.Gson
-//import kotlinx.coroutines.delay
-//import kotlinx.coroutines.launch
-//import retrofit2.Call
-//import retrofit2.Callback
-//import retrofit2.Response
-//import retrofit2.Retrofit
-//import retrofit2.converter.gson.GsonConverterFactory
-//
-//class RegisterInformation : ComponentActivity() {
-//    private lateinit var binding: ActivityRegisterInformationBinding
-//    private val totalRequests = 3 // 총 요청 수 (themes, purposes, regions)
-//    private var completedRequests = 0
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        binding = ActivityRegisterInformationBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
-//
-//        val selectedThemes = intent.getStringArrayListExtra("selectedThemes")
-//        val selectedPurpose = intent.getStringArrayListExtra("selectedPurpose")
-//        val selectedLocations = intent.getStringArrayListExtra("selectedLocations")
-//
-//        // 서버에 POST 요청 보내기
-//        postPreferencesToServer(
-//            themes = selectedThemes ?: listOf(),
-//            purposes = selectedPurpose ?: listOf(),
-//            regions = selectedLocations ?: listOf()
-//        )
-//    }
-//
-//    private fun setupProgressBar() {
-//        lifecycleScope.launch {
-//            val totalSteps = 5 // 총 단계
-//            while (completedRequests < totalRequests) {
-//                delay(1000) // 1초마다 체크
-//                // 프로그래스바를 업데이트합니다.
-//                val progress = (completedRequests * 100) / totalRequests
-//                updateProgressBar(progress)
-//            }
-//            // 마지막 단계까지 진행된 후, 100%로 설정합니다.
-//            updateProgressBar(100)
-//            navigateToMainScreen()
-//        }
-//    }
-//
-//    private fun updateProgressBar(progress: Int) {
-//        binding.activityRegisterProgressbar.progress = progress
-//    }
-//
-//    private fun navigateToMainScreen() {
-//        startActivity(Intent(this, MainActivity::class.java))
-//        finish()
-//    }
-//
-//    private fun postPreferencesToServer(
-//        themes: List<String>,
-//        purposes: List<String>,
-//        regions: List<String>
-//    ) {
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("https://www.teamspot.site/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//
-//        val service = retrofit.create(LoginApiService::class.java)
-//        val memberId = 12345 // 실제 멤버아이디로 변경
-//
-//        val themePreferences = ThemePreferences(themes)
-//        val purposePreferences = StudyReasons(purposes)
-//        val regionsPreferences = RegionsPreferences(regions)
-//
-//        // Gson 인스턴스 생성
-//        val gson = Gson()
-//
-//        // 데이터 JSON으로 변환하여 로그에 출력
-//        val themePreferencesJson = gson.toJson(themePreferences)
-//        val purposePreferencesJson = gson.toJson(purposePreferences)
-//        val regionsPreferencesJson = gson.toJson(regionsPreferences)
-//
-//        Log.d("RegisterInformation", "Theme Preferences JSON: $themePreferencesJson")
-//        Log.d("RegisterInformation", "Purpose Preferences JSON: $purposePreferencesJson")
-//        Log.d("RegisterInformation", "Regions Preferences JSON: $regionsPreferencesJson")
-//
-//        // 요청을 리스트로 만듭니다.
-//        val requests = listOf(
-//            service.postThemes(memberId, themePreferences),
-//            service.postPurposes(memberId, purposePreferences),
-//            service.postRegions(memberId, regionsPreferences)
-//        )
-//
-//        // 각 요청에 대해 콜백을 설정합니다.
-//        requests.forEachIndexed { index, call ->
-//            call.enqueue(object : Callback<Void> {
-//                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                    Log.d("RegisterInformation", "POST request success for index $index")
-//                    completedRequests++
-//                    // 요청이 완료된 후 프로그래스바를 업데이트합니다.
-//                    val progress = (completedRequests * 100) / totalRequests
-//                    updateProgressBar(progress)
-//
-//                    // 모든 요청이 완료되면 프로그래스바를 업데이트하고, 화면을 전환합니다.
-//                    if (completedRequests == totalRequests) {
-//                        setupProgressBar()
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<Void>, t: Throwable) {
-//                    Log.e("RegisterInformation", "POST request failure for index $index", t)
-//                    completedRequests++
-//                    // 실패한 경우에도 진행 상태를 업데이트합니다.
-//                    val progress = (completedRequests * 100) / totalRequests
-//                    updateProgressBar(progress)
-//
-//                    // 모든 요청이 완료되면 프로그래스바를 업데이트하고, 화면을 전환합니다.
-//                    if (completedRequests == totalRequests) {
-//                        setupProgressBar()
-//                    }
-//                }
-//            })
-//        }
-//    }
-//}

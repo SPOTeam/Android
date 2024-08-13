@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.ComponentActivity.MODE_PRIVATE
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
@@ -30,6 +32,7 @@ class ActivityFeeStudyFragment : Fragment() {
         binding.fragmentActivityFeeStudyBackBt.setOnClickListener {
             goToPreviusFragment()
         }
+
 
         return binding.root
     }
@@ -78,7 +81,6 @@ class ActivityFeeStudyFragment : Fragment() {
         val feeText = binding.fragmentActivityFeeStudyEt.text.toString()
         val fee = feeText.toIntOrNull() ?: 0
 
-
         if (fee > 10000) {
             binding.fragmentActivityFeeStudyEt.error = "최대 10,000원까지 입력 가능합니다."
             binding.fragmentActivityFeeStudyPreviewBt.isEnabled = false
@@ -90,7 +92,7 @@ class ActivityFeeStudyFragment : Fragment() {
                 goal = viewModel.studyRequest.value?.goal.orEmpty(),
                 introduction = viewModel.studyRequest.value?.introduction.orEmpty(),
                 isOnline = viewModel.studyRequest.value?.isOnline ?: true,
-                profileImage = viewModel.studyRequest.value?.profileImage, // null 가능성 유지
+                profileImage = viewModel.studyRequest.value?.profileImage,
                 regions = viewModel.studyRequest.value?.regions ?: emptyList(),
                 maxPeople = viewModel.studyRequest.value?.maxPeople ?: 0,
                 gender = viewModel.studyRequest.value?.gender ?: Gender.UNKNOWN,
@@ -101,16 +103,31 @@ class ActivityFeeStudyFragment : Fragment() {
         }
     }
 
+
     private fun setupPreviewButtonListener() {
 
         binding.fragmentActivityFeeStudyPreviewBt.setOnClickListener {
             // ViewModel에 저장된 데이터 JSON으로 변환하여 로그 출력
             val studyData = viewModel.studyRequest.value
             val studyDataJson = gson.toJson(studyData)
-            Log.d("ActivityFeeStudyFragment", "$studyDataJson")
 
-            viewModel.submitStudyData()
-            // 서버 전송 후 사용자에게 알림을 추가하거나 다른 액션을 수행할 수 있습니다.
+            Log.d("ActivityFeeStudyFragment", "$studyDataJson")
+            val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
+            val email = sharedPreferences.getString("currentEmail", null)
+
+            if (email != null) {
+                // 이메일 기반으로 memberId 가져오기
+                val memberId = sharedPreferences.getInt("${email}_memberId", -1)
+
+                if (memberId != -1) {
+                    viewModel.submitStudyData(memberId)
+                } else {
+                    Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Email not provided", Toast.LENGTH_SHORT).show()
+            }
+
 
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.main_frm, MyStudyRegisterPreviewFragment()) // 변경할 Fragment로 교체

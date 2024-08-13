@@ -40,12 +40,18 @@ class IntroduceStudyFragment : Fragment() {
         initActivityResultLaunchers()
         initAddImageButton()
         setupTextWatchers()
-        checkButtonState()
+        checkButtonState() // 초기 상태 체크
 
         binding.fragmentIntroduceStudyBt.setOnClickListener {
+            if (profileImage == null) { // profileImage가 null인지 확인
+                Toast.makeText(context, "프로필 이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener // 이미지가 선택되지 않으면 함수 종료
+            }
+
             saveStudyData()
             goToNextFragment()
         }
+
         binding.fragmentIntroduceStudyBackBt.setOnClickListener {
             goToPreviusFragment()
         }
@@ -142,8 +148,10 @@ class IntroduceStudyFragment : Fragment() {
                 binding.fragmentIntroduceStudypurposeEt.text.isNotEmpty() &&
                 binding.fragmentIntroduceStudyEt.text.isNotEmpty()
 
-        val isImageSelected = binding.fragmentIntroduceStudyIv.drawable != null
+        // profileImage가 null이 아닌지 확인
+        val isImageSelected = profileImage != null
 
+        // 모든 조건이 만족해야 버튼을 활성화
         binding.fragmentIntroduceStudyBt.isEnabled = isEditTextFilled && isImageSelected
     }
 
@@ -175,7 +183,6 @@ class IntroduceStudyFragment : Fragment() {
             fee = fee
         )
 
-        Log.d("IntroduceStudyFragment", "ViewModel Study Request: ${viewModel.studyRequest.value}")
     }
 
     private fun goToNextFragment() {

@@ -12,5 +12,6 @@ class GlobalApplication: Application() {
         var keyHash = Utility.getKeyHash(this)
         Log.i("GlobalApplication", "$keyHash")
 
+
     }
 }

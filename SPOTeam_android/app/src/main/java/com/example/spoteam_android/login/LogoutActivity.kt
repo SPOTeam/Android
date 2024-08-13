@@ -23,6 +23,7 @@ class LogoutActivity : AppCompatActivity() {
                 if (error != null) {
                     Toast.makeText(this, "로그아웃 실패: $error", Toast.LENGTH_SHORT).show()
                     Log.d("error","$error")
+
                 } else {
                     Toast.makeText(this, "로그아웃 성공", Toast.LENGTH_SHORT).show()
 
@@ -57,7 +58,7 @@ class LogoutActivity : AppCompatActivity() {
                     }
 
                     // MainActivity로 이동
-                    val intent = Intent(this, MainActivity::class.java)
+                    val intent = Intent(this, StartLoginActivity::class.java)
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                     finish()
                 }
