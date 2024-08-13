@@ -14,7 +14,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentCalendarBinding
+import com.example.spoteam_android.todolist.TodoAdapter
+import com.example.spoteam_android.todolist.TodoListFragment
+import com.example.spoteam_android.todolist.TodoViewModel
 import java.util.*
 
 class CalendarFragment : Fragment() {
@@ -37,19 +41,18 @@ class CalendarFragment : Fragment() {
         eventsRecyclerView = binding.eventrecyclerview
         imgbtnAddEvent = binding.imgbtnAddEvent
 
-        eventAdapter = EventAdapter(emptyList()) { event ->
+        eventAdapter = EventAdapter(emptyList(), { event ->
             // 여기에 출석체크 넣으세요!!
             (activity as MainActivity).switchFragment(CalendarAddEventFragment())
+        }, false)
 
-
-
-        }
         eventsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         eventsRecyclerView.adapter = eventAdapter
 
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             Log.d("CalendarFragment", "Date selected: $year-${month + 1}-$dayOfMonth")
             eventViewModel.loadEvents(year, month + 1, dayOfMonth)
+//            todoViewModel.loadTodosForDate(year, month + 1, dayOfMonth)
         }
 
         eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
@@ -67,6 +70,8 @@ class CalendarFragment : Fragment() {
 
         return view
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

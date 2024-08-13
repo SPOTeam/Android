@@ -71,7 +71,7 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="경기 수원시"
+            android:text="서울 종로 \n사직동"
             android:textColor="@color/black"
             android:textSize="11sp"
             android:textStyle="bold" />
@@ -79,7 +79,7 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="경기 안산시"
+            android:text="서울 종로 \n삼청동"
             android:textColor="@color/black"
             android:textSize="11sp"
             android:textStyle="bold" />
