@@ -14,6 +14,7 @@ import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
+import com.example.spoteam_android.ui.community.CommunityFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.WriteContentFragment
 //import com.example.spoteam_android.ui.mypage.ConsiderAttendanceMemberFragment
@@ -38,9 +39,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-
-
-
         // 다른 아무 화면 클릭시 스터디 화면 사라지도록
         binding.root.setOnTouchListener { _, _ ->
             showStudyFrameLayout(false)
@@ -56,7 +54,11 @@ class MainActivity : AppCompatActivity() {
         binding.mainFloatingButton.setOnClickListener {
             getCurrentFragment()?.let {
                 if(it is CommunityHomeFragment) {
-                    val writeCommunityFragment = WriteContentFragment(this)
+                    val writeCommunityFragment = WriteContentFragment()
+                    writeCommunityFragment.show(supportFragmentManager, "Write Content")
+                }
+                if(it is CommunityFragment) {
+                    val writeCommunityFragment = WriteContentFragment()
                     writeCommunityFragment.show(supportFragmentManager, "Write Content")
                 }
                 if(it is DetailStudyFragment) {
