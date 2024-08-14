@@ -35,6 +35,49 @@ data class BoardItem (
     val watch : Int
 )
 
+data class StudyItem (
+    val title : String,
+    val introduction : String,
+    val studyTO : Int,
+    val memberCount: Int,
+    val heartCount: Int,
+    val hitNum : Int,
+//    val imageUrl: String
+)
+
+data class StudyResponse(
+    val result: StudyResult
+)
+
+data class StudyResult(
+    val totalPages: Int,
+    val totalElements: Int,
+    val first: Boolean,
+    val last: Boolean,
+    val size: Int,
+    val content: List<StudyData>,
+    val number: Int
+)
+
+
+
+data class StudyData(
+    val studyId: Int,
+    val imageUrl: String,
+    val title: String,
+    val introduction: String,
+    val memberCount: Int,
+    val heartCount: Int,
+    val hitNum: Int,
+    val maxPeople: Int,
+    val studyState: String,
+    val themeTypes: List<String>,
+    val regions: List<String>,
+    val createdAt: String,
+    val liked: Boolean
+)
+
+
 data class SceduleItem (
     val dday: String,
     val day: String,
