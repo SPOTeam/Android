@@ -3,7 +3,6 @@
     android:shape="rectangle"
     android:elevation="10dp">
 
-        <solid android:color="#26588FF2"/>
-        <corners android:radius="10dp" /> <!-- 둥근 모서리의 반지름 설정 -->
+        <solid android:color="#26588FF2"/><!-- 둥근 모서리의 반지름 설정 -->
 
 </shape>

@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.community.communityContent
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,8 @@ import com.example.spoteam_android.ui.community.CategoryPagesDetail
 import com.example.spoteam_android.ui.community.CategoryPagesResponse
 import com.example.spoteam_android.ui.community.CommunityContentActivity
 import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.ContentLikeResponse
+import com.example.spoteam_android.ui.community.ContentUnLikeResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,6 +25,7 @@ import retrofit2.Response
 class PassingReviewFragment : Fragment() {
 
     lateinit var binding: FragmentCommunityCategoryContentBinding
+    var memberId : Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,9 +33,78 @@ class PassingReviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCommunityCategoryContentBinding.inflate(inflater, container, false)
+
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val currentEmail = sharedPreferences.getString("currentEmail", null)
+
+        // 현재 로그인된 사용자 정보를 로그
+        memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
+        Log.d("SharedPreferences", "MemberId: $memberId")
+
         fetchPages("PASS_EXPERIENCE", 0)
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchPages("PASS_EXPERIENCE", 0)
+    }
+
+    private fun fetchLike(postId : Int) {
+        CommunityRetrofitClient.instance.postContentLike(postId, memberId)
+            .enqueue(object : Callback<ContentLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentLikeResponse>,
+                    response: Response<ContentLikeResponse>
+                ) {
+                    Log.d("LikeContent", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val likeResponse = response.body()
+                        Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
+                        if (likeResponse?.isSuccess == "true") {
+                            val pagesResponseResult = likeResponse.result
+                            Log.d("LikeContent", "items: $pagesResponseResult")
+                        } else {
+                            showError(likeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
+                    Log.e("LikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun fetchUnLike(postId : Int) {
+        CommunityRetrofitClient.instance.postContentUnLike(postId, memberId)
+            .enqueue(object : Callback<ContentUnLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentUnLikeResponse>,
+                    response: Response<ContentUnLikeResponse>
+                ) {
+                    Log.d("UnLikeContent", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val unLikeResponse = response.body()
+                        Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
+                        if (unLikeResponse?.isSuccess == "true") {
+                            val unLikeResult = unLikeResponse.result
+                            Log.d("UnLikeContent", "items: $unLikeResult")
+                        } else {
+                            showError(unLikeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
+                    Log.e("UnLikeContent", "Failure: ${t.message}", t)
+                }
+            })
     }
 
     private fun fetchPages(type: String, pageNum: Int) {
@@ -79,9 +152,20 @@ class PassingReviewFragment : Fragment() {
         dataRVAdapter.setItemClickListener(object :
             CommunityCategoryContentRVAdapter.OnItemClickListener {
             override fun onItemClick(data: CategoryPagesDetail) {
-                startActivity(Intent(requireContext(), CommunityContentActivity::class.java))
+                val intent = Intent(requireContext(), CommunityContentActivity::class.java)
+                intent.putExtra("postInfo", data.postId.toString())
+                startActivity(intent)
             }
 
+            override fun onLikeClick(data: CategoryPagesDetail) {
+                fetchLike(data.postId)
+                onResume()
+            }
+
+            override fun onUnLikeClick(data: CategoryPagesDetail) {
+                fetchUnLike(data.postId)
+                onResume()
+            }
         })
     }
 }

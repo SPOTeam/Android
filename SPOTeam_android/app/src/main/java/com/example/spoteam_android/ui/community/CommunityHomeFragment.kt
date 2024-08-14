@@ -38,8 +38,15 @@ class CommunityHomeFragment : Fragment() {
         }
 
         binding.communityMoveNotificationIv.setOnClickListener {
+            val fragment = CommunityFragment()
+
+            val bundle = Bundle()
+            bundle.putBoolean("showSpotNotice", true) // 조건이 충족되면 true로 설정
+
+            fragment.arguments = bundle
+
             (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, CommunityFragment())
+                .replace(R.id.main_frm, fragment)
                 .commitAllowingStateLoss()
         }
 

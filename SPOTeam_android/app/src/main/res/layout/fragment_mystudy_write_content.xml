@@ -87,7 +87,7 @@
         app:layout_constraintTop_toBottomOf="@id/community_sp_iv"/>
 
     <LinearLayout
-        android:id="@+id/write_content_info_ll"
+        android:id="@+id/mystudy_write_content_info_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/write_content_content_et"
@@ -101,7 +101,7 @@
             android:text="테마" />
 
         <Spinner
-            android:id="@+id/category_spinner"
+            android:id="@+id/mystudy_category_spinner"
             android:layout_centerHorizontal="true"
             android:background="@drawable/gender_spinner_background"
             android:layout_width="wrap_content"

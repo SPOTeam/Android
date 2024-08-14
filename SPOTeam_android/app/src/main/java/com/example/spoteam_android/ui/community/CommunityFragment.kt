@@ -33,6 +33,15 @@ class CommunityFragment : Fragment() {
                 tab, position -> tab.text = tabList[position]
         }.attach()
 
+        // Bundle로부터 특정 조건을 체크
+        val showSpotNotice = arguments?.getBoolean("showSpotNotice", false) ?: false
+        if (showSpotNotice) {
+            val spotNoticeTabPosition = tabList.indexOf("SPOT공지")
+            if (spotNoticeTabPosition != -1) {
+                binding.categoryContentVp.setCurrentItem(spotNoticeTabPosition, true)
+            }
+        }
+
         binding.communityPrevIv.setOnClickListener{
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(

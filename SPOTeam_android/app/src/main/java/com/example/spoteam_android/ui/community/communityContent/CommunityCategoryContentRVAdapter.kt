@@ -16,6 +16,10 @@ class CommunityCategoryContentRVAdapter(private val dataList: List<CategoryPages
 
     interface OnItemClickListener {
         fun onItemClick(data: CategoryPagesDetail)
+        fun onLikeClick(data: CategoryPagesDetail)
+        fun onUnLikeClick(data: CategoryPagesDetail)
+//        fun onSubscribeClick(data: CategoryPagesDetail)
+//        fun onUnSubscribeClick(data: CategoryPagesDetail)
     }
 
     private lateinit var itemClickListener : OnItemClickListener
@@ -42,10 +46,13 @@ class CommunityCategoryContentRVAdapter(private val dataList: List<CategoryPages
         holder.binding.contentLikeNumCheckedIv.setOnClickListener{
             holder.binding.contentLikeNumCheckedIv.visibility = View.GONE
             holder.binding.contentLikeNumUncheckedIv.visibility = View.VISIBLE
+            itemClickListener.onUnLikeClick(dataList[position])
         }
+
         holder.binding.contentLikeNumUncheckedIv.setOnClickListener{
             holder.binding.contentLikeNumCheckedIv.visibility = View.VISIBLE
             holder.binding.contentLikeNumUncheckedIv.visibility = View.GONE
+            itemClickListener.onLikeClick(dataList[position])
         }
 
         holder.binding.contentBookmarkCheckedIv.setOnClickListener{
