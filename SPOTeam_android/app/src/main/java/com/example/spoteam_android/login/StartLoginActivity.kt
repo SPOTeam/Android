@@ -36,6 +36,10 @@ class StartLoginActivity : AppCompatActivity() {
         val memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
         Log.d("SharedPreferences", "MemberId: $memberId")
 
+        val value = sharedPreferences.getInt("memberId",-1)
+
+        Log.d("SharedPreferences", "memberId: $value")
+
         if (isLoggedIn) {
             // 이미 로그인된 경우 MainActivity로 이동
             val intent = Intent(this, MainActivity::class.java)
@@ -43,6 +47,10 @@ class StartLoginActivity : AppCompatActivity() {
             finish()  // 현재 Activity를 종료
             return
         }
+
+// 대니/김빈
+//         binding = ActivityStartLoginBinding.inflate(layoutInflater)
+//         setContentView(binding.root)
 
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
