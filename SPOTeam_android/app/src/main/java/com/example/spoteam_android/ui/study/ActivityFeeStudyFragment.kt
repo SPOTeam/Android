@@ -120,7 +120,7 @@ class ActivityFeeStudyFragment : Fragment() {
                 val memberId = sharedPreferences.getInt("${email}_memberId", -1)
 
                 if (memberId != -1) {
-                    viewModel.submitStudyData(memberId)
+                    viewModel.submitStudyData(memberId, requireContext())
                 } else {
                     Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT).show()
                 }

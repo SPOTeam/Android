@@ -80,7 +80,7 @@ class OnlineStudyFragment : Fragment() {
                 minAge = 0,
                 maxAge = 0,
                 fee = 0,
-                hasfee = false
+                hasFee = false
             )
 
             when (checkedId) {
@@ -164,7 +164,7 @@ class OnlineStudyFragment : Fragment() {
             minAge = 0,
             maxAge = 0,
             fee = 0,
-            hasfee = false
+            hasFee = false
         )
 
         val currentRegions = currentStudyRequest.regions?.toMutableList() ?: mutableListOf()
