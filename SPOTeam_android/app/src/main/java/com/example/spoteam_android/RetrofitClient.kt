@@ -1,4 +1,6 @@
 import com.example.spoteam_android.search.SearchApiService
+import com.example.spoteam_android.ui.interestarea.InterestAreaApiService
+import com.example.spoteam_android.ui.interestarea.InterestSpecificAreaApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -24,5 +26,11 @@ object RetrofitClient {
 
     val apiService: SearchApiService by lazy {
         instance.create(SearchApiService::class.java)
+    }
+    val IaapiService: InterestAreaApiService by lazy {
+        instance.create(InterestAreaApiService::class.java)
+    }
+    val IaSapiService: InterestSpecificAreaApiService by lazy {
+        instance.create(InterestSpecificAreaApiService::class.java)
     }
 }

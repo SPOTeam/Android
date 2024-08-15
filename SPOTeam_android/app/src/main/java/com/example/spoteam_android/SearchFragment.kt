@@ -102,7 +102,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun fetchPages() {
-        RetrofitClient.apiService.searchStudies("Bearer eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NSwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzMjY3MTEzLCJleHAiOjE3MjMyNzA3MTN9.nmmoB8joTGKyeJjn5tva8hqnlbRuYq50405FqlPIsOw","Kotlin",1,1,"ALL")
+        RetrofitClient.apiService.searchStudies("Bearer eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzMjczODE0LCJleHAiOjE3MjMyNzc0MTR9.-LB5qbiMrMH5f3gtCTlmVAKnpEOLUMBcff2LYS5CHNk","Kotlin",1,1,"ALL")
             .enqueue(object : Callback<ApiResponse> {
                 override fun onResponse(
                     call: Call<ApiResponse>,

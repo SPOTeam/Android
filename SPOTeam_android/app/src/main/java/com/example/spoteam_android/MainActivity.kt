@@ -6,7 +6,9 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
@@ -16,28 +18,33 @@ import com.example.spoteam_android.ui.category.CategoryNavViewFragment
 import com.example.spoteam_android.ui.community.CommunityFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.WriteContentFragment
+//import com.example.spoteam_android.ui.mypage.ConsiderAttendanceMemberFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.MyStudyCommunityFragment
 import com.example.spoteam_android.ui.study.MyStudyWriteContentFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.example.spoteam_android.ui.study.StudyFragment
+import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val todoViewModel: TodoViewModel by viewModels()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
         // 다른 아무 화면 클릭시 스터디 화면 사라지도록
         binding.root.setOnTouchListener { _, _ ->
             showStudyFrameLayout(false)
+            binding.main.closeDrawers()
             getCurrentFragment()?.let {
                 if(it is CommunityHomeFragment){
                     isOnCommunityHome(it)
@@ -148,35 +155,6 @@ class MainActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
     }
 
-
-
-    private fun checkCategoryType(buttonType: String) {
-        val fragment = CategoryFragment()
-
-        val bundle = Bundle()
-        // 버튼 타입에 따라 초기 탭의 인덱스를 설정
-        val tabIndex = when (buttonType) {
-            "Language" -> 1
-            "License" -> 2
-            "Job" -> 3
-            "Discuss" -> 4
-            "News" -> 5
-            "FreeStudy" -> 6
-            "Project" -> 7
-            "Contest" -> 8
-            "MajorStudy" -> 9
-            "Rest" -> 10
-            else -> 0
-        }
-
-        bundle.putInt("categoryType", tabIndex) // 어떤 버튼이 눌렸는지를 추가
-        fragment.arguments = bundle
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_frm, fragment)
-            .commitAllowingStateLoss()
-    }
-
     // Fragment 교체 메서드
     private fun showFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
@@ -239,7 +217,5 @@ class MainActivity : AppCompatActivity() {
             Log.d("showkey", "$key: $value")
         }
     }
+
 }
-
-
-

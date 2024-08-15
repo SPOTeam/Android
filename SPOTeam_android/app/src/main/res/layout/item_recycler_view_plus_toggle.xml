@@ -12,9 +12,8 @@
     android:elevation="4dp">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="85dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -23,32 +22,32 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/activity_main_ic_recyclervw_groups" />
-
+            android:layout_gravity="center"
+            android:src="@drawable/activity_main_ic_recyclervw_groups"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:layout_gravity="center"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:text="스터디 이름"
+                android:fontFamily="@font/pretendardsource"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />
-
 
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:text="스터디 목표"
+                android:fontFamily="@font/pretendardsource"
                 android:textSize="12sp" />
 
             <LinearLayout

@@ -23,8 +23,6 @@ class ReportStudymemberFragment(private val context: Context)  {
 
     fun start() {
 
-
-
         // 타이틀바 제거
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
         // 커스텀 다이얼로그 radius 적용

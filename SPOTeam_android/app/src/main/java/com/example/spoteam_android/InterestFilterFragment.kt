@@ -1,20 +1,28 @@
 package com.example.spoteam_android
 
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentInterestFilterBinding
+import com.example.spoteam_android.search.ApiResponse
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.RangeSlider
-
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class InterestFilterFragment : Fragment() {
 
@@ -26,7 +34,6 @@ class InterestFilterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentInterestFilterBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -37,7 +44,9 @@ class InterestFilterFragment : Fragment() {
 
         val toolbar = binding.toolbar
 
-        toolbar.icBack.setOnClickListener() {
+        val bundle = Bundle()
+
+        toolbar.icBack.setOnClickListener {
             (activity as MainActivity).switchFragment(InterestFragment())
         }
 
@@ -48,6 +57,25 @@ class InterestFilterFragment : Fragment() {
         )
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spinner.adapter = adapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when (position) {
+                    0 -> bundle.putString("gender", "MALE")
+                    1 -> bundle.putString("gender", "MALE")
+                    2 -> bundle.putString("gender", "FEMALE")
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Log.d("InterestFilterFragment", "아무것도 선택되지 않았습니다.")
+            }
+        }
 
         val ageRangeSlider = binding.ageRangeSlider
         val minValueText = binding.minValueText
@@ -62,6 +90,7 @@ class InterestFilterFragment : Fragment() {
             val values = slider.values
             minValueText.text = values[0].toInt().toString()
             maxValueText.text = values[1].toInt().toString()
+
         }
 
         val chipGroup1 = binding.chipGroup1
@@ -72,13 +101,16 @@ class InterestFilterFragment : Fragment() {
             if (checkedId != ChipGroup.NO_ID) {
                 val checkedChip = group.findViewById<Chip>(checkedId)
                 if (checkedChip.id == R.id.chip1) {
+                    bundle.putString("activityFee", "있음") // 활동비 유무
                     editText.visibility = View.VISIBLE
                     behind_et.visibility = View.VISIBLE
                 } else {
+                    bundle.putString("activityFee", "없음") // 활동비 유무
                     editText.visibility = View.GONE
                     behind_et.visibility = View.GONE
                 }
             } else {
+                bundle.putString("activityFee", "없음") // 활동비 유무
                 editText.visibility = View.GONE
                 behind_et.visibility = View.GONE
             }
@@ -88,22 +120,30 @@ class InterestFilterFragment : Fragment() {
 
         chipGroup2.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId != ChipGroup.NO_ID) {
-                val checkedChip = group.findViewById<Chip>(checkedId)
-                checkedChip.setOnCheckedChangeListener { _, isChecked ->
-                    if (isChecked) {
-//                        checkedChip.setChipBackgroundColorResource(R.color.active_blue)
-//                        checkedChip.setTextColor(getResources().getColor(R.color.white, null))
-                    } else {
-//                        checkedChip.setChipBackgroundColorResource(android.R.color.transparent)
-//                        checkedChip.setTextColor(getResources().getColor(R.color.active_blue, null))
-                    }
-                }
+                val selectedChip = group.findViewById<Chip>(checkedId)
+                val selectedChipText = selectedChip?.text.toString()
+                bundle.putString("selectedStudyTheme", selectedChipText)
+                Log.d("InterestFilterFragment", "Selected study theme: $selectedChipText")
             }
         }
 
+        val interestFragment = InterestFragment()
+        interestFragment.arguments = bundle
 
+        val searchbtn = binding.fragmentIntroduceStudyBt
+        searchbtn.setOnClickListener {
+            bundle.putString("source", "InterestFilterFragment")
 
+            bundle.putString("minAge", minValueText.text.toString()) // 최소 나이
+            bundle.putString("maxAge", maxValueText.text.toString()) // 최대 나이
+
+            val activityFeeAmount = editText.text.toString()
+            bundle.putString("activityFeeAmount", activityFeeAmount)
+
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, interestFragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
-
 }
-

@@ -27,4 +27,9 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="member_count_format">%d</string>
+    <string name="heart_count_format">%d</string>
+    <string name="hit_num_format">%d</string>
+    <string name="max_people_format">%d</string>
 </resources>

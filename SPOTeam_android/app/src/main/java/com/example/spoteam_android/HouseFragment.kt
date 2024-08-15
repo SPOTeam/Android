@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.ui.alert.AlertFragment
+import com.example.spoteam_android.todolist.TodoListFragment
 import com.example.spoteam_android.ui.calendar.CalendarAddEventFragment
 //import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
@@ -42,24 +43,36 @@ class HouseFragment : Fragment() {
             (context as MainActivity).isOnCommunityHome(HomeFragment())
         }
 
+        val bundle = Bundle()
+        val interestFragment = InterestFragment()
+        interestFragment.arguments = bundle
 
         val spoticon: ImageView = binding.root.findViewById(R.id.ic_spot_logo)
         spoticon.setOnClickListener {
             //스터디 참여하기 팝업으로 이동
-            val reportStudymemberFragment = ReportStudymemberFragment(requireContext())
-            reportStudymemberFragment.start()
+//            val reportStudymemberFragment = ReportStudymemberFragment(requireContext())
+//            reportStudymemberFragment.start()
+            (activity as MainActivity).switchFragment(TodoListFragment())
         }
 
         val txintereststudy: TextView = binding.root.findViewById(R.id.tx_interest_study)
         txintereststudy.setOnClickListener {
             //스터디 참여하기 팝업으로 이동
-            (activity as MainActivity).switchFragment(InterestFragment())
+            bundle.putString("source", "AnyWhere")
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, interestFragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         val icgointerest: ImageView = binding.root.findViewById(R.id.ic_go_interest)
         icgointerest.setOnClickListener {
             //스터디 참여하기 팝업으로 이동
-            (activity as MainActivity).switchFragment(InterestFragment())
+            bundle.putString("source", "AnyWhere")
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, interestFragment)
+                .addToBackStack(null)
+                .commit()
         }
 
 
