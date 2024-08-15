@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/category_navView"
+    android:layout_width="142dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="130dp"
+    android:background="@drawable/category_appbar_btn_up_right">
+
+    <TextView
+        android:id="@+id/language_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="16sp"
+        android:text="어학"
+        android:background="@drawable/selector_category_background_u_r"
+        android:textColor="@drawable/selector_category_text"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/license_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="16sp"
+        android:text="자격증"
+        android:background="@color/white"
+        android:textColor="@drawable/selector_category_text"
+        android:gravity="center"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/language_btn"/>
+
+    <TextView
+        android:id="@+id/job_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="16sp"
+        android:text="취업"
+        android:textColor="@drawable/selector_category_text"
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/license_btn"/>
+
+    <TextView
+        android:id="@+id/discuss_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="16sp"
+        android:text="토론"
+        android:textColor="@drawable/selector_category_text"
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/job_btn"/>
+
+    <TextView
+        android:id="@+id/news_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="16sp"
+        android:text="시사/뉴스"
+        android:textColor="@drawable/selector_category_text"
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/discuss_btn"/>
+
+    <TextView
+        android:id="@+id/freeStudy_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="16sp"
+        android:text="자율 학습"
+        android:textColor="@drawable/selector_category_text"
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/news_btn"/>
+
+    <TextView
+        android:id="@+id/project_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="16sp"
+        android:text="프로젝트"
+        android:textColor="@drawable/selector_category_text"
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/freeStudy_btn"/>
+
+    <TextView
+        android:id="@+id/contest_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="16sp"
+        android:text="공모전"
+        android:textColor="@drawable/selector_category_text"
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/project_btn"/>
+
+    <TextView
+        android:id="@+id/majorStudy_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="16sp"
+        android:text="전공/진로 학습"
+        android:textColor="@drawable/selector_category_text"
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contest_btn"/>
+
+    <TextView
+        android:id="@+id/rest_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="16sp"
+        android:text="기타"
+        android:textColor="@drawable/selector_category_text"
+        android:gravity="center"
+        android:background="@drawable/selector_category_background_d_r"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/majorStudy_btn"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

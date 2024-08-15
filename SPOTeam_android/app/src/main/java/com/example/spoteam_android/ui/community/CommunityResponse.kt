@@ -65,8 +65,8 @@ data class CategoryPagesInfo(
     val postResponses: List<CategoryPagesDetail>,
     val totalPages : Int,
     val totalElements : Int,
-    val isFirst : String,
-    val isLast : String
+    val isFirst : Boolean,
+    val isLast : Boolean
 )
 
 data class CategoryPagesDetail(
@@ -78,7 +78,8 @@ data class CategoryPagesDetail(
     val content : String,
     val likeCount : Int,
     val commentCount : Int,
-    val viewCount : Int
+    val viewCount : Int,
+    val likedByCurrentUser : Boolean
 )
 /************게시글 단건 조회***********/
 data class ContentResponse(
@@ -99,6 +100,7 @@ data class ContentInfo(
     val likeCount : Int,
     val commentCount : Int,
     val viewCount : Int,
+    val likedByCurrentUser : Boolean,
     val commentResponses : CommentResponse,
     val reported : Boolean
 )
@@ -113,7 +115,9 @@ data class CommentsInfo(
     val parentCommentId : Int,
     val writer : String,
     val writtenTime : String,
-    val likeCount : Int
+    val likeCount : Int,
+    val likedByCurrentUser : Boolean,
+    val dislikedByCurrentUser : Boolean
 )
 
 /************게시글 작성 완료***********/
@@ -171,4 +175,51 @@ data class WriteCommentInfo (
     val writer : String
 )
 
+/************카테고리 별 스터디***********/
+data class CategoryStudyResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: CategoryStudyInfo
+)
+
+data class CategoryStudyInfo (
+    val totalPages : Int,
+    val totalElements : Int,
+    val first : Boolean,
+    val last : Boolean,
+    val size : Int,
+    val content : List<CategoryStudyDetail>,
+    val number : Int
+)
+
+data class CategoryStudyDetail (
+    val studyId : Int,
+    val imageUrl : String,
+    val title : String,
+    val introduction : String,
+    val memberCount : Int,
+    val heartCount : Int,
+    val hitNum : Int,
+    val maxPeople : Int,
+    val studyState : String,
+    val themeTypes : List<String>,
+    val regions : List<Int>,
+    val createdAt : String,
+    val liked : Boolean
+)
+
+/************댓글 좋아요 완료***********/
+data class LikeCommentResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: LikeCommentInfo
+)
+
+data class LikeCommentInfo (
+    val commentId : Int,
+    val likeCount : Int,
+    val disLikeCount : String,
+)
 

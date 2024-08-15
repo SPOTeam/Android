@@ -27,22 +27,46 @@ class AllCategoryFragment : Fragment() {
         return binding.root
     }
 
+//    private fun fetchBestCommunityContent() {
+//        CommunityRetrofitClient.instance.getCategoryStudy()
+//            .enqueue(object : Callback<CommunityResponse> {
+//                override fun onResponse(
+//                    call: Call<CommunityResponse>,
+//                    response: Response<CommunityResponse>
+//                ) {
+//                    if (response.isSuccessful) {
+//                        val communityResponse = response.body()
+//                        if (communityResponse?.isSuccess == "true") {
+//                            val contentList = communityResponse.result?.postBest5Responses
+//                            Log.d("BestCommunity", "items: $contentList")
+//                            if (contentList != null) {
+//                                initRecyclerview(contentList)
+//                            }
+//
+//                        } else {
+//                            showError(communityResponse?.message)
+//                        }
+//                    } else {
+//                        showError(response.code().toString())
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<CommunityResponse>, t: Throwable) {
+//                    Log.e("CommunityHomeFragment", "Failure: ${t.message}", t)
+//                }
+//            })
+//    }
+
     private fun initRecyclerview(){
         binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         val dataList :  ArrayList<BoardItem> = arrayListOf()
 
-        dataList.apply {
-        // arrayList 타입이 Data 객체이다. | 데이터 삽입 시 Data 객체 타입으로 넣어줌.
-            dataList.add(BoardItem("피아노 스터디", "스터디 목표", 10, 1, 1, 600))
-            dataList.add(BoardItem("태권도 스터디", "스터디 목표", 10, 2, 1, 500))
-            dataList.add(BoardItem("보컬 스터디", "스터디 목표", 10, 3, 1, 400))
-        }
 
-        val dataRVAdapter = CommunityCategoryStudyContentRVAdapter(dataList)
+//        val dataRVAdapter = CategoryStudyContentRVAdapter(dataList)
         //리스너 객체 생성 및 전달
 
-        binding.communityCategoryContentRv.adapter = dataRVAdapter
+//        binding.communityCategoryContentRv.adapter = dataRVAdapter
 
         ArrayAdapter.createFromResource(
             requireContext(),

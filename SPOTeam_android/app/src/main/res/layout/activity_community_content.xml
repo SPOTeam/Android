@@ -169,7 +169,7 @@
 
                 <!--    좋아요 아이콘 수정  -->
                 <ImageView
-                    android:id="@+id/community_content_likeNum_iv"
+                    android:id="@+id/community_content_likeNum_unchecked_iv"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:src="@drawable/ic_like_unchecked"
@@ -177,7 +177,7 @@
                     app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
 
                 <ImageView
-                    android:id="@+id/content_likeNum_checked_iv"
+                    android:id="@+id/community_content_likeNum_checked_iv"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:src="@drawable/ic_like_checked"

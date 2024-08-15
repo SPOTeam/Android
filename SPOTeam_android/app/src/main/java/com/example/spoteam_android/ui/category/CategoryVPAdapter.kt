@@ -2,12 +2,11 @@ package com.example.spoteam_android.ui.category
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.spoteam_android.ui.category.category_tabs.AllCategoryFragment
 import com.example.spoteam_android.ui.category.category_tabs.ContestFragment
 import com.example.spoteam_android.ui.category.category_tabs.DiscussionFragment
 import com.example.spoteam_android.ui.category.category_tabs.FreeStudyFragment
 import com.example.spoteam_android.ui.category.category_tabs.JobFragment
-import com.example.spoteam_android.ui.category.category_tabs.LanguageStudyFragment
+import com.example.spoteam_android.ui.category.category_tabs.LanguageFragment
 import com.example.spoteam_android.ui.category.category_tabs.LicenseFragment
 import com.example.spoteam_android.ui.category.category_tabs.MajorFragment
 import com.example.spoteam_android.ui.category.category_tabs.NewsFragment
@@ -16,16 +15,16 @@ import com.example.spoteam_android.ui.category.category_tabs.RestFragment
 
 class CategoryVPAdapter(fragment : Fragment) : FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = 10
+    override fun getItemCount(): Int = 11
 
     // "전체", "어학", "자격증", "취업", "토론", "시사/뉴스", "자율학습", "프로젝트", "공모전", "전공/진로", "기타"
 
     override fun createFragment(position: Int): Fragment {
         return when(position){
             //All
-            0 -> AllCategoryFragment()
+//            0 -> AllCategoryFragment()
             //어학
-            1 -> LanguageStudyFragment()
+            1 -> LanguageFragment()
             //자격증
             2 -> LicenseFragment()
             //취업

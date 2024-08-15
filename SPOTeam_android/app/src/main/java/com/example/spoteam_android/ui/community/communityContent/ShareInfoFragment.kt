@@ -58,8 +58,7 @@ class ShareInfoFragment : Fragment() {
                         val likeResponse = response.body()
                         Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
-                            val pagesResponseResult = likeResponse.result
-                            Log.d("LikeContent", "items: $pagesResponseResult")
+                            onResume()
                         } else {
                             showError(likeResponse?.message)
                         }
@@ -75,7 +74,7 @@ class ShareInfoFragment : Fragment() {
     }
 
     private fun fetchUnLike(postId : Int) {
-        CommunityRetrofitClient.instance.postContentUnLike(postId, memberId)
+        CommunityRetrofitClient.instance.deleteContentLike(postId, memberId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentUnLikeResponse>,
@@ -86,8 +85,7 @@ class ShareInfoFragment : Fragment() {
                         val unLikeResponse = response.body()
                         Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
-                            val unLikeResult = unLikeResponse.result
-                            Log.d("UnLikeContent", "items: $unLikeResult")
+                            onResume()
                         } else {
                             showError(unLikeResponse?.message)
                         }
@@ -159,12 +157,10 @@ class ShareInfoFragment : Fragment() {
 
             override fun onLikeClick(data: CategoryPagesDetail) {
                 fetchLike(data.postId)
-                onResume()
             }
 
             override fun onUnLikeClick(data: CategoryPagesDetail) {
                 fetchUnLike(data.postId)
-                onResume()
             }
 
         })

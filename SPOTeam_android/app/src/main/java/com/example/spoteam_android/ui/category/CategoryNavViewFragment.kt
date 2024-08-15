@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.spoteam_android.databinding.FragmentCategoryBinding
+import com.example.spoteam_android.databinding.FragmentCategoryNavigationviewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
 
-class CategoryFragment : Fragment() {
+class CategoryNavViewFragment : Fragment() {
 
-    lateinit var binding: FragmentCategoryBinding
+    lateinit var binding: FragmentCategoryNavigationviewBinding
     private val tabList = arrayListOf("전체", "어학", "자격증", "취업", "토론", "시사/뉴스", "자율학습", "프로젝트", "공모전", "전공/진로", "기타")
 
     override fun onCreateView(
@@ -19,18 +20,7 @@ class CategoryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCategoryBinding.inflate(inflater, container, false)
-
-        val categoryAdapter = CategoryVPAdapter(this)
-        binding.categoryContentVp.adapter = categoryAdapter
-
-        TabLayoutMediator(binding.categoryTl, binding.categoryContentVp) {
-                tab, position -> tab.text = tabList[position]
-        }.attach()
-
-        val categoryType = arguments?.getInt("categoryType", 0) ?: 0
-
-        binding.categoryContentVp.setCurrentItem(categoryType, false)
+        binding = FragmentCategoryNavigationviewBinding.inflate(inflater, container, false)
 
         return binding.root
     }

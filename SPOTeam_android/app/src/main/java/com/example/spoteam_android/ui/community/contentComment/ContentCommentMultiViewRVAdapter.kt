@@ -14,6 +14,8 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
 
     interface ItemClick {
         fun onItemClick(view: View, position: Int, parentCommentId : Int)
+        fun onLikeClick(view: View, position: Int, parentCommentId : Int)
+        fun onUnLikeClick(view: View, position: Int, parentCommentId : Int)
     }
 
     var itemClick: ItemClick? = null
@@ -60,16 +62,40 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
         fun bind(item: CommentsInfo) {
             binding.communityContentCommentWriterTv.text = item.writer
             binding.communityContentCommentStrTv.text = item.commentContent
+            binding.communityContentCommentGoodNumTv.text = item.likeCount.toString()
+
+            if (item.likedByCurrentUser) {
+                binding.communityContentCommentGoodCheckedIv.visibility = View.VISIBLE
+                binding.communityContentCommentGoodUncheckedIv.visibility = View.GONE
+            } else {
+                binding.communityContentCommentGoodCheckedIv.visibility = View.GONE
+                binding.communityContentCommentGoodUncheckedIv.visibility = View.VISIBLE
+            }
+
+            if (item.dislikedByCurrentUser) {
+                binding.communityContentCommentBadCheckedIv.visibility = View.VISIBLE
+                binding.communityContentCommentBadUncheckedIv.visibility = View.GONE
+            } else {
+                binding.communityContentCommentBadCheckedIv.visibility = View.GONE
+                binding.communityContentCommentBadUncheckedIv.visibility = View.VISIBLE
+            }
 
             // 클릭 상태에 따른 communityWriteReplyTv 텍스트 색상 변경
             binding.communityWriteReplyTv.setTextColor(
                 if (clickedState[bindingAdapterPosition]) binding.root.context.getColor(R.color.active_blue) // 파란색으로 변경
                 else binding.root.context.getColor(R.color.gray) // 기본 색상으로 변경
             )
-
             binding.communityWriteReplyTv.setOnClickListener {
                 updateClickedState(bindingAdapterPosition) // 클릭 상태 갱신
                 itemClick?.onItemClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentGoodUncheckedIv.setOnClickListener {
+                itemClick?.onUnLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentGoodCheckedIv.setOnClickListener {
+                itemClick?.onLikeClick(it, bindingAdapterPosition, item.commentId)
             }
         }
     }
@@ -78,6 +104,23 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
         fun bind(item: CommentsInfo) {
             binding.communityContentCommentReplyWriterTv.text = item.writer
             binding.communityContentCommentReplyStrTv.text = item.commentContent
+            binding.communityContentCommentReplyGoodNumTv.text = item.likeCount.toString()
+
+            if(item.likedByCurrentUser) {
+                binding.communityContentCommentReplyGoodCheckedIv.visibility = View.VISIBLE
+                binding.communityContentCommentReplyGoodUncheckedIv.visibility = View.GONE
+            } else {
+                binding.communityContentCommentReplyGoodCheckedIv.visibility = View.GONE
+                binding.communityContentCommentReplyGoodUncheckedIv.visibility = View.VISIBLE
+            }
+
+            if(item.dislikedByCurrentUser) {
+                binding.communityContentCommentReplyBadCheckedIv.visibility = View.VISIBLE
+                binding.communityContentCommentReplyBadUncheckedIv.visibility = View.GONE
+            } else {
+                binding.communityContentCommentReplyBadCheckedIv.visibility = View.GONE
+                binding.communityContentCommentReplyBadUncheckedIv.visibility = View.VISIBLE
+            }
 
             // 클릭 상태에 따른 communityReplyWriteReplyTv 텍스트 색상 변경
             binding.communityReplyWriteReplyTv.setTextColor(
@@ -89,6 +132,15 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
                 updateClickedState(bindingAdapterPosition) // 클릭 상태 갱신
                 itemClick?.onItemClick(it, bindingAdapterPosition, item.parentCommentId)
             }
+
+            binding.communityContentCommentReplyGoodUncheckedIv.setOnClickListener {
+                itemClick?.onUnLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentReplyGoodCheckedIv.setOnClickListener {
+                itemClick?.onLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
         }
     }
     // 클릭 상태를 업데이트하는 함수

@@ -2,6 +2,7 @@ package com.example.spoteam_android.ui.community
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.spoteam_android.ui.community.communityContent.AllFragment
 //import com.example.spoteam_android.ui.community.communityContent.AllFragment
 import com.example.spoteam_android.ui.community.communityContent.CounselingFragment
 import com.example.spoteam_android.ui.community.communityContent.FreeTalkFragment
@@ -17,7 +18,7 @@ class CommunityCategoryVPAdapter(fragment : Fragment) : FragmentStateAdapter(fra
     override fun createFragment(position: Int): Fragment {
         return when(position){
             //All
-//            0 -> AllFragment()
+            0 -> AllFragment()
             //PassingReview
             1 -> PassingReviewFragment()
             //ShareInfo

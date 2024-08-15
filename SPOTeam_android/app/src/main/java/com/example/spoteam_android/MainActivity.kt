@@ -7,15 +7,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
-import com.example.spoteam_android.todolist.TodoViewModel
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
+import com.example.spoteam_android.ui.category.CategoryNavViewFragment
 import com.example.spoteam_android.ui.community.CommunityFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.WriteContentFragment
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-        
+
         // 다른 아무 화면 클릭시 스터디 화면 사라지도록
         binding.root.setOnTouchListener { _, _ ->
             showStudyFrameLayout(false)
@@ -52,6 +51,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             true
+        }
+
+        binding.blurOverlayContainer.setOnClickListener{
+            hideBlur()
+            removeNavViewFragment()
         }
 
         binding.mainFloatingButton.setOnClickListener {
@@ -71,76 +75,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        initCategoryNavigationView()
         init()
         isOnCommunityHome(HouseFragment())
     }
 
     private fun getCurrentFragment(): Fragment? {
         return supportFragmentManager.findFragmentById(R.id.main_frm)
-    }
-
-    private fun initCategoryNavigationView() {
-        val navigationView: NavigationView = findViewById(R.id.mainCategoryBar)
-
-        val languageBtn: TextView = navigationView.findViewById(R.id.language_btn)
-        val licenseBtn: TextView = navigationView.findViewById(R.id.license_btn)
-        val jobBtn: TextView = navigationView.findViewById(R.id.job_btn)
-        val discussBtn: TextView = navigationView.findViewById(R.id.discuss_btn)
-        val newsBtn: TextView = navigationView.findViewById(R.id.news_btn)
-        val freeStudyBtn: TextView = navigationView.findViewById(R.id.freeStudy_btn)
-        val projectBtn: TextView = navigationView.findViewById(R.id.project_btn)
-        val competitionBtn: TextView = navigationView.findViewById(R.id.competition_btn)
-        val majorStudyBtn: TextView = navigationView.findViewById(R.id.majorStudy_btn)
-        val restBtn: TextView = navigationView.findViewById(R.id.rest_btn)
-
-        languageBtn.setOnClickListener { handleCategoryClick("어학") }
-        licenseBtn.setOnClickListener { handleCategoryClick("자격증") }
-        jobBtn.setOnClickListener { handleCategoryClick("취업") }
-        discussBtn.setOnClickListener { handleCategoryClick("토론") }
-        newsBtn.setOnClickListener { handleCategoryClick("시사/뉴스") }
-        freeStudyBtn.setOnClickListener { handleCategoryClick("자율 학습") }
-        projectBtn.setOnClickListener { handleCategoryClick("프로젝트") }
-        competitionBtn.setOnClickListener { handleCategoryClick("공모전") }
-        majorStudyBtn.setOnClickListener { handleCategoryClick("전공/진로 학습") }
-        restBtn.setOnClickListener { handleCategoryClick("기타") }
-    }
-
-    private fun handleCategoryClick(s: String) {
-        when (s) {
-            "어학" -> {
-
-            }
-            "자격증" -> {
-
-            }
-            "취업" -> {
-
-            }
-            "토론" -> {
-
-            }
-            "시사/뉴스" -> {
-
-            }
-            "자율 학습" -> {
-
-            }
-            "프로젝트" -> {
-
-            }
-            "공모전" -> {
-
-            }
-            "전공/진로 학습" -> {
-
-            }
-            "기타" -> {
-
-            }
-        }
-        showFragment(CategoryFragment())
-        binding.main.closeDrawers()
     }
 
     private fun init() {
@@ -153,31 +93,35 @@ class MainActivity : AppCompatActivity() {
         binding.mainBnv.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
+                    hideBlur()
                     showFragment(HouseFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(HouseFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_category -> {
-//                    showFragment(CategoryFragment()) // appbar 이후에 category frame 보여줌
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
-                    binding.main.openDrawer(GravityCompat.START)
                     isOnCommunityHome(CategoryFragment())
+                    addCategoryFragmentOnTop()
+                    showBlur()
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_study -> {
                     // StudyFragment로의 전환 없이 FrameLayout의 visibility만 변경
+                    hideBlur()
                     showStudyFrameLayout(true)
                     isOnCommunityHome(StudyFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_bookmark -> {
+                    hideBlur()
                     showFragment(BookmarkFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(BookmarkFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_mypage -> {
+                    hideBlur()
                     showFragment(MyPageFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(MyPageFragment())
@@ -188,6 +132,27 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupButtonListeners()
+    }
+
+    private fun removeNavViewFragment() {
+        supportFragmentManager.beginTransaction()
+            .remove(CategoryNavViewFragment())
+            .commitAllowingStateLoss()
+    }
+
+    private fun showBlur() {
+        findViewById<View>(R.id.blur_overlay_container).visibility = View.VISIBLE
+    }
+
+    private fun hideBlur() {
+        findViewById<View>(R.id.blur_overlay_container).visibility = View.GONE
+    }
+
+    private fun addCategoryFragmentOnTop() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.blur_overlay_container, CategoryNavViewFragment())
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
     }
 
     // Fragment 교체 메서드
@@ -254,5 +219,3 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-
-

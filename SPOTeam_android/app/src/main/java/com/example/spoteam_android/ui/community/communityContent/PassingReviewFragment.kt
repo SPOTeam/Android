@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.CommunityData
 import com.example.spoteam_android.databinding.FragmentCommunityCategoryContentBinding
 import com.example.spoteam_android.ui.community.CategoryPagesDetail
 import com.example.spoteam_android.ui.community.CategoryPagesResponse
@@ -63,8 +62,7 @@ class PassingReviewFragment : Fragment() {
                         val likeResponse = response.body()
                         Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
-                            val pagesResponseResult = likeResponse.result
-                            Log.d("LikeContent", "items: $pagesResponseResult")
+                            onResume()
                         } else {
                             showError(likeResponse?.message)
                         }
@@ -80,7 +78,7 @@ class PassingReviewFragment : Fragment() {
     }
 
     private fun fetchUnLike(postId : Int) {
-        CommunityRetrofitClient.instance.postContentUnLike(postId, memberId)
+        CommunityRetrofitClient.instance.deleteContentLike(postId, memberId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentUnLikeResponse>,
@@ -91,8 +89,7 @@ class PassingReviewFragment : Fragment() {
                         val unLikeResponse = response.body()
                         Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
-                            val unLikeResult = unLikeResponse.result
-                            Log.d("UnLikeContent", "items: $unLikeResult")
+                            onResume()
                         } else {
                             showError(unLikeResponse?.message)
                         }
@@ -159,12 +156,10 @@ class PassingReviewFragment : Fragment() {
 
             override fun onLikeClick(data: CategoryPagesDetail) {
                 fetchLike(data.postId)
-                onResume()
             }
 
             override fun onUnLikeClick(data: CategoryPagesDetail) {
                 fetchUnLike(data.postId)
-                onResume()
             }
         })
     }

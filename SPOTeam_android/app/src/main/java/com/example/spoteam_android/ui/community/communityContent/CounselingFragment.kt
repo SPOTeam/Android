@@ -93,8 +93,7 @@ class CounselingFragment : Fragment() {
                         val likeResponse = response.body()
                         Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
-                            val pagesResponseResult = likeResponse.result
-                            Log.d("LikeContent", "items: $pagesResponseResult")
+                            onResume()
                         } else {
                             showError(likeResponse?.message)
                         }
@@ -110,7 +109,7 @@ class CounselingFragment : Fragment() {
     }
 
     private fun fetchUnLike(postId : Int) {
-        CommunityRetrofitClient.instance.postContentUnLike(postId, memberId)
+        CommunityRetrofitClient.instance.deleteContentLike(postId, memberId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentUnLikeResponse>,
@@ -121,8 +120,7 @@ class CounselingFragment : Fragment() {
                         val unLikeResponse = response.body()
                         Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
-                            val unLikeResult = unLikeResponse.result
-                            Log.d("UnLikeContent", "items: $unLikeResult")
+                            onResume()
                         } else {
                             showError(unLikeResponse?.message)
                         }
@@ -158,12 +156,10 @@ class CounselingFragment : Fragment() {
 
             override fun onLikeClick(data: CategoryPagesDetail) {
                 fetchLike(data.postId)
-                onResume()
             }
 
             override fun onUnLikeClick(data: CategoryPagesDetail) {
                 fetchUnLike(data.postId)
-                onResume()
             }
 
         })

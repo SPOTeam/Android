@@ -68,30 +68,20 @@
 
         <!--    비추천 이미지 변경    -->
         <ImageView
-            android:id="@+id/community_content_comment_reply_bad_unchecked_iv"
+            android:id="@+id/community_content_comment_bad_unchecked_iv"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:src="@drawable/ic_bad_unchecked"
             android:foregroundGravity="center" />
 
         <ImageView
-            android:id="@+id/community_content_comment_reply_bad_checked_iv"
+            android:id="@+id/community_content_comment_bad_checked_iv"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:src="@drawable/ic_bad_checked"
             android:visibility="gone"
             android:foregroundGravity="center"
             app:layout_constraintEnd_toEndOf="parent" />
-
-        <TextView
-            android:id="@+id/community_content_comment_reply_badNum_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="6"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:textColor="@color/active_blue" />
 
     </LinearLayout>
 
@@ -105,7 +95,7 @@
 
         <!--    추천 이미지 변경    -->
         <ImageView
-            android:id="@+id/community_content_comment_reply_good_unchecked_iv"
+            android:id="@+id/community_content_comment_good_unchecked_iv"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:src="@drawable/ic_like_unchecked"
@@ -114,7 +104,7 @@
 
         <!--    추천 이미지 변경    -->
         <ImageView
-            android:id="@+id/community_content_comment_reply_good_checked_iv"
+            android:id="@+id/community_content_comment_good_checked_iv"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:src="@drawable/ic_like_checked"
@@ -122,7 +112,7 @@
             android:foregroundGravity="center"/>
 
         <TextView
-            android:id="@+id/community_content_comment_reply_goodNum_tv"
+            android:id="@+id/community_content_comment_goodNum_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"

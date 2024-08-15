@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spoteam_android.HouseFragment
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentCommunityHomeBinding
@@ -52,7 +53,8 @@ class CommunityHomeFragment : Fragment() {
 
         binding.communityHomeAlertIv.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, AlertFragment()).addToBackStack(null)
+                .replace(R.id.main_frm, AlertFragment())
+                .addToBackStack(null)
                 .commitAllowingStateLoss()
             (context as MainActivity).isOnCommunityHome(HomeFragment())
         }
@@ -67,6 +69,12 @@ class CommunityHomeFragment : Fragment() {
 
         binding.communityHomeCommentTv.setOnClickListener {
             fetchBestCommunityContent(sortType = "COMMENT")
+        }
+
+        binding.communityHomeSpotNameLogoIv.setOnClickListener{
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, HouseFragment())
+                .commitAllowingStateLoss()
         }
 
         return binding.root
