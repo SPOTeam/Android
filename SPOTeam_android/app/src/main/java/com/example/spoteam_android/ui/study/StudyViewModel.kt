@@ -1,23 +1,17 @@
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.spoteam_android.ui.mypage.ThemePreferenceFragment.LoginchecklistAuthInterceptor
 import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.io.InputStream
 
 class StudyViewModel : ViewModel() {
 
@@ -46,7 +40,7 @@ class StudyViewModel : ViewModel() {
             goal = goal,
             introduction = introduction,
             isOnline = isOnline,
-            profileImage = profileImage,
+            profileImage = profileImage,  // Use the image URL or path here
             regions = regions,
             maxPeople = maxPeople,
             gender = gender,
@@ -69,34 +63,36 @@ class StudyViewModel : ViewModel() {
         updateStudyRequest()
     }
 
-    fun submitStudyData(memberId: Int, context: Context) {
+    fun submitStudyData(memberId: Int) {  // Remove Context from method signature
         val retrofit = getRetrofit()
         val apiService = retrofit.create(StudyApiService::class.java)
         val studyData = _studyRequest.value
 
         if (studyData != null) {
-            // 이미지를 Base64로 변환
-            val profileImageBase64 = studyData.profileImage?.let { uri ->
-                Uri.parse(uri).let { convertImageUriToBase64(it, context) }
-            }
+            val studyRequestBody = createStudyRequestBody(studyData)
 
-            // Base64 문자열 길이 확인 (디버깅용)
-            Log.d("StudyViewModel", "Profile Image Base64 Length: ${profileImageBase64?.length}")
-
-            // StudyRequest 데이터에 Base64 문자열로 설정
-            apiService.submitStudyData(memberId, studyData.copy(profileImage = profileImageBase64)).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Log.d("StudyViewModel", "Study data submitted successfully.")
-                    } else {
-                        Log.e("StudyViewModel", "Failed to submit study data. Response code: ${response.code()}")
+            apiService.submitStudyData(memberId, studyRequestBody)
+                .enqueue(object : Callback<ApiResponsed> {  // Ensure ApiResponsed is the correct type
+                    override fun onResponse(call: Call<ApiResponsed>, response: Response<ApiResponsed>) {
+                        if (response.isSuccessful) {
+                            response.body()?.let { apiResponse ->
+                                Log.d("StudyViewModel", "Study data submitted successfully.")
+                                Log.d("StudyViewModel", "Response: ${Gson().toJson(apiResponse)}")
+                            } ?: run {
+                                Log.d("StudyViewModel", "No response body returned.")
+                            }
+                        } else {
+                            Log.e("StudyViewModel", "Failed to submit study data. Response code: ${response.code()}")
+                            response.errorBody()?.let { errorBody ->
+                                Log.e("StudyViewModel", "Error body: ${errorBody.string()}")
+                            }
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.e("StudyViewModel", "Error submitting study data: ${t.message}")
-                }
-            })
+                    override fun onFailure(call: Call<ApiResponsed>, t: Throwable) {
+                        Log.e("StudyViewModel", "Error submitting study data: ${t.message}")
+                    }
+                })
         } else {
             Log.e("StudyViewModel", "No study data available to submit.")
         }
@@ -106,31 +102,21 @@ class StudyViewModel : ViewModel() {
         _studyRequest.value = _studyRequest.value?.copy(regions = null)
     }
 
-    private fun convertImageUriToBase64(uri: Uri, context: Context): String? {
-        return try {
-            val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
-            val bitmap: Bitmap? = BitmapFactory.decodeStream(inputStream)
-            inputStream?.close()
-
-            // 이미지 크기 조정 및 압축
-            val maxSize = 400 // 더 작은 사이즈로 조정
-            val scaledBitmap = Bitmap.createScaledBitmap(bitmap!!, maxSize, maxSize, true)
-            val outputStream = ByteArrayOutputStream()
-            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 30, outputStream) // 압축 품질을 50으로 설정
-            val bytes = outputStream.toByteArray()
-            Base64.encodeToString(bytes, Base64.NO_WRAP)
-
-        } catch (e: IOException) {
-            Log.e("ImageConversion", "Failed to convert image to Base64", e)
-            null
-        }
+    private fun createStudyRequestBody(studyRequest: StudyRequest): RequestBody {
+        val gson = Gson()
+        val json = gson.toJson(studyRequest)
+        return json.toRequestBody("application/json".toMediaType())
     }
 
-
     private fun getRetrofit(): Retrofit {
-        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzMzc3ODk5LCJleHAiOjE3MjMzODE0OTl9.pe2trdaOvCD-OHt640kqX10umJ-WHiRezN42fzIZXgI"
+        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzNjk4Nzk1LCJleHAiOjE3MjM3ODUxOTV9.mIyb1iGWC1QyyfLFgaBRSsg2QdPbpBLJiuEqztepvzY" // Ensure this is correct
         val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(LoginchecklistAuthInterceptor(authToken))
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("Authorization", "Bearer $authToken")
+                    .build()
+                chain.proceed(request)
+            }
             .build()
 
         return Retrofit.Builder()
