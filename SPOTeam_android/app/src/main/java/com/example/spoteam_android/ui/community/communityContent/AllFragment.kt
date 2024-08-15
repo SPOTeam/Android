@@ -80,7 +80,7 @@ class AllFragment : Fragment() {
             })
     }
 
-    private fun fetchLike(postId : Int) {
+    private fun postLike(postId : Int) {
         CommunityRetrofitClient.instance.postContentLike(postId, memberId)
             .enqueue(object : Callback<ContentLikeResponse> {
                 override fun onResponse(
@@ -92,8 +92,7 @@ class AllFragment : Fragment() {
                         val likeResponse = response.body()
                         Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
-                            val pagesResponseResult = likeResponse.result
-                            Log.d("LikeContent", "items: $pagesResponseResult")
+                            onResume()
                         } else {
                             showError(likeResponse?.message)
                         }
@@ -108,8 +107,8 @@ class AllFragment : Fragment() {
             })
     }
 
-    private fun fetchUnLike(postId : Int) {
-        CommunityRetrofitClient.instance.postContentUnLike(postId, memberId)
+    private fun deleteLike(postId : Int) {
+        CommunityRetrofitClient.instance.deleteContentLike(postId, memberId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentUnLikeResponse>,
@@ -120,8 +119,7 @@ class AllFragment : Fragment() {
                         val unLikeResponse = response.body()
                         Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
-                            val unLikeResult = unLikeResponse.result
-                            Log.d("UnLikeContent", "items: $unLikeResult")
+                            onResume()
                         } else {
                             showError(unLikeResponse?.message)
                         }
@@ -156,13 +154,11 @@ class AllFragment : Fragment() {
             }
 
             override fun onLikeClick(data: CategoryPagesDetail) {
-                fetchLike(data.postId)
-                onResume()
+                postLike(data.postId)
             }
 
             override fun onUnLikeClick(data: CategoryPagesDetail) {
-                fetchUnLike(data.postId)
-                onResume()
+                deleteLike(data.postId)
             }
         })
     }

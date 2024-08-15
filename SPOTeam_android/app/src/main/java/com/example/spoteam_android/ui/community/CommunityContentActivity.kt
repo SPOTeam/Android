@@ -32,20 +32,21 @@ class CommunityContentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCommunityContentBinding
     var memberId : Int = -1
+    var postId : Int = -1
     var parentCommentId : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val postId = intent.getStringExtra("postInfo")
+        postId = intent.getStringExtra("postInfo")!!.toInt()
 
         // SharedPreferences 사용
-        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val currentEmail = sharedPreferences.getString("currentEmail", null)
 
         // 현재 로그인된 사용자 정보를 로그
         memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
-        Log.d("SharedPreferences", "MemberId: $memberId")
+        Log.d("SharedPreferences", "MemberId: $memberId, PostId : $postId")
 
         binding = ActivityCommunityContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -59,15 +60,77 @@ class CommunityContentActivity : AppCompatActivity() {
         }
 
         binding.applyCommentIv.setOnClickListener {
-            submitComment(postId!!)
+            submitComment()
+        }
+
+        binding.communityContentLikeNumCheckedIv.setOnClickListener{
+            deleteLike()
+        }
+
+        binding.communityContentLikeNumUncheckedIv.setOnClickListener{
+            postLike()
         }
 
         if (postId != null) {
-            fetchContentInfo(postId)
+            fetchContentInfo()
         }
     }
 
-    private fun submitComment(postId : String) {
+    private fun postLike() {
+        CommunityRetrofitClient.instance.postContentLike(postId, memberId)
+            .enqueue(object : Callback<ContentLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentLikeResponse>,
+                    response: Response<ContentLikeResponse>
+                ) {
+                    Log.d("LikeContent", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val likeResponse = response.body()
+                        Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
+                        if (likeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                        } else {
+                            showError(likeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
+                    Log.e("LikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun deleteLike() {
+        CommunityRetrofitClient.instance.deleteContentLike(postId, memberId)
+            .enqueue(object : Callback<ContentUnLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentUnLikeResponse>,
+                    response: Response<ContentUnLikeResponse>
+                ) {
+                    Log.d("UnLikeContent", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val unLikeResponse = response.body()
+                        Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
+                        if (unLikeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                        } else {
+                            showError(unLikeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
+                    Log.e("UnLikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun submitComment() {
         val isAnonymous = binding.writeCommentAnonymous.isChecked
         val commentContent = binding.writeCommentContentEt.text.toString().trim()
 
@@ -82,11 +145,11 @@ class CommunityContentActivity : AppCompatActivity() {
         )
 
         // 서버에 댓글 전송
-        sendCommentToServer(postId, requestBody)
+        sendCommentToServer(requestBody)
     }
 
-    private fun sendCommentToServer(postId: String, requestBody: WriteCommentRequest) {
-        CommunityRetrofitClient.instance.postContentComment(postId.toInt(), memberId, requestBody)
+    private fun sendCommentToServer(requestBody: WriteCommentRequest) {
+        CommunityRetrofitClient.instance.postContentComment(postId, memberId, requestBody)
             .enqueue(object : Callback<WriteCommentResponse> {
                 override fun onResponse(
                     call: Call<WriteCommentResponse>,
@@ -97,7 +160,7 @@ class CommunityContentActivity : AppCompatActivity() {
 
                         // 어댑터의 상태 초기화
                         resetAdapterState()
-                        fetchContentInfo(postId)
+                        fetchContentInfo()
 
                     } else {
                         Log.d("WriteComment", response.body()!!.message)
@@ -133,8 +196,7 @@ class CommunityContentActivity : AppCompatActivity() {
         popupMenu.show()
     }
 
-
-    private fun fetchContentInfo(postId : String) {
+    private fun fetchContentInfo() {
         CommunityRetrofitClient.instance.getContentInfo(postId)
             .enqueue(object : Callback<ContentResponse> {
                 override fun onResponse(
@@ -181,6 +243,14 @@ class CommunityContentActivity : AppCompatActivity() {
         binding.communityContentLikeNumTv.text = contentInfo.likeCount.toString()
         binding.communityContentContentNumTv.text = contentInfo.commentCount.toString()
         binding.communityContentViewNumTv.text = contentInfo.viewCount.toString()
+
+        if(contentInfo.likedByCurrentUser) {
+            binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE
+            binding.communityContentLikeNumUncheckedIv.visibility = View.GONE
+        } else {
+            binding.communityContentLikeNumCheckedIv.visibility = View.GONE
+            binding.communityContentLikeNumUncheckedIv.visibility = View.VISIBLE
+        }
     }
 
     private fun initMultiViewRecyclerView(commentInfo: List<CommentsInfo>) {
@@ -192,6 +262,14 @@ class CommunityContentActivity : AppCompatActivity() {
         dataRVAdapter.itemClick = object :ContentCommentMultiViewRVAdapter.ItemClick {
             override fun onItemClick(view: View, position: Int, parentId: Int) {
                 parentCommentId = parentId
+            }
+
+            override fun onLikeClick(view: View, position: Int, parentCommentId: Int) {
+
+            }
+
+            override fun onUnLikeClick(view: View, position: Int, parentCommentId: Int) {
+                TODO("Not yet implemented")
             }
         }
     }
@@ -240,3 +318,4 @@ class CommunityContentActivity : AppCompatActivity() {
         }
     }
 }
+

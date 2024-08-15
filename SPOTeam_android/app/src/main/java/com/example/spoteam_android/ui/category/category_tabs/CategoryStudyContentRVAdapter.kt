@@ -1,12 +1,18 @@
 package com.example.spoteam_android.ui.category.category_tabs
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.databinding.ItemRecyclerViewBinding
+import com.example.spoteam_android.ui.community.CategoryStudyDetail
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class CommunityCategoryStudyContentRVAdapter(private val dataList: ArrayList<BoardItem>) : RecyclerView.Adapter<CommunityCategoryStudyContentRVAdapter.ViewHolder>() {
+class CategoryStudyContentRVAdapter(private val dataList: List<CategoryStudyDetail>) : RecyclerView.Adapter<CategoryStudyContentRVAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(data : BoardItem)
@@ -25,19 +31,21 @@ class CommunityCategoryStudyContentRVAdapter(private val dataList: ArrayList<Boa
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(dataList[position])
+        if (position < dataList.size) {
+            holder.bind(dataList[position])
+        }
     }
 
     override fun getItemCount() = dataList.size
 
     inner class ViewHolder(val binding : ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: BoardItem){
-            binding.tvTime.text = data.studyName
-            binding.tvTitle.text = data.studyObject
-            binding.tvName.text = data.studyTO.toString()
-            binding.tvName2.text = data.studyPO.toString()
-            binding.tvName3.text = data.like.toString()
-            binding.tvName4.text = data.watch.toString()
+        fun bind(data: CategoryStudyDetail){
+            binding.tvTime.text = data.title
+            binding.tvTitle.text = data.introduction
+            binding.tvName.text = data.maxPeople.toString()
+            binding.tvName2.text = data.memberCount.toString()
+            binding.tvName3.text = data.heartCount.toString()
+            binding.tvName4.text = data.hitNum.toString()
         }
     }
 }

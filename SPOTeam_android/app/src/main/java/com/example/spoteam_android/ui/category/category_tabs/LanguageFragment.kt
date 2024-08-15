@@ -20,10 +20,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class LanguageFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     lateinit var binding: FragmentCategoryStudyContentBinding
-    private var selectedSortBy: String = "ALL"
+    private var selectedCategory: String = "ALL"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +41,7 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.contentFilterSp.adapter = adapter
         }
 
-        fetchBestCommunityContent("자격증", 0, 1, selectedSortBy)
+        fetchBestCommunityContent("어학", 0, 1, selectedCategory)
 
         return binding.root
     }
@@ -57,7 +57,7 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         val categoryStudyResponse = response.body()
                         if (categoryStudyResponse?.isSuccess == "true") {
                             val contentList = categoryStudyResponse.result?.content
-                            Log.d("ContestFragment", "items: $contentList")
+                            Log.d("LanguageFragment", "items: $contentList")
                             if (contentList != null) {
                                 binding.emptyTv.visibility = View.GONE
                                 initRecyclerview(contentList)
@@ -71,13 +71,13 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
 
                 override fun onFailure(call: Call<CategoryStudyResponse>, t: Throwable) {
-                    Log.e("ContestFragment", "Failure: ${t.message}", t)
+                    Log.e("LanguageFragment", "Failure: ${t.message}", t)
                 }
             })
     }
 
     private fun showLog(message: String?) {
-        Toast.makeText(requireContext(), "ContestFragment: $message", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "LanguageFragment: $message", Toast.LENGTH_SHORT).show()
     }
 
     private fun initRecyclerview(contentList: List<CategoryStudyDetail>) {
@@ -94,7 +94,7 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val selectedItem = parent?.getItemAtPosition(position).toString()
 
         // 선택된 항목에 따라 카테고리 설정
-        selectedSortBy = when (selectedItem) {
+        selectedCategory = when (selectedItem) {
             "전체" -> "ALL"
             "모집중" -> "RECRUITING"
             "모집완료" -> "COMPLETED"
@@ -105,6 +105,6 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        selectedSortBy = "ALL"
+        selectedCategory = "ALL"
     }
 }

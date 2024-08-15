@@ -1,12 +1,19 @@
 package com.example.spoteam_android.ui.community
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemCommunityhomeContentWithIndexBinding
 import com.kakao.sdk.template.model.Content
 
 class CommunityHomeRVAdapterAnnouncement(private val dataList: List<AnnouncementDetailInfo>) : RecyclerView.Adapter<CommunityHomeRVAdapterAnnouncement.ViewHolder>() {
+
+    interface ItemClick {
+        fun onItemClick(view: View, position: Int, parentCommentId : Int)
+    }
+
+    var itemClick: ItemClick? = null
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemCommunityhomeContentWithIndexBinding = ItemCommunityhomeContentWithIndexBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
@@ -29,6 +36,10 @@ class CommunityHomeRVAdapterAnnouncement(private val dataList: List<Announcement
             binding.contentIndexTv.text = data.rank.toString()
             binding.contentTitleTv.text = data.postTitle
             binding.contentCommentNumTv.text = data.commentCount.toString()
+
+//            binding.root.setOnClickListener{
+//                itemClick?.onItemClick(it, bindingAdapterPosition, data.post)
+//            }
         }
     }
 }
