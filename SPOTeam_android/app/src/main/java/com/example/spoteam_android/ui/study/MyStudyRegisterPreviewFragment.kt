@@ -1,6 +1,8 @@
 package com.example.spoteam_android.ui.study
 
+import StudyApiService
 import StudyViewModel
+import UploadResponse
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -8,16 +10,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.databinding.FragmentMyStudyRegisterPreviewBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody.Companion.asRequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 class MyStudyRegisterPreviewFragment : Fragment() {
 
     private lateinit var binding: FragmentMyStudyRegisterPreviewBinding
     private val tabList = arrayListOf("홈", "캘린더", "게시판", "갤러리", "투표")
     private val viewModel: StudyViewModel by activityViewModels()
+    private var imageUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,20 +39,27 @@ class MyStudyRegisterPreviewFragment : Fragment() {
     ): View? {
         binding = FragmentMyStudyRegisterPreviewBinding.inflate(inflater, container, false)
 
+        // ViewModel에서 이미지 URI를 가져옵니다.
+        val profileImageUriString = viewModel.profileImageUri.value
+        imageUri = profileImageUriString?.let { Uri.parse(it) }
+
         setupViewPagerAndTabs()
         updateUIWithData()
-        observeProfileImageUri()
 
         // 버튼 클릭 이벤트 설정
         binding.fragmentMyStudyRegisterPreviewRegisterBt.setOnClickListener {
-            showCompletionDialog()
+            if (imageUri != null) {
+                uploadImage(imageUri!!)
+            } else {
+                Toast.makeText(context, "이미지가 선택되지 않았습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return binding.root
     }
 
     private fun setupViewPagerAndTabs() {
-        val pagerAdapter = MyStudyRegisterPreviewVPAdapter(this) // 어댑터를 적절히 설정하세요
+        val pagerAdapter = MyStudyRegisterPreviewVPAdapter(this)
         binding.fragmentMyStudyRegisterPreviewVp.adapter = pagerAdapter
 
         TabLayoutMediator(binding.fragmentMyStudyRegisterPreviewTl, binding.fragmentMyStudyRegisterPreviewVp) { tab, position ->
@@ -64,23 +85,75 @@ class MyStudyRegisterPreviewFragment : Fragment() {
     }
 
     private fun updateUIWithData() {
-        viewModel.studyRequest.value?.let { studyData ->
-            binding.fragmentMyStudyRegisterPreviewTitleTv.text = studyData.title
-            binding.fragmentMyStudyRegisterPreviewGoalTv.text = studyData.goal
-            binding.fragmentMyStudyRegisterPreviewGoalTv.setTextColor(Color.parseColor("#2D2D2D"))
-            binding.fragmentMyStudyRegisterPreviewChipTv.text = studyData.themes.joinToString(separator = " / ")
-            binding.fragmentMyStudyRegisterPreviewOnlineTv.text = if (studyData.isOnline) "온라인" else "오프라인"
-            binding.fragmentMyStudyRegisterPreviewFeeTv.text = if (studyData.fee > 0) "유료" else "무료"
-            binding.fragmentMyStudyRegisterPreviewAgeTv.text = "${studyData.minAge}-${studyData.maxAge}세"
+        // UI 업데이트 코드 (이전 프래그먼트에서 전달된 데이터를 활용)
+    }
+
+    private fun uploadImage(imageUri: Uri) {
+        val retrofit = getRetrofit()
+        val apiService = retrofit.create(StudyApiService::class.java)
+
+        val imagePart = prepareImagePart(imageUri)
+
+        if (imagePart != null) {
+            apiService.uploadImages(listOf(imagePart)).enqueue(object : Callback<UploadResponse> {
+                override fun onResponse(call: Call<UploadResponse>, response: Response<UploadResponse>) {
+                    if (response.isSuccessful) {
+                        val uploadResponse = response.body()
+                        if (uploadResponse != null && uploadResponse.isSuccess) {
+                            val imageUrls = uploadResponse.result.imageUrls
+                            // 이미지 업로드 성공 후 처리
+                            showCompletionDialog()
+                        } else {
+                            println("Upload failed: ${uploadResponse?.message}")
+                        }
+                    } else {
+                        println("Upload failed with response code: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<UploadResponse>, t: Throwable) {
+                    println("Upload error: ${t.message}")
+                }
+            })
+        } else {
+            Toast.makeText(context, "이미지 파일을 준비할 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun observeProfileImageUri() {
-        viewModel.profileImageUri.observe(viewLifecycleOwner) { uri ->
-            uri?.let {
-                binding.fragmentMyStudyRegisterPreviewUserIv.setImageURI(Uri.parse(uri))
-            }
+    private fun prepareImagePart(uri: Uri): MultipartBody.Part? {
+        val file = getFileFromUri(uri)
+        return file?.let {
+            val mimeType = requireContext().contentResolver.getType(uri) ?: "image/*"
+            val requestFile = it.asRequestBody(mimeType.toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("images", it.name, requestFile)
         }
+    }
+
+    private fun getFileFromUri(uri: Uri): File? {
+        val inputStream = requireContext().contentResolver.openInputStream(uri) ?: return null
+        val file = File(requireContext().cacheDir, "temp_image")
+        file.outputStream().use { outputStream ->
+            inputStream.copyTo(outputStream)
+        }
+        return file
+    }
+
+    private fun getRetrofit(): Retrofit {
+        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzNjk4Nzk1LCJleHAiOjE3MjM3ODUxOTV9.mIyb1iGWC1QyyfLFgaBRSsg2QdPbpBLJiuEqztepvzY"
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("Authorization", "Bearer $authToken")
+                    .build()
+                chain.proceed(request)
+            }
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl("https://www.teamspot.site/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
     private fun showCompletionDialog() {

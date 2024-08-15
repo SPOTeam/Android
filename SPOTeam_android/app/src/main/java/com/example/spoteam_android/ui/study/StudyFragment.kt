@@ -29,7 +29,8 @@ class StudyFragment : Fragment() {
     private lateinit var studyAdapter: StudyAdapter
     private var itemList = ArrayList<StudyItem>()
     private var currentPage = 0
-    private val size = 4 // 페이지당 항목 수
+    private val size = 5 // 페이지당 항목 수
+    private var totalPages = 0
 
     // Retrofit API Service
     private lateinit var studyApiService: StudyApiService
@@ -49,7 +50,18 @@ class StudyFragment : Fragment() {
         studyApiService = retrofit.create(StudyApiService::class.java)
 
         // 어댑터 설정
-        studyAdapter = StudyAdapter(ArrayList())
+        studyAdapter = StudyAdapter(ArrayList()) { selectedItem ->
+            // 클릭된 StudyItem을 DetailFragment로 전달
+            val detailFragment = DetailStudyFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable("studyItem", selectedItem)
+                }
+            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, detailFragment)
+                .addToBackStack(null)
+                .commit()
+        }
 
         // RecyclerView 설정
         binding.fragmentStudyRv.apply {
@@ -68,7 +80,6 @@ class StudyFragment : Fragment() {
         binding.nextPage.setOnClickListener {
             if (currentPage < getTotalPages() - 1) {
                 currentPage++
-                Log.d("StudyFragment", "Next Page Clicked: currentPage = $currentPage")
                 fetchStudyData() // 다음 페이지 데이터를 가져옴
             }
         }
@@ -78,7 +89,7 @@ class StudyFragment : Fragment() {
     }
 
     private fun getRetrofit(): Retrofit {
-        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzNTk5NTMzLCJleHAiOjE3MjM2ODU5MzN9.ha6TKUawUA1iBopNeRMKnL-2Ktj_xf1lsNP4pVxI9Bg"
+        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzNjk4Nzk1LCJleHAiOjE3MjM3ODUxOTV9.mIyb1iGWC1QyyfLFgaBRSsg2QdPbpBLJiuEqztepvzY"
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
@@ -103,21 +114,30 @@ class StudyFragment : Fragment() {
             val memberId = sharedPreferences.getInt("${email}_memberId", -1)
 
             if (memberId != -1) {
+                Log.d("StudyFragment", "Fetching data for memberId: $memberId, page: $currentPage, size: $size")
+
                 studyApiService.getStudies(memberId.toString(), currentPage, size).enqueue(object : Callback<StudyResponse> {
                     override fun onResponse(call: Call<StudyResponse>, response: Response<StudyResponse>) {
                         if (response.isSuccessful) {
                             response.body()?.let { studyResponse ->
+                                Log.d("StudyFragment", "Received data: ${studyResponse.result.content.size} items")
+
                                 itemList.clear()
                                 itemList.addAll(studyResponse.result.content.map {
                                     StudyItem(
                                         title = it.title,
                                         introduction = it.introduction,
-                                        studyTO = 10,
                                         memberCount = it.memberCount,
                                         heartCount = it.heartCount,
-                                        hitNum = it.hitNum
+                                        hitNum = it.hitNum,
+                                        maxPeople = it.maxPeople,
+                                        studyState = it.studyState,
+                                        themeTypes = it.themeTypes,
+                                        regions = it.regions
                                     )
                                 })
+
+                                totalPages = studyResponse.result.totalPages
 
                                 // RecyclerView 업데이트
                                 studyAdapter.updateList(itemList)
@@ -127,11 +147,13 @@ class StudyFragment : Fragment() {
                                 updatePageNumberUI(studyResponse.result.totalPages)
                             }
                         } else {
+                            Log.d("StudyFragment", "Response failed: ${response.code()}")
                             Toast.makeText(requireContext(), "Failed to fetch data", Toast.LENGTH_SHORT).show()
                         }
                     }
 
                     override fun onFailure(call: Call<StudyResponse>, t: Throwable) {
+                        Log.d("StudyFragment", "Error: ${t.message}")
                         Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
                     }
                 })
@@ -144,9 +166,8 @@ class StudyFragment : Fragment() {
     }
 
     private fun updatePageNumberUI(totalPages: Int) {
-        binding.currentPage.text = "${currentPage + 1} / $totalPages"
+        binding.currentPage.text = "${currentPage + 1}"
 
-        // 이전 페이지 버튼 활성화/비활성화
         binding.previousPage.isEnabled = currentPage > 0
         binding.previousPage.setTextColor(resources.getColor(
             if (currentPage > 0) R.color.active_color else R.color.disabled_color,
@@ -161,15 +182,12 @@ class StudyFragment : Fragment() {
         ))
     }
 
-
     private fun getTotalPages(): Int {
-        return (itemList.size + size - 1) / size // 올바른 페이지 수 계산
+        return totalPages // 올바른 페이지 수 계산
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
-
