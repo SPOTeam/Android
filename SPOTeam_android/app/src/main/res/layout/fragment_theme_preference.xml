@@ -29,6 +29,7 @@
             android:text="마이페이지"
             android:textColor="@color/black"
             android:textSize="16sp"
+            android:fontFamily="@font/pretendard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp" />
@@ -52,10 +53,22 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
         android:layout_marginTop="30dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_theme_preference_pb"/>
+
+    <ImageView
+        android:id="@+id/theme_edit_iv"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/mypageedit"
+        android:layout_marginTop="35dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/fragment_theme_preference_tv"
+        app:layout_constraintTop_toBottomOf="@id/fragment_theme_preference_pb"/>
+
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/fragment_theme_preference_flexbox_layout"
@@ -70,7 +83,8 @@
         android:layout_marginEnd="-10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_theme_preference_tv"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_theme_preference_tv"
+        android:visibility="visible"/>
 
 
 
@@ -199,6 +213,45 @@
 
 
     </com.google.android.material.chip.ChipGroup>
+
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone">
+
+        <android.widget.Button
+            android:id="@+id/editTheme_cancel_bt"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/button_background"
+            android:enabled="true"
+            android:text="취소"
+            android:textColor="@drawable/button_textcolor"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <android.widget.Button
+            android:id="@+id/editTheme_finish_bt"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:enabled="false"
+            android:text="완료"
+            android:textColor="@drawable/button_textcolor"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 
 

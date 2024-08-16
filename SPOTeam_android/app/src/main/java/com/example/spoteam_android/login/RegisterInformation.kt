@@ -7,11 +7,11 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.RegionsPreferences
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.StudyReasons
 import com.example.spoteam_android.ThemePreferences
 import com.example.spoteam_android.databinding.ActivityRegisterInformationBinding
 import com.example.spoteam_android.login.LoginApiService
-import com.example.spoteam_android.ui.mypage.ThemePreferenceFragment.LoginchecklistAuthInterceptor
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -52,8 +52,8 @@ class RegisterInformation : ComponentActivity() {
         }
 
         // 닉네임 생성 및 저장
-        val nickname = generateRandomNickname()
-        saveNicknameToPreferences(email, nickname)
+        val randomNickname = generateRandomNickname()
+        saveNicknameToPreferences(email, randomNickname)
 
         // 서버에 POST 요청 보내기
         postPreferencesToServer(
@@ -92,9 +92,8 @@ class RegisterInformation : ComponentActivity() {
         purposes: List<String>,
         regions: List<String>
     ) {
-        val retrofit = getRetrofit()
 
-        val service = retrofit.create(LoginApiService::class.java)
+        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
 
         val themePreferences = ThemePreferences(themes)
         val purposePreferences = StudyReasons(purposes)
@@ -144,18 +143,6 @@ class RegisterInformation : ComponentActivity() {
         })
     }
 
-    private fun getRetrofit(): Retrofit {
-        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzMzc2NDk3LCJleHAiOjE3MjMzODAwOTd9.xxtr97HO-u1VW1dAu8fRyobh8D7KywUk-6akBE4RE1U"
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(LoginchecklistAuthInterceptor(authToken))
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
 
     private fun generateRandomNickname(): String {
         val letters = "abcdefghijklmnopqrstuvwxyz"
@@ -168,10 +155,10 @@ class RegisterInformation : ComponentActivity() {
         return "$letterPart$numberPart"
     }
 
-    private fun saveNicknameToPreferences(email: String, nickname: String) {
+    private fun saveNicknameToPreferences(email: String, randomNickname: String) {
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         with(sharedPreferences.edit()) {
-            putString("${email}_nickname", nickname)
+            putString("${email}_randomNickname", randomNickname)
             apply()  // 비동기 저장
         }
     }

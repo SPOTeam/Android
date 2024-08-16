@@ -2,6 +2,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.spoteam_android.RetrofitInstance
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -28,6 +29,19 @@ class StudyViewModel : ViewModel() {
         _profileImageUri.value = uri
         updateStudyRequest()
     }
+    private val _studyId = MutableLiveData<Int>()
+    val studyId: LiveData<Int> get() = _studyId
+    private val _studyImageUrl = MutableLiveData<String>()
+    val studyImageUrl: LiveData<String> get() = _studyImageUrl
+    private val _studyIntroduction = MutableLiveData<String>()
+    val studyIntroduction: LiveData<String> get() = _studyIntroduction
+
+    fun setStudyData(id: Int, imageUrl: String, studyIntroduction: String) {
+        _studyId.value = id
+        _studyImageUrl.value = imageUrl
+        _studyIntroduction.value = studyIntroduction
+    }
+
 
     fun setStudyData(
         title: String, goal: String, introduction: String, isOnline: Boolean, profileImage: String?,
@@ -63,16 +77,15 @@ class StudyViewModel : ViewModel() {
         updateStudyRequest()
     }
 
-    fun submitStudyData(memberId: Int) {  // Remove Context from method signature
-        val retrofit = getRetrofit()
-        val apiService = retrofit.create(StudyApiService::class.java)
+    fun submitStudyData(memberId: Int) {
+        val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
         val studyData = _studyRequest.value
 
         if (studyData != null) {
             val studyRequestBody = createStudyRequestBody(studyData)
 
             apiService.submitStudyData(memberId, studyRequestBody)
-                .enqueue(object : Callback<ApiResponsed> {  // Ensure ApiResponsed is the correct type
+                .enqueue(object : Callback<ApiResponsed> {
                     override fun onResponse(call: Call<ApiResponsed>, response: Response<ApiResponsed>) {
                         if (response.isSuccessful) {
                             response.body()?.let { apiResponse ->
@@ -108,21 +121,4 @@ class StudyViewModel : ViewModel() {
         return json.toRequestBody("application/json".toMediaType())
     }
 
-    private fun getRetrofit(): Retrofit {
-        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzNjk4Nzk1LCJleHAiOjE3MjM3ODUxOTV9.mIyb1iGWC1QyyfLFgaBRSsg2QdPbpBLJiuEqztepvzY" // Ensure this is correct
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer $authToken")
-                    .build()
-                chain.proceed(request)
-            }
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
 }

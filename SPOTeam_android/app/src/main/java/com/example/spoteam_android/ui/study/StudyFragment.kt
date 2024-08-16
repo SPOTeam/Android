@@ -2,6 +2,7 @@ package com.example.spoteam_android.ui.study
 
 import StudyAdapter
 import StudyApiService
+import StudyViewModel
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
@@ -10,8 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.StudyResponse
 import com.example.spoteam_android.databinding.FragmentStudyBinding
@@ -31,6 +34,8 @@ class StudyFragment : Fragment() {
     private var currentPage = 0
     private val size = 5 // 페이지당 항목 수
     private var totalPages = 0
+    private val studyViewModel: StudyViewModel by activityViewModels()
+
 
     // Retrofit API Service
     private lateinit var studyApiService: StudyApiService
@@ -46,19 +51,17 @@ class StudyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val retrofit = getRetrofit()
-        studyApiService = retrofit.create(StudyApiService::class.java)
+        studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
         // 어댑터 설정
         studyAdapter = StudyAdapter(ArrayList()) { selectedItem ->
-            // 클릭된 StudyItem을 DetailFragment로 전달
-            val detailFragment = DetailStudyFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable("studyItem", selectedItem)
-                }
-            }
+            // StudyViewModel에 studyId 설정
+            studyViewModel.setStudyData(selectedItem.studyId, selectedItem.imageUrl, selectedItem.introduction)
+
+
+            val detailStudyFragment = DetailStudyFragment()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, detailFragment)
+                .replace(R.id.main_frm, detailStudyFragment)
                 .addToBackStack(null)
                 .commit()
         }
@@ -88,23 +91,6 @@ class StudyFragment : Fragment() {
         fetchStudyData()
     }
 
-    private fun getRetrofit(): Retrofit {
-        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzNjk4Nzk1LCJleHAiOjE3MjM3ODUxOTV9.mIyb1iGWC1QyyfLFgaBRSsg2QdPbpBLJiuEqztepvzY"
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer $authToken")
-                    .build()
-                chain.proceed(request)
-            }
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
 
     private fun fetchStudyData() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
@@ -120,31 +106,44 @@ class StudyFragment : Fragment() {
                     override fun onResponse(call: Call<StudyResponse>, response: Response<StudyResponse>) {
                         if (response.isSuccessful) {
                             response.body()?.let { studyResponse ->
-                                Log.d("StudyFragment", "Received data: ${studyResponse.result.content.size} items")
+                                val content = studyResponse.result.content
+                                if (!content.isNullOrEmpty()) {
+                                    Log.d("StudyFragment", "Received data: ${content.size} items")
 
-                                itemList.clear()
-                                itemList.addAll(studyResponse.result.content.map {
-                                    StudyItem(
-                                        title = it.title,
-                                        introduction = it.introduction,
-                                        memberCount = it.memberCount,
-                                        heartCount = it.heartCount,
-                                        hitNum = it.hitNum,
-                                        maxPeople = it.maxPeople,
-                                        studyState = it.studyState,
-                                        themeTypes = it.themeTypes,
-                                        regions = it.regions
-                                    )
-                                })
+                                    itemList.clear()
+                                    itemList.addAll(content.map {
+                                        StudyItem(
+                                            studyId = it.studyId,
+                                            title = it.title,
+                                            introduction = it.introduction,
+                                            memberCount = it.memberCount,
+                                            heartCount = it.heartCount,
+                                            hitNum = it.hitNum,
+                                            maxPeople = it.maxPeople,
+                                            studyState = it.studyState,
+                                            themeTypes = it.themeTypes,
+                                            regions = it.regions,
+                                            imageUrl = it.imageUrl
+                                        )
+                                    })
 
-                                totalPages = studyResponse.result.totalPages
+                                    totalPages = studyResponse.result.totalPages
 
-                                // RecyclerView 업데이트
-                                studyAdapter.updateList(itemList)
-                                Log.d("StudyFragment", "List updated with new data.")
+                                    // RecyclerView 업데이트
+                                    studyAdapter.updateList(itemList)
+                                    Log.d("StudyFragment", "List updated with new data.")
 
-                                // 페이지 UI 업데이트
-                                updatePageNumberUI(studyResponse.result.totalPages)
+                                    binding.fragmentStudyRv.visibility = View.VISIBLE
+                                    binding.emptyMessage.visibility = View.GONE
+
+                                    // 페이지 UI 업데이트
+                                    updatePageNumberUI(studyResponse.result.totalPages)
+                                } else {
+                                    // 데이터가 없을 때 처리
+                                    Log.d("StudyFragment", "No studies found.")
+                                    binding.fragmentStudyRv.visibility = View.GONE
+                                    binding.emptyMessage.visibility = View.VISIBLE
+                                }
                             }
                         } else {
                             Log.d("StudyFragment", "Response failed: ${response.code()}")
@@ -164,6 +163,7 @@ class StudyFragment : Fragment() {
             Toast.makeText(requireContext(), "Email not provided", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun updatePageNumberUI(totalPages: Int) {
         binding.currentPage.text = "${currentPage + 1}"
