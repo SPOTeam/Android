@@ -7,11 +7,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
+import com.example.spoteam_android.todolist.TodoViewModel
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.category.CategoryNavViewFragment
@@ -38,13 +41,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        val drawerLayout: DrawerLayout = binding.drawerLayout
 
         setContentView(binding.root)
 
         // 다른 아무 화면 클릭시 스터디 화면 사라지도록
         binding.root.setOnTouchListener { _, _ ->
             showStudyFrameLayout(false)
-            binding.main.closeDrawers()
+            drawerLayout.closeDrawers()
             getCurrentFragment()?.let {
                 if(it is CommunityHomeFragment){
                     isOnCommunityHome(it)
