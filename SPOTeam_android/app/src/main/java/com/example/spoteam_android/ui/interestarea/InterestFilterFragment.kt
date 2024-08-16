@@ -105,6 +105,7 @@ class InterestFilterFragment : Fragment() {
                 editText.visibility = View.GONE
                 behind_et.visibility = View.GONE
             }
+            updateNextButtonState()
         }
 
         val chipGroup2 = binding.chipGroup2
@@ -116,6 +117,7 @@ class InterestFilterFragment : Fragment() {
                 bundle.putString("selectedStudyTheme", selectedChipText)
                 Log.d("InterestFilterFragment", "Selected study theme: $selectedChipText")
             }
+            updateNextButtonState()
         }
 
         val interestFragment = InterestFragment()
@@ -136,5 +138,23 @@ class InterestFilterFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+    }
+
+    private fun updateNextButtonState() {
+
+        val isActivityFeeNoneSelected = binding.chipGroup1.checkedChipId == R.id.chip2
+
+        // EditText의 값이 비어있지 않고, 숫자만 포함하는지 확인
+        val activityFeeText = binding.edittext1.text.toString()
+        val isActivityFeeEntered = binding.chipGroup1.checkedChipId == R.id.chip1 && activityFeeText.isNotEmpty() && activityFeeText.toIntOrNull() != null
+
+        // 첫 번째 조건: 온라인이 선택되었거나, 오프라인이 선택되고 위치가 설정된 경우
+        // 두 번째 조건: 활동비 없음이 선택되었거나, 활동비 있음이 선택되고 숫자가 입력된 경우
+        val isSecondConditionMet = isActivityFeeNoneSelected || isActivityFeeEntered
+
+        val isThirdConditionMet = binding.chipGroup2.checkedChipId != ChipGroup.NO_ID
+
+        // 두 조건 모두 만족해야 버튼이 활성화됨
+        binding.fragmentIntroduceStudyBt.isEnabled = isSecondConditionMet && isThirdConditionMet
     }
 }

@@ -3,9 +3,13 @@ package com.example.spoteam_android.ui.calendar
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
@@ -19,7 +23,7 @@ class CalendarAddEventFragment : Fragment() {
     private lateinit var eventTitleEditText: EditText
     private lateinit var startDateTimeTextView: TextView
     private lateinit var endDateTimeTextView: TextView
-    private lateinit var saveButton: ImageButton
+    private lateinit var saveButton: Button
 
     private val eventViewModel: EventViewModel by activityViewModels()
 
@@ -31,9 +35,27 @@ class CalendarAddEventFragment : Fragment() {
         eventTitleEditText = view.findViewById(R.id.eventTitleEditText)
         startDateTimeTextView = view.findViewById(R.id.startDateTimeTextView)
         endDateTimeTextView = view.findViewById(R.id.endDateTimeTextView)
-        saveButton = view.findViewById(R.id.saveButton)
 
-            // 기본값으로 오늘 날짜와 시간 설정
+        saveButton = view.findViewById(R.id.fragment_introduce_study_bt)
+
+        eventTitleEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // 아무 작업도 필요하지 않음
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // isNotEmpty를 사용하여 버튼 활성화 여부 결정
+                saveButton.isEnabled = s?.isNotEmpty() == true
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // 아무 작업도 필요하지 않음
+            }
+        })
+
+
+
+        // 기본값으로 오늘 날짜와 시간 설정
         val calendar = Calendar.getInstance()
         val today = String.format("%04d-%02d-%02d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH))
         val now = String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
