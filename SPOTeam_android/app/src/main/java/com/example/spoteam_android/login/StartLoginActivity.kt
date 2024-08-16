@@ -30,15 +30,9 @@ class StartLoginActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val currentEmail = sharedPreferences.getString("currentEmail", null)
-        val isLoggedIn = currentEmail != null && sharedPreferences.getBoolean("${currentEmail}_isLoggedIn", false)
-
-        // 현재 로그인된 사용자 정보를 로그
-        val memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
-        Log.d("SharedPreferences", "MemberId: $memberId")
-
-        val value = sharedPreferences.getInt("memberId",-1)
-
-        Log.d("SharedPreferences", "memberId: $value")
+        val isLoggedIn = currentEmail != null && sharedPreferences.getBoolean(
+            "${currentEmail}_isLoggedIn", false
+        )
 
         if (isLoggedIn) {
             // 이미 로그인된 경우 MainActivity로 이동
@@ -48,10 +42,7 @@ class StartLoginActivity : AppCompatActivity() {
             return
         }
 
-// 대니/김빈
-//         binding = ActivityStartLoginBinding.inflate(layoutInflater)
-//         setContentView(binding.root)
-
+        // 로그인 실패 시 혹은 초기화된 상태에서 로그인 처리
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
                 val message = when (error.toString()) {
@@ -84,11 +75,12 @@ class StartLoginActivity : AppCompatActivity() {
         }
     }
 
+
     private fun sendTokenToServer(accessToken: String) {
-        Log.d("Token", "전송할 액세스 토큰: $accessToken")  // 액세스 토큰을 로그에 출력
+        Log.d("Token", "전송할 액세스 토큰: $accessToken")
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/") // 서버의 URL로 변경
+            .baseUrl("https://www.teamspot.site/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -99,29 +91,48 @@ class StartLoginActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val userInfo = response.body()?.result
                     if (userInfo != null) {
-                        Log.d("UserInfo", "memberId: ${userInfo.memberId}, email: ${userInfo.email}")
+                        Log.d(
+                            "UserInfo",
+                            "memberId: ${userInfo.memberId}, email: ${userInfo.email}"
+                        )
 
-                        // SharedPreferences에 데이터 저장
-                        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-                        with(sharedPreferences.edit()) {
-                            putBoolean("${userInfo.email}_isLoggedIn", true)
-                            putString("${userInfo.email}_accessToken", accessToken)
-                            putInt("${userInfo.email}_memberId", userInfo.memberId)
-                            putString("currentEmail", userInfo.email)
-                            apply()
+                        UserApiClient.instance.me { user, error ->
+                            if (error != null) {
+                                Log.e("Kakao", "사용자 정보 요청 실패", error)
+                            } else if (user != null) {
+                                val nickname = user.kakaoAccount?.profile?.nickname ?: "Unknown"
+                                Log.d("Kakao", "사용자 닉네임: $nickname")
+
+                                val sharedPreferences =
+                                    getSharedPreferences("MyPrefs", MODE_PRIVATE)
+                                val randomNickname = sharedPreferences.getString(
+                                    "${userInfo.email}_randomNickname",
+                                    null
+                                )
+
+                                with(sharedPreferences.edit()) {
+                                    putBoolean("${userInfo.email}_isLoggedIn", true)
+                                    putString("${userInfo.email}_accessToken", accessToken)
+                                    putInt("${userInfo.email}_memberId", userInfo.memberId)
+                                    putString("${userInfo.email}_nickname", nickname)  // 카카오 닉네임 저장
+                                    putString("currentEmail", userInfo.email)
+                                    apply()
+                                }
+
+                                // randomNickname이 존재하면 MainActivity로, 그렇지 않으면 CheckListCategoryActivity로 이동
+                                val intent = if (randomNickname != null) {
+                                    Intent(this@StartLoginActivity, MainActivity::class.java)
+                                } else {
+                                    Intent(
+                                        this@StartLoginActivity,
+                                        CheckListCategoryActivity::class.java
+                                    )
+                                }
+
+                                startActivity(intent)
+                                finish() // 로그인 완료 후 현재 Activity 종료
+                            }
                         }
-
-                        // 가입 여부 확인
-                        val existingMemberId = sharedPreferences.getInt("${userInfo.email}_memberId", -1)
-
-                        // 가입했던 적이 있으면 MainActivity로, 없으면 CheckListCategoryActivity로 이동
-                        val intent = if (existingMemberId != -1) {
-                            Intent(this@StartLoginActivity, CheckListCategoryActivity::class.java)
-                        } else {
-                            Intent(this@StartLoginActivity, CheckListCategoryActivity::class.java)
-                        }
-                        startActivity(intent)
-                        finish() // 로그인 완료 후 현재 Activity 종료
                     }
                 } else {
                     Log.e("Token", "토큰 전송 실패: ${response.errorBody()?.string()}")
@@ -135,7 +146,9 @@ class StartLoginActivity : AppCompatActivity() {
     }
 }
 
-// Retrofit 관련 인터페이스 정의
+
+
+    // Retrofit 관련 인터페이스 정의
 interface KaKaoApiService {
     @GET("/spot/members/sign-in/kakao") // 엔드포인트 경로로 변경
     fun getUserInfo(@Query("accessToken") accessToken: String): Call<YourResponse>

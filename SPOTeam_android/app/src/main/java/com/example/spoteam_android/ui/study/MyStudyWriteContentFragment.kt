@@ -31,7 +31,7 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
             android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.categorySpinner.adapter = adapter
+            binding.mystudyCategorySpinner.adapter = adapter
         }
 
         return binding.root

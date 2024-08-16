@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+
     <item
-        android:id="@+id/menuitem1"
-        android:title="menuItem1" />
+        android:id="@+id/language"
+        android:title="어학" />
     <item
-        android:id="@+id/menuitem2"
-        android:title="menuItem2" />
+        android:id="@+id/license"
+        android:title="자격증" />
     <item
-        android:id="@+id/menuitem3"
-        android:title="menuItem3" />
+        android:id="@+id/job"
+        android:title="취업" />
     <item
-        android:id="@+id/menuitem4"
-        android:title="menuItem4" />
+        android:id="@+id/discuss"
+        android:title="토론" />
     <item
-        android:id="@+id/menuitem5"
-        android:title="menuItem5" />
+        android:id="@+id/news"
+        android:title="시사/뉴스" />
     <item
-        android:id="@+id/menuitem6"
-        android:title="menuItem6" />
+        android:id="@+id/freeStudy"
+        android:title="자율 학습" />
+    <item
+        android:id="@+id/project"
+        android:title="프로젝트" />
+    <item
+        android:id="@+id/contest"
+        android:title="공모전" />
+    <item
+        android:id="@+id/majorStudy"
+        android:title="전공/진로 학습" />
+    <item
+        android:id="@+id/rest"
+        android:title="기타" />
+
 </menu>

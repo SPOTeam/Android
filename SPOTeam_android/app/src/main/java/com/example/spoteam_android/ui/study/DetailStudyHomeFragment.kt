@@ -1,72 +1,81 @@
 package com.example.spoteam_android.ui.study
 
+import StudyApiService
+import StudyViewModel
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.databinding.FragmentDetailStudyHomeBinding
-import com.example.spoteam_android.DetailStudyHomeAdapter
+import com.example.spoteam_android.MemberResponse
 import com.example.spoteam_android.ProfileItem
-import com.example.spoteam_android.R
-import com.example.spoteam_android.SceduleItem
+import com.example.spoteam_android.RetrofitInstance
+import com.example.spoteam_android.databinding.FragmentDetailStudyHomeBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DetailStudyHomeFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailStudyHomeBinding
+    private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
+    private val studyViewModel: StudyViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentDetailStudyHomeBinding.inflate(inflater, container, false)
+
+        setupViews()
+
+        // ViewModel에서 studyId를 관찰하고 변경될 때마다 fetchStudyMembers 호출
+        studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
+            Log.d("DetailStudyHomeFragment", "Received studyId from ViewModel: $studyId")
+            if (studyId != null) {
+                fetchStudyMembers(studyId)
+            } else {
+                Toast.makeText(requireContext(), "Study ID is missing", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun setupViews() {
+        profileAdapter = DetailStudyHomeProfileAdapter(ArrayList())
+        binding.fragmentDetailStudyHomeProfileRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.fragmentDetailStudyHomeProfileRv.adapter = profileAdapter
 
-        // 스케줄 데이터 리스트 생성
-        val scheduleList = ArrayList<SceduleItem>().apply {
-            add(SceduleItem("D-3", "5/21 (화)", "모의고사 풀이", "5/21 7:00pm", "투썸 플레이스 강남점"))
-            add(SceduleItem("D-2", "5/22 (수)", "토익 스피킹", "5/22 5:00pm", "셀렉티드니스 강남점"))
-            add(SceduleItem("D-1", "5/23 (목)", "면접 스터디", "5/23 3:00pm", "스타벅스 강남점"))
-        }
-
-        // 스케줄 어댑터 설정
-        val detailStudyHomeAdapter = DetailStudyHomeAdapter(scheduleList)
-
-        // 스케줄 RecyclerView 설정
-        binding.fragmentDetailStudyHomeScheduleRv.apply {
-            adapter = detailStudyHomeAdapter
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        }
-
-        // 프로필 데이터 리스트 생성
-        val profileList = ArrayList<ProfileItem>().apply {
-            add(ProfileItem(R.drawable.ic_host_profile, "사용자1"))
-            add(ProfileItem(R.drawable.ic_host_profile, "사용자2"))
-            add(ProfileItem(R.drawable.ic_host_profile, "사용자3"))
-            add(ProfileItem(R.drawable.ic_host_profile, "사용자4"))
-            add(ProfileItem(R.drawable.ic_host_profile, "사용자5"))
-            add(ProfileItem(R.drawable.ic_host_profile, "사용자6"))
-            add(ProfileItem(R.drawable.ic_host_profile, "사용자7"))
-            add(ProfileItem(R.drawable.ic_host_profile, "사용자8"))
-            add(ProfileItem(R.drawable.ic_host_profile, "사용자9"))
-            add(ProfileItem(R.drawable.ic_host_profile, "사용자10"))
-
-            // 추가 프로필 데이터 추가
-        }
-
-        // 프로필 어댑터 설정
-        val profileAdapter = DetailStudyHomeProfileAdapter(profileList)
-
-        // 프로필 RecyclerView 설정
-        binding.fragmentDetailStudyHomeProfileRv.apply {
-            adapter = profileAdapter
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        studyViewModel.studyIntroduction.observe(viewLifecycleOwner) { introduction ->
+            binding.fragmentDetailStudyHomeIntroduceTv.text = introduction
         }
     }
+
+    private fun fetchStudyMembers(studyId: Int) {
+        val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
+        api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
+            override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { memberResponse ->
+                        profileAdapter.updateList(memberResponse.result.members.map {
+                            ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
+                        })
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
 }

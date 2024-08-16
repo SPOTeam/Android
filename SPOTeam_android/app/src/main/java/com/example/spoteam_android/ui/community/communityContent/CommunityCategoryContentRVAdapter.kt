@@ -12,13 +12,15 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class CommunityCategoryContentRVAdapter(private val dataList: List<CategoryPagesDetail>) : RecyclerView.Adapter<CommunityCategoryContentRVAdapter.ViewHolder>() {
+class CommunityCategoryContentRVAdapter(private var dataList: List<CategoryPagesDetail>) : RecyclerView.Adapter<CommunityCategoryContentRVAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(data: CategoryPagesDetail)
+        fun onLikeClick(data: CategoryPagesDetail)
+        fun onUnLikeClick(data: CategoryPagesDetail)
     }
 
-    private lateinit var itemClickListener : OnItemClickListener
+    private lateinit var itemClickListener: OnItemClickListener
 
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {
         this.itemClickListener = onItemClickListener
@@ -26,7 +28,6 @@ class CommunityCategoryContentRVAdapter(private val dataList: List<CategoryPages
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemCommunityContentBinding = ItemCommunityContentBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
-
         return ViewHolder(binding)
     }
 
@@ -39,20 +40,19 @@ class CommunityCategoryContentRVAdapter(private val dataList: List<CategoryPages
             itemClickListener.onItemClick(dataList[position])
         }
 
-        holder.binding.contentLikeNumCheckedIv.setOnClickListener{
-            holder.binding.contentLikeNumCheckedIv.visibility = View.GONE
-            holder.binding.contentLikeNumUncheckedIv.visibility = View.VISIBLE
-        }
-        holder.binding.contentLikeNumUncheckedIv.setOnClickListener{
-            holder.binding.contentLikeNumCheckedIv.visibility = View.VISIBLE
-            holder.binding.contentLikeNumUncheckedIv.visibility = View.GONE
+        holder.binding.contentLikeNumCheckedIv.setOnClickListener {
+            itemClickListener.onUnLikeClick(dataList[position])
         }
 
-        holder.binding.contentBookmarkCheckedIv.setOnClickListener{
+        holder.binding.contentLikeNumUncheckedIv.setOnClickListener {
+            itemClickListener.onLikeClick(dataList[position])
+        }
+
+        holder.binding.contentBookmarkCheckedIv.setOnClickListener {
             holder.binding.contentBookmarkCheckedIv.visibility = View.GONE
             holder.binding.contentBookmarkUncheckedIv.visibility = View.VISIBLE
         }
-        holder.binding.contentBookmarkUncheckedIv.setOnClickListener{
+        holder.binding.contentBookmarkUncheckedIv.setOnClickListener {
             holder.binding.contentBookmarkCheckedIv.visibility = View.VISIBLE
             holder.binding.contentBookmarkUncheckedIv.visibility = View.GONE
         }
@@ -60,8 +60,8 @@ class CommunityCategoryContentRVAdapter(private val dataList: List<CategoryPages
 
     override fun getItemCount() = dataList.size
 
-    inner class ViewHolder(val binding : ItemCommunityContentBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: CategoryPagesDetail){
+    inner class ViewHolder(val binding: ItemCommunityContentBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: CategoryPagesDetail) {
             binding.contentTitleTv.text = data.title
             binding.contentSaveNumTv.text = data.scrapCount.toString()
             binding.contentSummaryTv.text = data.content
@@ -70,7 +70,15 @@ class CommunityCategoryContentRVAdapter(private val dataList: List<CategoryPages
             binding.contentViewNumTv.text = data.viewCount.toString()
             binding.contentWriterTv.text = data.writer
             binding.contentDateTv.text = formatWrittenTime(data.writtenTime)
+            if (data.likedByCurrentUser) {
+                binding.contentLikeNumCheckedIv.visibility = View.VISIBLE
+                binding.contentLikeNumUncheckedIv.visibility = View.GONE
+            } else {
+                binding.contentLikeNumCheckedIv.visibility = View.GONE
+                binding.contentLikeNumUncheckedIv.visibility = View.VISIBLE
+            }
         }
+
         private fun formatWrittenTime(writtenTime: String): String {
             val formats = arrayOf(
                 SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault()),

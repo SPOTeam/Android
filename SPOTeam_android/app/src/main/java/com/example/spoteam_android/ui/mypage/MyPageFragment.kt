@@ -46,12 +46,27 @@ class MyPageFragment : Fragment() {
         return binding.root
     }
 
-    private fun setNickname() {
+//    private fun setNickname() {
+//        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+//        val email = sharedPreferences.getString("currentEmail", null)
+//        if (email != null) {
+//            val nickname = getNicknameFromPreferences(email)
+//            binding.tvNickname.text = nickname ?: "닉네임 없음"  // 닉네임이 없는 경우의 기본 값
+//        } else {
+//            binding.tvNickname.text = "이메일 없음"  // 이메일이 없는 경우의 기본 값
+//        }
+//    }
+//
+//    private fun getNicknameFromPreferences(email: String): String? {
+//        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+//        return sharedPreferences.getString("${email}_nickname", null)
+//    }
+        private fun setNickname() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
         if (email != null) {
-            val nickname = getNicknameFromPreferences(email)
-            binding.tvNickname.text = nickname ?: "닉네임 없음"  // 닉네임이 없는 경우의 기본 값
+            val randomNickname = getNicknameFromPreferences(email)
+            binding.tvNickname.text = randomNickname ?: "닉네임 없음"  // 닉네임이 없는 경우의 기본 값
         } else {
             binding.tvNickname.text = "이메일 없음"  // 이메일이 없는 경우의 기본 값
         }
@@ -59,7 +74,7 @@ class MyPageFragment : Fragment() {
 
     private fun getNicknameFromPreferences(email: String): String? {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("${email}_nickname", null)
+        return sharedPreferences.getString("${email}_randomNickname", null)
     }
 
     private fun performAccountDeletion() {
@@ -88,6 +103,7 @@ class MyPageFragment : Fragment() {
         }
     }
 
+
     private fun performLogout() {
         UserApiClient.instance.logout { error ->
             if (error != null) {
@@ -98,13 +114,14 @@ class MyPageFragment : Fragment() {
                 // 로그아웃 성공
                 Toast.makeText(requireContext(), "로그아웃 성공", Toast.LENGTH_SHORT).show()
 
-                // SharedPreferences의 로그인 상태 및 이메일 정보 삭제
+                // SharedPreferences의 로그인 상태 및 이메일 정보만 삭제 (닉네임은 유지)
                 val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
                 val email = sharedPreferences.getString("currentEmail", null)
 
                 with(sharedPreferences.edit()) {
-                    putBoolean("${email}_isLoggedIn", false)
-                    putString("currentEmail", null)
+                    putBoolean("${email}_isLoggedIn", false)  // 로그인 상태 해제
+                    putString("currentEmail", null)  // 현재 로그인된 이메일 정보 삭제
+                    // 닉네임과 관련된 데이터는 삭제하지 않음
                     apply()
                 }
 

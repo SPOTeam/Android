@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- 메인 콘텐츠 영역 -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -27,17 +30,19 @@
             android:src="@drawable/icon_write"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
+            app:borderWidth="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/main_bnv"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_bnv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
             android:background="?android:attr/windowBackground"
+            app:itemIconSize="45dp"
             app:labelVisibilityMode="unlabeled"
-            app:itemIconSize="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:menu="@menu/bottom_nav_menu" />
@@ -83,122 +88,16 @@
                     android:paddingEnd="13dp"/>
             </LinearLayout>
         </FrameLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/mainCategoryBar"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="125dp"
-        android:layout_gravity="start"
-        android:background="@drawable/category_appbar_btn_up_right">
-
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/blur_overlay_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/category_appbar_btn_up_right"
-            android:orientation="vertical">
+            android:visibility="gone"
+            android:background="@drawable/blur_background"
+            app:layout_constraintBottom_toBottomOf="@id/main_bnv"/>
 
-            <TextView
-                android:id="@+id/language_btn"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:background="@drawable/selector_category_background_u_r"
-                android:textSize="15sp"
-                android:text="어학"
-                android:textColor="@drawable/selector_button_text"
-                android:gravity="center"
-                android:layout_marginBottom="2dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/license_btn"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:text="자격증"
-                android:textColor="@drawable/selector_category_text"
-                android:gravity="center"
-                android:background="@drawable/selector_category_background"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:id="@+id/job_btn"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:text="취업"
-                android:textColor="@drawable/selector_category_text"
-                android:gravity="center"
-                android:background="@drawable/selector_category_background"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:id="@+id/discuss_btn"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:text="토론"
-                android:textColor="@drawable/selector_category_text"
-                android:gravity="center"
-                android:background="@drawable/selector_category_background"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:id="@+id/news_btn"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:text="시사/뉴스"
-                android:textColor="@drawable/selector_category_text"
-                android:gravity="center"
-                android:background="@drawable/selector_category_background"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:id="@+id/freeStudy_btn"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:text="자율 학습"
-                android:textColor="@drawable/selector_category_text"
-                android:gravity="center"
-                android:background="@drawable/selector_category_background"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:id="@+id/project_btn"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:text="프로젝트"
-                android:textColor="@drawable/selector_category_text"
-                android:gravity="center"
-                android:background="@drawable/selector_category_background"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:id="@+id/competition_btn"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:text="공모전"
-                android:textColor="@drawable/selector_category_text"
-                android:gravity="center"
-                android:background="@drawable/selector_category_background"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:id="@+id/majorStudy_btn"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:text="전공/진로 학습"
-                android:textColor="@drawable/selector_category_text"
-                android:gravity="center"
-                android:background="@drawable/selector_category_background"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:id="@+id/rest_btn"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:text="기타"
-                android:textColor="@drawable/selector_category_text"
-                android:gravity="center"
-                android:background="@drawable/selector_category_background_d_r" />
-        </LinearLayout>
-    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

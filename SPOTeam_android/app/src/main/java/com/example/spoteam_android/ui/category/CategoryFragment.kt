@@ -28,6 +28,10 @@ class CategoryFragment : Fragment() {
                 tab, position -> tab.text = tabList[position]
         }.attach()
 
+        val categoryType = arguments?.getInt("categoryType", 0) ?: 0
+
+        binding.categoryContentVp.setCurrentItem(categoryType, false)
+
         return binding.root
     }
 }

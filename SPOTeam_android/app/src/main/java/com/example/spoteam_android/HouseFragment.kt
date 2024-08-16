@@ -9,11 +9,13 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentHouseBinding
+import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.todolist.TodoListFragment
 import com.example.spoteam_android.ui.calendar.CalendarAddEventFragment
 import com.example.spoteam_android.ui.calendar.CalendarFragment
 //import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
+import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.InterestFragment
 import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
 import com.example.spoteam_android.ui.recruiting.RecruitingStudyFragment
@@ -35,6 +37,14 @@ class HouseFragment : Fragment() {
         icFindButton.setOnClickListener {
             // MainActivity의 switchFragment 메서드를 호출하여 SearchFragment로 전환
             (activity as MainActivity).switchFragment(SearchFragment())
+        }
+
+        binding.icAlarm.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, AlertFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+            (context as MainActivity).isOnCommunityHome(HomeFragment())
         }
 
         val bundle = Bundle()

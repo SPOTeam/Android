@@ -2,29 +2,38 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp">
 
-    <!--    프로필 이미지 변경    -->
-    <ImageView
-        android:id="@+id/community_content_comment_profile_iv"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_profile"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/community_content_comment_writer_tv"
+    <LinearLayout
+        android:id="@+id/writerInfo_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="익명"
-        android:textSize="25sp"
-        android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@id/community_content_comment_profile_iv"
-        app:layout_constraintTop_toTopOf="@id/community_content_comment_profile_iv" />
+        android:gravity="start|center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    <!--    프로필 이미지 변경    -->
+        <ImageView
+            android:id="@+id/community_content_comment_profile_iv"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_profile"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/community_content_comment_writer_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="익명"
+            android:textSize="14sp"
+            android:layout_marginStart="5dp"
+            app:layout_constraintStart_toEndOf="@id/community_content_comment_profile_iv"
+            app:layout_constraintTop_toTopOf="@id/community_content_comment_profile_iv" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/community_content_comment_str_tv"
@@ -32,90 +41,83 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="카카오 최종합격"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
         android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@id/community_content_comment_profile_iv"
-        app:layout_constraintTop_toBottomOf="@id/community_content_comment_profile_iv" />
+        app:layout_constraintStart_toStartOf="@id/writerInfo_ll"
+        app:layout_constraintTop_toBottomOf="@id/writerInfo_ll" />
 
     <TextView
-        android:id="@+id/community_content_comment_writeComment_tv"
+        android:id="@+id/community_writeReply_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="답글쓰기"
-        android:textSize="15sp"
+        android:textSize="12sp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="@id/community_content_comment_str_tv"
         app:layout_constraintTop_toBottomOf="@id/community_content_comment_str_tv" />
 
-    <TextView
-        android:id="@+id/community_content_comment_reply_badNum_tv"
+    <LinearLayout
+        android:id="@+id/unlike_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="6"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:layout_marginEnd="15dp"
-        android:textColor="@color/active_blue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/community_content_comment_writeComment_tv" />
+        app:layout_constraintTop_toTopOf="@id/community_writeReply_tv">
 
-    <!--    비추천 이미지 변경    -->
-    <ImageView
-        android:id="@+id/community_content_comment_reply_bad_unchecked_iv"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/ic_bad_unchecked"
-        android:foregroundGravity="center"
-        app:layout_constraintEnd_toStartOf="@id/community_content_comment_reply_badNum_tv"
-        app:layout_constraintTop_toTopOf="@id/community_content_comment_reply_badNum_tv" />
+        <!--    비추천 이미지 변경    -->
+        <ImageView
+            android:id="@+id/community_content_comment_bad_unchecked_iv"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_bad_unchecked"
+            android:foregroundGravity="center" />
 
-    <ImageView
-        android:id="@+id/community_content_comment_reply_bad_checked_iv"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/ic_bad_checked"
-        android:visibility="gone"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/community_content_comment_writeComment_tv" />
+        <ImageView
+            android:id="@+id/community_content_comment_bad_checked_iv"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_bad_checked"
+            android:visibility="gone"
+            android:foregroundGravity="center"
+            app:layout_constraintEnd_toEndOf="parent" />
 
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/community_content_comment_reply_goodNum_tv"
+    <LinearLayout
+        android:id="@+id/like_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="6"
-        android:textSize="16sp"
-        android:layout_marginEnd="15dp"
-        android:textColor="@color/active_blue"
-        app:layout_constraintEnd_toStartOf="@id/community_content_comment_reply_bad_unchecked_iv"
-        app:layout_constraintTop_toTopOf="@id/community_content_comment_writeComment_tv" />
+        android:layout_marginEnd="13dp"
+        app:layout_constraintEnd_toStartOf="@id/unlike_ll"
+        app:layout_constraintTop_toTopOf="@id/community_writeReply_tv">
 
+        <!--    추천 이미지 변경    -->
+        <ImageView
+            android:id="@+id/community_content_comment_good_unchecked_iv"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_like_unchecked"
+            android:foregroundGravity="center"
+            android:layout_marginEnd="2dp" />
 
-    <!--    추천 이미지 변경    -->
-    <ImageView
-        android:id="@+id/community_content_comment_reply_good_unchecked_iv"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/ic_like_unchecked"
-        android:layout_marginEnd="2dp"
-        app:layout_constraintEnd_toStartOf="@id/community_content_comment_reply_goodNum_tv"
-        app:layout_constraintTop_toTopOf="@id/community_content_comment_writeComment_tv" />
+        <!--    추천 이미지 변경    -->
+        <ImageView
+            android:id="@+id/community_content_comment_good_checked_iv"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_like_checked"
+            android:visibility="gone"
+            android:foregroundGravity="center"/>
 
-    <!--    추천 이미지 변경    -->
-    <ImageView
-        android:id="@+id/community_content_comment_reply_good_checked_iv"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/ic_like_checked"
-        android:visibility="gone"
-        android:layout_marginEnd="2dp"
-        app:layout_constraintEnd_toStartOf="@id/community_content_comment_reply_goodNum_tv"
-        app:layout_constraintTop_toTopOf="@id/community_content_comment_writeComment_tv" />
-
+        <TextView
+            android:id="@+id/community_content_comment_goodNum_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="6"
+            android:textSize="12sp"
+            android:textColor="@color/active_blue"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

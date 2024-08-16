@@ -76,6 +76,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
+        android:gravity="start|center"
         app:layout_constraintTop_toBottomOf="@id/content_summary_tv"
         app:layout_constraintEnd_toEndOf="@id/content_ll"
         app:layout_constraintStart_toStartOf="parent">
@@ -110,8 +111,8 @@
         <!--    댓글 아이콘 추가   -->
         <ImageView
             android:id="@+id/contetn_commentNum_iv"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
             android:src="@drawable/ic_comment"
             android:layout_gravity="center"
             app:layout_constraintStart_toStartOf="parent"
@@ -130,8 +131,8 @@
         <!--    시청 수 아이콘 추가   -->
         <ImageView
             android:id="@+id/content_viewNum_iv"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_view"
             android:layout_gravity="center"
             app:layout_constraintStart_toStartOf="parent"

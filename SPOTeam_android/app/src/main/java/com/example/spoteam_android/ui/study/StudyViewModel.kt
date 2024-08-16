@@ -2,8 +2,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.spoteam_android.ui.mypage.ThemePreferenceFragment.LoginchecklistAuthInterceptor
+import com.example.spoteam_android.RetrofitInstance
+import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,26 +29,39 @@ class StudyViewModel : ViewModel() {
         _profileImageUri.value = uri
         updateStudyRequest()
     }
+    private val _studyId = MutableLiveData<Int>()
+    val studyId: LiveData<Int> get() = _studyId
+    private val _studyImageUrl = MutableLiveData<String>()
+    val studyImageUrl: LiveData<String> get() = _studyImageUrl
+    private val _studyIntroduction = MutableLiveData<String>()
+    val studyIntroduction: LiveData<String> get() = _studyIntroduction
+
+    fun setStudyData(id: Int, imageUrl: String, studyIntroduction: String) {
+        _studyId.value = id
+        _studyImageUrl.value = imageUrl
+        _studyIntroduction.value = studyIntroduction
+    }
+
 
     fun setStudyData(
         title: String, goal: String, introduction: String, isOnline: Boolean, profileImage: String?,
         regions: List<String>?, maxPeople: Int, gender: Gender, minAge: Int, maxAge: Int, fee: Int
     ) {
-        val hasfee = fee > 0
+        val hasFee = fee > 0
         _studyRequest.value = StudyRequest(
-            themes = _themes.value ?: listOf(), // 현재 themes 값을 사용
+            themes = _themes.value ?: listOf(),
             title = title,
             goal = goal,
             introduction = introduction,
             isOnline = isOnline,
-            profileImage = profileImage,
+            profileImage = profileImage,  // Use the image URL or path here
             regions = regions,
             maxPeople = maxPeople,
             gender = gender,
             minAge = minAge,
             maxAge = maxAge,
             fee = fee,
-            hasfee = hasfee
+            hasFee = hasFee
         )
     }
 
@@ -61,32 +78,34 @@ class StudyViewModel : ViewModel() {
     }
 
     fun submitStudyData(memberId: Int) {
-        // Retrofit 인스턴스와 API 서비스 가져오기
-        val retrofit = getRetrofit()
-
-        val apiService = retrofit.create(StudyApiService::class.java)
-
-        // 현재 저장된 StudyRequest 데이터 가져오기
+        val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
         val studyData = _studyRequest.value
 
         if (studyData != null) {
-            // POST 요청 수행
-            apiService.submitStudyData(memberId, studyData).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        // 성공적으로 데이터가 전송된 경우
-                        Log.d("StudyViewModel", "Study data submitted successfully.")
-                    } else {
-                        // 서버 응답이 성공적이지 않은 경우
-                        Log.e("StudyViewModel", "Failed to submit study data. Response code: ${response.code()}")
-                    }
-                }
+            val studyRequestBody = createStudyRequestBody(studyData)
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    // 네트워크 요청 실패
-                    Log.e("StudyViewModel", "Error submitting study data: ${t.message}")
-                }
-            })
+            apiService.submitStudyData(memberId, studyRequestBody)
+                .enqueue(object : Callback<ApiResponsed> {
+                    override fun onResponse(call: Call<ApiResponsed>, response: Response<ApiResponsed>) {
+                        if (response.isSuccessful) {
+                            response.body()?.let { apiResponse ->
+                                Log.d("StudyViewModel", "Study data submitted successfully.")
+                                Log.d("StudyViewModel", "Response: ${Gson().toJson(apiResponse)}")
+                            } ?: run {
+                                Log.d("StudyViewModel", "No response body returned.")
+                            }
+                        } else {
+                            Log.e("StudyViewModel", "Failed to submit study data. Response code: ${response.code()}")
+                            response.errorBody()?.let { errorBody ->
+                                Log.e("StudyViewModel", "Error body: ${errorBody.string()}")
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ApiResponsed>, t: Throwable) {
+                        Log.e("StudyViewModel", "Error submitting study data: ${t.message}")
+                    }
+                })
         } else {
             Log.e("StudyViewModel", "No study data available to submit.")
         }
@@ -96,16 +115,10 @@ class StudyViewModel : ViewModel() {
         _studyRequest.value = _studyRequest.value?.copy(regions = null)
     }
 
-    private fun getRetrofit(): Retrofit {
-        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzMzc3ODk5LCJleHAiOjE3MjMzODE0OTl9.pe2trdaOvCD-OHt640kqX10umJ-WHiRezN42fzIZXgI"
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(LoginchecklistAuthInterceptor(authToken))
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+    private fun createStudyRequestBody(studyRequest: StudyRequest): RequestBody {
+        val gson = Gson()
+        val json = gson.toJson(studyRequest)
+        return json.toRequestBody("application/json".toMediaType())
     }
+
 }

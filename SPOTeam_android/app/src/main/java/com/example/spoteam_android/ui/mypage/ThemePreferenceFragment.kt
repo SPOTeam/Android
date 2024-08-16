@@ -6,31 +6,28 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.ComponentActivity.MODE_PRIVATE
-import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
+import com.example.spoteam_android.ThemeApiResponse
+import com.example.spoteam_android.ThemePreferences
 import com.example.spoteam_android.databinding.FragmentThemePreferenceBinding
 import com.example.spoteam_android.login.LoginApiService
-import com.example.spoteam_android.ui.study.IntroduceStudyFragment
+import com.example.spoteam_android.ui.study.StudyRegisterCompleteDialog
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
-import com.google.gson.annotations.SerializedName
-import okhttp3.OkHttpClient
-import okhttp3.Interceptor
-import okhttp3.Response as OkHttpResponse // 'OkHttpResponse'로 변경
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
-import retrofit2.Response as RetrofitResponse // 'RetrofitResponse'로 변경
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.Response as RetrofitResponse
 
 class ThemePreferenceFragment : Fragment() {
 
     private lateinit var binding: FragmentThemePreferenceBinding
+    private val selectedThemes = mutableListOf<String>() // 선택된 테마를 저장할 리스트
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,61 +35,86 @@ class ThemePreferenceFragment : Fragment() {
     ): View? {
         binding = FragmentThemePreferenceBinding.inflate(inflater, container, false)
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val sharedPreferences =
+            requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
 
         if (email != null) {
             val memberId = sharedPreferences.getInt("${email}_memberId", -1)
 
             if (memberId != -1) {
-                fetchThemes(memberId)
+                fetchThemes(memberId) // GET 요청으로 테마 가져오기
             } else {
                 Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT).show()
             }
         } else {
             Toast.makeText(requireContext(), "Email not provided", Toast.LENGTH_SHORT).show()
         }
-        binding.fragmentThemePreferenceBackBt.setOnClickListener {
-            goToPreviusFragment()
+
+        // 테마 수정 버튼 클릭 시
+        binding.themeEditIv.setOnClickListener {
+            binding.buttonLayout.visibility = View.VISIBLE
+            binding.fragmentThemePreferenceFlexboxLayout.visibility = View.GONE
+            binding.activityChecklistChipGroup.visibility = View.VISIBLE
+            setChipGroup() // Chip 그룹 설정
         }
+
+        // POST 요청을 보내는 버튼 클릭 시
+        binding.editThemeFinishBt.setOnClickListener {
+            if (email != null) {
+                val memberId = sharedPreferences.getInt("${email}_memberId", -1)
+                if (memberId != -1) {
+                    postThemesToServer(memberId, selectedThemes) // POST 요청으로 테마 전송
+
+                } else {
+                    Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+
         return binding.root
     }
 
     private fun fetchThemes(memberId: Int) {
-        val retrofit = getRetrofit()
-        val service = retrofit.create(LoginApiService::class.java)
+        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
 
-        service.getThemes(memberId).enqueue(object : Callback<ApiResponse> {
-            override fun onResponse(call: Call<ApiResponse>, response: RetrofitResponse<ApiResponse>) {
+        service.getThemes(memberId).enqueue(object : Callback<ThemeApiResponse> {
+            override fun onResponse(
+                call: Call<ThemeApiResponse>,
+                response: RetrofitResponse<ThemeApiResponse>
+            ) {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse != null && apiResponse.isSuccess) {
-                        val themes = apiResponse.result.themes
+                        val themes = apiResponse.result.themes // 서버에서 받아오는 테마 리스트
                         if (themes.isNotEmpty()) {
                             displayThemes(themes)
-                        } else {
-
                         }
                     } else {
                         val errorMessage = apiResponse?.message ?: "알 수 없는 오류 발생"
                         Log.e("ThemePreferenceFragment", "테마 가져오기 실패: $errorMessage")
-                        Toast.makeText(requireContext(), "테마 가져오기 실패: $errorMessage", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "테마 가져오기 실패: $errorMessage",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "응답 실패"
                     Log.e("ThemePreferenceFragment", "테마 가져오기 실패: $errorMessage")
-                    Toast.makeText(requireContext(), "테마 가져오기 실패: $errorMessage", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "테마 가져오기 실패: $errorMessage", Toast.LENGTH_LONG)
+                        .show()
                 }
             }
 
-            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ThemeApiResponse>, t: Throwable) {
                 Log.e("ThemePreferenceFragment", "테마 가져오기 오류", t)
-                Toast.makeText(requireContext(), "테마 가져오기 오류: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "테마 가져오기 오류: ${t.message}", Toast.LENGTH_LONG)
+                    .show()
             }
         })
     }
-
-
 
     private fun displayThemes(themes: List<String>) {
         val flexboxLayout = binding.fragmentThemePreferenceFlexboxLayout
@@ -130,48 +152,68 @@ class ThemePreferenceFragment : Fragment() {
         }
     }
 
+    private fun setChipGroup() {
+        // 초기 버튼 비활성화
+        binding.editThemeFinishBt.isEnabled = false
 
-    private fun goToPreviusFragment() {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, MyPageFragment()) // 변경할 Fragment로 교체
-        transaction.addToBackStack(null) // 백스택에 추가
-        transaction.commit()
-    }
+        // Chip 선택 상태 리스너
+        val chipCheckedChangeListener =
+            CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                val chip = buttonView as Chip
+                val chipText = chip.text.toString()
 
+                // Text 처리 로직
+                val processedText = when {
+                    chipText.contains("전공") -> chipText.replace("/", "및")
+                    else -> chipText.replace("/", "").replace(" ", "") // 공백 및 슬래시를 제거
+                }
 
+                if (isChecked) {
+                    if (processedText !in selectedThemes) { // processedText가 리스트에 없을 때만 추가
+                        selectedThemes.add(processedText)
+                    }
+                } else {
+                    selectedThemes.remove(processedText) // 선택 해제 시 리스트에서 제거
+                }
 
+                // 선택된 칩이 하나라도 있으면 버튼 활성화
+                binding.editThemeFinishBt.isEnabled = selectedThemes.isNotEmpty()
 
+                Log.d("ThemePreferenceFragment", "Selected Themes: $selectedThemes")
+            }
 
-    private fun getRetrofit(): Retrofit {
-        val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NywidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzMzc2NDk3LCJleHAiOjE3MjMzODAwOTd9.xxtr97HO-u1VW1dAu8fRyobh8D7KywUk-6akBE4RE1U"
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(LoginchecklistAuthInterceptor(authToken))
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    class LoginchecklistAuthInterceptor(private val authToken: String) : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): OkHttpResponse { // 'OkHttpResponse'로 변경
-            val request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer $authToken")
-                .build()
-            return chain.proceed(request)
+        // Chip 그룹의 모든 칩에 리스너 설정
+        for (i in 0 until binding.activityChecklistChipGroup.childCount) {
+            val chip = binding.activityChecklistChipGroup.getChildAt(i) as? Chip
+            chip?.setOnCheckedChangeListener(chipCheckedChangeListener)
         }
     }
-}
-data class ApiResponse(
-    val isSuccess: Boolean,
-    val code: String,
-    val message: String,
-    val result: ThemeResult
-)
 
-data class ThemeResult(
-    val memberId: Int,
-    val themes: List<String>
-)
+
+
+    private fun postThemesToServer(memberId: Int, themes: List<String>) {
+        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
+        val themePreferences = ThemePreferences(themes) // 서버에 보낼 테마 리스트
+
+        service.postThemes(memberId, themePreferences).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: RetrofitResponse<Void>) {
+                if (response.isSuccessful) {
+                    Log.d("ThemePreferenceFragment", "Themes POST request success")
+                    showCompletionDialog()
+                } else {
+                    Log.e("ThemePreferenceFragment", "Themes POST request failed with code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("ThemePreferenceFragment", "Themes POST request failure", t)
+            }
+        })
+    }
+
+    private fun showCompletionDialog() {
+        val dialog = ThemeUploadCompleteDialog(requireContext())
+        dialog.start(parentFragmentManager)
+    }
+
+}
