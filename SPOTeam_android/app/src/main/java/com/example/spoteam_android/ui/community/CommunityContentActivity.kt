@@ -1,6 +1,5 @@
 package com.example.spoteam_android.ui.community
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuInflater
@@ -9,15 +8,8 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.AlertInfo
-import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ActivityCommunityContentBinding
-import com.example.spoteam_android.ui.alert.AlertMultiViewRVAdapter
-import com.example.spoteam_android.ui.alert.AlertMultiViewRVAdapter.Companion.ENROLL
-import com.example.spoteam_android.ui.alert.AlertMultiViewRVAdapter.Companion.LIVE
-import com.example.spoteam_android.ui.alert.AlertMultiViewRVAdapter.Companion.UPDATE
-import com.example.spoteam_android.ui.alert.CheckAppliedStudyFragment
 import com.example.spoteam_android.ui.community.contentComment.ContentCommentMultiViewRVAdapter
 import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
 import retrofit2.Call
@@ -64,19 +56,17 @@ class CommunityContentActivity : AppCompatActivity() {
         }
 
         binding.communityContentLikeNumCheckedIv.setOnClickListener{
-            deleteLike()
+            deleteContentLike()
         }
 
         binding.communityContentLikeNumUncheckedIv.setOnClickListener{
-            postLike()
+            postContentLike()
         }
 
-        if (postId != null) {
-            fetchContentInfo()
-        }
+        fetchContentInfo()
     }
 
-    private fun postLike() {
+    private fun postContentLike() {
         CommunityRetrofitClient.instance.postContentLike(postId, memberId)
             .enqueue(object : Callback<ContentLikeResponse> {
                 override fun onResponse(
@@ -103,7 +93,7 @@ class CommunityContentActivity : AppCompatActivity() {
             })
     }
 
-    private fun deleteLike() {
+    private fun deleteContentLike() {
         CommunityRetrofitClient.instance.deleteContentLike(postId, memberId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
                 override fun onResponse(
@@ -157,11 +147,9 @@ class CommunityContentActivity : AppCompatActivity() {
                     if (response.isSuccessful && response.body()?.isSuccess == "true") {
                         Log.d("WriteComment", "${response.body()!!.result}")
                         parentCommentId = 0 // postCommentID 초기화
-
                         // 어댑터의 상태 초기화
                         resetAdapterState()
                         fetchContentInfo()
-
                     } else {
                         Log.d("WriteComment", response.body()!!.message)
                     }
@@ -210,12 +198,10 @@ class CommunityContentActivity : AppCompatActivity() {
                             val commentInfo = contentInfo.commentResponses.comments
                             Log.d("Content", "items: $contentInfo")
                             Log.d("Comment", "items: $commentInfo")
-                            if (contentInfo != null) {
-                                initContentInfo(contentInfo)
+                            initContentInfo(contentInfo)
 
-                                val sortedComments = sortComments(commentInfo)
-                                initMultiViewRecyclerView(sortedComments)
-                            }
+                            val sortedComments = sortComments(commentInfo)
+                            initMultiViewRecyclerView(sortedComments)
                         } else {
                             showError(contentResponse?.message)
                         }
@@ -232,6 +218,114 @@ class CommunityContentActivity : AppCompatActivity() {
 
     private fun showError(message: String?) {
         Toast.makeText(this, "Error: $message", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun postCommentLike(commentId : Int) {
+        CommunityRetrofitClient.instance.postCommentLike(commentId, memberId)
+            .enqueue(object : Callback<LikeCommentResponse> {
+                override fun onResponse(
+                    call: Call<LikeCommentResponse>,
+                    response: Response<LikeCommentResponse>
+                ) {
+                    Log.d("LikeComment", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val likeResponse = response.body()
+                        Log.d("LikeComment", "responseBody: ${likeResponse?.isSuccess}")
+                        if (likeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                        } else {
+                            showError(likeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<LikeCommentResponse>, t: Throwable) {
+                    Log.e("LikeComment", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun deleteCommentLike(commentId : Int) {
+        CommunityRetrofitClient.instance.deleteCommentLike(commentId, memberId)
+            .enqueue(object : Callback<UnLikeCommentResponse> {
+                override fun onResponse(
+                    call: Call<UnLikeCommentResponse>,
+                    response: Response<UnLikeCommentResponse>
+                ) {
+                    Log.d("UnLikeComment", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val unLikeResponse = response.body()
+                        Log.d("UnLikeComment", "responseBody: ${unLikeResponse?.isSuccess}")
+                        if (unLikeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                        } else {
+                            showError(unLikeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<UnLikeCommentResponse>, t: Throwable) {
+                    Log.e("UnLikeComment", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun postCommentDisLike(commentId : Int) {
+        CommunityRetrofitClient.instance.postCommentDisLike(commentId, memberId)
+            .enqueue(object : Callback<DisLikeCommentResponse> {
+                override fun onResponse(
+                    call: Call<DisLikeCommentResponse>,
+                    response: Response<DisLikeCommentResponse>
+                ) {
+                    Log.d("DisLikeComment", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val likeResponse = response.body()
+                        Log.d("DisLikeComment", "responseBody: ${likeResponse?.isSuccess}")
+                        if (likeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                        } else {
+                            showError(likeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<DisLikeCommentResponse>, t: Throwable) {
+                    Log.e("DisLikeComment", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun deleteCommentDisLike(commentId : Int) {
+        CommunityRetrofitClient.instance.deleteCommentDisLike(commentId, memberId)
+            .enqueue(object : Callback<UnDisLikeCommentResponse> {
+                override fun onResponse(
+                    call: Call<UnDisLikeCommentResponse>,
+                    response: Response<UnDisLikeCommentResponse>
+                ) {
+                    Log.d("UnDisLikeComment", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val unLikeResponse = response.body()
+                        Log.d("UnDisLikeComment", "responseBody: ${unLikeResponse?.isSuccess}")
+                        if (unLikeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                        } else {
+                            showError(unLikeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<UnDisLikeCommentResponse>, t: Throwable) {
+                    Log.e("UnDisLikeComment", "Failure: ${t.message}", t)
+                }
+            })
     }
 
     private fun initContentInfo(contentInfo: ContentInfo) {
@@ -264,12 +358,20 @@ class CommunityContentActivity : AppCompatActivity() {
                 parentCommentId = parentId
             }
 
-            override fun onLikeClick(view: View, position: Int, parentCommentId: Int) {
-
+            override fun onLikeClick(view: View, position: Int, commentId: Int) {
+                deleteCommentLike(commentId)
             }
 
-            override fun onUnLikeClick(view: View, position: Int, parentCommentId: Int) {
-                TODO("Not yet implemented")
+            override fun onUnLikeClick(view: View, position: Int, commentId: Int) {
+                postCommentLike(commentId)
+            }
+
+            override fun onDisLikeClick(view: View, position: Int, commentId: Int) {
+                deleteCommentDisLike(commentId)
+            }
+
+            override fun onUnDisLikeClick(view: View, position: Int, commentId: Int) {
+                postCommentDisLike(commentId)
             }
         }
     }
@@ -293,6 +395,7 @@ class CommunityContentActivity : AppCompatActivity() {
             sortedList.addAll(replies)
         }
         Log.d("sortedList", "$sortedList")
+        Log.d("sortedListLength", "${sortedList.size}")
 
         return sortedList
     }

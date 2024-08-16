@@ -220,6 +220,48 @@ data class LikeCommentResponse(
 data class LikeCommentInfo (
     val commentId : Int,
     val likeCount : Int,
-    val disLikeCount : String,
+    val disLikeCount : Int
+)
+
+/************댓글 좋아요 취소***********/
+data class UnLikeCommentResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: UnLikeCommentInfo
+)
+
+data class UnLikeCommentInfo (
+    val commentId : Int,
+    val likeCount : Int,
+    val disLikeCount : Int
+)
+
+/************댓글 싫어요 완료***********/
+data class DisLikeCommentResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: LikeCommentInfo
+)
+
+data class DisLikeCommentInfo (
+    val commentId : Int,
+    val likeCount : Int,
+    val disLikeCount : Int
+)
+
+/************댓글 싫어요 취소***********/
+data class UnDisLikeCommentResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: UnLikeCommentInfo
+)
+
+data class UnDisLikeCommentInfo (
+    val commentId : Int,
+    val likeCount : Int,
+    val disLikeCount : Int
 )
 
