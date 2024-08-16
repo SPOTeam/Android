@@ -16,12 +16,22 @@
         tools:context=".MainActivity">
 
         <ImageView
+            android:id="@+id/ic_spot_logo_ic"
+            android:layout_width="23dp"
+            android:layout_height="25dp"
+            android:src="@drawable/study_spot_logo"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_spot_logo"
+            app:layout_constraintStart_toEndOf="@+id/ic_spot_logo"
+            app:layout_constraintTop_toTopOf="@+id/ic_spot_logo" />
+
+
+        <ImageView
             android:id="@+id/ic_spot_logo"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="74dp"
+            android:layout_height="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
-            android:src="@drawable/study_spot_logo"
+            android:src="@drawable/fragment_house_spot_logo_tx"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -31,8 +41,8 @@
 
         <ImageView
             android:id="@+id/ic_alarm"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginEnd="30dp"
             android:src="@drawable/activity_main_ic_alaram"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,16 +50,16 @@
 
         <ImageView
             android:id="@+id/ic_find"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/activity_main_ic_find"
             app:layout_constraintEnd_toStartOf="@+id/ic_alarm"
             app:layout_constraintTop_toTopOf="@+id/ic_spot_logo" />
 
         <ImageView
             android:id="@+id/ic_sun"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
             android:layout_marginTop="60dp"
             android:src="@drawable/activity_main_ic_sun"
             app:layout_constraintStart_toStartOf="@+id/ic_spot_logo"
@@ -59,46 +69,49 @@
             android:id="@+id/tx_temperature"
             android:layout_width="70dp"
             android:layout_height="30dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:text="31.0°C"
             android:textColor="@color/black"
             android:textSize="20dp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_sun"
             app:layout_constraintStart_toEndOf="@+id/ic_sun"
             app:layout_constraintTop_toTopOf="@+id/ic_sun" />
 
         <TextView
             android:id="@+id/tx_explain_weather"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="너무 덥네요!\n오늘은 카공을 추천해요"
-            android:textColor="@color/black"
-            android:textSize="10dp"
+            android:text="시원한 스팟에서 \n집중력을 발휘해보자 !"
+            android:textColor="@color/gray_03"
+            android:textSize="12dp"
             app:layout_constraintStart_toStartOf="@+id/ic_sun"
             app:layout_constraintTop_toBottomOf="@+id/ic_sun" />
 
 
         <ImageButton
             android:id="@+id/imgbtn_go_board"
-            android:layout_width="172dp"
-            android:layout_height="73dp"
-            android:layout_marginStart="50dp"
-            android:background="@color/background_gray"
+            android:layout_width="210dp"
+            android:layout_height="90dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/white"
+            android:scaleType="fitCenter"
             android:src="@drawable/activity_main_imgbtn_go_board"
-            app:layout_constraintStart_toEndOf="@+id/tx_temperature"
-            app:layout_constraintTop_toTopOf="@+id/tx_temperature"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ic_sun" />
 
         <ImageButton
             android:id="@+id/imgbtn_location"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:background="@color/white"
             android:scaleType="centerCrop"
             android:src="@drawable/activity_main_imgbtn_location"
             app:layout_constraintStart_toStartOf="@+id/tx_explain_weather"
-            app:layout_constraintTop_toBottomOf="@+id/tx_explain_weather"/>
+            app:layout_constraintTop_toBottomOf="@+id/tx_explain_weather" />
 
         <ImageButton
             android:id="@+id/imgbtn_board"
@@ -120,7 +133,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/activity_main_imgbtn_union"
             app:layout_constraintStart_toEndOf="@+id/imgbtn_board"
-            app:layout_constraintTop_toTopOf="@+id/imgbtn_location"/>
+            app:layout_constraintTop_toTopOf="@+id/imgbtn_location" />
 
         <ImageButton
             android:id="@+id/imgbtn_jjim"
@@ -137,7 +150,7 @@
             android:id="@+id/tx_interest_study"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:text="관심지역 스터디 BEST"
             android:textColor="@color/black"
             android:textSize="20sp"

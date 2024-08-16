@@ -93,17 +93,21 @@
         app:layout_constraintTop_toBottomOf="@+id/tx_end_date_time"
         tools:layout_editor_absoluteX="4dp" />
 
-    <ImageButton
-        android:id="@+id/saveButton"
+    <android.widget.Button
+        android:id="@+id/fragment_introduce_study_bt"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="20dp"
-        android:background="@color/white"
-        android:scaleType="centerCrop"
-        android:src="@drawable/fragment_calendar_add_event_btn_add"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button_background"
+        android:enabled="false"
+        android:text="추가"
+        android:textColor="@drawable/button_textcolor"
+        android:textSize="17sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="10dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -59,12 +59,26 @@ class HouseFragment : Fragment() {
             (activity as MainActivity).switchFragment(TodoListFragment())
         }
 
+        binding.imgbtnUnion.setOnClickListener{
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, RecruitingStudyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.imgbtnJjim.setOnClickListener{
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, MyInterestStudyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
         val txintereststudy: TextView = binding.root.findViewById(R.id.tx_interest_study)
         txintereststudy.setOnClickListener {
             //스터디 참여하기 팝업으로 이동
             bundle.putString("source", "AnyWhere")
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, CalendarFragment())
+                .replace(R.id.main_frm, InterestFragment())
                 .addToBackStack(null)
                 .commit()
         }
