@@ -42,13 +42,11 @@
     <ScrollView
         android:id="@+id/content_sv"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:overScrollMode="never"
+        android:layout_height="wrap_content"
         android:nestedScrollingEnabled="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/community_sp_iv"
-        app:layout_constraintBottom_toTopOf="@id/community_comment_content_tv">
+        app:layout_constraintTop_toTopOf="@id/community_sp_iv">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -233,30 +231,27 @@
                     android:textColor="@color/selector_blue" />
 
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/community_sp2_iv"
-                android:layout_width="0dp"
-                android:layout_height="2dp"
-                android:src="@drawable/line_img"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/community_content_content_info_ll"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/content_comment_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/community_sp2_iv"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:overScrollMode="never"
-                android:nestedScrollingEnabled="false"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
+    <ImageView
+        android:id="@+id/community_sp2_iv"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:src="@drawable/line_img"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content_sv"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/content_comment_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/community_sp2_iv"
+        app:layout_constraintBottom_toTopOf="@id/community_comment_content_tv"/>
 
     <LinearLayout
         android:id="@+id/content_write_ll"

@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
         setupButtonListeners()
     }
 
-    private fun removeNavViewFragment() {
+    fun removeNavViewFragment() {
         supportFragmentManager.beginTransaction()
             .remove(CategoryNavViewFragment())
             .commitAllowingStateLoss()
@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.blur_overlay_container).visibility = View.VISIBLE
     }
 
-    private fun hideBlur() {
+    fun hideBlur() {
         findViewById<View>(R.id.blur_overlay_container).visibility = View.GONE
     }
 

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.databinding.FragmentCalendarBinding
+import com.example.spoteam_android.ui.study.quiz.HostMakeQuizFragment
 import java.util.*
 
 class CalendarFragment : Fragment() {
@@ -38,7 +39,8 @@ class CalendarFragment : Fragment() {
 
         eventAdapter = EventAdapter(emptyList(), { event ->
             // 여기에 출석체크 넣으세요!!
-            (activity as MainActivity).switchFragment(CalendarAddEventFragment())
+            val hostMakeQuizFragment = HostMakeQuizFragment()
+            hostMakeQuizFragment.show(parentFragmentManager, "HostMakeQuizFragment")
         }, false)
 
         eventsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
