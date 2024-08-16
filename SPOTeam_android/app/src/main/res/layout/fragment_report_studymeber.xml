@@ -211,8 +211,7 @@
                     android:id="@+id/crew8_profile"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/ic_normal_study_profile"
-                    android:background="@drawable/user_avatar_background" />
+                    android:src="@drawable/ic_normal_study_profile" />
 
                 <TextView
                     android:id="@+id/crew8_name"

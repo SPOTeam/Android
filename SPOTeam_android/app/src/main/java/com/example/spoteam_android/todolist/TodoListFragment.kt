@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -14,6 +15,7 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentTodoListBinding
 import com.example.spoteam_android.ui.calendar.EventAdapter
 import com.example.spoteam_android.ui.calendar.EventViewModel
+import java.util.Calendar
 
 class TodoListFragment : Fragment() {
 
@@ -27,15 +29,14 @@ class TodoListFragment : Fragment() {
     private lateinit var layoutManager: LinearLayoutManager
     private val eventViewModel: EventViewModel by activityViewModels()
     private lateinit var eventAdapter: EventAdapter
+    private val todoList = mutableListOf<String>()
+    private var selectedImageView: ImageView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTodoListBinding.inflate(inflater, container, false)
-        val view = inflater.inflate(R.layout.fragment_todo_list, container, false)
-
-
 
         eventsRecyclerView = binding.eventrecyclerviewto
 
@@ -80,8 +81,27 @@ class TodoListFragment : Fragment() {
             }
         })
 
+        val userImageViews = listOf(
+            binding.imvStudyowner,
+            binding.imvStudyone1,
+            binding.imvStudyone2,
+            binding.imvStudyone3,
+            binding.imvStudyone4,
+            binding.imvStudyone5,
+            binding.imvStudyone6,
+            binding.imvStudyone7,
+            binding.imvStudyone8,
+            binding.imvStudyone9,
+            binding.imvStudyone10
+        ).filterNotNull()
 
 
+
+        userImageViews.forEach { imageView ->
+            imageView.setOnClickListener {
+                highlightImageView(imageView)
+            }
+        }
 
         eventAdapter = EventAdapter(emptyList(), { /* 클릭 이벤트 처리 (필요시 추가) */ }, true)
         eventsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -94,18 +114,43 @@ class TodoListFragment : Fragment() {
         })
 
         // 투두 리스트 어댑터 설정
-        myTodoAdapter = TodoAdapter(emptyList())
-        rvMyTodoList.adapter = myTodoAdapter
+        myTodoAdapter = TodoAdapter(requireContext(), todoList)
 
-        // TodoViewModel의 투두 리스트를 관찰하여 RecyclerView 업데이트
-        todoViewModel.myTodos.observe(viewLifecycleOwner, Observer { todos ->
-            myTodoAdapter.updateTodos(todos)
-        })
+        binding.rvMyTodoList.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvMyTodoList.adapter = myTodoAdapter
+
+        binding.imgbtnPlusTodolist.setOnClickListener {
+            myTodoAdapter.addTodo() // 항목 추가
+            binding.rvMyTodoList.scrollToPosition(todoList.size - 1) // 마지막 항목으로 스크롤
+        }
 
         return binding.root
     }
 
     private fun onDateSelected(selectedDate: String) {
-        // 날짜 선택 시 호출될 동작 정의
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작합니다.
+
+        try {
+            val day = selectedDate.toInt() // selectedDate를 정수형으로 변환 (날짜를 나타냄)
+
+            // EventViewModel을 사용하여 선택한 날짜의 일정을 로드
+            eventViewModel.loadEvents(year, month, day)
+
+            // 이벤트 로드 후, UI에 업데이트
+            eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
+                Log.d("TodoListFragment", "Events for $year-$month-$day: ${events.size} events")
+                eventAdapter.updateEvents(events)
+            })
+        } catch (e: NumberFormatException) {
+            Log.e("TodoListFragment", "Invalid date format: $selectedDate")
+        }
+    }
+
+    private fun highlightImageView(imageView: ImageView) {
+        selectedImageView?.setBackgroundResource(0)
+        imageView.setBackgroundResource(R.drawable.selected_border_blue)  // 선택된 ImageView에 파란 테두리 설정
+        selectedImageView = imageView  // 현재 선택된 ImageView 업데이트
     }
 }

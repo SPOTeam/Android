@@ -11,8 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.todolist.TodoListFragment
 import com.example.spoteam_android.ui.calendar.CalendarAddEventFragment
+import com.example.spoteam_android.ui.calendar.CalendarFragment
 //import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
+import com.example.spoteam_android.ui.interestarea.InterestFragment
+import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
+import com.example.spoteam_android.ui.recruiting.RecruitingStudyFragment
 
 class HouseFragment : Fragment() {
 
@@ -50,7 +54,7 @@ class HouseFragment : Fragment() {
             //스터디 참여하기 팝업으로 이동
             bundle.putString("source", "AnyWhere")
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, interestFragment)
+                .replace(R.id.main_frm, CalendarFragment())
                 .addToBackStack(null)
                 .commit()
         }
@@ -60,7 +64,7 @@ class HouseFragment : Fragment() {
             //스터디 참여하기 팝업으로 이동
             bundle.putString("source", "AnyWhere")
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, interestFragment)
+                .replace(R.id.main_frm, CalendarAddEventFragment())
                 .addToBackStack(null)
                 .commit()
         }

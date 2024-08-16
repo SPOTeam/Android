@@ -7,18 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CalendarView
 import android.widget.ImageButton
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.MainActivity
-import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentCalendarBinding
-import com.example.spoteam_android.todolist.TodoAdapter
-import com.example.spoteam_android.todolist.TodoListFragment
-import com.example.spoteam_android.todolist.TodoViewModel
 import java.util.*
 
 class CalendarFragment : Fragment() {

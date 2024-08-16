@@ -4,21 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="?attr/actionBarSize">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/spot_logo"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="24dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="37dp"
         android:src="@drawable/study_spot_logo"
-        app:layout_constraintStart_toStartOf="@+id/interest_study_bold"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ic_alarm_recruiting"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginEnd="30dp"
         android:src="@drawable/activity_main_ic_alaram"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,8 +27,8 @@
 
     <ImageView
         android:id="@+id/ic_find_recruiting"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/activity_main_ic_find"
         app:layout_constraintEnd_toStartOf="@+id/ic_alarm_recruiting"
         app:layout_constraintTop_toTopOf="@+id/spot_logo" />
@@ -36,14 +37,14 @@
         android:id="@+id/interest_study_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="250dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="108dp"
         android:text="모집중 스터디"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spot_logo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
@@ -66,6 +67,7 @@
         android:layout_height="40dp"
         android:layout_marginEnd="130dp"
         android:src="@drawable/interest_fragment_study_setcondition_deactivate"
+        app:layout_constraintBottom_toBottomOf="@+id/check_amount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/check_amount" />
 
@@ -84,7 +86,7 @@
         android:id="@+id/recruiting_study_reyclerview"
         android:layout_width="match_parent"
         android:layout_height="450dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

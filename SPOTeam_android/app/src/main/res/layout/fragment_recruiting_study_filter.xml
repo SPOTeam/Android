@@ -43,10 +43,10 @@
             <Spinner
                 android:id="@+id/gender_spinner"
                 android:layout_width="100dp"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_gravity="end|center"
                 android:layout_marginEnd="15dp"
-                android:background="@drawable/gender_spinner_background"
+                android:background="@drawable/my_spinner_background"
                 android:spinnerMode="dropdown" />
 
 
@@ -135,9 +135,9 @@
         <FrameLayout
             android:id="@+id/frameLayout_new"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout2"
-            android:background="@drawable/interest_filter_frame_layout_bottom_border">
+            android:layout_height="180dp"
+            android:background="@drawable/interest_filter_frame_layout_bottom_border"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
 
             <TextView
                 android:id="@+id/tx_activity"
@@ -155,9 +155,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|bottom"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="80dp"
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
@@ -167,6 +167,7 @@
                     android:layout_height="wrap_content"
                     android:text="온라인"
                     android:textColor="@drawable/chip_text_selector"
+                    android:textSize="15sp"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
                     app:chipStrokeColor="@color/active_blue"
@@ -179,12 +180,52 @@
                     android:layout_height="wrap_content"
                     android:text="오프라인"
                     android:textColor="@drawable/chip_text_selector"
+                    android:textSize="15sp"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
                     app:chipStrokeColor="@color/active_blue"
-                    app:chipStrokeWidth="1dp" />
+                    app:chipStrokeWidth="1dp"/>
 
             </com.google.android.material.chip.ChipGroup>
+
+            <android.widget.Button
+                android:id="@+id/btn_add_area"
+                android:layout_width="86dp"
+                android:layout_height="34dp"
+                android:layout_gravity="end|bottom"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="88dp"
+                android:background="@drawable/button_background"
+                android:text="지역 추가"
+                android:textColor="@drawable/button_textcolor"
+                android:textSize="14sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fragment_online_study_location_plus_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/fragment_online_study_location_caution_tv">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/location_chip"
+                    style="@style/CustomChipCloseStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="100dp"
+                    android:textSize="15sp"
+                    android:text="경기 안산시 상록구 사동"
+                    android:visibility="gone"
+                    app:closeIconVisible="true" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
 
         <FrameLayout
@@ -210,7 +251,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|bottom"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 app:singleSelection="true">
@@ -221,6 +262,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="있음"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -233,6 +275,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="없음"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -243,12 +286,15 @@
 
             <EditText
                 android:id="@+id/edittext1"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_width="65dp"
+                android:layout_height="35dp"
                 android:layout_gravity="end|bottom"
                 android:layout_marginStart="100dp"
                 android:layout_marginEnd="70dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:background="@drawable/edittext_rounded_corner_rectangle"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="number"
@@ -259,10 +305,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="25dp"
                 android:text="원 이하"
-                android:textColor="@color/gray"
+                android:textColor="#8E8E8E"
                 android:textSize="16sp"
                 android:visibility="gone" />
 
@@ -304,6 +350,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="어학"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -317,6 +364,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="자격증"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -330,6 +378,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="공모전"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -343,6 +392,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="취업"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -356,6 +406,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="토론"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -369,6 +420,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="기타"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -382,6 +434,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="시사/뉴스"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -395,6 +448,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="자율학습"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -408,6 +462,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="프로젝트"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -421,6 +476,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="전공/진로학습"
+                    android:textSize="15sp"
                     android:textColor="@drawable/chip_text_selector"
                     app:checkedIconVisible="false"
                     app:chipBackgroundColor="@drawable/chip_background_selector"
@@ -431,26 +487,21 @@
 
         </FrameLayout>
 
-        <ImageButton
-            android:id="@+id/imageButton"
+        <android.widget.Button
+            android:id="@+id/fragment_introduce_study_bt"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:scaleType="centerInside"
-            android:src="@drawable/interest_filter_search_result_imgbtn"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout4" />
-
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="@color/white"
-            android:scaleType="centerInside"
-            android:src="@drawable/interest_filter_search_result_imgbtn"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout4" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_background"
+            android:text="검색 결과 보기"
+            android:textColor="@drawable/button_textcolor"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout4"
+            android:enabled="false"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
