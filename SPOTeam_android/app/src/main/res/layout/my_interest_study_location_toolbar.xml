@@ -36,17 +36,6 @@
             app:layout_constraintStart_toEndOf="@+id/ic_back"
             app:layout_constraintTop_toTopOf="@+id/ic_back" />
 
-        <ImageButton
-            android:id="@+id/toolbar_icon"
-            android:layout_width="80dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="15dp"
-            android:background="@color/white"
-            android:scaleType="fitCenter"
-            android:src="@drawable/imgbtn_reset_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/toolbar_title" />
-        <!--            android:background="?attr/selectableItemBackgroundBorderless"-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.appcompat.widget.Toolbar>

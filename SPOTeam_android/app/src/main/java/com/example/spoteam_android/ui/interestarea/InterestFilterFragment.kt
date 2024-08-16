@@ -1,7 +1,6 @@
-package com.example.spoteam_android
+package com.example.spoteam_android.ui.interestarea
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,20 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentInterestFilterBinding
-import com.example.spoteam_android.search.ApiResponse
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.slider.RangeSlider
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class InterestFilterFragment : Fragment() {
 
@@ -84,13 +76,12 @@ class InterestFilterFragment : Fragment() {
         ageRangeSlider.valueFrom = 18f
         ageRangeSlider.valueTo = 60f
         ageRangeSlider.stepSize = 1f
-        ageRangeSlider.values = listOf(18f, 25f)
+        ageRangeSlider.values = listOf(18f, 60f)
 
         ageRangeSlider.addOnChangeListener { slider, _, _ ->
             val values = slider.values
             minValueText.text = values[0].toInt().toString()
             maxValueText.text = values[1].toInt().toString()
-
         }
 
         val chipGroup1 = binding.chipGroup1

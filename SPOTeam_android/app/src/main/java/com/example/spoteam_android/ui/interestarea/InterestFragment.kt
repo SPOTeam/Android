@@ -1,7 +1,5 @@
-package com.example.spoteam_android
+package com.example.spoteam_android.ui.interestarea
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,12 +11,13 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.spoteam_android.BoardAdapter
+import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentInterestBinding
-import com.example.spoteam_android.databinding.FragmentSearchBinding
 import com.example.spoteam_android.search.ApiResponse
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call

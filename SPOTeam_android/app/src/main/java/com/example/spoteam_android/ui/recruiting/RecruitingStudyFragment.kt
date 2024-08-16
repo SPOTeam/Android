@@ -1,6 +1,5 @@
-package com.example.spoteam_android
+package com.example.spoteam_android.ui.recruiting
 
-import RecruitingStudyFilterFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,10 @@ import android.widget.ImageView
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.spoteam_android.BoardAdapter
+import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentRecruitingStudyBinding
 
 class RecruitingStudyFragment : Fragment() {
