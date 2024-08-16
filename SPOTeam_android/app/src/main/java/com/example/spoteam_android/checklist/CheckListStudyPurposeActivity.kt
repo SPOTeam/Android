@@ -34,6 +34,7 @@ class CheckListStudyPurposeActivity : AppCompatActivity() {
                 putStringArrayListExtra("selectedPurpose", ArrayList(selectedPurpose))
             }
             startActivity(locationIntent)
+            finish()
         }
 
         setChipGroup()

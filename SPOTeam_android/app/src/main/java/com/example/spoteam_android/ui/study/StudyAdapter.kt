@@ -11,6 +11,8 @@ import com.example.spoteam_android.ReportStudymemberFragment
 import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.databinding.ItemRecyclerViewBinding
 
+import com.bumptech.glide.Glide
+
 class StudyAdapter(
     private val itemList: ArrayList<StudyItem>,
     private val onItemClick: (StudyItem) -> Unit
@@ -40,6 +42,11 @@ class StudyAdapter(
             binding.tvName2.text = item.memberCount.toString()
             binding.tvName3.text = item.heartCount.toString()
             binding.tvName4.text = item.hitNum.toString()
+
+            // Glide를 사용하여 imageUrl을 ImageView에 로드
+            Glide.with(binding.root.context)
+                .load(item.imageUrl)
+                .into(binding.ImageView4) // ImageView4에 이미지를 로드
         }
     }
 
@@ -49,3 +56,4 @@ class StudyAdapter(
         notifyDataSetChanged()
     }
 }
+

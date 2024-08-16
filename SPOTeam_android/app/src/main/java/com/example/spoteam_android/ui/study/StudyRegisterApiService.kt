@@ -1,5 +1,7 @@
+import com.example.spoteam_android.MemberResponse
+import com.example.spoteam_android.StudyDetailsResponse
+import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.StudyResponse
-import com.example.spoteam_android.ui.mypage.ApiResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -33,6 +35,16 @@ interface StudyApiService {
         @Part images: List<MultipartBody.Part>
 
     ): Call<UploadResponse>
+
+    @GET("/spot/studies/{studyId}/members")
+    fun getStudyMembers(
+        @Path("studyId") studyId: Int
+    ): Call<MemberResponse>
+
+    @GET("/spot/studies/{studyId}")
+    fun getStudyDetails(
+        @Path("studyId") studyId: Int
+    ): Call<StudyDetailsResponse>
 
 }
 

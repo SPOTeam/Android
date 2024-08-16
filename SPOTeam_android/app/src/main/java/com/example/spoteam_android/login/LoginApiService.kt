@@ -2,8 +2,8 @@ package com.example.spoteam_android.login
 
 import com.example.spoteam_android.RegionsPreferences
 import com.example.spoteam_android.StudyReasons
+import com.example.spoteam_android.ThemeApiResponse
 import com.example.spoteam_android.ThemePreferences
-import com.example.spoteam_android.ui.mypage.ApiResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -22,6 +22,6 @@ interface LoginApiService {
     fun postPurposes(@Path("memberId") memberId: Int, @Body purposePreferences: StudyReasons): Call<Void>
 
     @GET("spot/member/{memberId}/theme")
-    fun getThemes(@Path("memberId") memberId: Int): Call<ApiResponse>
+    fun getThemes(@Path("memberId") memberId: Int): Call<ThemeApiResponse>
 
 }

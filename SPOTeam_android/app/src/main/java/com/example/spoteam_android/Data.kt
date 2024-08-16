@@ -39,7 +39,8 @@ data class BoardItem (
 
 
 
-data class StudyItem(
+data class StudyItem( //StudyFragment에서 사용
+    val studyId: Int,
     val title: String,
     val introduction: String,
     val memberCount: Int,
@@ -48,49 +49,57 @@ data class StudyItem(
     val maxPeople: Int,
     val studyState: String,
     val themeTypes: List<String>,
-    val regions: List<String>
-    // val imageUrl: String // 주석 제거 시 추가
-) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readInt(),
-        parcel.readInt(),
-        parcel.readInt(),
-        parcel.readInt(),
-        parcel.readString() ?: "",
-        parcel.createStringArrayList() ?: arrayListOf(),
-        parcel.createStringArrayList() ?: arrayListOf()
-        // parcel.readString() ?: "" // imageUrl을 추가할 경우
-    )
+    val regions: List<String>,
+    val imageUrl: String
+)
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(title)
-        parcel.writeString(introduction)
-        parcel.writeInt(memberCount)
-        parcel.writeInt(heartCount)
-        parcel.writeInt(hitNum)
-        parcel.writeInt(maxPeople)
-        parcel.writeString(studyState)
-        parcel.writeStringList(themeTypes)
-        parcel.writeStringList(regions)
-        // parcel.writeString(imageUrl) // imageUrl을 추가할 경우
-    }
+data class StudyDetailsResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: StudyDetailsResult
+)
 
-    override fun describeContents(): Int {
-        return 0
-    }
+data class StudyDetailsResult( //StudyFragment에서 detail하게 들어갔을때 사용
+    val studyId: Int,
+    val studyName: String,
+    val studyOwner: Owner,
+    val hitNum: Int,
+    val heartCount: Int,
+    val memberCount: Int,
+    val gender: String,
+    val minAge: Int,
+    val maxAge: Int,
+    val fee: Int,
+    val isOnline: Boolean,
+    val themes: List<String>,
+    val goal: String,
+    val introduction: String
+)
 
-    companion object CREATOR : Parcelable.Creator<StudyItem> {
-        override fun createFromParcel(parcel: Parcel): StudyItem {
-            return StudyItem(parcel)
-        }
+data class Owner(
+    val ownerId: Int,
+    val ownerName: String
+)
 
-        override fun newArray(size: Int): Array<StudyItem?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
+
+data class MemberResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: MemberResult
+)
+
+data class MemberResult(
+    val totalElements: Int,
+    val members: List<Member>
+)
+
+data class Member(
+    val memberId: Int,
+    val nickname: String,
+    val profileImage: String
+)
 
 data class StudyResponse(
     val result: StudyResult
@@ -134,7 +143,7 @@ data class SceduleItem (
 )
 
 data class ProfileItem(
-    val profileImage: Int,
+    val profileImage: String,
     val nickname: String
 )
 
@@ -164,6 +173,19 @@ data class CommentInfo(
     val Comment : String,
     val commentType : Int
 )
+
+data class ThemeApiResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ThemeResult
+)
+
+data class ThemeResult(
+    val memberId: Int,
+    val themes: List<String>
+)
+
 
 data class ThemePreferences(
     @SerializedName("themes")

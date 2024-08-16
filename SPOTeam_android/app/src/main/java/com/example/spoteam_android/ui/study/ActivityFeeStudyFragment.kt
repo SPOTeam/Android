@@ -125,7 +125,7 @@ class ActivityFeeStudyFragment : Fragment() {
 
     private fun goToPreviusFragment() {
         val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, RegisterStudyFragment()) // 이전 프래그먼트로 전환
+        transaction.replace(R.id.main_frm,MemberStudyFragment()) // 이전 프래그먼트로 전환
         transaction.addToBackStack(null)
         transaction.commit()
     }
