@@ -192,9 +192,22 @@ data class ThemePreferences(
     val themes: List<String>
 )
 
+data class ReasonApiResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ReasonResult
+)
+
+data class ReasonResult(
+    val memberId: Int,
+    val reasons: List<String>
+)
+
+
 data class StudyReasons(
     @SerializedName("reasons")
-    val reasons: List<String>
+    val reasons: List<Int>
 )
 
 data class RegionsPreferences(

@@ -32,7 +32,7 @@ class RegisterInformation : ComponentActivity() {
         setContentView(binding.root)
 
         val selectedThemes = intent.getStringArrayListExtra("selectedThemes")
-        val selectedPurpose = intent.getStringArrayListExtra("selectedPurpose")
+        val selectedPurpose = intent.getIntegerArrayListExtra("selectedPurpose")
         val selectedLocations = intent.getStringArrayListExtra("selectedLocations")
 
         // SharedPreferences에서 현재 이메일을 가져오기
@@ -89,7 +89,7 @@ class RegisterInformation : ComponentActivity() {
     private fun postPreferencesToServer(
         memberId: Int,
         themes: List<String>,
-        purposes: List<String>,
+        purposes: List<Int>,
         regions: List<String>
     ) {
 

@@ -33,7 +33,7 @@ class CheckListLocationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val selectedThemes = intent.getStringArrayListExtra("selectedThemes")
-        val selectedPurpose = intent.getStringArrayListExtra("selectedPurpose")
+        val selectedPurpose = intent.getIntegerArrayListExtra("selectedPurpose")
 
         Log.d("CheckListLocationActivity", "Received Themes: $selectedThemes")
         Log.d("CheckListLocationActivity", "Received Purpose: $selectedPurpose")
@@ -57,7 +57,7 @@ class CheckListLocationActivity : AppCompatActivity() {
         binding.checklistspotLocationFinishBt.setOnClickListener {
             val intent = Intent(this, RegisterInformation::class.java).apply {
                 putStringArrayListExtra("selectedThemes", ArrayList(selectedThemes))
-                putStringArrayListExtra("selectedPurpose", ArrayList(selectedPurpose))
+                putIntegerArrayListExtra("selectedPurpose", ArrayList(selectedPurpose))
                 putStringArrayListExtra("selectedLocations", ArrayList(selectedLocations)) // 코드 리스트 전달
             }
             startActivity(intent)
