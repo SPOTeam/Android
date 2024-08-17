@@ -72,6 +72,15 @@ class ThemePreferenceFragment : Fragment() {
                 }
             }
         }
+        binding.editThemeCancelBt.setOnClickListener {
+            binding.buttonLayout.visibility = View.GONE
+            binding.fragmentThemePreferenceFlexboxLayout.visibility = View.VISIBLE
+            binding.activityChecklistChipGroup.visibility = View.GONE
+        }
+
+        binding.fragmentThemePreferenceBackBt.setOnClickListener {
+            goToPreviusFragment()
+        }
 
         return binding.root
     }
@@ -214,6 +223,13 @@ class ThemePreferenceFragment : Fragment() {
     private fun showCompletionDialog() {
         val dialog = ThemeUploadCompleteDialog(requireContext())
         dialog.start(parentFragmentManager)
+    }
+
+    private fun goToPreviusFragment() {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.main_frm, MyPageFragment()) // 변경할 Fragment로 교체
+        transaction.addToBackStack(null) // 백스택에 추가
+        transaction.commit()
     }
 
 }

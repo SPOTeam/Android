@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentMypageBinding
 import com.example.spoteam_android.login.StartLoginActivity
@@ -40,6 +41,12 @@ class MyPageFragment : Fragment() {
         binding.framelayout1.setOnClickListener {
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.main_frm, ThemePreferenceFragment())
+            transaction.commit()
+        }
+
+        binding.framelayout3.setOnClickListener {
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.main_frm, PurposePreferenceFragment())
             transaction.commit()
         }
 
