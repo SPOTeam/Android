@@ -59,6 +59,7 @@ class CheckListLocationActivity : AppCompatActivity() {
                 putStringArrayListExtra("selectedThemes", ArrayList(selectedThemes))
                 putIntegerArrayListExtra("selectedPurpose", ArrayList(selectedPurpose))
                 putStringArrayListExtra("selectedLocations", ArrayList(selectedLocations)) // 코드 리스트 전달
+                Log.d("ChecklistLocation","$selectedLocations")
             }
             startActivity(intent)
         }
