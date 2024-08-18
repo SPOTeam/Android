@@ -17,6 +17,12 @@ data class ApiResponse(
 )
 
 data class Result(
+    @SerializedName("regions")
+    val regions: List<Region>,
+
+    @SerializedName("memberId")
+    val memberId: Int,
+
     @SerializedName("totalPages")
     val totalPages: Int,
 
@@ -61,6 +67,9 @@ data class Content(
     @SerializedName("hitNum")
     val hitNum: Int,
 
+    @SerializedName("maxPeople")
+    val maxPeople: Int,
+
     @SerializedName("studyState")
     val studyState: String,
 
@@ -76,3 +85,18 @@ data class Content(
     @SerializedName("liked")
     val liked: Boolean
 )
+
+data class Region(
+    @SerializedName("province")
+    val province: String,
+
+    @SerializedName("district")
+    val district: String,
+
+    @SerializedName("neighborhood")
+    val neighborhood: String,
+
+    @SerializedName("code")
+    val code: String
+)
+

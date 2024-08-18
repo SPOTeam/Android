@@ -1,6 +1,5 @@
 package com.example.spoteam_android.ui.interestarea
 
-import com.example.spoteam_android.search.ApiResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -25,7 +24,7 @@ interface InterestAreaApiService {
 }
 
 interface InterestSpecificAreaApiService {
-    @GET("/spot/search/studies/preferred-region/all/members/{memberId}")
+    @GET("/spot/search/studies/preferred-region/specific/members/{memberId}")
     fun InterestSpecificArea(
         @Header("Authorization") authToken: String,
         @Path("memberId") memberId: Int,  // Path parameter for memberId
@@ -41,5 +40,23 @@ interface InterestSpecificAreaApiService {
         @Query("sortBy") sortBy: String,
     ): Call<ApiResponse>
 }
+
+interface GetMemberInterestAreaApiService{
+    @GET("/spot/member/{memberId}/region")
+    fun GetInterestArea(
+        @Header("Authorization") authToken: String,
+        @Path("memberId") memberId: Int,  // Path parameter for memberId
+    ): Call<ApiResponse>
+}
+
+interface RecommendStudyApiService{
+    @GET("/spot/search/studies/recommend/main/members/{memberId}")
+    fun GetRecommendStudy(
+        @Header("Authorization") authToken: String,
+        @Path("memberId") memberId: Int,
+    ): Call<ApiResponse>
+}
+
+
 
 

@@ -12,6 +12,7 @@
     android:elevation="4dp">
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="85dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,23 +22,23 @@
             android:id="@+id/ImageView4"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginEnd="16dp"
             android:layout_gravity="center"
-            android:src="@drawable/activity_main_ic_recyclervw_groups"/>
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/activity_main_ic_recyclervw_groups" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:layout_gravity="center"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="스터디 이름"
                 android:fontFamily="@font/pretendardsource"
+                android:text="스터디 이름"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -46,8 +47,8 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="스터디 목표"
                 android:fontFamily="@font/pretendardsource"
+                android:text="스터디 목표"
                 android:textSize="12sp" />
 
             <LinearLayout
@@ -125,12 +126,10 @@
         android:layout_width="wrap_content"
         android:layout_height="15dp"
         android:layout_gravity="end|top"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="7dp"
         android:scaleType="fitCenter"
         android:src="@drawable/fragment_participating_study_ic_toggle"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

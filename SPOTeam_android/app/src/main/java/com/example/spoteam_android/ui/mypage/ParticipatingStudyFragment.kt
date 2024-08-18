@@ -37,6 +37,8 @@ class ParticipatingStudyFragment : Fragment(){
 
         val boardAdapter = BoardAdapter(itemList)
 
+
+
         participatingboard.post {
             for (i in 0 until boardAdapter.itemCount) {
                 val holder = participatingboard.findViewHolderForAdapterPosition(i) as? BoardAdapter.BoardViewHolder

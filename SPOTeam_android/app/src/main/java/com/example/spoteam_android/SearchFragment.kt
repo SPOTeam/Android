@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentSearchBinding
+import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
-import com.example.spoteam_android.search.ApiResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,11 +35,6 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        fetchPages()
-
-
-
 
         val itemList = ArrayList<BoardItem>()
         itemList.add(BoardItem("피아노 스터디", "스터디 목표", 10, 1, 1, 600))
@@ -99,49 +94,5 @@ class SearchFragment : Fragment() {
 
         binding.chipGroup.addView(chip)
 
-    }
-
-    private fun fetchPages() {
-        RetrofitClient.apiService.searchStudies("Bearer eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIzMjczODE0LCJleHAiOjE3MjMyNzc0MTR9.-LB5qbiMrMH5f3gtCTlmVAKnpEOLUMBcff2LYS5CHNk","Kotlin",1,1,"ALL")
-            .enqueue(object : Callback<ApiResponse> {
-                override fun onResponse(
-                    call: Call<ApiResponse>,
-                    response: Response<ApiResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d("SearchFragment","pass")
-                        val pagesResponse = response.body()
-                        if (pagesResponse?.isSuccess == false) {
-                            val pagesResponseList = pagesResponse.result?.content
-                            Log.d("SearchFragment", "items: $pagesResponse")
-                            if (pagesResponseList != null) {
-                                Log.d("SearchFragment", "items: $pagesResponseList")
-                            }
-                        }
-                    }
-//                    else {
-//                        Log.d("SearchFragment","{$response}")
-//                        // 실패한 경우 서버로부터의 응답 코드를 로그로 출력
-//                        Log.e("SearchActivity", "Failed to fetch studies: ${response.code()} - ${response.message()}")
-//
-//                        // 응답 본문을 문자열로 변환하여 로그로 출력
-//                        val errorBody = response.errorBody()?.string()
-//                        if (errorBody != null) {
-//                            Log.e("SearchActivity", "Error body: $errorBody")
-//                        } else {
-//                            Log.e("SearchActivity", "Error body is null")
-//                        }
-//
-//                        // 추가 디버깅 정보 출력
-//                        Log.e("SearchActivity", "Request URL: ${response.raw().request.url}")
-//                        Log.e("SearchActivity", "Request Method: ${response.raw().request.method}")
-//                        Log.e("SearchActivity", "Request Headers: ${response.raw().request.headers}")
-//                    }
-
-                }
-                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                    Log.e("ALL", "Failure: ${t.message}", t)
-                }
-            })
     }
 }
