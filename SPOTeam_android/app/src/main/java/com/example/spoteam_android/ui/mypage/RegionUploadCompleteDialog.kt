@@ -1,15 +1,14 @@
-package com.example.spoteam_android.ui.study
+package com.example.spoteam_android.ui.mypage
 
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.view.View
 import android.view.Window
 import android.widget.Button
 import androidx.fragment.app.FragmentManager
 import com.example.spoteam_android.R
 
-class StudyRegisterCompleteDialog(private val context: Context) {
+class RegionUploadCompleteDialog(private val context: Context) {
 
     private val dlg = android.app.Dialog(context)
 
@@ -20,12 +19,12 @@ class StudyRegisterCompleteDialog(private val context: Context) {
         dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         // 다이얼로그 레이아웃 설정
-        dlg.setContentView(R.layout.dialog_complete)
+        dlg.setContentView(R.layout.dialog_region_upload_complete)
 
         val btnMove = dlg.findViewById<Button>(R.id.dialog_complete_bt)
         btnMove.setOnClickListener {
             val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.main_frm, StudyFragment())
+            transaction.replace(R.id.main_frm, RegionPreferenceFragment())
             transaction.commit()
             dlg.dismiss()
         }

@@ -36,7 +36,6 @@ class StudyFragment : Fragment() {
     private var totalPages = 0
     private val studyViewModel: StudyViewModel by activityViewModels()
 
-
     // Retrofit API Service
     private lateinit var studyApiService: StudyApiService
 
@@ -115,6 +114,7 @@ class StudyFragment : Fragment() {
                                         StudyItem(
                                             studyId = it.studyId,
                                             title = it.title,
+                                            goal = it.goal,
                                             introduction = it.introduction,
                                             memberCount = it.memberCount,
                                             heartCount = it.heartCount,

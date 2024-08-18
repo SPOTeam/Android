@@ -37,7 +37,7 @@ class StudyAdapter(
 
         fun bind(item: StudyItem) {
             binding.tvTime.text = item.title
-            binding.tvTitle.text = item.introduction
+            binding.tvTitle.text = item.goal
             binding.tvName.text = item.maxPeople.toString()
             binding.tvName2.text = item.memberCount.toString()
             binding.tvName3.text = item.heartCount.toString()

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.databinding.FragmentCalendarBinding
+import com.example.spoteam_android.ui.study.quiz.HostMakeQuizFragment
 import java.util.*
 
 class CalendarFragment : Fragment() {
@@ -24,11 +25,13 @@ class CalendarFragment : Fragment() {
     private lateinit var imgbtnAddEvent: ImageButton
     private val eventViewModel: EventViewModel by activityViewModels()
     private lateinit var eventAdapter: EventAdapter
+    private var studyId: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        studyId = arguments?.getInt("studyId") ?: 0
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -38,7 +41,8 @@ class CalendarFragment : Fragment() {
 
         eventAdapter = EventAdapter(emptyList(), { event ->
             // 여기에 출석체크 넣으세요!!
-            (activity as MainActivity).switchFragment(CalendarAddEventFragment())
+            val hostMakeQuizFragment = HostMakeQuizFragment()
+            hostMakeQuizFragment.show(parentFragmentManager, "HostMakeQuizFragment")
         }, false)
 
         eventsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -47,7 +51,6 @@ class CalendarFragment : Fragment() {
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             Log.d("CalendarFragment", "Date selected: $year-${month + 1}-$dayOfMonth")
             eventViewModel.loadEvents(year, month + 1, dayOfMonth)
-//            todoViewModel.loadTodosForDate(year, month + 1, dayOfMonth)
         }
 
         eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
@@ -66,13 +69,13 @@ class CalendarFragment : Fragment() {
         return view
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         imgbtnAddEvent.setOnClickListener {
-            (activity as MainActivity).switchFragment(CalendarAddEventFragment())
+            val fragment = CalendarAddEventFragment.newInstance(studyId)
+            (activity as MainActivity).switchFragment(fragment)
         }
     }
 }
+

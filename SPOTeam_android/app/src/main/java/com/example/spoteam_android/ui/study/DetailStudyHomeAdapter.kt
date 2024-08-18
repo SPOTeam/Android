@@ -33,9 +33,9 @@ class DetailStudyHomeAdapter(private val itemList: ArrayList<SceduleItem>) :
         }
     }
 
-    fun filterList(filteredList: ArrayList<SceduleItem>) {
+    fun updateList(newList: ArrayList<SceduleItem>) {
         itemList.clear()
-        itemList.addAll(filteredList)
+        itemList.addAll(newList)
         notifyDataSetChanged()
     }
 }

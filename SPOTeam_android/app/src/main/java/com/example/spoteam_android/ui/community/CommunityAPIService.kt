@@ -60,4 +60,28 @@ interface CommunityAPIService {
         @Query("size") size: Int,
         @Query("sortBy") sortBy: String
     ): Call<CategoryStudyResponse>
+
+    @POST("/spot/posts/comments/{commentId}/{memberId}/like")
+    fun postCommentLike(
+        @Path("commentId") postId: Int,
+        @Path("memberId") memberId: Int
+    ): Call<LikeCommentResponse>
+
+    @DELETE("/spot/posts/comments/{commentId}/{memberId}/like")
+    fun deleteCommentLike(
+        @Path("commentId") postId: Int,
+        @Path("memberId") memberId: Int
+    ): Call<UnLikeCommentResponse>
+
+    @POST("/spot/posts/comments/{commentId}/{memberId}/dislike")
+    fun postCommentDisLike(
+        @Path("commentId") postId: Int,
+        @Path("memberId") memberId: Int
+    ): Call<DisLikeCommentResponse>
+
+    @DELETE("/spot/posts/comments/{commentId}/{memberId}/dislike")
+    fun deleteCommentDisLike(
+        @Path("commentId") postId: Int,
+        @Path("memberId") memberId: Int
+    ): Call<UnDisLikeCommentResponse>
 }

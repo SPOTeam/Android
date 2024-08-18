@@ -1,4 +1,8 @@
 import com.example.spoteam_android.MemberResponse
+import com.example.spoteam_android.RecentAnnounceResponse
+import com.example.spoteam_android.ScheduleListResponse
+import com.example.spoteam_android.ScheduleRequest
+import com.example.spoteam_android.ScheduleResponse
 import com.example.spoteam_android.StudyDetailsResponse
 import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.StudyResponse
@@ -45,6 +49,25 @@ interface StudyApiService {
     fun getStudyDetails(
         @Path("studyId") studyId: Int
     ): Call<StudyDetailsResponse>
+
+    @POST("/spot/studies/{studyId}/schedules")
+    fun addSchedules(
+        @Path("studyId") studyId: Int,
+        @Body scheduleRequest: ScheduleRequest
+    ): Call<ScheduleResponse>
+    //다가오는 모임 불러오기
+    @GET("/spot/studies/{studyId}/upcoming-schedules")
+    fun getStudySchedules(
+        @Path("studyId") studyId: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): Call<ScheduleListResponse>
+
+    //최근 공지 1개 불러오기
+    @GET("/spot/studies/{studyId}/announce")
+    fun getRecentAnnounce(
+        @Path("studyId") studyId: Int,
+    ): Call<RecentAnnounceResponse>
 
 }
 

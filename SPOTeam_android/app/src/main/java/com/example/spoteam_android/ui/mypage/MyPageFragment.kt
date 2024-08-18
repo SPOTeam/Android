@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.spoteam_android.MainActivity
+import androidx.fragment.app.replace
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentMypageBinding
 import com.example.spoteam_android.login.StartLoginActivity
@@ -57,33 +58,30 @@ class MyPageFragment : Fragment() {
             transaction.replace(R.id.main_frm, ThemePreferenceFragment())
             transaction.commit()
         }
+        binding.framelayout2.setOnClickListener {
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.main_frm, RegionPreferenceFragment())
+            transaction.commit()
+        }
+
+        binding.framelayout3.setOnClickListener {
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.main_frm, PurposePreferenceFragment())
+            transaction.commit()
+        }
+
 
 
 
         return binding.root
     }
 
-//    private fun setNickname() {
-//        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-//        val email = sharedPreferences.getString("currentEmail", null)
-//        if (email != null) {
-//            val nickname = getNicknameFromPreferences(email)
-//            binding.tvNickname.text = nickname ?: "닉네임 없음"  // 닉네임이 없는 경우의 기본 값
-//        } else {
-//            binding.tvNickname.text = "이메일 없음"  // 이메일이 없는 경우의 기본 값
-//        }
-//    }
-//
-//    private fun getNicknameFromPreferences(email: String): String? {
-//        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-//        return sharedPreferences.getString("${email}_nickname", null)
-//    }
-        private fun setNickname() {
+    private fun setNickname() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
         if (email != null) {
-            val randomNickname = getNicknameFromPreferences(email)
-            binding.tvNickname.text = randomNickname ?: "닉네임 없음"  // 닉네임이 없는 경우의 기본 값
+            val nickname = getNicknameFromPreferences(email)
+            binding.tvNickname.text = nickname ?: "닉네임 없음"  // 닉네임이 없는 경우의 기본 값
         } else {
             binding.tvNickname.text = "이메일 없음"  // 이메일이 없는 경우의 기본 값
         }
@@ -91,8 +89,11 @@ class MyPageFragment : Fragment() {
 
     private fun getNicknameFromPreferences(email: String): String? {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("${email}_randomNickname", null)
+        return sharedPreferences.getString("${email}_nickname", null)
     }
+
+
+
 
     private fun performAccountDeletion() {
         UserApiClient.instance.unlink { error ->

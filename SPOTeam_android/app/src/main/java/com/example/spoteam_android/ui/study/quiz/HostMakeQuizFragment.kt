@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.spoteam_android.databinding.FragmentHostFinishMakeQuizBinding
 import com.example.spoteam_android.databinding.FragmentHostMakeQuizBinding
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
-class HostMakeQuizFragment : Fragment() {
+class HostMakeQuizFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentHostMakeQuizBinding
 

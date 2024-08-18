@@ -14,8 +14,10 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
 
     interface ItemClick {
         fun onItemClick(view: View, position: Int, parentCommentId : Int)
-        fun onLikeClick(view: View, position: Int, parentCommentId : Int)
-        fun onUnLikeClick(view: View, position: Int, parentCommentId : Int)
+        fun onLikeClick(view: View, position: Int, commentId : Int)
+        fun onUnLikeClick(view: View, position: Int, commentId : Int)
+        fun onDisLikeClick(view: View, position: Int, commentId : Int)
+        fun onUnDisLikeClick(view: View, position: Int, commentId : Int)
     }
 
     var itemClick: ItemClick? = null
@@ -97,6 +99,14 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
             binding.communityContentCommentGoodCheckedIv.setOnClickListener {
                 itemClick?.onLikeClick(it, bindingAdapterPosition, item.commentId)
             }
+
+            binding.communityContentCommentBadUncheckedIv.setOnClickListener {
+                itemClick?.onUnDisLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentBadCheckedIv.setOnClickListener {
+                itemClick?.onDisLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
         }
     }
 
@@ -139,6 +149,14 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
 
             binding.communityContentCommentReplyGoodCheckedIv.setOnClickListener {
                 itemClick?.onLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentReplyBadUncheckedIv.setOnClickListener {
+                itemClick?.onUnDisLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentReplyBadCheckedIv.setOnClickListener {
+                itemClick?.onDisLikeClick(it, bindingAdapterPosition, item.commentId)
             }
 
         }
