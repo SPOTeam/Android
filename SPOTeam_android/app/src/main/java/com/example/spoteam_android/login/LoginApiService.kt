@@ -1,6 +1,7 @@
 package com.example.spoteam_android.login
 
 import com.example.spoteam_android.ReasonApiResponse
+import com.example.spoteam_android.RegionApiResponse
 import com.example.spoteam_android.RegionsPreferences
 import com.example.spoteam_android.StudyReasons
 import com.example.spoteam_android.ThemeApiResponse
@@ -28,4 +29,6 @@ interface LoginApiService {
     @GET("spot/member/{memberId}/study-reasons")
     fun getReasons(@Path("memberId") memberId: Int): Call<ReasonApiResponse>
 
+    @GET("/spot/member/{memberId}/region")
+    fun getRegion(@Path("memberId") memberId: Int): Call<RegionApiResponse>
 }

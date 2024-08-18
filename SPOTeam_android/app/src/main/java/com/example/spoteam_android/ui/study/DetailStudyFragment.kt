@@ -55,33 +55,42 @@ class DetailStudyFragment : Fragment() {
     }
 
     private fun setupViews() {
-        val detailStudyAdapter = DetailStudyVPAdapter(this)
-        binding.fragmentDetailStudyVp.adapter = detailStudyAdapter
+        // ViewModel에서 studyId를 옵저빙하고 가져옵니다.
+        studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
+            if (studyId != null) {
+                // studyId를 DetailStudyVPAdapter에 전달합니다.
+                val detailStudyAdapter = DetailStudyVPAdapter(this, studyId)
+                binding.fragmentDetailStudyVp.adapter = detailStudyAdapter
 
-        // ViewPager가 미리 모든 탭의 프래그먼트를 생성하고 캐싱하도록 설정
-        binding.fragmentDetailStudyVp.offscreenPageLimit = tabList.size
+                // ViewPager가 미리 모든 탭의 프래그먼트를 생성하고 캐싱하도록 설정
+                binding.fragmentDetailStudyVp.offscreenPageLimit = tabList.size
 
-        TabLayoutMediator(binding.fragmentDetailStudyTl, binding.fragmentDetailStudyVp) { tab, position ->
-            tab.text = tabList[position]
-        }.attach()
+                TabLayoutMediator(binding.fragmentDetailStudyTl, binding.fragmentDetailStudyVp) { tab, position ->
+                    tab.text = tabList[position]
+                }.attach()
 
-        binding.fragmentDetailStudyTl.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                currentTabPosition = tab?.position ?: 0
+                binding.fragmentDetailStudyTl.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                    override fun onTabSelected(tab: TabLayout.Tab?) {
+                        currentTabPosition = tab?.position ?: 0
+                    }
+
+                    override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+                    override fun onTabReselected(tab: TabLayout.Tab?) {}
+                })
+
+                binding.fragmentDetailStudyVp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                        currentTabPosition = position
+                    }
+                })
+            } else {
+                Log.e("DetailStudyFragment", "studyId is null")
             }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
-
-        binding.fragmentDetailStudyVp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                currentTabPosition = position
-            }
-        })
+        }
     }
+
 
 
     private fun fetchStudyDetails(studyId: Int) {
@@ -125,7 +134,7 @@ class DetailStudyFragment : Fragment() {
         binding.fragmentDetailStudyViewTv.text = getString(R.string.hit_num_format, studyDetails.hitNum)
 
         // maxpeople 서버 업데이트시 수정예정
-        binding.fragmentDetailStudyMemberMaxTv.text = getString(R.string.max_people_format, studyDetails.maxAge)
+        binding.fragmentDetailStudyMemberMaxTv.text = getString(R.string.max_people_format, studyDetails.maxPeople)
 
         // Study State (Online/Offline)
         binding.fragmentDetailStudyOnlineTv.text = if (studyDetails.isOnline) {
@@ -145,17 +154,19 @@ class DetailStudyFragment : Fragment() {
 
         // Theme Types
         val themes = studyDetails.themes
-        val displayedThemes = themes.take(2).joinToString("/") // 최대 2개 항목
+        val displayedThemes = themes.take(3).joinToString("/") // 최대 2개 항목
         val remainingCount = (themes.size - 2).coerceAtLeast(0) // 2개를 초과한 항목 수
+        binding.fragmentDetailStudyChipTv.text = "${displayedThemes}"
 
-        binding.fragmentDetailStudyChipTv.text = if (remainingCount > 0) {
-            "$displayedThemes/+$remainingCount" // 나머지 항목 수 표시
-        } else {
-            displayedThemes
-        }
+//        binding.fragmentDetailStudyChipTv.text = if (remainingCount > 0) {
+//            "$displayedThemes/+$remainingCount" // 나머지 항목 수 표시
+//        } else {
+//            displayedThemes
+//        }
     }
 
     fun getCurrentTabPosition(): Int {
         return currentTabPosition
     }
+
 }

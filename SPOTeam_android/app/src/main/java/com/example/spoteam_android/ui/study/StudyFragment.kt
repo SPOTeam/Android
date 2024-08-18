@@ -114,6 +114,7 @@ class StudyFragment : Fragment() {
                                         StudyItem(
                                             studyId = it.studyId,
                                             title = it.title,
+                                            goal = it.goal,
                                             introduction = it.introduction,
                                             memberCount = it.memberCount,
                                             heartCount = it.heartCount,

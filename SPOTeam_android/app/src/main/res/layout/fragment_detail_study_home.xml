@@ -10,56 +10,70 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="최근 공지"
-        android:textColor="#2D2D2D"
+        android:textColor="#186AFF"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
         android:layout_marginTop="20dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
-    <ImageView
-        android:id="@+id/fragment_detail_study_home_notification_iv"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/detail_home_info"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_notification_tv"/>
 
-    <TextView
-        android:id="@+id/fragment_detail_study_home_title_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="제목"
-        android:textColor="#2D2D2D"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintStart_toEndOf="@id/fragment_detail_study_home_notification_iv"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_notification_tv"/>
+    <LinearLayout
+        android:id="@+id/fragment_detail_study_home_title_ll"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@drawable/detail_study_home_title_background"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_notification_tv">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/icon_detail_home_title"/>
+
+
+        <TextView
+            android:id="@+id/fragment_detail_study_home_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="가장 최근 공지의 제목"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:fontFamily="@font/pretendard"
+            android:layout_marginStart="10dp"/>
+    </LinearLayout>
+
 
     <View
         android:id="@+id/fragment_detail_study_home_notification_v"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_notification_iv"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_title_ll"/>
 
     <TextView
         android:id="@+id/fragment_detail_study_home_schedule_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="다가오는 모임"
+        android:text="⏰ 다가오는 모임"
         android:textColor="#2D2D2D"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:layout_marginTop="20dp"
+        android:fontFamily="@font/pretendard"
+        android:layout_marginTop="25dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_notification_iv"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_title_ll"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_detail_study_home_schedule_rv"
@@ -87,6 +101,7 @@
         android:textColor="#2D2D2D"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
         android:layout_marginTop="20dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,6 +115,7 @@
         android:inputType="textMultiLine"
         android:padding="10dp"
         android:textSize="15sp"
+        android:fontFamily="@font/pretendard"
         android:background="@drawable/edittext_rounded_corner_rectangle"
         android:gravity="top"
         android:layout_marginTop="15dp"
@@ -116,6 +132,7 @@
         android:textColor="#2D2D2D"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
         android:layout_marginTop="20dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"

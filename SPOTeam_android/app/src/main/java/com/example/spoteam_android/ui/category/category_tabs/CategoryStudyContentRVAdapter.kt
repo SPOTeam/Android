@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.databinding.ItemRecyclerViewBinding
 import com.example.spoteam_android.ui.community.CategoryStudyDetail
@@ -46,6 +47,9 @@ class CategoryStudyContentRVAdapter(private val dataList: List<CategoryStudyDeta
             binding.tvName2.text = data.memberCount.toString()
             binding.tvName3.text = data.heartCount.toString()
             binding.tvName4.text = data.hitNum.toString()
+            Glide.with(binding.root.context)
+                .load(data.imageUrl)
+                .into(binding.ImageView4)
         }
     }
 }

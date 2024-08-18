@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.calendar
 
+import StudyApiService
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
@@ -11,19 +12,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
+import com.example.spoteam_android.ScheduleRequest
+import com.example.spoteam_android.ScheduleResponse
+import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.util.*
 
 class CalendarAddEventFragment : Fragment() {
 
     private lateinit var eventTitleEditText: EditText
+    private lateinit var eventPositionEditText: EditText
     private lateinit var startDateTimeTextView: TextView
     private lateinit var endDateTimeTextView: TextView
     private lateinit var saveButton: Button
+    private var studyId: Int = 0
 
     private val eventViewModel: EventViewModel by activityViewModels()
 
@@ -33,32 +44,35 @@ class CalendarAddEventFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_calendar_add_event, container, false)
         eventTitleEditText = view.findViewById(R.id.eventTitleEditText)
+        eventPositionEditText = view.findViewById(R.id.eventPositionEditText)
         startDateTimeTextView = view.findViewById(R.id.startDateTimeTextView)
         endDateTimeTextView = view.findViewById(R.id.endDateTimeTextView)
-
         saveButton = view.findViewById(R.id.fragment_introduce_study_bt)
 
-        eventTitleEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // 아무 작업도 필요하지 않음
-            }
+        studyId = arguments?.getInt("studyId") ?: 0
+        Log.d("CalendarAddEventFragment1", "Received studyId: $studyId")
 
+        eventTitleEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // isNotEmpty를 사용하여 버튼 활성화 여부 결정
                 saveButton.isEnabled = s?.isNotEmpty() == true
             }
-
-            override fun afterTextChanged(s: Editable?) {
-                // 아무 작업도 필요하지 않음
-            }
+            override fun afterTextChanged(s: Editable?) {}
         })
-
-
 
         // 기본값으로 오늘 날짜와 시간 설정
         val calendar = Calendar.getInstance()
-        val today = String.format("%04d-%02d-%02d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH))
-        val now = String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
+        val today = String.format(
+            "%04d-%02d-%02d",
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH) + 1,
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        val now = String.format(
+            "%02d:%02d",
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE)
+        )
 
         startDateTimeTextView.text = "$today $now"
         endDateTimeTextView.text = "$today $now"
@@ -67,43 +81,10 @@ class CalendarAddEventFragment : Fragment() {
         endDateTimeTextView.setOnClickListener { showDateTimePickerDialog(endDateTimeTextView) }
 
         saveButton.setOnClickListener {
-            val title = eventTitleEditText.text.toString()
-            val startDateTime = startDateTimeTextView.text.toString()
-            val endDateTime = endDateTimeTextView.text.toString()
+            addEventToViewModel()
+            // 서버에 일정 업로드
+            uploadScheduleToServer()
 
-            // 날짜와 시간을 구분자로 분리하여 year, month, day, hour, minute 추출
-            val startParts = startDateTime.split(" ", "-", ":")
-            val startYear = startParts[0].toInt()
-            val startMonth = startParts[1].toInt()
-            val startDay = startParts[2].toInt()
-            val startHour = startParts[3].toInt()
-            val startMinute = startParts[4].toInt()
-
-            val endParts = endDateTime.split(" ", "-", ":")
-            val endYear = endParts[0].toInt()
-            val endMonth = endParts[1].toInt()
-            val endDay = endParts[2].toInt()
-            val endHour = endParts[3].toInt()
-            val endMinute = endParts[4].toInt()
-
-
-            val event = Event(
-                id = EventRepository.getNextId(),
-                title = title,
-                startYear = startYear,
-                startMonth = startMonth,
-                startDay = startDay,
-                startHour = startHour,
-                startMinute = startMinute,
-                endYear = endYear,
-                endMonth = endMonth,
-                endDay = endDay,
-                endHour = endHour,
-                endMinute = endMinute,
-            )
-
-            eventViewModel.addEvent(event)
-            parentFragmentManager.popBackStack()
         }
 
         return view
@@ -123,7 +104,14 @@ class CalendarAddEventFragment : Fragment() {
                 val timePickerDialog = TimePickerDialog(
                     requireContext(),
                     { _, selectedHour, selectedMinute ->
-                        textView.text = String.format("%04d-%02d-%02d %02d:%02d", selectedYear, selectedMonth + 1, selectedDay, selectedHour, selectedMinute)
+                        textView.text = String.format(
+                            "%04d-%02d-%02d %02d:%02d",
+                            selectedYear,
+                            selectedMonth + 1,
+                            selectedDay,
+                            selectedHour,
+                            selectedMinute
+                        )
                     },
                     hour, minute, true
                 )
@@ -132,5 +120,96 @@ class CalendarAddEventFragment : Fragment() {
             year, month, day
         )
         datePickerDialog.show()
+    }
+
+    private fun uploadScheduleToServer() {
+        val title = eventTitleEditText.text.toString()
+        val location = eventPositionEditText.text.toString() // 위치 입력
+        val startDateTime = startDateTimeTextView.text.toString()
+        val endDateTime = endDateTimeTextView.text.toString()
+        val isAllDay = false
+        val period = "NONE"
+
+        // ISO 8601 형식으로 변환
+        val isoDateTimeFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+
+        // startDateTime과 endDateTime을 Date로 파싱
+        val startDate: Date = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).parse(startDateTime)
+        val endDate: Date = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).parse(endDateTime)
+
+        // ISO 8601 형식으로 포맷팅
+        val formattedStartDateTime = isoDateTimeFormat.format(startDate)
+        val formattedEndDateTime = isoDateTimeFormat.format(endDate)
+
+        val scheduleRequest = ScheduleRequest(
+            title = title,
+            location = location,
+            startedAt = formattedStartDateTime,
+            finishedAt = formattedEndDateTime,
+            isAllDay = isAllDay,
+            period = period
+        )
+        Log.d("CalendarAddEventFragment", "Received studyId2: $studyId")
+        val jsonRequestBody = Gson().toJson(scheduleRequest)
+        Log.d("CalendarAddEventFragment", "Request body: $jsonRequestBody")
+
+
+        val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+        val call = apiService.addSchedules(studyId, scheduleRequest)
+
+        call.enqueue(object : Callback<ScheduleResponse> {
+            override fun onResponse(call: Call<ScheduleResponse>, response: Response<ScheduleResponse>) {
+                if (response.isSuccessful) {
+                    val scheduleResponse = response.body()
+                    if (scheduleResponse != null && scheduleResponse.isSuccess) {
+                        Toast.makeText(requireContext(), "일정이 성공적으로 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "일정 추가에 실패했습니다: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ScheduleResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun addEventToViewModel() {
+        val title = eventTitleEditText.text.toString()
+        val startDateTime = startDateTimeTextView.text.toString()
+        val endDateTime = endDateTimeTextView.text.toString()
+
+        val startParts = startDateTime.split(" ", "-", ":")
+        val endParts = endDateTime.split(" ", "-", ":")
+
+        val event = Event(
+            id = EventRepository.getNextId(),
+            title = title,
+            startYear = startParts[0].toInt(),
+            startMonth = startParts[1].toInt(),
+            startDay = startParts[2].toInt(),
+            startHour = startParts[3].toInt(),
+            startMinute = startParts[4].toInt(),
+            endYear = endParts[0].toInt(),
+            endMonth = endParts[1].toInt(),
+            endDay = endParts[2].toInt(),
+            endHour = endParts[3].toInt(),
+            endMinute = endParts[4].toInt()
+        )
+
+        eventViewModel.addEvent(event)
+    }
+
+    companion object {
+        fun newInstance(studyId: Int): CalendarAddEventFragment {
+            val fragment = CalendarAddEventFragment()
+            val args = Bundle()
+            args.putInt("studyId", studyId)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }
