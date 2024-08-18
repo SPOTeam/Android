@@ -19,7 +19,6 @@ import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentInterestBinding
 import com.example.spoteam_android.databinding.FragmentMyInterestStudyBinding
-import com.example.spoteam_android.search.ApiResponse
 import com.example.spoteam_android.ui.interestarea.InterestFilterFragment
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call

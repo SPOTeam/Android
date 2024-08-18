@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentMypageBinding
 import com.example.spoteam_android.login.StartLoginActivity
@@ -22,10 +23,24 @@ class MyPageFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentMypageBinding.inflate(inflater, container, false)
+        ): View {
+            binding = FragmentMypageBinding.inflate(inflater, container, false)
 
-        setNickname()
+            setNickname()
+
+        binding.tvInProgress.setOnClickListener{
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, ParticipatingStudyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.tvInProgressNum.setOnClickListener{
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, ParticipatingStudyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         binding.framelayout10.setOnClickListener {
             // 회원 탈퇴 버튼 클릭 시
@@ -42,6 +57,8 @@ class MyPageFragment : Fragment() {
             transaction.replace(R.id.main_frm, ThemePreferenceFragment())
             transaction.commit()
         }
+
+
 
         return binding.root
     }

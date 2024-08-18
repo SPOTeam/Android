@@ -5,6 +5,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
@@ -20,11 +21,25 @@ class BoardAdapter(private val itemList: ArrayList<BoardItem>) :
     override fun onBindViewHolder(holder: BoardViewHolder, position: Int) {
         val currentItem = itemList[position]
         holder.bind(currentItem)
+
+        holder.itemView.setOnClickListener {
+            Toast.makeText(holder.itemView.context, "Clicked: ${currentItem.studyName}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun removeItem(position: Int) {
+        if (position >= 0 && position < itemList.size) {
+            itemList.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, itemCount)
+        }
     }
 
     override fun getItemCount(): Int {
         return itemList.size
     }
+
+
 
     inner class BoardViewHolder(val binding: ItemRecyclerViewPlusToggleBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -44,7 +59,7 @@ class BoardAdapter(private val itemList: ArrayList<BoardItem>) :
         private fun showPopupMenu(view: View) {
             val popupMenu = PopupMenu(view.context, view)
             val inflater: MenuInflater = popupMenu.menuInflater
-            val exit = ExitStudyPopupFragment(view.context)
+            val exit = ExitStudyPopupFragment(view.context,this@BoardAdapter, adapterPosition)
             val report = ReportStudymemberFragment(view.context)
             inflater.inflate(R.menu.menu_item_options, popupMenu.menu)
             popupMenu.setOnMenuItemClickListener { menuItem ->
@@ -69,5 +84,7 @@ class BoardAdapter(private val itemList: ArrayList<BoardItem>) :
         itemList.addAll(filteredList)
         notifyDataSetChanged()
     }
+
+
 
 }

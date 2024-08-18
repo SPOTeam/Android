@@ -25,9 +25,9 @@
     <!--    X 이미지 변경    -->
     <ImageView
         android:id="@+id/write_content_prev_iv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="25dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="15dp"
         android:src="@drawable/ic_x_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/take_attendance_title_tv" />
@@ -290,6 +290,8 @@
         android:layout_height="100dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/my_edittext_background"
         android:hint="이유를 작성해주세요."
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
