@@ -20,6 +20,7 @@
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut"/>
 
+
     <TextView
         android:id="@+id/fragment_cosider_attendance_member_profile_tv"
         android:layout_width="wrap_content"

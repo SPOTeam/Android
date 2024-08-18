@@ -25,7 +25,7 @@ class StudyRegisterCompleteDialog(private val context: Context) {
         val btnMove = dlg.findViewById<Button>(R.id.dialog_complete_bt)
         btnMove.setOnClickListener {
             val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.main_frm, DetailStudyFragment())
+            transaction.replace(R.id.main_frm, StudyFragment())
             transaction.commit()
             dlg.dismiss()
         }
