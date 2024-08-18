@@ -100,11 +100,20 @@ class DetailStudyHomeFragment : Fragment() {
     private fun fetchStudySchedules(studyId: Int) {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
-        api.getStudySchedules(studyId,page, size).enqueue(object : Callback<ScheduleListResponse> {
+        api.getStudySchedules(studyId, page, size).enqueue(object : Callback<ScheduleListResponse> {
             override fun onResponse(call: Call<ScheduleListResponse>, response: Response<ScheduleListResponse>) {
                 if (response.isSuccessful) {
-                    response.body()?.let { scheduleListResponse ->
-                        val scheduleItems = scheduleListResponse.result.schedules.map { schedule ->
+                    val scheduleListResponse = response.body()
+                    val schedules = scheduleListResponse?.result?.schedules
+
+                    if (schedules.isNullOrEmpty()) {
+                        // Schedules가 없을 때
+                        binding.fragmentDetailStudyHomeScheduleRv.visibility = View.GONE
+                    } else {
+                        // Schedules가 있을 때
+                        binding.fragmentDetailStudyHomeScheduleRv.visibility = View.VISIBLE
+
+                        val scheduleItems = schedules.map { schedule ->
                             SceduleItem(
                                 dday = calculateDday(schedule.staredAt),
                                 day = formatDate(schedule.staredAt),
@@ -116,15 +125,18 @@ class DetailStudyHomeFragment : Fragment() {
                         scheduleAdapter.updateList(ArrayList(scheduleItems))
                     }
                 } else {
+                    // 응답이 실패한 경우
                     Toast.makeText(requireContext(), "Failed to fetch study schedules", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ScheduleListResponse>, t: Throwable) {
+                // 네트워크 실패 등
                 Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 
     private fun fetchRecentAnnounce(studyId: Int) {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
@@ -133,29 +145,25 @@ class DetailStudyHomeFragment : Fragment() {
             override fun onResponse(call: Call<RecentAnnounceResponse>, response: Response<RecentAnnounceResponse>) {
                 if (response.isSuccessful) {
                     val announceResponse = response.body()
-                    if (announceResponse != null && announceResponse.isSuccess) {
-                        // 서버로부터 받은 최신 공지사항을 UI에 업데이트
-                        val recentAnnounce = announceResponse.result
-                        val title = recentAnnounce.title
+                    val recentAnnounce = announceResponse?.result
 
-                        // 예: TextView에 공지사항을 설정
-                        binding.fragmentDetailStudyHomeTitleTv.text = title
+                    if (recentAnnounce?.title.isNullOrEmpty()) {
+                        binding.fragmentDetailStudyHomeTitleTv.text = "최근 공지가 없습니다"
                     } else {
-                        // 공지사항 로드 실패 메시지
-                        Toast.makeText(requireContext(), "Failed to load announcement: ${announceResponse?.message}", Toast.LENGTH_SHORT).show()
+                        binding.fragmentDetailStudyHomeTitleTv.text = recentAnnounce?.title ?: "최근 공지가 없습니다"
                     }
                 } else {
-                    // 서버 응답이 실패했을 때의 처리
-                    Toast.makeText(requireContext(), "Server Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to load announcement: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<RecentAnnounceResponse>, t: Throwable) {
-                // 네트워크 오류 등으로 인해 요청이 실패한 경우 처리
                 Toast.makeText(requireContext(), "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
+
 
 
     // Null 체크를 추가한 D-day 변경 로직

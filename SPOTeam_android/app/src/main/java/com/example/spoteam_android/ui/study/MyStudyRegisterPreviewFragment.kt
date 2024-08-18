@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMyStudyRegisterPreviewBinding
@@ -111,8 +112,43 @@ class MyStudyRegisterPreviewFragment : Fragment() {
     }
 
     private fun updateUIWithData() {
-        // UI 업데이트 코드 (이전 프래그먼트에서 전달된 데이터를 활용)
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val currentEmail = sharedPreferences.getString("currentEmail", null)
+        val kakaoNickname = sharedPreferences.getString("${currentEmail}_nickname", "Unknown")
+
+        binding.fragmentMyStudyRegisterPreviewUsernameTv.text = kakaoNickname
+        // 스터디 제목 설정
+        binding.fragmentMyStudyRegisterPreviewTitleTv.text = viewModel.studyRequest.value?.title
+
+        // 스터디 목표 설정
+        binding.fragmentMyStudyRegisterPreviewGoalTv.text = viewModel.studyRequest.value?.goal
+
+        // 스터디 프로필 이미지 설정
+        val profileImageUriString = viewModel.profileImageUri.value
+        profileImageUriString?.let { uri ->
+            Glide.with(this)
+                .load(Uri.parse(uri))
+                .into(binding.fragmentMyStudyRegisterPreviewUserIv)
+        }
+
+        // 온라인/오프라인 설정
+        binding.fragmentMyStudyRegisterPreviewOnlineTv.text = if (viewModel.studyRequest.value?.isOnline == true) "온라인" else "오프라인"
+
+        // 유료/무료 설정
+        binding.fragmentMyStudyRegisterPreviewFeeTv.text = if (viewModel.studyRequest.value?.hasFee == true) "${viewModel.studyRequest.value?.fee}원" else "무료"
+
+        // 나이대 설정
+        binding.fragmentMyStudyRegisterPreviewAgeTv.text = "${viewModel.studyRequest.value?.minAge}-${viewModel.studyRequest.value?.maxAge}세"
+
+        // 스터디 멤버 수 설정
+        binding.fragmentMyStudyRegisterPreviewMemberTv.text = "1/${viewModel.studyRequest.value?.maxPeople}"
+
+        // 스터디 테마 설정 (chip으로 나열)
+        val themes = viewModel.studyRequest.value?.themes?.take(3)?.joinToString("/") ?:"테마 없음" // 예: "취업/프로젝트"
+        binding.fragmentMyStudyRegisterPreviewChipTv.text = themes
+
     }
+
 
     private fun uploadImage(imageUri: Uri, memberId: Int) {
         val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)

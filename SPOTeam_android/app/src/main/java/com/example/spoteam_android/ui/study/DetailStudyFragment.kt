@@ -27,7 +27,7 @@ import retrofit2.Response
 class DetailStudyFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailStudyBinding
-    private val tabList = arrayListOf("홈", "캘린더", "게시판", "갤러리", "투표")
+    private val tabList = arrayListOf("홈", "캘린더", "게시판", "갤러리", "투두 리스트")
     private var currentTabPosition: Int = 0
     private val studyViewModel: StudyViewModel by activityViewModels()
 
@@ -43,11 +43,14 @@ class DetailStudyFragment : Fragment() {
         }
 
 
-        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val currentEmail = sharedPreferences.getString("currentEmail", null)
         val kakaoNickname = sharedPreferences.getString("${currentEmail}_nickname", "Unknown")
 
         binding.fragmentDetailStudyUsernameTv.text = kakaoNickname
+
+        binding.fragmentDetailStudyTl.tabMode = TabLayout.MODE_SCROLLABLE
 
         setupViews()
 
