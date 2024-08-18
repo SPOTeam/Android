@@ -14,10 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.ui.alert.AlertFragment
-import com.example.spoteam_android.todolist.TodoListFragment
-import com.example.spoteam_android.ui.calendar.CalendarAddEventFragment
-import com.example.spoteam_android.ui.calendar.CalendarFragment
-//import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
@@ -63,13 +59,6 @@ class HouseFragment : Fragment() {
         val interestFragment = InterestFragment()
         interestFragment.arguments = bundle
 
-        val spoticon: ImageView = binding.root.findViewById(R.id.ic_spot_logo)
-        spoticon.setOnClickListener {
-            //스터디 참여하기 팝업으로 이동
-//            val reportStudymemberFragment = ReportStudymemberFragment(requireContext())
-//            reportStudymemberFragment.start()
-            (activity as MainActivity).switchFragment(TodoListFragment())
-        }
 
         binding.imgbtnUnion.setOnClickListener{
             (activity as MainActivity).supportFragmentManager.beginTransaction()
@@ -87,20 +76,21 @@ class HouseFragment : Fragment() {
 
         val txintereststudy: TextView = binding.root.findViewById(R.id.tx_interest_study)
         txintereststudy.setOnClickListener {
+            bundle.putString("source", "HouseFragment")
             //스터디 참여하기 팝업으로 이동
-            bundle.putString("source", "AnyWhere")
+
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, InterestFragment())
+                .replace(R.id.main_frm, interestFragment)
                 .addToBackStack(null)
                 .commit()
         }
 
         val icgointerest: ImageView = binding.root.findViewById(R.id.ic_go_interest)
         icgointerest.setOnClickListener {
+            bundle.putString("source", "HouseFragment")
             //스터디 참여하기 팝업으로 이동
-            bundle.putString("source", "AnyWhere")
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, CalendarAddEventFragment())
+                .replace(R.id.main_frm, interestFragment)
                 .addToBackStack(null)
                 .commit()
         }
@@ -116,23 +106,6 @@ class HouseFragment : Fragment() {
         return binding.root
     }
 
-    private fun initRecyclerView() {
-//        val itemList2 = ArrayList<BoardItem>()
-//
-//
-//        itemList2.add(BoardItem("피아노 스터디", "스터디 목표", 10, 1, 1, 600))
-//        itemList2.add(BoardItem("태권도 스터디", "스터디 목표", 10, 2, 1, 500))
-//        itemList2.add(BoardItem("보컬 스터디", "스터디 목표", 10, 3, 1, 400))
-//
-//        val boardAdapter2 = BoardAdapter(itemList2)
-//
-//        boardAdapter2.notifyDataSetChanged()
-//
-//        binding.rvBoard2.adapter = boardAdapter2
-//
-//        binding.rvBoard2.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-    }
-
     private fun fetchDataAnyWhere(memberId: Int) {
 
         Log.d("HouseFragment","fetchDataAnyWhere()실행")
@@ -144,7 +117,7 @@ class HouseFragment : Fragment() {
             authToken = getAuthToken(),
             memberId = memberId,
             page = 0,
-            size = 10,
+            size = 3,
             sortBy = "ALL",
             gender = "MALE",
             minAge = 18,
@@ -217,7 +190,6 @@ class HouseFragment : Fragment() {
             -1
         ) else -1
 
-        Log.d("memberId3", "$memberId")
         return memberId // 저장된 memberId 없을 시 기본값 -1 반환
     }
 

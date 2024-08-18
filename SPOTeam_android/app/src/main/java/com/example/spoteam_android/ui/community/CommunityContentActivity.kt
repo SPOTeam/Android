@@ -164,7 +164,7 @@ class CommunityContentActivity : AppCompatActivity() {
     private fun showPopupMenu(view: View) {
         val popupMenu = PopupMenu(view.context, view)
         val inflater: MenuInflater = popupMenu.menuInflater
-        val exit = ExitStudyPopupFragment(view.context)
+//        val exit = ExitStudyPopupFragment(view.context)
         val report = ReportContentFragment(view.context)
         val fragmentManager = (view.context as AppCompatActivity).supportFragmentManager
         inflater.inflate(R.menu.menu_community_home_options, popupMenu.menu)
@@ -175,7 +175,7 @@ class CommunityContentActivity : AppCompatActivity() {
                     true
                 }
                 R.id.edit_content -> {
-                    exit.start() // 편집하기로 수정
+//                    exit.start() // 편집하기로 수정
                     true
                 }
                 else -> false

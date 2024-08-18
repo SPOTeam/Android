@@ -1,123 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/spot_logo"
-        android:layout_width="24dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="37dp"
-        android:src="@drawable/study_spot_logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"  />
-
-    <ImageView
-        android:id="@+id/ic_alarm_interest"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="30dp"
-        android:src="@drawable/activity_main_ic_alaram"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ic_find_interest" />
-
-    <ImageView
-        android:id="@+id/ic_find_interest"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/activity_main_ic_find"
-        app:layout_constraintEnd_toStartOf="@+id/ic_alarm_interest"
-        app:layout_constraintTop_toTopOf="@+id/spot_logo" />
-
-    <TextView
-        android:id="@+id/interest_study_bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="108dp"
-        android:text="@string/interest_study"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/framelayout01_my_interest"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:scrollbars="none">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/tab_indicator"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/interest_study_bold">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+        <ImageView
+            android:id="@+id/spot_logo"
+            android:layout_width="24dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="37dp"
+            android:src="@drawable/study_spot_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"  />
+
+        <ImageView
+            android:id="@+id/ic_alarm_interest"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="30dp"
+            android:src="@drawable/activity_main_ic_alaram"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ic_find_interest" />
+
+        <ImageView
+            android:id="@+id/ic_find_interest"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/activity_main_ic_find"
+            app:layout_constraintEnd_toStartOf="@+id/ic_alarm_interest"
+            app:layout_constraintTop_toTopOf="@+id/spot_logo" />
+
+        <TextView
+            android:id="@+id/interest_study_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="108dp"
+            android:text="@string/interest_study"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/framelayout01_my_interest"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_gravity="start|center"
-            android:layout_marginEnd="150dp"
-            app:tabIndicatorColor="#186AFF"
-            app:tabIndicatorFullWidth="false"
-            app:tabIndicatorHeight="2dp"
-            app:tabSelectedTextColor="#186AFF">
+            android:layout_marginTop="10dp"
+            android:background="@drawable/tab_indicator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/interest_study_bold">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_gravity="start|center"
+                android:layout_marginEnd="150dp"
+                app:tabIndicatorColor="#186AFF"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorHeight="2dp"
+                app:tabSelectedTextColor="#186AFF">
 
 
-        </com.google.android.material.tabs.TabLayout>
-    </FrameLayout>
+            </com.google.android.material.tabs.TabLayout>
+        </FrameLayout>
 
 
-    <TextView
-        android:id="@+id/check_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:text="--건"
-        android:textColor="@color/gray_03"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/framelayout01_my_interest" />
+        <TextView
+            android:id="@+id/check_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="--건"
+            android:textColor="@color/gray_03"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/framelayout01_my_interest" />
 
 
-    <ImageView
-        android:id="@+id/ic_filter"
-        android:layout_width="25dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="130dp"
-        android:src="@drawable/interest_fragment_study_setcondition_deactivate"
-        app:layout_constraintBottom_toBottomOf="@+id/check_amount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/check_amount" />
+        <ImageView
+            android:id="@+id/ic_filter"
+            android:layout_width="25dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="130dp"
+            android:src="@drawable/interest_fragment_study_setcondition_deactivate"
+            app:layout_constraintBottom_toBottomOf="@+id/check_amount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/check_amount" />
 
-    <Spinner
-        android:id="@+id/filter_toggle"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="10dp"
-        android:background="@drawable/gender_spinner_background"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toBottomOf="@+id/ic_filter"
-        app:layout_constraintStart_toEndOf="@+id/ic_filter" />
+        <ImageView
+            android:id="@+id/ic_filter_active"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/interest_fragment_study_setcondition_active"
+            app:layout_constraintStart_toStartOf="@+id/ic_filter"
+            app:layout_constraintTop_toTopOf="@+id/ic_filter" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/interest_area_study_reyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/check_amount"
-        tools:listitem="@layout/item_recycler_view" />
+        <Spinner
+            android:id="@+id/filter_toggle"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/gender_spinner_background"
+            android:spinnerMode="dropdown"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_filter"
+            app:layout_constraintStart_toEndOf="@+id/ic_filter" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/interest_area_study_reyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="490dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/check_amount"
+            tools:listitem="@layout/item_recycler_view" />
+
+        <LinearLayout
+            android:id="@+id/page_number_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/interest_area_study_reyclerview"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/previous_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&lt;"
+                android:textSize="18sp"
+                android:textColor="#588FF2"
+                android:layout_marginEnd="3dp"
+                android:padding="10dp"/>
+
+            <TextView
+                android:id="@+id/current_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textColor="#186AFF"
+                android:textSize="14sp"
+                android:padding="3dp"/>
+
+            <TextView
+                android:id="@+id/next_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&gt;"
+                android:textSize="18sp"
+                android:textColor="#588FF2"
+                android:layout_marginStart="3dp"
+                android:padding="10dp"/>
+        </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

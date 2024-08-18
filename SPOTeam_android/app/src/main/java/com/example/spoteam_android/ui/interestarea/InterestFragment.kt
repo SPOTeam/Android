@@ -46,6 +46,7 @@ class InterestFragment : Fragment() {
     @SuppressLint("ResourceType")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val gender = arguments?.getString("gender")
         val minAge = arguments?.getString("minAge")
         val maxAge = arguments?.getString("maxAge")
@@ -60,110 +61,255 @@ class InterestFragment : Fragment() {
 
         val memberId = getMemberId(requireContext())
 
-        fetchDataAnyWhere("ALL")
+        val source = arguments?.getString("source")
+        Log.d("My","$source")
+        when (source) {
+            "HouseFragment" -> {
+                binding.icFilterActive.visibility = View.GONE
 
-        fetchDataGetInterestArea(memberId) { regions ->
-            if (regions != null) {
-                val allTab = tabLayout.newTab()
-                val customView = LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null)
-                val allTextView = customView.findViewById<TextView>(R.id.tabText)
-                allTextView.text = "전체"
-                allTab.customView = customView
-                allTab.tag = "0000000000" // "전체" 탭의 tag 설정
-                tabLayout.addTab(allTab)
+                Log.d("My","HouseFragment에서 진입")
 
-                regions.forEach { region ->
-                    val tab = tabLayout.newTab()
+                fetchDataAnyWhere("ALL",memberId)
 
-                    val customView =
-                        LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null)
-                    val textView = customView.findViewById<TextView>(R.id.tabText)
-                    val tabText = "${region.province}\n${region.district}\n${region.neighborhood}"
+                fetchDataGetInterestArea(memberId) { regions ->
+                    if (regions != null) {
+                        val allTab = tabLayout.newTab()
+                        val customView =
+                            LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null)
+                        val allTextView = customView.findViewById<TextView>(R.id.tabText)
+                        allTextView.text = "전체"
+                        allTab.customView = customView
+                        allTab.tag = "0000000000" // "전체" 탭의 tag 설정
+                        tabLayout.addTab(allTab)
 
-                    textView.text = tabText
-                    tab.customView = customView
-                    tab.tag = region.code // 각 탭에 해당 region.code를 태그로 저장
-                    tabLayout.addTab(tab)
-                }
+                        regions.forEach { region ->
+                            val tab = tabLayout.newTab()
 
-                tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                    override fun onTabSelected(tab: TabLayout.Tab) {
-                        // 선택된 탭의 텍스트 색상을 파란색으로 설정
-                        val textView = tab.customView?.findViewById<TextView>(R.id.tabText)
-                        textView?.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.button_enabled_text
-                            )
-                        ) // 파란색으로 변경
+                            val customView =
+                                LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null)
+                            val textView = customView.findViewById<TextView>(R.id.tabText)
+                            val tabText =
+                                "${region.province}\n${region.district}\n${region.neighborhood}"
 
-                        // 선택된 탭의 region.code를 가져옴
-                        val selectedRegionCode = tab.tag as String
+                            textView.text = tabText
+                            tab.customView = customView
+                            tab.tag = region.code // 각 탭에 해당 region.code를 태그로 저장
+                            tabLayout.addTab(tab)
+                        }
 
-                        Log.d("selectedRegionCode",selectedRegionCode)
-
-                        // API 호출
-                        if (selectedRegionCode == "0000000000") {
-
-                            fetchDataAnyWhere("ALL")
-                        } else {
-                            if (gender != null && minAge != null && maxAge != null && activityFee != null && selectedStudyTheme != null) {
-                                Log.d(
-                                    "sagic 1",
-                                    "$gender $minAge $maxAge $activityFee $selectedStudyTheme $activityFeeAmount"
-                                )
-                                if (activityFeeAmount != null) {
-                                    Log.d("Selected Region Number", selectedRegionCode)
-                                    Log.d("Selected Region", textView?.text.toString())
-                                    fetchDataPlusArea(
-                                        "ALL",
-                                        selectedRegionCode,
-                                        gender,
-                                        minAge,
-                                        maxAge,
-                                        activityFee,
-                                        activityFeeAmount,
-                                        selectedStudyTheme
+                        tabLayout.addOnTabSelectedListener(object :
+                            TabLayout.OnTabSelectedListener {
+                            override fun onTabSelected(tab: TabLayout.Tab) {
+                                // 선택된 탭의 텍스트 색상을 파란색으로 설정
+                                val textView = tab.customView?.findViewById<TextView>(R.id.tabText)
+                                textView?.setTextColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.button_enabled_text
                                     )
+                                ) // 파란색으로 변경
+
+                                // 선택된 탭의 region.code를 가져옴
+                                val selectedRegionCode = tab.tag as String
+
+                                Log.d("selectedRegionCode", selectedRegionCode)
+
+                                // API 호출
+                                if (selectedRegionCode == "0000000000") {
+                                    fetchDataAnyWhere("ALL",memberId)
                                 } else {
-                                    Log.d(
-                                        "sagic 3",
-                                        "$gender $minAge $maxAge $activityFee $selectedStudyTheme $activityFeeAmount"
-                                    )
-                                    Log.d("Selected Region Number", selectedRegionCode)
-                                    Log.d("Selected Region", textView?.text.toString())
                                     fetchDataPlusArea(
                                         "ALL",
+                                        memberId,
                                         selectedRegionCode,
-                                        gender,
-                                        minAge,
-                                        maxAge,
-                                        activityFee,
+                                        "MALE",
+                                        "18",
+                                        "60",
+                                        "false",
                                         "",
-                                        selectedStudyTheme
+                                        "어학"
                                     )
                                 }
                             }
+
+                            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                                val textView = tab?.customView?.findViewById<TextView>(R.id.tabText)
+                                textView?.setTextColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.black))
+                            }
+
+                            override fun onTabReselected(tab: TabLayout.Tab?) {
+                                TODO("Not yet implemented")
+                            }
+                        })
+                    }
+                }
+            }
+
+
+            "InterestFilterFragment" -> {
+
+                binding.icFilterActive.visibility = View.VISIBLE
+                Log.d("My","InterestFilterFragment에서 진입")
+
+                if (gender != null  && minAge != null && maxAge != null && activityFee != null && selectedStudyTheme != null) {
+                    if (activityFeeAmount != null){
+                        fetchDataAnyWhere2(
+                            "ALL",
+                            memberId,
+                            gender,
+                            minAge,
+                            maxAge,
+                            activityFee,
+                            activityFeeAmount,
+                            selectedStudyTheme)
+                        }else{
+                        fetchDataAnyWhere2(
+                            "ALL",
+                            memberId,
+                            gender,
+                            minAge,
+                            maxAge,
+                            activityFee,
+                            "",
+                            selectedStudyTheme)
+                    }
+                }
+
+
+                fetchDataGetInterestArea(memberId) { regions ->
+                    if (regions != null) {
+                        val allTab = tabLayout.newTab()
+                        val customView = LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null)
+                        val allTextView = customView.findViewById<TextView>(R.id.tabText)
+                        allTextView.text = "전체"
+                        allTab.customView = customView
+                        allTab.tag = "0000000000" // "전체" 탭의 tag 설정
+                        tabLayout.addTab(allTab)
+
+                        regions.forEach { region ->
+                            val tab = tabLayout.newTab()
+
+                            val customView =
+                                LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null)
+                            val textView = customView.findViewById<TextView>(R.id.tabText)
+                            val tabText = "${region.province}\n${region.district}\n${region.neighborhood}"
+
+                            textView.text = tabText
+                            tab.customView = customView
+                            tab.tag = region.code // 각 탭에 해당 region.code를 태그로 저장
+                            tabLayout.addTab(tab)
                         }
-                    }
 
-                    override fun onTabUnselected(tab: TabLayout.Tab) {
-                        // 선택되지 않은 탭의 텍스트 색상을 검정색으로 설정
-                        val textView = tab.customView?.findViewById<TextView>(R.id.tabText)
-                        textView?.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.black
-                            )
-                        ) // 검정색으로 변경
-                    }
+                        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                            override fun onTabSelected(tab: TabLayout.Tab) {
+                                // 선택된 탭의 텍스트 색상을 파란색으로 설정
+                                val textView = tab.customView?.findViewById<TextView>(R.id.tabText)
+                                textView?.setTextColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.button_enabled_text
+                                    )
+                                ) // 파란색으로 변경
 
-                    override fun onTabReselected(tab: TabLayout.Tab) {
-                        // 이미 선택된 탭을 다시 선택할 때 수행할 작업이 있으면 여기에 작성
+                                // 선택된 탭의 region.code를 가져옴
+                                val selectedRegionCode = tab.tag as String
+
+                                Log.d("selectedRegionCode",selectedRegionCode)
+
+                                // API 호출
+                                if (selectedRegionCode == "0000000000") {
+                                    if (gender != null && minAge != null && maxAge != null && activityFee != null && selectedStudyTheme != null) {
+                                        if (activityFeeAmount != null){
+                                            fetchDataAnyWhere2(
+                                                "ALL",
+                                                memberId,
+                                                gender,
+                                                minAge,
+                                                maxAge,
+                                                activityFee,
+                                                activityFeeAmount,
+                                                selectedStudyTheme
+                                            )
+                                        }else{
+                                            fetchDataAnyWhere2(
+                                                "ALL",
+                                                memberId,
+                                                gender,
+                                                minAge,
+                                                maxAge,
+                                                activityFee,
+                                                "",
+                                                selectedStudyTheme
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    if (gender != null && minAge != null && maxAge != null && activityFee != null && selectedStudyTheme != null) {
+                                        Log.d(
+                                            "sagic 1",
+                                            "$gender $minAge $maxAge $activityFee $selectedStudyTheme $activityFeeAmount"
+                                        )
+                                        if (activityFeeAmount != null) {
+                                            Log.d("Selected Region Number", selectedRegionCode)
+                                            Log.d("Selected Region", textView?.text.toString())
+                                            fetchDataPlusArea(
+                                                "ALL",
+                                                memberId,
+                                                selectedRegionCode,
+                                                gender,
+                                                minAge,
+                                                maxAge,
+                                                activityFee,
+                                                activityFeeAmount,
+                                                selectedStudyTheme
+                                            )
+                                        } else {
+                                            Log.d(
+                                                "sagic 3",
+                                                "$gender $minAge $maxAge $activityFee $selectedStudyTheme $activityFeeAmount"
+                                            )
+                                            Log.d("Selected Region Number", selectedRegionCode)
+                                            Log.d("Selected Region", textView?.text.toString())
+                                            fetchDataPlusArea(
+                                                "ALL",
+                                                memberId,
+                                                selectedRegionCode,
+                                                gender,
+                                                minAge,
+                                                maxAge,
+                                                activityFee,
+                                                "",
+                                                selectedStudyTheme
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
+                            override fun onTabUnselected(tab: TabLayout.Tab) {
+                                // 선택되지 않은 탭의 텍스트 색상을 검정색으로 설정
+                                val textView = tab.customView?.findViewById<TextView>(R.id.tabText)
+                                textView?.setTextColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.black
+                                    )
+                                ) // 검정색으로 변경
+                            }
+
+                            override fun onTabReselected(tab: TabLayout.Tab) {
+                                // 이미 선택된 탭을 다시 선택할 때 수행할 작업이 있으면 여기에 작성
+                            }
+                        })
                     }
-                })
+                }
             }
         }
+
+
 
         val spinner: Spinner = binding.filterToggle
 
@@ -186,14 +332,14 @@ class InterestFragment : Fragment() {
             ) {
                 val source = arguments?.getString("source")
                 when (source) {
-                    "AnyWhere" -> {
+                    "HouseFragment" -> {
                         // HouseFragment에서 접근했을 때의 API 처리
                         when (position) {
-                            0 -> fetchDataAnyWhere("ALL")
-                            1 -> fetchDataAnyWhere("RECRUITING")
-                            2 -> fetchDataAnyWhere("COMPLETED")
-                            3 -> fetchDataAnyWhere("HIT")
-                            4 -> fetchDataAnyWhere("LIKED")
+                            0 -> fetchDataAnyWhere("ALL",memberId)
+                            1 -> fetchDataAnyWhere("RECRUITING",memberId)
+                            2 -> fetchDataAnyWhere("COMPLETED",memberId)
+                            3 -> fetchDataAnyWhere("HIT",memberId)
+                            4 -> fetchDataAnyWhere("LIKED",memberId)
                         }
                     }
 
@@ -204,11 +350,12 @@ class InterestFragment : Fragment() {
                                 if (gender != null && minAge != null && maxAge != null && activityFee != null && selectedStudyTheme != null) {
                                     fetchDataAnyWhere2(
                                         "ALL",
+                                        memberId,
                                         gender,
                                         minAge,
                                         maxAge,
                                         activityFee,
-                                        activityFeeAmount ?: "0", // null이면 기본값 "0"으로 대체
+                                        activityFeeAmount ?: "", // null이면 기본값 "0"으로 대체
                                         selectedStudyTheme
                                     )
                                 }
@@ -218,11 +365,12 @@ class InterestFragment : Fragment() {
                                 if (gender != null && minAge != null && maxAge != null && activityFee != null && selectedStudyTheme != null) {
                                     fetchDataAnyWhere2(
                                         "RECRUITING",
+                                        memberId,
                                         gender,
                                         minAge,
                                         maxAge,
                                         activityFee,
-                                        activityFeeAmount ?: "0", // null이면 기본값 "0"으로 대체
+                                        activityFeeAmount ?: "", // null이면 기본값 "0"으로 대체
                                         selectedStudyTheme
                                     )
                                 }
@@ -233,6 +381,7 @@ class InterestFragment : Fragment() {
                                 if (gender != null && minAge != null && maxAge != null && activityFee != null && selectedStudyTheme != null) {
                                     fetchDataAnyWhere2(
                                         "COMPLETED",
+                                        memberId,
                                         gender,
                                         minAge,
                                         maxAge,
@@ -247,11 +396,12 @@ class InterestFragment : Fragment() {
                                 if (gender != null && minAge != null && maxAge != null && activityFee != null && selectedStudyTheme != null) {
                                     fetchDataAnyWhere2(
                                         "HIT",
+                                        memberId,
                                         gender,
                                         minAge,
                                         maxAge,
                                         activityFee,
-                                        activityFeeAmount ?: "0", // null이면 기본값 "0"으로 대체
+                                        activityFeeAmount ?: "", // null이면 기본값 "0"으로 대체
                                         selectedStudyTheme
                                     )
                                 }
@@ -261,16 +411,21 @@ class InterestFragment : Fragment() {
                                 if (gender != null && minAge != null && maxAge != null && activityFee != null && selectedStudyTheme != null) {
                                     fetchDataAnyWhere2(
                                         "LIKED",
+                                        memberId,
                                         gender,
                                         minAge,
                                         maxAge,
                                         activityFee,
-                                        activityFeeAmount ?: "0", // null이면 기본값 "0"으로 대체
+                                        activityFeeAmount ?: "", // null이면 기본값 "0"으로 대체
                                         selectedStudyTheme
                                     )
                                 }
                             }
                         }
+
+
+
+
                     }
                 }
             }
@@ -285,7 +440,7 @@ class InterestFragment : Fragment() {
         }
     }
 
-    private fun fetchDataAnyWhere(selectedItem: String) {
+    private fun fetchDataAnyWhere(selectedItem: String,memberId: Int,) {
 
         Log.d("InterestFragment","fetchDataAnyWhere()실행")
 
@@ -295,7 +450,7 @@ class InterestFragment : Fragment() {
 
         RetrofitClient.IaapiService.InterestArea(
             authToken = getAuthToken(),
-            memberId = 10,
+            memberId = memberId,
             page = 0,
             size = 10,
             sortBy = selectedItem,
@@ -359,7 +514,7 @@ class InterestFragment : Fragment() {
             })
     }
 
-    private fun fetchDataAnyWhere2(selectedItem: String,gender: String, minAge: String, maxAge: String, activityFee: String, activityFeeAmount: String, selectedStudyTheme:String) {
+    private fun fetchDataAnyWhere2(selectedItem: String, memberId: Int, gender: String, minAge: String, maxAge: String, activityFee: String, activityFeeAmount: String, selectedStudyTheme:String) {
 
         Log.d("InterestFragment","fetchDataAnyWhere2()실행")
         val interest_area_board = binding.interestAreaStudyReyclerview
@@ -373,7 +528,7 @@ class InterestFragment : Fragment() {
 
         RetrofitClient.IaapiService.InterestArea(
             authToken = getAuthToken(),
-            memberId = 10,
+            memberId = memberId,
             gender = gender,
             minAge = minAge.toInt(),
             maxAge = maxAge.toInt(),
@@ -432,7 +587,7 @@ class InterestFragment : Fragment() {
             })
     }
 
-    private fun fetchDataPlusArea(selectedItem: String,regionCode: String, gender: String, minAge: String, maxAge: String, activityFee: String, activityFeeAmount: String, selectedStudyTheme:String) {
+    private fun fetchDataPlusArea(selectedItem: String, memberId: Int, regionCode: String, gender: String, minAge: String, maxAge: String, activityFee: String, activityFeeAmount: String, selectedStudyTheme:String) {
 
         val interest_area_board = binding.interestAreaStudyReyclerview
         val checkcount: TextView = binding.checkAmount
@@ -513,7 +668,7 @@ class InterestFragment : Fragment() {
 
         RetrofitClient.GetIaService.GetInterestArea(
             authToken = getAuthToken(),
-            memberId = 10,
+            memberId = memberId,
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
