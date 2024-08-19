@@ -1,3 +1,4 @@
+import com.example.spoteam_android.ui.calendar.CalendarApiService
 import com.example.spoteam_android.ui.interestarea.GetMemberInterestAreaApiService
 import com.example.spoteam_android.ui.interestarea.InterestAreaApiService
 import com.example.spoteam_android.ui.interestarea.InterestSpecificAreaApiService
@@ -44,5 +45,9 @@ object RetrofitClient {
 
     val GetRSService: RecommendStudyApiService by lazy{
         instance.create(RecommendStudyApiService::class.java)
+    }
+
+    val CAService: CalendarApiService by lazy{
+        instance.create(CalendarApiService::class.java)
     }
 }

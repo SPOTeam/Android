@@ -29,6 +29,7 @@ data class CommunityData(
 
 
 data class BoardItem (
+    val studyId: Int,
     val studyName : String,
     val studyObject : String,
     val studyTO : Int,

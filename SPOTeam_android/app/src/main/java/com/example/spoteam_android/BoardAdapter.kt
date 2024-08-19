@@ -1,17 +1,23 @@
 package com.example.spoteam_android
 
+import StudyAdapter
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
+import com.example.spoteam_android.ui.study.DetailStudyFragment
 
 class BoardAdapter(private val itemList: ArrayList<BoardItem>) :
     RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
         val binding = ItemRecyclerViewPlusToggleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,8 +28,24 @@ class BoardAdapter(private val itemList: ArrayList<BoardItem>) :
         val currentItem = itemList[position]
         holder.bind(currentItem)
 
+
         holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context, "Clicked: ${currentItem.studyName}", Toast.LENGTH_SHORT).show()
+            holder.itemView.setOnClickListener {
+                // Toast 메시지 대신 DetailStudyFragment로 전환
+                val fragment = DetailStudyFragment()
+
+                //스터디 ID bundle형태로 DetailStudyFragment 전달
+                val bundle = Bundle()
+                bundle.putString("studyId", currentItem.studyId.toString())
+                Log.d("StudyId",currentItem.studyId.toString())
+                fragment.arguments = bundle
+
+                val fragmentManager = (holder.itemView.context as AppCompatActivity).supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.main_frm, fragment)
+                fragmentTransaction.addToBackStack(null)  // 백스택에 추가하여 뒤로가기 버튼을 사용 가능하게 함
+                fragmentTransaction.commit()
+            }
         }
     }
 
@@ -84,7 +106,5 @@ class BoardAdapter(private val itemList: ArrayList<BoardItem>) :
         itemList.addAll(filteredList)
         notifyDataSetChanged()
     }
-
-
 
 }
