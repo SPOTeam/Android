@@ -37,11 +37,11 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val itemList = ArrayList<BoardItem>()
-        itemList.add(BoardItem("피아노 스터디", "스터디 목표", 10, 1, 1, 600))
-        itemList.add(BoardItem("태권도 스터디", "스터디 목표", 10, 2, 1, 500))
-        itemList.add(BoardItem("보컬 스터디", "스터디 목표", 10, 3, 1, 400))
+        itemList.add(BoardItem(1,"피아노 스터디", "스터디 목표", "피아노 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(1,"태권도 스터디", "스터디 목표", "태권도 스터디입니다", 2, 1, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(1,"보컬 스터디", "스터디 목표", "보컬 스터디입니다", 3, 1, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
 
-        boardAdapter = BoardAdapter(itemList)
+        boardAdapter = BoardAdapter(itemList){selectedItem ->}
         binding.rvBoard2.apply {
             adapter = boardAdapter
             layoutManager =

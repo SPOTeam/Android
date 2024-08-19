@@ -45,11 +45,6 @@ class CalendarFragment : Fragment() {
         studyId = arguments?.getInt("studyId") ?: 0
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
 
-
-
-
-        fetchGetSchedule()
-
         calendarView = binding.calendarView
         eventsRecyclerView = binding.eventrecyclerview
         imgbtnAddEvent = binding.imgbtnAddEvent
@@ -63,6 +58,9 @@ class CalendarFragment : Fragment() {
         eventsRecyclerView.adapter = eventAdapter
 
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            fetchGetSchedule(
+                9,year,month
+            )
             Log.d("CalendarFragment", "Date selected: $year-${month + 1}-$dayOfMonth")
             eventViewModel.loadEvents(year, month + 1, dayOfMonth)
         }
@@ -84,26 +82,14 @@ class CalendarFragment : Fragment() {
         return binding.root
     }
 
-    private fun fetchGetSchedule() {
+    private fun fetchGetSchedule(studyId: Int, year: Int, month: Int) {
         Log.d("CalendarFragment", "fetchGetSchedule() 실행")
-
-
-        val request = RetrofitClient.CAService.GetScheuled(
-            authToken = getAuthToken(),
-            studyId = 8,
-            year = 2024,
-            month = 1
-        )
-
-        // URL 로그 출력
-        val url = request.request().url
-        Log.d("CalendarFragment", "Request URL: $url")
 
         RetrofitClient.CAService.GetScheuled(
             authToken = getAuthToken(),
-            studyId = 8,
-            year = 2024,
-            month = 1,
+            studyId = 9,
+            year = year,
+            month = month,
         ).enqueue(object : Callback<ScheduleResponse> {
             override fun onResponse(
                 call: Call<ScheduleResponse>,

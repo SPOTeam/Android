@@ -474,15 +474,19 @@ class InterestFragment : Fragment() {
                             apiResponse?.result?.content?.forEach { study ->
                                 val boardItem = BoardItem(
                                     studyId = study.studyId,
-                                    studyName = study.title,  // title을 studyName으로 사용
-                                    studyObject = study.introduction,  // introduction을 studyObject로 사용
-                                    studyTO = study.maxPeople,
-                                    studyPO = study.memberCount,
-                                    like = study.heartCount,
-                                    watch = study.hitNum,
-                                )
+                                    title = study.title,
+                                    goal = study.goal,
+                                    introduction = study.introduction,
+                                    memberCount = study.memberCount,
+                                    heartCount = study.heartCount,
+                                    hitNum = study.hitNum,
+                                    maxPeople = study.maxPeople,
+                                    studyState = study.studyState,
+                                    themeTypes = study.themeTypes,
+                                    regions = study.regions,
+                                    imageUrl = study.imageUrl)
                                 boardItems.add(boardItem)
-                                val boardAdapter = BoardAdapter(boardItems)
+                                val boardAdapter = BoardAdapter(boardItems){selectedItem ->}
                                 boardAdapter.notifyDataSetChanged()
                                 interest_area_board.visibility = View.VISIBLE
                                 interest_area_board.adapter = boardAdapter
@@ -553,15 +557,20 @@ class InterestFragment : Fragment() {
                             apiResponse?.result?.content?.forEach { study ->
                                 val boardItem = BoardItem(
                                     studyId = study.studyId,
-                                    studyName = study.title,  // title을 studyName으로 사용
-                                    studyObject = study.introduction,  // introduction을 studyObject로 사용
-                                    studyTO = study.maxPeople,
-                                    studyPO = study.memberCount,
-                                    like = study.heartCount,
-                                    watch = study.hitNum,
+                                    title = study.title,
+                                    goal = study.goal,
+                                    introduction = study.introduction,
+                                    memberCount = study.memberCount,
+                                    heartCount = study.heartCount,
+                                    hitNum = study.hitNum,
+                                    maxPeople = study.maxPeople,
+                                    studyState = study.studyState,
+                                    themeTypes = study.themeTypes,
+                                    regions = study.regions,
+                                    imageUrl = study.imageUrl
                                 )
                                 boardItems.add(boardItem)
-                                val boardAdapter = BoardAdapter(boardItems)
+                                val boardAdapter = BoardAdapter(boardItems){selectedItem ->}
                                 boardAdapter.notifyDataSetChanged()
                                 interest_area_board.visibility = View.VISIBLE
                                 interest_area_board.adapter = boardAdapter
@@ -628,15 +637,20 @@ class InterestFragment : Fragment() {
                             apiResponse?.result?.content?.forEach { study ->
                                 val boardItem = BoardItem(
                                     studyId = study.studyId,
-                                    studyName = study.title,  // title을 studyName으로 사용
-                                    studyObject = study.introduction,  // introduction을 studyObject로 사용
-                                    studyTO = study.maxPeople,
-                                    studyPO = study.memberCount,
-                                    like = study.heartCount,
-                                    watch = study.hitNum,
+                                    title = study.title,
+                                    goal = study.goal,
+                                    introduction = study.introduction,
+                                    memberCount = study.memberCount,
+                                    heartCount = study.heartCount,
+                                    hitNum = study.hitNum,
+                                    maxPeople = study.maxPeople,
+                                    studyState = study.studyState,
+                                    themeTypes = study.themeTypes,
+                                    regions = study.regions,
+                                    imageUrl = study.imageUrl
                                 )
                                 boardItems.add(boardItem)
-                                val boardAdapter = BoardAdapter(boardItems)
+                                val boardAdapter = BoardAdapter(boardItems){selectedItem ->}
                                 boardAdapter.notifyDataSetChanged()
                                 interest_area_board.visibility = View.VISIBLE
                                 interest_area_board.adapter = boardAdapter

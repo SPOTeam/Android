@@ -97,6 +97,7 @@ class DetailStudyFragment : Fragment() {
 
 
     private fun fetchStudyDetails(studyId: Int) {
+        Log.d("DetailStudyFragment","fetchStudyDetails() 호출")
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
         api.getStudyDetails(studyId).enqueue(object : Callback<StudyDetailsResponse> {

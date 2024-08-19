@@ -55,6 +55,9 @@ data class Content(
     @SerializedName("title")
     val title: String,
 
+    @SerializedName("goal")
+    val goal: String,
+
     @SerializedName("introduction")
     val introduction: String,
 
