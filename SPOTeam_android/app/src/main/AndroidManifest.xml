@@ -23,7 +23,9 @@
             android:name=".login.LoginAPiService"
             android:enabled="true"
             android:exported="true" />
-
+        <activity
+            android:name=".ui.study.MyStudyPostContentActivity"
+            android:exported="false" />
         <activity
             android:name=".login.LocationSearchActivity"
             android:exported="false" />

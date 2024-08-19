@@ -59,14 +59,13 @@ class RecruitingStudyFragment : Fragment() {
         itemList.add(BoardItem(6,"디자인 스터디", "스터디 목표", "디자인 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
         itemList.add(BoardItem(7,"기타 스터디", "스터디 목표", "기타 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
 
+
         val boardAdapter = BoardAdapter(itemList){selectedItem ->}
         boardAdapter.notifyDataSetChanged()
 
         recruiting_board.adapter = boardAdapter
         recruiting_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-
     }
-
 }
 

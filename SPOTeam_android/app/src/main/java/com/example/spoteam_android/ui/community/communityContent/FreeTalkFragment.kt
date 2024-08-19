@@ -43,6 +43,14 @@ class FreeTalkFragment : Fragment() {
 
         fetchPages("FREE_TALK", 0)
 
+        // WriteContentFragment에서 결과 수신
+        parentFragmentManager.setFragmentResultListener("requestKey", this) { _, bundle ->
+            val result = bundle.getString("resultKey")
+            if (result == "SUCCESS") {
+                fetchPages("FREE_TALK", 0) // 게시글 등록 성공 시 갱신
+            }
+        }
+
         return binding.root
     }
 

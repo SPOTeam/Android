@@ -110,6 +110,7 @@
             android:layout_marginEnd="10dp" />
 
         <CheckBox
+            android:id="@+id/isAnnouncement_cb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@null"
@@ -134,6 +135,6 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/write_content_content_et"
         app:layout_constraintEnd_toEndOf="@id/write_content_content_et"
-        app:layout_constraintTop_toBottomOf="@id/write_content_info_ll" />
+        app:layout_constraintTop_toBottomOf="@id/mystudy_write_content_info_ll" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

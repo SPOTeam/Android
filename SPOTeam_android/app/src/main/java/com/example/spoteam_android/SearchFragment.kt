@@ -1,21 +1,15 @@
 package com.example.spoteam_android
 
 
-import RetrofitClient
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentSearchBinding
-import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SearchFragment : Fragment() {
 

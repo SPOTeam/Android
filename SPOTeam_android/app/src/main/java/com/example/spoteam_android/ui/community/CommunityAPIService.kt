@@ -84,4 +84,30 @@ interface CommunityAPIService {
         @Path("commentId") postId: Int,
         @Path("memberId") memberId: Int
     ): Call<UnDisLikeCommentResponse>
+
+    @POST("/spot/studies/{studyId}/posts")
+    fun postStudyPost(
+        @Path("studyId") studyId: Int,
+        @Body requestBody : StudyWriteContentRequest
+    ): Call<StudyPostResponse>
+
+    @GET("/spot/studies/{studyId}/posts")
+    fun getStudyPost(
+        @Path("studyId") studyId: Int,
+        @Query("themeQuery") themeQuery : String,
+        @Query("offset") offset : Int,
+        @Query("limit") limit : Int
+    ): Call<StudyPostListResponse>
+
+    @GET("/spot/studies/{studyId}/posts/{postId}")
+    fun getStudyPostContent(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int,
+    ): Call<StudyPostContentResponse>
+
+    @GET("/spot/studies/{studyId}/posts/{postId}/comments")
+    fun getStudyPostContentComment(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int,
+    ): Call<StudyPostContentCommentResponse>
 }
