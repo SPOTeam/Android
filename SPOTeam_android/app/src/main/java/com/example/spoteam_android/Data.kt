@@ -30,14 +30,18 @@ data class CommunityData(
 
 data class BoardItem (
     val studyId: Int,
-    val studyName : String,
-    val studyObject : String,
-    val studyTO : Int,
-    val studyPO : Int,
-    val like: Int,
-    val watch : Int
+    val title: String,
+    val goal: String,
+    val introduction: String,
+    val memberCount: Int,
+    val heartCount: Int,
+    val hitNum: Int,
+    val maxPeople: Int,
+    val studyState: String,
+    val themeTypes: List<String>,
+    val regions: List<String>,
+    val imageUrl: String
 )
-
 
 
 data class StudyItem( //StudyFragment에서 사용

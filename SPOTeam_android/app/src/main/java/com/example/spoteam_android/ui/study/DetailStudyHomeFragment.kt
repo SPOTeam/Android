@@ -80,10 +80,15 @@ class DetailStudyHomeFragment : Fragment() {
         api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
             override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
                 if (response.isSuccessful) {
+                    Log.d("DSHomeFragment","$response")
                     response.body()?.let { memberResponse ->
-                        profileAdapter.updateList(memberResponse.result.members.map {
-                            ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
-                        })
+                        if (memberResponse != null && memberResponse.result != null) {
+                            profileAdapter.updateList(memberResponse.result.members.map {
+                                ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
+                            })
+                        }else{
+                            ProfileItem("","")
+                        }
                     }
                 } else {
                     Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
