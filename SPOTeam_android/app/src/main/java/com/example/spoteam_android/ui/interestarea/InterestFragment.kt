@@ -473,6 +473,7 @@ class InterestFragment : Fragment() {
                         if (apiResponse?.isSuccess == true) {
                             apiResponse?.result?.content?.forEach { study ->
                                 val boardItem = BoardItem(
+                                    studyId = study.studyId,
                                     studyName = study.title,  // title을 studyName으로 사용
                                     studyObject = study.introduction,  // introduction을 studyObject로 사용
                                     studyTO = study.maxPeople,
@@ -551,6 +552,7 @@ class InterestFragment : Fragment() {
                         if (apiResponse?.isSuccess == true) {
                             apiResponse?.result?.content?.forEach { study ->
                                 val boardItem = BoardItem(
+                                    studyId = study.studyId,
                                     studyName = study.title,  // title을 studyName으로 사용
                                     studyObject = study.introduction,  // introduction을 studyObject로 사용
                                     studyTO = study.maxPeople,
@@ -625,6 +627,7 @@ class InterestFragment : Fragment() {
                         if (apiResponse?.isSuccess == true) {
                             apiResponse?.result?.content?.forEach { study ->
                                 val boardItem = BoardItem(
+                                    studyId = study.studyId,
                                     studyName = study.title,  // title을 studyName으로 사용
                                     studyObject = study.introduction,  // introduction을 studyObject로 사용
                                     studyTO = study.maxPeople,

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.ui.alert.AlertFragment
+import com.example.spoteam_android.ui.calendar.CalendarFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
@@ -23,6 +24,7 @@ import com.example.spoteam_android.ui.recruiting.RecruitingStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Calendar
 
 class HouseFragment : Fragment() {
 
@@ -90,7 +92,7 @@ class HouseFragment : Fragment() {
             bundle.putString("source", "HouseFragment")
             //스터디 참여하기 팝업으로 이동
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, interestFragment)
+                .replace(R.id.main_frm, CalendarFragment())
                 .addToBackStack(null)
                 .commit()
         }
@@ -137,7 +139,9 @@ class HouseFragment : Fragment() {
                         Log.d("HouseFragment","$apiResponse")
                         if (apiResponse?.isSuccess == true) {
                             apiResponse?.result?.content?.forEach { study ->
+                                val studyId = study.studyId
                                 val boardItem = BoardItem(
+                                    studyId = study.studyId,
                                     studyName = study.title,  // title을 studyName으로 사용
                                     studyObject = study.introduction,  // introduction을 studyObject로 사용
                                     studyTO = study.maxPeople,
@@ -216,6 +220,7 @@ class HouseFragment : Fragment() {
                         if (apiResponse?.isSuccess == true) {
                             apiResponse?.result?.content?.forEach { study ->
                                 val boardItem = BoardItem(
+                                    studyId = study.studyId,
                                     studyName = study.title,  // title을 studyName으로 사용
                                     studyObject = study.introduction,  // introduction을 studyObject로 사용
                                     studyTO = study.maxPeople,
