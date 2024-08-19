@@ -51,19 +51,15 @@ class RecruitingStudyFragment : Fragment() {
 
         val itemList = ArrayList<BoardItem>()
 
-        itemList.add(BoardItem("피아노 스터디", "스터디 목표", 10, 1, 1, 600))
-        itemList.add(BoardItem("태권도 스터디", "스터디 목표", 10, 2, 1, 500))
-        itemList.add(BoardItem("보컬 스터디", "스터디 목표", 10, 3, 1, 400))
-        itemList.add(BoardItem("기타 스터디", "스터디 목표", 10, 4, 1, 300))
-        itemList.add(BoardItem("롤 스터디", "스터디 목표", 10, 5, 5, 200))
-        itemList.add(BoardItem("안드로이드 스터디", "스터디 목표", 10, 5, 200, 200))
-        itemList.add(BoardItem("ios 스터디", "스터디 목표", 10, 7, 1, 200))
-        itemList.add(BoardItem("Server 스터디", "스터디 목표", 10, 8, 1, 200))
-        itemList.add(BoardItem("Kotlin 스터디", "스터디 목표", 10, 5, 1, 200))
-        itemList.add(BoardItem("Java 스터디", "스터디 목표", 10, 5, 1, 200))
+        itemList.add(BoardItem(1,"피아노 스터디", "스터디 목표", "피아노 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(2,"태권도 스터디", "스터디 목표", "태권도 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(3,"프랑스어 스터디", "스터디 목표", "프랑스어 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(4,"토익 스터디", "스터디 목표", "토익 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(5,"C언어 스터디", "스터디 목표", "C언어 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(6,"디자인 스터디", "스터디 목표", "디자인 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(7,"기타 스터디", "스터디 목표", "기타 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
 
-
-        val boardAdapter = BoardAdapter(itemList)
+        val boardAdapter = BoardAdapter(itemList){selectedItem ->}
         boardAdapter.notifyDataSetChanged()
 
         recruiting_board.adapter = boardAdapter
