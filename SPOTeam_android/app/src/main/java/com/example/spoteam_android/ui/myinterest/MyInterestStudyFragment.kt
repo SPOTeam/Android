@@ -60,6 +60,24 @@ class MyInterestStudyFragment : Fragment() {
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spinner.adapter = adapter
 
+        val myinterest_board = binding.myInterestStudyReyclerview
+
+        val itemList = ArrayList<BoardItem>()
+
+        itemList.add(BoardItem(1,"피아노 스터디", "스터디 목표", "피아노 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(2,"태권도 스터디", "스터디 목표", "태권도 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(3,"프랑스어 스터디", "스터디 목표", "프랑스어 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(4,"토익 스터디", "스터디 목표", "토익 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(5,"C언어 스터디", "스터디 목표", "C언어 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(6,"디자인 스터디", "스터디 목표", "디자인 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(7,"기타 스터디", "스터디 목표", "기타 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+
+        val boardAdapter = BoardAdapter(itemList){selectedItem ->}
+        boardAdapter.notifyDataSetChanged()
+
+        myinterest_board.adapter = boardAdapter
+        myinterest_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
     }
 }
 
