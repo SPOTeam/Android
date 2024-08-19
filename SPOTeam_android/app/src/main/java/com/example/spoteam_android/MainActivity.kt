@@ -28,6 +28,7 @@ import com.example.spoteam_android.ui.study.MyStudyCommunityFragment
 import com.example.spoteam_android.ui.study.MyStudyWriteContentFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.example.spoteam_android.ui.study.StudyFragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 
@@ -63,17 +64,27 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.mainFloatingButton.setOnClickListener {
+            val writeCommunityFragment = WriteContentFragment().apply {
+                setStyle(
+                    BottomSheetDialogFragment.STYLE_NORMAL,
+                    R.style.AppBottomSheetDialogBorder20WhiteTheme
+                )
+            }
+
+            val myStudyWriteCommunityFragment = MyStudyWriteContentFragment().apply {
+                setStyle(
+                    BottomSheetDialogFragment.STYLE_NORMAL,
+                    R.style.AppBottomSheetDialogBorder20WhiteTheme
+                )
+            }
             getCurrentFragment()?.let {
                 if(it is CommunityHomeFragment) {
-                    val writeCommunityFragment = WriteContentFragment()
                     writeCommunityFragment.show(supportFragmentManager, "Write Content")
                 }
                 if(it is CommunityFragment) {
-                    val writeCommunityFragment = WriteContentFragment()
                     writeCommunityFragment.show(supportFragmentManager, "Write Content")
                 }
                 if(it is DetailStudyFragment) {
-                    val myStudyWriteCommunityFragment = MyStudyWriteContentFragment()
                     myStudyWriteCommunityFragment.show(supportFragmentManager, "My Study Write Content")
                 }
             }
@@ -163,6 +174,7 @@ class MainActivity : AppCompatActivity() {
     private fun showFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_frm, fragment)
+            .addToBackStack(null)
             .commitAllowingStateLoss()
     }
 

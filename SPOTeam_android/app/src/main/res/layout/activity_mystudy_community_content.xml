@@ -63,17 +63,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/community_content_writer_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="익명"
-                android:textSize="14sp"
-                android:layout_marginStart="5dp"
-                app:layout_constraintStart_toEndOf="@id/community_content_profile_iv"
-                app:layout_constraintTop_toTopOf="@id/community_content_profile_iv" />
-
-            <TextView
                 android:id="@+id/community_content_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,8 +70,19 @@
                 android:text="2024.05.31 17:31"
                 android:textSize="14sp"
                 android:layout_marginTop="5dp"
-                app:layout_constraintStart_toStartOf="@id/community_content_writer_tv"
-                app:layout_constraintTop_toBottomOf="@id/community_content_writer_tv" />
+                app:layout_constraintStart_toEndOf="@id/community_content_profile_iv"
+                app:layout_constraintBottom_toBottomOf="@id/community_content_profile_iv" />
+
+            <!--    점3개 이미지 변경    -->
+            <ImageView
+                android:id="@+id/community_content_image_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/study_spot_logo"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
+                app:layout_constraintTop_toBottomOf="@id/community_content_profile_iv" />
 
             <!--    점3개 이미지 변경    -->
             <ImageView
@@ -95,41 +95,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/community_content_profile_iv" />
 
-            <LinearLayout
-                android:id="@+id/subscribe_ll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginEnd="12dp"
-                app:layout_constraintEnd_toStartOf="@id/community_content_more_iv"
-                app:layout_constraintTop_toTopOf="@id/community_content_profile_iv">
-
-                <!--    저장 이미지 변경    -->
-                <ImageView
-                    android:id="@+id/community_content_bookMark_unchecked_iv"
-                    android:layout_width="11dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/ic_bookmark_unchecked" />
-
-                <ImageView
-                    android:id="@+id/community_content_bookMark_checked_iv"
-                    android:layout_width="11dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/ic_bookmark_checked"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/community_content_saveNum_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:text="20"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/selector_blue" />
-
-            </LinearLayout>
-
             <TextView
                 android:id="@+id/community_content_title_tv"
                 android:layout_width="wrap_content"
@@ -138,23 +103,23 @@
                 android:text="카카오 최종합격"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
-                app:layout_constraintTop_toBottomOf="@id/community_content_profile_iv" />
+                app:layout_constraintTop_toBottomOf="@id/community_content_image_iv" />
 
             <TextView
                 android:id="@+id/community_content_content_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:text="카카오 최종합격했습니다!\n 면접 후기랑 자소서 풀어볼게요\n자소서 문항 :\n 1.지원동기와 성장과정, 문제해결과정을 중심으로 작성하시오"
                 android:textSize="14sp"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 android:lineSpacingMultiplier="1.5"
                 app:layout_constraintStart_toStartOf="@id/community_content_title_tv"
-                app:layout_constraintTop_toBottomOf="@id/community_content_title_tv"
-                app:layout_constraintEnd_toEndOf="@id/community_content_more_iv"/>
+                app:layout_constraintEnd_toEndOf="@id/community_content_more_iv"
+                app:layout_constraintTop_toBottomOf="@id/community_content_title_tv" />
 
             <LinearLayout
                 android:id="@+id/community_content_content_info_ll"

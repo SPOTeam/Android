@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -60,14 +61,19 @@
 
     <TextView
         android:id="@+id/content_summary_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="4학년 취준생들은 요즘 뭐하고 사니"
         android:textSize="14sp"
         android:textColor="@color/black"
         android:layout_marginTop="10dp"
+        android:maxLines="3"
+        android:ellipsize="end"
         app:layout_constraintTop_toBottomOf="@id/content_ll"
-        app:layout_constraintStart_toStartOf="@id/content_ll"/>
+        app:layout_constraintStart_toStartOf="@id/content_ll"
+        app:layout_constraintEnd_toEndOf="@id/content_bookmark_unchecked_iv"
+        tools:ignore="NotSibling" />
+
 
 
     <LinearLayout
