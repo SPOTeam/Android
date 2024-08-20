@@ -43,18 +43,6 @@ class HouseFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentHouseBinding.inflate(inflater, container, false)
 
-//        boardAdapter = BoardAdapter(ArrayList()) { selectedItem ->
-//            Log.d("HouseFragment", "이벤트 클릭: ${selectedItem}")
-//            studyViewModel.setStudyData(selectedItem.studyId, selectedItem.imageUrl, selectedItem.introduction)
-//
-//            // Fragment 전환
-//            val detailStudyFragment = DetailStudyFragment()
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.main_frm, detailStudyFragment)
-//                .addToBackStack(null)
-//                .commit()
-//        }
-
         interestBoardAdapter = BoardAdapter(ArrayList()) { selectedItem ->
             Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
             studyViewModel.setStudyData(
@@ -152,7 +140,7 @@ class HouseFragment : Fragment() {
             bundle.putString("source", "HouseFragment")
             //스터디 참여하기 팝업으로 이동
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, CalendarFragment())
+                .replace(R.id.main_frm, interestFragment)
                 .addToBackStack(null)
                 .commit()
         }

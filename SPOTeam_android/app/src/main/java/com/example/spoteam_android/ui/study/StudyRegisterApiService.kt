@@ -1,8 +1,10 @@
+import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MemberResponse
 import com.example.spoteam_android.RecentAnnounceResponse
 import com.example.spoteam_android.ScheduleListResponse
 import com.example.spoteam_android.ScheduleRequest
 import com.example.spoteam_android.ScheduleResponse
+import com.example.spoteam_android.StudyApplyResponse
 import com.example.spoteam_android.StudyDetailsResponse
 import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.StudyResponse
@@ -30,6 +32,11 @@ interface StudyApiService {
         @Path("memberId") memberId: Int,
         @Query("page") page: Int,
         @Query("size") size: Int
+    ): Call<StudyResponse>
+
+    @GET("/spot/search/studies/liked/members/{memberId}")
+    fun getBookmark(
+        @Path("memberId") memberId: Int,
     ): Call<StudyResponse>
 
 
@@ -68,6 +75,21 @@ interface StudyApiService {
     fun getRecentAnnounce(
         @Path("studyId") studyId: Int,
     ): Call<RecentAnnounceResponse>
+
+    //스터디 참여 신청하기
+    @POST("/spot/members/{memberId}/studies/{studyId}")
+    fun applyStudy(
+        @Path("memberId") memberId: Int,
+        @Path("studyId") studyId: Int,
+        @Body introduction: String
+    ): Call<StudyApplyResponse>
+
+    @POST("/spot/studies/{studyId}/members/{memberId}/like")
+    fun toggleStudyLike(
+        @Path("studyId") studyId: Int,
+        @Path("memberId") memberId: Int
+    ): Call<LikeResponse>
+
 
 }
 

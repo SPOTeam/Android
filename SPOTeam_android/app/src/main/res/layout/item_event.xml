@@ -43,14 +43,14 @@
         android:id="@+id/tx_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
+        android:layout_marginEnd="10dp"
         android:background="#F8F8F8"
         android:padding="3dp"
         android:text="일시"
         android:textColor="#186AFF"
         android:textSize="13sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ic_check"
+        app:layout_constraintEnd_toStartOf="@+id/startDate"
         app:layout_constraintTop_toTopOf="@+id/ic_check" />
 
 
@@ -58,23 +58,23 @@
         android:id="@+id/startDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:text="Star Date"
         android:textColor="#555555"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/tx_date"
-        app:layout_constraintStart_toEndOf="@+id/tx_date"
+        app:layout_constraintEnd_toStartOf="@+id/enddate"
         app:layout_constraintTop_toTopOf="@+id/tx_date" />
 
     <TextView
         android:id="@+id/enddate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
         android:text="End Date"
         android:textColor="#555555"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/tx_date"
-        app:layout_constraintStart_toEndOf="@+id/startDate"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tx_date" />
 
 
