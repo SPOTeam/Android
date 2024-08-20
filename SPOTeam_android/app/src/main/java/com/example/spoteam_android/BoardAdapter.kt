@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.bumptech.glide.Glide
 
 class BoardAdapter(
     private val itemList: ArrayList<BoardItem>,
@@ -51,6 +51,8 @@ class BoardAdapter(
             // 이미지 로드
             Glide.with(binding.root.context)
                 .load(item.imageUrl)
+                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
+                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
                 .into(binding.ImageView4)
 
             binding.toggle.setOnClickListener {

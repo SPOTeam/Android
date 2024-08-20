@@ -1,21 +1,18 @@
-import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
-import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
-import com.example.spoteam_android.ReportStudymemberFragment
 import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.databinding.ItemRecyclerViewBinding
 
-import com.bumptech.glide.Glide
-
 class StudyAdapter(
     private val itemList: ArrayList<StudyItem>,
-    private val onItemClick: (StudyItem) -> Unit
+    private val onItemClick: (StudyItem) -> Unit,
+    private val onLikeClick: (StudyItem, ImageView) -> Unit
 ) : RecyclerView.Adapter<StudyAdapter.StudyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyViewHolder {
@@ -26,14 +23,21 @@ class StudyAdapter(
     override fun onBindViewHolder(holder: StudyViewHolder, position: Int) {
         val currentItem = itemList[position]
         holder.bind(currentItem)
+
         holder.itemView.setOnClickListener {
             onItemClick(currentItem)
+        }
+
+        holder.likeButton.setOnClickListener {
+            onLikeClick(currentItem, holder.likeButton)
         }
     }
 
     override fun getItemCount(): Int = itemList.size
 
     inner class StudyViewHolder(val binding: ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        val likeButton: ImageView = binding.heartCountIv // 찜 버튼
 
         fun bind(item: StudyItem) {
             binding.tvTime.text = item.title
@@ -47,6 +51,12 @@ class StudyAdapter(
             Glide.with(binding.root.context)
                 .load(item.imageUrl)
                 .into(binding.ImageView4) // ImageView4에 이미지를 로드
+
+            Log.d("StudyAdapter","${item.liked}")
+
+            val heartIcon = if (item.liked) R.drawable.ic_heart_filled else R.drawable.study_like
+            binding.heartCountIv.setImageResource(heartIcon)
+
         }
     }
 
@@ -56,4 +66,3 @@ class StudyAdapter(
         notifyDataSetChanged()
     }
 }
-

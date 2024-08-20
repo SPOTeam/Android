@@ -28,6 +28,17 @@ data class CommunityData(
 )
 
 
+data class BoardItems (
+    val studyId: Int,
+    val studyName : String,
+    val studyObject : String,
+    val studyTO : Int,
+    val studyPO : Int,
+    val like: Int,
+    val watch : Int
+)
+
+
 data class BoardItem (
     val studyId: Int,
     val title: String,
@@ -50,13 +61,14 @@ data class StudyItem( //StudyFragment에서 사용
     val goal: String,
     val introduction: String,
     val memberCount: Int,
-    val heartCount: Int,
+    var heartCount: Int,
     val hitNum: Int,
     val maxPeople: Int,
     val studyState: String,
     val themeTypes: List<String>,
     val regions: List<String>,
-    val imageUrl: String
+    val imageUrl: String,
+    var liked: Boolean
 )
 
 data class StudyDetailsResponse(
@@ -307,8 +319,38 @@ data class RecentAnnounceResult(
 )
 
 
+//스터디 신청
+data class StudyApplyResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: StudyResponseResult
+)
+
+data class StudyResponseResult(
+    val memberId: Int,
+    val study: StudyApplyInfo
+)
+
+data class StudyApplyInfo(
+    val studyId: Int,
+    val title: String
+)
 
 
+//찜 구현
+data class LikeResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: LikeResult
+)
+
+data class LikeResult(
+    val studyTitle: String,
+    val createdAt: String,
+    val status: String // LIKE 또는 DISLIKE
+)
 
 
 
