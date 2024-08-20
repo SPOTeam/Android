@@ -32,12 +32,12 @@ class BookMarkRVAdapter(private val dataList: ArrayList<BoardItem>) : RecyclerVi
 
     inner class ViewHolder(val binding : ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: BoardItem){
-            binding.tvTime.text = data.studyName
-            binding.tvTitle.text = data.studyObject
-            binding.tvName.text = data.studyTO.toString()
-            binding.tvName2.text = data.studyPO.toString()
-            binding.tvName3.text = data.like.toString()
-            binding.tvName4.text = data.watch.toString()
+            binding.tvTime.text = data.title
+            binding.tvTitle.text = data.goal
+            binding.tvName.text = data.maxPeople.toString()
+            binding.tvName2.text = data.memberCount.toString()
+            binding.tvName3.text = data.heartCount.toString()
+            binding.tvName4.text = data.hitNum.toString()
         }
     }
 }

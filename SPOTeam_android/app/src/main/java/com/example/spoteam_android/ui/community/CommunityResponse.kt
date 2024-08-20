@@ -1,5 +1,7 @@
 package com.example.spoteam_android.ui.community
 
+import com.example.spoteam_android.ProfileItem
+
 /*********Best 인기글 조회********/
 data class CommunityResponse(
     val isSuccess: String,
@@ -97,10 +99,10 @@ data class ContentInfo(
     val fileUrls : List<String>,
     val title : String,
     val content : String,
-    val likeCount : Int,
+    var likeCount : Int,
     val commentCount : Int,
     val viewCount : Int,
-    val likedByCurrentUser : Boolean,
+    var likedByCurrentUser : Boolean,
     val commentResponses : CommentResponse,
     val reported : Boolean
 )
@@ -115,9 +117,9 @@ data class CommentsInfo(
     val parentCommentId : Int,
     val writer : String,
     val writtenTime : String,
-    val likeCount : Int,
-    val likedByCurrentUser : Boolean,
-    val dislikedByCurrentUser : Boolean
+    var likeCount : Int,
+    var likedByCurrentUser : Boolean,
+    var dislikedByCurrentUser : Boolean
 )
 
 /************게시글 작성 완료***********/
@@ -242,7 +244,7 @@ data class DisLikeCommentResponse(
     val isSuccess: String,
     val code: String,
     val message: String,
-    val result: LikeCommentInfo
+    val result: DisLikeCommentInfo
 )
 
 data class DisLikeCommentInfo (
@@ -256,12 +258,109 @@ data class UnDisLikeCommentResponse(
     val isSuccess: String,
     val code: String,
     val message: String,
-    val result: UnLikeCommentInfo
+    val result: UnDisLikeCommentInfo
 )
 
 data class UnDisLikeCommentInfo (
     val commentId : Int,
     val likeCount : Int,
     val disLikeCount : Int
+)
+
+/************스터디 게시글 작성***********/
+data class StudyPostResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: StudyPostInfo
+)
+
+data class StudyPostInfo (
+    val postId : Int,
+    val title : String
+)
+
+/************스터디 게시글들***********/
+data class StudyPostListResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: StudyPostListInfo
+)
+
+data class StudyPostListInfo (
+    val studyId : Int,
+    val posts : List<PostDetail>
+)
+
+data class PostDetail (
+    val postId : Int,
+    val title : String,
+    val content : String,
+    val theme : String,
+    val isAnnouncement : Boolean,
+    val createdAt : String,
+    val likeNum : Int,
+    val hitNum : Int,
+    val commentNum : Int,
+    val isLiked : Boolean,
+)
+
+/************스터디 게시글 내용***********/
+data class StudyPostContentResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: StudyPostContentInfo
+)
+
+data class StudyPostContentInfo (
+    val memberId : Int,
+    val postId : Int,
+    val title : String,
+    val content : String,
+    val theme : String,
+    val isAnnouncement : Boolean,
+    val createdAt : String,
+    val likeNum : Int,
+    val hitNum : Int,
+    val commentNum : Int,
+    val isLiked : Boolean,
+    val studyPostImages : List<PostImages>
+)
+
+data class PostImages (
+    val imageId : Int,
+    val imageUrl : String
+)
+
+/************스터디 게시글 댓글***********/
+data class StudyPostContentCommentResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: StudyPostContentCommentInfo
+)
+
+data class StudyPostContentCommentInfo (
+    val postId : Int,
+    val comments : List<StudyPostContentCommentDetail>
+)
+
+data class StudyPostContentCommentDetail(
+    val commentId : Int,
+    val member : MemberInfo,
+    val content : String,
+    val likeCount : Int,
+    val dislikeCount : Int,
+    val isDeleted : Boolean,
+    val isLiked : String,
+    val applies : List<StudyPostContentCommentDetail>
+)
+
+data class MemberInfo (
+    val memberId : Int,
+    val name : String,
+    val profileImage : String
 )
 
