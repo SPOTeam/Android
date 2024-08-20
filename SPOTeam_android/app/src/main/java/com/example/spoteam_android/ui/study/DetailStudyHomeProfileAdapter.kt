@@ -34,8 +34,11 @@ class DetailStudyHomeProfileAdapter(private var profiles: MutableList<ProfileIte
         fun bind(profile: ProfileItem, isHost: Boolean) {
             // Glide를 사용하여 프로필 이미지 로드
             Glide.with(binding.root.context)
-                .load(profile.profileImage)  // URL 문자열
+                .load(profile.profileImage)
+                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
+                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
                 .into(binding.fragmentDetailStudyHomeHostuserIv)
+
 
             binding.profileNickname.text = profile.nickname
 

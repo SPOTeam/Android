@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="업데이트 완료"
+        android:text="신청 완료"
         android:textColor="#000000"
         android:fontFamily="@font/pretendard"
         android:textSize="20sp"
@@ -29,18 +29,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/complete_iv" />
+
     <TextView
         android:id="@+id/dialog_complete_content_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="관심 분야 별로 스터디를 확인해보세요"
+        android:text="스터디를 신청 완료했어요!\n수락 여부는 알람탭에서 확인 가능합니다."
         android:textColor="#8E8E8E"
         android:fontFamily="@font/pretendard"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialog_complete_title_tv" />
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/dialog_complete_bt"
@@ -49,10 +52,10 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="15dp"
-        android:paddingStart="60dp"
-        android:paddingEnd="60dp"
+        android:paddingStart="90dp"
+        android:paddingEnd="90dp"
         android:background="@drawable/button_background"
-        android:text="관심 스터디 보기"
+        android:text="확인"
         android:fontFamily="@font/pretendard"
         android:textColor="#186AFF"
         android:textSize="16sp"
@@ -60,6 +63,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
 
 
 
