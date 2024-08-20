@@ -35,6 +35,7 @@ class BookmarkFragment : Fragment() {
         itemList.add(BoardItem(1,"보컬 스터디", "스터디 목표", "보컬 스터디입니다", 3, 1, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
 
         val dataRVAdapter = BookMarkRVAdapter(itemList)
+
         //리스너 객체 생성 및 전달
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
