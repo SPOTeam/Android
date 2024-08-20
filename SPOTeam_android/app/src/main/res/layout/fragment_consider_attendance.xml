@@ -7,13 +7,19 @@
 
     <LinearLayout
         android:id="@+id/fragment_consider_attendance_ll"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/prev_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow"/>
 
         <TextView
             android:id="@+id/fragment_consider_attendance_title_tv"
@@ -22,9 +28,7 @@
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:drawableStart="@drawable/ic_arrow"
-            android:drawablePadding="20dp"/>
+            android:layout_marginStart="15dp" />
     </LinearLayout>
 
     <View

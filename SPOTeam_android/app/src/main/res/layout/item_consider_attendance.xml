@@ -84,6 +84,14 @@
                     android:textSize="14sp" />
 
                 <ImageView
+                    android:id="@+id/ic_heart_red"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="4dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_heart_red" />
+
+                <ImageView
                     android:id="@+id/ImageView6"
                     android:layout_width="14dp"
                     android:layout_height="14dp"
@@ -103,7 +111,7 @@
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:layout_marginEnd="4dp"
-                    android:src="@drawable/study_view" />
+                    android:src="@drawable/ic_group_gray" />
 
                 <TextView
                     android:id="@+id/tv_name4"

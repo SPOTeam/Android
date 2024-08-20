@@ -1,21 +1,27 @@
 package com.example.spoteam_android.ui.alert
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.CommunityData
-import com.example.spoteam_android.MainActivity
-import com.example.spoteam_android.StudyInfo
 import com.example.spoteam_android.databinding.FragmentCheckAppliedStudyBinding
-import com.example.spoteam_android.ui.community.CommunityContentActivity
+import com.example.spoteam_android.ui.community.AcceptedAlertStudyResponse
+import com.example.spoteam_android.ui.community.AlertStudyDetail
+import com.example.spoteam_android.ui.community.AlertStudyResponse
+import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CheckAppliedStudyFragment : Fragment() {
 
     lateinit var binding: FragmentCheckAppliedStudyBinding
+    private var page : Int = 0
+    private var size : Int = 10
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,46 +34,89 @@ class CheckAppliedStudyFragment : Fragment() {
             requireActivity().supportFragmentManager.beginTransaction().remove(this).commitAllowingStateLoss()
             requireActivity().supportFragmentManager.popBackStack()
         }
-
-        initRecyclerview()
+        fetchStudyAlert()
 
         return binding.root
     }
 
-    private fun initRecyclerview(){
+    private fun fetchStudyAlert() {
+        CommunityRetrofitClient.instance.getStudyAlert(page, size)
+            .enqueue(object : Callback<AlertStudyResponse> {
+                override fun onResponse(
+                    call: Call<AlertStudyResponse>,
+                    response: Response<AlertStudyResponse>
+                ) {
+                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val studyAlertResponse = response.body()
+                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
+                        if (studyAlertResponse?.isSuccess == "true") {
+                            val studyAlertInfo = studyAlertResponse.result.notifications
+                            initRecyclerview(studyAlertInfo)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<AlertStudyResponse>, t: Throwable) {
+                    Log.e("MyStudyAttendance", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun showError(message: String?) {
+        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun initRecyclerview(studyAlertInfo: List<AlertStudyDetail>) {
         binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-
-        val dataList: ArrayList<StudyInfo> = arrayListOf()
-
-        // arrayList 에 데이터 삽입
-        dataList.apply{
-            // arrayList 타입이 Data 객체이다. | 데이터 삽입 시 Data 객체 타입으로 넣어줌.
-            add(StudyInfo("JLPT"))
-            add(StudyInfo("토익"))
-            add(StudyInfo("코딩"))
-            add(StudyInfo("한국사"))
-            add(StudyInfo("요리"))
-        }
-
-        val dataRVAdapter = CheckAppliedStudyFragmentRVAdapter(dataList)
-        //리스너 객체 생성 및 전달
+        val dataRVAdapter = CheckAppliedStudyFragmentRVAdapter(studyAlertInfo)
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
 
         dataRVAdapter.setItemClickListener(object :CheckAppliedStudyFragmentRVAdapter.OnItemClickListener{
-            override fun onOKClick() {
-                val dlgOK = OkDialog(requireContext())
+            override fun onOKClick(data : AlertStudyDetail) {
 
+                postStudyAccept(data.studyId)
+                val dlgOK = OkDialog(requireContext())
+                dlgOK.setStudyId(data.studyId)
                 dlgOK.start()
             }
 
-            override fun onRefuseClick() {
+            override fun onRefuseClick(data: AlertStudyDetail) {
                 val dlgRefuse = RefuseDialog(requireContext())
+                dlgRefuse.setStudyId(data.studyId)
                 dlgRefuse.start()
             }
 
         })
 
+    }
+
+    private fun postStudyAccept(studyId : Int) {
+        CommunityRetrofitClient.instance.postAcceptedStudyAlert(studyId, true)
+            .enqueue(object : Callback<AcceptedAlertStudyResponse> {
+                override fun onResponse(
+                    call: Call<AcceptedAlertStudyResponse>,
+                    response: Response<AcceptedAlertStudyResponse>
+                ) {
+                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val studyAlertResponse = response.body()
+                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
+                        if (studyAlertResponse?.isSuccess == "true") {
+                            //add method
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<AcceptedAlertStudyResponse>, t: Throwable) {
+                    Log.e("MyStudyAttendance", "Failure: ${t.message}", t)
+                }
+            })
     }
 }

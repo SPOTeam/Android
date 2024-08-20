@@ -121,6 +121,9 @@ data class Member(
 )
 
 data class StudyResponse(
+    val isSuccess : Boolean,
+    val code : String ,
+    val message: String ,
     val result: StudyResult
 )
 
@@ -134,14 +137,12 @@ data class StudyResult(
     val number: Int
 )
 
-
-
 data class StudyData(
     val studyId: Int,
-    val goal: String,
     val imageUrl: String,
     val title: String,
     val introduction: String,
+    val goal: String,
     val memberCount: Int,
     val heartCount: Int,
     val hitNum: Int,
@@ -152,7 +153,6 @@ data class StudyData(
     val createdAt: String,
     val liked: Boolean
 )
-
 
 data class SceduleItem (
     val dday: String,

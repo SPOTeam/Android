@@ -16,7 +16,7 @@ import java.util.Locale
 class CategoryStudyContentRVAdapter(private val dataList: List<CategoryStudyDetail>) : RecyclerView.Adapter<CategoryStudyContentRVAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(data : BoardItem)
+        fun onItemClick(data : CategoryStudyDetail)
     }
 
     private lateinit var itemClickListener : OnItemClickListener
