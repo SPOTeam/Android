@@ -8,7 +8,7 @@ object RetrofitInstance {
 
     private const val BASE_URL = "https://www.teamspot.site/"
 
-     private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyMzk5MDYyNCwiZXhwIjoxNzI0MDc3MDI0fQ.DpY93HGLtXMvww3t0Yh2enJLCuhsv1bZ9mFA8eSeUCs"
+     private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDE0MjgwNCwiZXhwIjoxNzI0MjI5MjA0fQ.hJCey-hvKVfv0qJLLDSExYq3Gz4tviU44n6nm2phn-c"
 
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
