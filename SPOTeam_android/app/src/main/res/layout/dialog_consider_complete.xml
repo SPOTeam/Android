@@ -44,10 +44,10 @@
         app:layout_constraintTop_toBottomOf="@id/alert_tv"/>
 
     <TextView
-        android:id="@+id/move_to_study_tv"
+        android:id="@+id/ok_tv"
         android:layout_width="226dp"
         android:layout_height="38dp"
-        android:text="내 스터디로 이동"
+        android:text="확인"
         android:textSize="16sp"
         android:textStyle="bold"
         android:background="@drawable/button_background"

@@ -10,22 +10,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.StudyResponse
 import com.example.spoteam_android.databinding.FragmentStudyBinding
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class StudyFragment : Fragment() {
 
@@ -109,7 +104,7 @@ class StudyFragment : Fragment() {
             if (memberId != -1) {
                 Log.d("StudyFragment", "Fetching data for memberId: $memberId, page: $currentPage, size: $size")
 
-                studyApiService.getStudies(memberId.toString(), currentPage, size).enqueue(object : Callback<StudyResponse> {
+                studyApiService.getStudies(memberId, currentPage, size).enqueue(object : Callback<StudyResponse> {
                     override fun onResponse(call: Call<StudyResponse>, response: Response<StudyResponse>) {
                         if (response.isSuccessful) {
                             response.body()?.let { studyResponse ->

@@ -364,3 +364,162 @@ data class MemberInfo (
     val profileImage : String
 )
 
+
+/************마이 페이지 멤버 관련 스터디 갯수***********/
+data class MyPageStudyNumResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: MyPageStudyNumInfo
+)
+
+data class MyPageStudyNumInfo (
+    val name : String,
+    val appliedStudies : Int,
+    val ongoingStudies : Int,
+    val myRecruitingStudies : Int
+)
+
+/************내가 모집하고 있는 스터디***********/
+data class MyRecruitingStudiesResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: MyRecruitingStudyInfo
+)
+
+data class MyRecruitingStudyInfo(
+    val totalPages: Int,
+    val totalElements: Int,
+    val first: Boolean,
+    val last: Boolean,
+    val size: Int,
+    val content: List<MyRecruitingStudyDetail>,
+    val number : Int
+)
+
+data class MyRecruitingStudyDetail (
+    val studyId : Int,
+    val imageUrl : String,
+    val title : String,
+    val introduction : String,
+    val goal : String,
+    val memberCount : Int,
+    val heartCount : Int,
+    val hitNum : Int,
+    val maxPeople : Int,
+    val studyState : String,
+    val themeTypes : List<String>,
+    val regions : List<String>,
+    val createdAt : String,
+    val liked : Boolean
+)
+
+/************모집 스터디 참여 신청 멤버들***********/
+data class MyStudyAttendanceMemberResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: MyStudyAttendanceMemberInfo
+)
+
+data class MyStudyAttendanceMemberInfo(
+    val totalElements: Int,
+    val members : List<AttendanceMemberInfo>
+)
+
+data class AttendanceMemberInfo(
+    val memberId: Int,
+    val nickname: String,
+    val profileImage: String
+)
+
+/************신청자 소개 결과***********/
+data class MemberAttendanceIntroResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: MemberIntroInfo
+)
+
+data class MemberIntroInfo(
+    val memberId: Int,
+    val studyId : Int,
+    val nickname: String,
+    val profileImage : String,
+    val introduction : String
+)
+
+/************참여 합불 결과***********/
+data class MemberAcceptResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: MemberAcceptInfo
+)
+
+data class MemberAcceptInfo(
+    val status: String,
+    val updatedAt : String,
+)
+
+
+/************알림 결과***********/
+data class AlertResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: AlertInfo
+)
+
+data class AlertInfo(
+    val notifications: List<AlertDetail>,
+    val totalNotificationCount : Int,
+    val uncheckedNotificationCount : Int
+)
+
+data class AlertDetail(
+    val notificationId: Int,
+    val studyTitle : String,
+    val notifierName : String,
+    val type : String,
+    val isChecked : Boolean,
+    val createdAt : String
+)
+
+/************내가 신청한 스터디 알림 결과***********/
+data class AlertStudyResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: AlertStudyInfo
+)
+
+data class AlertStudyInfo(
+    val notifications: List<AlertStudyDetail>,
+    val totalNotificationCount : Int,
+    val uncheckedNotificationCount : Int
+)
+
+data class AlertStudyDetail(
+    val notificationId: Int,
+    val studyId: Int,
+    val studyTitle : String,
+    val notifierName : String,
+    val type : String,
+    val isChecked : Boolean,
+    val createdAt : String
+)
+
+/************내가 신청한 스터디 수락 알림 처리 결과***********/
+data class AcceptedAlertStudyResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: AcceptedAlertStudyInfo
+)
+
+data class AcceptedAlertStudyInfo(
+    val processedAt : String,
+    val accept : Boolean
+)

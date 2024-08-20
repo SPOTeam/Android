@@ -87,6 +87,13 @@ class DiscussionFragment : Fragment(),  AdapterView.OnItemSelectedListener {
         //리스너 객체 생성 및 전달
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
+
+        dataRVAdapter.setItemClickListener(object : CategoryStudyContentRVAdapter.OnItemClickListener{
+            override fun onItemClick(data: CategoryStudyDetail) {
+                //detailFragmentPreview로 전송
+            }
+
+        })
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

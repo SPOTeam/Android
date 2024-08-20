@@ -27,7 +27,7 @@ interface StudyApiService {
 
     @GET("/spot/search/studies/on-studies/members/{memberId}")
     fun getStudies(
-        @Path("memberId") memberId: String,
+        @Path("memberId") memberId: Int,
         @Query("page") page: Int,
         @Query("size") size: Int
     ): Call<StudyResponse>

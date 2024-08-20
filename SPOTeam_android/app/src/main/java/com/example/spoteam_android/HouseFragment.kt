@@ -1,7 +1,6 @@
 package com.example.spoteam_android
 
 import RetrofitClient.getAuthToken
-import StudyAdapter
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
@@ -28,7 +27,6 @@ import com.example.spoteam_android.ui.study.DetailStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Calendar
 
 class HouseFragment : Fragment() {
 

@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.category.category_tabs
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -87,6 +88,15 @@ class LanguageFragment : Fragment(), AdapterView.OnItemSelectedListener {
         //리스너 객체 생성 및 전달
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
+
+        dataRVAdapter.setItemClickListener(object : CategoryStudyContentRVAdapter.OnItemClickListener{
+            override fun onItemClick(data: CategoryStudyDetail) {
+//                val intent = Intent(context, ::class.java)
+//                intent.putExtra("key_name", "value") // String 데이터를 추가
+//                intent.putExtra("key_data", myDataObject) // Parcelable 또는 Serializable 객체를 추가
+//                startActivity(intent)
+            }
+        })
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

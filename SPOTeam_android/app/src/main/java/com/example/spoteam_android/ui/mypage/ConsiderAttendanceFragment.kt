@@ -1,60 +1,106 @@
 package com.example.spoteam_android.ui.mypage
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
+import com.example.spoteam_android.databinding.FragmentConsiderAttendanceBinding
+import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.MyRecruitingStudiesResponse
+import com.example.spoteam_android.ui.community.MyRecruitingStudyDetail
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ConsiderAttendanceFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ConsiderAttendanceFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentConsiderAttendanceBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var memberId : Int = -1
+    private var page : Int = 0
+    private var size : Int = 5
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_consider_attendance, container, false)
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentConsiderAttendanceBinding.inflate(inflater, container, false)
+
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+        memberId = if (email != null) sharedPreferences.getInt("${email}_memberId", -1) else -1
+
+
+        binding.prevIv.setOnClickListener{
+            parentFragmentManager.popBackStack()
+        }
+
+        fetchMyRecruitingStudies()
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ConsiderAttendanceFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ConsiderAttendanceFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun fetchMyRecruitingStudies() {
+        CommunityRetrofitClient.instance.getMyPageRecruitingStudy(memberId, page, size)
+            .enqueue(object : Callback<MyRecruitingStudiesResponse> {
+                override fun onResponse(
+                    call: Call<MyRecruitingStudiesResponse>,
+                    response: Response<MyRecruitingStudiesResponse>
+                ) {
+                    Log.d("MyRecruitingStudy", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val recruitingStudyResponse = response.body()
+                        Log.d("MyRecruitingStudy", "responseBody: ${recruitingStudyResponse?.isSuccess}")
+                        if (recruitingStudyResponse?.isSuccess == "true") {
+                            val result = recruitingStudyResponse.result
+                            initRecyclerView(result.content)
+                        } else {
+                            showError(recruitingStudyResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
                 }
+
+                override fun onFailure(call: Call<MyRecruitingStudiesResponse>, t: Throwable) {
+                    Log.e("MyRecruitingStudy", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun initRecyclerView(content: List<MyRecruitingStudyDetail>) {
+        binding.fragmentConsiderAttendanceRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        val dataRVAdapter = ConsiderAttendanceContentRVAdapter(content)
+        //리스너 객체 생성 및 전달
+
+        binding.fragmentConsiderAttendanceRv.adapter = dataRVAdapter
+
+        dataRVAdapter.setItemClickListener(object : ConsiderAttendanceContentRVAdapter.OnItemClickListener {
+            override fun onItemClick(data: MyRecruitingStudyDetail) {
+                val fragment = ConsiderAttendanceMemberFragment()
+
+                val bundle = Bundle()
+                bundle.putInt("recruitingStudyId", data.studyId)
+                fragment.arguments = bundle
+
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
             }
+
+        })
+    }
+
+    private fun showError(message: String?) {
+        Toast.makeText(context, "Error: $message", Toast.LENGTH_SHORT).show()
     }
 }
