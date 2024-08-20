@@ -148,22 +148,6 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/content_writer_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="익명"
-            android:textSize="13sp"
-            android:layout_marginStart="5dp"/>
-
-        <TextView
-            android:id="@+id/content_sp_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="|"
-            android:textSize="13sp"
-            android:layout_marginStart="5dp"/>
-
-        <TextView
             android:id="@+id/content_date_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

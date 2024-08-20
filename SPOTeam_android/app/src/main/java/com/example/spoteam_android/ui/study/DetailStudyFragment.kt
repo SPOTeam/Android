@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.StudyDetailsResponse
@@ -53,6 +54,11 @@ class DetailStudyFragment : Fragment() {
         binding.fragmentDetailStudyTl.tabMode = TabLayout.MODE_SCROLLABLE
 
         setupViews()
+
+        binding.fragmentDetailStudyPreviousBt.setOnClickListener {
+            // 현재 Fragment를 백스택에서 제거하고 이전 Fragment로 돌아갑니다.
+            parentFragmentManager.popBackStack()
+        }
 
         return binding.root
     }

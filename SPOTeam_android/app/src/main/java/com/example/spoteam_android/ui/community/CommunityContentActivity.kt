@@ -26,6 +26,10 @@ class CommunityContentActivity : AppCompatActivity() {
     var memberId : Int = -1
     var postId : Int = -1
     var parentCommentId : Int = 0
+    var initialIsliked : Boolean = false
+    var initialIsLikedNum : Int = 0
+    var compareIsliked : Boolean = false
+    var compareIslikedNum : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +48,7 @@ class CommunityContentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.communityPrevIv.setOnClickListener{
+            compareLiked()
             finish()
         }
 
@@ -56,14 +61,38 @@ class CommunityContentActivity : AppCompatActivity() {
         }
 
         binding.communityContentLikeNumCheckedIv.setOnClickListener{
-            deleteContentLike()
+//            deleteContentLike()
+            compareIsliked = false
+            compareIslikedNum--
+
+            binding.communityContentLikeNumCheckedIv.visibility = View.GONE
+            binding.communityContentLikeNumUncheckedIv.visibility = View.VISIBLE
+
+            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
         }
 
         binding.communityContentLikeNumUncheckedIv.setOnClickListener{
-            postContentLike()
+//            postContentLike()
+            compareIsliked = true
+            compareIslikedNum++
+
+            binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE
+            binding.communityContentLikeNumUncheckedIv.visibility = View.GONE
+
+            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
         }
 
         fetchContentInfo()
+    }
+
+    private fun compareLiked(){
+        if(compareIsliked != initialIsliked){
+            if(compareIsliked){
+                postContentLike()
+            } else {
+                deleteContentLike()
+            }
+        }
     }
 
     private fun postContentLike() {
@@ -78,7 +107,7 @@ class CommunityContentActivity : AppCompatActivity() {
                         val likeResponse = response.body()
                         Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
-                            fetchContentInfo()
+
                         } else {
                             showError(likeResponse?.message)
                         }
@@ -105,7 +134,7 @@ class CommunityContentActivity : AppCompatActivity() {
                         val unLikeResponse = response.body()
                         Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
-                            fetchContentInfo()
+
                         } else {
                             showError(unLikeResponse?.message)
                         }
@@ -196,6 +225,11 @@ class CommunityContentActivity : AppCompatActivity() {
                         if (contentResponse?.isSuccess == "true") {
                             val contentInfo = contentResponse.result
                             val commentInfo = contentInfo.commentResponses.comments
+                            compareIsliked = contentInfo.likedByCurrentUser
+                            compareIslikedNum = contentInfo.likeCount
+                            initialIsliked = contentInfo.likedByCurrentUser
+                            initialIsLikedNum = contentInfo.likeCount
+
                             Log.d("Content", "items: $contentInfo")
                             Log.d("Comment", "items: $commentInfo")
                             initContentInfo(contentInfo)

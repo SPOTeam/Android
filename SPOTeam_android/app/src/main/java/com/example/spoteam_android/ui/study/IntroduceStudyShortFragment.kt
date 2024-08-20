@@ -34,8 +34,5 @@ class IntroduceStudyShortFragment : Fragment() {
             binding.fragmentIntroduceStudyShortTv.setTextColor(Color.parseColor("#2D2D2D"))
 
         }
-
-
     }
-
 }

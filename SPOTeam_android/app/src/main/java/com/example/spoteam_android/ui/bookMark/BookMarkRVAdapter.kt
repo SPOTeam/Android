@@ -39,6 +39,7 @@ class BookMarkRVAdapter(
     inner class BookmarkViewHolder(val binding: ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val likeButton: ImageView = binding.heartCountIv
 
+
         fun bind(item: StudyItem) {
             binding.tvTime.text = item.title
             binding.tvTitle.text = item.goal
@@ -57,6 +58,15 @@ class BookMarkRVAdapter(
             // 하트 아이콘 상태 설정
             val heartIcon = if (item.liked) R.drawable.ic_heart_filled else R.drawable.study_like
             binding.heartCountIv.setImageResource(heartIcon)
+            
+    inner class ViewHolder(val binding : ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: BoardItem){
+            binding.tvTime.text = data.title
+            binding.tvTitle.text = data.goal
+            binding.tvName.text = data.maxPeople.toString()
+            binding.tvName2.text = data.memberCount.toString()
+            binding.tvName3.text = data.heartCount.toString()
+            binding.tvName4.text = data.hitNum.toString()
         }
     }
 

@@ -10,6 +10,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentWriteContentBinding
 import retrofit2.Callback
@@ -53,8 +55,6 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
             binding.categorySpinner.adapter = adapter
         }
 
-
-
         return binding.root
     }
 
@@ -79,6 +79,12 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
 
         // 서버로 데이터 전송
         sendContentToServer(requestBody, memberId)
+        resetWriting()
+    }
+
+    private fun resetWriting() {
+        binding.writeContentTitleEt.text = null
+        binding.writeContentContentEt.text = null
     }
 
     private fun sendContentToServer(requestBody: WriteContentRequest, memberId : Int) {
@@ -88,7 +94,8 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
                     Log.d("WriteContentFragment", response.body()?.isSuccess.toString())
                     if (response.isSuccessful && response.body()?.isSuccess == "true") {
                         val writeContentResponseBody = response.body()!!.result
-                        showLog(writeContentResponseBody.toString())
+//                        showLog(writeContentResponseBody.toString())
+                        setFragmentResult("requestKey", bundleOf("resultKey" to "SUCCESS"))
                         dismiss()
                     } else {
                         Toast.makeText(requireContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
