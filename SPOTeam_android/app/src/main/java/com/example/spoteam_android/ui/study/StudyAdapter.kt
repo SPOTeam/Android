@@ -28,16 +28,16 @@ class StudyAdapter(
             onItemClick(currentItem)
         }
 
-        holder.likeButton.setOnClickListener {
-            onLikeClick(currentItem, holder.likeButton)
-        }
+//        holder.likeButton.setOnClickListener {
+//            onLikeClick(currentItem, holder.likeButton)
+//        }
     }
 
     override fun getItemCount(): Int = itemList.size
 
     inner class StudyViewHolder(val binding: ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val likeButton: ImageView = binding.heartCountIv // 찜 버튼
+//        val likeButton: ImageView = binding.heartCountIv // 찜 버튼
 
         fun bind(item: StudyItem) {
             binding.tvTime.text = item.title
@@ -55,7 +55,7 @@ class StudyAdapter(
             Log.d("StudyAdapter","${item.liked}")
 
             val heartIcon = if (item.liked) R.drawable.ic_heart_filled else R.drawable.study_like
-            binding.heartCountIv.setImageResource(heartIcon)
+//            binding.heartCountIv.setImageResource(heartIcon)
 
         }
     }
