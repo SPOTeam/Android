@@ -484,9 +484,11 @@ class InterestFragment : Fragment() {
                                     studyState = study.studyState,
                                     themeTypes = study.themeTypes,
                                     regions = study.regions,
-                                    imageUrl = study.imageUrl)
+                                    imageUrl = study.imageUrl,
+                                    liked = study.liked)
                                 boardItems.add(boardItem)
-                                val boardAdapter = BoardAdapter(boardItems){selectedItem ->}
+                                val boardAdapter = BoardAdapter(boardItems, onItemClick = { /* No-op */ }, onLikeClick = { _, _ -> /* No-op */ })
+
                                 boardAdapter.notifyDataSetChanged()
                                 interest_area_board.visibility = View.VISIBLE
                                 interest_area_board.adapter = boardAdapter
@@ -567,10 +569,12 @@ class InterestFragment : Fragment() {
                                     studyState = study.studyState,
                                     themeTypes = study.themeTypes,
                                     regions = study.regions,
-                                    imageUrl = study.imageUrl
+                                    imageUrl = study.imageUrl,
+                                    liked = study.liked
                                 )
                                 boardItems.add(boardItem)
-                                val boardAdapter = BoardAdapter(boardItems){selectedItem ->}
+                                val boardAdapter = BoardAdapter(boardItems, onItemClick = { /* No-op */ }, onLikeClick = { _, _ -> /* No-op */ })
+
                                 boardAdapter.notifyDataSetChanged()
                                 interest_area_board.visibility = View.VISIBLE
                                 interest_area_board.adapter = boardAdapter
@@ -647,10 +651,11 @@ class InterestFragment : Fragment() {
                                     studyState = study.studyState,
                                     themeTypes = study.themeTypes,
                                     regions = study.regions,
-                                    imageUrl = study.imageUrl
+                                    imageUrl = study.imageUrl,
+                                    liked = study.liked
                                 )
                                 boardItems.add(boardItem)
-                                val boardAdapter = BoardAdapter(boardItems){selectedItem ->}
+                                val boardAdapter = BoardAdapter(boardItems, onItemClick = { /* No-op */ }, onLikeClick = { _, _ -> /* No-op */ })
                                 boardAdapter.notifyDataSetChanged()
                                 interest_area_board.visibility = View.VISIBLE
                                 interest_area_board.adapter = boardAdapter

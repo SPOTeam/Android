@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.DetailStudyHomeAdapter
 import com.example.spoteam_android.HouseFragment
+import com.example.spoteam_android.IsAppliedResponse
 import com.example.spoteam_android.MemberResponse
 import com.example.spoteam_android.ProfileItem
 import com.example.spoteam_android.R
@@ -53,6 +54,7 @@ class DetailStudyHomeFragment : Fragment() {
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
             Log.d("DetailStudyHomeFragment", "Received studyId from ViewModel: $studyId")
             if (studyId != null) {
+                fetchIsApplied(studyId)
                 fetchStudySchedules(studyId)
                 fetchStudyMembers(studyId)
                 fetchRecentAnnounce(studyId)
@@ -122,6 +124,34 @@ class DetailStudyHomeFragment : Fragment() {
                 Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun fetchIsApplied(studyId: Int) {
+        val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+        api.getIsApplied(studyId).enqueue(object : Callback<IsAppliedResponse> {
+            override fun onResponse(call: Call<IsAppliedResponse>, response: Response<IsAppliedResponse>) {
+                if (response.isSuccessful) {
+                    val isApplied = response.body()?.result?.applied ?: false
+                    updateRegisterButton(isApplied)
+                } else {
+                    Toast.makeText(requireContext(), "Failed to check application status", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<IsAppliedResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun updateRegisterButton(isApplied: Boolean) {
+        if (isApplied) {
+            binding.fragmentDetailStudyHomeRegisterBt.isEnabled = false
+            binding.fragmentDetailStudyHomeRegisterBt.text = "신청 완료"
+        } else {
+            binding.fragmentDetailStudyHomeRegisterBt.isEnabled = true
+            binding.fragmentDetailStudyHomeRegisterBt.text = "신청하기"
+        }
     }
 
 
@@ -269,9 +299,4 @@ class DetailStudyHomeFragment : Fragment() {
             transaction.commit()
         }
     }
-
-
-
-
-
 }

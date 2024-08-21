@@ -77,7 +77,7 @@ class MyPageFragment : Fragment() {
             }
             binding.framelayout2.setOnClickListener {
                 (context as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, ConsiderAttendanceFragment())
+                    .replace(R.id.main_frm, RegionPreferenceFragment())
                     .addToBackStack(null)
                     .commitAllowingStateLoss()
             }

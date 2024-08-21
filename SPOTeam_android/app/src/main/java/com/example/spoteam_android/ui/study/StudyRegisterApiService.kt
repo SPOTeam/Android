@@ -1,3 +1,5 @@
+import com.example.spoteam_android.BookmarkResponse
+import com.example.spoteam_android.IsAppliedResponse
 import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MemberResponse
 import com.example.spoteam_android.RecentAnnounceResponse
@@ -37,7 +39,7 @@ interface StudyApiService {
     @GET("/spot/search/studies/liked/members/{memberId}")
     fun getBookmark(
         @Path("memberId") memberId: Int,
-    ): Call<StudyResponse>
+    ): Call<BookmarkResponse>
 
 
     @Multipart
@@ -89,6 +91,11 @@ interface StudyApiService {
         @Path("studyId") studyId: Int,
         @Path("memberId") memberId: Int
     ): Call<LikeResponse>
+
+    @GET("/spot/studies/{studyId}/is-applied")
+    fun getIsApplied(
+        @Path("studyId") studyId: Int
+    ): Call<IsAppliedResponse>
 
 
 }

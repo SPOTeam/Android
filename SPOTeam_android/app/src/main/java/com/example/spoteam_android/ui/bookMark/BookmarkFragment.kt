@@ -1,11 +1,13 @@
 package com.example.spoteam_android.ui.bookMark
 
 import StudyApiService
+import StudyViewModel
 import android.content.Context.MODE_PRIVATE
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
-import com.example.spoteam_android.StudyItem
-import com.example.spoteam_android.StudyResponse
+import com.example.spoteam_android.BookmarkItem
+import com.example.spoteam_android.BookmarkResponse
+import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.databinding.FragmentBookmarkBinding
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +17,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.LikeResponse
+import com.example.spoteam_android.ui.study.DetailStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,7 +28,8 @@ class BookmarkFragment : Fragment() {
 
     private lateinit var binding: FragmentBookmarkBinding
     private lateinit var bookMarkRVAdapter: BookMarkRVAdapter
-    private var itemList = ArrayList<StudyItem>()
+    private var bookitemList = ArrayList<BookmarkItem>()
+    private val studyViewModel: StudyViewModel by activityViewModels()
 
     // Retrofit API Service
     private lateinit var studyApiService: StudyApiService
@@ -36,18 +40,35 @@ class BookmarkFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentBookmarkBinding.inflate(inflater, container, false)
-        studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
+
+        studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+        bookMarkRVAdapter = BookMarkRVAdapter(bookitemList, onItemClick = { selectedItem ->
+            // StudyViewModel에 studyId 설정
+            studyViewModel.setStudyData(selectedItem.studyId, selectedItem.imageUrl, selectedItem.introduction)
+
+            val detailStudyFragment = DetailStudyFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, detailStudyFragment)
+                .addToBackStack(null)
+                .commit()
+        }, onLikeClick = { selectedItem, likeButton ->
+            toggleLikeStatus(selectedItem, likeButton)
+        })
+
+        binding.fragmentBookmarkRv.apply {
+            adapter = bookMarkRVAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        }
         fetchBookmarkedStudies()
     }
 
     private fun setupRecyclerView() {
-        bookMarkRVAdapter = BookMarkRVAdapter(itemList, onItemClick = { selectedItem ->
+        bookMarkRVAdapter = BookMarkRVAdapter(bookitemList, onItemClick = { selectedItem ->
             // 아이템 클릭 시 동작 정의
         }, onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
@@ -64,17 +85,15 @@ class BookmarkFragment : Fragment() {
         val memberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
 
         if (memberId != -1) {
-            studyApiService.getBookmark(memberId).enqueue(object : Callback<StudyResponse> {
-                override fun onResponse(call: Call<StudyResponse>, response: Response<StudyResponse>) {
+            studyApiService.getBookmark(memberId).enqueue(object : Callback<BookmarkResponse> {
+                override fun onResponse(call: Call<BookmarkResponse>, response: Response<BookmarkResponse>) {
                     if (response.isSuccessful) {
-                        response.body()?.let { studyResponse ->
-                            val content = studyResponse.result.content
+                        response.body()?.let { bookmarkResponse ->
+                            val content = bookmarkResponse.result.content
                             if (!content.isNullOrEmpty()) {
-                                itemList.clear()
-                                // liked가 true인 항목만 필터링
-                                val filteredList = content.filter { it.liked }
-                                itemList.addAll(filteredList.map { studyData ->
-                                    StudyItem(
+                                bookitemList.clear()
+                                bookitemList.addAll(content.map { studyData ->
+                                    BookmarkItem(
                                         studyId = studyData.studyId,
                                         title = studyData.title,
                                         goal = studyData.goal,
@@ -90,13 +109,12 @@ class BookmarkFragment : Fragment() {
                                         liked = studyData.liked
                                     )
                                 })
-                                Log.d("Bookmark", "${filteredList.size} liked items found")
-                                bookMarkRVAdapter.updateList(itemList)
-                                Log.d("Bookmark", "${itemList.size}size")
-                                binding.bookmarkEmpty.visibility = if (itemList.isEmpty()) View.VISIBLE else View.GONE
-                                binding.fragmentBookmarkRv.visibility = if (itemList.isNotEmpty()) View.VISIBLE else View.GONE
+                                Log.d("Bookmark", "Fetched bookmarked studies: $bookitemList")
+                                bookMarkRVAdapter.updateList(bookitemList)
+                                binding.bookmarkEmpty.visibility = View.GONE
+                                binding.fragmentBookmarkRv.visibility = View.VISIBLE
                             } else {
-                                Log.d("Bookmark", "No data found")
+                                // 데이터가 없을 때 처리
                                 binding.bookmarkEmpty.visibility = View.VISIBLE
                                 binding.fragmentBookmarkRv.visibility = View.GONE
                             }
@@ -106,7 +124,7 @@ class BookmarkFragment : Fragment() {
                     }
                 }
 
-                override fun onFailure(call: Call<StudyResponse>, t: Throwable) {
+                override fun onFailure(call: Call<BookmarkResponse>, t: Throwable) {
                     Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
                 }
             })
@@ -115,17 +133,8 @@ class BookmarkFragment : Fragment() {
         }
     }
 
-        val itemList = ArrayList<BoardItem>()
-        itemList.add(BoardItem(1,"피아노 스터디", "스터디 목표", "피아노 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
-        itemList.add(BoardItem(1,"태권도 스터디", "스터디 목표", "태권도 스터디입니다", 2, 1, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
-        itemList.add(BoardItem(1,"보컬 스터디", "스터디 목표", "보컬 스터디입니다", 3, 1, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
 
-        val dataRVAdapter = BookMarkRVAdapter(itemList)
-
-        //리스너 객체 생성 및 전달
-
-
-    private fun toggleLikeStatus(studyItem: StudyItem, likeButton: ImageView) {
+    private fun toggleLikeStatus(studyItem: BookmarkItem, likeButton: ImageView) {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val memberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
 
@@ -134,7 +143,7 @@ class BookmarkFragment : Fragment() {
                 override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
                     if (response.isSuccessful) {
                         response.body()?.let { likeResponse ->
-                            // 서버에서 반환된 상태에 따라 하트 아이콘 및 StudyItem의 liked 상태 업데이트
+                            // 서버에서 반환된 상태에 따라 하트 아이콘 및 BookmarkItem의 liked 상태 업데이트
                             val newStatus = likeResponse.result.status
                             Log.d("studyfrag", newStatus)
                             studyItem.liked = newStatus == "LIKE" // "LIKE"이면 true, "DISLIKE"이면 false로 저장
@@ -143,7 +152,7 @@ class BookmarkFragment : Fragment() {
 
                             // heartCount 즉시 증가 또는 감소
                             studyItem.heartCount = if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
-                            bookMarkRVAdapter.notifyItemChanged(itemList.indexOf(studyItem))
+                            bookMarkRVAdapter.notifyItemChanged(bookitemList.indexOf(studyItem))
                         }
                     } else {
                         Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()

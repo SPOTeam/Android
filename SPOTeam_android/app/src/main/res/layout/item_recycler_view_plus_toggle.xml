@@ -14,7 +14,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="65dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -41,7 +41,7 @@
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendardsource"
+                android:fontFamily="@font/pretendard"
                 android:text="스터디 이름"
                 android:textColor="@color/black"
                 android:textSize="14sp"
@@ -51,7 +51,7 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendardsource"
+                android:fontFamily="@font/pretendard"
                 android:text="스터디 목표"
                 android:textSize="12sp" />
 
@@ -91,7 +91,7 @@
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:id="@+id/ImageView6"
+                    android:id="@+id/heart_count_iv"
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:layout_marginEnd="4dp"

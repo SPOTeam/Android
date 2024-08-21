@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.spoteam_android.BookmarkItem
 import com.example.spoteam_android.R
-import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.databinding.ItemRecyclerViewBinding
 
 class BookMarkRVAdapter(
-    private val itemList: ArrayList<StudyItem>,
-    private val onItemClick: (StudyItem) -> Unit,
-    private val onLikeClick: (StudyItem, ImageView) -> Unit
+    private var bookmarkitemList: ArrayList<BookmarkItem>,
+    private val onItemClick: (BookmarkItem) -> Unit,
+    private val onLikeClick: (BookmarkItem, ImageView) -> Unit
 ) : RecyclerView.Adapter<BookMarkRVAdapter.BookmarkViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkViewHolder {
@@ -22,7 +22,8 @@ class BookMarkRVAdapter(
     }
 
     override fun onBindViewHolder(holder: BookmarkViewHolder, position: Int) {
-        val currentItem = itemList[position]
+        val currentItem = bookmarkitemList[position]
+        Log.d("BookMarkRVAdapter", "onBindViewHolder: Position: $position, Item: $currentItem")
         holder.bind(currentItem)
 
         holder.itemView.setOnClickListener {
@@ -34,13 +35,16 @@ class BookMarkRVAdapter(
         }
     }
 
-    override fun getItemCount(): Int = itemList.size
+    override fun getItemCount(): Int {
+        Log.d("BookMarkRVAdapter", "ItemCount: ${bookmarkitemList.size}")
+        return bookmarkitemList.size
+    }
+
 
     inner class BookmarkViewHolder(val binding: ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val likeButton: ImageView = binding.heartCountIv
 
-
-        fun bind(item: StudyItem) {
+        fun bind(item: BookmarkItem) {
             binding.tvTime.text = item.title
             binding.tvTitle.text = item.goal
             binding.tvName.text = item.maxPeople.toString()
@@ -58,24 +62,20 @@ class BookMarkRVAdapter(
             // 하트 아이콘 상태 설정
             val heartIcon = if (item.liked) R.drawable.ic_heart_filled else R.drawable.study_like
             binding.heartCountIv.setImageResource(heartIcon)
-            
-    inner class ViewHolder(val binding : ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: BoardItem){
-            binding.tvTime.text = data.title
-            binding.tvTitle.text = data.goal
-            binding.tvName.text = data.maxPeople.toString()
-            binding.tvName2.text = data.memberCount.toString()
-            binding.tvName3.text = data.heartCount.toString()
-            binding.tvName4.text = data.hitNum.toString()
         }
     }
 
-    fun updateList(newList: List<StudyItem>) {
+    fun updateList(newList: List<BookmarkItem>) {
         Log.d("BookMarkRVAdapter", "updateList called with ${newList.size} items")
-        itemList.clear()
-        itemList.addAll(newList)
-        Log.d("BookMarkRVAdapter", "itemList size after update: ${itemList.size}")
+
+        bookmarkitemList = ArrayList() // 새 ArrayList로 초기화
+        bookmarkitemList.addAll(newList)
+        Log.d("BookMarkRVAdapter", "itemList size after addAll: ${bookmarkitemList.size}")
+
         notifyDataSetChanged()
     }
+
+
+
 
 }

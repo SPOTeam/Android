@@ -11,16 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
     private const val BASE_URL = "https://www.teamspot.site/"  // 실제 API의 베이스 URL
 
-//종훈 토큰
-   //private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6OSwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzI0MTM5NjE3LCJleHAiOjE3MjQyMjYwMTd9.C67pEhuGur5vz5iwfCAygg-Dj-vIIqCGPJ3yXV_ZpMk"
-
-    //종훈 토큰
-
-=======
-// 대니/김빈
-//     private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDE0MjgwNCwiZXhwIjoxNzI0MjI5MjA0fQ.hJCey-hvKVfv0qJLLDSExYq3Gz4tviU44n6nm2phn-c"
-
-    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTQsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDA0NzM3OSwiZXhwIjoxNzI0MTMzNzc5fQ.FM1iVo2n1jgAiewsrNF-z6CkTUHEr3MX50bS1uqJgvo"
+    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6OSwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzI0MTQ3NzMwLCJleHAiOjE3MjQyMzQxMzB9.0d6fWTixeBSq-vOts_2Ap8LdGtE1K47JQlSoNfmU-Ss"
 
     fun getAuthToken(): String {
         return "Bearer $authToken"
@@ -58,5 +49,9 @@ object RetrofitClient {
 
     val CAService: CalendarApiService by lazy{
         instance.create(CalendarApiService::class.java)
+    }
+
+    val GetBookmarkService: StudyApiService by lazy{
+        instance.create(StudyApiService::class.java)
     }
 }

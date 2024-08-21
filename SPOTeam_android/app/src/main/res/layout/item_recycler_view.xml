@@ -91,16 +91,9 @@
                     android:text="to"
                     android:textSize="14sp" />
 
-                <ImageView
-                    android:id="@+id/ic_heart_tv_iv"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:layout_marginEnd="4dp"
-                    android:src="@drawable/ic_heart_red"
-                    android:visibility="gone"/>
 
                 <ImageView
-                    android:id="@+id/ImageView6"
+                    android:id="@+id/heart_count_iv"
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:layout_marginEnd="4dp"

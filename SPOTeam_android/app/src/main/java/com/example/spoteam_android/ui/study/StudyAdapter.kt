@@ -50,6 +50,8 @@ class StudyAdapter(
             // Glide를 사용하여 imageUrl을 ImageView에 로드
             Glide.with(binding.root.context)
                 .load(item.imageUrl)
+                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
+                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
                 .into(binding.ImageView4) // ImageView4에 이미지를 로드
 
             Log.d("StudyAdapter","${item.liked}")

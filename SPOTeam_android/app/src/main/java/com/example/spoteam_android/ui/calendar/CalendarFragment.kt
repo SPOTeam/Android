@@ -21,8 +21,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentCalendarBinding
+import com.example.spoteam_android.ui.study.OnlineStudyFragment
 import com.example.spoteam_android.ui.study.quiz.HostMakeQuizFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -63,6 +65,7 @@ class CalendarFragment : Fragment() {
             fetchGetSchedule(studyId, year, month + 1) {
                 eventViewModel.loadEvents(year, month + 1, dayOfMonth)
             }
+
         }
 
         eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
@@ -83,8 +86,13 @@ class CalendarFragment : Fragment() {
             eventViewModel.loadEvents(year, month, day)
         }
 
+
+
         return binding.root
     }
+
+
+
 
     private fun fetchGetSchedule(studyId: Int, year: Int, month: Int, onComplete: () -> Unit) {
         Log.d("CalendarFragment", "fetchGetSchedule() 실행")
@@ -155,4 +163,3 @@ class CalendarFragment : Fragment() {
         })
     }
 }
-
