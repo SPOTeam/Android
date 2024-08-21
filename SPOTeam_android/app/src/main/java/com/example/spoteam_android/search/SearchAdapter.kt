@@ -1,5 +1,8 @@
-package com.example.spoteam_android
+package com.example.spoteam_android.search
 
+import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.R
+import com.example.spoteam_android.ReportStudymemberFragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuInflater
@@ -10,11 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
 import com.bumptech.glide.Glide
+import com.example.spoteam_android.SearchItem
 
-class BoardAdapter(
-    private val itemList: ArrayList<BoardItem>,
-    private val onItemClick: (BoardItem) -> Unit
-) : RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {
+class SearchAdapter(
+    private val itemList: ArrayList<SearchItem>,
+    private val onItemClick: (SearchItem) -> Unit
+) : RecyclerView.Adapter<SearchAdapter.BoardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
         val binding = ItemRecyclerViewPlusToggleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,8 +29,9 @@ class BoardAdapter(
         val currentItem = itemList[position]
         holder.bind(currentItem)
         holder.itemView.setOnClickListener {
-            Log.d("BoardAdapter","{$currentItem}이 선택되었습니다")
+            Log.d("SearchAdapter","{$currentItem}이 선택되었습니다")
             onItemClick(currentItem)
+            Log.d("SearchAdapter", "onItemClick 호출됨")
         }
     }
 
@@ -36,7 +41,7 @@ class BoardAdapter(
 
     inner class BoardViewHolder(val binding: ItemRecyclerViewPlusToggleBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: BoardItem) {
+        fun bind(item: SearchItem) {
             // 데이터 바인딩
             binding.tvTime.text = item.title
             binding.tvTitle.text = item.goal
@@ -57,28 +62,29 @@ class BoardAdapter(
             }
         }
 
-        private fun showPopupMenu(view: View) {
-            val popupMenu = PopupMenu(view.context, view)
-            val inflater: MenuInflater = popupMenu.menuInflater
-            val exit = ExitStudyPopupFragment(view.context, this@BoardAdapter, adapterPosition)
-            val report = ReportStudymemberFragment(view.context)
-            inflater.inflate(R.menu.menu_item_options, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.exit_study -> {
-                        exit.start()
-                        true
-                    }
-                    R.id.report_study -> {
-                        report.start()
-                        true
-                    }
-                    else -> false
-                }
-            }
-            popupMenu.show()
-        }
+        private fun showPopupMenu(view: View) {}
+//            val popupMenu = PopupMenu(view.context, view)
+//            val inflater: MenuInflater = popupMenu.menuInflater
+//            val exit = ExitStudyPopupFragment(view.context, this@SearchAdapter, adapterPosition)
+//            val report = ReportStudymemberFragment(view.context)
+//            inflater.inflate(R.menu.menu_item_options, popupMenu.menu)
+//            popupMenu.setOnMenuItemClickListener { menuItem ->
+//                when (menuItem.itemId) {
+//                    R.id.exit_study -> {
+//                        exit.start()
+//                        true
+//                    }
+//                    R.id.report_study -> {
+//                        report.start()
+//                        true
+//                    }
+//                    else -> false
+//                }
+//            }
+//            popupMenu.show()
+//        }
     }
+
 
     fun removeItem(position: Int) {
         if (position >= 0 && position < itemList.size) {
@@ -88,7 +94,7 @@ class BoardAdapter(
         }
     }
 
-    fun updateList(newList: List<BoardItem>) {
+    fun updateList(newList: List<SearchItem>) {
         itemList.clear()
         itemList.addAll(newList)
         notifyDataSetChanged()
