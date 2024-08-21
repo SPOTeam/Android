@@ -51,6 +51,13 @@ class CalendarFragment : Fragment() {
         calendarView = binding.calendarView
         eventsRecyclerView = binding.eventrecyclerview
         imgbtnAddEvent = binding.imgbtnAddEvent
+        
+        imgbtnAddEvent.setOnClickListener{
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, CalendarAddEventFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         eventAdapter = EventAdapter(emptyList(), { event ->
             val hostMakeQuizFragment = HostMakeQuizFragment()

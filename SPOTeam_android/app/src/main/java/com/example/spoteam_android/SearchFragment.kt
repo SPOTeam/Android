@@ -64,6 +64,7 @@ class SearchFragment : Fragment() {
                     addSearchChip(it)
                     binding.searchView.setQuery("", false)
                     binding.searchView.clearFocus()
+
                 }
                 return true
             }
@@ -79,27 +80,21 @@ class SearchFragment : Fragment() {
     private fun addSearchChip(query: String) {
         if (query in recentSearches) return
 
-        recentSearches.add(query)
+        recentSearches.add(0, query) // 새로운 검색어를 리스트의 앞에 추가
+
         binding.txRecentlySearchedWord.visibility = View.VISIBLE
 
         val chip = Chip(requireContext()).apply {
             text = query
-            isCloseIconVisible = true
-            setOnCloseIconClickListener {
-                binding.chipGroup.removeView(this)
-                recentSearches.remove(query)
-//                if (recentSearches.isEmpty()) {
-//                    binding.txRecentlySearchedWord.visibility = View.GONE
-//                }
-            }
+            isCloseIconVisible = false
             setChipDrawable(
                 ChipDrawable.createFromAttributes(
                     requireContext(), null, 0, R.style.find_ChipStyle
                 )
             )
+            isCloseIconVisible = false
         }
-
-        binding.chipGroup.addView(chip)
-
+        // ChipGroup의 첫 번째 위치에 Chip 추가
+        binding.chipGroup.addView(chip, 0)
     }
 }

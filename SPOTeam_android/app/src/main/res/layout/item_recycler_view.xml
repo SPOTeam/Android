@@ -12,7 +12,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,28 +20,27 @@
             android:id="@+id/ImageView4"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/activity_main_ic_recyclervw_groups"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="15dp"
             android:background="@color/white"
             android:scaleType="centerCrop"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="7dp"
+            android:src="@drawable/activity_main_ic_recyclervw_groups"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut" />
 
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_gravity="center"
+            android:layout_height="80dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="스터디 이름"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/pretendardsource"
+                android:text="스터디 이름"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -50,15 +49,17 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="스터디 목표"
+                android:layout_marginTop="5dp"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:fontFamily="@font/pretendardsource"
+                android:text="스터디 목표"
                 android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -74,14 +75,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="po"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_name5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_name"
@@ -89,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="to"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
 
                 <ImageView
@@ -105,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="like"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/ImageView7"
@@ -119,7 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="view"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

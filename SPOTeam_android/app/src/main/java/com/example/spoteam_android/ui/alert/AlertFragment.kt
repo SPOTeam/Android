@@ -58,11 +58,12 @@ class AlertFragment : Fragment() {
                     call: Call<AlertResponse>,
                     response: Response<AlertResponse>
                 ) {
-                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
+                    Log.d("MyAlert", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val alertResponse = response.body()
-                        Log.d("MyStudyAttendance", "responseBody: ${alertResponse?.isSuccess}")
+                        Log.d("MyAlert", "responseBody: ${alertResponse?.isSuccess}")
                         if (alertResponse?.isSuccess == "true") {
+                            Log.d("MyAlert", "responseBody: ${alertResponse?.result?.notifications}")
                             val alertInfo = alertResponse.result.notifications
                             initMultiViewRecyclerView(alertInfo)
                         } else {
@@ -74,7 +75,7 @@ class AlertFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<AlertResponse>, t: Throwable) {
-                    Log.e("MyStudyAttendance", "Failure: ${t.message}", t)
+                    Log.e("MyAlert", "Failure: ${t.message}", t)
                 }
             })
     }
@@ -91,6 +92,8 @@ class AlertFragment : Fragment() {
                         val studyAlertResponse = response.body()
                         Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
                         if (studyAlertResponse?.isSuccess == "true") {
+
+                            Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.result?.notifications}")
                             binding.studyAlertCl.visibility = View.VISIBLE
 
                         } else {
