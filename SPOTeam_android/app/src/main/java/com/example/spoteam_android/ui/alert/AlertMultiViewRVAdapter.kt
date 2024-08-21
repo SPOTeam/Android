@@ -44,7 +44,7 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
         return when (dataList[position].type) {
             "POPULAR_POST" -> 1
             "ANNOUNCEMENT" -> 2
-            "SCHEDULE_UPDATE " -> 2
+            "SCHEDULE_UPDATE" -> 2
             "TO_DO_UPDATE" -> 2
             else -> -1  // 예외 처리, 정의되지 않은 타입에 대해 기본 값을 반환
         }
