@@ -19,7 +19,7 @@
        app:layout_constraintTop_toTopOf="parent" />
 
    <LinearLayout
-       android:id="@+id/content_ll"
+       android:id="@+id/summary_ll"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_marginStart="10dp"
@@ -33,7 +33,8 @@
           android:text="내 스터디"
           android:textColor="@color/black"
           android:textStyle="bold"
-          android:textSize="15sp"/>
+          android:textSize="15sp"
+          android:layout_marginEnd="4dp"/>
 
       <TextView
           android:id="@+id/category_type"
@@ -42,7 +43,8 @@
           android:text="'공지'"
           android:textColor="@color/black"
           android:textStyle="bold"
-          android:textSize="15sp"/>
+          android:textSize="15sp"
+          android:layout_marginEnd="5dp"/>
 
       <TextView
           android:id="@+id/alert_type"
@@ -54,12 +56,33 @@
           android:textSize="15sp"/>
    </LinearLayout>
 
-   <TextView
-       android:id="@+id/alert_update_content_tv"
+   <LinearLayout
+       android:id="@+id/content_ll"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:text= "&quot;토익 스피킹 IH 스터디&quot;의 새로운 공지"
-       app:layout_constraintStart_toStartOf="@id/content_ll"
-       app:layout_constraintTop_toBottomOf="@id/content_ll"/>
+       app:layout_constraintStart_toStartOf="@id/summary_ll"
+       app:layout_constraintTop_toBottomOf="@id/summary_ll">
 
+      <TextView
+          android:id="@+id/alert_content_1_tv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text= "123"
+          android:textSize="14sp"
+          android:layout_marginEnd="5dp"/>
+      <TextView
+          android:id="@+id/alert_content_2_tv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text= "456"
+          android:textSize="14sp"
+          android:layout_marginEnd="5dp"/>
+      <TextView
+          android:id="@+id/alert_content_3_tv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="14sp"
+          android:text= "789" />
+
+   </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

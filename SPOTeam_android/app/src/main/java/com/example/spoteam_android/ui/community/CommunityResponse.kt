@@ -523,3 +523,55 @@ data class AcceptedAlertStudyInfo(
     val processedAt : String,
     val accept : Boolean
 )
+
+/************내가 신청한 스터디 수락 알림 처리 결과***********/
+data class NotificationStateResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: NotificationStateInfo
+)
+
+data class NotificationStateInfo(
+    val processedAt : String,
+    val accept : Boolean
+)
+
+/************내가 진행중인 스터디***********/
+data class MemberOnStudiesResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: MemberOnStudiesInfo
+)
+
+data class MemberOnStudiesInfo(
+    val totalPages : Int,
+    val totalElements : Int,
+    val first : Boolean,
+    val last : Boolean,
+    val size : Int,
+    val content : List<MyRecruitingStudyDetail>,
+    val number : Int
+)
+
+/************내가 참여신청한 스터디***********/
+data class MemberAppliedStudiesResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: MemberAppliedStudiesInfo
+)
+
+data class MemberAppliedStudiesInfo(
+    val totalPages : Int,
+    val totalElements : Int,
+    val first : Boolean,
+    val last : Boolean,
+    val size : Int,
+    val content : List<MyRecruitingStudyDetail>,
+    val number : Int
+)
+
+
+

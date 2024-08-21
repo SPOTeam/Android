@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.BookmarkItem
 import com.example.spoteam_android.R
+import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.databinding.ItemRecyclerViewBinding
 
 class BookMarkRVAdapter(
