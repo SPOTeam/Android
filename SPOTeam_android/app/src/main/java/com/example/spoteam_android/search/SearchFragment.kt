@@ -59,21 +59,26 @@ class SearchFragment : Fragment() {
                 .commit()
         }
 
-        recommendBoardAdapter = BoardAdapter(ArrayList()) { selectedItem ->
-            Log.d("SearchFragment", "이벤트 클릭: ${selectedItem.title}")
-            studyViewModel.setStudyData(
-                selectedItem.studyId,
-                selectedItem.imageUrl,
-                selectedItem.introduction
-            )
+        recommendBoardAdapter = BoardAdapter(
+            ArrayList(),
+            onItemClick = { selectedItem ->
+                Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
+                studyViewModel.setStudyData(
+                    selectedItem.studyId,
+                    selectedItem.imageUrl,
+                    selectedItem.introduction
+                )
 
-            // Fragment 전환
-            val fragment = DetailStudyFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
+                // Fragment 전환
+                val fragment = DetailStudyFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            },
+            onLikeClick = { selectedItem, likeButton ->
+            }
+        )
 
         binding.searchBoard.apply {
             layoutManager = LinearLayoutManager(context)
@@ -218,7 +223,8 @@ class SearchFragment : Fragment() {
                             studyState = study.studyState,
                             themeTypes = study.themeTypes,
                             regions = study.regions,
-                            imageUrl = study.imageUrl
+                            imageUrl = study.imageUrl,
+                            liked = study.liked
                         )
                     } ?: emptyList()
 
@@ -257,4 +263,6 @@ class SearchFragment : Fragment() {
 
         return memberId // 저장된 memberId 없을 시 기본값 -1 반환
     }
+
+
 }

@@ -45,13 +45,14 @@ data class BoardItem (
     val goal: String,
     val introduction: String,
     val memberCount: Int,
-    val heartCount: Int,
+    var heartCount: Int,
     val hitNum: Int,
     val maxPeople: Int,
     val studyState: String,
     val themeTypes: List<String>,
     val regions: List<String>,
-    val imageUrl: String
+    val imageUrl: String,
+    var liked: Boolean
 )
 
 data class SearchItem (
@@ -368,5 +369,68 @@ data class LikeResult(
     val status: String // LIKE 또는 DISLIKE
 )
 
+//스터디 신청여부
+data class IsAppliedResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: IsAppliedResult
+)
+
+data class  IsAppliedResult(
+    val studyId: Int,
+    val applied: Boolean
+)
 
 
+data class BookmarkResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: BookmarkResult
+)
+
+data class BookmarkResult(
+    val totalPages: Int,
+    val totalElements: Int,
+    val first: Boolean,
+    val last: Boolean,
+    val size: Int,
+    val content: List<BookmarkStudyItem>,
+    val number: Int
+)
+
+data class BookmarkStudyItem(
+    val studyId: Int,
+    val imageUrl: String,
+    val title: String,
+    val introduction: String,
+    val goal: String,
+    val memberCount: Int,
+    val heartCount: Int,
+    val hitNum: Int,
+    val maxPeople: Int,
+    val studyState: String,
+    val themeTypes: List<String>,
+    val regions: List<String>,
+    val createdAt: String,
+    val liked: Boolean
+)
+
+
+
+data class BookmarkItem( //StudyFragment에서 사용
+    val studyId: Int,
+    val title: String,
+    val goal: String,
+    val introduction: String,
+    val memberCount: Int,
+    var heartCount: Int,
+    val hitNum: Int,
+    val maxPeople: Int,
+    val studyState: String,
+    val themeTypes: List<String>,
+    val regions: List<String>,
+    val imageUrl: String,
+    var liked: Boolean
+)

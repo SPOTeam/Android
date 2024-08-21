@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
@@ -13,7 +14,8 @@ import com.bumptech.glide.Glide
 
 class BoardAdapter(
     private val itemList: ArrayList<BoardItem>,
-    private val onItemClick: (BoardItem) -> Unit
+    private val onItemClick: (BoardItem) -> Unit,
+    private val onLikeClick: (BoardItem, ImageView) -> Unit // onLikeClick 추가
 ) : RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
@@ -24,17 +26,23 @@ class BoardAdapter(
     override fun onBindViewHolder(holder: BoardViewHolder, position: Int) {
         val currentItem = itemList[position]
         holder.bind(currentItem)
+
         holder.itemView.setOnClickListener {
-            Log.d("BoardAdapter","{$currentItem}이 선택되었습니다")
             onItemClick(currentItem)
+        }
+
+        holder.likeButton.setOnClickListener {
+            onLikeClick(currentItem, holder.likeButton) // onLikeClick 호출
         }
     }
 
-    override fun getItemCount(): Int {
-        return itemList.size
+    override fun getItemCount(): Int = itemList.size
+    fun getItemList(): List<BoardItem> {
+        return itemList
     }
 
     inner class BoardViewHolder(val binding: ItemRecyclerViewPlusToggleBinding) : RecyclerView.ViewHolder(binding.root) {
+        val likeButton: ImageView = binding.heartCountIv
 
         fun bind(item: BoardItem) {
             // 데이터 바인딩
@@ -48,9 +56,13 @@ class BoardAdapter(
             // 이미지 로드
             Glide.with(binding.root.context)
                 .load(item.imageUrl)
-                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
-                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
+                .error(R.drawable.fragment_calendar_spot_logo)
+                .fallback(R.drawable.fragment_calendar_spot_logo)
                 .into(binding.ImageView4)
+
+            // 하트 아이콘 상태 설정
+            val heartIcon = if (item.liked) R.drawable.ic_heart_filled else R.drawable.study_like
+            binding.heartCountIv.setImageResource(heartIcon)
 
             binding.toggle.setOnClickListener {
                 showPopupMenu(it)
@@ -80,17 +92,17 @@ class BoardAdapter(
         }
     }
 
-    fun removeItem(position: Int) {
-        if (position >= 0 && position < itemList.size) {
-            itemList.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, itemCount)
-        }
-    }
-
     fun updateList(newList: List<BoardItem>) {
         itemList.clear()
         itemList.addAll(newList)
         notifyDataSetChanged()
+    }
+
+    fun removeItem(position: Int) {
+        if (position >= 0 && position < itemList.size) {
+            itemList.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, itemList.size)
+        }
     }
 }

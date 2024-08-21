@@ -28,16 +28,16 @@ class StudyAdapter(
             onItemClick(currentItem)
         }
 
-//        holder.likeButton.setOnClickListener {
-//            onLikeClick(currentItem, holder.likeButton)
-//        }
+        holder.likeButton.setOnClickListener {
+            onLikeClick(currentItem, holder.likeButton)
+        }
     }
 
     override fun getItemCount(): Int = itemList.size
 
     inner class StudyViewHolder(val binding: ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
-//        val likeButton: ImageView = binding.heartCountIv // 찜 버튼
+        val likeButton: ImageView = binding.heartCountIv // 찜 버튼
 
         fun bind(item: StudyItem) {
             binding.tvTime.text = item.title
@@ -50,12 +50,14 @@ class StudyAdapter(
             // Glide를 사용하여 imageUrl을 ImageView에 로드
             Glide.with(binding.root.context)
                 .load(item.imageUrl)
+                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
+                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
                 .into(binding.ImageView4) // ImageView4에 이미지를 로드
 
             Log.d("StudyAdapter","${item.liked}")
 
             val heartIcon = if (item.liked) R.drawable.ic_heart_filled else R.drawable.study_like
-//            binding.heartCountIv.setImageResource(heartIcon)
+            binding.heartCountIv.setImageResource(heartIcon)
 
         }
     }
