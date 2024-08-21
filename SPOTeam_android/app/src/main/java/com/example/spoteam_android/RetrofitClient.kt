@@ -12,8 +12,7 @@ object RetrofitClient {
     private const val BASE_URL = "https://www.teamspot.site/"  // 실제 API의 베이스 URL
 
 
-
-    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDE0MjgwNCwiZXhwIjoxNzI0MjI5MjA0fQ.hJCey-hvKVfv0qJLLDSExYq3Gz4tviU44n6nm2phn-c"
+    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6OSwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzI0MTM5NjE3LCJleHAiOjE3MjQyMjYwMTd9.C67pEhuGur5vz5iwfCAygg-Dj-vIIqCGPJ3yXV_ZpMk"
 
     fun getAuthToken(): String {
         return "Bearer $authToken"

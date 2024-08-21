@@ -9,23 +9,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.StudyResponse
 import com.example.spoteam_android.databinding.FragmentStudyBinding
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class StudyFragment : Fragment() {
 
@@ -61,17 +59,18 @@ class StudyFragment : Fragment() {
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
         // 어댑터 설정
-        studyAdapter = StudyAdapter(ArrayList()) { selectedItem ->
+        studyAdapter = StudyAdapter(ArrayList(), onItemClick = { selectedItem ->
             // StudyViewModel에 studyId 설정
             studyViewModel.setStudyData(selectedItem.studyId, selectedItem.imageUrl, selectedItem.introduction)
-
 
             val detailStudyFragment = DetailStudyFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, detailStudyFragment)
                 .addToBackStack(null)
                 .commit()
-        }
+        }, onLikeClick = { selectedItem, likeButton ->
+            toggleLikeStatus(selectedItem, likeButton)
+        })
 
         // RecyclerView 설정
         binding.fragmentStudyRv.apply {
@@ -98,7 +97,6 @@ class StudyFragment : Fragment() {
         fetchStudyData()
     }
 
-
     private fun fetchStudyData() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
@@ -109,7 +107,7 @@ class StudyFragment : Fragment() {
             if (memberId != -1) {
                 Log.d("StudyFragment", "Fetching data for memberId: $memberId, page: $currentPage, size: $size")
 
-                studyApiService.getStudies(memberId.toString(), currentPage, size).enqueue(object : Callback<StudyResponse> {
+                studyApiService.getStudies(memberId, currentPage, size).enqueue(object : Callback<StudyResponse> {
                     override fun onResponse(call: Call<StudyResponse>, response: Response<StudyResponse>) {
                         if (response.isSuccessful) {
                             response.body()?.let { studyResponse ->
@@ -131,7 +129,8 @@ class StudyFragment : Fragment() {
                                             studyState = it.studyState,
                                             themeTypes = it.themeTypes,
                                             regions = it.regions,
-                                            imageUrl = it.imageUrl
+                                            imageUrl = it.imageUrl,
+                                            liked = it.liked // Boolean 값으로 받음
                                         )
                                     })
 
@@ -172,6 +171,39 @@ class StudyFragment : Fragment() {
         }
     }
 
+    private fun toggleLikeStatus(studyItem: StudyItem, likeButton: ImageView) {
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val memberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
+
+        if (memberId != -1) {
+            studyApiService.toggleStudyLike(studyItem.studyId, memberId).enqueue(object : Callback<LikeResponse> {
+                override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
+                    if (response.isSuccessful) {
+                        response.body()?.let { likeResponse ->
+                            // 서버에서 반환된 상태에 따라 하트 아이콘 및 StudyItem의 liked 상태 업데이트
+                            val newStatus = likeResponse.result.status
+                            Log.d("studyfrag", newStatus)
+                            studyItem.liked = newStatus == "LIKE" // Boolean 값으로 업데이트
+                            val newIcon = if (studyItem.liked) R.drawable.ic_heart_filled else R.drawable.study_like
+                            likeButton.setImageResource(newIcon)
+
+                            // heartCount 즉시 증가 또는 감소
+                            studyItem.heartCount = if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
+                            studyAdapter.notifyItemChanged(itemList.indexOf(studyItem))
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
+                    Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun updatePageNumberUI(totalPages: Int) {
         binding.currentPage.text = "${currentPage + 1}"

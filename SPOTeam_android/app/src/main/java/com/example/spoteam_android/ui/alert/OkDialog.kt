@@ -6,12 +6,18 @@ import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
+import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
+import com.example.spoteam_android.ui.study.DetailStudyFragment
 
-class OkDialog(context : Context) {
+class OkDialog(private val context: Context) {
 
     private val dlg = android.app.Dialog(context)
+    private var studyId : Int = -1
 
+    fun setStudyId(studyId : Int) {
+        this.studyId = studyId
+    }
     fun start() {
         // 타이틀바 제거
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -23,6 +29,10 @@ class OkDialog(context : Context) {
 
         val btnMove = dlg.findViewById<TextView>(R.id.move_to_study_tv)
         btnMove.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, DetailStudyFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
             dlg.dismiss()
         }
 

@@ -57,7 +57,7 @@
             android:id="@+id/reject_tv"
             android:layout_width="140dp"
             android:layout_height="38dp"
-            android:text="불참"
+            android:text="거절"
             android:textSize="16sp"
             android:textStyle="bold"
             android:gravity="center"

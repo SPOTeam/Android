@@ -87,6 +87,12 @@ class ContestFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
 
+        dataRVAdapter.setItemClickListener(object : CategoryStudyContentRVAdapter.OnItemClickListener{
+            override fun onItemClick(data: CategoryStudyDetail) {
+                //detailFragmentPreview로 전송
+            }
+
+        })
     }
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         // Spinner에서 선택된 항목의 텍스트를 가져옴

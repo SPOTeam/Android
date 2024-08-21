@@ -50,6 +50,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:fontFamily="@font/pretendardsource"
                 android:text="스터디 목표"
                 android:textSize="12sp" />
@@ -89,6 +91,14 @@
                     android:layout_marginEnd="8dp"
                     android:text="to"
                     android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/ic_heart_tv_iv"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_heart_red"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/ImageView6"

@@ -1,7 +1,9 @@
 package com.example.spoteam_android.ui.study
 
+import ApplyStudyDialog
 import StudyApiService
 import StudyViewModel
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,13 +14,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.DetailStudyHomeAdapter
+import com.example.spoteam_android.HouseFragment
 import com.example.spoteam_android.MemberResponse
 import com.example.spoteam_android.ProfileItem
+import com.example.spoteam_android.R
 import com.example.spoteam_android.RecentAnnounceResponse
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.SceduleItem
 import com.example.spoteam_android.ScheduleListResponse
 import com.example.spoteam_android.databinding.FragmentDetailStudyHomeBinding
+import com.example.spoteam_android.ui.mypage.PurposeUploadComplteDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,13 +38,14 @@ class DetailStudyHomeFragment : Fragment() {
     private lateinit var scheduleAdapter: DetailStudyHomeAdapter
     private val page = 0
     private val size = 2
-    private val studyViewModel: StudyViewModel by activityViewModels()
+    val studyViewModel: StudyViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentDetailStudyHomeBinding.inflate(inflater, container, false)
+
 
         setupViews()
 
@@ -53,6 +59,10 @@ class DetailStudyHomeFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "Study ID is missing", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.fragmentDetailStudyHomeRegisterBt.setOnClickListener {
+            showCompletionDialog()
         }
 
         return binding.root
@@ -77,17 +87,30 @@ class DetailStudyHomeFragment : Fragment() {
     private fun fetchStudyMembers(studyId: Int) {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+        val kakaoNickname = sharedPreferences.getString("${email}_nickname", null)
+
+
         api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
             override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
                 if (response.isSuccessful) {
-                    Log.d("DSHomeFragment","$response")
+                    Log.d("DSHomeFragment", "$response")
                     response.body()?.let { memberResponse ->
-                        if (memberResponse != null && memberResponse.result != null) {
-                            profileAdapter.updateList(memberResponse.result.members.map {
-                                ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
-                            })
-                        }else{
-                            ProfileItem("","")
+                        val members = memberResponse.result?.members ?: emptyList()
+                        profileAdapter.updateList(members.map {
+                            ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
+                        })
+
+                        // 닉네임 리스트에서 현재 사용자의 닉네임과 일치하는지 확인
+                        val nicknames = members.map { it.nickname }
+                        val isNicknameFound = kakaoNickname?.let { nicknames.contains(it) } ?: false
+
+                        // 닉네임이 리스트에 없으면 버튼을 보이게, 있으면 숨기기
+                        binding.fragmentDetailStudyHomeRegisterBt.visibility = if (isNicknameFound) {
+                            View.GONE
+                        } else {
+                            View.VISIBLE
                         }
                     }
                 } else {
@@ -100,6 +123,7 @@ class DetailStudyHomeFragment : Fragment() {
             }
         })
     }
+
 
 
     private fun fetchStudySchedules(studyId: Int) {
@@ -235,6 +259,17 @@ class DetailStudyHomeFragment : Fragment() {
         val date = inputFormatter.parse(staredAt)
         return outputFormatter.format(date)
     }
+
+    private fun showCompletionDialog() {
+        val dialog = ApplyStudyDialog(requireContext(), this)
+        dialog.start {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.main_frm, HouseFragment())
+            transaction.addToBackStack(null)  // 백스택에 추가하여 뒤로 가기 가능하게 함
+            transaction.commit()
+        }
+    }
+
 
 
 

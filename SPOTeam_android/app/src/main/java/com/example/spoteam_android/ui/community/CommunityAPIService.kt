@@ -108,6 +108,54 @@ interface CommunityAPIService {
     @GET("/spot/studies/{studyId}/posts/{postId}/comments")
     fun getStudyPostContentComment(
         @Path("studyId") studyId: Int,
-        @Path("postId") postId: Int,
+        @Path("postId") postId: Int
     ): Call<StudyPostContentCommentResponse>
+
+    @GET("/spot/search/studies/my-page/members/{memberId}")
+    fun getMyPageStudyNum(
+        @Path("memberId") memberId: Int
+    ): Call<MyPageStudyNumResponse>
+
+    @GET("/spot/search/studies/my-recruiting-studies/members/{memberId}/")
+    fun getMyPageRecruitingStudy(
+        @Path("memberId") memberId: Int,
+        @Query("page") page: Int,
+        @Query("size") size : Int
+    ): Call<MyRecruitingStudiesResponse>
+
+    @GET("/spot/studies/{studyId}/applicants")
+    fun getMyStudyAttendanceMember(
+        @Path("studyId") studyId: Int
+    ): Call<MyStudyAttendanceMemberResponse>
+
+    @POST("/spot/studies/{studyId}/applicants/{applicantId}")
+    fun postAttendanceMember(
+        @Path("studyId") studyId: Int,
+        @Path("applicantId") applicantId: Int,
+        @Query("isAccept") isAccept: Boolean
+    ): Call<MemberAcceptResponse>
+
+    @GET("/spot/studies/{studyId}/applicants/{applicantId}")
+    fun getAttendanceIntroduction(
+        @Path("studyId") studyId: Int,
+        @Path("applicantId") applicantId: Int
+    ): Call<MemberAttendanceIntroResponse>
+
+    @GET("/spot/notifications")
+    fun getAlert(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Call<AlertResponse>
+
+    @GET("/spot/notifications/applied-study")
+    fun getStudyAlert(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Call<AlertStudyResponse>
+
+    @POST("/spot/notifications/applied-study/{studyId}/join")
+    fun postAcceptedStudyAlert(
+        @Path("studyId") studyId: Int,
+        @Query("isAccepted") isAccepted: Boolean
+    ): Call<AcceptedAlertStudyResponse>
 }

@@ -159,6 +159,8 @@ class DetailStudyFragment : Fragment() {
             // 이미지 로드
             Glide.with(binding.root.context)
                 .load(imageUrl)
+                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
+                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
                 .into(binding.fragmentDetailStudyUserIv)
         }
 

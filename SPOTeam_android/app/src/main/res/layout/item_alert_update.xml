@@ -18,25 +18,48 @@
        app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintTop_toTopOf="parent" />
 
-   <TextView
-       android:id="@+id/alert_update_tv"
+   <LinearLayout
+       android:id="@+id/content_ll"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:text="내 스터디 '공지' 업데이트"
-       android:textColor="@color/black"
-       android:textStyle="bold"
-       android:textSize="15sp"
        android:layout_marginStart="10dp"
        app:layout_constraintStart_toEndOf="@id/alert_bell_iv"
-       app:layout_constraintTop_toTopOf="@id/alert_bell_iv"/>
+       app:layout_constraintTop_toTopOf="@id/alert_bell_iv">
+
+      <TextView
+          android:id="@+id/study_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="내 스터디"
+          android:textColor="@color/black"
+          android:textStyle="bold"
+          android:textSize="15sp"/>
+
+      <TextView
+          android:id="@+id/category_type"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="'공지'"
+          android:textColor="@color/black"
+          android:textStyle="bold"
+          android:textSize="15sp"/>
+
+      <TextView
+          android:id="@+id/alert_type"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="업데이트"
+          android:textColor="@color/black"
+          android:textStyle="bold"
+          android:textSize="15sp"/>
+   </LinearLayout>
 
    <TextView
        android:id="@+id/alert_update_content_tv"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:text= "&quot;토익 스피킹 IH 스터디&quot;의 새로운 공지"
-       android:layout_marginStart="10dp"
-       app:layout_constraintStart_toEndOf="@id/alert_bell_iv"
-       app:layout_constraintBottom_toBottomOf="@id/alert_bell_iv"/>
+       app:layout_constraintStart_toStartOf="@id/content_ll"
+       app:layout_constraintTop_toBottomOf="@id/content_ll"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
