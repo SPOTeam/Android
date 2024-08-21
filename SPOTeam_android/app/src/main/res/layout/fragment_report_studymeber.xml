@@ -39,6 +39,7 @@
         android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="신고하고자 하는 스터디원을 선택 후, 이유를 작성해주세요.\n SPOT이  살핀 후 탈퇴 신청을 용인합니다."
+        app:layout_constraintBottom_toTopOf="@+id/member_tl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/take_attendance_title_tv" />
