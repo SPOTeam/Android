@@ -184,4 +184,31 @@ interface CommunityAPIService {
         @Query("page") page: Int,
         @Query("size") size: Int
     ): Call<MemberOnStudiesResponse>
+
+    @POST("/spot/studies/{studyId}/posts/{postId}/likes")
+    fun postStudyContentLike(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int
+    ): Call<StudyContentLikeResponse>
+
+    @DELETE("/spot/studies/{studyId}/posts/{postId}/likes")
+    fun deleteStudyContentLike(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int
+    ): Call<StudyContentUnLikeResponse>
+
+    @POST("/spot/studies/{studyId}/posts/{postId}/comments")
+    fun postStudyContentComment(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int,
+        @Body requestBody : WriteStudyCommentRequest
+    ): Call<WriteStudyCommentResponse>
+
+    @POST("/spot/studies/{studyId}/posts/{postId}/comments/{commentId}/replies")
+    fun postStudyContentReplyComment(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int,
+        @Path("commentId") commentId: Int,
+        @Body requestBody : WriteStudyCommentRequest
+    ): Call<WriteStudyCommentResponse>
 }

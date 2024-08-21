@@ -10,7 +10,7 @@ data class WriteContentRequest(
     val anonymous : Boolean
 )
 
-/*********댓글 작성 Request********/
+/*********게시글 댓글 작성 Request********/
 data class WriteCommentRequest(
     val content: String,
     val parentCommentId : Int,
@@ -24,4 +24,10 @@ data class StudyWriteContentRequest(
     val title: String,
     val content: String,
     val images: List<MultipartBody.Part?>
+)
+
+/*********스터디 게시글 댓글 작성 Request********/
+data class WriteStudyCommentRequest(
+    val isAnonymous : Boolean,
+    val content : String
 )
