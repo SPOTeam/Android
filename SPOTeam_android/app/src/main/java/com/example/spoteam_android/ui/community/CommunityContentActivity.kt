@@ -8,6 +8,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ActivityCommunityContentBinding
 import com.example.spoteam_android.ui.community.contentComment.ContentCommentMultiViewRVAdapter
@@ -61,25 +62,25 @@ class CommunityContentActivity : AppCompatActivity() {
         }
 
         binding.communityContentLikeNumCheckedIv.setOnClickListener{
-//            deleteContentLike()
-            compareIsliked = false
-            compareIslikedNum--
-
-            binding.communityContentLikeNumCheckedIv.visibility = View.GONE
-            binding.communityContentLikeNumUncheckedIv.visibility = View.VISIBLE
-
-            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
+            deleteContentLike()
+//            compareIsliked = false
+//            compareIslikedNum--
+//
+//            binding.communityContentLikeNumCheckedIv.visibility = View.GONE
+//            binding.communityContentLikeNumUncheckedIv.visibility = View.VISIBLE
+//
+//            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
         }
 
         binding.communityContentLikeNumUncheckedIv.setOnClickListener{
-//            postContentLike()
-            compareIsliked = true
-            compareIslikedNum++
-
-            binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE
-            binding.communityContentLikeNumUncheckedIv.visibility = View.GONE
-
-            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
+            postContentLike()
+//            compareIsliked = true
+//            compareIslikedNum++
+//
+//            binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE
+//            binding.communityContentLikeNumUncheckedIv.visibility = View.GONE
+//
+//            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
         }
 
         fetchContentInfo()
@@ -176,6 +177,8 @@ class CommunityContentActivity : AppCompatActivity() {
                     if (response.isSuccessful && response.body()?.isSuccess == "true") {
                         Log.d("WriteComment", "${response.body()!!.result}")
                         parentCommentId = 0 // postCommentID 초기화
+                        binding.writeCommentContentEt.text.clear()
+                        binding.writeCommentContentEt.clearFocus()
                         // 어댑터의 상태 초기화
                         resetAdapterState()
                         fetchContentInfo()
@@ -225,10 +228,16 @@ class CommunityContentActivity : AppCompatActivity() {
                         if (contentResponse?.isSuccess == "true") {
                             val contentInfo = contentResponse.result
                             val commentInfo = contentInfo.commentResponses.comments
-                            compareIsliked = contentInfo.likedByCurrentUser
-                            compareIslikedNum = contentInfo.likeCount
-                            initialIsliked = contentInfo.likedByCurrentUser
-                            initialIsLikedNum = contentInfo.likeCount
+//                            compareIsliked = contentInfo.likedByCurrentUser
+//                            compareIslikedNum = contentInfo.likeCount
+//                            initialIsliked = contentInfo.likedByCurrentUser
+//                            initialIsLikedNum = contentInfo.likeCount
+//                            //Glide를 사용하여 imageUrl을 ImageView에 로드
+//                            Glide.with(binding.root.context)
+//                                .load(contentInfo.fileUrls)
+//                                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
+//                                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
+//                                .into(binding.communityContentProfileIv)
 
                             Log.d("Content", "items: $contentInfo")
                             Log.d("Comment", "items: $commentInfo")

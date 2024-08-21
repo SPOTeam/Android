@@ -96,13 +96,13 @@ data class ContentInfo(
     val writer: String,
     val writtenTime : String,
     val scrapCount : Int,
-    val fileUrls : List<String>,
     val title : String,
     val content : String,
     var likeCount : Int,
     val commentCount : Int,
     val viewCount : Int,
     var likedByCurrentUser : Boolean,
+    var scrapedByCurrentUser : Boolean,
     val commentResponses : CommentResponse,
     val reported : Boolean
 )
@@ -571,6 +571,47 @@ data class MemberAppliedStudiesInfo(
     val size : Int,
     val content : List<MyRecruitingStudyDetail>,
     val number : Int
+)
+
+/************스터디 게시글 좋아요 완료***********/
+data class StudyContentLikeResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: StudyContentLikeInfo
+)
+
+data class StudyContentLikeInfo (
+    val postId : Int,
+    val title : String,
+    val likeNum : Int
+)
+
+/************스터디 게시글 좋아요 취소***********/
+data class StudyContentUnLikeResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: StudyContentUnLikeInfo
+)
+
+data class StudyContentUnLikeInfo (
+    val postId : Int,
+    val title : String,
+    val likeNum : Int
+)
+
+/************스터디 게시글 댓글 작성 완료***********/
+data class WriteStudyCommentResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: WriteStudyCommentInfo
+)
+
+data class WriteStudyCommentInfo (
+    val isAnonymous : Boolean,
+    val content : String
 )
 
 

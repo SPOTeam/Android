@@ -15,26 +15,24 @@ data class CommentItem(
     val isReply: Boolean
 )
 
-
 class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<CommentItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-//    interface ItemClick {
-////        fun onItemClick(view: View, position: Int, parentCommentId : Int)
-////        fun onLikeClick(view: View, position: Int, commentId : Int)
-////        fun onUnLikeClick(view: View, position: Int, commentId : Int)
-////        fun onDisLikeClick(view: View, position: Int, commentId : Int)
-////        fun onUnDisLikeClick(view: View, position: Int, commentId : Int)
-//    }
-//
-//    var itemClick: ItemClick? = null
-//    private val clickedState = MutableList(dataList.size) { false } // 각 아이템의 클릭 상태를 저장
-//
-//    fun resetClickedState() {
-//        clickedState.indices.forEach { clickedState[it] = false }
-//        notifyDataSetChanged() // 리스트 갱신
-//    }
+    interface ItemClick {
+        fun onItemClick(parentId: Int?)
+//        fun onLikeClick(view: View, position: Int, commentId : Int)
+//        fun onUnLikeClick(view: View, position: Int, commentId : Int)
+//        fun onDisLikeClick(view: View, position: Int, commentId : Int)
+//        fun onUnDisLikeClick(view: View, position: Int, commentId : Int)
+    }
 
-    // 데이터 설정 함수
+    var itemClick: ItemClick? = null
+    private val clickedState = MutableList(dataList.size) { false } // 각 아이템의 클릭 상태를 저장
+
+    fun resetClickedState() {
+        clickedState.indices.forEach { clickedState[it] = false }
+        notifyDataSetChanged() // 리스트 갱신
+    }
+
     fun setData(comments: List<StudyPostContentCommentDetail>) {
         dataList.clear()
         comments.forEach { comment ->
@@ -43,19 +41,23 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
                 dataList.add(CommentItem(reply, true)) // 대댓글
             }
         }
+        clickedState.clear() // 기존 상태 초기화
+        clickedState.addAll(List(dataList.size) { false }) // 새로운 데이터 크기만큼 초기화
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : RecyclerView.ViewHolder {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return when(viewType) {
+        return when (viewType) {
             0 -> {
                 val binding = ItemContentCommentBinding.inflate(inflater, parent, false)
-                CommentViewHolder(binding)
+                MyStudyCommentViewHolder(binding)
             }
+
             else -> {
                 val binding = ItemContentCommentReplyBinding.inflate(inflater, parent, false)
-                ReplyCommentViewHolder(binding)
+                MyStudyReplyCommentViewHolder(binding)
             }
         }
     }
@@ -69,16 +71,30 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = dataList[position].commentDetail
         when (holder) {
-            is CommentViewHolder -> {
+            is MyStudyCommentViewHolder -> {
                 holder.bind(item)
             }
-            is ReplyCommentViewHolder -> {
-                holder.bind(item)
+
+            is MyStudyReplyCommentViewHolder -> {
+                // 대댓글인 경우, 상위 댓글의 ID를 찾습니다.
+                val parentCommentId = findParentCommentId(position)
+                holder.bind(item, parentCommentId)
             }
         }
     }
 
-    inner class CommentViewHolder(private val binding : ItemContentCommentBinding) : RecyclerView.ViewHolder(binding.root) {
+    private fun findParentCommentId(position: Int): Int? {
+        // position에서 위로 올라가면서 댓글을 찾음
+        for (i in position downTo 0) {
+            if (!dataList[i].isReply) {
+                return dataList[i].commentDetail.commentId
+            }
+        }
+        return null
+    }
+
+    inner class MyStudyCommentViewHolder(private val binding: ItemContentCommentBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: StudyPostContentCommentDetail) {
             binding.communityContentCommentWriterTv.text = item.member.name
             binding.communityContentCommentStrTv.text = item.content
@@ -92,6 +108,11 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
                 binding.communityContentCommentGoodUncheckedIv.visibility = View.VISIBLE
             }
 
+            binding.communityWriteReplyTv.setOnClickListener {
+                updateClickedState(bindingAdapterPosition) // 클릭 상태 갱신
+                itemClick?.onItemClick(item.commentId)  // 댓글의 ID를 전달, parentId는 null로 설정
+            }
+
             if (item.isDeleted) {
                 binding.communityContentCommentBadCheckedIv.visibility = View.VISIBLE
                 binding.communityContentCommentBadUncheckedIv.visibility = View.GONE
@@ -99,11 +120,19 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
                 binding.communityContentCommentBadCheckedIv.visibility = View.GONE
                 binding.communityContentCommentBadUncheckedIv.visibility = View.VISIBLE
             }
+
+            // 클릭 상태에 따른 communityWriteReplyTv 텍스트 색상 변경
+            binding.communityWriteReplyTv.setTextColor(
+                if (clickedState[bindingAdapterPosition]) binding.root.context.getColor(R.color.active_blue) // 파란색으로 변경
+                else binding.root.context.getColor(R.color.gray) // 기본 색상으로 변경
+            )
         }
     }
 
-    inner class ReplyCommentViewHolder(private val binding : ItemContentCommentReplyBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: StudyPostContentCommentDetail) {
+
+    inner class MyStudyReplyCommentViewHolder(private val binding: ItemContentCommentReplyBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: StudyPostContentCommentDetail, parentId: Int?) {
             binding.communityContentCommentReplyWriterTv.text = item.member.name
             binding.communityContentCommentReplyStrTv.text = item.content
             binding.communityContentCommentReplyGoodNumTv.text = item.likeCount.toString()
@@ -116,6 +145,11 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
                 binding.communityContentCommentReplyGoodUncheckedIv.visibility = View.VISIBLE
             }
 
+            binding.communityReplyWriteReplyTv.setOnClickListener {
+                updateClickedState(bindingAdapterPosition) // 클릭 상태 갱신
+                itemClick?.onItemClick(parentId)  // 대댓글의 ID와 부모 댓글의 ID 반환
+            }
+
             if (item.isDeleted) {
                 binding.communityContentCommentReplyBadCheckedIv.visibility = View.VISIBLE
                 binding.communityContentCommentReplyBadUncheckedIv.visibility = View.GONE
@@ -123,6 +157,21 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
                 binding.communityContentCommentReplyBadCheckedIv.visibility = View.GONE
                 binding.communityContentCommentReplyBadUncheckedIv.visibility = View.VISIBLE
             }
+
+            // 클릭 상태에 따른 communityReplyWriteReplyTv 텍스트 색상 변경
+            binding.communityReplyWriteReplyTv.setTextColor(
+                if (clickedState[bindingAdapterPosition]) binding.root.context.getColor(R.color.blue) // 파란색으로 변경
+                else binding.root.context.getColor(R.color.gray_03) // 기본 색상으로 변경
+            )
+        }
+    }
+
+
+    private fun updateClickedState(position: Int) {
+        if (position in clickedState.indices) {
+            clickedState.indices.forEach { clickedState[it] = false }
+            clickedState[position] = true
+            notifyDataSetChanged()
         }
     }
 }
