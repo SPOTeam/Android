@@ -71,14 +71,14 @@ class SearchFragment : Fragment() {
 
         val chip = Chip(requireContext()).apply {
             text = query
-            isCloseIconVisible = true
-            setOnCloseIconClickListener {
-                binding.chipGroup.removeView(this)
-                recentSearches.remove(query)
+//            isCloseIconVisible = false
+//            setOnCloseIconClickListener {
+//                binding.chipGroup.removeView(this)
+//                recentSearches.remove(query)
 //                if (recentSearches.isEmpty()) {
 //                    binding.txRecentlySearchedWord.visibility = View.GONE
 //                }
-            }
+//            }
             setChipDrawable(
                 ChipDrawable.createFromAttributes(
                     requireContext(), null, 0, R.style.find_ChipStyle

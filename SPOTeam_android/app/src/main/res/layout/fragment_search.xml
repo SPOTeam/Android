@@ -19,17 +19,6 @@
         app:layout_constraintTop_toTopOf="parent">
     </androidx.appcompat.widget.SearchView>
 
-<!--    <com.google.android.material.textfield.TextInputEditText-->
-<!--        android:id="@+id/activity_location_search_et"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/checklist_location_search_background"-->
-<!--        android:drawableEnd="@drawable/location_search_resize"-->
-<!--        android:hint="○○시, ○○구,○○동"-->
-<!--        android:maxLines="1"-->
-<!--        android:padding="10dp"-->
-<!--        android:textSize="16sp" />-->
-
 
     <TextView
         android:id="@+id/tx_recently_searched_word"
@@ -84,7 +73,8 @@
         android:layout_height="120dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tx_recently_viewed_study"></androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/tx_recently_viewed_study">
+    </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
         android:id="@+id/tx_recommendation_study"

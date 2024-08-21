@@ -141,7 +141,6 @@ class InterestFragment : Fragment() {
                             }
 
                             override fun onTabReselected(tab: TabLayout.Tab?) {
-                                TODO("Not yet implemented")
                             }
                         })
                     }
