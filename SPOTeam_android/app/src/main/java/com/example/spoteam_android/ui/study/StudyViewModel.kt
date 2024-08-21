@@ -34,6 +34,7 @@ class StudyViewModel : ViewModel() {
     private val _studyImageUrl = MutableLiveData<String>()
     val studyImageUrl: LiveData<String> get() = _studyImageUrl
     private val _studyIntroduction = MutableLiveData<String>()
+    val studyOwner = MutableLiveData<String>()
     val studyIntroduction: LiveData<String> get() = _studyIntroduction
 
     fun setStudyData(id: Int, imageUrl: String, studyIntroduction: String) {

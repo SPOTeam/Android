@@ -67,18 +67,6 @@ class BookmarkFragment : Fragment() {
         fetchBookmarkedStudies()
     }
 
-    private fun setupRecyclerView() {
-        bookMarkRVAdapter = BookMarkRVAdapter(bookitemList, onItemClick = { selectedItem ->
-            // 아이템 클릭 시 동작 정의
-        }, onLikeClick = { selectedItem, likeButton ->
-            toggleLikeStatus(selectedItem, likeButton)
-        })
-
-        binding.fragmentBookmarkRv.apply {
-            adapter = bookMarkRVAdapter
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        }
-    }
 
     private fun fetchBookmarkedStudies() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
@@ -88,7 +76,8 @@ class BookmarkFragment : Fragment() {
             studyApiService.getBookmark(memberId).enqueue(object : Callback<BookmarkResponse> {
                 override fun onResponse(call: Call<BookmarkResponse>, response: Response<BookmarkResponse>) {
                     if (response.isSuccessful) {
-                        response.body()?.let { bookmarkResponse ->
+                        val bookmarkResponse = response.body()
+                        if (bookmarkResponse != null && bookmarkResponse.result != null) {
                             val content = bookmarkResponse.result.content
                             if (!content.isNullOrEmpty()) {
                                 bookitemList.clear()
@@ -118,6 +107,8 @@ class BookmarkFragment : Fragment() {
                                 binding.bookmarkEmpty.visibility = View.VISIBLE
                                 binding.fragmentBookmarkRv.visibility = View.GONE
                             }
+                        } else {
+                            Toast.makeText(requireContext(), "서버 응답이 올바르지 않습니다.", Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         Toast.makeText(requireContext(), "북마크 데이터를 가져오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -132,6 +123,7 @@ class BookmarkFragment : Fragment() {
             Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
+
 
 
     private fun toggleLikeStatus(studyItem: BookmarkItem, likeButton: ImageView) {

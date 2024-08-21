@@ -50,6 +50,7 @@ class CalendarAddEventFragment : Fragment() {
         saveButton = view.findViewById(R.id.fragment_introduce_study_bt)
 
         studyId = arguments?.getInt("studyId") ?: 0
+
         Log.d("CalendarAddEventFragment1", "Received studyId: $studyId")
 
         eventTitleEditText.addTextChangedListener(object : TextWatcher {
