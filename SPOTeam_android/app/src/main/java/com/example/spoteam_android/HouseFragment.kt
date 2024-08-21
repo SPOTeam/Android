@@ -1,8 +1,10 @@
 package com.example.spoteam_android
 
 import RetrofitClient.getAuthToken
+import StudyApiService
 import StudyViewModel
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -35,6 +37,8 @@ class HouseFragment : Fragment() {
     private lateinit var interestBoardAdapter: BoardAdapter
     private lateinit var recommendBoardAdapter: BoardAdapter
 
+
+    private lateinit var studyApiService: StudyApiService
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,37 +47,51 @@ class HouseFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentHouseBinding.inflate(inflater, container, false)
 
-        interestBoardAdapter = BoardAdapter(ArrayList()) { selectedItem ->
-            Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
-            studyViewModel.setStudyData(
-                selectedItem.studyId,
-                selectedItem.imageUrl,
-                selectedItem.introduction
-            )
+        studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
-            // Fragment 전환
-            val fragment = DetailStudyFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
+        interestBoardAdapter = BoardAdapter(
+            ArrayList(),
+            onItemClick = { selectedItem ->
+                Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
+                studyViewModel.setStudyData(
+                    selectedItem.studyId,
+                    selectedItem.imageUrl,
+                    selectedItem.introduction
+                )
 
-        recommendBoardAdapter = BoardAdapter(ArrayList()) { selectedItem ->
-            Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
-            studyViewModel.setStudyData(
-                selectedItem.studyId,
-                selectedItem.imageUrl,
-                selectedItem.introduction
-            )
+                // Fragment 전환
+                val fragment = DetailStudyFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            },
+            onLikeClick = { selectedItem, likeButton ->
+                toggleLikeStatus(selectedItem, likeButton)
+            }
+        )
 
-            // Fragment 전환
-            val fragment = DetailStudyFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
+        recommendBoardAdapter = BoardAdapter(
+            ArrayList(),
+            onItemClick = { selectedItem ->
+                Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
+                studyViewModel.setStudyData(
+                    selectedItem.studyId,
+                    selectedItem.imageUrl,
+                    selectedItem.introduction
+                )
+
+                // Fragment 전환
+                val fragment = DetailStudyFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            },
+            onLikeClick = { selectedItem, likeButton ->
+                toggleLikeStatus(selectedItem, likeButton)
+            }
+        )
 
         binding.rvBoard.apply {
             layoutManager = LinearLayoutManager(context)
@@ -187,7 +205,8 @@ class HouseFragment : Fragment() {
                             studyState = study.studyState,
                             themeTypes = study.themeTypes,
                             regions = study.regions,
-                            imageUrl = study.imageUrl
+                            imageUrl = study.imageUrl,
+                            liked = study.liked
                         )
                     } ?: emptyList()
 
@@ -209,6 +228,41 @@ class HouseFragment : Fragment() {
             }
         })
     }
+
+    private fun toggleLikeStatus(studyItem: BoardItem, likeButton: ImageView) {
+        val memberId = getMemberId(requireContext())
+
+        if (memberId != -1) {
+            studyApiService.toggleStudyLike(studyItem.studyId, memberId).enqueue(object : Callback<LikeResponse> {
+                override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
+                    if (response.isSuccessful) {
+                        val newStatus = response.body()?.result?.status
+                        studyItem.liked = newStatus == "LIKE"
+                        val newIcon = if (studyItem.liked) R.drawable.ic_heart_filled else R.drawable.study_like
+                        likeButton.setImageResource(newIcon)
+
+                        // heartCount 즉시 증가 또는 감소
+                        studyItem.heartCount = if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
+
+                        // 최신 데이터 동기화를 위해 fetchDataAnyWhere와 fetchRecommendStudy를 다시 호출
+                        fetchDataAnyWhere(memberId)
+                        fetchRecommendStudy(memberId)
+                    } else {
+                        Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
+                        Log.d("studyid","${studyItem.studyId}")
+                        Log.d("memberid", "${memberId}")
+                    }
+                }
+
+                override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
+                    Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     private fun fetchRecommendStudy(memberId: Int) {
         Log.d("HouseFragment", "fetchRecommendStudy() 실행")
@@ -232,7 +286,8 @@ class HouseFragment : Fragment() {
                             studyState = study.studyState,
                             themeTypes = study.themeTypes,
                             regions = study.regions,
-                            imageUrl = study.imageUrl
+                            imageUrl = study.imageUrl,
+                            liked = study.liked
                         )
                     } ?: emptyList()
 
@@ -298,7 +353,6 @@ class HouseFragment : Fragment() {
 //        )
 //            .enqueue(object : Callback<ApiResponse> {
 //                override fun onResponse(
-//                    call: Call<ApiResponse>,
 //                    response: Response<ApiResponse>
 //                ) {
 //                    if (response.isSuccessful) {

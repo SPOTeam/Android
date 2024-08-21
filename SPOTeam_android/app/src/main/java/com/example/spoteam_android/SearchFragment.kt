@@ -2,6 +2,7 @@ package com.example.spoteam_android
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,19 +32,30 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val itemList = ArrayList<BoardItem>()
-        itemList.add(BoardItem(1,"피아노 스터디", "스터디 목표", "피아노 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
-        itemList.add(BoardItem(1,"태권도 스터디", "스터디 목표", "태권도 스터디입니다", 2, 1, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
-        itemList.add(BoardItem(1,"보컬 스터디", "스터디 목표", "보컬 스터디입니다", 3, 1, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String"))
+        itemList.add(BoardItem(1,"피아노 스터디", "스터디 목표", "피아노 스터디입니다", 1, 5, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String", liked = false))
+        itemList.add(BoardItem(1,"태권도 스터디", "스터디 목표", "태권도 스터디입니다", 2, 1, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String", liked = false))
+        itemList.add(BoardItem(1,"보컬 스터디", "스터디 목표", "보컬 스터디입니다", 3, 1, 100,10,"ALL",listOf("어학"),listOf("1111053000"),"String", liked = false))
 
-        boardAdapter = BoardAdapter(itemList){selectedItem ->}
+        boardAdapter = BoardAdapter(itemList,
+            onItemClick = { selectedItem ->
+                // 임시로 로그 출력
+                Log.d("SearchFragment", "Item clicked: ${selectedItem.title}")
+            },
+            onLikeClick = { selectedItem, likeButton ->
+                // 임시로 로그 출력
+                Log.d("SearchFragment", "Like button clicked for: ${selectedItem.title}")
+                // 좋아요 버튼 클릭 시 임시로 아이콘을 변경
+                val newIcon = if (selectedItem.liked) R.drawable.study_like else R.drawable.ic_heart_filled
+                likeButton.setImageResource(newIcon)
+                // 좋아요 상태 변경
+                selectedItem.liked = !selectedItem.liked
+            }
+        )
+
         binding.rvBoard2.apply {
             adapter = boardAdapter
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
-
-
-
 
         binding.searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -63,6 +75,7 @@ class SearchFragment : Fragment() {
             }
         })
     }
+
 
     private fun addSearchChip(query: String) {
         if (query in recentSearches) return
