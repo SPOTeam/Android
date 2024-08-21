@@ -1,6 +1,7 @@
 package com.example.spoteam_android.ui.interestarea
 
 import RetrofitClient.getAuthToken
+import StudyViewModel
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
@@ -17,12 +18,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentInterestBinding
+import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,6 +35,8 @@ class InterestFragment : Fragment() {
 
     lateinit var binding: FragmentInterestBinding
     lateinit var tabLayout: TabLayout
+    private val studyViewModel: StudyViewModel by activityViewModels()
+    private lateinit var interestBoardAdapter: BoardAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +44,27 @@ class InterestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentInterestBinding.inflate(inflater, container, false)
+
+        interestBoardAdapter = BoardAdapter(
+            ArrayList(),
+            onItemClick = { selectedItem ->
+                Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
+                studyViewModel.setStudyData(
+                    selectedItem.studyId,
+                    selectedItem.imageUrl,
+                    selectedItem.introduction
+                )
+
+                // Fragment 전환
+                val fragment = DetailStudyFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            },
+            onLikeClick = { selectedItem, likeButton ->
+            }
+        )
 
         return binding.root
     }
@@ -123,8 +149,8 @@ class InterestFragment : Fragment() {
                                         memberId,
                                         selectedRegionCode,
                                         "MALE",
-                                        "18",
-                                        "60",
+                                        "20",
+                                        "50",
                                         "false",
                                         "",
                                         "어학"

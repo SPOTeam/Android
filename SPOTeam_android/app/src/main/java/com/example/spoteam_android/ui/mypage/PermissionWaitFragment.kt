@@ -20,7 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ParticipatingStudyFragment : Fragment() {
+class PermissionWaitFragment : Fragment() {
 
     lateinit var binding: FragmentParticipatingStudyBinding
     var memberId : Int = -1
@@ -42,6 +42,8 @@ class ParticipatingStudyFragment : Fragment() {
 
         fetchInProgressStudy()
 
+        binding.participatingStudyBold.text = "신청 대기 중인 스터디"
+
         binding.mypagePrevIv.setOnClickListener{
             parentFragmentManager.popBackStack()
         }
@@ -51,7 +53,7 @@ class ParticipatingStudyFragment : Fragment() {
 
 
     private fun fetchInProgressStudy() {
-        CommunityRetrofitClient.instance.getMemberOnStudies(memberId, page, size)
+        CommunityRetrofitClient.instance.getMemberAppliedStudies(memberId, page, size)
             .enqueue(object : Callback<MemberOnStudiesResponse> {
                 override fun onResponse(
                     call: Call<MemberOnStudiesResponse>,
@@ -109,12 +111,12 @@ class ParticipatingStudyFragment : Fragment() {
         // 어댑터 초기화
         val boardAdapter = BoardAdapter(itemList, onItemClick = { selectedItem -> }, onLikeClick = { _, _ -> })
 
-        participatingboard.post {
-            for (i in 0 until boardAdapter.itemCount) {
-                val holder = participatingboard.findViewHolderForAdapterPosition(i) as? BoardAdapter.BoardViewHolder
-                holder?.binding?.toggle?.visibility = View.VISIBLE
-            }
-        }
+//        participatingboard.post {
+//            for (i in 0 until boardAdapter.itemCount) {
+//                val holder = participatingboard.findViewHolderForAdapterPosition(i) as? BoardAdapter.BoardViewHolder
+//                holder?.binding?.toggle?.visibility = View.VISIBLE
+//            }
+//        }
 
         // RecyclerView에 어댑터 및 레이아웃 매니저 설정
         participatingboard.adapter = boardAdapter

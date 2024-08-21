@@ -59,6 +59,27 @@ class MyPageFragment : Fragment() {
                     .commit()
             }
 
+            binding.tvRecruitingNum.setOnClickListener{
+                (activity as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, ConsiderAttendanceFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+
+            binding.tvApplied.setOnClickListener{
+                (activity as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, PermissionWaitFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+
+            binding.tvAppliedNum.setOnClickListener{
+                (activity as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, PermissionWaitFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+
 
             binding.framelayout10.setOnClickListener {
                 // 회원 탈퇴 버튼 클릭 시

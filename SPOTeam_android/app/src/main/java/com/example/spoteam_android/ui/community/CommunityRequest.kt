@@ -23,5 +23,5 @@ data class StudyWriteContentRequest(
     val theme: String,
     val title: String,
     val content: String,
-    val images: MultipartBody.Part
+    val images: List<MultipartBody.Part?>
 )

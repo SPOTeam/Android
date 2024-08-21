@@ -9,7 +9,7 @@ object RetrofitInstance {
     private const val BASE_URL = "https://www.teamspot.site/"
 
 
-     private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6OSwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzI0MjI1MTE3LCJleHAiOjE3MjQzMTE1MTd9.HkcW7WyV9vLhb5T4jTSHUfOVu60SoXnHJZTecLr9H8E"
+     private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDIyOTMyMywiZXhwIjoxNzI0MzE1NzIzfQ.90lF9GyRLvUR0st3FtNrdk099LEzgq3ot7Cm4ewUAy4"
 
 //   대니/김빈
 //      private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDE0MjgwNCwiZXhwIjoxNzI0MjI5MjA0fQ.hJCey-hvKVfv0qJLLDSExYq3Gz4tviU44n6nm2phn-c"

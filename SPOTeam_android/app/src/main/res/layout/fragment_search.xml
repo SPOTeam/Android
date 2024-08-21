@@ -31,16 +31,25 @@
         app:layout_constraintStart_toStartOf="@+id/tx_recently_viewed_study"
         app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
+    <HorizontalScrollView
+        android:id="@+id/chipLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:paddingStart="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tx_recently_searched_word"
-        app:singleLine="true">
-    </com.google.android.material.chip.ChipGroup>
+        android:scrollbars="none">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingLeft="5dp"
+            app:singleLine="true">
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </HorizontalScrollView>
 
     <TextView
         android:id="@+id/tx_populared_word"
@@ -50,7 +59,7 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/tx_recently_searched_word"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/chipLayout" />
 
 
     <TextView
@@ -63,12 +72,12 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/rv_board"
+        app:layout_constraintStart_toStartOf="@+id/search_board"
         app:layout_constraintTop_toBottomOf="@+id/tx_populared_word" />
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_board"
+        android:id="@+id/search_board"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginTop="16dp"
@@ -86,11 +95,11 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/rv_board2"
-        app:layout_constraintTop_toBottomOf="@+id/rv_board" />
+        app:layout_constraintStart_toStartOf="@+id/recommendation_board"
+        app:layout_constraintTop_toBottomOf="@+id/search_board" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_board2"
+        android:id="@+id/recommendation_board"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginTop="20dp"

@@ -3,6 +3,7 @@ package com.example.spoteam_android.ui.alert
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
@@ -29,8 +30,16 @@ class OkDialog(private val context: Context) {
 
         val btnMove = dlg.findViewById<TextView>(R.id.move_to_study_tv)
         btnMove.setOnClickListener {
+            val fragment = DetailStudyFragment()
+
+            val bundle = Bundle().apply {
+                putInt("FromOKToDetailStudy", studyId)
+            }
+
+            fragment.arguments = bundle
+
             (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, DetailStudyFragment())
+                .replace(R.id.main_frm, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
             dlg.dismiss()

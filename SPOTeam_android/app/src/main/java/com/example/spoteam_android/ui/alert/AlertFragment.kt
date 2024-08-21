@@ -17,6 +17,7 @@ import com.example.spoteam_android.ui.community.AlertResponse
 import com.example.spoteam_android.ui.community.AlertStudyDetail
 import com.example.spoteam_android.ui.community.AlertStudyResponse
 import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.NotificationStateResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -122,13 +123,36 @@ class AlertFragment : Fragment() {
 
         binding.alertContentRv.adapter = dataRVAdapter
 
-//        dataRVAdapter.itemClick = object : AlertMultiViewRVAdapter.ItemClick {
-//            override fun onItemClick(view: View, position: Int) {
-//                (context as MainActivity).supportFragmentManager.beginTransaction()
-//                    .replace(R.id.main_frm, CheckAppliedStudyFragment())
-//                    .addToBackStack(null)
-//                    .commitAllowingStateLoss()
-//            }
-//        }
+        dataRVAdapter.itemClick = object : AlertMultiViewRVAdapter.ItemClick {
+            override fun onStateUpdateClick(data: AlertDetail) {
+                updateState(data)   
+            }
+        }
+    }
+
+    private fun updateState(data: AlertDetail) {
+        CommunityRetrofitClient.instance.postNotificationState(data.notificationId)
+            .enqueue(object : Callback<NotificationStateResponse> {
+                override fun onResponse(
+                    call: Call<NotificationStateResponse>,
+                    response: Response<NotificationStateResponse>
+                ) {
+                    Log.d("AlertStateUpdate", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val studyAlertResponse = response.body()
+                        Log.d("AlertStateUpdate", "responseBody: ${studyAlertResponse?.isSuccess}")
+                        if (studyAlertResponse?.isSuccess == "true") {
+                            Log.d("AlertStateUpdate", "responseBody: ${studyAlertResponse?.result}")
+                            fetchAlert()
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<NotificationStateResponse>, t: Throwable) {
+                    Log.e("AlertStateUpdate", "Failure: ${t.message}", t)
+                }
+            })
     }
 }

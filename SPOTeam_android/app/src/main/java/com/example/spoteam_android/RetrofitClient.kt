@@ -1,3 +1,4 @@
+import com.example.spoteam_android.search.SearchApiService
 import com.example.spoteam_android.ui.calendar.CalendarApiService
 import com.example.spoteam_android.ui.interestarea.GetMemberInterestAreaApiService
 import com.example.spoteam_android.ui.interestarea.InterestAreaApiService
@@ -11,7 +12,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
     private const val BASE_URL = "https://www.teamspot.site/"  // 실제 API의 베이스 URL
 
-    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6OSwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzI0MjI1MTE3LCJleHAiOjE3MjQzMTE1MTd9.HkcW7WyV9vLhb5T4jTSHUfOVu60SoXnHJZTecLr9H8E"
+
+
+    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDIyOTMyMywiZXhwIjoxNzI0MzE1NzIzfQ.90lF9GyRLvUR0st3FtNrdk099LEzgq3ot7Cm4ewUAy4"
 
     fun getAuthToken(): String {
         return "Bearer $authToken"
@@ -20,10 +23,6 @@ object RetrofitClient {
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
-
-    private val httpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .build()
 
     val instance: Retrofit by lazy {
         Retrofit.Builder()
@@ -51,7 +50,9 @@ object RetrofitClient {
         instance.create(CalendarApiService::class.java)
     }
 
-    val GetBookmarkService: StudyApiService by lazy{
-        instance.create(StudyApiService::class.java)
+    val SSService: SearchApiService by lazy{
+        instance.create(SearchApiService::class.java)
     }
+
+
 }

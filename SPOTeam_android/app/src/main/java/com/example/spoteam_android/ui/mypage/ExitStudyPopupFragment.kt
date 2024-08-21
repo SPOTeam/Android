@@ -5,16 +5,13 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.view.View
 import android.view.Window
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.fragment.app.FragmentManager
 import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.R
 
-class ExitStudyPopupFragment(private val context: Context,private val adapter: BoardAdapter, private val position: Int) {
+class ExitStudyPopupFragment(private val context: Context, private val adapter: BoardAdapter, private val position: Int) {
 
     private val dlg = Dialog(context)
 

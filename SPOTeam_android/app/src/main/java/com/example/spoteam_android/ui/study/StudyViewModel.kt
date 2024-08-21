@@ -48,6 +48,7 @@ class StudyViewModel : ViewModel() {
         title: String, goal: String, introduction: String, isOnline: Boolean, profileImage: String?,
         regions: List<String>?, maxPeople: Int, gender: Gender, minAge: Int, maxAge: Int, fee: Int
     ) {
+        Log.d("StudyViewModel", "setStudyData 호출: studyId = $studyId, imageUrl = $profileImage, introduction = $introduction")
         val hasFee = fee > 0
         _studyRequest.value = StudyRequest(
             themes = _themes.value ?: listOf(),

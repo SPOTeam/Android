@@ -38,6 +38,10 @@ class DetailStudyFragment : Fragment() {
     ): View? {
         binding = FragmentDetailStudyBinding.inflate(inflater, container, false)
 
+        val OkDialogStudyId=  arguments?.getInt("FromOKToDetailStudy")
+
+        Log.d("OKBUNDLE", OkDialogStudyId.toString())
+
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
             Log.d("DetailFragment", "Received studyId from ViewModel: $studyId")
             fetchStudyDetails(studyId)

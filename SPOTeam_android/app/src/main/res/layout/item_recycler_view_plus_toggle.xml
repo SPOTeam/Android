@@ -131,8 +131,8 @@
         android:layout_height="15dp"
         android:layout_gravity="end|top"
         android:scaleType="fitCenter"
-        android:src="@drawable/fragment_participating_study_ic_toggle"
         android:visibility="gone"
+        android:src="@drawable/fragment_participating_study_ic_toggle"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
         app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
 

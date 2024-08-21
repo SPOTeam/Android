@@ -1,19 +1,15 @@
 package com.example.spoteam_android
 
-import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
-import com.example.spoteam_android.ui.study.DetailStudyFragment
-import com.bumptech.glide.Glide
 
 class BoardAdapter(
     private val itemList: ArrayList<BoardItem>,
