@@ -201,14 +201,14 @@ data class CategoryStudyDetail (
     val title : String,
     val introduction : String,
     val memberCount : Int,
-    val heartCount : Int,
+    var heartCount : Int,
     val hitNum : Int,
     val maxPeople : Int,
     val studyState : String,
     val themeTypes : List<String>,
     val regions : List<Int>,
     val createdAt : String,
-    val liked : Boolean
+    var liked : Boolean
 )
 
 /************댓글 좋아요 완료***********/

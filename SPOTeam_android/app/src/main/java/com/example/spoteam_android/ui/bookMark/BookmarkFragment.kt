@@ -67,18 +67,6 @@ class BookmarkFragment : Fragment() {
         fetchBookmarkedStudies()
     }
 
-    private fun setupRecyclerView() {
-        bookMarkRVAdapter = BookMarkRVAdapter(bookitemList, onItemClick = { selectedItem ->
-            // 아이템 클릭 시 동작 정의
-        }, onLikeClick = { selectedItem, likeButton ->
-            toggleLikeStatus(selectedItem, likeButton)
-        })
-
-        binding.fragmentBookmarkRv.apply {
-            adapter = bookMarkRVAdapter
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        }
-    }
 
     private fun fetchBookmarkedStudies() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
@@ -135,6 +123,7 @@ class BookmarkFragment : Fragment() {
             Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
+
 
 
     private fun toggleLikeStatus(studyItem: BookmarkItem, likeButton: ImageView) {

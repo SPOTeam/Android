@@ -30,7 +30,7 @@
             android:layout_width="74dp"
             android:layout_height="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="35dp"
             android:src="@drawable/fragment_house_spot_logo_tx"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

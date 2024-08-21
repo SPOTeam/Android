@@ -3,6 +3,7 @@ package com.example.spoteam_android.ui.calendar
 import RetrofitClient.getAuthToken
 import StudyApiService
 import StudyViewModel
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -51,12 +52,26 @@ class CalendarFragment : Fragment() {
         calendarView = binding.calendarView
         eventsRecyclerView = binding.eventrecyclerview
         imgbtnAddEvent = binding.imgbtnAddEvent
-        
-        imgbtnAddEvent.setOnClickListener{
-            (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, CalendarAddEventFragment())
-                .addToBackStack(null)
-                .commit()
+
+        binding.imgbtnAddEvent.visibility = View.GONE // 기본값을 GONE으로 설정하여 버튼 숨기기
+
+        studyViewModel.studyOwner.observe(viewLifecycleOwner) { studyOwner ->
+            val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+            val currentEmail = sharedPreferences.getString("currentEmail", null)
+            val kakaoNickname = sharedPreferences.getString("${currentEmail}_nickname", "Unknown")
+
+            if (kakaoNickname == studyOwner) {
+                binding.imgbtnAddEvent.visibility = View.VISIBLE // 닉네임이 일치할 경우 버튼 보이기
+            } else {
+                binding.imgbtnAddEvent.visibility = View.GONE // 닉네임이 일치하지 않을 경우 버튼 숨기기
+            }
+        }
+
+
+        imgbtnAddEvent.setOnClickListener {
+            val studyId = studyViewModel.studyId.value ?: 0
+            val fragment = CalendarAddEventFragment.newInstance(studyId)
+            (activity as MainActivity).switchFragment(fragment)
         }
 
         eventAdapter = EventAdapter(emptyList(), { event ->

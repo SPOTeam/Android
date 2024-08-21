@@ -153,16 +153,30 @@ class MyPageFragment : Fragment() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
         if (email != null) {
+            // SharedPreferences에서 닉네임 가져오기
             val nickname = getNicknameFromPreferences(email)
             binding.tvNickname.text = nickname ?: "닉네임 없음"  // 닉네임이 없는 경우의 기본 값
+
+            // SharedPreferences에서 카카오 프로필 이미지 URL 가져오기
+            val kakaoProfileImageUrl = sharedPreferences.getString("${email}_kakaoProfileImageUrl", null)
+
+            // Glide를 사용하여 이미지 로드
+            Glide.with(binding.root.context)
+                .load(kakaoProfileImageUrl)
+                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
+                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
+                .into(binding.ivProfile)  // 이미지를 로드할 ImageView
+
         } else {
             binding.tvNickname.text = "이메일 없음"  // 이메일이 없는 경우의 기본 값
         }
 
+        // memberId 가져오기
         memberId = if (email != null) sharedPreferences.getInt("${email}_memberId", -1) else -1
 
         fetchMyPageInfo()
     }
+
 
     private fun getNicknameFromPreferences(email: String): String? {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
