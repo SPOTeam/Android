@@ -52,11 +52,12 @@ class ProjectFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.contentFilterSp.adapter = adapter
         }
 
+        binding.contentFilterSp.onItemSelectedListener = this
+
         fetchBestCommunityContent("프로젝트", 0, 5, selectedCategory)
 
         return binding.root
     }
-
 
     private fun fetchBestCommunityContent(theme: String, page: Int, size: Int, sortBy: String) {
         CommunityRetrofitClient.instance.getCategoryStudy(theme, page, size, sortBy)
@@ -69,8 +70,9 @@ class ProjectFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         val categoryStudyResponse = response.body()
                         if (categoryStudyResponse?.isSuccess == "true") {
                             val contentList = categoryStudyResponse.result?.content
-                            Log.d("ProjectFragment", "items: $contentList")
+                            Log.d("ProjectFragment", "items: ${contentList}")
                             if (contentList != null) {
+                                binding.contentCountTv.text = categoryStudyResponse.result.totalElements.toString()
                                 binding.emptyTv.visibility = View.GONE
                                 initRecyclerview(contentList)
                             }
@@ -115,7 +117,6 @@ class ProjectFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         })
     }
-
 
     fun toggleLikeStatus(studyItem: CategoryStudyDetail, likeButton: ImageView) {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -170,11 +171,10 @@ class ProjectFragment : Fragment(), AdapterView.OnItemSelectedListener {
             "관심순" -> "LIKED"
             else -> "ALL"
         }
-        fetchBestCommunityContent("프로젝트", 0, 1, selectedCategory)
+        fetchBestCommunityContent("프로젝트", 0, 6, selectedCategory)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         selectedCategory = "ALL"
     }
-
 }

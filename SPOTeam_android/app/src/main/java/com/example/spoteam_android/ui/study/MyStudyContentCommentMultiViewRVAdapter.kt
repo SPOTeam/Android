@@ -19,10 +19,10 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
 
     interface ItemClick {
         fun onItemClick(parentId: Int?)
-//        fun onLikeClick(view: View, position: Int, commentId : Int)
-//        fun onUnLikeClick(view: View, position: Int, commentId : Int)
-//        fun onDisLikeClick(view: View, position: Int, commentId : Int)
-//        fun onUnDisLikeClick(view: View, position: Int, commentId : Int)
+        fun onLikeClick(view: View, position: Int, commentId : Int)
+        fun onUnLikeClick(view: View, position: Int, commentId : Int)
+        fun onDisLikeClick(view: View, position: Int, commentId : Int)
+        fun onUnDisLikeClick(view: View, position: Int, commentId : Int)
     }
 
     var itemClick: ItemClick? = null
@@ -100,12 +100,19 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
             binding.communityContentCommentStrTv.text = item.content
             binding.communityContentCommentGoodNumTv.text = item.likeCount.toString()
 
-            if (item.isLiked == "true") {
+            if (item.isLiked == "LIKED") {
                 binding.communityContentCommentGoodCheckedIv.visibility = View.VISIBLE
                 binding.communityContentCommentGoodUncheckedIv.visibility = View.GONE
-            } else {
+            }
+            if (item.isLiked == "NONE") {
                 binding.communityContentCommentGoodCheckedIv.visibility = View.GONE
                 binding.communityContentCommentGoodUncheckedIv.visibility = View.VISIBLE
+                binding.communityContentCommentBadCheckedIv.visibility = View.GONE
+                binding.communityContentCommentBadUncheckedIv.visibility = View.VISIBLE
+            }
+            if (item.isLiked == "DISLIKED") {
+                binding.communityContentCommentBadCheckedIv.visibility = View.VISIBLE
+                binding.communityContentCommentBadUncheckedIv.visibility = View.GONE
             }
 
             binding.communityWriteReplyTv.setOnClickListener {
@@ -113,19 +120,28 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
                 itemClick?.onItemClick(item.commentId)  // 댓글의 ID를 전달, parentId는 null로 설정
             }
 
-            if (item.isDeleted) {
-                binding.communityContentCommentBadCheckedIv.visibility = View.VISIBLE
-                binding.communityContentCommentBadUncheckedIv.visibility = View.GONE
-            } else {
-                binding.communityContentCommentBadCheckedIv.visibility = View.GONE
-                binding.communityContentCommentBadUncheckedIv.visibility = View.VISIBLE
-            }
-
             // 클릭 상태에 따른 communityWriteReplyTv 텍스트 색상 변경
             binding.communityWriteReplyTv.setTextColor(
                 if (clickedState[bindingAdapterPosition]) binding.root.context.getColor(R.color.active_blue) // 파란색으로 변경
                 else binding.root.context.getColor(R.color.gray) // 기본 색상으로 변경
             )
+
+            binding.communityContentCommentGoodUncheckedIv.setOnClickListener {
+                itemClick?.onUnLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentGoodCheckedIv.setOnClickListener {
+                itemClick?.onLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentBadUncheckedIv.setOnClickListener {
+                itemClick?.onUnDisLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentBadCheckedIv.setOnClickListener {
+                itemClick?.onDisLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
         }
     }
 
@@ -137,12 +153,19 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
             binding.communityContentCommentReplyStrTv.text = item.content
             binding.communityContentCommentReplyGoodNumTv.text = item.likeCount.toString()
 
-            if (item.isLiked == "true") {
+            if (item.isLiked == "LIKED") {
                 binding.communityContentCommentReplyGoodCheckedIv.visibility = View.VISIBLE
                 binding.communityContentCommentReplyGoodUncheckedIv.visibility = View.GONE
-            } else {
+            }
+            if (item.isLiked == "NONE"){
                 binding.communityContentCommentReplyGoodCheckedIv.visibility = View.GONE
                 binding.communityContentCommentReplyGoodUncheckedIv.visibility = View.VISIBLE
+                binding.communityContentCommentReplyBadCheckedIv.visibility = View.GONE
+                binding.communityContentCommentReplyBadUncheckedIv.visibility = View.VISIBLE
+            }
+            if (item.isLiked == "DISLIKED") {
+                binding.communityContentCommentReplyBadCheckedIv.visibility = View.VISIBLE
+                binding.communityContentCommentReplyBadUncheckedIv.visibility = View.GONE
             }
 
             binding.communityReplyWriteReplyTv.setOnClickListener {
@@ -150,19 +173,27 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
                 itemClick?.onItemClick(parentId)  // 대댓글의 ID와 부모 댓글의 ID 반환
             }
 
-            if (item.isDeleted) {
-                binding.communityContentCommentReplyBadCheckedIv.visibility = View.VISIBLE
-                binding.communityContentCommentReplyBadUncheckedIv.visibility = View.GONE
-            } else {
-                binding.communityContentCommentReplyBadCheckedIv.visibility = View.GONE
-                binding.communityContentCommentReplyBadUncheckedIv.visibility = View.VISIBLE
-            }
-
             // 클릭 상태에 따른 communityReplyWriteReplyTv 텍스트 색상 변경
             binding.communityReplyWriteReplyTv.setTextColor(
                 if (clickedState[bindingAdapterPosition]) binding.root.context.getColor(R.color.blue) // 파란색으로 변경
                 else binding.root.context.getColor(R.color.gray_03) // 기본 색상으로 변경
             )
+
+            binding.communityContentCommentReplyGoodUncheckedIv.setOnClickListener {
+                itemClick?.onUnLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentReplyGoodCheckedIv.setOnClickListener {
+                itemClick?.onLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentReplyBadUncheckedIv.setOnClickListener {
+                itemClick?.onUnDisLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
+
+            binding.communityContentCommentReplyBadCheckedIv.setOnClickListener {
+                itemClick?.onDisLikeClick(it, bindingAdapterPosition, item.commentId)
+            }
         }
     }
 

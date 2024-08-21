@@ -1,6 +1,5 @@
 package com.example.spoteam_android.ui.community.contentComment
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

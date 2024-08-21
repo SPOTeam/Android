@@ -42,6 +42,7 @@ class DiscussionFragment : Fragment(), AdapterView.OnItemSelectedListener {
     ): View {
         binding = FragmentCategoryStudyContentBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+        binding.contentFilterSp.onItemSelectedListener = this
 
         ArrayAdapter.createFromResource(
             requireContext(),
@@ -71,6 +72,7 @@ class DiscussionFragment : Fragment(), AdapterView.OnItemSelectedListener {
                             val contentList = categoryStudyResponse.result?.content
                             Log.d("DiscussionFragment", "items: $contentList")
                             if (contentList != null) {
+                                binding.contentCountTv.text = categoryStudyResponse.result.totalElements.toString()
                                 binding.emptyTv.visibility = View.GONE
                                 initRecyclerview(contentList)
                             }

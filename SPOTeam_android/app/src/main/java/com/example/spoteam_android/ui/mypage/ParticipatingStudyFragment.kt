@@ -19,7 +19,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class ParticipatingStudyFragment : Fragment() {
 
     lateinit var binding: FragmentParticipatingStudyBinding
@@ -123,7 +122,6 @@ class ParticipatingStudyFragment : Fragment() {
 
         boardAdapter.notifyDataSetChanged()
     }
-
 }
 
 

@@ -1,9 +1,11 @@
 package com.example.spoteam_android.ui.study
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +14,8 @@ import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ActivityMystudyCommunityContentBinding
 import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.DisLikeCommentResponse
+import com.example.spoteam_android.ui.community.LikeCommentResponse
 import com.example.spoteam_android.ui.community.ReportContentFragment
 import com.example.spoteam_android.ui.community.StudyContentLikeResponse
 import com.example.spoteam_android.ui.community.StudyContentUnLikeResponse
@@ -19,6 +23,8 @@ import com.example.spoteam_android.ui.community.StudyPostContentCommentDetail
 import com.example.spoteam_android.ui.community.StudyPostContentCommentResponse
 import com.example.spoteam_android.ui.community.StudyPostContentInfo
 import com.example.spoteam_android.ui.community.StudyPostContentResponse
+import com.example.spoteam_android.ui.community.UnDisLikeCommentResponse
+import com.example.spoteam_android.ui.community.UnLikeCommentResponse
 import com.example.spoteam_android.ui.community.WriteStudyCommentRequest
 import com.example.spoteam_android.ui.community.WriteStudyCommentResponse
 import retrofit2.Call
@@ -91,7 +97,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         val likeResponse = response.body()
                         Log.d("StudyLikeContent", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
-
+                            fetchContentInfo()
                         } else {
                             showError(likeResponse?.message)
                         }
@@ -118,7 +124,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         val unLikeResponse = response.body()
                         Log.d("StudyUnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
-
+                            fetchContentInfo()
                         } else {
                             showError(unLikeResponse?.message)
                         }
@@ -205,6 +211,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         parentCommentId = 0 // postCommentID 초기화
                         binding.writeCommentContentEt.text.clear()
                         binding.writeCommentContentEt.clearFocus()
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(binding.writeCommentContentEt.windowToken, 0)
                         resetAdapterState()
                         fetchContentInfo()
                     } else {
@@ -240,7 +248,6 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         }
         popupMenu.show()
     }
-
 
     private fun fetchContentInfo() {
         CommunityRetrofitClient.instance.getStudyPostContent(currentStudyId, postId)
@@ -298,6 +305,118 @@ class MyStudyPostContentActivity : AppCompatActivity() {
             })
     }
 
+    private fun postCommentLike(commentId : Int) {
+        CommunityRetrofitClient.instance.postMyStudyCommentLike(currentStudyId, postId, commentId)
+            .enqueue(object : Callback<LikeCommentResponse> {
+                override fun onResponse(
+                    call: Call<LikeCommentResponse>,
+                    response: Response<LikeCommentResponse>
+                ) {
+                    Log.d("LikeComment", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val likeResponse = response.body()
+                        Log.d("LikeComment", "responseBody: ${likeResponse?.isSuccess}")
+                        if (likeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                            fetchContentCommentInfo()
+                        } else {
+                            showError(likeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<LikeCommentResponse>, t: Throwable) {
+                    Log.e("LikeComment", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun deleteCommentLike(commentId : Int) {
+        CommunityRetrofitClient.instance.deleteMyStudyCommentLike(currentStudyId, postId, commentId)
+            .enqueue(object : Callback<UnLikeCommentResponse> {
+                override fun onResponse(
+                    call: Call<UnLikeCommentResponse>,
+                    response: Response<UnLikeCommentResponse>
+                ) {
+                    Log.d("UnLikeComment", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val unLikeResponse = response.body()
+                        Log.d("UnLikeComment", "responseBody: ${unLikeResponse?.isSuccess}")
+                        if (unLikeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                            fetchContentCommentInfo()
+                        } else {
+                            showError(unLikeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<UnLikeCommentResponse>, t: Throwable) {
+                    Log.e("UnLikeComment", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun postCommentDisLike(commentId : Int) {
+        CommunityRetrofitClient.instance.postMyStudyCommentDisLike(currentStudyId, postId, commentId)
+            .enqueue(object : Callback<DisLikeCommentResponse> {
+                override fun onResponse(
+                    call: Call<DisLikeCommentResponse>,
+                    response: Response<DisLikeCommentResponse>
+                ) {
+                    Log.d("DisLikeComment", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val likeResponse = response.body()
+                        Log.d("DisLikeComment", "responseBody: ${likeResponse?.isSuccess}")
+                        if (likeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                            fetchContentCommentInfo()
+                        } else {
+                            showError(likeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<DisLikeCommentResponse>, t: Throwable) {
+                    Log.e("DisLikeComment", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun deleteCommentDisLike(commentId : Int) {
+        CommunityRetrofitClient.instance.deleteMyStudyCommentDisLike(currentStudyId, postId, commentId)
+            .enqueue(object : Callback<UnDisLikeCommentResponse> {
+                override fun onResponse(
+                    call: Call<UnDisLikeCommentResponse>,
+                    response: Response<UnDisLikeCommentResponse>
+                ) {
+                    Log.d("UnDisLikeComment", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val unLikeResponse = response.body()
+                        Log.d("UnDisLikeComment", "responseBody: ${unLikeResponse?.isSuccess}")
+                        if (unLikeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                            fetchContentCommentInfo()
+                        } else {
+                            showError(unLikeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<UnDisLikeCommentResponse>, t: Throwable) {
+                    Log.e("UnDisLikeComment", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
     private fun showError(message: String?) {
         Toast.makeText(this, "Error: $message", Toast.LENGTH_SHORT).show()
     }
@@ -345,25 +464,29 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                 if (parentId != 0) {
                     parentCommentId = parentId
                 }
+                binding.writeCommentContentEt.requestFocus()
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(binding.writeCommentContentEt, InputMethodManager.SHOW_IMPLICIT)
+
                 Log.d("MyStudyWriteComment", "parent : $parentId")
                 Log.d("MyStudyWriteComment", "parent : $parentCommentId")
             }
 
-//            override fun onLikeClick(view: View, position: Int, commentId: Int) {
-//                deleteCommentLike(commentId)
-//            }
-//
-//            override fun onUnLikeClick(view: View, position: Int, commentId: Int) {
-//                postCommentLike(commentId)
-//            }
-//
-//            override fun onDisLikeClick(view: View, position: Int, commentId: Int) {
-//                deleteCommentDisLike(commentId)
-//            }
-//
-//            override fun onUnDisLikeClick(view: View, position: Int, commentId: Int) {
-//                postCommentDisLike(commentId)
-//            }
+            override fun onLikeClick(view: View, position: Int, commentId: Int) {
+                deleteCommentLike(commentId)
+            }
+
+            override fun onUnLikeClick(view: View, position: Int, commentId: Int) {
+                postCommentLike(commentId)
+            }
+
+            override fun onDisLikeClick(view: View, position: Int, commentId: Int) {
+                deleteCommentDisLike(commentId)
+            }
+
+            override fun onUnDisLikeClick(view: View, position: Int, commentId: Int) {
+                postCommentDisLike(commentId)
+            }
         }
     }
 
