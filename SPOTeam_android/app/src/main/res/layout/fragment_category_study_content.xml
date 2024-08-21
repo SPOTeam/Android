@@ -13,11 +13,20 @@
             android:id="@+id/content_count_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="15건"
+            android:text=""
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/measure_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="건"
+            android:layout_marginStart="3dp"
+            app:layout_constraintStart_toEndOf="@id/content_count_tv"
+            app:layout_constraintTop_toTopOf="@id/content_count_tv" />
 
         <Spinner
             android:id="@+id/content_filter_sp"

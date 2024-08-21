@@ -1,18 +1,18 @@
 package com.example.spoteam_android.ui.community
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ActivityCommunityContentBinding
 import com.example.spoteam_android.ui.community.contentComment.ContentCommentMultiViewRVAdapter
-import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,7 +49,7 @@ class CommunityContentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.communityPrevIv.setOnClickListener{
-            compareLiked()
+//            compareLiked()
             finish()
         }
 
@@ -108,7 +108,7 @@ class CommunityContentActivity : AppCompatActivity() {
                         val likeResponse = response.body()
                         Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
-
+                            fetchContentInfo()
                         } else {
                             showError(likeResponse?.message)
                         }
@@ -135,7 +135,7 @@ class CommunityContentActivity : AppCompatActivity() {
                         val unLikeResponse = response.body()
                         Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
-
+                            fetchContentInfo()
                         } else {
                             showError(unLikeResponse?.message)
                         }
@@ -179,6 +179,8 @@ class CommunityContentActivity : AppCompatActivity() {
                         parentCommentId = 0 // postCommentID 초기화
                         binding.writeCommentContentEt.text.clear()
                         binding.writeCommentContentEt.clearFocus()
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(binding.writeCommentContentEt.windowToken, 0)
                         // 어댑터의 상태 초기화
                         resetAdapterState()
                         fetchContentInfo()
@@ -399,6 +401,9 @@ class CommunityContentActivity : AppCompatActivity() {
         dataRVAdapter.itemClick = object :ContentCommentMultiViewRVAdapter.ItemClick {
             override fun onItemClick(view: View, position: Int, parentId: Int) {
                 parentCommentId = parentId
+                binding.writeCommentContentEt.requestFocus()
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(binding.writeCommentContentEt, InputMethodManager.SHOW_IMPLICIT)
             }
 
             override fun onLikeClick(view: View, position: Int, commentId: Int) {

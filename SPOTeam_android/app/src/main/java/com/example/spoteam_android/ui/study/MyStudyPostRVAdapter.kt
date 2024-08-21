@@ -18,8 +18,8 @@ class MyStudyPostRVAdapter(private var dataList: List<PostDetail>) : RecyclerVie
 
     interface OnItemClickListener {
         fun onItemClick(data: PostDetail)
-//        fun onLikeClick(data: CategoryPagesDetail)
-//        fun onUnLikeClick(data: CategoryPagesDetail)
+        fun onLikeClick(data: PostDetail)
+        fun onUnLikeClick(data: PostDetail)
     }
 
     private lateinit var itemClickListener: OnItemClickListener
@@ -40,6 +40,12 @@ class MyStudyPostRVAdapter(private var dataList: List<PostDetail>) : RecyclerVie
 
         holder.itemView.setOnClickListener {
             itemClickListener.onItemClick(dataList[position])
+        }
+        holder.binding.contentLikeNumCheckedIv.setOnClickListener {
+            itemClickListener.onLikeClick(dataList[position])
+        }
+        holder.binding.contentLikeNumUncheckedIv.setOnClickListener {
+            itemClickListener.onUnLikeClick(dataList[position])
         }
     }
 

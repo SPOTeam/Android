@@ -211,4 +211,32 @@ interface CommunityAPIService {
         @Path("commentId") commentId: Int,
         @Body requestBody : WriteStudyCommentRequest
     ): Call<WriteStudyCommentResponse>
+
+    @POST("/spot/studies/{studyId}/posts/{postId}/comments/{commentId}/likes")
+    fun postMyStudyCommentLike(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int,
+        @Path("commentId") commentId: Int
+    ): Call<LikeCommentResponse>
+
+    @DELETE("/spot/studies/{studyId}/posts/{postId}/comments/{commentId}/likes")
+    fun deleteMyStudyCommentLike(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int,
+        @Path("commentId") commentId: Int
+    ): Call<UnLikeCommentResponse>
+
+    @POST("/spot/studies/{studyId}/posts/{postId}/comments/{commentId}/dislikes")
+    fun postMyStudyCommentDisLike(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int,
+        @Path("commentId") commentId: Int
+    ): Call<DisLikeCommentResponse>
+
+    @DELETE("/spot/studies/{studyId}/posts/{postId}/comments/{commentId}/dislikes")
+    fun deleteMyStudyCommentDisLike(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int,
+        @Path("commentId") commentId: Int
+    ): Call<UnDisLikeCommentResponse>
 }

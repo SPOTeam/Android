@@ -40,6 +40,11 @@ class BookmarkFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentBookmarkBinding.inflate(inflater, container, false)
+
+        binding.prevIv.setOnClickListener{
+            parentFragmentManager.popBackStack()
+        }
+
         return binding.root
     }
 
