@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.todolist.TodoViewModel
-import com.example.spoteam_android.ui.bookMark.BookmarkFragment
+//import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.category.CategoryNavViewFragment
 import com.example.spoteam_android.ui.community.CommunityFragment
@@ -128,13 +128,13 @@ class MainActivity : AppCompatActivity() {
                     isOnCommunityHome(StudyFragment())
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigation_bookmark -> {
-                    hideBlur()
-                    showFragment(BookmarkFragment())
-                    showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
-                    isOnCommunityHome(BookmarkFragment())
-                    return@setOnItemSelectedListener true
-                }
+//                R.id.navigation_bookmark -> {
+//                    hideBlur()
+//                    showFragment(BookmarkFragment())
+//                    showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
+//                    isOnCommunityHome(BookmarkFragment())
+//                    return@setOnItemSelectedListener true
+//                }
                 R.id.navigation_mypage -> {
                     hideBlur()
                     showFragment(MyPageFragment())
