@@ -6,7 +6,7 @@
     android:paddingTop="25dp"
     android:paddingStart="25dp"
     android:paddingBottom="25dp"
-    android:background="@drawable/selector_background_alert">
+    android:background="@drawable/alert_background_false">
 
    <ImageView
        android:id="@+id/alert_start_iv"

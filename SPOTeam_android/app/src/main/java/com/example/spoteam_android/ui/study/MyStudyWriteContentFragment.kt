@@ -3,8 +3,6 @@ package com.example.spoteam_android.ui.study
 import StudyViewModel
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -22,11 +20,12 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentMystudyWriteContentBinding
 import com.example.spoteam_android.ui.community.CommunityRetrofitClient
 import com.example.spoteam_android.ui.community.StudyPostResponse
-import com.example.spoteam_android.ui.community.StudyWriteContentRequest
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -83,12 +82,14 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
                 if(selectedImageURI != null) {
                     binding.fragmentIntroduceStudyIv.setImageURI(selectedImageURI)
                     profileImageURI = selectedImageURI
+                    Log.d("imageFormat", "$profileImageURI")
                 }
             }
         }
 
         binding.fragmentIntroduceStudyIv.setOnClickListener{
             getImageFromAlbum()
+            Log.d("imageFormat", "$profileImageURI")
         }
 
         binding.writeContentPrevIv.setOnClickListener{
@@ -106,76 +107,80 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
         getImageLauncher.launch(intent)
     }
 
-    private fun submitContent(studyId : Int) {
+    private fun submitContent(studyId: Int) {
         val title = binding.writeContentTitleEt.text.toString().trim()
         val content = binding.writeContentContentEt.text.toString().trim()
         isAnnouncement = binding.mystudyWriteContentInfoLl.findViewById<CheckBox>(R.id.isAnnouncement_cb).isChecked
-        val imagePart = profileImageURI?.let { prepareImagePart(it) }
-        if (title.isEmpty() || content.isEmpty()) {
+
+        if (title.isEmpty() || content.isEmpty() || profileImageURI == null) {
             Toast.makeText(requireContext(), "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()
             return
         }
-        val requestBody = StudyWriteContentRequest (
-                isAnnouncement = isAnnouncement,
-                theme = selectedTheme,
-                title = title,
-                content = content,
-                images = listOf(imagePart)
-            )
 
+        // 여러 이미지 파일을 담을 리스트 생성
+        val imageParts = mutableListOf<MultipartBody.Part>()
+        val uris = listOf(profileImageURI!!) // 여기에 여러 URI를 추가할 수 있음
+        uris.forEach { uri ->
+            val file = getFileFromUri(uri)
+            if (file != null) {
+                val requestFile = file.asRequestBody("image/png".toMediaTypeOrNull())
+                val imagePart = MultipartBody.Part.createFormData("images", file.name, requestFile)
+                imageParts.add(imagePart)
+            }
+        }
 
-        Log.d("MYSTUDYWriteContentFragment", "${requestBody} , ${studyId}")
+        // 나머지 데이터를 RequestBody로 변환
+        val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
+        val contentPart = content.toRequestBody("text/plain".toMediaTypeOrNull())
+        val themePart = selectedTheme.toRequestBody("text/plain".toMediaTypeOrNull())
+        val isAnnouncementPart = isAnnouncement.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
         // 서버로 데이터 전송
-        if (requestBody != null) {
-            sendContentToServer(requestBody)
-        }
+        sendContentToServer(studyId, titlePart, contentPart, themePart, isAnnouncementPart, imageParts)
     }
 
-    private fun prepareImagePart(uri: Uri): MultipartBody.Part? {
-        val file = saveUriAsPng(uri)
-        return file?.let {
-            val requestFile = it.asRequestBody("image/png".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("images", it.name, requestFile)
+    private fun getFileFromUri(uri: Uri): File? {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        val file = File(requireContext().cacheDir, "selected_image.png")
+        val outputStream = FileOutputStream(file)
+        inputStream?.use { input ->
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
         }
+        return file
     }
 
-    private fun saveUriAsPng(uri: Uri): File? {
-        return try {
-            val inputStream = requireContext().contentResolver.openInputStream(uri)
-            val bitmap = BitmapFactory.decodeStream(inputStream)
-
-            // PNG 파일로 저장할 임시 파일 생성
-            val tempFile = File(requireContext().cacheDir, "temp_image.png")
-            val outputStream = FileOutputStream(tempFile)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-            outputStream.flush()
-            outputStream.close()
-
-            tempFile // 생성된 파일 반환
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    private fun sendContentToServer(requestBody: StudyWriteContentRequest) {
-        CommunityRetrofitClient.instance.postStudyPost(currentStudyId, requestBody)
-            .enqueue(object : Callback<StudyPostResponse> {
-                override fun onResponse(call: Call<StudyPostResponse>, response: Response<StudyPostResponse>) {
-                    Log.d("WriteContentFragment", response.body()?.isSuccess.toString())
-                    if (response.isSuccessful && response.body()?.isSuccess == "true") {
-                        val writeContentResponseBody = response.body()!!.result
-                        showLog(writeContentResponseBody.toString())
-                        dismiss()
-                    } else {
-                        Toast.makeText(requireContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    }
+    private fun sendContentToServer(
+        studyId: Int,
+        titlePart: RequestBody,
+        contentPart: RequestBody,
+        themePart: RequestBody,
+        isAnnouncementPart: RequestBody,
+        imageParts: List<MultipartBody.Part>
+    ) {
+        CommunityRetrofitClient.instance.postStudyPost(
+            studyId,
+            titlePart,
+            contentPart,
+            themePart,
+            isAnnouncementPart,
+            imageParts
+        ).enqueue(object : Callback<StudyPostResponse> {
+            override fun onResponse(call: Call<StudyPostResponse>, response: Response<StudyPostResponse>) {
+                if (response.isSuccessful && response.body()?.isSuccess == "true") {
+                    val writeContentResponseBody = response.body()!!.result
+                    showLog(writeContentResponseBody.toString())
+                    dismiss()
+                } else {
+                    Toast.makeText(requireContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
-                override fun onFailure(call: Call<StudyPostResponse>, t: Throwable) {
-                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            })
+            }
+
+            override fun onFailure(call: Call<StudyPostResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun showLog(message: String?) {

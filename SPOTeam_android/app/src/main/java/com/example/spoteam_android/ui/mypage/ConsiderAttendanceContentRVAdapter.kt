@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemCommunityContentBinding
 import com.example.spoteam_android.databinding.ItemConsiderAttendanceBinding
 import com.example.spoteam_android.ui.community.CategoryPagesDetail
@@ -60,6 +62,12 @@ class ConsiderAttendanceContentRVAdapter(private var dataList: List<MyRecruiting
                 binding.icHeartRed.visibility = View.GONE
                 binding.ImageView6.visibility = View.VISIBLE
             }
+
+            Glide.with(binding.root.context)
+                .load(data.imageUrl)
+                .error(R.drawable.fragment_calendar_spot_logo)
+                .fallback(R.drawable.fragment_calendar_spot_logo)
+                .into(binding.ImageView4)
         }
     }
 }

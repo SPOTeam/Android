@@ -17,6 +17,7 @@ import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.todolist.TodoViewModel
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 //import com.example.spoteam_android.ui.bookMark.BookmarkFragment
+//import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.category.CategoryNavViewFragment
 import com.example.spoteam_android.ui.community.CommunityFragment

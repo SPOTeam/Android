@@ -129,13 +129,10 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         binding.communityContentLikeNumTv.text = contentInfo.likeNum.toString()
         binding.communityContentContentNumTv.text = contentInfo.commentNum.toString()
         binding.communityContentViewNumTv.text = contentInfo.hitNum.toString()
-//        // 스터디 프로필 이미지 설정
-//        val profileImageUriString = contentInfo.studyPostImages[0].imageUrl
-//        profileImageUriString?.let { uri ->
-//            Glide.with(this)
-//                .load(Uri.parse(uri))
-//                .into(binding.communityContentImageIv)
-//        }
+
+        Glide.with(binding.root.context)
+            .load(contentInfo.studyPostImages)
+            .into(binding.communityContentImageIv)
 
         if(contentInfo.isLiked) {
             binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE

@@ -1,5 +1,7 @@
 package com.example.spoteam_android.ui.community
 
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -85,10 +87,15 @@ interface CommunityAPIService {
         @Path("memberId") memberId: Int
     ): Call<UnDisLikeCommentResponse>
 
+    @Multipart
     @POST("/spot/studies/{studyId}/posts")
     fun postStudyPost(
         @Path("studyId") studyId: Int,
-        @Body requestBody : StudyWriteContentRequest
+        @Part("isAnnouncement") isAnnouncementPart: RequestBody,
+        @Part("title") titlePart: RequestBody,
+        @Part("content") contentPart: RequestBody,
+        @Part("theme") themePart: RequestBody,
+        @Part imagePart: List<MultipartBody.Part>
     ): Call<StudyPostResponse>
 
     @GET("/spot/studies/{studyId}/posts")
@@ -158,4 +165,23 @@ interface CommunityAPIService {
         @Path("studyId") studyId: Int,
         @Query("isAccepted") isAccepted: Boolean
     ): Call<AcceptedAlertStudyResponse>
+
+    @POST("/spot/notifications/{notificationId}/read")
+    fun postNotificationState(
+        @Path("notificationId") notificationId: Int
+    ): Call<NotificationStateResponse>
+
+    @GET("/spot/search/studies/on-studies/members/{memberId}")
+    fun getMemberOnStudies(
+        @Path("memberId") memberId: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Call<MemberOnStudiesResponse>
+
+    @GET("/spot/search/studies/applied-studies/members/{memberId}/")
+    fun getMemberAppliedStudies(
+        @Path("memberId") memberId: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Call<MemberOnStudiesResponse>
 }

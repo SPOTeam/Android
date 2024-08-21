@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.AlertInfo
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemAlertEnrollStudyBinding
 import com.example.spoteam_android.databinding.ItemAlertLiveBinding
 import com.example.spoteam_android.databinding.ItemAlertUpdateBinding
@@ -84,25 +85,49 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
 
     inner class LiveViewHolder(private val binding : ItemAlertLiveBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AlertDetail) {
+            if(item.isChecked) {
+                binding.root.setBackgroundResource(R.drawable.alert_background_true)
+            } else {
+                binding.root.setBackgroundResource(R.drawable.alert_background_false)
+            }
             binding.alertLiveContentTv.text = item.studyTitle
         }
     }
 
     inner class UpdatedViewHolder(private val binding : ItemAlertUpdateBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AlertDetail) {
+            if(item.isChecked) {
+                binding.root.setBackgroundResource(R.drawable.alert_background_true)
+            } else {
+                binding.root.setBackgroundResource(R.drawable.alert_background_false)
+            }
             when (item.type) {
                 "ANNOUNCEMENT" -> {
                     binding.studyName.text = item.studyTitle
-                    binding.alertType.text = "'공지'"
-                }
-                "SCHEDULE_UPDATE " -> {
-                    binding.studyName.text = item.studyTitle
-                    binding.alertType.text = "새'일정'"
+                    binding.categoryType.text = "'공지'"
+                    binding.alertType.text = "업데이트"
 
+                    binding.alertContent1Tv.text = "'${item.studyTitle}의'"
+                    binding.alertContent2Tv.text = "새로운"
+                    binding.alertContent3Tv.text = "공지"
+                }
+                "SCHEDULE_UPDATE" -> {
+                    binding.studyName.text = item.studyTitle
+                    binding.categoryType.text = "새 '일정'"
+                    binding.alertType.text = "등록"
+
+                    binding.alertContent1Tv.text = "'${item.studyTitle}의'"
+                    binding.alertContent2Tv.text = "새로운"
+                    binding.alertContent3Tv.text = "일정"
                 }
                 "TO_DO_UPDATE" -> {
-                    binding.studyName.text = "'${item.notifierName}'님의"
-//                    binding.alertType.text = item.
+                    binding.studyName.text = "'${item.notifierName}' 님의"
+                    binding.categoryType.text = "'${item.studyTitle}'"
+                    binding.alertType.text = "완료!"
+
+                    binding.alertContent1Tv.text = "'${item.studyTitle}의'"
+                    binding.alertContent2Tv.text = "${item.notifierName}"
+                    binding.alertContent3Tv.text = "님"
                 }
             }
         }
