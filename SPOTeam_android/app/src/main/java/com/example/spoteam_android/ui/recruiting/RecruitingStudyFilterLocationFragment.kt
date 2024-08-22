@@ -50,6 +50,7 @@ class RecruitingStudyFilterLocationFragment : Fragment() {
             (activity as MainActivity).switchFragment(RecruitingStudyFilterFragment())
         }
 
+
         return binding.root
     }
 

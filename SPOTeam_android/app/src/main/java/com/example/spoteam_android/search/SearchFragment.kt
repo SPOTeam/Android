@@ -1,6 +1,5 @@
 package com.example.spoteam_android.search
 
-
 import RetrofitClient.getAuthToken
 import StudyViewModel
 import android.content.Context
@@ -9,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -32,8 +30,9 @@ class SearchFragment : Fragment() {
     lateinit var binding: FragmentSearchBinding
     private val recentSearches = mutableListOf<String>()
     private lateinit var searchAdapter: SearchAdapter
+    private lateinit var studyViewModel: StudyViewModel
     private lateinit var recommendBoardAdapter: BoardAdapter
-    private val studyViewModel: StudyViewModel by activityViewModels()
+
 
 
     override fun onCreateView(
@@ -44,14 +43,11 @@ class SearchFragment : Fragment() {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
 
         searchAdapter = SearchAdapter(ArrayList()) { selectedItem ->
-            Log.d("SearchFragment", "이벤트 클릭: ${selectedItem.title}")
             studyViewModel.setStudyData(
                 selectedItem.studyId,
                 selectedItem.imageUrl,
                 selectedItem.introduction
             )
-
-            // Fragment 전환
             val fragment = DetailStudyFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, fragment)
@@ -62,7 +58,7 @@ class SearchFragment : Fragment() {
         recommendBoardAdapter = BoardAdapter(
             ArrayList(),
             onItemClick = { selectedItem ->
-                Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
+                Log.d("SearchFragment", "이벤트 클릭: ${selectedItem.title}")
                 studyViewModel.setStudyData(
                     selectedItem.studyId,
                     selectedItem.imageUrl,
@@ -77,6 +73,7 @@ class SearchFragment : Fragment() {
                     .commit()
             },
             onLikeClick = { selectedItem, likeButton ->
+//                toggleLikeStatus(selectedItem, likeButton)
             }
         )
 
@@ -90,16 +87,10 @@ class SearchFragment : Fragment() {
             adapter = recommendBoardAdapter
         }
 
-        val memeberId = getMemberId(requireContext())
+        val memberId = getMemberId(requireContext())
+        fetchRecommendStudy(memberId)
 
-        fetchRecommendStudy(memeberId) //추천 스터디
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+        // SearchView의 입력이 완료되면 SearchResultFragment로 이동
         binding.searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -107,16 +98,32 @@ class SearchFragment : Fragment() {
                     addSearchChip(it)
                     binding.searchView.setQuery("", false)
                     binding.searchView.clearFocus()
-                    fetchGetSearchStudy(it)  // 검색어를 fetchGetSearchStudy 함수에 전달
+
+                    // 키워드를 번들로 전달
+                    val bundle = Bundle().apply {
+                        putString("search_keyword", it)
+                    }
+
+                    // SearchResultFragment로 이동
+                    val fragment = SearchResultFragment().apply {
+                        arguments = bundle
+                    }
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, fragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Do nothing for now
+                // 사용자가 입력할 때마다 호출되는 부분
                 return true
             }
         })
+
+        return binding.root
     }
 
     private fun addSearchChip(query: String) {
@@ -142,68 +149,11 @@ class SearchFragment : Fragment() {
         )
 
         chip.isCloseIconVisible = false
-        // Chip의 체크박스 스타일을 유지하면서 클릭은 비활성화
-        chip.isCheckable = false // 체크박스를 비활성화하여 클릭 시 상태 변경되지 않도록
-
-        // ChipGroup의 첫 번째 위치에 Chip 추가
+        chip.isCheckable = false
         binding.chipGroup.addView(chip, 0)
     }
 
-    private fun fetchGetSearchStudy(keyword: String) {
-        Log.d("SearchFragement", "fetchGetSearchStudy() 실행")
-
-        RetrofitClient.SSService.PostSearchApi(
-            authToken = getAuthToken(),
-            keyword = keyword,
-            page = 0,
-            size = 3,
-            sortBy = "ALL"
-        ).enqueue(object : Callback<SearchResponse> {
-            override fun onResponse(
-                call: Call<SearchResponse>,
-                response: Response<SearchResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    if (apiResponse?.isSuccess == true) {
-                        val searchItems = apiResponse.result?.content?.map { study ->
-                            SearchItem(
-                                studyId = study.studyId,
-                                title = study.title,
-                                goal = study.goal,
-                                introduction = study.introduction,
-                                memberCount = study.memberCount,
-                                heartCount = study.heartCount,
-                                hitNum = study.hitNum,
-                                maxPeople = study.maxPeople,
-                                studyState = study.studyState,
-                                themeTypes = study.themeTypes,
-                                createdAt = study.createdAt,
-                                liked = study.liked,
-                                imageUrl = study.imageUrl
-                            )
-                        } ?: emptyList()
-
-                        searchAdapter.updateList(searchItems)
-                        searchAdapter.notifyDataSetChanged()
-                        binding.searchBoard.visibility = View.VISIBLE
-                    } else {
-                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    val errorBody = response.errorBody()?.string()
-                }
-            }
-
-            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                // Handle failure
-            }
-        })
-    }
-
     private fun fetchRecommendStudy(memberId: Int) {
-        Log.d("SearchFragment", "fetchRecommendStudy() 실행")
-
         RetrofitClient.GetRSService.GetRecommendStudy(
             authToken = getAuthToken(),
             memberId = memberId,
@@ -233,36 +183,27 @@ class SearchFragment : Fragment() {
                         binding.recommendationBoard.visibility = View.VISIBLE
                     } else {
                         binding.recommendationBoard.visibility = View.GONE
-                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Log.d("HouseFragment", "연결 실패: ${response.code()}")
+                    Log.d("SearchFragment", "연결 실패: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                Log.d("HouseFragment", "API 호출 실패: ${t.message}")
+                Log.d("SearchFragment", "API 호출 실패: ${t.message}")
             }
         })
     }
 
-    fun getMemberId(context: Context): Int {
-
-        var memberId: Int = -1
-
-        val sharedPreferences =
-            context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+    private fun getMemberId(context: Context): Int {
+        val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val currentEmail = sharedPreferences.getString("currentEmail", null)
-
-        // 현재 로그인된 사용자 정보를 로그
-        memberId = if (currentEmail != null) sharedPreferences.getInt(
-            "${currentEmail}_memberId",
+        return if (currentEmail != null) {
+            sharedPreferences.getInt("${currentEmail}_memberId", -1)
+        } else {
             -1
-        ) else -1
-
-        return memberId // 저장된 memberId 없을 시 기본값 -1 반환
+        }
     }
-
 
 }

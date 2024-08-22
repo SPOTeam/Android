@@ -184,28 +184,19 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/tx_interest_study"
+            app:layout_constraintStart_toStartOf="@+id/imgbtn_location"
             app:layout_constraintTop_toBottomOf="@+id/rv_board" />
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_board2"
             android:layout_width="match_parent"
             android:layout_height="360dp"
-            android:layout_marginTop="15dp"
             android:nestedScrollingEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tx_recommendation_study"
-            tools:listitem="@layout/item_recycler_view"/>
+            tools:listitem="@layout/item_recycler_view"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/tx_recommendation_study"/>
 
-        <ImageView
-            android:id="@+id/ic_go_recommendation"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="30dp"
-            android:src="@drawable/activity_main_navigate_before"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tx_recommendation_study" />
 
 
         <!--    <FrameLayout-->

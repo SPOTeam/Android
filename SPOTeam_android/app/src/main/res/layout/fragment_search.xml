@@ -42,14 +42,13 @@
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:paddingTop="4dp"
             android:paddingLeft="5dp"
             app:singleLine="true">
+            </com.google.android.material.chip.ChipGroup>
 
-        </com.google.android.material.chip.ChipGroup>
-
-    </HorizontalScrollView>
+        </HorizontalScrollView>
 
     <TextView
         android:id="@+id/tx_populared_word"
@@ -67,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="50dp"
         android:text="최근 본 스터디"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -80,7 +79,7 @@
         android:id="@+id/search_board"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tx_recently_viewed_study">
     </androidx.recyclerview.widget.RecyclerView>
@@ -90,7 +89,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="추천 스터디"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -102,7 +101,7 @@
         android:id="@+id/recommendation_board"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:paddingBottom="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tx_recommendation_study" />

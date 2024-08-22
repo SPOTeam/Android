@@ -1,11 +1,14 @@
 package com.example.spoteam_android.ui.recruiting
 
 import StudyViewModel
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
@@ -68,13 +71,27 @@ class RecruitingStudyFilterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        super.onViewCreated(view, savedInstanceState)
+        super.onViewCreated(view, savedInstanceState
+        )
         val spinner: Spinner = binding.genderSpinner
+
+
 
         val toolbar = binding.toolbar
 
+        val source = arguments?.getString("source")
+        Log.d("RecruitingStudyFragment","source = $source")
+
+        when (source){
+            "RecruitingStudyFragment" -> {
+                resetChipGroupState()
+            }
+        }
+
+
         val bundle = Bundle()
 
+        bundle.putString("activityFee_01", "오프라인")
 
         toolbar.icBack.setOnClickListener {
             (activity as MainActivity).switchFragment(RecruitingStudyFragment())
@@ -104,9 +121,9 @@ class RecruitingStudyFilterFragment : Fragment() {
             ) {
                 myviewModel.selectedSpinnerPosition = position
                 when (position) {
-                    0 -> bundle.putString("gender", "MALE")
-                    1 -> bundle.putString("gender", "MALE")
-                    2 -> bundle.putString("gender", "FEMALE")
+                    0 -> bundle.putString("gender2", "MALE")
+                    1 -> bundle.putString("gender2", "MALE")
+                    2 -> bundle.putString("gender2", "FEMALE")
                 }
             }
 
@@ -151,19 +168,30 @@ class RecruitingStudyFilterFragment : Fragment() {
                 if (checkedChip.id == R.id.chip01) {
                     binding.btnAddArea.visibility = View.GONE
                     binding.locationChip.visibility = View.GONE
-                    bundle.putString("activityFee", "온라인") // 활동비 유무
+                    bundle.putString("activityFee_01", "true")
                 } else {
                     binding.btnAddArea.visibility = View.VISIBLE
-                    bundle.putString("activityFee", "오프라인") // 활동비 유무
+                    bundle.putString("activityFee_01", "false")
                 }
             } else {
-                bundle.putString("activityFee", "오프라인") // 활동비 유무
+                bundle.putString("activityFee_01", "false")
             }
             updateNextButtonState()  // 상태 업데이트 호출
         }
 
         editText.setOnClickListener{
             updateNextButtonState()
+        }
+
+        editText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.hideSoftInputFromWindow(view.windowToken, 0)
+                editText.clearFocus()  // 포커스 해제
+                true
+            } else {
+                false
+            }
         }
 
         chipGroup2.setOnCheckedChangeListener { group, checkedId ->
@@ -182,20 +210,19 @@ class RecruitingStudyFilterFragment : Fragment() {
 
 
         chipGroup1.setOnCheckedChangeListener { group, checkedId ->
-            myviewModel.selectedChipId = checkedId
             if (checkedId != ChipGroup.NO_ID) {
                 val checkedChip = group.findViewById<Chip>(checkedId)
                 if (checkedChip.id == R.id.chip1) {
-                    bundle.putString("activityFee", "있음") // 활동비 유무
+                    bundle.putString("activityFee_02", "true") // 활동비 유무
                     editText.visibility = View.VISIBLE
                     behind_et.visibility = View.VISIBLE
                 } else {
-                    bundle.putString("activityFee", "없음") // 활동비 유무
+                    bundle.putString("activityFee_02", "false") // 활동비 유무
                     editText.visibility = View.GONE
                     behind_et.visibility = View.GONE
                 }
             } else {
-                bundle.putString("activityFee", "없음") // 활동비 유무
+                bundle.putString("activityFee_02", "false") // 활동비 유무
                 editText.visibility = View.GONE
                 behind_et.visibility = View.GONE
             }
@@ -203,32 +230,52 @@ class RecruitingStudyFilterFragment : Fragment() {
         }
 
 
+        chipGroup2.setOnCheckedChangeListener { group, checkedId ->
+            if (checkedId != ChipGroup.NO_ID) {
+                val selectedChip = group.findViewById<Chip>(checkedId)
+                val selectedChipText = selectedChip?.text.toString()
+                bundle.putString("selectedStudyTheme2", selectedChipText)
+            }
+            updateNextButtonState()
+        }
 
-        val interestFragment = MyInterestStudyFragment()
-        interestFragment.arguments = bundle
+
 
         val searchbtn = binding.fragmentIntroduceStudyBt
         searchbtn.setOnClickListener {
+
+
+
             bundle.putString("source", "RecruitingStudyFilterFragment")
 
-            bundle.putString("minAge", minValueText.text.toString()) // 최소 나이
-            bundle.putString("maxAge", maxValueText.text.toString()) // 최대 나이
+            bundle.putString("minAge2", minValueText.text.toString()) // 최소 나이
+            bundle.putString("maxAge2", maxValueText.text.toString()) // 최대 나이
 
             val activityFeeAmount = editText.text.toString()
-            bundle.putString("activityFeeAmount", activityFeeAmount)
+            bundle.putString("activityFeeAmount2", activityFeeAmount)
+
+            val recruitingStudyFragment = RecruitingStudyFragment()
+            recruitingStudyFragment.arguments = bundle // Bundle 전달
+
 
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, RecruitingStudyFragment())
+                .replace(R.id.main_frm, recruitingStudyFragment)
                 .addToBackStack(null)
                 .commit()
         }
+
+
     }
+
+
 
     private fun setupChipCloseListener() {
         binding.locationChip.setOnCloseIconClickListener {
             binding.locationChip.visibility = View.GONE
             binding.btnAddArea.visibility = View.VISIBLE
         }
+
+
     }
 
     private fun updateNextButtonState() {
@@ -259,6 +306,7 @@ class RecruitingStudyFilterFragment : Fragment() {
     private fun setChipState(isOffline: Boolean) {
         if (isOffline) {
             binding.chipGroupNew.check(R.id.chip02)
+
         } else {
             binding.chipGroupNew.check(R.id.chip01)
         }
@@ -280,5 +328,17 @@ class RecruitingStudyFilterFragment : Fragment() {
             text = truncatedAddress
         }
         updateNextButtonState()
+    }
+
+    private fun resetChipGroupState() {
+        // 모든 ChipGroup의 선택을 초기화합니다.
+        binding.chipGroup1.clearCheck()
+        binding.chipGroupNew.clearCheck()
+        binding.chipGroup2.clearCheck()
+
+        // 필요하다면 EditText와 기타 UI 요소도 초기화합니다.
+        binding.edittext1.text.clear()
+        binding.behindEt.visibility = View.GONE
+        binding.edittext1.visibility = View.GONE
     }
 }

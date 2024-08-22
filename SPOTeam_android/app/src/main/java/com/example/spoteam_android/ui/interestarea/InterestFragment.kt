@@ -696,7 +696,7 @@ class InterestFragment : Fragment() {
                         else{
                             checkcount.text = "00 건"
                             interest_area_board.visibility = View.GONE
-                            Toast.makeText(requireContext() ,"2. 조건에 맞는 항목이 없습니다.",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext() ,"조건에 맞는 항목이 없습니다.",Toast.LENGTH_SHORT).show()
                         }
                     }
                     else{
