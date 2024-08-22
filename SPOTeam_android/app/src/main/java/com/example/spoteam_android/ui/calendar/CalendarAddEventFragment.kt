@@ -20,6 +20,8 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.ScheduleRequest
 import com.example.spoteam_android.ScheduleResponse
+import com.example.spoteam_android.ui.mypage.PurposeUploadComplteDialog
+import com.example.spoteam_android.ui.study.CompleteScheduleDialog
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -163,7 +165,7 @@ class CalendarAddEventFragment : Fragment() {
                 if (response.isSuccessful) {
                     val scheduleResponse = response.body()
                     if (scheduleResponse != null && scheduleResponse.isSuccess) {
-                        Toast.makeText(requireContext(), "일정이 성공적으로 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                        showCompletionDialog()
                     } else {
                         Toast.makeText(requireContext(), "일정 추가에 실패했습니다: ${response.message()}", Toast.LENGTH_SHORT).show()
                     }
@@ -212,5 +214,9 @@ class CalendarAddEventFragment : Fragment() {
             fragment.arguments = args
             return fragment
         }
+    }
+    private fun showCompletionDialog() {
+        val dialog = CompleteScheduleDialog(requireContext())
+        dialog.start(parentFragmentManager)
     }
 }

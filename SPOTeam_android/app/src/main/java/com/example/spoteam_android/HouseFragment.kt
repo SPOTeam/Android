@@ -178,18 +178,9 @@ class HouseFragment : Fragment() {
     private fun fetchDataAnyWhere(memberId: Int) {
         Log.d("HouseFragment", "fetchDataAnyWhere() 실행")
 
-        RetrofitClient.IaapiService.InterestArea(
+        RetrofitClient.IaapiService.getInterestedBestStudies(
             authToken = getAuthToken(),
-            memberId = memberId,
-            page = 0,
-            size = 3,
-            sortBy = "LIKED",
-            gender = "UNKNOWN",
-            minAge = 18,
-            maxAge = 60,
-            isOnline = true,
-            hasFee = false,
-            fee = null
+            memberId = memberId
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
@@ -229,6 +220,7 @@ class HouseFragment : Fragment() {
             }
         })
     }
+
 
     private fun toggleLikeStatus(studyItem: BoardItem, likeButton: ImageView) {
         val memberId = getMemberId(requireContext())

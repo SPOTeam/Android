@@ -129,13 +129,13 @@ class BookmarkFragment : Fragment() {
                                 })
 
                                 totalPages = bookmarkResponse.result.totalPages
-                                Log.d("Bookmark", "Fetched bookmarked studies: $bookitemList")
+//                                Log.d("Bookmark", "Fetched bookmarked studies: $bookitemList")
                                 bookMarkRVAdapter.updateList(bookitemList)
                                 binding.bookmarkEmpty.visibility = View.GONE
                                 binding.fragmentBookmarkRv.visibility = View.VISIBLE
 
                                 // 페이지 UI 업데이트
-                                Log.d("Bookmark","${totalPages}")
+//                                Log.d("Bookmark","${totalPages}")
                                 updatePageNumberUI(totalPages)
                             } else {
                                 // 데이터가 없을 때 처리
@@ -170,7 +170,6 @@ class BookmarkFragment : Fragment() {
                         response.body()?.let { likeResponse ->
                             // 서버에서 반환된 상태에 따라 하트 아이콘 및 BookmarkItem의 liked 상태 업데이트
                             val newStatus = likeResponse.result.status
-                            Log.d("studyfrag", newStatus)
                             studyItem.liked = newStatus == "LIKE" // "LIKE"이면 true, "DISLIKE"이면 false로 저장
                             val newIcon = if (studyItem.liked) R.drawable.ic_heart_filled else R.drawable.study_like
                             likeButton.setImageResource(newIcon)

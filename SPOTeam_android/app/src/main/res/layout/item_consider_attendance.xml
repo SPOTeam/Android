@@ -16,12 +16,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ImageView4"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_marginTop="14dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/activity_main_ic_recyclervw_groups"/>
+            android:layout_marginBottom="15dp"
+            android:background="@color/white"
+            android:scaleType="centerCrop"
+            android:src="@drawable/activity_main_ic_recyclervw_groups"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut" />
 
         <LinearLayout
             android:id="@+id/consider_attendance_ll"
