@@ -13,13 +13,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.databinding.FragmentMystudyCommunityBinding
-import com.example.spoteam_android.ui.community.CategoryPagesDetail
-import com.example.spoteam_android.ui.community.CategoryPagesResponse
-import com.example.spoteam_android.ui.community.CommunityContentActivity
 import com.example.spoteam_android.ui.community.CommunityRetrofitClient
 import com.example.spoteam_android.ui.community.PostDetail
+import com.example.spoteam_android.ui.community.StudyContentLikeResponse
+import com.example.spoteam_android.ui.community.StudyContentUnLikeResponse
 import com.example.spoteam_android.ui.community.StudyPostListResponse
-import com.example.spoteam_android.ui.community.communityContent.CommunityCategoryContentRVAdapter
 import com.example.spoteam_android.ui.home.HomeFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -129,6 +127,60 @@ class MyStudyCommunityFragment : Fragment() {
             })
     }
 
+    private fun postStudyContentLike(postId: Int) {
+        CommunityRetrofitClient.instance.postStudyContentLike(currentStudyId, postId)
+            .enqueue(object : Callback<StudyContentLikeResponse> {
+                override fun onResponse(
+                    call: Call<StudyContentLikeResponse>,
+                    response: Response<StudyContentLikeResponse>
+                ) {
+                    Log.d("StudyLikeContent", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val likeResponse = response.body()
+                        Log.d("StudyLikeContent", "responseBody: ${likeResponse?.isSuccess}")
+                        if (likeResponse?.isSuccess == "true") {
+                            fetchPages()
+                        } else {
+                            showError(likeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<StudyContentLikeResponse>, t: Throwable) {
+                    Log.e("StudyLikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun deleteStudyContentLike(postId: Int) {
+        CommunityRetrofitClient.instance.deleteStudyContentLike(currentStudyId, postId)
+            .enqueue(object : Callback<StudyContentUnLikeResponse> {
+                override fun onResponse(
+                    call: Call<StudyContentUnLikeResponse>,
+                    response: Response<StudyContentUnLikeResponse>
+                ) {
+                    Log.d("StudyUnLikeContent", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val unLikeResponse = response.body()
+                        Log.d("StudyUnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
+                        if (unLikeResponse?.isSuccess == "true") {
+                            fetchPages()
+                        } else {
+                            showError(unLikeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<StudyContentUnLikeResponse>, t: Throwable) {
+                    Log.e("StudyUnLikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
     private fun showError(message: String?) {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
     }
@@ -148,14 +200,14 @@ class MyStudyCommunityFragment : Fragment() {
                 intent.putExtra("myStudyPostId", data.postId.toString())
                 startActivity(intent)
             }
-//
-//            override fun onLikeClick(data: CategoryPagesDetail) {
-//                postLike(data.postId)
-//            }
-//
-//            override fun onUnLikeClick(data: CategoryPagesDetail) {
-//                deleteLike(data.postId)
-//            }
+
+            override fun onLikeClick(data: PostDetail) {
+                deleteStudyContentLike(data.postId)
+            }
+
+            override fun onUnLikeClick(data: PostDetail) {
+                postStudyContentLike(data.postId)
+            }
         })
     }
 }

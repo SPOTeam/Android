@@ -1,9 +1,11 @@
 package com.example.spoteam_android.ui.community
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ActivityCommunityContentBinding
 import com.example.spoteam_android.ui.community.contentComment.ContentCommentMultiViewRVAdapter
-import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,7 +49,7 @@ class CommunityContentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.communityPrevIv.setOnClickListener{
-            compareLiked()
+//            compareLiked()
             finish()
         }
 
@@ -61,25 +62,25 @@ class CommunityContentActivity : AppCompatActivity() {
         }
 
         binding.communityContentLikeNumCheckedIv.setOnClickListener{
-//            deleteContentLike()
-            compareIsliked = false
-            compareIslikedNum--
-
-            binding.communityContentLikeNumCheckedIv.visibility = View.GONE
-            binding.communityContentLikeNumUncheckedIv.visibility = View.VISIBLE
-
-            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
+            deleteContentLike()
+//            compareIsliked = false
+//            compareIslikedNum--
+//
+//            binding.communityContentLikeNumCheckedIv.visibility = View.GONE
+//            binding.communityContentLikeNumUncheckedIv.visibility = View.VISIBLE
+//
+//            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
         }
 
         binding.communityContentLikeNumUncheckedIv.setOnClickListener{
-//            postContentLike()
-            compareIsliked = true
-            compareIslikedNum++
-
-            binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE
-            binding.communityContentLikeNumUncheckedIv.visibility = View.GONE
-
-            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
+            postContentLike()
+//            compareIsliked = true
+//            compareIslikedNum++
+//
+//            binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE
+//            binding.communityContentLikeNumUncheckedIv.visibility = View.GONE
+//
+//            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
         }
 
         fetchContentInfo()
@@ -107,7 +108,7 @@ class CommunityContentActivity : AppCompatActivity() {
                         val likeResponse = response.body()
                         Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
-
+                            fetchContentInfo()
                         } else {
                             showError(likeResponse?.message)
                         }
@@ -134,7 +135,7 @@ class CommunityContentActivity : AppCompatActivity() {
                         val unLikeResponse = response.body()
                         Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
-
+                            fetchContentInfo()
                         } else {
                             showError(unLikeResponse?.message)
                         }
@@ -176,6 +177,10 @@ class CommunityContentActivity : AppCompatActivity() {
                     if (response.isSuccessful && response.body()?.isSuccess == "true") {
                         Log.d("WriteComment", "${response.body()!!.result}")
                         parentCommentId = 0 // postCommentID 초기화
+                        binding.writeCommentContentEt.text.clear()
+                        binding.writeCommentContentEt.clearFocus()
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(binding.writeCommentContentEt.windowToken, 0)
                         // 어댑터의 상태 초기화
                         resetAdapterState()
                         fetchContentInfo()
@@ -225,10 +230,16 @@ class CommunityContentActivity : AppCompatActivity() {
                         if (contentResponse?.isSuccess == "true") {
                             val contentInfo = contentResponse.result
                             val commentInfo = contentInfo.commentResponses.comments
-                            compareIsliked = contentInfo.likedByCurrentUser
-                            compareIslikedNum = contentInfo.likeCount
-                            initialIsliked = contentInfo.likedByCurrentUser
-                            initialIsLikedNum = contentInfo.likeCount
+//                            compareIsliked = contentInfo.likedByCurrentUser
+//                            compareIslikedNum = contentInfo.likeCount
+//                            initialIsliked = contentInfo.likedByCurrentUser
+//                            initialIsLikedNum = contentInfo.likeCount
+//                            //Glide를 사용하여 imageUrl을 ImageView에 로드
+//                            Glide.with(binding.root.context)
+//                                .load(contentInfo.fileUrls)
+//                                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
+//                                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
+//                                .into(binding.communityContentProfileIv)
 
                             Log.d("Content", "items: $contentInfo")
                             Log.d("Comment", "items: $commentInfo")
@@ -390,6 +401,9 @@ class CommunityContentActivity : AppCompatActivity() {
         dataRVAdapter.itemClick = object :ContentCommentMultiViewRVAdapter.ItemClick {
             override fun onItemClick(view: View, position: Int, parentId: Int) {
                 parentCommentId = parentId
+                binding.writeCommentContentEt.requestFocus()
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(binding.writeCommentContentEt, InputMethodManager.SHOW_IMPLICIT)
             }
 
             override fun onLikeClick(view: View, position: Int, commentId: Int) {

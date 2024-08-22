@@ -15,7 +15,14 @@
         android:layout_marginTop="30dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="15dp">
+
+        <ImageView
+            android:id="@+id/prev_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow"/>
 
         <TextView
             android:id="@+id/fragment_study_tv"
@@ -25,9 +32,8 @@
             android:fontFamily="@font/pretendard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:drawableStart="@drawable/ic_arrow"
             android:drawablePadding="20dp"/>
+
     </LinearLayout>
 
     <View

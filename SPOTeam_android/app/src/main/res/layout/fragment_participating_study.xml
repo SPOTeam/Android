@@ -7,6 +7,36 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:paddingTop="?attr/actionBarSize">
 
+    <TextView
+        android:id="@+id/mypage_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="마이페이지"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/mypage_prev_iv"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:src="@drawable/navigate_before_3x"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mypage_title" />
+
+    <ImageView
+        android:id="@+id/mypage_sp_iv"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:src="@drawable/line_img"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@id/mypage_prev_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mypage_title"/>
 
     <TextView
         android:id="@+id/participating_study_bold"
@@ -19,8 +49,7 @@ android:paddingTop="?attr/actionBarSize">
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toBottomOf="@id/mypage_sp_iv" />
 
 
     <androidx.recyclerview.widget.RecyclerView

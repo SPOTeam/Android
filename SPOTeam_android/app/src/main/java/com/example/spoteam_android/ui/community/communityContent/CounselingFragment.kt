@@ -89,7 +89,7 @@ class CounselingFragment : Fragment() {
     }
 
 
-    private fun fetchLike(postId : Int) {
+    private fun postLike(postId : Int) {
         CommunityRetrofitClient.instance.postContentLike(postId, memberId)
             .enqueue(object : Callback<ContentLikeResponse> {
                 override fun onResponse(
@@ -116,7 +116,7 @@ class CounselingFragment : Fragment() {
             })
     }
 
-    private fun fetchUnLike(postId : Int) {
+    private fun deleteLike(postId : Int) {
         CommunityRetrofitClient.instance.deleteContentLike(postId, memberId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
                 override fun onResponse(
@@ -163,11 +163,11 @@ class CounselingFragment : Fragment() {
             }
 
             override fun onLikeClick(data: CategoryPagesDetail) {
-                fetchLike(data.postId)
+                postLike(data.postId)
             }
 
             override fun onUnLikeClick(data: CategoryPagesDetail) {
-                fetchUnLike(data.postId)
+                deleteLike(data.postId)
             }
 
         })
