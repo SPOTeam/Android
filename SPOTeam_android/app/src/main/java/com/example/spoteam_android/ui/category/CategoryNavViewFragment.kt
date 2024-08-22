@@ -24,34 +24,34 @@ class CategoryNavViewFragment : Fragment() {
         binding = FragmentCategoryNavigationviewBinding.inflate(inflater, container, false)
 
         binding.languageBtn.setOnClickListener{
-            moveCategoryFragment(1)
+            moveCategoryFragment(0)
         }
         binding.licenseBtn.setOnClickListener{
-            moveCategoryFragment(2)
+            moveCategoryFragment(1)
         }
         binding.jobBtn.setOnClickListener{
-            moveCategoryFragment(3)
+            moveCategoryFragment(2)
         }
         binding.discussBtn.setOnClickListener{
-            moveCategoryFragment(4)
+            moveCategoryFragment(3)
         }
         binding.newsBtn.setOnClickListener{
-            moveCategoryFragment(5)
+            moveCategoryFragment(4)
         }
         binding.freeStudyBtn.setOnClickListener{
-            moveCategoryFragment(6)
+            moveCategoryFragment(5)
         }
         binding.projectBtn.setOnClickListener{
-            moveCategoryFragment(7)
+            moveCategoryFragment(6)
         }
         binding.contestBtn.setOnClickListener{
-            moveCategoryFragment(8)
+            moveCategoryFragment(7)
         }
         binding.majorStudyBtn.setOnClickListener{
-            moveCategoryFragment(9)
+            moveCategoryFragment(8)
         }
         binding.restBtn.setOnClickListener{
-            moveCategoryFragment(10)
+            moveCategoryFragment(9)
         }
 
         return binding.root

@@ -16,6 +16,7 @@ data class CommunityContentInfo(
 )
 
 data class ContentDetailInfo(
+    val postId : Int,
     val rank: Int,
     val postTitle: String,
     val commentCount: Int
@@ -319,7 +320,7 @@ data class StudyPostContentResponse(
 )
 
 data class StudyPostContentInfo (
-    val memberId : Int,
+    val member : MemberInfo,
     val postId : Int,
     val title : String,
     val content : String,
@@ -617,6 +618,8 @@ data class WriteStudyCommentInfo (
     val isAnonymous : Boolean,
     val content : String
 )
+
+
 
 
 

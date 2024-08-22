@@ -40,17 +40,18 @@
             app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_ll"
             android:background="#186AFF">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/fragment_detail_study_user_iv"
                 android:layout_width="59dp"
                 android:layout_height="59dp"
-                android:src="@drawable/ic_preview_profile"
                 android:layout_marginStart="15dp"
                 android:layout_marginBottom="15dp"
                 android:layout_gravity="bottom"
                 android:scaleType="centerCrop"
+                android:src="@drawable/ic_preview_profile"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut" />
 
             <TextView
                 android:id="@+id/fragment_detail_study_hello_tv"

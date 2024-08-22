@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.spoteam_android.R
 
 
-class ReportContentFragment(private val context: Context)  {
+class ReportContentDialog(private val context: Context)  {
     private val dlg = android.app.Dialog(context)
 
     fun start(fragmentManager: FragmentManager) {

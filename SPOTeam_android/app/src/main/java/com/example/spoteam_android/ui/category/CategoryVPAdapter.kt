@@ -15,32 +15,32 @@ import com.example.spoteam_android.ui.category.category_tabs.RestFragment
 
 class CategoryVPAdapter(fragment : Fragment) : FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = 11
+    override fun getItemCount(): Int = 10
 
-    // "전체", "어학", "자격증", "취업", "토론", "시사/뉴스", "자율학습", "프로젝트", "공모전", "전공/진로", "기타"
-
+    // "전체",
+//    "어학", "자격증", "취업", "토론", "시사/뉴스", "자율학습", "프로젝트", "공모전", "전공/진로", "기타"
     override fun createFragment(position: Int): Fragment {
         return when(position){
             //All
 //            0 -> AllCategoryFragment()
             //어학
-            1 -> LanguageFragment()
+            0 -> LanguageFragment()
             //자격증
-            2 -> LicenseFragment()
+            1 -> LicenseFragment()
             //취업
-            3 -> JobFragment()
+            2 -> JobFragment()
             //토론
-            4 -> DiscussionFragment()
+            3 -> DiscussionFragment()
             //시사/뉴스
-            5 -> NewsFragment()
+            4 -> NewsFragment()
             //자율학습
-            6 -> FreeStudyFragment()
+            5 -> FreeStudyFragment()
             //프로젝트
-            7-> ProjectFragment()
+            6-> ProjectFragment()
             //공모전
-            8 -> ContestFragment()
+            7 -> ContestFragment()
             //전공/진로
-            9 -> MajorFragment()
+            8 -> MajorFragment()
             //기타
             else -> RestFragment()
         }

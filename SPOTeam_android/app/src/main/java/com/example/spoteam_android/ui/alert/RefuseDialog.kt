@@ -55,10 +55,10 @@ class RefuseDialog(private val context: Context) {
                     call: Call<AcceptedAlertStudyResponse>,
                     response: Response<AcceptedAlertStudyResponse>
                 ) {
-                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
+//                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val studyAlertResponse = response.body()
-                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
+//                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
                         if (studyAlertResponse?.isSuccess == "true") {
                             //add method
                         }
