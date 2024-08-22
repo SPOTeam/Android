@@ -167,6 +167,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         Log.d("MyStudyWriteComment", "${response.body()!!.result}")
                         binding.writeCommentContentEt.text.clear()
                         binding.writeCommentContentEt.clearFocus()
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(binding.writeCommentContentEt.windowToken, 0)
                         resetAdapterState()
                         fetchContentInfo()
                     } else {
@@ -262,6 +264,11 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         if (postContentResponse?.isSuccess == "true") {
                             val postContent = postContentResponse.result
                             Log.d("MyStudyContent", "response: ${postContent}")
+                            if(postContent.studyPostImages.isEmpty()) {
+                                binding.communityContentImageIv.visibility = View.GONE
+                            } else {
+                                binding.communityContentImageIv.visibility = View.VISIBLE
+                            }
                             initContentInfo(postContent)
                             fetchContentCommentInfo()
                         } else {
@@ -434,9 +441,11 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         binding.communityContentContentNumTv.text = contentInfo.commentNum.toString()
         binding.communityContentViewNumTv.text = contentInfo.hitNum.toString()
 
-        Glide.with(binding.root.context)
-            .load(contentInfo.studyPostImages)
-            .into(binding.communityContentImageIv)
+        if(!contentInfo.studyPostImages.isEmpty()) {
+            Glide.with(binding.root.context)
+                .load(contentInfo.studyPostImages[0].imageUrl)
+                .into(binding.communityContentImageIv)
+        }
 
         if(contentInfo.isLiked) {
             binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE

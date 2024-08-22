@@ -53,7 +53,7 @@ class DiscussionFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.contentFilterSp.adapter = adapter
         }
 
-        fetchBestCommunityContent("토론", 0, 1, selectedSortBy)
+        fetchBestCommunityContent("토론", 0, 5, selectedSortBy)
 
         return binding.root
     }

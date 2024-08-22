@@ -52,7 +52,7 @@ class NewsFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.contentFilterSp.adapter = adapter
         }
 
-        fetchBestCommunityContent("시사뉴스", 0, 1, selectedCategory)
+        fetchBestCommunityContent("시사뉴스", 0, 5, selectedCategory)
 
         return binding.root
     }

@@ -55,6 +55,10 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
             binding.categorySpinner.adapter = adapter
         }
 
+        binding.writeContentPrevIv.setOnClickListener{
+            dismiss()
+        }
+
         return binding.root
     }
 

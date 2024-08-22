@@ -112,32 +112,36 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
         val content = binding.writeContentContentEt.text.toString().trim()
         isAnnouncement = binding.mystudyWriteContentInfoLl.findViewById<CheckBox>(R.id.isAnnouncement_cb).isChecked
 
-        if (title.isEmpty() || content.isEmpty() || profileImageURI == null) {
+        if (title.isEmpty() || content.isEmpty()) {
             Toast.makeText(requireContext(), "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()
             return
         }
 
         // 여러 이미지 파일을 담을 리스트 생성
         val imageParts = mutableListOf<MultipartBody.Part>()
-        val uris = listOf(profileImageURI!!) // 여기에 여러 URI를 추가할 수 있음
-        uris.forEach { uri ->
-            val file = getFileFromUri(uri)
-            if (file != null) {
-                val requestFile = file.asRequestBody("image/png".toMediaTypeOrNull())
-                val imagePart = MultipartBody.Part.createFormData("images", file.name, requestFile)
-                imageParts.add(imagePart)
+        if (profileImageURI != null) {
+            val uris = listOf(profileImageURI!!) // 여기에 여러 URI를 추가할 수 있음
+            uris.forEach { uri ->
+                val file = getFileFromUri(uri)
+                if (file != null) {
+                    val requestFile = file.asRequestBody("image/png".toMediaTypeOrNull())
+                    val imagePart =
+                        MultipartBody.Part.createFormData("images", file.name, requestFile)
+                    imageParts.add(imagePart)
+                }
             }
         }
 
         // 나머지 데이터를 RequestBody로 변환
+        val isAnnouncementPart = (if (isAnnouncement) "true" else "false").toRequestBody("text/plain".toMediaTypeOrNull())
+        val themePart = selectedTheme.toRequestBody("text/plain".toMediaTypeOrNull())
         val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
         val contentPart = content.toRequestBody("text/plain".toMediaTypeOrNull())
-        val themePart = selectedTheme.toRequestBody("text/plain".toMediaTypeOrNull())
-        val isAnnouncementPart = isAnnouncement.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
         // 서버로 데이터 전송
-        sendContentToServer(studyId, titlePart, contentPart, themePart, isAnnouncementPart, imageParts)
+        sendContentToServer(studyId, isAnnouncementPart, themePart, titlePart, contentPart, imageParts)
     }
+
 
     private fun getFileFromUri(uri: Uri): File? {
         val inputStream = requireContext().contentResolver.openInputStream(uri)
@@ -153,18 +157,18 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
 
     private fun sendContentToServer(
         studyId: Int,
+        isAnnouncementPart: RequestBody,
+        themePart: RequestBody,
         titlePart: RequestBody,
         contentPart: RequestBody,
-        themePart: RequestBody,
-        isAnnouncementPart: RequestBody,
         imageParts: List<MultipartBody.Part>
     ) {
         CommunityRetrofitClient.instance.postStudyPost(
             studyId,
+            isAnnouncementPart,
+            themePart,
             titlePart,
             contentPart,
-            themePart,
-            isAnnouncementPart,
             imageParts
         ).enqueue(object : Callback<StudyPostResponse> {
             override fun onResponse(call: Call<StudyPostResponse>, response: Response<StudyPostResponse>) {
@@ -173,6 +177,7 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
                     showLog(writeContentResponseBody.toString())
                     dismiss()
                 } else {
+                    Log.e("API_ERROR", "Error code: ${response.code()}, Message: ${response.errorBody()?.string()}")
                     Toast.makeText(requireContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -182,6 +187,7 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
             }
         })
     }
+
 
     private fun showLog(message: String?) {
         Toast.makeText(requireContext(), "WriteContentFragment: $message", Toast.LENGTH_SHORT).show()

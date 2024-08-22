@@ -54,7 +54,7 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
         binding.contentFilterSp.onItemSelectedListener = this
 
-        fetchBestCommunityContent("자격증", 0, 1, selectedSortBy)
+        fetchBestCommunityContent("자격증", 0, 5, selectedSortBy)
 
         return binding.root
     }

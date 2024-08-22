@@ -52,7 +52,7 @@ class RestFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.contentFilterSp.adapter = adapter
         }
 
-        fetchBestCommunityContent("기타", 0, 1, selectedCategory)
+        fetchBestCommunityContent("기타", 0, 5, selectedCategory)
 
         return binding.root
     }

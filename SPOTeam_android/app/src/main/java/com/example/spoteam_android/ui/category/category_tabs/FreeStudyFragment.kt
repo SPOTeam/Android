@@ -53,7 +53,7 @@ class FreeStudyFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.contentFilterSp.adapter = adapter
         }
 
-        fetchBestCommunityContent("자율학습", 0, 1, selectedCategory)
+        fetchBestCommunityContent("자율학습", 0, 5, selectedCategory)
 
         return binding.root
     }

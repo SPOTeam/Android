@@ -53,7 +53,7 @@ class MajorFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.contentFilterSp.adapter = adapter
         }
 
-        fetchBestCommunityContent("전공및진로학습", 0, 1, selectedSortBy)
+        fetchBestCommunityContent("전공및진로학습", 0, 5, selectedSortBy)
 
         return binding.root
     }

@@ -53,7 +53,7 @@ class LanguageFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.contentFilterSp.adapter = adapter
         }
 
-        fetchBestCommunityContent("어학", 0, 1, selectedCategory)
+        fetchBestCommunityContent("어학", 0, 5, selectedCategory)
 
         return binding.root
     }

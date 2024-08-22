@@ -53,7 +53,7 @@ class JobFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.contentFilterSp.adapter = adapter
         }
 
-        fetchBestCommunityContent("취업", 0, 1, selectedCategory)
+        fetchBestCommunityContent("취업", 0, 5, selectedCategory)
 
         return binding.root
     }
