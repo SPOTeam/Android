@@ -25,6 +25,20 @@ class StudyViewModel : ViewModel() {
     private val _themes = MutableLiveData<List<String>>()
     val themes: LiveData<List<String>> = _themes
 
+    private val _maxPeople = MutableLiveData<Int>()
+    val maxPeople: LiveData<Int> = _maxPeople
+
+    private val _memberCount = MutableLiveData<Int>()
+    val memberCount: LiveData<Int> = _memberCount
+
+    fun setMaxPeople(value: Int) {
+        _maxPeople.value = value
+    }
+
+    fun setMemberCount(value: Int) {
+        _memberCount.value = value
+    }
+
     fun setProfileImageUri(uri: String?) {
         _profileImageUri.value = uri
         updateStudyRequest()
