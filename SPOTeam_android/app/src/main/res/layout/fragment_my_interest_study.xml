@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/spot_logo"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="50dp"
         android:src="@drawable/study_spot_logo"
@@ -20,7 +20,7 @@
         android:id="@+id/ic_alarm_my_interest"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="20dp"
         android:src="@drawable/activity_main_ic_alaram"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ic_find_my_interest" />
@@ -29,6 +29,7 @@
         android:id="@+id/ic_find_my_interest"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginEnd="3dp"
         android:src="@drawable/activity_main_ic_find"
         app:layout_constraintEnd_toStartOf="@+id/ic_alarm_my_interest"
         app:layout_constraintTop_toTopOf="@+id/spot_logo" />
@@ -50,7 +51,7 @@
     <FrameLayout
         android:id="@+id/framelayout01_my_interest"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/tab_indicator"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,38 +62,14 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="start|center"
-            android:layout_marginEnd="150dp"
+            android:layout_marginEnd="220dp"
             app:tabIndicatorColor="#186AFF"
             app:tabIndicatorFullWidth="false"
             app:tabIndicatorHeight="2dp"
-            app:tabSelectedTextColor="#186AFF"
-            app:tabTextColor="@color/black">
+            app:tabSelectedTextColor="#186AFF">
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="전체"
-                android:textColor="@color/black"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="어학"
-                android:textColor="@color/black"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="자격증"
-                android:textColor="@color/black"
-                android:textSize="11sp"
-                android:textStyle="bold" />
 
         </com.google.android.material.tabs.TabLayout>
     </FrameLayout>
@@ -122,6 +99,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/check_amount" />
 
+    <ImageView
+        android:id="@+id/ic_filter_active"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/interest_fragment_study_setcondition_active"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/ic_filter"
+        app:layout_constraintTop_toTopOf="@+id/ic_filter" />
+
     <Spinner
         android:id="@+id/filter_toggle"
         android:layout_width="100dp"
@@ -130,6 +118,7 @@
         android:layout_marginStart="10dp"
         android:background="@drawable/gender_spinner_background"
         android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="@+id/ic_filter"
         app:layout_constraintStart_toEndOf="@+id/ic_filter"
         app:layout_constraintTop_toTopOf="@+id/ic_filter" />
 

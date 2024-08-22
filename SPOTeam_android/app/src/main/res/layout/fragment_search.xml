@@ -33,7 +33,7 @@
 
     <HorizontalScrollView
         android:id="@+id/chipLayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tx_recently_searched_word"
@@ -41,11 +41,15 @@
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:paddingTop="4dp"
-            android:paddingLeft="5dp"
+            android:paddingTop="8dp"
+            android:paddingRight="15dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="10dp"
             app:singleLine="true">
+
+
             </com.google.android.material.chip.ChipGroup>
 
         </HorizontalScrollView>
@@ -58,8 +62,108 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/tx_recently_searched_word"
-        app:layout_constraintTop_toBottomOf="@+id/chipLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/chipLayout" />
 
+    <HorizontalScrollView
+        android:id="@+id/chipLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tx_populared_word"
+        android:scrollbars="none">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:layout_gravity="start|bottom"
+            app:singleSelection="true">
+
+            <!-- Chip 1 -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/study_chip1"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="토익 스피킹"
+                android:textColor="@drawable/chip_text_selector"
+                android:textSize="12sp"
+                app:checkedIconVisible="false"
+                app:chipBackgroundColor="@drawable/chip_background_selector"
+                app:chipStrokeColor="@color/active_blue"
+                app:chipStrokeWidth="1dp" />
+
+            <!-- Chip 2 -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/study_chip2"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="코딩 테스트"
+                android:textColor="@drawable/chip_text_selector"
+                android:textSize="12sp"
+                app:checkedIconVisible="false"
+                app:chipBackgroundColor="@drawable/chip_background_selector"
+                app:chipStrokeColor="@color/active_blue"
+                app:chipStrokeWidth="1dp" />
+
+            <!-- Chip 3 -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/study_chip3"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="컴활"
+                android:textColor="@drawable/chip_text_selector"
+                android:textSize="12sp"
+                app:checkedIconVisible="false"
+                app:chipBackgroundColor="@drawable/chip_background_selector"
+                app:chipStrokeColor="@color/active_blue"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/study_chip4"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="공기업 취뽀"
+                android:textColor="@drawable/chip_text_selector"
+                android:textSize="12sp"
+                app:checkedIconVisible="false"
+                app:chipBackgroundColor="@drawable/chip_background_selector"
+                app:chipStrokeColor="@color/active_blue"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/study_chip5"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="리액트"
+                android:textColor="@drawable/chip_text_selector"
+                android:textSize="12sp"
+                app:checkedIconVisible="false"
+                app:chipBackgroundColor="@drawable/chip_background_selector"
+                app:chipStrokeColor="@color/active_blue"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/study_chip6"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="타입스크립트"
+                android:textColor="@drawable/chip_text_selector"
+                android:textSize="12sp"
+                app:checkedIconVisible="false"
+                app:chipBackgroundColor="@drawable/chip_background_selector"
+                app:chipStrokeColor="@color/active_blue"
+                app:chipStrokeWidth="1dp" />
+        </com.google.android.material.chip.ChipGroup>
+
+    </HorizontalScrollView>
 
     <TextView
         android:id="@+id/tx_recently_viewed_study"
@@ -78,7 +182,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_board"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tx_recently_viewed_study">
@@ -102,8 +206,9 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginTop="10dp"
-        android:paddingBottom="30dp"
+        android:paddingBottom="0dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tx_recommendation_study" />
 
 

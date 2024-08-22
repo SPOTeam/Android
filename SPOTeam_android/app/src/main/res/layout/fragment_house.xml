@@ -287,6 +287,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_board" />
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_board2"
             android:layout_width="match_parent"
@@ -299,6 +300,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tx_recommendation_study"
             tools:listitem="@layout/item_recycler_view"/>
+
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
