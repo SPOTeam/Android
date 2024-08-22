@@ -434,3 +434,22 @@ data class BookmarkItem( //StudyFragment에서 사용
     val imageUrl: String,
     var liked: Boolean
 )
+
+
+data class GalleryResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: GalleryResult
+)
+
+data class GalleryResult(
+    val studyId: Int,
+    val images: List<GalleryItems>
+)
+
+data class GalleryItems(
+    val imageId: Int,
+    val imageUrl: String,
+    val postId: Int
+)

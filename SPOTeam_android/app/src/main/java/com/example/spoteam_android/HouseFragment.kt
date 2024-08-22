@@ -187,7 +187,7 @@ class HouseFragment : Fragment() {
             gender = "UNKNOWN",
             minAge = 18,
             maxAge = 60,
-            isOnline = false,
+            isOnline = true,
             hasFee = false,
             fee = null
         ).enqueue(object : Callback<ApiResponse> {

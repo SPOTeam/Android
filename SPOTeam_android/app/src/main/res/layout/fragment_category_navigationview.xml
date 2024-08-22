@@ -5,7 +5,7 @@
     android:layout_width="142dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="130dp"
+    android:layout_marginTop="80dp"
     android:background="@drawable/category_appbar_btn_up_right">
 
     <TextView
