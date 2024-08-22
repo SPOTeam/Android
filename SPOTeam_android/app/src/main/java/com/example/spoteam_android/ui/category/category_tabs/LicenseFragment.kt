@@ -58,7 +58,6 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.contentFilterSp.adapter = adapter
         }
 
-
         val categoryStudyAdapter = CategoryStudyContentRVAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
         })

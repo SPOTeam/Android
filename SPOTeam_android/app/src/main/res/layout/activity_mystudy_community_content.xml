@@ -112,15 +112,15 @@
 
             <TextView
                 android:id="@+id/community_content_content_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:text="카카오 최종합격했습니다!\n 면접 후기랑 자소서 풀어볼게요\n자소서 문항 :\n 1.지원동기와 성장과정, 문제해결과정을 중심으로 작성하시오"
                 android:textSize="14sp"
                 android:fontFamily="@font/pretendard"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 android:lineSpacingMultiplier="1.5"
-                app:layout_constraintStart_toStartOf="@id/community_content_title_tv"
+                app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
                 app:layout_constraintEnd_toEndOf="@id/community_content_more_iv"
                 app:layout_constraintTop_toBottomOf="@id/community_content_title_tv" />
 
