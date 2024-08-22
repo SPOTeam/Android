@@ -39,8 +39,14 @@ class DetailStudyHomeProfileAdapter(private var profiles: MutableList<ProfileIte
                 .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
                 .into(binding.fragmentDetailStudyHomeHostuserIv)
 
+            val nickname = if (profile.nickname.length == 2) {
+                " ${profile.nickname}"
+            } else {
+                profile.nickname
+            }
 
-            binding.profileNickname.text = profile.nickname
+
+            binding.profileNickname.text = nickname
 
             if (isHost) {
                 binding.fragmentConsiderAttendanceMemberHostIv.visibility = View.VISIBLE

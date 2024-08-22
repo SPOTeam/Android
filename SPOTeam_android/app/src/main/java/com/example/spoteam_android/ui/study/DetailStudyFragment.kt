@@ -116,7 +116,11 @@ class DetailStudyFragment : Fragment() {
                     val studyDetailsResponse = response.body()
                     val studyDetails = studyDetailsResponse?.result
                     if (studyDetails != null) {
+
+                        studyViewModel.setMaxPeople(studyDetails.maxPeople)
+                        studyViewModel.setMemberCount(studyDetails.memberCount)
                         updateUI(studyDetails)
+
                     } else {
                         Toast.makeText(requireContext(), "Received empty response", Toast.LENGTH_SHORT).show()
                     }
@@ -173,6 +177,8 @@ class DetailStudyFragment : Fragment() {
         val displayedThemes = themes.take(3).joinToString("/") // 최대 2개 항목
         val remainingCount = (themes.size - 2).coerceAtLeast(0) // 2개를 초과한 항목 수
         studyViewModel.studyOwner.value = studyDetails.studyOwner.ownerName
+
+
         binding.fragmentDetailStudyChipTv.text = "${displayedThemes}"
 
 //        binding.fragmentDetailStudyChipTv.text = if (remainingCount > 0) {
