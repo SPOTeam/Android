@@ -101,20 +101,20 @@ class StartLoginActivity : AppCompatActivity() {
                                 Log.e("Kakao", "사용자 정보 요청 실패", error)
                             } else if (user != null) {
                                 val nickname = user.kakaoAccount?.profile?.nickname ?: "Unknown"
-                                Log.d("Kakao", "사용자 닉네임: $nickname")
+                                val kakaoProfileImageUrl = user.kakaoAccount?.profile?.profileImageUrl ?: "" // 프로필 이미지 URL 가져오기
 
-                                val sharedPreferences =
-                                    getSharedPreferences("MyPrefs", MODE_PRIVATE)
-                                val randomNickname = sharedPreferences.getString(
-                                    "${userInfo.email}_randomNickname",
-                                    null
-                                )
+                                Log.d("Kakao", "사용자 닉네임: $nickname")
+                                Log.d("Kakao", "카카오 프로필 이미지 URL: $kakaoProfileImageUrl")
+
+                                val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+                                val randomNickname = sharedPreferences.getString("${userInfo.email}_randomNickname", null)
 
                                 with(sharedPreferences.edit()) {
                                     putBoolean("${userInfo.email}_isLoggedIn", true)
                                     putString("${userInfo.email}_accessToken", accessToken)
                                     putInt("${userInfo.email}_memberId", userInfo.memberId)
                                     putString("${userInfo.email}_nickname", nickname)  // 카카오 닉네임 저장
+                                    putString("${userInfo.email}_kakaoProfileImageUrl", kakaoProfileImageUrl) // 카카오 프로필 이미지 URL 저장
                                     putString("currentEmail", userInfo.email)
                                     apply()
                                 }
@@ -123,10 +123,7 @@ class StartLoginActivity : AppCompatActivity() {
                                 val intent = if (randomNickname != null) {
                                     Intent(this@StartLoginActivity, MainActivity::class.java)
                                 } else {
-                                    Intent(
-                                        this@StartLoginActivity,
-                                        CheckListCategoryActivity::class.java
-                                    )
+                                    Intent(this@StartLoginActivity, CheckListCategoryActivity::class.java)
                                 }
 
                                 startActivity(intent)

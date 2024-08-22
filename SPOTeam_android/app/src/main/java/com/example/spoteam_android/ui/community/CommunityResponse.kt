@@ -96,13 +96,13 @@ data class ContentInfo(
     val writer: String,
     val writtenTime : String,
     val scrapCount : Int,
-    val fileUrls : List<String>,
     val title : String,
     val content : String,
     var likeCount : Int,
     val commentCount : Int,
     val viewCount : Int,
     var likedByCurrentUser : Boolean,
+    var scrapedByCurrentUser : Boolean,
     val commentResponses : CommentResponse,
     val reported : Boolean
 )
@@ -201,14 +201,14 @@ data class CategoryStudyDetail (
     val title : String,
     val introduction : String,
     val memberCount : Int,
-    val heartCount : Int,
+    var heartCount : Int,
     val hitNum : Int,
     val maxPeople : Int,
     val studyState : String,
     val themeTypes : List<String>,
     val regions : List<Int>,
     val createdAt : String,
-    val liked : Boolean
+    var liked : Boolean
 )
 
 /************댓글 좋아요 완료***********/
@@ -523,3 +523,96 @@ data class AcceptedAlertStudyInfo(
     val processedAt : String,
     val accept : Boolean
 )
+
+/************내가 신청한 스터디 수락 알림 처리 결과***********/
+data class NotificationStateResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: NotificationStateInfo
+)
+
+data class NotificationStateInfo(
+    val processedAt : String,
+    val accept : Boolean
+)
+
+/************내가 진행중인 스터디***********/
+data class MemberOnStudiesResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: MemberOnStudiesInfo
+)
+
+data class MemberOnStudiesInfo(
+    val totalPages : Int,
+    val totalElements : Int,
+    val first : Boolean,
+    val last : Boolean,
+    val size : Int,
+    val content : List<MyRecruitingStudyDetail>,
+    val number : Int
+)
+
+/************내가 참여신청한 스터디***********/
+data class MemberAppliedStudiesResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: MemberAppliedStudiesInfo
+)
+
+data class MemberAppliedStudiesInfo(
+    val totalPages : Int,
+    val totalElements : Int,
+    val first : Boolean,
+    val last : Boolean,
+    val size : Int,
+    val content : List<MyRecruitingStudyDetail>,
+    val number : Int
+)
+
+/************스터디 게시글 좋아요 완료***********/
+data class StudyContentLikeResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: StudyContentLikeInfo
+)
+
+data class StudyContentLikeInfo (
+    val postId : Int,
+    val title : String,
+    val likeNum : Int
+)
+
+/************스터디 게시글 좋아요 취소***********/
+data class StudyContentUnLikeResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: StudyContentUnLikeInfo
+)
+
+data class StudyContentUnLikeInfo (
+    val postId : Int,
+    val title : String,
+    val likeNum : Int
+)
+
+/************스터디 게시글 댓글 작성 완료***********/
+data class WriteStudyCommentResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: WriteStudyCommentInfo
+)
+
+data class WriteStudyCommentInfo (
+    val isAnonymous : Boolean,
+    val content : String
+)
+
+
+

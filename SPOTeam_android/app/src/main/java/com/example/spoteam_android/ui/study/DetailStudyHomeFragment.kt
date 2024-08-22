@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,7 +47,6 @@ class DetailStudyHomeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentDetailStudyHomeBinding.inflate(inflater, container, false)
-
 
         setupViews()
 
@@ -93,11 +93,9 @@ class DetailStudyHomeFragment : Fragment() {
         val email = sharedPreferences.getString("currentEmail", null)
         val kakaoNickname = sharedPreferences.getString("${email}_nickname", null)
 
-
         api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
             override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
                 if (response.isSuccessful) {
-                    Log.d("DSHomeFragment", "$response")
                     response.body()?.let { memberResponse ->
                         val members = memberResponse.result?.members ?: emptyList()
                         profileAdapter.updateList(members.map {
@@ -108,12 +106,29 @@ class DetailStudyHomeFragment : Fragment() {
                         val nicknames = members.map { it.nickname }
                         val isNicknameFound = kakaoNickname?.let { nicknames.contains(it) } ?: false
 
-                        // 닉네임이 리스트에 없으면 버튼을 보이게, 있으면 숨기기
-                        binding.fragmentDetailStudyHomeRegisterBt.visibility = if (isNicknameFound) {
+                        // maxPeople과 memberCount 값을 가져오기 위해 ViewModel을 옵저빙
+                        val maxPeople = studyViewModel.maxPeople.value
+                        val memberCount = studyViewModel.memberCount.value
+
+                        // 닉네임이 리스트에 있거나, memberCount와 maxPeople이 일치하면 버튼을 숨김
+                        val shouldHideButton = isNicknameFound || (maxPeople != null && memberCount != null && memberCount >= maxPeople)
+
+                        binding.fragmentDetailStudyHomeRegisterBt.visibility = if (shouldHideButton) {
                             View.GONE
                         } else {
                             View.VISIBLE
                         }
+
+                        // RecyclerView의 제약 조건 설정
+                        val layoutParams = binding.fragmentDetailStudyHomeProfileRv.layoutParams as ConstraintLayout.LayoutParams
+                        if (binding.fragmentDetailStudyHomeRegisterBt.visibility == View.GONE) {
+                            layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                            layoutParams.bottomToTop = ConstraintLayout.LayoutParams.UNSET
+                        } else {
+                            layoutParams.bottomToTop = R.id.fragment_detail_study_home_register_bt
+                            layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.UNSET
+                        }
+                        binding.fragmentDetailStudyHomeProfileRv.layoutParams = layoutParams
                     }
                 } else {
                     Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
@@ -154,8 +169,6 @@ class DetailStudyHomeFragment : Fragment() {
         }
     }
 
-
-
     private fun fetchStudySchedules(studyId: Int) {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
@@ -169,19 +182,28 @@ class DetailStudyHomeFragment : Fragment() {
                         // Schedules가 없을 때
                         binding.fragmentDetailStudyHomeScheduleRv.visibility = View.GONE
                     } else {
-                        // Schedules가 있을 때
-                        binding.fragmentDetailStudyHomeScheduleRv.visibility = View.VISIBLE
-
-                        val scheduleItems = schedules.map { schedule ->
-                            SceduleItem(
-                                dday = calculateDday(schedule.staredAt),
-                                day = formatDate(schedule.staredAt),
-                                scheduleContent = schedule.title,
-                                concreteTime = formatTime(schedule.staredAt),
-                                place = schedule.location
-                            )
+                        // 현재 날짜 이후의 일정만 필터링
+                        val validSchedules = schedules.filter { schedule ->
+                            val scheduleDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(schedule.staredAt)
+                            scheduleDate?.after(Calendar.getInstance().time) ?: false
                         }
-                        scheduleAdapter.updateList(ArrayList(scheduleItems))
+
+                        if (validSchedules.isEmpty()) {
+                            binding.fragmentDetailStudyHomeScheduleRv.visibility = View.GONE
+                        } else {
+                            binding.fragmentDetailStudyHomeScheduleRv.visibility = View.VISIBLE
+
+                            val scheduleItems = validSchedules.map { schedule ->
+                                SceduleItem(
+                                    dday = calculateDday(schedule.staredAt),
+                                    day = formatDate(schedule.staredAt),
+                                    scheduleContent = schedule.title,
+                                    concreteTime = formatTime(schedule.staredAt),
+                                    place = schedule.location
+                                )
+                            }
+                            scheduleAdapter.updateList(ArrayList(scheduleItems))
+                        }
                     }
                 } else {
                     // 응답이 실패한 경우
@@ -195,7 +217,6 @@ class DetailStudyHomeFragment : Fragment() {
             }
         })
     }
-
 
     private fun fetchRecentAnnounce(studyId: Int) {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
@@ -221,9 +242,6 @@ class DetailStudyHomeFragment : Fragment() {
             }
         })
     }
-
-
-
 
     // Null 체크를 추가한 D-day 변경 로직
     private fun calculateDday(staredAt: String?): String {
@@ -262,7 +280,6 @@ class DetailStudyHomeFragment : Fragment() {
             "D+${-daysLeft}"
         }
     }
-
 
     // Null 체크를 추가한 날짜 변경 로직
     private fun formatDate(startedAt: String?): String {
