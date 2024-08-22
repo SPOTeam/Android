@@ -57,6 +57,24 @@ interface RecommendStudyApiService{
     ): Call<ApiResponse>
 }
 
+interface RecruitingStudyApiService{
+    @GET("/spot/search/studies/recruiting")
+    fun GetRecruitingStudy(
+        @Header("Authorization") authToken: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sortBy") sortBy: String,
+        @Query("gender") gender: String?,
+        @Query("minAge") minAge: Int?,
+        @Query("maxAge") maxAge: Int?,
+        @Query("isOnline") isOnline: Boolean?,
+        @Query("hasFee") hasFee: Boolean?,
+        @Query("fee") fee: Int?
+    ): Call<ApiResponse>
+}
+
+
+
 
 
 

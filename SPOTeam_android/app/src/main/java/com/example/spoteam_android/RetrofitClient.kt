@@ -4,6 +4,7 @@ import com.example.spoteam_android.ui.interestarea.GetMemberInterestAreaApiServi
 import com.example.spoteam_android.ui.interestarea.InterestAreaApiService
 import com.example.spoteam_android.ui.interestarea.InterestSpecificAreaApiService
 import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
+import com.example.spoteam_android.ui.interestarea.RecruitingStudyApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,9 +13,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
     private const val BASE_URL = "https://www.teamspot.site/"  // 실제 API의 베이스 URL
 
-
-
     private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDIyOTMyMywiZXhwIjoxNzI0MzE1NzIzfQ.90lF9GyRLvUR0st3FtNrdk099LEzgq3ot7Cm4ewUAy4"
+
 
     fun getAuthToken(): String {
         return "Bearer $authToken"
@@ -52,6 +52,10 @@ object RetrofitClient {
 
     val SSService: SearchApiService by lazy{
         instance.create(SearchApiService::class.java)
+    }
+
+    val RSService: RecruitingStudyApiService by lazy {
+        instance.create(RecruitingStudyApiService::class.java)
     }
 
 
