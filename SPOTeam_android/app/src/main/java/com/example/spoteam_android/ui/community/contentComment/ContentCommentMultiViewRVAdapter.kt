@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemContentCommentBinding
 import com.example.spoteam_android.databinding.ItemContentCommentReplyBinding
@@ -61,9 +62,20 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
 
     inner class CommentViewHolder(private val binding : ItemContentCommentBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CommentsInfo) {
-            binding.communityContentCommentWriterTv.text = item.writer
             binding.communityContentCommentStrTv.text = item.commentContent
             binding.communityContentCommentGoodNumTv.text = item.likeCount.toString()
+
+            if(item.anonymous) {
+                binding.communityContentCommentWriterTv.text = "익명"
+                Glide.with(binding.root.context)
+                    .load(R.drawable.fragment_calendar_spot_logo)
+                    .into(binding.communityContentCommentProfileIv)
+            } else {
+                binding.communityContentCommentWriterTv.text = item.writer
+                Glide.with(binding.root.context)
+                    .load(item.profileImage)
+                    .into(binding.communityContentCommentProfileIv)
+            }
 
             if (item.likedByCurrentUser) {
                 binding.communityContentCommentGoodCheckedIv.visibility = View.VISIBLE
@@ -111,9 +123,20 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
 
     inner class ReplyCommentViewHolder(private val binding : ItemContentCommentReplyBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CommentsInfo) {
-            binding.communityContentCommentReplyWriterTv.text = item.writer
             binding.communityContentCommentReplyStrTv.text = item.commentContent
             binding.communityContentCommentReplyGoodNumTv.text = item.likeCount.toString()
+
+            if(item.anonymous) {
+                binding.communityContentCommentReplyWriterTv.text = "익명"
+                Glide.with(binding.root.context)
+                    .load(R.drawable.fragment_calendar_spot_logo)
+                    .into(binding.communityContentCommentReplyProfileIv)
+            } else {
+                binding.communityContentCommentReplyWriterTv.text = item.writer
+                Glide.with(binding.root.context)
+                    .load(item.profileImage)
+                    .into(binding.communityContentCommentReplyProfileIv)
+            }
 
             if(item.likedByCurrentUser) {
                 binding.communityContentCommentReplyGoodCheckedIv.visibility = View.VISIBLE

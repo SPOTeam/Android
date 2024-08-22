@@ -441,6 +441,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         binding.communityContentContentNumTv.text = contentInfo.commentNum.toString()
         binding.communityContentViewNumTv.text = contentInfo.hitNum.toString()
 
+
+
         if(!contentInfo.studyPostImages.isEmpty()) {
             Glide.with(binding.root.context)
                 .load(contentInfo.studyPostImages[0].imageUrl)

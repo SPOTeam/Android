@@ -29,7 +29,7 @@ class MyStudyCommunityFragment : Fragment() {
     private lateinit var binding: FragmentMystudyCommunityBinding
     private var currentStudyId : Int = -1
     private var offset : Int = 0
-    private var limit : Int = 5
+    private var limit : Int = 30
     private var themeQuery : String = ""
     private val studyViewModel: StudyViewModel by activityViewModels()
 
