@@ -42,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="익명"
+            android:fontFamily="@font/pretendard"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -53,6 +54,7 @@
         android:textAlignment="center"
         android:text="카카오 최종합격"
         android:textSize="14sp"
+        android:fontFamily="@font/pretendard"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
         android:textColor="@color/black"
@@ -66,6 +68,7 @@
         android:layout_height="20dp"
         android:textAlignment="center"
         android:text="답글쓰기"
+        android:fontFamily="@font/pretendard"
         android:textSize="12sp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="@id/community_content_comment_reply_str_tv"
@@ -129,6 +132,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:text="6"
+            android:fontFamily="@font/pretendard"
             android:textSize="12sp"
             android:textColor="@color/active_blue"/>
     </LinearLayout>

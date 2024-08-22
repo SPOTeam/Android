@@ -7,10 +7,11 @@
 
     <ImageView
         android:id="@+id/community_prev_iv"
-        android:layout_width="40dp"
-        android:layout_height="45dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/navigate_before_3x"
         android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,9 +21,9 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="알림"
-        android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
         android:textColor="@color/black"
-        android:textSize="25sp"
+        android:textSize="18sp"
         android:layout_marginStart="30dp"
         app:layout_constraintStart_toEndOf="@id/community_prev_iv"
         app:layout_constraintTop_toTopOf="@id/community_prev_iv" />
@@ -63,6 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="신청 스터디"
+            android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="18sp"
@@ -74,6 +76,7 @@
             android:id="@+id/alert_study_content_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard"
             android:text= "신청 스터디의 수락 알람입니다.\n 클릭하여 스터디 참여를 확인해주세요"
             android:layout_marginTop="14dp"
             app:layout_constraintStart_toStartOf="@id/alert_study_tv"

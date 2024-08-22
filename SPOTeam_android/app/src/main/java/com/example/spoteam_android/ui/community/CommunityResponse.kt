@@ -206,7 +206,7 @@ data class CategoryStudyDetail (
     val maxPeople : Int,
     val studyState : String,
     val themeTypes : List<String>,
-    val regions : List<Int>,
+    val regions : List<String>,
     val createdAt : String,
     var liked : Boolean
 )

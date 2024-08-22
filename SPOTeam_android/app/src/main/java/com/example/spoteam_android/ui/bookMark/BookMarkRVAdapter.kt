@@ -24,7 +24,6 @@ class BookMarkRVAdapter(
 
     override fun onBindViewHolder(holder: BookmarkViewHolder, position: Int) {
         val currentItem = bookmarkitemList[position]
-        Log.d("BookMarkRVAdapter", "onBindViewHolder: Position: $position, Item: $currentItem")
         holder.bind(currentItem)
 
         holder.itemView.setOnClickListener {
@@ -37,7 +36,6 @@ class BookMarkRVAdapter(
     }
 
     override fun getItemCount(): Int {
-        Log.d("BookMarkRVAdapter", "ItemCount: ${bookmarkitemList.size}")
         return bookmarkitemList.size
     }
 
