@@ -43,7 +43,6 @@ class DetailStudyFragment : Fragment() {
         Log.d("OKBUNDLE", OkDialogStudyId.toString())
 
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
-            Log.d("DetailFragment", "Received studyId from ViewModel: $studyId")
             fetchStudyDetails(studyId)
         }
 
@@ -107,7 +106,6 @@ class DetailStudyFragment : Fragment() {
 
 
     private fun fetchStudyDetails(studyId: Int) {
-        Log.d("DetailStudyFragment","fetchStudyDetails() 호출")
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
         api.getStudyDetails(studyId).enqueue(object : Callback<StudyDetailsResponse> {

@@ -96,7 +96,7 @@ class CommunityHomeFragment : Fragment() {
                         val communityResponse = response.body()
                         if (communityResponse?.isSuccess == "true") {
                             val contentList = communityResponse.result?.postBest5Responses
-                            Log.d("BestCommunity", "items: $contentList")
+//                            Log.d("BestCommunity", "items: $contentList")
                             if (contentList != null) {
                                 initBestRecyclerview(contentList)
                             }
@@ -126,7 +126,7 @@ class CommunityHomeFragment : Fragment() {
                         val announcementResponse = response.body()
                         if (announcementResponse?.isSuccess == "true") {
                             val announcementList = announcementResponse.result?.responses
-                            Log.d("Announcement", "items: $announcementList")
+//                            Log.d("Announcement", "items: $announcementList")
                             if (announcementList != null) {
                                 initAnnouncementRecyclerview(announcementList)
                             }
@@ -156,7 +156,7 @@ class CommunityHomeFragment : Fragment() {
                         val representativeResponse = response.body()
                         if (representativeResponse?.isSuccess == "true") {
                             val representativeList = representativeResponse.result?.responses
-                            Log.d("Representative", "items: $representativeList")
+//                            Log.d("Representative", "items: $representativeList")
                             if (representativeList != null) {
                                 initRepresentativeRecyclerview(representativeList)
                             }

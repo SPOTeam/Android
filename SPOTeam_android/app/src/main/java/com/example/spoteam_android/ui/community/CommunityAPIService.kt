@@ -92,10 +92,10 @@ interface CommunityAPIService {
     fun postStudyPost(
         @Path("studyId") studyId: Int,
         @Part("isAnnouncement") isAnnouncementPart: RequestBody,
+        @Part("theme") themePart: RequestBody,
         @Part("title") titlePart: RequestBody,
         @Part("content") contentPart: RequestBody,
-        @Part("theme") themePart: RequestBody,
-        @Part imagePart: List<MultipartBody.Part>
+        @Part images: List<MultipartBody.Part> // 여기에 `images`라는 이름을 사용해야 합니다.
     ): Call<StudyPostResponse>
 
     @GET("/spot/studies/{studyId}/posts")

@@ -16,6 +16,7 @@ data class CommunityContentInfo(
 )
 
 data class ContentDetailInfo(
+    val postId : Int,
     val rank: Int,
     val postTitle: String,
     val commentCount: Int
@@ -94,6 +95,8 @@ data class ContentResponse(
 data class ContentInfo(
     val type : String,
     val writer: String,
+    val anonymous: Boolean,
+    val profileImage : String,
     val writtenTime : String,
     val scrapCount : Int,
     val title : String,
@@ -116,6 +119,8 @@ data class CommentsInfo(
     val commentContent : String,
     val parentCommentId : Int,
     val writer : String,
+    val anonymous: Boolean,
+    val profileImage : String,
     val writtenTime : String,
     var likeCount : Int,
     var likedByCurrentUser : Boolean,
@@ -206,7 +211,7 @@ data class CategoryStudyDetail (
     val maxPeople : Int,
     val studyState : String,
     val themeTypes : List<String>,
-    val regions : List<Int>,
+    val regions : List<String>,
     val createdAt : String,
     var liked : Boolean
 )
@@ -315,7 +320,7 @@ data class StudyPostContentResponse(
 )
 
 data class StudyPostContentInfo (
-    val memberId : Int,
+    val member : MemberInfo,
     val postId : Int,
     val title : String,
     val content : String,
@@ -613,6 +618,8 @@ data class WriteStudyCommentInfo (
     val isAnonymous : Boolean,
     val content : String
 )
+
+
 
 
 

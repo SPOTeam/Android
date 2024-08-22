@@ -38,7 +38,7 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
 
         // 현재 로그인된 사용자 정보를 로그
         val memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
-        Log.d("SharedPreferences", "MemberId: $memberId")
+//        Log.d("SharedPreferences", "MemberId: $memberId")
 
         binding.categorySpinner.onItemSelectedListener = this
 
@@ -53,6 +53,10 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.categorySpinner.adapter = adapter
+        }
+
+        binding.writeContentPrevIv.setOnClickListener{
+            dismiss()
         }
 
         return binding.root

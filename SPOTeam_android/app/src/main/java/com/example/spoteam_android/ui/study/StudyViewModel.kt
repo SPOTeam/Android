@@ -59,6 +59,7 @@ class StudyViewModel : ViewModel() {
     }
 
 
+
     fun setStudyData(
         title: String, goal: String, introduction: String, isOnline: Boolean, profileImage: String?,
         regions: List<String>?, maxPeople: Int, gender: Gender, minAge: Int, maxAge: Int, fee: Int

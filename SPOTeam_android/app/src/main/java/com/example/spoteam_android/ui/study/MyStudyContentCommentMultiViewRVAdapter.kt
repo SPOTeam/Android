@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.text2.input.TextFieldLineLimits
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemContentCommentBinding
 import com.example.spoteam_android.databinding.ItemContentCommentReplyBinding
@@ -100,6 +101,10 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
             binding.communityContentCommentStrTv.text = item.content
             binding.communityContentCommentGoodNumTv.text = item.likeCount.toString()
 
+            Glide.with(binding.root.context)
+                .load(item.member.profileImage)
+                .into(binding.communityContentCommentProfileIv)
+
             if (item.isLiked == "LIKED") {
                 binding.communityContentCommentGoodCheckedIv.visibility = View.VISIBLE
                 binding.communityContentCommentGoodUncheckedIv.visibility = View.GONE
@@ -152,6 +157,10 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
             binding.communityContentCommentReplyWriterTv.text = item.member.name
             binding.communityContentCommentReplyStrTv.text = item.content
             binding.communityContentCommentReplyGoodNumTv.text = item.likeCount.toString()
+
+            Glide.with(binding.root.context)
+                .load(item.member.profileImage)
+                .into(binding.communityContentCommentReplyProfileIv)
 
             if (item.isLiked == "LIKED") {
                 binding.communityContentCommentReplyGoodCheckedIv.visibility = View.VISIBLE

@@ -16,7 +16,7 @@ import com.example.spoteam_android.databinding.ActivityMystudyCommunityContentBi
 import com.example.spoteam_android.ui.community.CommunityRetrofitClient
 import com.example.spoteam_android.ui.community.DisLikeCommentResponse
 import com.example.spoteam_android.ui.community.LikeCommentResponse
-import com.example.spoteam_android.ui.community.ReportContentFragment
+import com.example.spoteam_android.ui.community.ReportContentDialog
 import com.example.spoteam_android.ui.community.StudyContentLikeResponse
 import com.example.spoteam_android.ui.community.StudyContentUnLikeResponse
 import com.example.spoteam_android.ui.community.StudyPostContentCommentDetail
@@ -167,6 +167,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         Log.d("MyStudyWriteComment", "${response.body()!!.result}")
                         binding.writeCommentContentEt.text.clear()
                         binding.writeCommentContentEt.clearFocus()
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(binding.writeCommentContentEt.windowToken, 0)
                         resetAdapterState()
                         fetchContentInfo()
                     } else {
@@ -230,7 +232,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         val popupMenu = PopupMenu(view.context, view)
         val inflater: MenuInflater = popupMenu.menuInflater
 //        val exit = ExitStudyPopupFragment(view.context)
-        val report = ReportContentFragment(view.context)
+        val report = ReportContentDialog(view.context)
         val fragmentManager = (view.context as AppCompatActivity).supportFragmentManager
         inflater.inflate(R.menu.menu_community_home_options, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { menuItem ->
@@ -262,6 +264,11 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         if (postContentResponse?.isSuccess == "true") {
                             val postContent = postContentResponse.result
                             Log.d("MyStudyContent", "response: ${postContent}")
+                            if(postContent.studyPostImages.isEmpty()) {
+                                binding.communityContentImageIv.visibility = View.GONE
+                            } else {
+                                binding.communityContentImageIv.visibility = View.VISIBLE
+                            }
                             initContentInfo(postContent)
                             fetchContentCommentInfo()
                         } else {
@@ -427,6 +434,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
 //        initialIsliked = contentInfo.isLiked
 //        initialIsLikedNum = contentInfo.likeNum
 
+        binding.communityContentWriterTv.text = contentInfo.member.name
         binding.communityContentDateTv.text = formatWrittenTime(contentInfo.createdAt)
         binding.communityContentTitleTv.text = contentInfo.title
         binding.communityContentContentTv.text = contentInfo.content
@@ -435,8 +443,15 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         binding.communityContentViewNumTv.text = contentInfo.hitNum.toString()
 
         Glide.with(binding.root.context)
-            .load(contentInfo.studyPostImages)
-            .into(binding.communityContentImageIv)
+            .load(contentInfo.member.profileImage)
+            .into(binding.communityContentProfileIv)
+
+
+        if(!contentInfo.studyPostImages.isEmpty()) {
+            Glide.with(binding.root.context)
+                .load(contentInfo.studyPostImages[0].imageUrl)
+                .into(binding.communityContentImageIv)
+        }
 
         if(contentInfo.isLiked) {
             binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE

@@ -30,18 +30,23 @@ import retrofit2.Response
 
 class MajorFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
-    lateinit var binding: FragmentCategoryStudyContentBinding
-    private var selectedSortBy: String = "ALL"
-    private lateinit var studyApiService: StudyApiService
+    private lateinit var binding: FragmentCategoryStudyContentBinding
     private val studyViewModel: StudyViewModel by activityViewModels()
+    private lateinit var studyApiService: StudyApiService
+
+    private var currentPage = 0
+    private val size = 4 // 페이지당 항목 수
+    private var totalPages = 0
+    private var isLoading = false
+    private var selectedSortBy: String = "ALL"
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCategoryStudyContentBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
         binding.contentFilterSp.onItemSelectedListener = this
 
         ArrayAdapter.createFromResource(
@@ -53,12 +58,54 @@ class MajorFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.contentFilterSp.adapter = adapter
         }
 
-        fetchBestCommunityContent("전공및진로학습", 0, 1, selectedSortBy)
+        val categoryStudyAdapter = CategoryStudyContentRVAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
+            toggleLikeStatus(selectedItem, likeButton)
+        })
+
+        binding.communityCategoryContentRv.adapter = categoryStudyAdapter
+
+        categoryStudyAdapter.setItemClickListener(object : CategoryStudyContentRVAdapter.OnItemClickListener {
+            override fun onItemClick(data: CategoryStudyDetail) {
+                // DetailStudyFragment로 이동
+                studyViewModel.setStudyData(data.studyId, data.imageUrl, data.introduction)
+
+                val detailStudyFragment = DetailStudyFragment()
+                (activity as? MainActivity)?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_frm, detailStudyFragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
+            }
+        })
+        binding.communityCategoryContentRv.adapter = categoryStudyAdapter
+        binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(requireContext())
+
+
+        setupPageNavigationButtons()
+
+        fetchBestCommunityContent("전공및진로학습", currentPage, size, selectedSortBy)
 
         return binding.root
     }
 
+
+    private fun setupPageNavigationButtons() {
+        binding.previousPage.setOnClickListener {
+            if (currentPage > 0) {
+                currentPage--
+                fetchBestCommunityContent("전공및진로학습", currentPage, size, selectedSortBy)
+            }
+        }
+
+        binding.nextPage.setOnClickListener {
+            if (currentPage < totalPages - 1) {
+                currentPage++
+                fetchBestCommunityContent("전공및진로학습", currentPage, size, selectedSortBy)
+            }
+        }
+    }
+
     private fun fetchBestCommunityContent(theme: String, page: Int, size: Int, sortBy: String) {
+        isLoading = true
         CommunityRetrofitClient.instance.getCategoryStudy(theme, page, size, sortBy)
             .enqueue(object : Callback<CategoryStudyResponse> {
                 override fun onResponse(
@@ -66,59 +113,88 @@ class MajorFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     response: Response<CategoryStudyResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val categoryStudyResponse = response.body()
-                        if (categoryStudyResponse?.isSuccess == "true") {
-                            val contentList = categoryStudyResponse.result?.content
-                            Log.d("MajorFragment", "items: $contentList")
-                            if (contentList != null) {
-                                binding.contentCountTv.text = categoryStudyResponse.result.totalElements.toString()
-                                binding.emptyTv.visibility = View.GONE
-                                initRecyclerview(contentList)
+                        response.body()?.let { categoryStudyResponse ->
+                            if (categoryStudyResponse.isSuccess == "true") {
+                                val contentList = categoryStudyResponse.result?.content ?: emptyList()
+                                totalPages = categoryStudyResponse.result.totalPages
+
+                                val totalElements = categoryStudyResponse.result.totalElements
+                                binding.contentCountTv.text = totalElements.toString()
+
+                                if (contentList.isNotEmpty()) {
+                                    updateRecyclerView(contentList)
+                                    binding.emptyTv.visibility = View.GONE
+                                } else if (currentPage == 0) {
+                                    binding.emptyTv.visibility = View.VISIBLE
+                                }
+
+                                updatePageNumberUI()
                             }
-                        } else {
-                            binding.emptyTv.visibility = View.VISIBLE
                         }
                     } else {
                         showLog(response.code().toString())
                     }
+                    isLoading = false
                 }
 
                 override fun onFailure(call: Call<CategoryStudyResponse>, t: Throwable) {
-                    Log.e("MajorFragment", "Failure: ${t.message}", t)
+                    showLog(t.message)
+                    isLoading = false
                 }
             })
     }
 
+    private fun updateRecyclerView(contentList: List<CategoryStudyDetail>) {
+        // 어댑터가 초기화되지 않은 경우 초기화
+        if (binding.communityCategoryContentRv.adapter == null) {
+            val categoryStudyAdapter = CategoryStudyContentRVAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
+                toggleLikeStatus(selectedItem, likeButton)
+            })
+            binding.communityCategoryContentRv.adapter = categoryStudyAdapter
+            binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        // 어댑터가 이미 존재하는 경우 데이터를 추가
+        val adapter = binding.communityCategoryContentRv.adapter as CategoryStudyContentRVAdapter
+        adapter.updateList(contentList)
+    }
+
+
+    private fun updatePageNumberUI() {
+        binding.currentPage.text = (currentPage + 1).toString()
+
+        binding.previousPage.isEnabled = currentPage > 0
+        binding.previousPage.setTextColor(resources.getColor(
+            if (currentPage > 0) R.color.active_color else R.color.disabled_color,
+            null
+        ))
+
+        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        binding.nextPage.setTextColor(resources.getColor(
+            if (currentPage < totalPages - 1) R.color.active_color else R.color.disabled_color,
+            null
+        ))
+    }
+
     private fun showLog(message: String?) {
-        Toast.makeText(requireContext(), "MajorFragment: $message", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "DiscussionFragment: $message", Toast.LENGTH_SHORT).show()
     }
 
-    private fun initRecyclerview(contentList: List<CategoryStudyDetail>) {
-        binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-        // contentList를 ArrayList로 변환
-        val dataRVAdapter = CategoryStudyContentRVAdapter(ArrayList(contentList), onLikeClick = { selectedItem, likeButton ->
-            toggleLikeStatus(selectedItem, likeButton)
-        })
-
-        binding.communityCategoryContentRv.adapter = dataRVAdapter
-
-        dataRVAdapter.setItemClickListener(object : CategoryStudyContentRVAdapter.OnItemClickListener {
-            override fun onItemClick(data: CategoryStudyDetail) {
-                // DetailStudyFragment로 이동
-                studyViewModel.setStudyData(data.studyId, data.imageUrl, data.introduction)
-
-                val detailStudyFragment = DetailStudyFragment()
-                parentFragmentManager.beginTransaction()
-                (activity as? MainActivity)?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.main_frm, detailStudyFragment)
-                    ?.addToBackStack(null)
-                    ?.commit()
-            }
-        })
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        val selectedItem = parent?.getItemAtPosition(position).toString()
+        selectedSortBy = when (selectedItem) {
+            "전체" -> "ALL"
+            "모집중" -> "RECRUITING"
+            "모집완료" -> "COMPLETED"
+            "조회수순" -> "HIT"
+            "관심순" -> "LIKED"
+            else -> "ALL"
+        }
+        currentPage = 0
+        fetchBestCommunityContent("전공및진로학습", currentPage, size, selectedSortBy)
     }
 
-    fun toggleLikeStatus(studyItem: CategoryStudyDetail, likeButton: ImageView) {
+    private fun toggleLikeStatus(studyItem: CategoryStudyDetail, likeButton: ImageView) {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val memberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
 
@@ -158,21 +234,8 @@ class MajorFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val selectedItem = parent?.getItemAtPosition(position).toString()
-        selectedSortBy = when (selectedItem) {
-            "전체" -> "ALL"
-            "모집중" -> "RECRUITING"
-            "모집완료" -> "COMPLETED"
-            "조회수순" -> "HIT"
-            "관심순" -> "LIKED"
-            else -> "ALL"
-        }
-        fetchBestCommunityContent("전공및진로학습", 0, 1, selectedSortBy)
-    }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         selectedSortBy = "ALL"
     }
-
 }

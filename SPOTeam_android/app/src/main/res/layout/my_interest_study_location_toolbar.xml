@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="검색조건설정"
+            android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/ic_back"

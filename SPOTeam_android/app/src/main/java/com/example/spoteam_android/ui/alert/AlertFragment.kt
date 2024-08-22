@@ -26,7 +26,7 @@ class AlertFragment : Fragment() {
 
     private lateinit var binding: FragmentAlertBinding
     private var page : Int = 0
-    private var size : Int = 10
+    private var size : Int = 100
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,12 +59,12 @@ class AlertFragment : Fragment() {
                     call: Call<AlertResponse>,
                     response: Response<AlertResponse>
                 ) {
-                    Log.d("MyAlert", "response: ${response.isSuccessful}")
+//                    Log.d("MyAlert", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val alertResponse = response.body()
-                        Log.d("MyAlert", "responseBody: ${alertResponse?.isSuccess}")
+//                        Log.d("MyAlert", "responseBody: ${alertResponse?.isSuccess}")
                         if (alertResponse?.isSuccess == "true") {
-                            Log.d("MyAlert", "responseBody: ${alertResponse?.result?.notifications}")
+//                            Log.d("MyAlert", "responseBody: ${alertResponse?.result?.notifications}")
                             val alertInfo = alertResponse.result.notifications
                             initMultiViewRecyclerView(alertInfo)
                         } else {
@@ -88,13 +88,13 @@ class AlertFragment : Fragment() {
                     call: Call<AlertStudyResponse>,
                     response: Response<AlertStudyResponse>
                 ) {
-                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
+//                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val studyAlertResponse = response.body()
-                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
+//                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
                         if (studyAlertResponse?.isSuccess == "true") {
 
-                            Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.result?.notifications}")
+//                            Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.result?.notifications}")
                             binding.studyAlertCl.visibility = View.VISIBLE
 
                         } else {
@@ -119,7 +119,9 @@ class AlertFragment : Fragment() {
     private fun initMultiViewRecyclerView(alertInfo: List<AlertDetail>) {
         binding.alertContentRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        val dataRVAdapter = AlertMultiViewRVAdapter(alertInfo)
+        val reversedAlertInfo = alertInfo.reversed()
+
+        val dataRVAdapter = AlertMultiViewRVAdapter(reversedAlertInfo)
 
         binding.alertContentRv.adapter = dataRVAdapter
 
@@ -137,12 +139,12 @@ class AlertFragment : Fragment() {
                     call: Call<NotificationStateResponse>,
                     response: Response<NotificationStateResponse>
                 ) {
-                    Log.d("AlertStateUpdate", "response: ${response.isSuccessful}")
+//                    Log.d("AlertStateUpdate", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val studyAlertResponse = response.body()
-                        Log.d("AlertStateUpdate", "responseBody: ${studyAlertResponse?.isSuccess}")
+//                        Log.d("AlertStateUpdate", "responseBody: ${studyAlertResponse?.isSuccess}")
                         if (studyAlertResponse?.isSuccess == "true") {
-                            Log.d("AlertStateUpdate", "responseBody: ${studyAlertResponse?.result}")
+//                            Log.d("AlertStateUpdate", "responseBody: ${studyAlertResponse?.result}")
                             fetchAlert()
                         }
                     } else {

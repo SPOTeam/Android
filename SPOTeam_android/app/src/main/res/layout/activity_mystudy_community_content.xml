@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="게시판"
+        android:fontFamily="@font/pretendard"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="16sp"
@@ -52,15 +53,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <!--    프로필 이미지 변경    -->
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/community_content_profile_iv"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_profile"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
+                android:background="@color/white"
+                android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut" />
+
+            <TextView
+                android:id="@+id/community_content_writer_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="익명"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@id/community_content_profile_iv"
+                app:layout_constraintTop_toTopOf="@id/community_content_profile_iv" />
 
             <TextView
                 android:id="@+id/community_content_date_tv"
@@ -69,7 +83,6 @@
                 android:textAlignment="center"
                 android:text="2024.05.31 17:31"
                 android:textSize="14sp"
-                android:layout_marginTop="5dp"
                 app:layout_constraintStart_toEndOf="@id/community_content_profile_iv"
                 app:layout_constraintBottom_toBottomOf="@id/community_content_profile_iv" />
 
@@ -101,6 +114,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:text="카카오 최종합격"
+                android:fontFamily="@font/pretendard"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
@@ -110,14 +124,15 @@
 
             <TextView
                 android:id="@+id/community_content_content_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:text="카카오 최종합격했습니다!\n 면접 후기랑 자소서 풀어볼게요\n자소서 문항 :\n 1.지원동기와 성장과정, 문제해결과정을 중심으로 작성하시오"
                 android:textSize="14sp"
+                android:fontFamily="@font/pretendard"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 android:lineSpacingMultiplier="1.5"
-                app:layout_constraintStart_toStartOf="@id/community_content_title_tv"
+                app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
                 app:layout_constraintEnd_toEndOf="@id/community_content_more_iv"
                 app:layout_constraintTop_toBottomOf="@id/community_content_title_tv" />
 
@@ -205,6 +220,7 @@
         android:layout_width="0dp"
         android:layout_height="2dp"
         android:src="@drawable/line_img"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/content_sv"/>
@@ -238,6 +254,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:text="익명"
+            android:fontFamily="@font/pretendard"
             android:layout_marginStart="5dp"/>
 
         <EditText
@@ -247,6 +264,7 @@
             android:layout_marginStart="10dp"
             android:background="@null"
             android:hint="댓글을 입력해주세요"
+            android:fontFamily="@font/pretendard"
             android:inputType="text" />
 
         <View
@@ -268,6 +286,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="댓글 내용"
+        android:fontFamily="@font/pretendard"
         android:textSize="15sp"
         android:textColor="@color/black"
         android:layout_marginBottom="5dp"

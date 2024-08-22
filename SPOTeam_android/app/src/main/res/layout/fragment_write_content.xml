@@ -37,6 +37,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="제목"
+        android:fontFamily="@font/pretendard"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="10dp"
         android:background="@android:color/transparent"
@@ -64,6 +65,7 @@
         android:hint="내용을 입력해주세요"
         android:gravity="top"
         android:background="@null"
+        android:fontFamily="@font/pretendard"
         android:layout_marginTop="10dp"
         android:inputType="textMultiLine"
         android:textSize="14sp"
@@ -100,6 +102,7 @@
             android:layout_height="wrap_content"
             android:button="@null"
             android:layout_marginStart="24dp"
+            android:fontFamily="@font/pretendard"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
             android:text="익명"/>
 
@@ -114,6 +117,7 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="완료"
+        android:fontFamily="@font/pretendard"
         android:textColor="@drawable/button_textcolor"
         android:textSize="20sp"
         android:textStyle="bold"

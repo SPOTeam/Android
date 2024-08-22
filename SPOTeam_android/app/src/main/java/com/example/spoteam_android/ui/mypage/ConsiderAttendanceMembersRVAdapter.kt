@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemConsiderAttendanceMemberBinding
 import com.example.spoteam_android.ui.community.AttendanceMemberInfo
 import com.example.spoteam_android.ui.community.MyRecruitingStudyDetail
@@ -43,6 +45,13 @@ class ConsiderAttendanceMembersRVAdapter(private var dataList: List<AttendanceMe
         fun bind(data: AttendanceMemberInfo) {
 //            binding.fragmentConsiderAttendanceMemberProfileIv.setImageResource(data.profileImage.)
             binding.fragmentCosiderAttendanceMemberProfileTv.text = data.nickname
+            Glide.with(binding.root.context)
+                .load(data.profileImage)
+                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
+                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
+                .into(binding.fragmentConsiderAttendanceMemberProfileIv)
+
+
         }
     }
 }

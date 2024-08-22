@@ -24,7 +24,6 @@ class BookMarkRVAdapter(
 
     override fun onBindViewHolder(holder: BookmarkViewHolder, position: Int) {
         val currentItem = bookmarkitemList[position]
-        Log.d("BookMarkRVAdapter", "onBindViewHolder: Position: $position, Item: $currentItem")
         holder.bind(currentItem)
 
         holder.itemView.setOnClickListener {
@@ -37,7 +36,6 @@ class BookMarkRVAdapter(
     }
 
     override fun getItemCount(): Int {
-        Log.d("BookMarkRVAdapter", "ItemCount: ${bookmarkitemList.size}")
         return bookmarkitemList.size
     }
 
@@ -67,11 +65,11 @@ class BookMarkRVAdapter(
     }
 
     fun updateList(newList: List<BookmarkItem>) {
-        Log.d("BookMarkRVAdapter", "updateList called with ${newList.size} items")
+        //Log.d("BookMarkRVAdapter", "updateList called with ${newList.size} items")
 
         bookmarkitemList = ArrayList() // 새 ArrayList로 초기화
         bookmarkitemList.addAll(newList)
-        Log.d("BookMarkRVAdapter", "itemList size after addAll: ${bookmarkitemList.size}")
+        //Log.d("BookMarkRVAdapter", "itemList size after addAll: ${bookmarkitemList.size}")
 
         notifyDataSetChanged()
     }

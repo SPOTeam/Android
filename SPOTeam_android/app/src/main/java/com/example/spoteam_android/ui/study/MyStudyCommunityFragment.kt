@@ -1,6 +1,8 @@
 package com.example.spoteam_android.ui.study
 
+import StudyApiService
 import StudyViewModel
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.MemberResponse
+import com.example.spoteam_android.ProfileItem
+import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMystudyCommunityBinding
 import com.example.spoteam_android.ui.community.CommunityRetrofitClient
 import com.example.spoteam_android.ui.community.PostDetail
@@ -27,9 +34,10 @@ import retrofit2.Response
 class MyStudyCommunityFragment : Fragment() {
 
     private lateinit var binding: FragmentMystudyCommunityBinding
+    private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
     private var currentStudyId : Int = -1
     private var offset : Int = 0
-    private var limit : Int = 5
+    private var limit : Int = 30
     private var themeQuery : String = ""
     private val studyViewModel: StudyViewModel by activityViewModels()
 
@@ -42,18 +50,55 @@ class MyStudyCommunityFragment : Fragment() {
 
         // ViewModel에서 studyId를 관찰하고 변경될 때마다 fetchStudyMembers 호출
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
-            Log.d("DetailStudyHomeFragment", "Received studyId from ViewModel: $studyId")
             if (studyId != null) {
                 currentStudyId = studyId
-                fetchPages()
+//                fetchStudyMembers(currentStudyId)
+//                fetchPages()
             } else {
                 Toast.makeText(requireContext(), "Study ID is missing", Toast.LENGTH_SHORT).show()
             }
         }
-
+//        fetchStudyMembers(currentStudyId)
         initBTN()
 
         return binding.root
+    }
+
+    private fun fetchStudyMembers(studyId: Int) {
+        profileAdapter = DetailStudyHomeProfileAdapter(ArrayList())
+        val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+        val kakaoNickname = sharedPreferences.getString("${email}_nickname", null)
+        api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
+            override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { memberResponse ->
+                        val members = memberResponse.result?.members ?: emptyList()
+                        profileAdapter.updateList(members.map {
+                            ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
+                        })
+
+                        // 닉네임 리스트에서 현재 사용자의 닉네임과 일치하는지 확인
+                        val nicknames = members.map { it.nickname }
+                        val isNicknameFound = kakaoNickname?.let { nicknames.contains(it) } ?: false
+                        if(isNicknameFound) {
+                            binding.categoryHsv.visibility = View.VISIBLE
+                            (activity as? MainActivity)?.isOnCommunityHome(MyStudyCommunityFragment())
+                            fetchPages()
+                        } else {
+                            binding.noneMemberAlert.visibility = View.VISIBLE
+                        }
+                    }
+                } else {
+//                    Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun initBTN() {
@@ -94,8 +139,7 @@ class MyStudyCommunityFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        fetchPages()
-        (activity as? MainActivity)?.isOnCommunityHome(MyStudyCommunityFragment())
+        fetchStudyMembers(currentStudyId)
     }
 
     private fun fetchPages() {
@@ -109,7 +153,7 @@ class MyStudyCommunityFragment : Fragment() {
                         val pagesResponse = response.body()
                         if (pagesResponse?.isSuccess == "true") {
                             val pagesResponseList = pagesResponse.result?.posts
-                            Log.d("ALL", "items: $pagesResponseList")
+//                            Log.d("ALL", "items: $pagesResponseList")
                             if (pagesResponseList != null) {
                                 initRecyclerview(pagesResponseList)
                             }
@@ -122,7 +166,7 @@ class MyStudyCommunityFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<StudyPostListResponse>, t: Throwable) {
-                    Log.e("ALL", "Failure: ${t.message}", t)
+//                    Log.e("ALL", "Failure: ${t.message}", t)
                 }
             })
     }
@@ -134,7 +178,7 @@ class MyStudyCommunityFragment : Fragment() {
                     call: Call<StudyContentLikeResponse>,
                     response: Response<StudyContentLikeResponse>
                 ) {
-                    Log.d("StudyLikeContent", "response: ${response.isSuccessful}")
+//                    Log.d("StudyLikeContent", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val likeResponse = response.body()
                         Log.d("StudyLikeContent", "responseBody: ${likeResponse?.isSuccess}")

@@ -21,6 +21,12 @@ interface InterestAreaApiService {
         @Query("hasFee") hasFee: Boolean?,
         @Query("fee") fee: Int?
     ): Call<ApiResponse>
+
+    @GET("/spot/search/studies/interested/main/")
+    fun getInterestedBestStudies(
+        @Header("Authorization") authToken: String,
+        @Query("memberId") memberId: Int // 필요한 경우 추가
+    ): Call<ApiResponse>
 }
 
 interface InterestSpecificAreaApiService {

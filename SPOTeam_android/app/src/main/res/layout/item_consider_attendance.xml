@@ -16,12 +16,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ImageView4"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_marginTop="14dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/activity_main_ic_recyclervw_groups"/>
+            android:layout_marginBottom="15dp"
+            android:background="@color/white"
+            android:scaleType="centerCrop"
+            android:src="@drawable/activity_main_ic_recyclervw_groups"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut" />
 
         <LinearLayout
             android:id="@+id/consider_attendance_ll"
@@ -36,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="스터디 이름"
+                android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -46,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="스터디 목표"
+                android:fontFamily="@font/pretendard"
                 android:textSize="12sp" />
 
             <LinearLayout
@@ -66,6 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="po"
+                    android:fontFamily="@font/pretendard"
                     android:textSize="14sp" />
 
                 <TextView
@@ -73,6 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/"
+                    android:fontFamily="@font/pretendard"
                     android:textSize="14sp" />
 
                 <TextView
@@ -81,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="to"
+                    android:fontFamily="@font/pretendard"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -104,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="like"
+                    android:fontFamily="@font/pretendard"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -118,6 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="view"
+                    android:fontFamily="@font/pretendard"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -132,6 +144,7 @@
         android:layout_height="35dp"
         android:background="@drawable/button_background"
         android:text="신청 확인"
+        android:fontFamily="@font/pretendard"
         android:textStyle="bold"
         android:textColor="#186AFF"
         android:layout_marginEnd="5dp"

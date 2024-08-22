@@ -5,6 +5,7 @@ import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,7 +21,11 @@ import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.calendar.CalendarFragment
+import com.example.spoteam_android.ui.community.CommunityContentActivity
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
+import com.example.spoteam_android.ui.community.CommunityResponse
+import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.StudyContentLikeResponse
 import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.example.spoteam_android.ui.interestarea.InterestFragment
@@ -37,6 +42,7 @@ class HouseFragment : Fragment() {
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var interestBoardAdapter: BoardAdapter
     private lateinit var recommendBoardAdapter: BoardAdapter
+    private var popularContentId : Int = -1
     private lateinit var studyApiService: StudyApiService
 
     override fun onCreateView(
@@ -48,6 +54,20 @@ class HouseFragment : Fragment() {
         binding = FragmentHouseBinding.inflate(inflater, container, false)
 
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
+        fetchLivePopularContent()
+
+        binding.goPopularContentIv.setOnClickListener{
+            val intent = Intent(requireContext(), CommunityContentActivity::class.java)
+            intent.putExtra("postInfo", popularContentId.toString())
+            startActivity(intent)
+        }
+
+        binding.popularContentTv.setOnClickListener {
+            val intent = Intent(requireContext(), CommunityContentActivity::class.java)
+            intent.putExtra("postInfo", popularContentId.toString())
+            startActivity(intent)
+        }
 
         interestBoardAdapter = BoardAdapter(
                         ArrayList(),
@@ -189,18 +209,9 @@ class HouseFragment : Fragment() {
     private fun fetchDataAnyWhere(memberId: Int) {
         Log.d("HouseFragment", "fetchDataAnyWhere() 실행")
 
-        RetrofitClient.IaapiService.InterestArea(
+        RetrofitClient.IaapiService.getInterestedBestStudies(
             authToken = getAuthToken(),
-            memberId = memberId,
-            page = 0,
-            size = 3,
-            sortBy = "LIKED",
-            gender = "UNKNOWN",
-            minAge = 18,
-            maxAge = 60,
-            isOnline = false,
-            hasFee = false,
-            fee = null
+            memberId = memberId
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
@@ -241,6 +252,7 @@ class HouseFragment : Fragment() {
         })
     }
 
+
     private fun toggleLikeStatus(studyItem: BoardItem, likeButton: ImageView) {
         val memberId = getMemberId(requireContext())
 
@@ -273,6 +285,38 @@ class HouseFragment : Fragment() {
         } else {
             Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun fetchLivePopularContent() {
+        CommunityRetrofitClient.instance.getBestCommunityContent("REAL_TIME")
+            .enqueue(object : Callback<CommunityResponse> {
+                override fun onResponse(
+                    call: Call<CommunityResponse>,
+                    response: Response<CommunityResponse>
+                ) {
+                    Log.d("LivePopularContent", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val popularResponse = response.body()
+                        Log.d("LivePopularContent", "responseBody: ${popularResponse?.isSuccess}")
+                        if (popularResponse?.isSuccess == "true") {
+                            binding.popularContentTv.text = popularResponse.result.postBest5Responses[0].postTitle
+                            popularContentId = popularResponse.result.postBest5Responses[0].postId
+                        } else {
+                            showError(popularResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<CommunityResponse>, t: Throwable) {
+                    Log.e("LivePopularContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun showError(message: String?) {
+        Toast.makeText(context, "Error: $message", Toast.LENGTH_SHORT).show()
     }
 
 

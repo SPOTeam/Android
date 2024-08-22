@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:text="토익 스피킹 IH 스터디"
+            android:fontFamily="@font/pretendard"
             android:textSize="18sp"
             android:textColor="@color/black"
             android:textStyle="bold" />
@@ -38,6 +39,7 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:text="스터디 목표"
+            android:fontFamily="@font/pretendard"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -58,6 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="po"
+                android:fontFamily="@font/pretendard"
                 android:textSize="14sp" />
 
             <TextView
@@ -65,6 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/"
+                android:fontFamily="@font/pretendard"
                 android:textSize="14sp" />
 
             <TextView
@@ -73,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="to"
+                android:fontFamily="@font/pretendard"
                 android:textSize="14sp" />
 
             <ImageView
@@ -88,6 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="like"
+                android:fontFamily="@font/pretendard"
                 android:textSize="14sp" />
 
             <ImageView
@@ -102,6 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="view"
+                android:fontFamily="@font/pretendard"
                 android:textSize="14sp" />
 
         </LinearLayout>

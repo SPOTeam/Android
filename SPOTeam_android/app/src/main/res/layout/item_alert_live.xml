@@ -23,6 +23,7 @@
        android:layout_height="wrap_content"
        android:text="실시간 인기 글"
        android:textColor="@color/black"
+       android:fontFamily="@font/pretendard"
        android:textStyle="bold"
        android:textSize="15sp"
        android:layout_marginStart="10dp"
@@ -34,6 +35,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:text= "&quot;카카오 최종 합격 후기 &quot;"
+       android:fontFamily="@font/pretendard"
        android:layout_marginStart="10dp"
        app:layout_constraintStart_toEndOf="@id/alert_start_iv"
        app:layout_constraintBottom_toBottomOf="@id/alert_start_iv"/>
