@@ -27,6 +27,7 @@
             android:id="@+id/fragment_member_study_tv"
             android:text="스터디 등록"
             android:textColor="@color/black"
+            android:fontFamily="@font/pretendard"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,6 +54,7 @@
     android:textColor="@color/black"
     android:textSize="18sp"
     android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
     android:layout_marginTop="30dp"
     android:layout_marginStart="15dp"
     app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +78,7 @@
             android:layout_centerVertical="true"
             android:layout_gravity="start|center"
             android:layout_marginStart="15dp"
+            android:fontFamily="@font/pretendard"
             android:text="참여인원(스터디장 포함)"
             android:textColor="@color/black"
             android:textSize="16sp"/>
@@ -110,6 +113,7 @@
             android:layout_gravity="start|center"
             android:layout_marginStart="15dp"
             android:text="성별"
+            android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -142,6 +146,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
             android:text="연령대"
+            android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -216,6 +221,7 @@
         android:textColor="#186AFF"
         android:textSize="17sp"
         android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

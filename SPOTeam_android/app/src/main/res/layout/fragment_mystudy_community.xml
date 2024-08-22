@@ -38,6 +38,7 @@
                     android:textColor="@drawable/selector_button_text"
                     android:textSize="14sp"
                     android:text="전체"
+                    android:fontFamily="@font/pretendard"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
@@ -51,6 +52,7 @@
                     android:textColor="@drawable/selector_button_text"
                     android:textSize="14sp"
                     android:text="공지"
+                    android:fontFamily="@font/pretendard"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
@@ -64,6 +66,7 @@
                     android:textColor="@drawable/selector_button_text"
                     android:textSize="14sp"
                     android:text="가입인사"
+                    android:fontFamily="@font/pretendard"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
@@ -77,6 +80,7 @@
                     android:textColor="@drawable/selector_button_text"
                     android:textSize="14sp"
                     android:text="정보공유"
+                    android:fontFamily="@font/pretendard"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
@@ -90,6 +94,7 @@
                     android:textColor="@drawable/selector_button_text"
                     android:textSize="14sp"
                     android:text="스터디후기"
+                    android:fontFamily="@font/pretendard"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
@@ -103,6 +108,7 @@
                     android:textColor="@drawable/selector_button_text"
                     android:textSize="14sp"
                     android:text="자유"
+                    android:fontFamily="@font/pretendard"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
@@ -116,6 +122,7 @@
                     android:textColor="@drawable/selector_button_text"
                     android:textSize="14sp"
                     android:text="Q&amp;A"
+                    android:fontFamily="@font/pretendard"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>

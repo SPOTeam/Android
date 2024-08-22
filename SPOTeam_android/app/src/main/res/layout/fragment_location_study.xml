@@ -28,6 +28,7 @@
             android:text="스터디 등록"
             android:textColor="@color/black"
             android:textSize="16sp"
+            android:fontFamily="@font/pretendard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp" />
@@ -50,6 +51,7 @@
         android:text="스터디 지역을 추가하세요."
         android:textColor="@color/black"
         android:textSize="18sp"
+        android:fontFamily="@font/pretendard"
         android:textStyle="bold"
         android:layout_marginTop="30dp"
         android:layout_marginStart="15dp"
@@ -63,6 +65,7 @@
         android:background="@drawable/checklist_location_search_background"
         android:drawableEnd="@drawable/location_search_resize"
         android:hint="○○시, ○○구,○○동"
+        android:fontFamily="@font/pretendard"
         android:maxLines="1"
         android:textSize="16sp"
         android:padding="10dp"
@@ -73,27 +76,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_online_study_activity_tv" />
 
-    <ImageView
-        android:id="@+id/activity_location_now_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/location_now_resize"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/activity_location_search_et"
-        app:layout_constraintStart_toStartOf="parent"/>
+<!--    <ImageView-->
+<!--        android:id="@+id/activity_location_now_iv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/location_now_resize"-->
+<!--        android:layout_marginStart="15dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/activity_location_search_et"-->
+<!--        app:layout_constraintStart_toStartOf="parent"/>-->
 
-    <TextView
-        android:id="@+id/activity_location_now_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="현재 위치로 보기"
-        android:textSize="14sp"
-        android:textColor="@color/black"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toEndOf="@id/activity_location_now_iv"
-        app:layout_constraintTop_toBottomOf="@id/activity_location_search_et"/>
+<!--    <TextView-->
+<!--        android:id="@+id/activity_location_now_tv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="현재 위치로 보기"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        app:layout_constraintStart_toEndOf="@id/activity_location_now_iv"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/activity_location_search_et"/>-->
 
     <View
         android:id="@+id/activity_location_v"
@@ -102,7 +105,7 @@
         android:background="#F8F8F8"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/activity_location_now_tv"/>
+        app:layout_constraintTop_toBottomOf="@id/activity_location_search_et"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activity_location_rv"

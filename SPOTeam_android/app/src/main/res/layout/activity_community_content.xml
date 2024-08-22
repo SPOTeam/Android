@@ -68,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:text="익명"
+                android:fontFamily="@font/pretendard"
                 android:textSize="14sp"
                 android:layout_marginStart="5dp"
                 app:layout_constraintStart_toEndOf="@id/community_content_profile_iv"
@@ -137,6 +138,7 @@
                 android:textAlignment="center"
                 android:text="카카오 최종합격"
                 android:textSize="18sp"
+                android:fontFamily="@font/pretendard"
                 android:textStyle="bold"
                 android:layout_marginTop="25dp"
                 android:textColor="@color/black"
@@ -149,6 +151,7 @@
                 android:layout_height="wrap_content"
                 android:text="카카오 최종합격했습니다!\n 면접 후기랑 자소서 풀어볼게요\n자소서 문항 :\n 1.지원동기와 성장과정, 문제해결과정을 중심으로 작성하시오"
                 android:textSize="14sp"
+                android:fontFamily="@font/pretendard"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 android:lineSpacingMultiplier="1.5"
@@ -273,6 +276,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:text="익명"
+            android:fontFamily="@font/pretendard"
             android:layout_marginStart="5dp"/>
 
         <EditText
@@ -282,6 +286,7 @@
             android:layout_marginStart="10dp"
             android:background="@null"
             android:hint="댓글을 입력해주세요"
+            android:fontFamily="@font/pretendard"
             android:inputType="text" />
 
         <View
@@ -303,6 +308,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="댓글 내용"
+        android:fontFamily="@font/pretendard"
         android:textSize="15sp"
         android:textColor="@color/black"
         android:layout_marginBottom="5dp"

@@ -6,10 +6,11 @@
 
     <ImageView
         android:id="@+id/community_prev_iv"
-        android:layout_width="40dp"
-        android:layout_height="45dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/navigate_before_3x"
         android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,9 +20,9 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="스터디 참여"
-        android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_marginStart="30dp"
         app:layout_constraintStart_toEndOf="@id/community_prev_iv"
         app:layout_constraintTop_toTopOf="@id/community_prev_iv" />

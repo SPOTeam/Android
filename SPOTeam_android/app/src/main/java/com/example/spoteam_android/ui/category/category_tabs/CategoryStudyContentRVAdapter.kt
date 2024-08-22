@@ -29,6 +29,10 @@ class CategoryStudyContentRVAdapter(
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {
         this.itemClickListener = onItemClickListener
     }
+    fun addData(newData: List<CategoryStudyDetail>) {
+        dataList.addAll(newData)
+        notifyDataSetChanged() // 어댑터에 데이터가 변경되었음을 알림
+    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemRecyclerViewBinding = ItemRecyclerViewBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)

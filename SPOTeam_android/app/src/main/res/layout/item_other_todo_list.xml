@@ -21,6 +21,7 @@
         android:layout_gravity="center"
         android:paddingTop="5dp"
         android:text="스터디장"
+        android:fontFamily="@font/pretendard"
         android:textSize="12sp" />
 
 </LinearLayout>

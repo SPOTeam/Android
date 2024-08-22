@@ -109,6 +109,7 @@ class DetailStudyHomeFragment : Fragment() {
                         // maxPeople과 memberCount 값을 가져오기 위해 ViewModel을 옵저빙
                         val maxPeople = studyViewModel.maxPeople.value
                         val memberCount = studyViewModel.memberCount.value
+                        Log.d("max","${maxPeople},${memberCount}")
 
                         // 닉네임이 리스트에 있거나, memberCount와 maxPeople이 일치하면 버튼을 숨김
                         val shouldHideButton = isNicknameFound || (maxPeople != null && memberCount != null && memberCount >= maxPeople)

@@ -58,6 +58,7 @@
         android:textColorHint="#8E8E8E"
         android:inputType="none"
         android:textSize="18sp"
+        android:fontFamily="@font/pretendard"
         app:layout_constraintStart_toStartOf="@id/write_content_prev_iv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_iv"/>
@@ -78,6 +79,7 @@
         android:layout_height="250dp"
         android:hint="내용을 입력해주세요"
         android:gravity="top"
+        android:fontFamily="@font/pretendard"
         android:background="@null"
         android:layout_marginTop="10dp"
         android:inputType="none"
@@ -116,7 +118,8 @@
             android:button="@null"
             android:layout_marginStart="24dp"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-            android:text="공지"/>
+            android:text="공지"
+            android:fontFamily="@font/pretendard"/>
 
     </LinearLayout>
 
@@ -127,6 +130,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="완료"
+        android:fontFamily="@font/pretendard"
         android:background="@drawable/button_background"
         android:textColor="@drawable/button_textcolor"
         android:padding="10dp"
