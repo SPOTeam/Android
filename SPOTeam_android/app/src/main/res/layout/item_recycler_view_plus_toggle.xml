@@ -73,6 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="po"
+                    android:fontFamily="@font/pretendard"
                     android:textSize="14sp" />
 
                 <TextView
@@ -80,6 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/"
+                    android:fontFamily="@font/pretendard"
                     android:textSize="14sp" />
 
                 <TextView
@@ -88,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="to"
+                    android:fontFamily="@font/pretendard"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -103,6 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="like"
+                    android:fontFamily="@font/pretendard"
                     android:textSize="14sp" />
 
                 <ImageView

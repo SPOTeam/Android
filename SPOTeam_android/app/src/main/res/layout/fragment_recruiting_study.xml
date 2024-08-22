@@ -8,18 +8,18 @@
 
     <ImageView
         android:id="@+id/spot_logo"
-        android:layout_width="24dp"
-        android:layout_height="25dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="50dp"
         android:src="@drawable/study_spot_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ic_alarm_recruiting"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="30dp"
         android:src="@drawable/activity_main_ic_alaram"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,8 +27,8 @@
 
     <ImageView
         android:id="@+id/ic_find_recruiting"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@drawable/activity_main_ic_find"
         app:layout_constraintEnd_toStartOf="@+id/ic_alarm_recruiting"
         app:layout_constraintTop_toTopOf="@+id/spot_logo" />
@@ -37,9 +37,10 @@
         android:id="@+id/interest_study_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="108dp"
         android:text="모집중 스터디"
+        android:fontFamily="@font/pretendard"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -51,9 +52,10 @@
         android:id="@+id/check_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="30dp"
         android:text="--건"
+        android:fontFamily="@font/pretendard"
         android:textColor="@color/gray_03"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -87,6 +89,8 @@
         android:layout_width="match_parent"
         android:layout_height="450dp"
         android:layout_marginTop="10dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

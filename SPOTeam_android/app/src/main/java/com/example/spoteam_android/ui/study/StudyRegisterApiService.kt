@@ -39,6 +39,8 @@ interface StudyApiService {
     @GET("/spot/search/studies/liked/members/{memberId}")
     fun getBookmark(
         @Path("memberId") memberId: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int
     ): Call<BookmarkResponse>
 
 

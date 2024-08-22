@@ -12,6 +12,7 @@ import android.widget.Toast
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.StudyApplyResponse
+import com.example.spoteam_android.StudyDetailsResponse
 import com.example.spoteam_android.ui.study.DetailStudyHomeFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,27 +54,37 @@ class ApplyStudyDialog(private val context: Context, private val fragment: Detai
             val studyId = fragment.studyViewModel.studyId.value
             val introduction = editText.text.toString()
 
-
             if (memberId != -1 && studyId != null) {
-                applyToStudy(memberId, studyId, introduction) { success ->
+                // 스터디 신청 전에 스터디 정보를 다시 가져와서 확인
+                fetchStudyDetails(studyId) { success, memberCount, maxPeople ->
                     if (success) {
-                        dlg.dismiss()
+                        if (memberCount >= maxPeople) {
+                            Toast.makeText(context, "인원이 가득 찼습니다.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            applyToStudy(memberId, studyId, introduction) { applySuccess ->
+                                if (applySuccess) {
+                                    dlg.dismiss()
 
-                        // 두 번째 다이얼로그 생성 및 표시
-                        val secondDialog = Dialog(context)
-                        secondDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                        secondDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        secondDialog.setContentView(R.layout.dialog_apply_complete_study)
+                                    // 두 번째 다이얼로그 생성 및 표시
+                                    val secondDialog = Dialog(context)
+                                    secondDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                                    secondDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                    secondDialog.setContentView(R.layout.dialog_apply_complete_study)
 
-                        val secondDialogButton = secondDialog.findViewById<Button>(R.id.dialog_complete_bt)
-                        secondDialogButton.setOnClickListener {
-                            secondDialog.dismiss()
-                            onMoveToHouseFragment()
+                                    val secondDialogButton = secondDialog.findViewById<Button>(R.id.dialog_complete_bt)
+                                    secondDialogButton.setOnClickListener {
+                                        secondDialog.dismiss()
+                                        onMoveToHouseFragment()
+                                    }
+
+                                    secondDialog.show()
+                                } else {
+                                    Toast.makeText(context, "스터디 신청에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
-
-                        secondDialog.show()
                     } else {
-                        Toast.makeText(context, "스터디 신청에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "스터디 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {
@@ -82,6 +93,36 @@ class ApplyStudyDialog(private val context: Context, private val fragment: Detai
         }
 
         dlg.show()
+    }
+
+    private fun fetchStudyDetails(studyId: Int, callback: (Boolean, Int, Int) -> Unit) {
+        Log.d("DetailStudyFragment", "fetchStudyDetails() 호출")
+        val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
+        api.getStudyDetails(studyId).enqueue(object : Callback<StudyDetailsResponse> {
+            override fun onResponse(call: Call<StudyDetailsResponse>, response: Response<StudyDetailsResponse>) {
+                if (response.isSuccessful) {
+                    val studyDetailsResponse = response.body()
+                    val studyDetails = studyDetailsResponse?.result
+                    if (studyDetails != null) {
+                        val memberCount = studyDetails.memberCount
+                        val maxPeople = studyDetails.maxPeople
+                        callback(true, memberCount, maxPeople)
+                    } else {
+                        callback(false, 0, 0)
+                        Toast.makeText(context, "스터디 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    callback(false, 0, 0)
+                    Toast.makeText(context, "스터디 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<StudyDetailsResponse>, t: Throwable) {
+                callback(false, 0, 0)
+                Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun applyToStudy(memberId: Int, studyId: Int, introduction: String, callback: (Boolean) -> Unit) {

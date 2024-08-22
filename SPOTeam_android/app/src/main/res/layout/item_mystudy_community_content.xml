@@ -20,6 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="카카오 최종합격"
+            android:fontFamily="@font/pretendard"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
@@ -41,6 +42,7 @@
             android:layout_gravity="center"
             android:text="#"
             android:textSize="15sp"
+            android:fontFamily="@font/pretendard"
             android:textColor="@color/selector_blue" />
 
         <TextView
@@ -51,6 +53,7 @@
             android:layout_gravity="center"
             android:text="공지"
             android:textSize="15sp"
+            android:fontFamily="@font/pretendard"
             android:textColor="@color/selector_blue" />
 
     </LinearLayout>
@@ -62,6 +65,7 @@
         android:text="4학년 취준생들은 요즘 뭐하고 사니"
         android:textSize="14sp"
         android:textColor="@color/black"
+        android:fontFamily="@font/pretendard"
         android:layout_marginTop="10dp"
         android:maxLines="2"
         android:ellipsize="end"
@@ -101,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
+            android:fontFamily="@font/pretendard"
             android:textSize="13sp"
             android:layout_marginStart="5dp"
             android:textColor="@color/selector_blue" />
@@ -121,6 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
+            android:fontFamily="@font/pretendard"
             android:textSize="13sp"
             android:layout_marginStart="5dp"
             android:textColor="@color/active_blue" />
@@ -141,6 +147,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
+            android:fontFamily="@font/pretendard"
             android:textSize="13sp"
             android:layout_marginStart="5dp"
             android:textColor="@color/active_blue" />
@@ -156,6 +163,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2024.05.31 17:31"
+            android:fontFamily="@font/pretendard"
             android:textSize="13sp"
             android:layout_marginStart="5dp" />
 

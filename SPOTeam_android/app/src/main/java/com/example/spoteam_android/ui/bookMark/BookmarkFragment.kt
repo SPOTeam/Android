@@ -31,6 +31,10 @@ class BookmarkFragment : Fragment() {
     private var bookitemList = ArrayList<BookmarkItem>()
     private val studyViewModel: StudyViewModel by activityViewModels()
 
+    private var currentPage = 0
+    private val size = 5 // 페이지당 항목 수
+    private var totalPages = 0
+
     // Retrofit API Service
     private lateinit var studyApiService: StudyApiService
 
@@ -44,6 +48,8 @@ class BookmarkFragment : Fragment() {
         binding.prevIv.setOnClickListener{
             parentFragmentManager.popBackStack()
         }
+
+        setupPageNavigationButtons()
 
         return binding.root
     }
@@ -69,21 +75,39 @@ class BookmarkFragment : Fragment() {
             adapter = bookMarkRVAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
+
         fetchBookmarkedStudies()
     }
 
+    private fun setupPageNavigationButtons() {
+        binding.previousPage.setOnClickListener {
+            if (currentPage > 0) {
+                currentPage--
+                fetchBookmarkedStudies() // 이전 페이지 데이터를 가져옴
+            }
+        }
+
+        binding.nextPage.setOnClickListener {
+            if (currentPage < totalPages - 1) {
+                currentPage++
+                fetchBookmarkedStudies() // 다음 페이지 데이터를 가져옴
+            }
+        }
+    }
 
     private fun fetchBookmarkedStudies() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val memberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
 
         if (memberId != -1) {
-            studyApiService.getBookmark(memberId).enqueue(object : Callback<BookmarkResponse> {
+            studyApiService.getBookmark(memberId, currentPage, size).enqueue(object : Callback<BookmarkResponse> {
                 override fun onResponse(call: Call<BookmarkResponse>, response: Response<BookmarkResponse>) {
                     if (response.isSuccessful) {
                         val bookmarkResponse = response.body()
                         if (bookmarkResponse != null && bookmarkResponse.result != null) {
                             val content = bookmarkResponse.result.content
+                            totalPages = bookmarkResponse.result.totalPages
+
                             if (!content.isNullOrEmpty()) {
                                 bookitemList.clear()
                                 bookitemList.addAll(content.map { studyData ->
@@ -103,17 +127,23 @@ class BookmarkFragment : Fragment() {
                                         liked = studyData.liked
                                     )
                                 })
+
+                                totalPages = bookmarkResponse.result.totalPages
                                 Log.d("Bookmark", "Fetched bookmarked studies: $bookitemList")
                                 bookMarkRVAdapter.updateList(bookitemList)
                                 binding.bookmarkEmpty.visibility = View.GONE
                                 binding.fragmentBookmarkRv.visibility = View.VISIBLE
+
+                                // 페이지 UI 업데이트
+                                Log.d("Bookmark","${totalPages}")
+                                updatePageNumberUI(totalPages)
                             } else {
                                 // 데이터가 없을 때 처리
                                 binding.bookmarkEmpty.visibility = View.VISIBLE
                                 binding.fragmentBookmarkRv.visibility = View.GONE
                             }
                         } else {
-                            Toast.makeText(requireContext(), "서버 응답이 올바르지 않습니다.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "마지막페이지입니다", Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         Toast.makeText(requireContext(), "북마크 데이터를 가져오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -128,8 +158,6 @@ class BookmarkFragment : Fragment() {
             Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
-
-
 
     private fun toggleLikeStatus(studyItem: BookmarkItem, likeButton: ImageView) {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
@@ -164,4 +192,23 @@ class BookmarkFragment : Fragment() {
             Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun updatePageNumberUI(totalPages: Int) {
+        binding.currentPage.text = "${currentPage + 1}"
+
+        binding.previousPage.isEnabled = currentPage > 0
+        binding.previousPage.setTextColor(resources.getColor(
+            if (currentPage > 0) R.color.active_color else R.color.disabled_color,
+            null
+        ))
+
+        // 다음 페이지 버튼 활성화/비활성화
+        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        binding.nextPage.setTextColor(resources.getColor(
+            if (currentPage < totalPages - 1) R.color.active_color else R.color.disabled_color,
+            null
+        ))
+    }
+
+
 }

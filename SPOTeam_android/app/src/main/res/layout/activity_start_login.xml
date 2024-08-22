@@ -22,6 +22,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
+        android:fontFamily="@font/pretendard"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,6 +36,7 @@
         android:text="스터디 신청 완료!"
         android:alpha="0.5"
         android:textSize="9sp"
+        android:fontFamily="@font/pretendard"
         android:textColor="#186AFF"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -53,6 +55,7 @@
         android:text="오늘은 카공을 추천해요."
         android:alpha="0.7"
         android:textSize="10sp"
+        android:fontFamily="@font/pretendard"
         android:textColor="#186AFF"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -71,6 +74,7 @@
         android:text="스터디 참여가 수락되었어요!"
         android:textSize="13sp"
         android:alpha="0.9"
+        android:fontFamily="@font/pretendard"
         android:textColor="#186AFF"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
@@ -82,36 +86,42 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
-    <android.widget.Button
+    <LinearLayout
         android:id="@+id/loginwithkakao_bt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:orientation="horizontal"
+        android:gravity="center"
         android:background="@drawable/examplekakao"
-        android:text="카카오톡으로 계속하기"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toTopOf="@id/loginwithspot_bt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <android.widget.Button
-        android:id="@+id/loginwithspot_bt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
-        android:background="@drawable/loginspot"
-        android:text="회원가입 "
-        android:textColor="#186AFF"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="25dp"
+        android:padding="10dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/kakao_logo_iv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kakao_logo"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:id="@+id/kakao_login_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="카카오톡으로 계속하기"
+            android:fontFamily="@font/pretendard"
+            android:textSize="19sp"
+            android:textColor="#2D2D2D"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
