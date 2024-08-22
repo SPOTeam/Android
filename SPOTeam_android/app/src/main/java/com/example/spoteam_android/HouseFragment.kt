@@ -37,9 +37,8 @@ class HouseFragment : Fragment() {
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var interestBoardAdapter: BoardAdapter
     private lateinit var recommendBoardAdapter: BoardAdapter
-
-
     private lateinit var studyApiService: StudyApiService
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,18 +50,18 @@ class HouseFragment : Fragment() {
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
         interestBoardAdapter = BoardAdapter(
-            ArrayList(),
-            onItemClick = { selectedItem ->
-                Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
-                studyViewModel.setStudyData(
-                    selectedItem.studyId,
-                    selectedItem.imageUrl,
-                    selectedItem.introduction
-                )
+                        ArrayList(),
+                onItemClick = { selectedItem ->
+                    Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
+                    studyViewModel.setStudyData(
+                        selectedItem.studyId,
+                        selectedItem.imageUrl,
+                        selectedItem.introduction
+                    )
 
-                // Fragment 전환
-                val fragment = DetailStudyFragment()
-                parentFragmentManager.beginTransaction()
+                    // Fragment 전환
+                    val fragment = DetailStudyFragment()
+                    parentFragmentManager.beginTransaction()
                     .replace(R.id.main_frm, fragment)
                     .addToBackStack(null)
                     .commit()
@@ -125,41 +124,53 @@ class HouseFragment : Fragment() {
         }
 
         val bundle = Bundle()
+        val bundle2 = Bundle()
+        val bundle3 = Bundle()
         val interestFragment = InterestFragment()
+        val myInterestStudyFragment = MyInterestStudyFragment()
+        val recruitingStudyFragment = RecruitingStudyFragment()
         interestFragment.arguments = bundle
+        myInterestStudyFragment.arguments = bundle2
+        recruitingStudyFragment.arguments = bundle3
+
+        binding.imgbtnLocation.setOnClickListener{
+            bundle.putString("source", "HouseFragment")
+            //스터디 참여하기 팝업으로 이동
+
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, interestFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
 
 
         binding.imgbtnUnion.setOnClickListener {
+            bundle3.putString("source", "HouseFragment")
+
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, RecruitingStudyFragment())
+                .replace(R.id.main_frm, recruitingStudyFragment)
                 .addToBackStack(null)
                 .commit()
         }
 
         binding.imgbtnJjim.setOnClickListener {
+            bundle2.putString("source", "HouseFragment")
+            //스터디 참여하기 팝업으로 이동
+
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, MyInterestStudyFragment())
+                .replace(R.id.main_frm, myInterestStudyFragment)
                 .addToBackStack(null)
                 .commit()
         }
 
-        val txintereststudy: TextView = binding.root.findViewById(R.id.tx_interest_study)
-        txintereststudy.setOnClickListener {
-            bundle.putString("source", "HouseFragment")
-            //스터디 참여하기 팝업으로 이동
 
-            (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, interestFragment)
-                .addToBackStack(null)
-                .commit()
-        }
-
-        val icgointerest: ImageView = binding.root.findViewById(R.id.ic_go_interest)
-        icgointerest.setOnClickListener {
-            bundle.putString("source", "HouseFragment")
+        binding.icGoInterest.setOnClickListener {
+            bundle3.putString("source", "HouseFragment")
+            bundle3.putString("mysource", "HouseFragment")
             //스터디 참여하기 팝업으로 이동
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, interestFragment)
+                .replace(R.id.main_frm, recruitingStudyFragment)
                 .addToBackStack(null)
                 .commit()
         }

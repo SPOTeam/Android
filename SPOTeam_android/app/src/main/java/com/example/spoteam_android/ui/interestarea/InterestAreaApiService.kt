@@ -57,7 +57,7 @@ interface RecommendStudyApiService{
     ): Call<ApiResponse>
 }
 
-interface RecruitingStudyApiService{
+interface RecruitingStudyApiService {
     @GET("/spot/search/studies/recruiting")
     fun GetRecruitingStudy(
         @Header("Authorization") authToken: String,
@@ -72,6 +72,51 @@ interface RecruitingStudyApiService{
         @Query("fee") fee: Int?
     ): Call<ApiResponse>
 }
+
+interface MyInterestStudyAllApiService {
+    @GET("/spot/search/studies/interest-themes/all/members/{memberId}")
+    fun GetMyInterestStudy(
+        @Header("Authorization") authToken: String,
+        @Path("memberId") memberId: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sortBy") sortBy: String,
+        @Query("gender") gender: String?,
+        @Query("minAge") minAge: Int?,
+        @Query("maxAge") maxAge: Int?,
+        @Query("isOnline") isOnline: Boolean?,
+        @Query("hasFee") hasFee: Boolean?,
+        @Query("fee") fee: Int?
+    ): Call<ApiResponse>
+}
+
+interface GetInterestCategoryApiService {
+    @GET("/spot/member/{memberId}/theme")
+    fun GetMyInterestStudy(
+        @Header("Authorization") authToken: String,
+        @Path("memberId") memberId: Int,
+    ): Call<ApiResponse>
+}
+
+interface MyInterestStudySpecificApiService {
+    @GET("/spot/search/studies/interest-themes/specific/members/{memberId}/")
+    fun GetMyInterestStudys(
+        @Header("Authorization") authToken: String,
+        @Path("memberId") memberId: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sortBy") sortBy: String,
+        @Query("gender") gender: String?,
+        @Query("minAge") minAge: Int?,
+        @Query("maxAge") maxAge: Int?,
+        @Query("isOnline") isOnline: Boolean?,
+        @Query("hasFee") hasFee: Boolean?,
+        @Query("fee") fee: Int?,
+        @Query("theme") theme : String?
+    ): Call<ApiResponse>
+}
+
+
 
 
 

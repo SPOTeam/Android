@@ -1,6 +1,8 @@
 package com.example.spoteam_android.ui.interestarea
 
 import RetrofitClient.getAuthToken
+import StudyAdapter
+import StudyApiService
 import StudyViewModel
 import android.annotation.SuppressLint
 import android.content.Context
@@ -22,8 +24,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentInterestBinding
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.google.android.material.tabs.TabLayout
@@ -34,9 +38,10 @@ import retrofit2.Response
 class InterestFragment : Fragment() {
 
     lateinit var binding: FragmentInterestBinding
-    lateinit var tabLayout: TabLayout
+    private lateinit var tabLayout: TabLayout
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var interestBoardAdapter: BoardAdapter
+    private lateinit var studyApiService: StudyApiService
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,10 +50,12 @@ class InterestFragment : Fragment() {
     ): View {
         binding = FragmentInterestBinding.inflate(inflater, container, false)
 
+        studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
         interestBoardAdapter = BoardAdapter(
             ArrayList(),
             onItemClick = { selectedItem ->
-                Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
+                Log.d("InterestFragment", "아이템 클릭: ${selectedItem.title}")
                 studyViewModel.setStudyData(
                     selectedItem.studyId,
                     selectedItem.imageUrl,
@@ -63,8 +70,14 @@ class InterestFragment : Fragment() {
                     .commit()
             },
             onLikeClick = { selectedItem, likeButton ->
+                // 좋아요 클릭 처리
             }
         )
+
+        binding.interestAreaStudyReyclerview.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = interestBoardAdapter
+        }
 
         return binding.root
     }
@@ -115,7 +128,7 @@ class InterestFragment : Fragment() {
                                 LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null)
                             val textView = customView.findViewById<TextView>(R.id.tabText)
                             val tabText =
-                                "${region.province}\n${region.district}\n${region.neighborhood}"
+                                "${region.neighborhood}"
 
                             textView.text = tabText
                             tab.customView = customView
@@ -335,7 +348,6 @@ class InterestFragment : Fragment() {
         }
 
 
-
         val spinner: Spinner = binding.filterToggle
 
         val adapter = ArrayAdapter.createFromResource(
@@ -477,7 +489,7 @@ class InterestFragment : Fragment() {
             authToken = getAuthToken(),
             memberId = memberId,
             page = 0,
-            size = 10,
+            size = 5,
             sortBy = selectedItem,
             gender = "MALE",
             minAge = 18,
@@ -568,7 +580,7 @@ class InterestFragment : Fragment() {
             hasFee = activityFee.toBoolean(),
             fee = activityFeeAmount?.toInt(),
             page = 0,
-            size = 10,
+            size = 5,
             sortBy = selectedItem,
         )
             .enqueue(object : Callback<ApiResponse> {
@@ -649,7 +661,7 @@ class InterestFragment : Fragment() {
             hasFee = activityFee.toBoolean(),
             fee = activityFeeAmount?.toInt(),
             page = 0,
-            size = 10,
+            size = 5,
             sortBy = selectedItem,
         )
             .enqueue(object : Callback<ApiResponse> {
@@ -773,66 +785,38 @@ class InterestFragment : Fragment() {
         return memberId // 저장된 memberId 없을 시 기본값 -1 반환
     }
 
+    private fun toggleLikeStatus(studyItem: BoardItem, likeButton: ImageView) {
+        val memberId = getMemberId(requireContext())
+
+        if (memberId != -1) {
+            studyApiService.toggleStudyLike(studyItem.studyId, memberId).enqueue(object : Callback<LikeResponse> {
+                override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
+                    if (response.isSuccessful) {
+                        val newStatus = response.body()?.result?.status
+                        studyItem.liked = newStatus == "LIKE"
+                        val newIcon = if (studyItem.liked) R.drawable.ic_heart_filled else R.drawable.study_like
+                        likeButton.setImageResource(newIcon)
+
+                        // heartCount 즉시 증가 또는 감소
+                        studyItem.heartCount = if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
+
+                        // 최신 데이터 동기화를 위해 fetchDataAnyWhere와 fetchRecommendStudy를 다시 호출
+                        fetchDataAnyWhere("ALL",memberId)
+                    } else {
+                        Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
+                        Log.d("studyid","${studyItem.studyId}")
+                        Log.d("memberid", "${memberId}")
+                    }
+                }
+
+                override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
+                    Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 }
-
-//                            val pagesResponse = response.body()
-//                            Log.d("InterestingFragment", "$response")
-//                            if (pagesResponse?.isSuccess == true) {
-//                                val pagesResponseList = pagesResponse?.result?.content
-//                                Log.d("InterestingFragment", "items: $pagesResponse")
-//                                if (pagesResponseList != null) {
-//                                    Log.d("InterestingFragment", "items: $pagesResponseList")
-//                                }
-//                                //}
-//                                else {
-//                                    Log.d("InterestingFragment", "이게 찍히나?")
-//                                }
-//                            } else {
-//                                Log.d("InterestingFragment", "{$response}")
-//                                // 실패한 경우 서버로부터의 응답 코드를 로그로 출력
-//                                Log.e(
-//                                    "InterestingFragment",
-//                                    "Failed to fetch studies: ${response.code()} - ${response.message()}"
-//                                )
-//
-//                                // 응답 본문을 문자열로 변환하여 로그로 출력
-//                                val errorBody = response.errorBody()?.string()
-//                                if (errorBody != null) {
-//                                    Log.e("InterestingFragment", "Error body: $errorBody")
-//                                } else {
-//                                    Log.e("InterestingFragment", "Error body is null")
-//                                }
-//
-//                                // 추가 디버깅 정보 출력
-//                                Log.e(
-//                                    "InterestingFragment",
-//                                    "Request URL: ${response.raw().request.url}"
-//                                )
-//                                Log.e(
-//                                    "InterestingFragment",
-//                                    "Request Method: ${response.raw().request.method}"
-//                                )
-//                                Log.e(
-//                                    "InterestingFragment",
-//                                    "Request Headers: ${response.raw().request.headers}"
-//                                )
-//                            }
-//
-//                        }
-//                    }
-//                }
-//
-//            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-//                TODO("Not yet implemented")
-//            }
-//        })
-
-
-    // memberId를 가져오는 메서드
-//    fun getMemberId(context: Context): Int {
-//        val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-//        return sharedPreferences.getInt("memberId", -1) // 저장된 memberId 없을 시 기본값 -1 반환
-//    }
-
-
 

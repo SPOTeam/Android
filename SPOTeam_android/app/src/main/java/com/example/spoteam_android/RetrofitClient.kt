@@ -1,8 +1,11 @@
 import com.example.spoteam_android.search.SearchApiService
 import com.example.spoteam_android.ui.calendar.CalendarApiService
+import com.example.spoteam_android.ui.interestarea.GetInterestCategoryApiService
 import com.example.spoteam_android.ui.interestarea.GetMemberInterestAreaApiService
 import com.example.spoteam_android.ui.interestarea.InterestAreaApiService
 import com.example.spoteam_android.ui.interestarea.InterestSpecificAreaApiService
+import com.example.spoteam_android.ui.interestarea.MyInterestStudyAllApiService
+import com.example.spoteam_android.ui.interestarea.MyInterestStudySpecificApiService
 import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
 import com.example.spoteam_android.ui.interestarea.RecruitingStudyApiService
 import okhttp3.OkHttpClient
@@ -13,8 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
     private const val BASE_URL = "https://www.teamspot.site/"  // 실제 API의 베이스 URL
 
-    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDIyOTMyMywiZXhwIjoxNzI0MzE1NzIzfQ.90lF9GyRLvUR0st3FtNrdk099LEzgq3ot7Cm4ewUAy4"
-
+    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDMzOTUwNywiZXhwIjoxNzI0NDI1OTA3fQ.tr-heLd82sLiWmsEZzFFccD-ZADjRKm0Y22fOc0IKzY"
 
     fun getAuthToken(): String {
         return "Bearer $authToken"
@@ -56,6 +58,18 @@ object RetrofitClient {
 
     val RSService: RecruitingStudyApiService by lazy {
         instance.create(RecruitingStudyApiService::class.java)
+    }
+
+    val MIAService: MyInterestStudyAllApiService by lazy{
+        instance.create(MyInterestStudyAllApiService::class.java)
+    }
+
+    val GICService: GetInterestCategoryApiService by lazy{
+        instance.create(GetInterestCategoryApiService::class.java)
+    }
+
+    val MISSerivice: MyInterestStudySpecificApiService by lazy{
+        instance.create(MyInterestStudySpecificApiService::class.java)
     }
 
 

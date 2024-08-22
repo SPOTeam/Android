@@ -1,11 +1,13 @@
 package com.example.spoteam_android.todolist
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -122,6 +124,41 @@ class TodoListFragment : Fragment() {
         binding.imgbtnPlusTodolist.setOnClickListener {
             myTodoAdapter.addTodo() // 항목 추가
             binding.rvMyTodoList.scrollToPosition(todoList.size - 1) // 마지막 항목으로 스크롤
+        }
+
+        val cbTodo1 = binding.cbTodo1
+        val cbTodo2 = binding.cbTodo2
+        val cbTodo3 = binding.cbTodo3
+
+        binding.cbTodo1.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                cbTodo1.paintFlags = cbTodo3.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                cbTodo1.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray))
+            } else {
+                cbTodo1.paintFlags = cbTodo3.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                cbTodo1.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
+            }
+        }
+        binding.cbTodo2.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                cbTodo2.paintFlags = cbTodo3.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                cbTodo2.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray))
+            } else {
+                cbTodo2.paintFlags = cbTodo3.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                cbTodo2.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
+            }
+        }
+
+
+
+        binding.cbTodo3.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                cbTodo3.paintFlags = cbTodo3.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                cbTodo3.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray))
+            } else {
+                cbTodo3.paintFlags = cbTodo3.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                cbTodo3.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
+            }
         }
 
         return binding.root

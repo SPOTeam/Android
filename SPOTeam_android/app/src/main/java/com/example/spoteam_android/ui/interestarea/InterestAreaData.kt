@@ -17,6 +17,10 @@ data class ApiResponse(
 )
 
 data class Result(
+
+    @SerializedName("themes")
+    val themes: List<String>,
+
     @SerializedName("regions")
     val regions: List<Region>,
 

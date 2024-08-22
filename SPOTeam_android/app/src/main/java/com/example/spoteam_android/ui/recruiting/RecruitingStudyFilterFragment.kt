@@ -3,7 +3,6 @@ package com.example.spoteam_android.ui.recruiting
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,12 +74,9 @@ class RecruitingStudyFilterFragment : Fragment() {
         )
         val spinner: Spinner = binding.genderSpinner
 
-
-
         val toolbar = binding.toolbar
 
         val source = arguments?.getString("source")
-        Log.d("RecruitingStudyFragment","source = $source")
 
         when (source){
             "RecruitingStudyFragment" -> {
@@ -91,7 +87,7 @@ class RecruitingStudyFilterFragment : Fragment() {
 
         val bundle = Bundle()
 
-        bundle.putString("activityFee_01", "오프라인")
+        bundle.putString("activityFee_01", "false")
 
         toolbar.icBack.setOnClickListener {
             (activity as MainActivity).switchFragment(RecruitingStudyFragment())

@@ -1,11 +1,14 @@
 package com.example.spoteam_android.ui.interestarea
 
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
@@ -106,6 +109,17 @@ class InterestFilterFragment : Fragment() {
                 behind_et.visibility = View.GONE
             }
             updateNextButtonState()
+        }
+
+        editText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.hideSoftInputFromWindow(view.windowToken, 0)
+                editText.clearFocus()  // 포커스 해제
+                true
+            } else {
+                false
+            }
         }
 
         val chipGroup2 = binding.chipGroup2

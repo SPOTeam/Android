@@ -1,5 +1,6 @@
 package com.example.spoteam_android
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -28,6 +29,7 @@ class BoardAdapter(
 
         holder.itemView.setOnClickListener {
             onItemClick(currentItem)
+            Log.d("BoardAdapter",currentItem.toString())
         }
 
         holder.likeButton.setOnClickListener {
