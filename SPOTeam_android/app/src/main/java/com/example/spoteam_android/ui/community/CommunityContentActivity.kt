@@ -10,6 +10,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ActivityCommunityContentBinding
 import com.example.spoteam_android.ui.community.contentComment.ContentCommentMultiViewRVAdapter
@@ -235,12 +236,6 @@ class CommunityContentActivity : AppCompatActivity() {
 //                            initialIsliked = contentInfo.likedByCurrentUser
 //                            initialIsLikedNum = contentInfo.likeCount
 //                            //Glide를 사용하여 imageUrl을 ImageView에 로드
-//                            Glide.with(binding.root.context)
-//                                .load(contentInfo.fileUrls)
-//                                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
-//                                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
-//                                .into(binding.communityContentProfileIv)
-
                             Log.d("Content", "items: $contentInfo")
                             Log.d("Comment", "items: $commentInfo")
                             initContentInfo(contentInfo)
@@ -374,7 +369,6 @@ class CommunityContentActivity : AppCompatActivity() {
     }
 
     private fun initContentInfo(contentInfo: ContentInfo) {
-        binding.communityContentWriterTv.text =contentInfo.writer
         binding.communityContentDateTv.text = formatWrittenTime(contentInfo.writtenTime)
         binding.communityContentSaveNumTv.text = contentInfo.scrapCount.toString()
         binding.communityContentTitleTv.text = contentInfo.title
@@ -382,6 +376,18 @@ class CommunityContentActivity : AppCompatActivity() {
         binding.communityContentLikeNumTv.text = contentInfo.likeCount.toString()
         binding.communityContentContentNumTv.text = contentInfo.commentCount.toString()
         binding.communityContentViewNumTv.text = contentInfo.viewCount.toString()
+
+        if(contentInfo.anonymous) {
+            binding.communityContentWriterTv.text = "익명"
+            Glide.with(binding.root.context)
+                .load(R.drawable.fragment_calendar_spot_logo)
+                .into(binding.communityContentProfileIv)
+        } else {
+            binding.communityContentWriterTv.text =contentInfo.writer
+            Glide.with(binding.root.context)
+                .load(contentInfo.profileImage)
+                .into(binding.communityContentProfileIv)
+        }
 
         if(contentInfo.likedByCurrentUser) {
             binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE

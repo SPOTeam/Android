@@ -94,6 +94,8 @@ data class ContentResponse(
 data class ContentInfo(
     val type : String,
     val writer: String,
+    val anonymous: Boolean,
+    val profileImage : String,
     val writtenTime : String,
     val scrapCount : Int,
     val title : String,
@@ -116,6 +118,8 @@ data class CommentsInfo(
     val commentContent : String,
     val parentCommentId : Int,
     val writer : String,
+    val anonymous: Boolean,
+    val profileImage : String,
     val writtenTime : String,
     var likeCount : Int,
     var likedByCurrentUser : Boolean,
