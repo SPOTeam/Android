@@ -44,7 +44,7 @@ class CommunityContentActivity : AppCompatActivity() {
 
         // 현재 로그인된 사용자 정보를 로그
         memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
-        Log.d("SharedPreferences", "MemberId: $memberId, PostId : $postId")
+//        Log.d("SharedPreferences", "MemberId: $memberId, PostId : $postId")
 
         binding = ActivityCommunityContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -104,10 +104,10 @@ class CommunityContentActivity : AppCompatActivity() {
                     call: Call<ContentLikeResponse>,
                     response: Response<ContentLikeResponse>
                 ) {
-                    Log.d("LikeContent", "response: ${response.isSuccessful}")
+//                    Log.d("LikeContent", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val likeResponse = response.body()
-                        Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
+//                        Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
                             fetchContentInfo()
                         } else {
@@ -131,10 +131,10 @@ class CommunityContentActivity : AppCompatActivity() {
                     call: Call<ContentUnLikeResponse>,
                     response: Response<ContentUnLikeResponse>
                 ) {
-                    Log.d("UnLikeContent", "response: ${response.isSuccessful}")
+//                    Log.d("UnLikeContent", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val unLikeResponse = response.body()
-                        Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
+//                        Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
                             fetchContentInfo()
                         } else {
@@ -176,7 +176,7 @@ class CommunityContentActivity : AppCompatActivity() {
                     call: Call<WriteCommentResponse>,
                     response: Response<WriteCommentResponse>) {
                     if (response.isSuccessful && response.body()?.isSuccess == "true") {
-                        Log.d("WriteComment", "${response.body()!!.result}")
+//                        Log.d("WriteComment", "${response.body()!!.result}")
                         parentCommentId = 0 // postCommentID 초기화
                         binding.writeCommentContentEt.text.clear()
                         binding.writeCommentContentEt.clearFocus()
@@ -185,8 +185,6 @@ class CommunityContentActivity : AppCompatActivity() {
                         // 어댑터의 상태 초기화
                         resetAdapterState()
                         fetchContentInfo()
-                    } else {
-                        Log.d("WriteComment", response.body()!!.message)
                     }
                 }
 
@@ -200,7 +198,7 @@ class CommunityContentActivity : AppCompatActivity() {
         val popupMenu = PopupMenu(view.context, view)
         val inflater: MenuInflater = popupMenu.menuInflater
 //        val exit = ExitStudyPopupFragment(view.context)
-        val report = ReportContentFragment(view.context)
+        val report = ReportContentDialog(view.context)
         val fragmentManager = (view.context as AppCompatActivity).supportFragmentManager
         inflater.inflate(R.menu.menu_community_home_options, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { menuItem ->
@@ -236,8 +234,8 @@ class CommunityContentActivity : AppCompatActivity() {
 //                            initialIsliked = contentInfo.likedByCurrentUser
 //                            initialIsLikedNum = contentInfo.likeCount
 //                            //Glide를 사용하여 imageUrl을 ImageView에 로드
-                            Log.d("Content", "items: $contentInfo")
-                            Log.d("Comment", "items: $commentInfo")
+//                            Log.d("Content", "items: $contentInfo")
+//                            Log.d("Comment", "items: $commentInfo")
                             initContentInfo(contentInfo)
 
                             val sortedComments = sortComments(commentInfo)
@@ -267,10 +265,10 @@ class CommunityContentActivity : AppCompatActivity() {
                     call: Call<LikeCommentResponse>,
                     response: Response<LikeCommentResponse>
                 ) {
-                    Log.d("LikeComment", "response: ${response.isSuccessful}")
+//                    Log.d("LikeComment", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val likeResponse = response.body()
-                        Log.d("LikeComment", "responseBody: ${likeResponse?.isSuccess}")
+//                        Log.d("LikeComment", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
                             fetchContentInfo()
                         } else {
@@ -294,10 +292,10 @@ class CommunityContentActivity : AppCompatActivity() {
                     call: Call<UnLikeCommentResponse>,
                     response: Response<UnLikeCommentResponse>
                 ) {
-                    Log.d("UnLikeComment", "response: ${response.isSuccessful}")
+//                    Log.d("UnLikeComment", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val unLikeResponse = response.body()
-                        Log.d("UnLikeComment", "responseBody: ${unLikeResponse?.isSuccess}")
+//                        Log.d("UnLikeComment", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
                             fetchContentInfo()
                         } else {
@@ -321,10 +319,10 @@ class CommunityContentActivity : AppCompatActivity() {
                     call: Call<DisLikeCommentResponse>,
                     response: Response<DisLikeCommentResponse>
                 ) {
-                    Log.d("DisLikeComment", "response: ${response.isSuccessful}")
+//                    Log.d("DisLikeComment", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val likeResponse = response.body()
-                        Log.d("DisLikeComment", "responseBody: ${likeResponse?.isSuccess}")
+//                        Log.d("DisLikeComment", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
                             fetchContentInfo()
                         } else {
@@ -348,10 +346,10 @@ class CommunityContentActivity : AppCompatActivity() {
                     call: Call<UnDisLikeCommentResponse>,
                     response: Response<UnDisLikeCommentResponse>
                 ) {
-                    Log.d("UnDisLikeComment", "response: ${response.isSuccessful}")
+//                    Log.d("UnDisLikeComment", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val unLikeResponse = response.body()
-                        Log.d("UnDisLikeComment", "responseBody: ${unLikeResponse?.isSuccess}")
+//                        Log.d("UnDisLikeComment", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
                             fetchContentInfo()
                         } else {
@@ -448,8 +446,8 @@ class CommunityContentActivity : AppCompatActivity() {
             val replies = commentInfo.filter { it.parentCommentId == parentComment.commentId }
             sortedList.addAll(replies)
         }
-        Log.d("sortedList", "$sortedList")
-        Log.d("sortedListLength", "${sortedList.size}")
+//        Log.d("sortedList", "$sortedList")
+//        Log.d("sortedListLength", "${sortedList.size}")
 
         return sortedList
     }

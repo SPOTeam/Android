@@ -16,7 +16,7 @@ import com.example.spoteam_android.databinding.ActivityMystudyCommunityContentBi
 import com.example.spoteam_android.ui.community.CommunityRetrofitClient
 import com.example.spoteam_android.ui.community.DisLikeCommentResponse
 import com.example.spoteam_android.ui.community.LikeCommentResponse
-import com.example.spoteam_android.ui.community.ReportContentFragment
+import com.example.spoteam_android.ui.community.ReportContentDialog
 import com.example.spoteam_android.ui.community.StudyContentLikeResponse
 import com.example.spoteam_android.ui.community.StudyContentUnLikeResponse
 import com.example.spoteam_android.ui.community.StudyPostContentCommentDetail
@@ -232,7 +232,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         val popupMenu = PopupMenu(view.context, view)
         val inflater: MenuInflater = popupMenu.menuInflater
 //        val exit = ExitStudyPopupFragment(view.context)
-        val report = ReportContentFragment(view.context)
+        val report = ReportContentDialog(view.context)
         val fragmentManager = (view.context as AppCompatActivity).supportFragmentManager
         inflater.inflate(R.menu.menu_community_home_options, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { menuItem ->
@@ -434,6 +434,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
 //        initialIsliked = contentInfo.isLiked
 //        initialIsLikedNum = contentInfo.likeNum
 
+        binding.communityContentWriterTv.text = contentInfo.member.name
         binding.communityContentDateTv.text = formatWrittenTime(contentInfo.createdAt)
         binding.communityContentTitleTv.text = contentInfo.title
         binding.communityContentContentTv.text = contentInfo.content
@@ -441,6 +442,9 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         binding.communityContentContentNumTv.text = contentInfo.commentNum.toString()
         binding.communityContentViewNumTv.text = contentInfo.hitNum.toString()
 
+        Glide.with(binding.root.context)
+            .load(contentInfo.member.profileImage)
+            .into(binding.communityContentProfileIv)
 
 
         if(!contentInfo.studyPostImages.isEmpty()) {

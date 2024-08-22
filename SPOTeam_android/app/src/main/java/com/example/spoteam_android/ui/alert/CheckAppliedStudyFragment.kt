@@ -46,10 +46,10 @@ class CheckAppliedStudyFragment : Fragment() {
                     call: Call<AlertStudyResponse>,
                     response: Response<AlertStudyResponse>
                 ) {
-                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
+//                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val studyAlertResponse = response.body()
-                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
+//                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
                         if (studyAlertResponse?.isSuccess == "true") {
                             val studyAlertInfo = studyAlertResponse.result.notifications
                             initRecyclerview(studyAlertInfo)
@@ -102,10 +102,10 @@ class CheckAppliedStudyFragment : Fragment() {
                     call: Call<AcceptedAlertStudyResponse>,
                     response: Response<AcceptedAlertStudyResponse>
                 ) {
-                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
+//                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val studyAlertResponse = response.body()
-                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
+//                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
                         if (studyAlertResponse?.isSuccess == "true") {
                             //add method
                         }

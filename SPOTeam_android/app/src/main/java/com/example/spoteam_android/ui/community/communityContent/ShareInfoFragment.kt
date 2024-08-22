@@ -39,7 +39,7 @@ class ShareInfoFragment : Fragment() {
 
         // 현재 로그인된 사용자 정보를 로그
         memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
-        Log.d("SharedPreferences", "MemberId: $memberId")
+//        Log.d("SharedPreferences", "MemberId: $memberId")
 
         fetchPages("INFORMATION_SHARING", 0)
 
@@ -61,7 +61,7 @@ class ShareInfoFragment : Fragment() {
                     call: Call<ContentLikeResponse>,
                     response: Response<ContentLikeResponse>
                 ) {
-                    Log.d("LikeContent", "response: ${response.isSuccessful}")
+//                    Log.d("LikeContent", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val likeResponse = response.body()
                         Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
@@ -88,7 +88,7 @@ class ShareInfoFragment : Fragment() {
                     call: Call<ContentUnLikeResponse>,
                     response: Response<ContentUnLikeResponse>
                 ) {
-                    Log.d("UnLikeContent", "response: ${response.isSuccessful}")
+//                    Log.d("UnLikeContent", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val unLikeResponse = response.body()
                         Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
@@ -124,7 +124,7 @@ class ShareInfoFragment : Fragment() {
                         val pagesResponse = response.body()
                         if (pagesResponse?.isSuccess == "true") {
                             val pagesResponseList = pagesResponse.result?.postResponses
-                            Log.d("PASS_EXPERIENCE", "items: $pagesResponseList")
+//                            Log.d("PASS_EXPERIENCE", "items: $pagesResponseList")
                             if (pagesResponseList != null) {
                                 initRecyclerview(pagesResponseList)
                             }

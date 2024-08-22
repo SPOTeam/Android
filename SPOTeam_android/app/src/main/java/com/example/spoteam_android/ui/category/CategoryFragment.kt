@@ -18,7 +18,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 class CategoryFragment : Fragment() {
 
     lateinit var binding: FragmentCategoryBinding
-    private val tabList = arrayListOf("전체", "어학", "자격증", "취업", "토론", "시사/뉴스", "자율학습", "프로젝트", "공모전", "전공/진로", "기타")
+    private val tabList = arrayListOf("어학", "자격증", "취업", "토론", "시사/뉴스", "자율학습", "프로젝트", "공모전", "전공/진로", "기타")
 
     override fun onCreateView(
         inflater: LayoutInflater,
