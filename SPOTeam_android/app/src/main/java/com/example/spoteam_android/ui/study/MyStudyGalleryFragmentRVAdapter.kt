@@ -3,28 +3,40 @@ package com.example.spoteam_android.ui.study
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.spoteam_android.BoardItem
-import com.example.spoteam_android.GalleryItem
+import com.bumptech.glide.Glide
+import com.example.spoteam_android.GalleryItems
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemGalleryPictureBinding
-import com.example.spoteam_android.databinding.ItemRecyclerViewBinding
 
-class MyStudyGalleryFragmentRVAdapter(private val dataList: ArrayList<GalleryItem>) : RecyclerView.Adapter<MyStudyGalleryFragmentRVAdapter.ViewHolder>() {
+class MyStudyGalleryFragmentRVAdapter(private val dataList: List<GalleryItems>) : RecyclerView.Adapter<MyStudyGalleryFragmentRVAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val binding: ItemGalleryPictureBinding = ItemGalleryPictureBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
-
+        // ItemGalleryPictureBinding을 사용해 뷰 홀더를 생성
+        val binding: ItemGalleryPictureBinding = ItemGalleryPictureBinding.inflate(
+            LayoutInflater.from(viewGroup.context),
+            viewGroup,
+            false
+        )
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        // 현재 위치의 데이터를 뷰 홀더에 바인딩
         holder.bind(dataList[position])
     }
 
-    override fun getItemCount() = dataList.size
+    override fun getItemCount(): Int {
+        // 데이터 리스트의 크기를 반환
+        return dataList.size
+    }
 
-    inner class ViewHolder(val binding : ItemGalleryPictureBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: GalleryItem){
-            binding.mypageGalleryPicture.setImageResource(data.imgId)
+    inner class ViewHolder(private val binding: ItemGalleryPictureBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: GalleryItems) {
+            // Glide를 사용해 이미지를 로드
+            Glide.with(binding.root.context)
+                .load(data.imageUrl)  // 이미지 URL // 로딩 중에 표시할 플레이스홀더 이미지
+                .error(R.drawable.study_spot_logo) // 오류 시 표시할 이미지
+                .into(binding.mypageGalleryPicture) // 이미지를 로드할 ImageView
         }
     }
 }

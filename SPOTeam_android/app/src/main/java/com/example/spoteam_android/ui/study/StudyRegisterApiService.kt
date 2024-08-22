@@ -1,4 +1,5 @@
 import com.example.spoteam_android.BookmarkResponse
+import com.example.spoteam_android.GalleryResponse
 import com.example.spoteam_android.IsAppliedResponse
 import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MemberResponse
@@ -98,6 +99,14 @@ interface StudyApiService {
     fun getIsApplied(
         @Path("studyId") studyId: Int
     ): Call<IsAppliedResponse>
+
+    //갤러리 이미지 불러오기
+    @GET("/spot/studies/{studyId}/images")
+    fun getStudyImages(
+        @Path("studyId") studyId: Int,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int
+    ): Call<GalleryResponse>
 
 
 }
