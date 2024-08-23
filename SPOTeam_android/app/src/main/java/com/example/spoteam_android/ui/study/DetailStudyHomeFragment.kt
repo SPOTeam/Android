@@ -50,6 +50,7 @@ class DetailStudyHomeFragment : Fragment() {
 
         setupViews()
 
+
         // ViewModel에서 studyId를 관찰하고 변경될 때마다 fetchStudyMembers 호출
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
             Log.d("DetailStudyHomeFragment", "Received studyId from ViewModel: $studyId")

@@ -134,8 +134,6 @@ class HouseFragment : Fragment() {
         fetchDataAnyWhere(memeberId) //관심 지역 스터디
         fetchRecommendStudy(memeberId) //추천 스터디
 
-
-
         binding.icFind.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, SearchFragment())

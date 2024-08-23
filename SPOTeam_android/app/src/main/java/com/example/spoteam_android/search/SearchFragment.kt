@@ -5,7 +5,6 @@ import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -28,8 +27,10 @@ import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.example.spoteam_android.ui.study.DetailStudyVPAdapter
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.tabs.TabLayoutMediator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,6 +43,8 @@ class SearchFragment : Fragment() {
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var recommendBoardAdapter: InterestVPAdapter
     private lateinit var studyApiService: StudyApiService
+    private lateinit var recruitingStudyAdapter: InterestVPAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,8 +92,36 @@ class SearchFragment : Fragment() {
             adapter = recommendBoardAdapter
         }
 
+        recruitingStudyAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
+            toggleLikeStatus(selectedItem, likeButton)
+        })
+
+        recruitingStudyAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
+            override fun onItemClick(data: BoardItem) {
+                studyViewModel.setStudyData(
+                    data.studyId,
+                    data.imageUrl,
+                    data.introduction
+                )
+
+                val detailStudyFragment = DetailStudyFragment()
+                (activity as? MainActivity)?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_frm, detailStudyFragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
+            }
+        })
+
+        binding.searchBoard.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = recruitingStudyAdapter
+        }
+
+
+
         val memberId = getMemberId(requireContext())
         fetchRecommendStudy(memberId)
+        fetchAllRecruiting("ALL")
 
         binding.searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -164,7 +195,6 @@ class SearchFragment : Fragment() {
         // 기존에 저장된 검색어 목록을 가져옴
         val searches = sharedPreferences.getStringSet("searches", LinkedHashSet()) ?: LinkedHashSet()
 
-        Log.d("saveSearchQuery()","$searches")
 
         // 이미 존재하는 검색어는 제거 (중복 방지)
         searches.remove(query)
@@ -188,7 +218,6 @@ class SearchFragment : Fragment() {
 
         val sharedPreferences = requireContext().getSharedPreferences("RecentSearches", Context.MODE_PRIVATE)
         val searches = sharedPreferences.getStringSet("searches", LinkedHashSet()) ?: LinkedHashSet()
-        Log.d("loadRecentSearches","$searches")
         recentSearches.clear()
         recentSearches.addAll(searches)
 
@@ -231,12 +260,10 @@ class SearchFragment : Fragment() {
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Log.d("SearchFragment", "연결 실패: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                Log.d("SearchFragment", "API 호출 실패: ${t.message}")
             }
         })
     }
@@ -289,6 +316,59 @@ class SearchFragment : Fragment() {
         } else {
             Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun fetchAllRecruiting(selectedItem: String) {
+        val boardItems = arrayListOf<BoardItem>()
+
+        RetrofitClient.RSService.GetRecruitingStudy(
+            authToken = getAuthToken(),
+            gender = "MALE",
+            minAge = 18,
+            maxAge = 60,
+            isOnline = false,
+            hasFee = false,
+            fee = null,
+            page = 0,
+            size = 1,
+            sortBy = selectedItem
+        ).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse?.isSuccess == true) {
+                        boardItems.clear()
+                        apiResponse.result?.content?.forEach { study ->
+                            val boardItem = BoardItem(
+                                studyId = study.studyId,
+                                title = study.title,
+                                goal = study.goal,
+                                introduction = study.introduction,
+                                memberCount = study.memberCount,
+                                heartCount = study.heartCount,
+                                hitNum = study.hitNum,
+                                maxPeople = study.maxPeople,
+                                studyState = study.studyState,
+                                themeTypes = study.themeTypes,
+                                regions = study.regions,
+                                imageUrl = study.imageUrl,
+                                liked = study.liked
+                            )
+                            boardItems.add(boardItem)
+                        }
+                        updateRecyclerView(boardItems)
+                    } else {
+                    }
+                } else {
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+            }
+        })
+    }
+    private fun updateRecyclerView(boardItems: List<BoardItem>) {
+        recruitingStudyAdapter.updateList(boardItems)
     }
 
 }
