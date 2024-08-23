@@ -15,7 +15,7 @@ interface SearchApiService {
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sortBy") sortBy: String,
-    ): Call<SearchResponse>
+    ): Call<ApiResponse>
 }
 
 

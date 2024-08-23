@@ -135,11 +135,15 @@ class HouseFragment : Fragment() {
         fetchRecommendStudy(memeberId) //추천 스터디
 
 
-        val icFindButton: ImageView = binding.root.findViewById(R.id.ic_find)
-        icFindButton.setOnClickListener {
-            // MainActivity의 switchFragment 메서드를 호출하여 SearchFragment로 전환
-            (activity as MainActivity).switchFragment(SearchFragment())
+
+        binding.icFind.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, SearchFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+            (context as MainActivity).isOnCommunityHome(HomeFragment())
         }
+
 
         binding.icAlarm.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()

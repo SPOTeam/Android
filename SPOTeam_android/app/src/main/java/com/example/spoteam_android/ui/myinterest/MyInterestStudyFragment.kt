@@ -25,6 +25,9 @@ import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMyInterestStudyBinding
+import com.example.spoteam_android.search.SearchFragment
+import com.example.spoteam_android.ui.alert.AlertFragment
+import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
 import com.example.spoteam_android.ui.study.DetailStudyFragment
@@ -67,6 +70,20 @@ class MyInterestStudyFragment : Fragment() {
         interestBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
         })
+
+        binding.icFindMyInterest.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, SearchFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+
+        binding.icAlarmMyInterest.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, AlertFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
 
         interestBoardAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
             override fun onItemClick(data: BoardItem) {

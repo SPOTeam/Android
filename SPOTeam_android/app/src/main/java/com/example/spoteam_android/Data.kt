@@ -55,22 +55,6 @@ data class BoardItem (
     var liked: Boolean
 )
 
-data class SearchItem (
-    val studyId: Int,
-    val title: String,
-    val goal: String,
-    val introduction: String,
-    val memberCount: Int,
-    val heartCount: Int,
-    val hitNum: Int,
-    val maxPeople: Int,
-    val studyState: String,
-    val themeTypes: List<String>,
-    val createdAt: String,
-    val liked: Boolean,
-    val imageUrl: String
-)
-
 
 data class StudyItem( //StudyFragment에서 사용
     val studyId: Int,

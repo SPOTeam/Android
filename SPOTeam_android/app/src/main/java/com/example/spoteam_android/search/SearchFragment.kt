@@ -1,6 +1,7 @@
 package com.example.spoteam_android.search
 
 import RetrofitClient.getAuthToken
+import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
@@ -9,15 +10,23 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.LikeResponse
+import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentSearchBinding
+import com.example.spoteam_android.ui.alert.AlertFragment
+import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
+import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
@@ -30,9 +39,9 @@ class SearchFragment : Fragment() {
 
     lateinit var binding: FragmentSearchBinding
     private val recentSearches = mutableListOf<String>()
-    private lateinit var searchAdapter: SearchAdapter
-    private lateinit var studyViewModel: StudyViewModel
-    private lateinit var recommendBoardAdapter: BoardAdapter
+    private val studyViewModel: StudyViewModel by activityViewModels()
+    private lateinit var recommendBoardAdapter: InterestVPAdapter
+    private lateinit var studyApiService: StudyApiService
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +49,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
+        studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
         // 최근 검색어 로드
         loadRecentSearches()
@@ -54,27 +64,25 @@ class SearchFragment : Fragment() {
             chip.isCheckable = false
         }
 
-        recommendBoardAdapter = BoardAdapter(
-            ArrayList(),
-            onItemClick = { selectedItem ->
-                Log.d("SearchFragment", "이벤트 클릭: ${selectedItem.title}")
+        recommendBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
+            toggleLikeStatus(selectedItem, likeButton)
+        })
+
+        recommendBoardAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
+            override fun onItemClick(data: BoardItem) {
                 studyViewModel.setStudyData(
-                    selectedItem.studyId,
-                    selectedItem.imageUrl,
-                    selectedItem.introduction
+                    data.studyId,
+                    data.imageUrl,
+                    data.introduction
                 )
 
-                // Fragment 전환
-                val fragment = DetailStudyFragment()
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, fragment)
-                    .addToBackStack(null)
-                    .commit()
-            },
-            onLikeClick = { selectedItem, likeButton ->
-//                toggleLikeStatus(selectedItem, likeButton)
+                val detailStudyFragment = DetailStudyFragment()
+                (activity as? MainActivity)?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_frm, detailStudyFragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
             }
-        )
+        })
 
         binding.recommendationBoard.apply {
             layoutManager = LinearLayoutManager(context)
@@ -240,6 +248,46 @@ class SearchFragment : Fragment() {
             sharedPreferences.getInt("${currentEmail}_memberId", -1)
         } else {
             -1
+        }
+    }
+
+    private fun toggleLikeStatus(studyItem: BoardItem, likeButton: ImageView) {
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val memberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
+
+        if (memberId != -1) {
+            studyApiService.toggleStudyLike(studyItem.studyId, memberId)
+                .enqueue(object : Callback<LikeResponse> {
+                    override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
+                        if (response.isSuccessful) {
+                            response.body()?.let { likeResponse ->
+                                // 서버에서 반환된 상태에 따라 하트 아이콘 및 BoardItem의 liked 상태 업데이트
+                                val newStatus = likeResponse.result.status
+                                studyItem.liked = newStatus == "LIKE"
+                                val newIcon = if (studyItem.liked) R.drawable.ic_heart_filled else R.drawable.study_like
+                                likeButton.setImageResource(newIcon)
+
+                                // heartCount 즉시 증가 또는 감소
+                                studyItem.heartCount = if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
+
+                                // 변경된 항목을 어댑터에 알림
+                                val adapter = binding.recommendationBoard.adapter as InterestVPAdapter
+                                val position = adapter.dataList.indexOf(studyItem)
+                                if (position != -1) {
+                                    adapter.notifyItemChanged(position)
+                                }
+                            }
+                        } else {
+                            Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
+                        Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+        } else {
+            Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
