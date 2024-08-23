@@ -57,15 +57,10 @@ class HouseFragment : Fragment() {
 
         fetchLivePopularContent()
 
-        binding.houseHotissueCl.setOnClickListener{
+        binding.goPopularContentIv.setOnClickListener{
             val intent = Intent(requireContext(), CommunityContentActivity::class.java)
             intent.putExtra("postInfo", popularContentId.toString())
             startActivity(intent)
-        }
-        binding.root.setOnTouchListener{_, _ ->
-            val mainActivity = activity as? MainActivity
-            mainActivity?.showStudyFrameLayout(false)
-            true
         }
 
         binding.popularContentTv.setOnClickListener {
@@ -133,14 +128,16 @@ class HouseFragment : Fragment() {
         fetchDataAnyWhere(memeberId) //관심 지역 스터디
         fetchRecommendStudy(memeberId) //추천 스터디
 
+
+
         binding.icFind.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, SearchFragment())
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
             (context as MainActivity).isOnCommunityHome(HomeFragment())
-
         }
+
 
         binding.icAlarm.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -169,8 +166,6 @@ class HouseFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-
-
 
         binding.houseRecruitCl.setOnClickListener {
             bundle3.putString("source", "HouseFragment")
@@ -390,152 +385,4 @@ class HouseFragment : Fragment() {
         return memberId // 저장된 memberId 없을 시 기본값 -1 반환
     }
 }
-
-    // getMemberId() 함수는 그대로 유지
-
-
-//    private fun fetchDataAnyWhere(memberId: Int) {
-//
-//        Log.d("HouseFragment","fetchDataAnyWhere()실행")
-//
-//        val interest_area_board = binding.rvBoard
-//        val boardItems = arrayListOf<BoardItem>()
-//
-//        RetrofitClient.IaapiService.InterestArea(
-//            authToken = getAuthToken(),
-//            memberId = memberId,
-//            page = 0,
-//            size = 3,
-//            sortBy = "ALL",
-//            gender = "MALE",
-//            minAge = 18,
-//            maxAge = 60,
-//            isOnline = false,
-//            hasFee = false,
-//            fee = null
-//        )
-//            .enqueue(object : Callback<ApiResponse> {
-//                override fun onResponse(
-//                    response: Response<ApiResponse>
-//                ) {
-//                    if (response.isSuccessful) {
-//                        boardItems.clear()
-//                        val apiResponse = response.body()
-//                        Log.d("HouseFragment","$apiResponse")
-//                        if (apiResponse?.isSuccess == true) {
-//                            apiResponse?.result?.content?.forEach { study ->
-//                                val boardItem = BoardItem(
-//                                    studyId = study.studyId,
-//                                    title = study.title,
-//                                    goal = study.goal,
-//                                    introduction = study.introduction,
-//                                    memberCount = study.memberCount,
-//                                    heartCount = study.heartCount,
-//                                    hitNum = study.hitNum,
-//                                    maxPeople = study.maxPeople,
-//                                    studyState = study.studyState,
-//                                    themeTypes = study.themeTypes,
-//                                    regions = study.regions,
-//                                    imageUrl = study.imageUrl
-//                                )
-//                                boardItems.add(boardItem)
-//                            }
-//                                val boardAdapter = BoardAdapter(boardItems){selectedItem ->}
-//                                boardAdapter.notifyDataSetChanged()
-//                                interest_area_board.visibility = View.VISIBLE
-//                                interest_area_board.adapter = boardAdapter
-//                                interest_area_board.layoutManager = LinearLayoutManager(
-//                                    requireContext(),
-//                                    LinearLayoutManager.VERTICAL,
-//                                    false
-//                                )
-//                        }
-//                        else{
-//                            interest_area_board.visibility = View.GONE
-//                            Toast.makeText(requireContext() ,"1. 조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
-//                            Log.d("HouseFragment","1. isSuccess == False")
-//                        }
-//                    }
-//                    else{
-//                        Log.d("HouseFragment","1. 연결 실패")
-//                        Log.d("HouseFragment", "{$response}")
-//                        Log.e("HouseFragment", "Error body: ${response.errorBody()}")
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-//                    Log.d("HouseFragment","API 호출 실패")
-//                }
-//            })
-//    }
-
-
-
-//    private fun fetchRecommendStudy(memberId: Int) {
-//
-//        Log.d("HouseFragment","fetchRecommendStudy()실행")
-//
-//        val recommend_study_board = binding.rvBoard2
-//        val boardItems = arrayListOf<BoardItem>()
-//
-//        RetrofitClient.GetRSService.GetRecommendStudy(
-//            authToken = getAuthToken(),
-//            memberId = memberId,
-//        )
-//            .enqueue(object : Callback<ApiResponse> {
-//                override fun onResponse(
-//                    call: Call<ApiResponse>,
-//                    response: Response<ApiResponse>
-//                ) {
-//                    if (response.isSuccessful) {
-//                        boardItems.clear()
-//                        val apiResponse = response.body()
-//                        Log.d("HouseFragment","$apiResponse")
-//                        if (apiResponse?.isSuccess == true) {
-//                            apiResponse?.result?.content?.forEach { study ->
-//                                val boardItem = BoardItem(
-//                                    studyId = study.studyId,
-//                                    title = study.title,
-//                                    goal = study.goal,
-//                                    introduction = study.introduction,
-//                                    memberCount = study.memberCount,
-//                                    heartCount = study.heartCount,
-//                                    hitNum = study.hitNum,
-//                                    maxPeople = study.maxPeople,
-//                                    studyState = study.studyState,
-//                                    themeTypes = study.themeTypes,
-//                                    regions = study.regions,
-//                                    imageUrl = study.imageUrl
-//                                )
-//                                boardItems.add(boardItem)
-//                            }
-//                                val boardAdapter = BoardAdapter(boardItems){selectedItem ->}
-//                                boardAdapter.notifyDataSetChanged()
-//                                recommend_study_board.visibility = View.VISIBLE
-//                                recommend_study_board.adapter = boardAdapter
-//                                recommend_study_board.layoutManager = LinearLayoutManager(
-//                                    requireContext(),
-//                                    LinearLayoutManager.VERTICAL,
-//                                    false
-//                                )
-//                        }
-//                        else{
-//                            recommend_study_board.visibility = View.GONE
-//                            Toast.makeText(requireContext() ,"1. 조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
-//                            Log.d("HouseFragment","1. isSuccess == False")
-//                        }
-//                    }
-//                    else{
-//                        Log.d("HouseFragment","1. 연결 실패")
-//                        Log.d("HouseFragment", "{$response}")
-//                        Log.e("HouseFragment", "Error body: ${response.errorBody()}")
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-//                    Log.d("HouseFragment","API 호출 실패")
-//                }
-//            })
-//    }
-
 
