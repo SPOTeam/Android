@@ -21,6 +21,8 @@ import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.calendar.CalendarFragment
+import com.example.spoteam_android.ui.category.CategoryFragment
+import com.example.spoteam_android.ui.category.category_tabs.AllCategoryFragment
 import com.example.spoteam_android.ui.community.CommunityContentActivity
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.CommunityResponse
@@ -150,12 +152,16 @@ class HouseFragment : Fragment() {
         val bundle = Bundle()
         val bundle2 = Bundle()
         val bundle3 = Bundle()
+        val bundle4 = Bundle()
+
         val interestFragment = InterestFragment()
         val myInterestStudyFragment = MyInterestStudyFragment()
         val recruitingStudyFragment = RecruitingStudyFragment()
+        val categoryFragment = CategoryFragment()
         interestFragment.arguments = bundle
         myInterestStudyFragment.arguments = bundle2
         recruitingStudyFragment.arguments = bundle3
+        categoryFragment.arguments = bundle4
 
         binding.houseLocationCl.setOnClickListener{
             bundle.putString("source", "HouseFragment")
@@ -188,14 +194,18 @@ class HouseFragment : Fragment() {
 
 
         binding.icGoInterest.setOnClickListener {
-            bundle3.putString("source", "HouseFragment")
-            bundle3.putString("mysource", "HouseFragment")
-            //스터디 참여하기 팝업으로 이동
+            val bundle4 = Bundle().apply {
+                putInt("categoryType", 0)
+            }
+            val categoryFragment = CategoryFragment().apply {
+                arguments = bundle4
+            }
             (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, recruitingStudyFragment)
+                .replace(R.id.main_frm, categoryFragment)
                 .addToBackStack(null)
                 .commit()
         }
+
 
 
         binding.houseCommunityCl.setOnClickListener {

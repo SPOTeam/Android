@@ -13,8 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:nestedScrollingEnabled="true"
         tools:context=".MainActivity">
-        
+
         <LinearLayout
             android:id="@+id/fragment_house_logo_ll"
             android:layout_width="match_parent"
@@ -39,7 +40,7 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="3dp"
                 android:src="@drawable/study_spot_logo" />
-            
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -125,8 +126,7 @@
                 android:paddingVertical="16dp"
                 android:paddingStart="12dp"
                 android:paddingEnd="9dp"
-                android:background="@drawable/content_tmpl"
-                android:elevation="8dp">
+                android:background="@drawable/content_tmpl">
 
 
                 <TextView
@@ -316,7 +316,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="45dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/house_fragment_ll">
