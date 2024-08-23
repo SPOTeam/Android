@@ -55,7 +55,7 @@ class InterestFragment : Fragment() {
         interestBoardAdapter = BoardAdapter(
             ArrayList(),
             onItemClick = { selectedItem ->
-                Log.d("InterestFragment", "아이템 클릭: ${selectedItem.title}")
+                Log.d("InterestFragment", "이벤트 클릭: ${selectedItem.title}")
                 studyViewModel.setStudyData(
                     selectedItem.studyId,
                     selectedItem.imageUrl,
@@ -70,7 +70,7 @@ class InterestFragment : Fragment() {
                     .commit()
             },
             onLikeClick = { selectedItem, likeButton ->
-                // 좋아요 클릭 처리
+                toggleLikeStatus(selectedItem, likeButton)
             }
         )
 

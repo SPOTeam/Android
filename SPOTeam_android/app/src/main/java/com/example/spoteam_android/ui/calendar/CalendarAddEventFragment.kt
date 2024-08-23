@@ -12,16 +12,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.ScheduleRequest
 import com.example.spoteam_android.ScheduleResponse
-import com.example.spoteam_android.ui.mypage.PurposeUploadComplteDialog
 import com.example.spoteam_android.ui.study.CompleteScheduleDialog
+import com.example.spoteam_android.ui.study.StudyFragment
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,6 +40,7 @@ class CalendarAddEventFragment : Fragment() {
     private lateinit var startDateTimeTextView: TextView
     private lateinit var endDateTimeTextView: TextView
     private lateinit var saveButton: Button
+    private lateinit var closeButton: ImageView
     private var studyId: Int = 0
 
     private val eventViewModel: EventViewModel by activityViewModels()
@@ -50,6 +55,7 @@ class CalendarAddEventFragment : Fragment() {
         startDateTimeTextView = view.findViewById(R.id.startDateTimeTextView)
         endDateTimeTextView = view.findViewById(R.id.endDateTimeTextView)
         saveButton = view.findViewById(R.id.fragment_introduce_study_bt)
+        closeButton = view.findViewById(R.id.write_content_prev_iv)
 
         studyId = arguments?.getInt("studyId") ?: 0
 
@@ -87,8 +93,15 @@ class CalendarAddEventFragment : Fragment() {
             addEventToViewModel()
             // 서버에 일정 업로드
             uploadScheduleToServer()
-
         }
+
+        closeButton.setOnClickListener{
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, StudyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
 
         return view
     }
