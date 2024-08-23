@@ -73,6 +73,7 @@
                 android:textAlignment="center"
                 android:text="익명"
                 android:textSize="14sp"
+                android:layout_marginStart="5dp"
                 app:layout_constraintStart_toEndOf="@id/community_content_profile_iv"
                 app:layout_constraintTop_toTopOf="@id/community_content_profile_iv" />
 
@@ -83,7 +84,7 @@
                 android:textAlignment="center"
                 android:text="2024.05.31 17:31"
                 android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@id/community_content_profile_iv"
+                app:layout_constraintStart_toStartOf="@id/community_content_writer_tv"
                 app:layout_constraintBottom_toBottomOf="@id/community_content_profile_iv" />
 
             <!--    점3개 이미지 변경    -->

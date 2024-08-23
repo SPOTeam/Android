@@ -2,6 +2,7 @@ package com.example.spoteam_android.ui.category
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.spoteam_android.ui.category.category_tabs.AllCategoryFragment
 import com.example.spoteam_android.ui.category.category_tabs.ContestFragment
 import com.example.spoteam_android.ui.category.category_tabs.DiscussionFragment
 import com.example.spoteam_android.ui.category.category_tabs.FreeStudyFragment
@@ -17,30 +18,29 @@ class CategoryVPAdapter(fragment : Fragment) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = 10
 
-    // "전체",
-//    "어학", "자격증", "취업", "토론", "시사/뉴스", "자율학습", "프로젝트", "공모전", "전공/진로", "기타"
+    // "전체", "어학", "자격증", "취업", "토론", "시사/뉴스", "자율학습", "프로젝트", "공모전", "전공/진로", "기타"
     override fun createFragment(position: Int): Fragment {
         return when(position){
             //All
-//            0 -> AllCategoryFragment()
+            0 -> AllCategoryFragment()
             //어학
-            0 -> LanguageFragment()
+            1 -> LanguageFragment()
             //자격증
-            1 -> LicenseFragment()
+            2 -> LicenseFragment()
             //취업
-            2 -> JobFragment()
+            3 -> JobFragment()
             //토론
-            3 -> DiscussionFragment()
+            4 -> DiscussionFragment()
             //시사/뉴스
-            4 -> NewsFragment()
+            5 -> NewsFragment()
             //자율학습
-            5 -> FreeStudyFragment()
+            6 -> FreeStudyFragment()
             //프로젝트
-            6-> ProjectFragment()
+            7-> ProjectFragment()
             //공모전
-            7 -> ContestFragment()
+            8 -> ContestFragment()
             //전공/진로
-            8 -> MajorFragment()
+            9 -> MajorFragment()
             //기타
             else -> RestFragment()
         }

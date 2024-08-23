@@ -85,7 +85,6 @@
                 android:textAlignment="center"
                 android:text="2024.05.31 17:31"
                 android:textSize="14sp"
-                android:layout_marginTop="5dp"
                 app:layout_constraintStart_toStartOf="@id/community_content_writer_tv"
                 app:layout_constraintTop_toBottomOf="@id/community_content_writer_tv" />
 
