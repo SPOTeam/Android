@@ -52,6 +52,10 @@ class MyPageFragment : Fragment() {
                     .commit()
             }
 
+            binding.tvMyPage.setOnClickListener{
+                parentFragmentManager.popBackStack()
+            }
+
             binding.tvRecruiting.setOnClickListener{
                 (activity as MainActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.main_frm, ConsiderAttendanceFragment())
