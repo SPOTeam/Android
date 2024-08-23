@@ -26,6 +26,7 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentCalendarBinding
 import com.example.spoteam_android.ui.study.OnlineStudyFragment
+import com.example.spoteam_android.ui.study.StudyFragment
 import com.example.spoteam_android.ui.study.quiz.HostMakeQuizFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -72,6 +73,11 @@ class CalendarFragment : Fragment() {
             val studyId = studyViewModel.studyId.value ?: 0
             val fragment = CalendarAddEventFragment.newInstance(studyId)
             (activity as MainActivity).switchFragment(fragment)
+
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.main_frm, StudyFragment())
+//                .addToBackStack(null)
+//                .commit()
         }
 
         eventAdapter = EventAdapter(emptyList(), { event ->
