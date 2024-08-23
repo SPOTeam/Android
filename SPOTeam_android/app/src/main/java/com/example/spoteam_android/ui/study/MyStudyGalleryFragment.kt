@@ -2,6 +2,7 @@ package com.example.spoteam_android.ui.study
 
 import StudyApiService
 import StudyViewModel
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +12,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.spoteam_android.GalleryItems
 import com.example.spoteam_android.GalleryResponse
+import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMystudyGalleryBinding
 import retrofit2.Call
@@ -84,6 +88,15 @@ class MyStudyGalleryFragment : Fragment() {
                         if (images.isNotEmpty()) {
                             val adapter = MyStudyGalleryFragmentRVAdapter(images)
                             binding.communityCategoryContentRv.adapter = adapter
+
+                            adapter.itemClick = object : MyStudyGalleryFragmentRVAdapter.ItemClick{
+                                override fun onItemClick(data: GalleryItems) {
+                                    val intent = Intent(requireContext(), MyStudyPostContentActivity::class.java)
+                                    intent.putExtra("myStudyId", studyId.toString())
+                                    intent.putExtra("myStudyPostId", data.postId.toString())
+                                    startActivity(intent)
+                                }
+                            }
 
                             // 이미지가 있을 때
                             showGallery()
