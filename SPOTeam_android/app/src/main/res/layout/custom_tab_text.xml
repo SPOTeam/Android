@@ -3,7 +3,7 @@
     android:id="@+id/tabText"
     android:layout_width="50dp"
     android:layout_height="wrap_content"
-    android:textSize="12sp"
+    android:textSize="16sp"
     android:gravity="center"
     android:maxLines="3"
     android:ellipsize="end"

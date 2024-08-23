@@ -13,11 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
 import com.bumptech.glide.Glide
-import com.example.spoteam_android.SearchItem
 
 class SearchAdapter(
-    private val itemList: ArrayList<SearchItem>,
-    private val onItemClick: (SearchItem) -> Unit
+    private val itemList: ArrayList<BoardItem>,
+    private val onItemClick: (BoardItem) -> Unit
 ) : RecyclerView.Adapter<SearchAdapter.BoardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
@@ -41,7 +40,7 @@ class SearchAdapter(
 
     inner class BoardViewHolder(val binding: ItemRecyclerViewPlusToggleBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: SearchItem) {
+        fun bind(item: BoardItem) {
             // 데이터 바인딩
             binding.tvTime.text = item.title
             binding.tvTitle.text = item.goal
@@ -94,7 +93,7 @@ class SearchAdapter(
         }
     }
 
-    fun updateList(newList: List<SearchItem>) {
+    fun updateList(newList: List<BoardItem>) {
         itemList.clear()
         itemList.addAll(newList)
         notifyDataSetChanged()

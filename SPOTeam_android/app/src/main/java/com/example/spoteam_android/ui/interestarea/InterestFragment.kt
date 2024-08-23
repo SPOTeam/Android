@@ -26,6 +26,9 @@ import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentInterestBinding
+import com.example.spoteam_android.search.SearchFragment
+import com.example.spoteam_android.ui.alert.AlertFragment
+import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
@@ -67,6 +70,20 @@ class InterestFragment : Fragment() {
                     ?.commit()
             }
         })
+
+        binding.icFindInterest.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, SearchFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+
+        binding.icAlarmInterest.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, AlertFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
 
         binding.interestAreaStudyReyclerview.apply {
             layoutManager = LinearLayoutManager(context)
