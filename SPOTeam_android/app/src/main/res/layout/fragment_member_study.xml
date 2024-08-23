@@ -64,7 +64,6 @@
         android:id="@+id/fragment_member_study_num_frameLayout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@drawable/interest_filter_frame_layout_bottom_border"
         android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +79,7 @@
             android:layout_marginStart="15dp"
             android:fontFamily="@font/pretendard"
             android:text="참여인원(스터디장 포함)"
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="16sp"/>
 
@@ -90,6 +90,7 @@
             android:layout_height="34dp"
             android:layout_gravity="end|center"
             android:layout_marginEnd="15dp"
+
             android:background="@drawable/gender_spinner_background"
             android:spinnerMode="dropdown" />
 
@@ -99,7 +100,6 @@
         android:id="@+id/fragment_member_study_gender_frameLayout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@drawable/interest_filter_frame_layout_bottom_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_member_study_num_frameLayout">
@@ -113,6 +113,7 @@
             android:layout_gravity="start|center"
             android:layout_marginStart="15dp"
             android:text="성별"
+            android:textStyle="bold"
             android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -135,8 +136,7 @@
         android:layout_height="120dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_member_study_gender_frameLayout"
-        android:background="@drawable/interest_filter_frame_layout_bottom_border">
+        app:layout_constraintTop_toBottomOf="@+id/fragment_member_study_gender_frameLayout">
 
         <TextView
             android:id="@+id/fragment_member_study_age_ageRange_tv"
@@ -146,6 +146,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
             android:text="연령대"
+            android:textStyle="bold"
             android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
             android:textSize="16sp" />

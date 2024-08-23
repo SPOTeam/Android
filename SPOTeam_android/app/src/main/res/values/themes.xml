@@ -159,7 +159,6 @@
         <item name="windowSplashScreenAnimationDuration">1000</item>
         <!-- 아이콘 크기 조절 -->
         <item name="postSplashScreenTheme">@style/Theme.SPOTeam_android</item>
-        <item name="android:windowSplashScreenBrandingImage"></item>
     </style>
 
 </resources>
