@@ -96,10 +96,7 @@ class CalendarAddEventFragment : Fragment() {
         }
 
         closeButton.setOnClickListener{
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, StudyFragment())
-                .addToBackStack(null)
-                .commit()
+            parentFragmentManager.popBackStack()
         }
 
 
