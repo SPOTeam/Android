@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             removeNavViewFragment()
         }
 
+
         binding.mainFloatingButton.setOnClickListener {
             val writeCommunityFragment = WriteContentFragment().apply {
                 setStyle(
@@ -233,5 +234,6 @@ class MainActivity : AppCompatActivity() {
             Log.d("showkey", "$key: $value")
         }
     }
-
+    override fun onBackPressed() {
+    }
 }
