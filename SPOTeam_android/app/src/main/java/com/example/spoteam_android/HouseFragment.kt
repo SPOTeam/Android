@@ -57,7 +57,7 @@ class HouseFragment : Fragment() {
 
         fetchLivePopularContent()
 
-        binding.goPopularContentIv.setOnClickListener{
+        binding.houseHotissueCl.setOnClickListener{
             val intent = Intent(requireContext(), CommunityContentActivity::class.java)
             intent.putExtra("postInfo", popularContentId.toString())
             startActivity(intent)
@@ -153,7 +153,7 @@ class HouseFragment : Fragment() {
         myInterestStudyFragment.arguments = bundle2
         recruitingStudyFragment.arguments = bundle3
 
-        binding.imgbtnLocation.setOnClickListener{
+        binding.houseLocationCl.setOnClickListener{
             bundle.putString("source", "HouseFragment")
             //스터디 참여하기 팝업으로 이동
 
@@ -165,7 +165,7 @@ class HouseFragment : Fragment() {
 
 
 
-        binding.imgbtnUnion.setOnClickListener {
+        binding.houseRecruitCl.setOnClickListener {
             bundle3.putString("source", "HouseFragment")
 
             (activity as MainActivity).supportFragmentManager.beginTransaction()
@@ -174,7 +174,7 @@ class HouseFragment : Fragment() {
                 .commit()
         }
 
-        binding.imgbtnJjim.setOnClickListener {
+        binding.houseInterestCl.setOnClickListener {
             bundle2.putString("source", "HouseFragment")
             //스터디 참여하기 팝업으로 이동
 
@@ -196,7 +196,7 @@ class HouseFragment : Fragment() {
         }
 
 
-        binding.imgbtnBoard.setOnClickListener {
+        binding.houseCommunityCl.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, CommunityHomeFragment())
                 .commitAllowingStateLoss()

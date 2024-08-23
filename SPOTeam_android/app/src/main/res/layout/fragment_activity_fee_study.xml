@@ -101,7 +101,6 @@
         android:id="@+id/fragment_activity_fee_study_num_fl"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@drawable/interest_filter_frame_layout_bottom_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="15dp"
@@ -117,6 +116,8 @@
             android:layout_gravity="start|center"
             android:layout_marginStart="15dp"
             android:text="설정한 활동비"
+            android:textStyle="bold"
+            android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
             android:textSize="16sp" />
 

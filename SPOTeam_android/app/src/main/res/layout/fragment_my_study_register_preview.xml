@@ -93,6 +93,60 @@
 
         </FrameLayout>
 
+
+        <LinearLayout
+            android:id="@+id/fragment_my_study_register_preview_member_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_fl">
+
+            <ImageView
+                android:layout_width="18sp"
+                android:layout_height="18sp"
+                android:src="@drawable/study_view"
+                android:layout_gravity="center"/>
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_view_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="1"
+                android:textSize="16sp"
+                android:textColor="#8E8E8E"/>
+
+            <ImageView
+                android:layout_width="18sp"
+                android:layout_height="18sp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/study_like"
+                android:layout_gravity="center"/>
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_bookmark_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="16sp"
+                android:textColor="#8E8E8E"
+                android:layout_marginStart="5dp"/>
+            <ImageView
+                android:layout_width="18sp"
+                android:layout_height="18sp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/study_small_people"
+                android:layout_gravity="center"/>
+            <TextView
+                android:id="@+id/fragment_my_study_register_preview_member_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1/10"
+                android:textSize="16sp"
+                android:textColor="#8E8E8E"
+                android:layout_marginStart="5dp"/>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/fragment_my_study_register_preview_title_tv"
             android:layout_width="wrap_content"
@@ -102,63 +156,10 @@
             android:textSize="20sp"
             android:fontFamily="@font/pretendard"
             android:textStyle="bold"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginStart="15dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_fl"/>
-
-        <LinearLayout
-            android:id="@+id/fragment_my_study_register_preview_member_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="15dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_title_tv">
-
-            <ImageView
-                android:layout_width="18sp"
-                android:layout_height="18sp"
-                android:src="@drawable/ic_preview_view"
-                android:layout_gravity="center"/>
-            <TextView
-                android:id="@+id/fragment_my_study_register_preview_view_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="1"
-                android:textSize="16sp"
-                android:textColor="#2D2D2D"/>
-
-            <ImageView
-                android:layout_width="18sp"
-                android:layout_height="18sp"
-                android:layout_marginStart="15dp"
-                android:src="@drawable/ic_preview_bookmark"
-                android:layout_gravity="center"/>
-            <TextView
-                android:id="@+id/fragment_my_study_register_preview_bookmark_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textSize="16sp"
-                android:textColor="#2D2D2D"
-                android:layout_marginStart="5dp"/>
-            <ImageView
-                android:layout_width="18sp"
-                android:layout_height="18sp"
-                android:layout_marginStart="15dp"
-                android:src="@drawable/ic_preview_member"
-                android:layout_gravity="center"/>
-            <TextView
-                android:id="@+id/fragment_my_study_register_preview_member_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1/10"
-                android:textSize="16sp"
-                android:textColor="#2D2D2D"
-                android:layout_marginStart="5dp"/>
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_member_ll"/>
 
         <TextView
             android:id="@+id/fragment_my_study_register_preview_goal_tv"
@@ -166,7 +167,7 @@
             android:layout_height="wrap_content"
             android:text="우리 스터디의 목표 한 문장"
             android:textSize="14sp"
-            android:textColor="#D8D8D8"
+            android:textColor="#588FF2"
             android:padding="10dp"
             android:background="@drawable/edittext_rounded_corner_rectangle"
             android:layout_marginStart="15dp"
@@ -174,7 +175,7 @@
             android:layout_marginTop="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_member_ll"/>
+            app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_title_tv"/>
 
         <LinearLayout
             android:id="@+id/fragment_my_study_register_preview_group_ll"
