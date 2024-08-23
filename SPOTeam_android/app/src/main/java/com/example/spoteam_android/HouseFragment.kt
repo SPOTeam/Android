@@ -57,16 +57,15 @@ class HouseFragment : Fragment() {
 
         fetchLivePopularContent()
 
+        binding.houseHotissueCl.setOnClickListener{
+            val intent = Intent(requireContext(), CommunityContentActivity::class.java)
+            intent.putExtra("postInfo", popularContentId.toString())
+            startActivity(intent)
+        }
         binding.root.setOnTouchListener{_, _ ->
             val mainActivity = activity as? MainActivity
             mainActivity?.showStudyFrameLayout(false)
             true
-        }
-
-        binding.goPopularContentIv.setOnClickListener{
-            val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-            intent.putExtra("postInfo", popularContentId.toString())
-            startActivity(intent)
         }
 
         binding.popularContentTv.setOnClickListener {
@@ -135,15 +134,11 @@ class HouseFragment : Fragment() {
         fetchRecommendStudy(memeberId) //추천 스터디
 
 
-
-        binding.icFind.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, SearchFragment())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-            (context as MainActivity).isOnCommunityHome(HomeFragment())
+        val icFindButton: ImageView = binding.root.findViewById(R.id.ic_find)
+        icFindButton.setOnClickListener {
+            // MainActivity의 switchFragment 메서드를 호출하여 SearchFragment로 전환
+            (activity as MainActivity).switchFragment(SearchFragment())
         }
-
 
         binding.icAlarm.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -163,7 +158,7 @@ class HouseFragment : Fragment() {
         myInterestStudyFragment.arguments = bundle2
         recruitingStudyFragment.arguments = bundle3
 
-        binding.imgbtnLocation.setOnClickListener{
+        binding.houseLocationCl.setOnClickListener{
             bundle.putString("source", "HouseFragment")
             //스터디 참여하기 팝업으로 이동
 
@@ -175,7 +170,7 @@ class HouseFragment : Fragment() {
 
 
 
-        binding.imgbtnUnion.setOnClickListener {
+        binding.houseRecruitCl.setOnClickListener {
             bundle3.putString("source", "HouseFragment")
 
             (activity as MainActivity).supportFragmentManager.beginTransaction()
@@ -184,7 +179,7 @@ class HouseFragment : Fragment() {
                 .commit()
         }
 
-        binding.imgbtnJjim.setOnClickListener {
+        binding.houseInterestCl.setOnClickListener {
             bundle2.putString("source", "HouseFragment")
             //스터디 참여하기 팝업으로 이동
 
@@ -206,10 +201,9 @@ class HouseFragment : Fragment() {
         }
 
 
-        binding.imgbtnBoard.setOnClickListener {
+        binding.houseCommunityCl.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, CommunityHomeFragment())
-                .addToBackStack(null)
                 .commitAllowingStateLoss()
             (activity as? MainActivity)?.isOnCommunityHome(CommunityHomeFragment())
         }
