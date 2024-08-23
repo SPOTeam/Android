@@ -147,19 +147,16 @@ class StudyFragment : Fragment() {
                                     updatePageNumberUI(studyResponse.result.totalPages)
                                 } else {
                                     // 데이터가 없을 때 처리
-                                    Log.d("StudyFragment", "No studies found.")
                                     binding.fragmentStudyRv.visibility = View.GONE
                                     binding.emptyMessage.visibility = View.VISIBLE
                                 }
                             }
                         } else {
-                            Log.d("StudyFragment", "Response failed: ${response.code()}")
-                            Toast.makeText(requireContext(), "Failed to fetch data", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "마지막페이지입니다", Toast.LENGTH_SHORT).show()
                         }
                     }
 
                     override fun onFailure(call: Call<StudyResponse>, t: Throwable) {
-                        Log.d("StudyFragment", "Error: ${t.message}")
                         Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
                     }
                 })
@@ -182,7 +179,6 @@ class StudyFragment : Fragment() {
                         response.body()?.let { likeResponse ->
                             // 서버에서 반환된 상태에 따라 하트 아이콘 및 StudyItem의 liked 상태 업데이트
                             val newStatus = likeResponse.result.status
-                            Log.d("studyfrag", newStatus)
                             studyItem.liked = newStatus == "LIKE" // Boolean 값으로 업데이트
                             val newIcon = if (studyItem.liked) R.drawable.ic_heart_filled else R.drawable.study_like
                             likeButton.setImageResource(newIcon)

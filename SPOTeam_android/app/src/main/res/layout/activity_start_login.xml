@@ -107,8 +107,8 @@
             android:id="@+id/kakao_logo_iv"
             android:layout_width="15dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp" />
-        <!--            android:src="@drawable/kakao_logo"-->
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/kakao_logo"/>
 
         <TextView
             android:id="@+id/kakao_login_text"

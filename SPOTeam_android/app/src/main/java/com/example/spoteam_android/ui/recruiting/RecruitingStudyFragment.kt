@@ -1,6 +1,7 @@
 package com.example.spoteam_android.ui.recruiting
 
 import RetrofitClient.getAuthToken
+import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
@@ -16,12 +17,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentRecruitingStudyBinding
 import com.example.spoteam_android.ui.interestarea.ApiResponse
+import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,7 +33,8 @@ import retrofit2.Response
 class RecruitingStudyFragment : Fragment() {
 
     lateinit var binding: FragmentRecruitingStudyBinding
-    private lateinit var recruitingStudyAdapter: BoardAdapter
+    private lateinit var recruitingStudyAdapter: InterestVPAdapter
+    private lateinit var studyApiService: StudyApiService
     private val studyViewModel: StudyViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -39,14 +43,21 @@ class RecruitingStudyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRecruitingStudyBinding.inflate(inflater, container, false)
+        studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
-        recruitingStudyAdapter = BoardAdapter(
+        recruitingStudyAdapter = InterestVPAdapter(
             ArrayList(),
-            onItemClick = { selectedItem ->
+            onLikeClick = { selectedItem, likeButton ->
+                toggleLikeStatus(selectedItem, likeButton)
+            }
+        )
+
+        recruitingStudyAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
+            override fun onItemClick(data: BoardItem) {
                 studyViewModel.setStudyData(
-                    selectedItem.studyId,
-                    selectedItem.imageUrl,
-                    selectedItem.introduction
+                    data.studyId,
+                    data.imageUrl,
+                    data.introduction
                 )
 
                 // Fragment 전환
@@ -55,10 +66,9 @@ class RecruitingStudyFragment : Fragment() {
                     .replace(R.id.main_frm, fragment)
                     .addToBackStack(null)
                     .commit()
-            },
-            onLikeClick = { selectedItem, likeButton ->
             }
-        )
+        })
+
         binding.recruitingStudyReyclerview.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = recruitingStudyAdapter
@@ -78,11 +88,7 @@ class RecruitingStudyFragment : Fragment() {
         val activityFee01 = arguments?.getString("activityFee_01")
         val activityFee02 = arguments?.getString("activityFee_02")
         val selectedStudyTheme = arguments?.getString("selectedStudyTheme2")
-
         val activityFeeinput = arguments?.getString("activityFeeAmount2")
-//        val activityFeeinput2 = activityFee02 =="있음" // activityFeeinput이 있으면 true, 없으면 false
-//        val activityFeeAmount: String? = if (activityFeeinput2) activityFeeinput else null
-
         val source = arguments?.getString("source")
         val mysource = arguments?.getString("mysource")
 
@@ -96,7 +102,6 @@ class RecruitingStudyFragment : Fragment() {
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spinner.adapter = adapter
 
-
         when (mysource) {
             "HouseFragment" -> {
                 fetchAllRecruiting("LIKED")
@@ -104,38 +109,21 @@ class RecruitingStudyFragment : Fragment() {
             }
         }
 
-
-
-
         when (source) {
             "RecruitingStudyFilterFragment" -> {
                 binding.icFilterActive.visibility = View.VISIBLE
 
-                if (gender != null && minAge!= null && maxAge!= null && activityFee02!= null && selectedStudyTheme!= null && activityFee01!= null) {
-                    if (activityFeeinput != null) {
-                        fetchSpecificRecruiting(
-                            "ALL",
-                            gender,
-                            minAge,
-                            maxAge,
-                            activityFee02,
-                            activityFeeinput,
-                            selectedStudyTheme,
-                            activityFee01
-                        )
-                    }
-                    else{
-                        fetchSpecificRecruiting(
-                            "ALL",
-                            gender,
-                            minAge,
-                            maxAge,
-                            activityFee02,
-                            "",
-                            selectedStudyTheme,
-                            activityFee01
-                        )
-                    }
+                if (gender != null && minAge != null && maxAge != null && activityFee02 != null && selectedStudyTheme != null && activityFee01 != null) {
+                    fetchSpecificRecruiting(
+                        "ALL",
+                        gender,
+                        minAge,
+                        maxAge,
+                        activityFee02,
+                        activityFeeinput ?: "",
+                        selectedStudyTheme,
+                        activityFee01
+                    )
                 }
             }
 
@@ -143,17 +131,10 @@ class RecruitingStudyFragment : Fragment() {
                 fetchAllRecruiting("ALL")
                 binding.icFilterActive.visibility = View.GONE
             }
-
         }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val source = arguments?.getString("source")
                 when (source) {
                     "HouseFragment" -> {
@@ -167,160 +148,37 @@ class RecruitingStudyFragment : Fragment() {
                         }
                     }
                     "RecruitingStudyFilterFragment" -> {
-                        when (position) {
-                            0 ->
-                                if (gender != null && minAge!= null && maxAge!= null && activityFee02!= null && selectedStudyTheme!= null && activityFee01!= null) {
-                                    if (activityFeeinput != null) {
-                                        fetchSpecificRecruiting(
-                                            "ALL",
-                                            gender,
-                                            minAge,
-                                            maxAge,
-                                            activityFee02,
-                                            activityFeeinput,
-                                            selectedStudyTheme,
-                                            activityFee01
-                                        )
-                                    }
-                                    else{
-                                        fetchSpecificRecruiting(
-                                            "ALL",
-                                            gender,
-                                            minAge,
-                                            maxAge,
-                                            activityFee02,
-                                            "",
-                                            selectedStudyTheme,
-                                            activityFee01
-                                        )
-                                    }
-                                }
-                            1 ->
-                                if (gender != null && minAge!= null && maxAge!= null && activityFee02!= null && selectedStudyTheme!= null && activityFee01!= null) {
-                                    if (activityFeeinput != null) {
-                                        fetchSpecificRecruiting(
-                                            "RECRUITING",
-                                            gender,
-                                            minAge,
-                                            maxAge,
-                                            activityFee02,
-                                            activityFeeinput,
-                                            selectedStudyTheme,
-                                            activityFee01
-                                        )
-                                    }
-                                    else{
-                                        fetchSpecificRecruiting(
-                                            "RECRUITING",
-                                            gender,
-                                            minAge,
-                                            maxAge,
-                                            activityFee02,
-                                            "",
-                                            selectedStudyTheme,
-                                            activityFee01
-                                        )
-                                    }
-                                }
-                            2 ->
-                                if (gender != null && minAge!= null && maxAge!= null && activityFee02!= null && selectedStudyTheme!= null && activityFee01!= null) {
-                                    if (activityFeeinput != null) {
-                                        fetchSpecificRecruiting(
-                                            "COMPLETED",
-                                            gender,
-                                            minAge,
-                                            maxAge,
-                                            activityFee02,
-                                            activityFeeinput,
-                                            selectedStudyTheme,
-                                            activityFee01
-                                        )
-                                    }
-                                    else{
-                                        fetchSpecificRecruiting(
-                                            "COMPLETED",
-                                            gender,
-                                            minAge,
-                                            maxAge,
-                                            activityFee02,
-                                            "",
-                                            selectedStudyTheme,
-                                            activityFee01
-                                        )
-                                    }
-                                }
-
-                            3 ->
-                                if (gender != null && minAge!= null && maxAge!= null && activityFee02!= null && selectedStudyTheme!= null && activityFee01!= null) {
-                                    if (activityFeeinput != null) {
-                                        fetchSpecificRecruiting(
-                                            "HIT",
-                                            gender,
-                                            minAge,
-                                            maxAge,
-                                            activityFee02,
-                                            activityFeeinput,
-                                            selectedStudyTheme,
-                                            activityFee01
-                                        )
-                                    }
-                                    else{
-                                        fetchSpecificRecruiting(
-                                            "HIT",
-                                            gender,
-                                            minAge,
-                                            maxAge,
-                                            activityFee02,
-                                            "",
-                                            selectedStudyTheme,
-                                            activityFee01
-                                        )
-                                    }
-                                }
-                            4 ->
-                                if (gender != null && minAge!= null && maxAge!= null && activityFee02!= null && selectedStudyTheme!= null && activityFee01!= null) {
-                                    if (activityFeeinput != null) {
-                                        fetchSpecificRecruiting(
-                                            "LIKED",
-                                            gender,
-                                            minAge,
-                                            maxAge,
-                                            activityFee02,
-                                            activityFeeinput,
-                                            selectedStudyTheme,
-                                            activityFee01
-                                        )
-                                    }
-                                    else{
-                                        fetchSpecificRecruiting(
-                                            "LIKED",
-                                            gender,
-                                            minAge,
-                                            maxAge,
-                                            activityFee02,
-                                            "",
-                                            selectedStudyTheme,
-                                            activityFee01
-                                        )
-                                    }
-                                }
+                        if (gender != null && minAge != null && maxAge != null && activityFee02 != null && selectedStudyTheme != null && activityFee01 != null) {
+                            fetchSpecificRecruiting(
+                                when (position) {
+                                    1 -> "RECRUITING"
+                                    2 -> "COMPLETED"
+                                    3 -> "HIT"
+                                    4 -> "LIKED"
+                                    else -> "ALL"
+                                },
+                                gender,
+                                minAge,
+                                maxAge,
+                                activityFee02,
+                                activityFeeinput ?: "",
+                                selectedStudyTheme,
+                                activityFee01
+                            )
                         }
                     }
-
                 }
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-
-
         val filter: ImageView = binding.icFilter
-        filter.setOnClickListener{
+        filter.setOnClickListener {
             bundle.putString("source", "RecruitingStudyFragment")
-            val recruitingStudyFilterFragment = RecruitingStudyFilterFragment()
-            recruitingStudyFilterFragment.arguments = bundle // Bundle 전달
+            val recruitingStudyFilterFragment = RecruitingStudyFilterFragment().apply {
+                arguments = bundle // Bundle 전달
+            }
 
             (activity as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, recruitingStudyFilterFragment)
@@ -329,14 +187,8 @@ class RecruitingStudyFragment : Fragment() {
         }
     }
 
-
-
-    private fun fetchAllRecruiting(SelectedItem:String) {
-
-        val recruitingboard = binding.recruitingStudyReyclerview
-        val checkcount: TextView = binding.checkAmount
+    private fun fetchAllRecruiting(selectedItem: String) {
         val boardItems = arrayListOf<BoardItem>()
-
 
         RetrofitClient.RSService.GetRecruitingStudy(
             authToken = getAuthToken(),
@@ -348,72 +200,60 @@ class RecruitingStudyFragment : Fragment() {
             fee = null,
             page = 0,
             size = 5,
-            sortBy = SelectedItem,
-        )
-            .enqueue(object : Callback<ApiResponse> {
-                override fun onResponse(
-                    call: Call<ApiResponse>,
-                    response: Response<ApiResponse>
-                ) {
-
-                    if (response.isSuccessful) {
+            sortBy = selectedItem
+        ).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse?.isSuccess == true) {
                         boardItems.clear()
-                        val apiResponse = response.body()
-                        if (apiResponse?.isSuccess == true) {
-                            apiResponse?.result?.content?.forEach { study ->
-                                val boardItem = BoardItem(
-                                    studyId = study.studyId,
-                                    title = study.title,
-                                    goal = study.goal,
-                                    introduction = study.introduction,
-                                    memberCount = study.memberCount,
-                                    heartCount = study.heartCount,
-                                    hitNum = study.hitNum,
-                                    maxPeople = study.maxPeople,
-                                    studyState = study.studyState,
-                                    themeTypes = study.themeTypes,
-                                    regions = study.regions,
-                                    imageUrl = study.imageUrl,
-                                    liked = study.liked
-                                )
-                                boardItems.add(boardItem)
-                                val boardAdapter = BoardAdapter(boardItems, onItemClick = { /* No-op */ }, onLikeClick = { _, _ -> /* No-op */ })
-
-                                boardAdapter.notifyDataSetChanged()
-                                recruitingboard.visibility = View.VISIBLE
-                                recruitingboard.adapter = boardAdapter
-                                recruitingboard.layoutManager = LinearLayoutManager(
-                                    requireContext(),
-                                    LinearLayoutManager.VERTICAL,
-                                    false
-                                )
-                                val itemcount= boardItems.size
-                                checkcount.text = String.format("%02d 건", itemcount)
-                            }
+                        apiResponse.result?.content?.forEach { study ->
+                            val boardItem = BoardItem(
+                                studyId = study.studyId,
+                                title = study.title,
+                                goal = study.goal,
+                                introduction = study.introduction,
+                                memberCount = study.memberCount,
+                                heartCount = study.heartCount,
+                                hitNum = study.hitNum,
+                                maxPeople = study.maxPeople,
+                                studyState = study.studyState,
+                                themeTypes = study.themeTypes,
+                                regions = study.regions,
+                                imageUrl = study.imageUrl,
+                                liked = study.liked
+                            )
+                            boardItems.add(boardItem)
                         }
-                        else{
-                            checkcount.text = "00 건"
-                            recruitingboard.visibility = View.GONE
-                        }
+                        updateRecyclerView(boardItems)
+                        val totalElements = apiResponse.result.totalElements
+                        binding.checkAmount.text = totalElements.toString()+"건"
+                    } else {
+                        binding.checkAmount.text = "0건"
+                        showNoResults()
                     }
-                    else{
-                        val errorBody = response.errorBody()?.string()
-                    }
+                } else {
+                    showError(response.errorBody()?.string())
                 }
+            }
 
-                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                }
-            })
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                showError(t.message)
+            }
+        })
     }
 
-    private fun fetchSpecificRecruiting(selectedItem: String, gender: String, minAge: String, maxAge: String, activityFee: String, activityFeeAmount: String, selectedStudyTheme:String,isOnline: String) {
-
-        val recruitingboard = binding.recruitingStudyReyclerview
-        val checkcount: TextView = binding.checkAmount
+    private fun fetchSpecificRecruiting(
+        selectedItem: String,
+        gender: String,
+        minAge: String,
+        maxAge: String,
+        activityFee: String,
+        activityFeeAmount: String,
+        selectedStudyTheme: String,
+        isOnline: String
+    ) {
         val boardItems = arrayListOf<BoardItem>()
-
-        val activityFeeAmount: String ? = if (activityFeeAmount=="") null else activityFeeAmount
-
 
         RetrofitClient.RSService.GetRecruitingStudy(
             authToken = getAuthToken(),
@@ -422,88 +262,114 @@ class RecruitingStudyFragment : Fragment() {
             maxAge = maxAge.toInt(),
             isOnline = isOnline.toBoolean(),
             hasFee = activityFee.toBoolean(),
-            fee = activityFeeAmount?.toInt(),
+            fee = activityFeeAmount.toIntOrNull(),
             page = 0,
             size = 5,
-            sortBy = selectedItem,
-        )
-            .enqueue(object : Callback<ApiResponse> {
-                override fun onResponse(
-                    call: Call<ApiResponse>,
-                    response: Response<ApiResponse>
-                ) {
-                    if (response.isSuccessful) {
-
+            sortBy = selectedItem
+        ).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse?.isSuccess == true) {
                         boardItems.clear()
-                        val apiResponse = response.body()
-
-                        if (apiResponse?.isSuccess == true) {
-                            apiResponse?.result?.content?.forEach { study ->
-                                val boardItem = BoardItem(
-                                    studyId = study.studyId,
-                                    title = study.title,
-                                    goal = study.goal,
-                                    introduction = study.introduction,
-                                    memberCount = study.memberCount,
-                                    heartCount = study.heartCount,
-                                    hitNum = study.hitNum,
-                                    maxPeople = study.maxPeople,
-                                    studyState = study.studyState,
-                                    themeTypes = study.themeTypes,
-                                    regions = study.regions,
-                                    imageUrl = study.imageUrl,
-                                    liked = study.liked
-                                )
-                                boardItems.add(boardItem)
-                                val boardAdapter = BoardAdapter(boardItems, onItemClick = { /* No-op */ }, onLikeClick = { _, _ -> /* No-op */ })
-
-                                boardAdapter.notifyDataSetChanged()
-                                recruitingboard.visibility = View.VISIBLE
-                                recruitingboard.adapter = boardAdapter
-                                recruitingboard.layoutManager = LinearLayoutManager(
-                                    requireContext(),
-                                    LinearLayoutManager.VERTICAL,
-                                    false
-                                )
-                                val itemcount= boardItems.size
-                                checkcount.text = String.format("%02d 건", itemcount)
-                            }
+                        apiResponse.result?.content?.forEach { study ->
+                            val boardItem = BoardItem(
+                                studyId = study.studyId,
+                                title = study.title,
+                                goal = study.goal,
+                                introduction = study.introduction,
+                                memberCount = study.memberCount,
+                                heartCount = study.heartCount,
+                                hitNum = study.hitNum,
+                                maxPeople = study.maxPeople,
+                                studyState = study.studyState,
+                                themeTypes = study.themeTypes,
+                                regions = study.regions,
+                                imageUrl = study.imageUrl,
+                                liked = study.liked
+                            )
+                            boardItems.add(boardItem)
                         }
-                        else{
-                            checkcount.text = "00 건"
-                            recruitingboard.visibility = View.GONE
-                            Toast.makeText(requireContext() ,"조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
-                        }
+                        updateRecyclerView(boardItems)
+                        val totalElements = apiResponse.result.totalElements
+                        binding.checkAmount.text = totalElements.toString()+"건"
+                    } else {
+                        binding.checkAmount.text = "0건"
+                        showNoResults()
                     }
-                    else{
-                        val errorBody = response.errorBody()?.string()
-
-                    }
+                } else {
+                    showError(response.errorBody()?.string())
                 }
+            }
 
-                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-
-                }
-            })
-
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                showError(t.message)
+            }
+        })
     }
 
-    fun getMemberId(context: Context): Int {
+    private fun updateRecyclerView(boardItems: List<BoardItem>) {
+        recruitingStudyAdapter.updateList(boardItems)
+    }
 
-        var memberId: Int = -1
+    private fun showNoResults() {
+        binding.checkAmount.text = "00 건"
+        binding.recruitingStudyReyclerview.visibility = View.GONE
+        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
+    }
 
-        val sharedPreferences =
-            context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+    private fun showError(error: String?) {
+        Toast.makeText(requireContext(), "API 호출 실패: $error", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun toggleLikeStatus(studyItem: BoardItem, likeButton: ImageView) {
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val memberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
+
+        if (memberId != -1) {
+            studyApiService.toggleStudyLike(studyItem.studyId, memberId)
+                .enqueue(object : Callback<LikeResponse> {
+                    override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
+                        if (response.isSuccessful) {
+                            response.body()?.let { likeResponse ->
+                                // 서버에서 반환된 상태에 따라 하트 아이콘 및 BoardItem의 liked 상태 업데이트
+                                val newStatus = likeResponse.result.status
+                                studyItem.liked = newStatus == "LIKE"
+                                val newIcon = if (studyItem.liked) R.drawable.ic_heart_filled else R.drawable.study_like
+                                likeButton.setImageResource(newIcon)
+
+                                // heartCount 즉시 증가 또는 감소
+                                studyItem.heartCount = if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
+
+                                // 변경된 항목을 어댑터에 알림
+                                val adapter = binding.recruitingStudyReyclerview.adapter as InterestVPAdapter
+                                val position = adapter.dataList.indexOf(studyItem)
+                                if (position != -1) {
+                                    adapter.notifyItemChanged(position)
+                                }
+                            }
+                        } else {
+                            Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
+                        Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+        } else {
+            Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateLikeButtonUI(likeButton: ImageView, isLiked: Boolean) {
+        val newIcon = if (isLiked) R.drawable.ic_heart_filled else R.drawable.study_like
+        likeButton.setImageResource(newIcon)
+    }
+
+    private fun getMemberId(context: Context): Int {
+        val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val currentEmail = sharedPreferences.getString("currentEmail", null)
-
-        // 현재 로그인된 사용자 정보를 로그
-        memberId = if (currentEmail != null) sharedPreferences.getInt(
-            "${currentEmail}_memberId",
-            -1
-        ) else -1
-
-
-        return memberId // 저장된 memberId 없을 시 기본값 -1 반환
+        return if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
     }
 }
-

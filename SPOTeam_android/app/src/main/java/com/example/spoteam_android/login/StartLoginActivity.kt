@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.checklist.CheckListCategoryActivity
 import com.example.spoteam_android.databinding.ActivityStartLoginBinding
@@ -23,6 +24,9 @@ class StartLoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val splashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
         binding = ActivityStartLoginBinding.inflate(layoutInflater)
