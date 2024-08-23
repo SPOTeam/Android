@@ -149,7 +149,9 @@ class NotificationFragment : Fragment() {
         binding.communityCategoryContentRv.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        val dataRVAdapter = CommunityCategoryContentRVAdapter(pageContent)
+        val reversedPageContent = pageContent.reversed()
+
+        val dataRVAdapter = CommunityCategoryContentRVAdapter(reversedPageContent)
         //리스너 객체 생성 및 전달
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter

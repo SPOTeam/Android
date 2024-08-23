@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentMystudyWriteContentBinding
+import com.example.spoteam_android.ui.community.CommunityContentActivity
 import com.example.spoteam_android.ui.community.CommunityRetrofitClient
 import com.example.spoteam_android.ui.community.StudyPostResponse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -176,6 +177,11 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
                     val writeContentResponseBody = response.body()!!.result
                     showLog(writeContentResponseBody.toString())
                     dismiss()
+                    val intent = Intent(requireContext(), MyStudyPostContentActivity::class.java)
+                    intent.putExtra("myStudyId", currentStudyId.toString())
+                    intent.putExtra("myStudyPostId", writeContentResponseBody.postId.toString())
+                    startActivity(intent)
+
                 } else {
                     Log.e("API_ERROR", "Error code: ${response.code()}, Message: ${response.errorBody()?.string()}")
                     Toast.makeText(requireContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
