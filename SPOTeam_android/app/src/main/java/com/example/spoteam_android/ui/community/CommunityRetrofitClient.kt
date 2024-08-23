@@ -6,8 +6,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object CommunityRetrofitClient {
     private const val BASE_URL = "https://www.teamspot.site/"
-    private const val token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDMzOTUwNywiZXhwIjoxNzI0NDI1OTA3fQ.tr-heLd82sLiWmsEZzFFccD-ZADjRKm0Y22fOc0IKzY"
 
+    private const val token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTQsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDM5NzAwOCwiZXhwIjoxNzI0NDgzNDA4fQ.9_DSK988m3uqIysvjDmSMaTgWDck0-U3a6LGvTRS1LQ"
 
     private val client = OkHttpClient.Builder().addInterceptor { chain ->
         val original = chain.request()
