@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
     private const val BASE_URL = "https://www.teamspot.site/"  // 실제 API의 베이스 URL
 
-    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDMzOTUwNywiZXhwIjoxNzI0NDI1OTA3fQ.tr-heLd82sLiWmsEZzFFccD-ZADjRKm0Y22fOc0IKzY"
+    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTQsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDM5NzAwOCwiZXhwIjoxNzI0NDgzNDA4fQ.9_DSK988m3uqIysvjDmSMaTgWDck0-U3a6LGvTRS1LQ"
 
     fun getAuthToken(): String {
         return "Bearer $authToken"
@@ -25,6 +25,10 @@ object RetrofitClient {
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
+
+    private val httpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .build()
 
     val instance: Retrofit by lazy {
         Retrofit.Builder()
@@ -71,6 +75,5 @@ object RetrofitClient {
     val MISSerivice: MyInterestStudySpecificApiService by lazy{
         instance.create(MyInterestStudySpecificApiService::class.java)
     }
-
 
 }

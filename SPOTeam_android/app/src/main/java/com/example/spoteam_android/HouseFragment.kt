@@ -62,6 +62,11 @@ class HouseFragment : Fragment() {
             intent.putExtra("postInfo", popularContentId.toString())
             startActivity(intent)
         }
+        binding.root.setOnTouchListener{_, _ ->
+            val mainActivity = activity as? MainActivity
+            mainActivity?.showStudyFrameLayout(false)
+            true
+        }
 
         binding.popularContentTv.setOnClickListener {
             val intent = Intent(requireContext(), CommunityContentActivity::class.java)

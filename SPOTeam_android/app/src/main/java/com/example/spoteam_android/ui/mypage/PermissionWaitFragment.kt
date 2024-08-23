@@ -25,7 +25,7 @@ class PermissionWaitFragment : Fragment() {
     lateinit var binding: FragmentParticipatingStudyBinding
     var memberId : Int = -1
     var page : Int = 0
-    var size : Int = 5
+    var size : Int = 10
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

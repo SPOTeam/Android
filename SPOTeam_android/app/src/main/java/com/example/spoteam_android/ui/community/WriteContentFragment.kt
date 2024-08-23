@@ -1,6 +1,7 @@
 package com.example.spoteam_android.ui.community
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.widget.CheckBox
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentWriteContentBinding
 import retrofit2.Callback
@@ -101,6 +103,10 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
 //                        showLog(writeContentResponseBody.toString())
                         setFragmentResult("requestKey", bundleOf("resultKey" to "SUCCESS"))
                         dismiss()
+                        val intent = Intent(requireContext(), CommunityContentActivity::class.java)
+                        intent.putExtra("postInfo", writeContentResponseBody.id)
+                        startActivity(intent)
+
                     } else {
                         Toast.makeText(requireContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
                     }

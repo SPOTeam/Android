@@ -23,6 +23,9 @@ import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentRecruitingStudyBinding
+import com.example.spoteam_android.search.SearchFragment
+import com.example.spoteam_android.ui.alert.AlertFragment
+import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
 import com.example.spoteam_android.ui.study.DetailStudyFragment
@@ -101,6 +104,20 @@ class RecruitingStudyFragment : Fragment() {
         )
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spinner.adapter = adapter
+
+        binding.icFindRecruiting.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, SearchFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+
+        binding.icAlarmRecruiting.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, AlertFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
 
         when (mysource) {
             "HouseFragment" -> {
