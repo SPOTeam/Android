@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.HouseFragment
 import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
@@ -70,6 +71,13 @@ class InterestFragment : Fragment() {
                     ?.commit()
             }
         })
+
+        binding.spotLogo.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, HouseFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
 
         binding.icFindInterest.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()

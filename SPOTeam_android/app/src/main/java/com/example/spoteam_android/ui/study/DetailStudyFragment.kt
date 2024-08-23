@@ -105,6 +105,7 @@ class DetailStudyFragment : Fragment() {
 
 
 
+
     private fun fetchStudyDetails(studyId: Int) {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 

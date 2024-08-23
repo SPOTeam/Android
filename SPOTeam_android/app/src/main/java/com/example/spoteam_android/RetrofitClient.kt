@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
     private const val BASE_URL = "https://www.teamspot.site/"  // 실제 API의 베이스 URL
 
-    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTQsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDM5NzAwOCwiZXhwIjoxNzI0NDgzNDA4fQ.9_DSK988m3uqIysvjDmSMaTgWDck0-U3a6LGvTRS1LQ"
+    private val authToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTAsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcyNDQzMDUwMywiZXhwIjoxNzI0NTE2OTAzfQ.KwgNXIqriboA9B6Z4lF2obTqJ2hy3T5pbyt00d0QTFA"
 
     fun getAuthToken(): String {
         return "Bearer $authToken"
