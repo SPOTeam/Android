@@ -1,5 +1,4 @@
 package com.example.spoteam_android.ui.myinterest
-
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle

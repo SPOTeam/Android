@@ -153,4 +153,13 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="Theme.SPOTeam_android.SplashScreen" parent="Theme.SplashScreen">
+        <!-- 스플래쉬 화면 배경 색 -->
+        <item name="windowSplashScreenBackground">@color/button_enabled_text</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <!-- 아이콘 크기 조절 -->
+        <item name="postSplashScreenTheme">@style/Theme.SPOTeam_android</item>
+        <item name="android:windowSplashScreenBrandingImage"></item>
+    </style>
+
 </resources>
