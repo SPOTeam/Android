@@ -143,15 +143,16 @@
                     android:id="@+id/popular_content_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="카카오 최종 합격 후기"
-                    android:textSize="12sp"
-                    android:textColor="#555555"
                     android:layout_marginTop="2dp"
-                    android:maxLines="1"
                     android:ellipsize="end"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="#555555"
+                    android:textSize="12sp"
                     app:layout_constraintEnd_toStartOf="@id/go_popular_content_iv"
-                    app:layout_constraintTop_toBottomOf="@id/live_popular_tv"/>
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/live_popular_tv" />
 
                 <ImageView
                     android:id="@+id/go_popular_content_iv"

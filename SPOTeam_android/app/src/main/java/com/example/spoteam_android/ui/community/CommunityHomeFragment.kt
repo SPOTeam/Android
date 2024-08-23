@@ -12,6 +12,7 @@ import com.example.spoteam_android.HouseFragment
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentCommunityHomeBinding
+import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.home.HomeFragment
 import retrofit2.Call
@@ -59,6 +60,14 @@ class CommunityHomeFragment : Fragment() {
             (context as MainActivity).isOnCommunityHome(HomeFragment())
         }
 
+        binding.communityHomeSearchIv.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, SearchFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+            (context as MainActivity).isOnCommunityHome(HomeFragment())
+        }
+
         binding.communityHomeRealTimeTv.setOnClickListener {
             fetchBestCommunityContent(sortType = "REAL_TIME")
         }
@@ -72,9 +81,8 @@ class CommunityHomeFragment : Fragment() {
         }
 
         binding.communityHomeSpotNameLogoIv.setOnClickListener{
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, HouseFragment())
-                .commitAllowingStateLoss()
+            (context as MainActivity).isOnCommunityHome(HomeFragment())
+            parentFragmentManager.popBackStack()
         }
 
         return binding.root
