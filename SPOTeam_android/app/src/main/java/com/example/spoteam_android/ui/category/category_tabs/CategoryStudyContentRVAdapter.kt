@@ -65,7 +65,7 @@ class CategoryStudyContentRVAdapter(
 
         fun bind(data: CategoryStudyDetail) {
             binding.tvTime.text = data.title
-            binding.tvTitle.text = data.introduction
+            binding.tvTitle.text = data.goal
             binding.tvName.text = data.maxPeople.toString()
             binding.tvName2.text = data.memberCount.toString()
             binding.tvName3.text = data.heartCount.toString()

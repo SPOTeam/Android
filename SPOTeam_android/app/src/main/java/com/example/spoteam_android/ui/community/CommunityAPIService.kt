@@ -63,6 +63,13 @@ interface CommunityAPIService {
         @Query("sortBy") sortBy: String
     ): Call<CategoryStudyResponse>
 
+    @GET("/spot/search/studies/all/no-conditions")
+    fun getAllStudy(
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sortBy") sortBy: String
+    ): Call<CategoryStudyResponse>
+
     @POST("/spot/posts/comments/{commentId}/{memberId}/like")
     fun postCommentLike(
         @Path("commentId") postId: Int,

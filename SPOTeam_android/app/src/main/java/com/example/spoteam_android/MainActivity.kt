@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+
         binding.blurOverlayContainer.setOnClickListener{
             hideBlur()
             removeNavViewFragment()
@@ -232,6 +233,11 @@ class MainActivity : AppCompatActivity() {
         for ((key, value) in allEntries) {
             Log.d("showkey", "$key: $value")
         }
+    }
+
+    override fun onBackPressed() {
+        // 아무 동작도 하지 않도록 설정
+        // super.onBackPressed()를 호출하지 않으면 기본 동작(뒤로 가기)이 수행되지 않습니다.
     }
 
 }

@@ -204,6 +204,7 @@ data class CategoryStudyDetail (
     val studyId : Int,
     val imageUrl : String,
     val title : String,
+    val goal: String,
     val introduction : String,
     val memberCount : Int,
     var heartCount : Int,
