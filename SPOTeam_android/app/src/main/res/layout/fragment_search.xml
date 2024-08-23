@@ -206,7 +206,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recommendation_board"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="15dp"

@@ -50,7 +50,6 @@ class EventViewModel : ViewModel() {
             // 선택한 날짜가 이벤트 시작 날짜와 종료 날짜 사이에 있는지 확인
             selectedDate in eventStartDate..eventEndDate
         }.also {
-            Log.d("EventViewModel", "Filtered Events for date $year-$month-$day: ${it.size}")
         }
     }
 }

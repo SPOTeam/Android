@@ -67,6 +67,7 @@ class MyInterestStudyFragment : Fragment() {
         val activityFee02 = arguments?.getString("activityFee02")
         val activityFeeinput = arguments?.getString("activityFeeAmount3")
 
+
         interestBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
         })

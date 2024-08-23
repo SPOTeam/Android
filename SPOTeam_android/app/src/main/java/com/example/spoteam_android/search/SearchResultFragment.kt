@@ -5,7 +5,6 @@ import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -109,7 +108,6 @@ class SearchResultFragment : Fragment() {
     }
 
     private fun fetchGetSearchStudy(keyword: String) {
-        Log.d("SearchFragement", "fetchGetSearchStudy() 실행")
 
         val checkcount: TextView = binding.checkAmount
         val boardItems = arrayListOf<BoardItem>()

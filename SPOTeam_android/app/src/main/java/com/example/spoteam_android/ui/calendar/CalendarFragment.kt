@@ -5,7 +5,6 @@ import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -97,7 +96,6 @@ class CalendarFragment : Fragment() {
         }
 
         eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
-            Log.d("CalendarFragment", "Events updated: ${events.size} events")
             eventAdapter.updateEvents(events)
         })
 
@@ -106,10 +104,8 @@ class CalendarFragment : Fragment() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-        Log.d("CalendarFragment", "Initial load: $year-$month-$day")
 
         val studyId = studyViewModel.studyId.value ?: 0
-        Log.d("My","이벤트 초기 로드")
         fetchGetSchedule(studyId, year, month) {
             eventViewModel.loadEvents(year, month, day)
         }
@@ -123,13 +119,10 @@ class CalendarFragment : Fragment() {
 
 
     private fun fetchGetSchedule(studyId: Int, year: Int, month: Int, onComplete: () -> Unit) {
-        Log.d("CalendarFragment", "fetchGetSchedule() 실행")
 
         val scheduleBoard = binding.eventrecyclerview
         val EventItems = arrayListOf<Event>()
 
-        Log.d("CalendarFragment","$year")
-        Log.d("CalendarFragment","$month")
         RetrofitClient.CAService.GetScheuled(
             authToken = getAuthToken(),
             studyId = studyId,
@@ -140,20 +133,11 @@ class CalendarFragment : Fragment() {
                 call: Call<ScheduleResponse>,
                 response: Response<ScheduleResponse>
             ) {
-                Log.d("My",response.toString())
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
-                    Log.d("CalendarFragment", "$apiResponse")
 
                     if (apiResponse?.isSuccess == true) {
                         apiResponse.result.scheduleList.forEach { schedule ->
-                            Log.d("CalendarFragment", "Schedule ID: ${schedule.scheduleId}")
-                            Log.d("CalendarFragment", "Title: ${schedule.title}")
-                            Log.d("CalendarFragment", "Started At: ${schedule.startedAt}")
-                            Log.d("CalendarFragment", "Finished At: ${schedule.finishedAt}")
-                            Log.d("CalendarFragment", "Period: ${schedule.period}")
-                            Log.d("CalendarFragment", "Is All Day: ${schedule.isAllDay}")
-                            Log.d("CalendarFragment", "Location: ${schedule.location}")
                             val eventItem = Event(
                                 id = schedule.scheduleId,
                                 title = schedule.title,
@@ -177,16 +161,12 @@ class CalendarFragment : Fragment() {
                         onComplete()
                     } else {
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
-                        Log.d("CalendarFragment", "isSuccess == False")
                     }
                 } else {
-                    Log.d("CalendarFragment", "연결 실패: ${response.code()} - ${response.message()}")
-                    Log.e("CalendarFragment", "Error body: ${response.errorBody()?.string()}")
                 }
             }
 
             override fun onFailure(call: Call<ScheduleResponse>, t: Throwable) {
-                Log.d("CalendarFragment", "API 호출 실패: ${t.message}")
             }
         })
     }

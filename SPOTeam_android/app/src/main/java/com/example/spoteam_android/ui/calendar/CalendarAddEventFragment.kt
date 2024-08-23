@@ -6,7 +6,6 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +58,6 @@ class CalendarAddEventFragment : Fragment() {
 
         studyId = arguments?.getInt("studyId") ?: 0
 
-        Log.d("CalendarAddEventFragment1", "Received studyId: $studyId")
 
         eventTitleEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -162,9 +160,7 @@ class CalendarAddEventFragment : Fragment() {
             isAllDay = isAllDay,
             period = period
         )
-        Log.d("CalendarAddEventFragment", "Received studyId2: $studyId")
         val jsonRequestBody = Gson().toJson(scheduleRequest)
-        Log.d("CalendarAddEventFragment", "Request body: $jsonRequestBody")
 
 
         val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
