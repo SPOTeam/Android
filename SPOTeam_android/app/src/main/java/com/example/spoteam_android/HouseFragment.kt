@@ -57,6 +57,12 @@ class HouseFragment : Fragment() {
 
         fetchLivePopularContent()
 
+        binding.root.setOnTouchListener{_, _ ->
+            val mainActivity = activity as? MainActivity
+            mainActivity?.showStudyFrameLayout(false)
+            true
+        }
+
         binding.goPopularContentIv.setOnClickListener{
             val intent = Intent(requireContext(), CommunityContentActivity::class.java)
             intent.putExtra("postInfo", popularContentId.toString())
@@ -199,6 +205,7 @@ class HouseFragment : Fragment() {
         binding.imgbtnBoard.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, CommunityHomeFragment())
+                .addToBackStack(null)
                 .commitAllowingStateLoss()
             (activity as? MainActivity)?.isOnCommunityHome(CommunityHomeFragment())
         }

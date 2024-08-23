@@ -24,7 +24,7 @@ class ConsiderAttendanceFragment : Fragment() {
 
     private var memberId : Int = -1
     private var page : Int = 0
-    private var size : Int = 5
+    private var size : Int = 10
 
     override fun onCreateView(
         inflater: LayoutInflater,

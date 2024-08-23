@@ -44,14 +44,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val drawerLayout: DrawerLayout = binding.drawerLayout
 
         setContentView(binding.root)
 
         // 다른 아무 화면 클릭시 스터디 화면 사라지도록
-        binding.root.setOnTouchListener { _, _ ->
+        binding.root.setOnTouchListener{_, _ ->
             showStudyFrameLayout(false)
-            drawerLayout.closeDrawers()
             getCurrentFragment()?.let {
                 if(it is CommunityHomeFragment){
                     isOnCommunityHome(it)
@@ -181,7 +179,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // activity_main_study_fl FrameLayout의 visibility를 설정하는 메서드
-    private fun showStudyFrameLayout(visible: Boolean) {
+    fun showStudyFrameLayout(visible: Boolean) {
         val visibility = if (visible) View.VISIBLE else View.GONE
         findViewById<View>(R.id.activity_main_study_fl).visibility = visibility
     }

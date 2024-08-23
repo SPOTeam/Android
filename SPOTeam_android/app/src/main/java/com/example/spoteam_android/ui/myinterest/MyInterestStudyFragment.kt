@@ -48,6 +48,7 @@ class MyInterestStudyFragment : Fragment() {
     ): View {
         binding = FragmentMyInterestStudyBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
         return binding.root
     }
 
