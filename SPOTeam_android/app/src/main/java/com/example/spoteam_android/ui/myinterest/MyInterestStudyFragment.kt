@@ -271,6 +271,7 @@ class MyInterestStudyFragment : Fragment() {
                             )
                             boardItems.add(boardItem)
                         }
+                        binding.myInterestStudyReyclerview.visibility = View.VISIBLE
                         updateRecyclerView(boardItems)
                         val totalElements = apiResponse.result.totalElements
                         binding.checkAmount.text = totalElements.toString()+"건"
