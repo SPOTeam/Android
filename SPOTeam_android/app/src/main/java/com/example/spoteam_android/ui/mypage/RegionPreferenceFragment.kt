@@ -66,6 +66,9 @@ class RegionPreferenceFragment : Fragment() {
         binding.editReasonCancelBt.setOnClickListener {
             goToLocationFragment()
         }
+        binding.fragmentRegionPreferenceBackBt.setOnClickListener {
+            goToPreviusFragment()
+        }
 
 
         return binding.root
@@ -151,6 +154,14 @@ class RegionPreferenceFragment : Fragment() {
         transaction.replace(R.id.main_frm, MyPageLocationFragment())
         transaction.commit()
     }
+
+    private fun goToPreviusFragment() {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.main_frm, MyPageFragment()) // 변경할 Fragment로 교체
+        transaction.addToBackStack(null) // 백스택에 추가
+        transaction.commit()
+    }
+
 }
 
 

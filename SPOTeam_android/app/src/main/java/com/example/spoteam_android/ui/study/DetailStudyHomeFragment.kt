@@ -39,7 +39,7 @@ class DetailStudyHomeFragment : Fragment() {
     private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
     private lateinit var scheduleAdapter: DetailStudyHomeAdapter
     private val page = 0
-    private val size = 2
+    private val size = 4
     val studyViewModel: StudyViewModel by activityViewModels()
 
     override fun onCreateView(
