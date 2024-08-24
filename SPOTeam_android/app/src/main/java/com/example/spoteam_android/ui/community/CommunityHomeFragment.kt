@@ -59,7 +59,7 @@ class CommunityHomeFragment : Fragment() {
                 .commitAllowingStateLoss()
             (context as MainActivity).isOnCommunityHome(HomeFragment())
         }
-
+    //수정완
         binding.communityHomeSearchIv.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, SearchFragment())
@@ -81,8 +81,11 @@ class CommunityHomeFragment : Fragment() {
         }
 
         binding.communityHomeSpotNameLogoIv.setOnClickListener{
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, HouseFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
             (context as MainActivity).isOnCommunityHome(HomeFragment())
-            parentFragmentManager.popBackStack()
         }
 
         return binding.root
