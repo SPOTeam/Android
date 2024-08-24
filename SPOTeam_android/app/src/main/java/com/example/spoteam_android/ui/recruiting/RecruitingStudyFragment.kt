@@ -253,9 +253,12 @@ class RecruitingStudyFragment : Fragment() {
                         updateRecyclerView(boardItems)
                         val totalElements = apiResponse.result.totalElements
                         binding.checkAmount.text = totalElements.toString()+"건"
+                        binding.recruitingStudyReyclerview.visibility = View.VISIBLE
                     } else {
                         binding.checkAmount.text = "0건"
+                        binding.recruitingStudyReyclerview.visibility = View.GONE
                         showNoResults()
+
                     }
                 } else {
                     showError(response.errorBody()?.string())
@@ -338,10 +341,11 @@ class RecruitingStudyFragment : Fragment() {
     }
 
     private fun showNoResults() {
-        binding.checkAmount.text = "00 건"
+        binding.checkAmount.text = "0 건"
         binding.recruitingStudyReyclerview.visibility = View.GONE
         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
     }
+
 
     private fun showError(error: String?) {
         Toast.makeText(requireContext(), "API 호출 실패: $error", Toast.LENGTH_SHORT).show()

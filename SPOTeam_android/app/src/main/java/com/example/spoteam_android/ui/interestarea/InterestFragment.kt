@@ -227,6 +227,7 @@ class InterestFragment : Fragment() {
             spinner.adapter = adapter
         }
 
+
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val memberId = getMemberId(requireContext())
@@ -316,9 +317,10 @@ class InterestFragment : Fragment() {
                             boardItems.add(boardItem)
                         }
                         updateRecyclerView(boardItems)
-                        checkcount.text = String.format("%02d 건", boardItems.size)
+                        checkcount.text = String.format("%01d 건", boardItems.size)
+                        interestAreaBoard.visibility = View.VISIBLE
                     } else {
-                        checkcount.text = "00 건"
+                        checkcount.text = "0 건"
                         interestAreaBoard.visibility = View.GONE
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                     }
