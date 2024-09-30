@@ -20,6 +20,7 @@
     <color name="selector_blue">#588FF2</color>
     <color name="gray_03">#8E8E8E</color>
     <color name="splash">#D2E0FF</color>
+    <color name="spot_login">#186AFF</color>
 
     <color name="active_color">#588FF2</color>
     <color name="disabled_color">#D8D8D8</color>
