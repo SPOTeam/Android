@@ -37,14 +37,14 @@ class StartLoginActivity : AppCompatActivity() {
         val isLoggedIn = currentEmail != null && sharedPreferences.getBoolean(
             "${currentEmail}_isLoggedIn", false
         )
-
-        if (isLoggedIn) {
-            // 이미 로그인된 경우 MainActivity로 이동
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()  // 현재 Activity를 종료
-            return
-        }
+// 회원가입 화면 작업중이라 여기 아래 코드 주석 처리했습니다. 메인 화면 작업하실꺼면 아래 코드 주석 처리 해제하고 사용하면 됩니다.
+//        if (isLoggedIn) {
+//            // 이미 로그인된 경우 MainActivity로 이동
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
+//            finish()  // 현재 Activity를 종료
+//            return
+//        }
 
         // 로그인 실패 시 혹은 초기화된 상태에서 로그인 처리
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
@@ -65,7 +65,7 @@ class StartLoginActivity : AppCompatActivity() {
             }
         }
 
-        binding.loginwithkakaoBt.setOnClickListener {
+        binding.itemLogoKakaoIb.setOnClickListener {
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
                 UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
             } else {
