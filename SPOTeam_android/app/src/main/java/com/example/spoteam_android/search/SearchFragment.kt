@@ -5,6 +5,7 @@ import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.LikeResponse
@@ -31,6 +33,9 @@ import com.example.spoteam_android.ui.study.DetailStudyVPAdapter
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,6 +49,9 @@ class SearchFragment : Fragment() {
     private lateinit var recommendBoardAdapter: InterestVPAdapter
     private lateinit var studyApiService: StudyApiService
     private lateinit var recruitingStudyAdapter: InterestVPAdapter
+    private lateinit var db: AppDatabase
+    private lateinit var searchQueryDao: SearchQueryDao
+
 
 
     override fun onCreateView(
@@ -54,7 +62,40 @@ class SearchFragment : Fragment() {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
-        // 최근 검색어 로드
+
+//        val db = Room.databaseBuilder(
+//            requireContext(),
+//            AppDatabase::class.java, "database-name"
+//        ).build()
+//
+//        val userDao = db.userDao()
+
+//        // 비동기로 데이터베이스 작업을 수행
+//        CoroutineScope(Dispatchers.IO).launch {
+//            // 더미 데이터 삽입
+//            val user1 = User(firstName = "John", lastName = "Doe",uid = 3)
+//            val user2 = User(firstName = "Jane", lastName = "Smith",uid = 4)
+//            userDao.insertAll(user1, user2)
+//
+//            // 모든 유저 조회
+//            val users = userDao.getAll()
+//            users.forEach { user ->
+//                Log.d("MainActivity", "User: ${user.firstName} ${user.lastName}, ID: ${user.uid}")
+//            }
+//
+//            // 특정 이름으로 유저 검색
+//            val foundUser = userDao.findByName("John", "Doe")
+//            Log.d("MainActivity", "Found User: ${foundUser.firstName} ${foundUser.lastName}")
+//        }
+
+        db = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java, "search_database"
+        ).build()
+
+        searchQueryDao = db.searchQueryDao()
+
+            // 최근 검색어 로드
         loadRecentSearches()
 
         val chipGroup = binding.chipGroup2
@@ -189,41 +230,18 @@ class SearchFragment : Fragment() {
     }
 
     private fun saveSearchQuery(query: String) {
-        val sharedPreferences = requireContext().getSharedPreferences("RecentSearches", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-
-        // 기존에 저장된 검색어 목록을 가져옴
-        val searches = sharedPreferences.getStringSet("searches", LinkedHashSet()) ?: LinkedHashSet()
-
-
-        // 이미 존재하는 검색어는 제거 (중복 방지)
-        searches.remove(query)
-
-        // 검색어를 맨 앞에 추가
-        searches.add(query)
-
-        // 만약 검색어가 10개를 초과하면 오래된 검색어 제거
-        if (searches.size > 10) {
-            val iterator = searches.iterator()
-            iterator.next() // 첫 번째 검색어 (가장 오래된 것)
-            iterator.remove()
+        CoroutineScope(Dispatchers.IO).launch {
+            val searchQuery = SearchQuery(query = query)
+            searchQueryDao.insertSearchQuery(searchQuery)
         }
-
-        // 업데이트된 검색어 목록을 다시 저장
-        editor.putStringSet("searches", searches)
-        editor.apply()
     }
 
     private fun loadRecentSearches() {
-
-        val sharedPreferences = requireContext().getSharedPreferences("RecentSearches", Context.MODE_PRIVATE)
-        val searches = sharedPreferences.getStringSet("searches", LinkedHashSet()) ?: LinkedHashSet()
-        recentSearches.clear()
-        recentSearches.addAll(searches)
-
-        // 최신 검색어들을 Chip 형태로 UI에 추가
-        recentSearches.forEach { query ->
-            addSearchChip(query)
+        CoroutineScope(Dispatchers.IO).launch {
+            val recentSearches = searchQueryDao.getAllSearchQueries()
+            recentSearches.forEach { searchQuery ->
+                Log.d("SearchFragment", "검색어: ${searchQuery.query}, 시간: ${searchQuery.timestamp}")
+            }
         }
     }
 
@@ -372,4 +390,3 @@ class SearchFragment : Fragment() {
     }
 
 }
-
