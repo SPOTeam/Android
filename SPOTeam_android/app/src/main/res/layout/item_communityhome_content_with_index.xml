@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="10dp"
     android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/content_index_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:text="01"
-        android:textSize="20sp"
+        android:fontFamily="@font/pretendard"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,21 +19,27 @@
 
     <TextView
         android:id="@+id/content_title_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="4학년 취준생들은 요즘 뭐하고 사니"
-        android:textSize="20sp"
+        android:fontFamily="@font/pretendard"
+        android:textSize="14sp"
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        app:layout_constraintStart_toEndOf="@id/content_index_tv" />
+        app:layout_constraintStart_toEndOf="@id/content_index_tv"
+        app:layout_constraintEnd_toEndOf="@id/content_bracket_l"/>
 
     <TextView
         android:id="@+id/content_bracket_l"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="("
-        android:textSize="20sp"
+        android:fontFamily="@font/pretendard"
+        android:textSize="14sp"
         android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/content_commentNum_tv"/>
@@ -42,7 +48,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="4"
-        android:textSize="20sp"
+        android:fontFamily="@font/pretendard"
+        android:textSize="14sp"
         android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/content_bracket_R"/>
@@ -51,7 +58,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=")"
-        android:textSize="20sp"
+        android:fontFamily="@font/pretendard"
+        android:textSize="14sp"
         android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

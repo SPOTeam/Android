@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="330dp"
+    android:layout_height="220dp"
+    android:layout_gravity="center"
+    android:background="@drawable/dialog_rounded_background">
+
+    <ImageView
+        android:id="@+id/complete_iv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/ic_check_alert"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dialog_complete_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="업데이트 완료"
+        android:textColor="#000000"
+        android:fontFamily="@font/pretendard"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/complete_iv" />
+    <TextView
+        android:id="@+id/dialog_complete_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="관심 지역의 스터디를 확인해보세요"
+        android:textColor="#8E8E8E"
+        android:fontFamily="@font/pretendard"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_complete_title_tv" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/dialog_complete_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="15dp"
+        android:paddingStart="60dp"
+        android:paddingEnd="60dp"
+        android:background="@drawable/button_background"
+        android:text="관심 스터디 보기"
+        android:fontFamily="@font/pretendard"
+        android:textColor="#186AFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

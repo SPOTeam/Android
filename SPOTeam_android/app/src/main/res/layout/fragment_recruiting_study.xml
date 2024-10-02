@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/spot_logo"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/study_spot_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ic_alarm_recruiting"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/activity_main_ic_alaram"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ic_find_recruiting" />
+
+        <ImageView
+            android:id="@+id/ic_find_recruiting"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="3dp"
+            android:src="@drawable/activity_main_ic_find"
+            app:layout_constraintEnd_toStartOf="@+id/ic_alarm_recruiting"
+            app:layout_constraintTop_toTopOf="@+id/spot_logo" />
+
+        <TextView
+            android:id="@+id/interest_study_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="108dp"
+            android:text="모집중 스터디"
+            android:fontFamily="@font/pretendard"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/check_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="30dp"
+            android:text="--건"
+            android:fontFamily="@font/pretendard"
+            android:textColor="@color/gray_03"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/interest_study_bold" />
+
+
+        <ImageView
+            android:id="@+id/ic_filter"
+            android:layout_width="25dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="130dp"
+            android:src="@drawable/interest_fragment_study_setcondition_deactivate"
+            app:layout_constraintBottom_toBottomOf="@+id/check_amount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/check_amount" />
+
+        <Spinner
+            android:id="@+id/filter_toggle"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/gender_spinner_background"
+            android:spinnerMode="dropdown"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_filter"
+            app:layout_constraintStart_toEndOf="@+id/ic_filter"
+            app:layout_constraintTop_toTopOf="@+id/ic_filter" />
+
+        <ImageView
+            android:id="@+id/ic_filter_active"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/interest_fragment_study_setcondition_active"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/ic_filter"
+            app:layout_constraintTop_toTopOf="@+id/ic_filter" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recruiting_study_reyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="490dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/check_amount"
+            tools:listitem="@layout/item_recycler_view" />
+
+        <LinearLayout
+            android:id="@+id/page_number_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/recruiting_study_reyclerview">
+
+            <TextView
+                android:id="@+id/previous_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:padding="10dp"
+                android:text="&lt;"
+                android:textColor="#588FF2"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/current_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="1"
+                android:textColor="#186AFF"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/next_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:padding="10dp"
+                android:text="&gt;"
+                android:textColor="#588FF2"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

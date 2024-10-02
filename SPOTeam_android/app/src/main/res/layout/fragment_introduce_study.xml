@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools">
+
+        <LinearLayout
+            android:id="@+id/fragment_introduce_study_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/fragment_introduce_study_back_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_resize"
+                android:background="@color/white"/>
+
+
+            <TextView
+                android:id="@+id/fragment_introduce_study_tv"
+                android:text="스터디 등록"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:fontFamily="@font/pretendard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/fragment_introduce_study_pb"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="#D8D8D8"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_ll"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/fragment_introduce_wantstudy_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="스터디를 소개해보세요!"
+            android:fontFamily="@font/pretendard"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_pb"/>
+
+        <ImageView
+            android:id="@+id/fragment_introduce_study_iv"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/fragment_introduce_study_gallery"
+            android:background="@drawable/fragment_introduce_study_background"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_introduce_wantstudy_tv"/>
+
+
+        <EditText
+            android:id="@+id/fragment_introduce_studyname_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="스터디 이름(최소 5글자 이상)"
+            android:maxLines="1"
+            android:inputType="text"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:maxLength="15"
+            android:fontFamily="@font/pretendard"
+            android:background="@drawable/edittext_rounded_corner_rectangle"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_iv"/>
+
+        <EditText
+            android:id="@+id/fragment_introduce_studypurpose_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="우리 스터디의 목표 한 문장"
+            android:maxLines="1"
+            android:inputType="text"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:maxLength="20"
+            android:fontFamily="@font/pretendard"
+            android:background="@drawable/edittext_rounded_corner_rectangle"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_introduce_studyname_et"/>
+
+        <EditText
+            android:id="@+id/fragment_introduce_study_et"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:hint="스터디를 소개해봅시다 ! 자유롭게 작성해봐요"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:fontFamily="@font/pretendard"
+            android:maxLength="190"
+            android:background="@drawable/edittext_rounded_corner_rectangle"
+            android:gravity="top"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_introduce_studypurpose_et"/>
+
+        <android.widget.Button
+            android:id="@+id/fragment_introduce_study_bt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_background"
+            android:enabled="false"
+            android:text="다음"
+            android:textColor="@drawable/button_textcolor"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

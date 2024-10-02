@@ -10,24 +10,32 @@
         tools:context=".ui.home.HomeFragment">
 
         <ImageView
-            android:id="@+id/community_home_spot_logo_iv"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/spot_logo_3x"
+            android:id="@+id/community_home_spot_name_logo_iv"
+            android:layout_width="74dp"
+            android:layout_height="21dp"
+            android:layout_marginTop="37dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/spot_name_logo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/community_home_spot_logo_iv"
+            android:layout_width="23dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/spot_logo_3x"
+            app:layout_constraintStart_toEndOf="@id/community_home_spot_name_logo_iv"
+            app:layout_constraintBottom_toBottomOf="@id/community_home_spot_name_logo_iv"/>
 
         <ImageView
             android:id="@+id/community_home_alert_iv"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="16dp"
             android:src="@drawable/alert_icon_3x"
-            android:padding="5dp"
+            android:padding="8dp"
             android:background="@drawable/icon_background"
-            android:elevation="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/community_home_spot_logo_iv"/>
 
@@ -35,11 +43,10 @@
             android:id="@+id/community_home_search_iv"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="20dp"
-            android:padding="6dp"
+            android:layout_marginEnd="8dp"
+            android:padding="8dp"
             android:background="@drawable/icon_background"
             android:src="@drawable/search_icon_3x"
-            android:elevation="20dp"
             app:layout_constraintEnd_toStartOf="@id/community_home_alert_iv"
             app:layout_constraintTop_toTopOf="@id/community_home_spot_logo_iv"/>
 
@@ -48,20 +55,20 @@
             android:id="@+id/communityHome_BestPopularity_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="10dp"
-            android:text="Best 인기글"
+            android:layout_marginTop="46dp"
+            android:text="Best 인기글 🔥"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:fontFamily="@font/pretendard"
+            android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@id/community_home_spot_logo_iv"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="@id/community_home_spot_name_logo_iv"/>
 
         <RadioGroup
             android:id="@+id/radioGroup"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/communityHome_BestPopularity_tv"
             android:orientation="horizontal">
@@ -76,10 +83,9 @@
                 android:textSize="12sp"
                 android:text="실시간"
                 android:button="@null"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="8dp"
                 android:textAlignment="center"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"/>
+                android:paddingHorizontal="15dp"/>
 
             <RadioButton
                 android:id="@+id/communityHome_recommend_tv"
@@ -90,13 +96,12 @@
                 android:textSize="12sp"
                 android:text="추천순"
                 android:button="@null"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="8dp"
                 android:textAlignment="center"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"/>
+                android:paddingHorizontal="15dp"/>
 
             <RadioButton
-                android:id="@+id/communityHome_commemt_tv"
+                android:id="@+id/communityHome_comment_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_button_background"
@@ -104,62 +109,67 @@
                 android:textSize="12sp"
                 android:text="댓글순"
                 android:button="@null"
-                android:layout_marginEnd="10dp"
                 android:textAlignment="center"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"/>
+                android:paddingHorizontal="15dp"/>
         </RadioGroup>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/communityHome_BestPopularity_content_rv"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="180dp"
             android:background="@drawable/content_tmpl"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="18dp"
             android:overScrollMode="never"
-            android:layout_marginTop="16dp"
+            android:nestedScrollingEnabled="false"
+            android:layout_marginTop="18dp"
+            android:elevation="6dp"
             app:layout_constraintStart_toStartOf="@id/communityHome_BestPopularity_tv"
             app:layout_constraintEnd_toEndOf="@id/radioGroup"
-            app:layout_constraintTop_toBottomOf="@id/communityHome_BestPopularity_tv" />
+            app:layout_constraintTop_toBottomOf="@id/communityHome_BestPopularity_tv"
+            tools:listitem="@layout/item_communityhome_content_with_index"/>
 
         <!--    게시판    -->
-
         <TextView
             android:id="@+id/communityHome_Community_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:layout_marginStart="10dp"
             android:text="게시판"
             android:textStyle="bold"
+            android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@id/communityHome_BestPopularity_content_rv"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="@id/communityHome_BestPopularity_content_rv"/>
 
         <!--    이동 화살표 추가-->
         <ImageView
             android:id="@+id/community_move_community_iv"
-            android:layout_width="12dp"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/icon_more"
-            android:layout_marginEnd="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/communityHome_Community_tv" />
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toTopOf="@id/communityHome_Community_tv"
+            app:layout_constraintEnd_toEndOf="@id/communityHome_Community_content_rv"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/communityHome_Community_content_rv"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_height="180dp"
             android:background="@drawable/content_tmpl"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="18dp"
             android:overScrollMode="never"
+            android:layout_marginTop="18dp"
+            android:nestedScrollingEnabled="false"
+            android:elevation="6dp"
             app:layout_constraintStart_toStartOf="@id/communityHome_Community_tv"
             app:layout_constraintEnd_toEndOf="@id/communityHome_BestPopularity_content_rv"
-            app:layout_constraintTop_toBottomOf="@id/communityHome_Community_tv" />
+            app:layout_constraintTop_toBottomOf="@id/communityHome_Community_tv"
+            tools:listitem="@layout/item_communityhome_content_with_category"/>
 
         <!--    SPOT 공지  -->
 
@@ -168,36 +178,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:layout_marginStart="10dp"
             android:text="SPOT 공지 "
+            android:fontFamily="@font/pretendard"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@id/communityHome_Community_content_rv"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="@id/communityHome_Community_content_rv"/>
 
         <!--    이동 화살표 추가-->
         <ImageView
             android:id="@+id/community_move_notification_iv"
-            android:layout_width="12dp"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/icon_more"
-            android:layout_marginEnd="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="@id/communityHome_Notification_content_rv"
             app:layout_constraintTop_toTopOf="@id/communityHome_Notification_tv" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/communityHome_Notification_content_rv"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_height="180dp"
             android:background="@drawable/content_tmpl"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="18dp"
             android:overScrollMode="never"
+            android:layout_marginTop="18dp"
+            android:nestedScrollingEnabled="false"
+            android:elevation="6dp"
             app:layout_constraintStart_toStartOf="@id/communityHome_Notification_tv"
             app:layout_constraintEnd_toEndOf="@id/communityHome_BestPopularity_content_rv"
-            app:layout_constraintTop_toBottomOf="@id/communityHome_Notification_tv" />
+            app:layout_constraintTop_toBottomOf="@id/communityHome_Notification_tv"
+            tools:listitem="@layout/item_communityhome_content_with_index"/>
+
+        <View
+            android:id="@+id/margin_v"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            app:layout_constraintTop_toBottomOf="@id/communityHome_Notification_content_rv"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

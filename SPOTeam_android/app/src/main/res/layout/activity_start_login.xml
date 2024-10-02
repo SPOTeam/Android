@@ -4,28 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/spotgradient"
+    android:background="@color/spot_login"
     tools:context=".login.StartLoginActivity">
 
-    <ImageView
-        android:id="@+id/startlogin_iv"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
-        android:src="@drawable/spot_logo"
-        app:layout_constraintEnd_toEndOf="parent" />
 
+
+    <ImageView
+        android:id="@+id/activity_start_login_logo_iv"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/spot_login_logo"
+        android:layout_marginTop="130dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
     <TextView
         android:id="@+id/startstudy_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/studystart"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textStyle="bold"
+        android:gravity="center"
         android:textColor="#FFFFFF"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="20dp"
+        android:lineSpacingExtra="10dp"
+        android:fontFamily="@font/pretendard"
+        android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/startlogin_iv"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_start_login_logo_iv"/>
 
     <TextView
         android:id="@+id/studyrequest_et"
@@ -34,16 +42,18 @@
         android:background="@drawable/startlogin"
         android:text="스터디 신청 완료!"
         android:alpha="0.5"
-        android:textSize="9sp"
+        android:textSize="9.5sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
         android:textColor="#186AFF"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="60dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintTop_toBottomOf="@id/startstudy_tv"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/studyrecommand_et"
@@ -52,16 +62,17 @@
         android:background="@drawable/startlogin"
         android:text="오늘은 카공을 추천해요."
         android:alpha="0.7"
-        android:textSize="10sp"
+        android:textSize="11.5sp"
+        android:fontFamily="@font/pretendard"
         android:textColor="#186AFF"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toBottomOf="@id/studyrequest_et"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/studyaccept_et"
@@ -69,50 +80,180 @@
         android:layout_height="wrap_content"
         android:background="@drawable/startlogin"
         android:text="스터디 참여가 수락되었어요!"
-        android:textSize="13sp"
-        android:alpha="0.9"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:alpha="0.7"
+        android:fontFamily="@font/pretendard"
         android:textColor="#186AFF"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:paddingBottom="7dp"
-        android:paddingTop="7dp"
-        android:layout_marginStart="75dp"
+        android:paddingBottom="9dp"
+        android:paddingTop="9dp"
         android:layout_marginTop="20dp"
         app:layout_constraintTop_toBottomOf="@id/studyrecommand_et"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
+    <TextView
+        android:id="@+id/activity_start_login_convenient_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="간편 가입하기"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:fontFamily="@font/pretendard"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/studyaccept_et"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <LinearLayout
+        android:id="@+id/activity_start_login_logo_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_start_login_convenient_tv">
+
+
+        <ImageButton
+            android:id="@+id/item_logo_kakao_ib"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape"
+            android:backgroundTint="#FFE501"
+            android:padding="14dp"
+            android:src="@drawable/kakao_logo"
+            android:scaleType="centerCrop" />
+
+        <ImageButton
+            android:id="@+id/item_logo_google_ib"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/shape"
+            android:backgroundTint="#FFFFFF"
+            android:padding="11dp"
+            android:src="@drawable/google_logo"
+            android:scaleType="centerCrop" />
+
+        <ImageButton
+            android:id="@+id/item_logo_naver_ib"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/shape"
+            android:src="@drawable/naver_logo"
+            android:scaleType="centerCrop" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/activity_start_login_or_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_start_login_logo_ll">
+
+        <View
+            android:layout_width="80dp"
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/activity_start_login_or_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="또는"
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="15dp"/>
+
+        <View
+            android:layout_width="80dp"
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"/>
+
+
+
+
+
+
+    </LinearLayout>
 
     <android.widget.Button
-        android:id="@+id/loginwithkakao_bt"
+        android:id="@+id/activity_start_login_next_bt"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="125dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/examplekakao"
-        android:text="카카오톡으로 계속하기"
-        android:textSize="17sp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_login_enabled"
+        android:text="이메일로 가입하기"
+        android:textColor="#2D2D2D"
+        android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/loginwithspot_bt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/studyaccept_et" />
+        app:layout_constraintTop_toBottomOf="@id/activity_start_login_or_ll"
+        app:layout_constraintEnd_toEndOf="@id/activity_start_login_or_ll"
+        app:layout_constraintStart_toStartOf="@id/activity_start_login_or_ll" />
 
-    <android.widget.Button
-        android:id="@+id/loginwithspot_bt"
-        android:layout_width="0dp"
+
+    <LinearLayout
+        android:id="@+id/activity_start_login_already_ll"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/loginspot"
-        android:text="회원가입"
-        android:textColor="#186AFF"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginwithkakao_bt" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_start_login_next_bt">
+
+
+
+        <TextView
+            android:id="@+id/activity_start_login_already_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이미 스팟 계정이 있으신가요?"
+            android:textSize="11sp"
+            android:fontFamily="@font/pretendard"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/activity_start_login_already_login_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_login"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/pretendard"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="10dp"/>
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/container"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingTop="?attr/actionBarSize">
+
+    <TextView
+        android:id="@+id/mypage_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="마이페이지"
+        android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/mypage_prev_iv"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:src="@drawable/navigate_before_3x"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mypage_title" />
+
+    <ImageView
+        android:id="@+id/mypage_sp_iv"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:src="@drawable/line_img"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@id/mypage_prev_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mypage_title"/>
+
+    <TextView
+        android:id="@+id/participating_study_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="내가 참여하고 있는 스터디"
+        android:fontFamily="@font/pretendard"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mypage_sp_iv" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/participating_study_reyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/participating_study_bold"
+        tools:listitem="@layout/item_recycler_view_plus_toggle" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

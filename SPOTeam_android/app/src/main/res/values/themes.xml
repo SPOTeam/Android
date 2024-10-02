@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.SPOTeam_android" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/button_enabled_text</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -14,17 +14,44 @@
         <!-- Customize your theme here. -->
 
         <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/custom_chip</item>
         <item name="chipStrokeColor">@color/custom_chip_stroke</item>
-        <item name="chipStrokeWidth">2dp</item>
+        <item name="chipStrokeWidth">1dp</item>
         <item name="android:textColor">@color/custom_chip_text</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
     </style>
+
+    <style name="CustomChipCloseStyle" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/white</item>
+        <item name="chipStrokeColor">#588FFE</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="android:textColor">#588FFE</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="closeIcon">@drawable/ic_close</item>
+        <item name="closeIconTint">#588FFE</item>
+    </style>
+
+    <style name="CustomChipthemeStyle" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/custom_chip</item>
+        <item name="chipStrokeColor">@color/custom_chip_stroke</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="android:textColor">@color/custom_chip_text</item>
+        <item name="android:textSize">16sp</item>
+        <item name="paddingStart">10dp</item>
+        <item name="paddingEnd">10dp</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+    </style>
+
+
     <style name="RangeSliderStyle" parent="Widget.MaterialComponents.Slider">
         <item name="materialThemeOverlay">@style/ThemeOverlay.Slider</item>
     </style>
@@ -55,6 +82,44 @@
         <item name="android:textSize">14sp</item> <!-- 비활성화된 아이템의 글씨 크기 -->
     </style>
 
+    <style name="find_ChipStyle" parent="Widget.MaterialComponents.Chip.Entry">
+        <!-- Chip의 배경 색상 -->
+        <item name="chipBackgroundColor">@color/white</item>
+        <!-- Chip의 텍스트 색상 -->
+        <item name="android:textColor">@color/active_blue</item>
+        <!-- Chip의 텍스트 크기 -->
+        <item name="android:textSize">16sp</item>
+        <!-- Chip의 테두리 색상 -->
+        <item name="chipStrokeColor">@color/active_blue</item>
+        <!-- Chip의 테두리 두께 -->
+        <item name="chipStrokeWidth">1dp</item>
+        <!-- Chip의 아이콘 표시 여부 -->
+        <item name="chipIconVisible">false</item>
+        <!-- Chip의 닫기 아이콘 표시 여부 -->
+        <item name="closeIconVisible">true</item>
+        <!-- Chip의 아이콘 -->
+    </style>
+
+    <!-- bottomSheetFragment border 20dp 전용 테마 -->
+    <style name="AppBottomSheetDialogBorder20WhiteTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalBorder20WhiteStyle</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="AppModalBorder20WhiteStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottomsheetfragment_style</item>
+    </style>
+
+    <style name="CustomSearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="queryBackground">@color/active_blue</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="searchIcon">@drawable/location_search_resize</item>
+        <item name="submitBackground">@color/active_blue</item>
+    </style>
+
 <!--    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">-->
 <!--        <item name="itemIconSize">24dp</item> &lt;!&ndash; 아이콘 크기 설정 &ndash;&gt;-->
 <!--        <item name="itemTextAppearanceActive">@style/BottomNavigationViewTextAppearance</item>-->
@@ -74,4 +139,26 @@
     <style name="Theme.SPOT.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.SPOT.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ShapeAppearanceOverlay.App.CornerFamily.Cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+    </style>
+
+    <style name="CustomBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.SPOTeam_android.SplashScreen" parent="Theme.SplashScreen">
+        <!-- 스플래쉬 화면 배경 색 -->
+        <item name="windowSplashScreenBackground">@color/button_enabled_text</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <!-- 아이콘 크기 조절 -->
+        <item name="postSplashScreenTheme">@style/Theme.SPOTeam_android</item>
+    </style>
+
 </resources>

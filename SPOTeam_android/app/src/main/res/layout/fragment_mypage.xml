@@ -1,19 +1,530 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:scrollbars="none">
 
-    <TextView
-        android:id="@+id/communityHome_title_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Mypage"
-        android:textSize="40sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+        <LinearLayout
+            android:id="@+id/fragment_study_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginStart="15dp">
+
+            <ImageView
+                android:id="@+id/tv_my_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow"/>
+
+            <TextView
+                android:id="@+id/fragment_study_tv"
+                android:text="마이페이지"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:fontFamily="@font/pretendard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="20dp"/>
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_profile"
+            android:layout_width="match_parent"
+            android:layout_height="199dp"
+            android:layout_margin="0dp"
+            android:layout_marginTop="120dp"
+            android:background="#D6E5FF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_my_page">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_profile"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_preview_profile"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="bottom"
+                android:background="@color/white"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="닉네임"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:fontFamily="@font/pretendard"
+                android:textStyle="bold"
+                android:layout_marginTop="18dp"
+                app:layout_constraintStart_toEndOf="@id/iv_profile"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="37.5°C"
+                android:fontFamily="@font/pretendard"
+                android:textColor="#186AFF"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/iv_profile"
+                app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
+
+            <ImageView
+                android:id="@+id/iv_bookmark"
+                android:layout_width="24dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="23dp"
+                android:src="@drawable/fragment_mypage_ic_bookmark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:id="@+id/frameLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/rounded_dialog"
+                android:paddingBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_profile"
+                app:layout_constraintVertical_bias="0.466">
+
+                <TextView
+                    android:id="@+id/tv_in_progress"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="진행 중"
+                    android:fontFamily="@font/pretendard"
+                    android:textAlignment="center"
+                    android:textColor="#7DABFC"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_in_progress_num"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="36dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="2"
+                    android:fontFamily="@font/pretendard"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ic_bar_01"
+                    android:layout_width="1dp"
+                    android:layout_height="55dp"
+                    android:layout_gravity="center|center"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="65dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="#D6E5FF" />
+
+                <TextView
+                    android:id="@+id/tv_recruiting"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="모집 중"
+                    android:fontFamily="@font/pretendard"
+                    android:textAlignment="center"
+                    android:textColor="#7DABFC"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@+id/tv_in_progress"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_recruiting_num"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="36dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="1"
+                    android:fontFamily="@font/pretendard"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/tv_in_progress"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ic_bar_02"
+                    android:layout_width="1dp"
+                    android:layout_height="55dp"
+                    android:layout_gravity="center|center"
+                    android:layout_marginStart="65dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="#D6E5FF" />
+
+                <TextView
+                    android:id="@+id/tv_applied"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="06dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="신청한"
+                    android:fontFamily="@font/pretendard"
+                    android:textAlignment="center"
+                    android:textColor="#7DABFC"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@+id/tv_recruiting"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_applied_num"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="36dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="5"
+                    android:fontFamily="@font/pretendard"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/tv_recruiting"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/framelayout1"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/interest_filter_frame_layout_bottom_border">
+
+            <TextView
+                android:id="@+id/tv_interest_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="50dp"
+                android:text="관심 분야"
+                android:textStyle="bold"
+                android:fontFamily="@font/pretendard"
+                android:textColor="#7DABFC"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_interest_field_arrow"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/fragment_mypage_ic_interest_field"
+                android:layout_gravity="start|center"/>
+
+            <ImageView
+                android:id="@+id/go_interest_field_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="10dp"
+                android:padding="4dp"
+                android:src="@drawable/fragment_mypage_ic_arrow" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/framelayout2"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/interest_filter_frame_layout_bottom_border">
+
+            <TextView
+                android:id="@+id/tv_interest_region"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="50dp"
+                android:text="관심 지역"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:fontFamily="@font/pretendard"
+                android:textColor="#7DABFC"/>
+
+            <ImageView
+                android:id="@+id/iv_interest_region"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/fragment_mypage_ic_interest_area"
+                android:layout_gravity="start|center"/>
+
+            <ImageView
+                android:id="@+id/go_interest_area_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="10dp"
+                android:padding="4dp"
+                android:src="@drawable/fragment_mypage_ic_arrow" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/framelayout3"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/interest_filter_frame_layout_bottom_border">
+
+            <TextView
+                android:id="@+id/tv_why_spot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="50dp"
+                android:text="Why SPOT"
+                android:textStyle="bold"
+                android:textColor="#7DABFC"
+                android:fontFamily="@font/pretendard"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_why_spot"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/fragment_mypage_ic_spot_logo" />
+
+            <ImageView
+                android:id="@+id/go_why_spot_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="10dp"
+                android:padding="4dp"
+                android:src="@drawable/fragment_mypage_ic_arrow" />
+
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/framelayout4"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tv_community"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="15dp"
+                android:text="커뮤니티"
+                android:fontFamily="@font/pretendard"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/framelayout5"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#F9FBFF">
+            <TextView
+                android:id="@+id/tv_community_01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="15dp"
+                android:text="이용 제한 내역"
+                android:fontFamily="@font/pretendard"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/framelayout6"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#F9FBFF">
+            <TextView
+                android:id="@+id/tv_community_02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="15dp"
+                android:text="커뮤니티 이용 규칙"
+                android:fontFamily="@font/pretendard"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/framelayout7"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tv_using"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="15dp"
+                android:text="이용 안내"
+                android:fontFamily="@font/pretendard"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/framelayout8"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#F9FBFF">
+            <TextView
+                android:id="@+id/tv_using_01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="15dp"
+                android:text="앱 버전"
+                android:fontFamily="@font/pretendard"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_using_01_02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="10dp"
+                android:text="v2.1234"
+                android:fontFamily="@font/pretendard"
+                android:textColor="#7DABFC"
+                android:textSize="16sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/framelayout9"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#F9FBFF">
+            <TextView
+                android:id="@+id/tv_using_02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="15dp"
+                android:text="개인정보 처리 방침"
+                android:fontFamily="@font/pretendard"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/framelayout10"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#F9FBFF">
+            <TextView
+                android:id="@+id/tv_using_03"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="15dp"
+                android:text="스팟 이용 약관"
+                android:fontFamily="@font/pretendard"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/framelayout11"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#F9FBFF">
+            <TextView
+                android:id="@+id/tv_using_04_01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="15dp"
+                android:text="배타 버전"
+                android:fontFamily="@font/pretendard"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_using_04_02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="10dp"
+                android:text="Beta10+"
+                android:fontFamily="@font/pretendard"
+                android:textColor="#7DABFC"
+                android:textSize="16sp" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

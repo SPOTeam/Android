@@ -1,17 +1,30 @@
 package com.example.spoteam_android.ui.community.communityContent
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.communityData
 import com.example.spoteam_android.databinding.FragmentCommunityCategoryContentBinding
+import com.example.spoteam_android.ui.community.CategoryPagesDetail
+import com.example.spoteam_android.ui.community.CategoryPagesResponse
+import com.example.spoteam_android.ui.community.CommunityContentActivity
+import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.ContentLikeResponse
+import com.example.spoteam_android.ui.community.ContentUnLikeResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class NotificationFragment : Fragment() {
 
     lateinit var binding: FragmentCommunityCategoryContentBinding
+    var memberId : Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,34 +33,145 @@ class NotificationFragment : Fragment() {
     ): View {
         binding = FragmentCommunityCategoryContentBinding.inflate(inflater, container, false)
 
-        initRecyclerview()
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val currentEmail = sharedPreferences.getString("currentEmail", null)
+
+        // 현재 로그인된 사용자 정보를 로그
+        memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
+//        Log.d("SharedPreferences", "MemberId: $memberId")
+
+        fetchPages("SPOT_ANNOUNCEMENT ", 0)
+
+        // WriteContentFragment에서 결과 수신
+        parentFragmentManager.setFragmentResultListener("requestKey", this) { _, bundle ->
+            val result = bundle.getString("resultKey")
+            if (result == "SUCCESS") {
+                fetchPages("SPOT_ANNOUNCEMENT", 0) // 게시글 등록 성공 시 갱신
+            }
+        }
 
         return binding.root
     }
 
-    private fun initRecyclerview(){
-        binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    override fun onResume() {
+        super.onResume()
+        fetchPages("SPOT_ANNOUNCEMENT", 0)
+    }
 
-        val dataList: ArrayList<communityData> = arrayListOf()
+    private fun fetchLike(postId : Int) {
+        CommunityRetrofitClient.instance.postContentLike(postId, memberId)
+            .enqueue(object : Callback<ContentLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentLikeResponse>,
+                    response: Response<ContentLikeResponse>
+                ) {
+//                    Log.d("LikeContent", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val likeResponse = response.body()
+//                        Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
+                        if (likeResponse?.isSuccess == "true") {
+                            onResume()
+                        } else {
+                            showError(likeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
 
-        // arrayList 에 데이터 삽입
-        dataList.apply{
-            // arrayList 타입이 Data 객체이다. | 데이터 삽입 시 Data 객체 타입으로 넣어줌.
-            add(communityData("첫번째 게시글", "첫번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(communityData("두번째 게시글", "두번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(communityData("세번째 게시글", "세번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(communityData("네번째 게시글", "네번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(communityData("다섯번째 게시글", "다섯번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(communityData("여섯번째 게시글", "여섯번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(communityData("일곱번째 게시글", "일곱번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(communityData("여덟번째 게시글", "여덟번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-            add(communityData("아홉번째 게시글", "아홉번째 게시글입니다.", "6", "10", "12", "20", "익명", "2024.12.15"))
-        }
+                override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
+                    Log.e("LikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
 
-        val dataRVAdapter = CommunityCategoryContentRVAdapter(dataList)
+    private fun fetchUnLike(postId : Int) {
+        CommunityRetrofitClient.instance.deleteContentLike(postId, memberId)
+            .enqueue(object : Callback<ContentUnLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentUnLikeResponse>,
+                    response: Response<ContentUnLikeResponse>
+                ) {
+//                    Log.d("UnLikeContent", "response: ${response.isSuccessful}")
+                    if (response.isSuccessful) {
+                        val unLikeResponse = response.body()
+//                        Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
+                        if (unLikeResponse?.isSuccess == "true") {
+                            onResume()
+                        } else {
+                            showError(unLikeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
+                    Log.e("UnLikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun fetchPages(type: String, pageNum: Int) {
+        CommunityRetrofitClient.instance.getCategoryPagesContent(type, pageNum)
+            .enqueue(object : Callback<CategoryPagesResponse> {
+                override fun onResponse(
+                    call: Call<CategoryPagesResponse>,
+                    response: Response<CategoryPagesResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val pagesResponse = response.body()
+                        if (pagesResponse?.isSuccess == "true") {
+                            val pagesResponseList = pagesResponse.result?.postResponses
+//                            Log.d("SPOT_ANNOUNCEMENT ", "items: $pagesResponseList")
+                            if (pagesResponseList != null) {
+                                initRecyclerview(pagesResponseList)
+                            }
+                        } else {
+                            showError(pagesResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<CategoryPagesResponse>, t: Throwable) {
+                    Log.e("SPOT_ANNOUNCEMENT ", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun showError(message: String?) {
+        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun initRecyclerview(pageContent: List<CategoryPagesDetail>) {
+        binding.communityCategoryContentRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        val reversedPageContent = pageContent.reversed()
+
+        val dataRVAdapter = CommunityCategoryContentRVAdapter(reversedPageContent)
         //리스너 객체 생성 및 전달
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
 
+        dataRVAdapter.setItemClickListener(object :
+            CommunityCategoryContentRVAdapter.OnItemClickListener {
+            override fun onItemClick(data: CategoryPagesDetail) {
+                val intent = Intent(requireContext(), CommunityContentActivity::class.java)
+                intent.putExtra("postInfo", data.postId.toString())
+                startActivity(intent)
+            }
+
+            override fun onLikeClick(data: CategoryPagesDetail) {
+                fetchLike(data.postId)
+            }
+
+            override fun onUnLikeClick(data: CategoryPagesDetail) {
+                fetchUnLike(data.postId)
+            }
+
+        })
     }
 }

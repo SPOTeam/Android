@@ -4,4 +4,29 @@
         <item>0.0</item>
         <item>100.0</item>
     </array>
+
+    <string-array name="category_list">
+        <item>합격후기</item>
+        <item>정보공유</item>
+        <item>고민상담</item>
+        <item>취준토크</item>
+        <item>자유토크</item>
+    </string-array>
+
+    <string-array name="filter_list">
+        <item>전체</item>
+        <item>모집중</item>
+        <item>모집완료</item>
+        <item>조회수순</item>
+        <item>관심순</item>
+    </string-array>
+
+    <string-array name="thema_list">
+        <item>가입인사</item>
+        <item>정보공유</item>
+        <item>스터디후기</item>
+        <item>자유</item>
+        <item>Q&amp;A</item>
+    </string-array>
+
 </resources>

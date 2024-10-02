@@ -1,0 +1,15 @@
+
+package com.example.spoteam_android.ui.calendar
+
+object EventRepository {
+    private val events = mutableListOf<Event>()
+    private var nextId = 1
+
+    fun addEvent(event: Event) {
+        events.add(event)
+    }
+
+    fun getNextId(): Int {
+        return nextId++
+    }
+}

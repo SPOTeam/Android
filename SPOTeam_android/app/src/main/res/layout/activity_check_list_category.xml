@@ -22,6 +22,7 @@
             android:text="체크리스트"
             android:textSize="17sp"
             android:textStyle="bold"
+            android:fontFamily="@font/pretendard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
@@ -42,12 +43,14 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
         android:layout_marginTop="30dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activity_checklist_checklist_v">
 
     </TextView>
+
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/activity_checklist_chipGroup"
@@ -66,6 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="어학"
+            android:fontFamily="@font/pretendard"
             android:textSize="16sp"
             app:chipStartPadding="15dp"
             app:chipEndPadding="15dp"
@@ -78,6 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="자격증"
+            android:fontFamily="@font/pretendard"
             android:textSize="16sp"
             app:chipStartPadding="15dp"
             app:chipEndPadding="15dp"
@@ -88,6 +93,7 @@
             style="@style/CustomChipStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard"
             android:text="취업"
             android:textSize="16sp"
             app:chipStartPadding="15dp"
@@ -100,6 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="토론"
+            android:fontFamily="@font/pretendard"
             android:textSize="16sp"
             app:chipStartPadding="15dp"
             app:chipEndPadding="15dp"
@@ -111,10 +118,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="시사/뉴스"
+            android:fontFamily="@font/pretendard"
             android:textSize="16sp"
             app:chipStartPadding="15dp"
             app:chipEndPadding="15dp"
             app:chipMinHeight="40dp"/>
+
 
 
         <com.google.android.material.chip.Chip
@@ -123,6 +132,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="자율 학습"
+            android:fontFamily="@font/pretendard"
             android:textSize="16sp"
             app:chipStartPadding="15dp"
             app:chipEndPadding="15dp"
@@ -135,6 +145,7 @@
             android:layout_height="wrap_content"
             android:text="프로젝트"
             android:textSize="16sp"
+            android:fontFamily="@font/pretendard"
             app:chipStartPadding="15dp"
             app:chipEndPadding="15dp"
             app:chipMinHeight="40dp"/>
@@ -146,6 +157,7 @@
             android:layout_height="wrap_content"
             android:text="공모전"
             android:textSize="16sp"
+            android:fontFamily="@font/pretendard"
             app:chipStartPadding="15dp"
             app:chipEndPadding="15dp"
             app:chipMinHeight="40dp"/>
@@ -155,6 +167,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="전공/진로학습"
+            android:fontFamily="@font/pretendard"
             android:textSize="16sp"
             app:chipStartPadding="15dp"
             app:chipEndPadding="15dp"
@@ -166,6 +179,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="기타"
+            android:fontFamily="@font/pretendard"
             android:textSize="16sp"
             app:chipStartPadding="15dp"
             app:chipEndPadding="15dp"
@@ -181,10 +195,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/button_background"
         android:enabled="false"
         android:text="다음"
+        android:fontFamily="@font/pretendard"
         android:textColor="@drawable/button_textcolor"
         android:textSize="17sp"
         android:textStyle="bold"

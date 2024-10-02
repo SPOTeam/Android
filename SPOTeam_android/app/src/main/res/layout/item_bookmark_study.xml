@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border_interest_recyclerv_item"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
+
+    <ImageView
+        android:id="@+id/ImageView4"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_study_gray"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="토익 스피킹 IH 스터디"
+            android:fontFamily="@font/pretendard"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="스터디 목표"
+            android:fontFamily="@font/pretendard"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ImageView5"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/study_small_people" />
+
+            <TextView
+                android:id="@+id/tv_name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="po"
+                android:fontFamily="@font/pretendard"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_name5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/"
+                android:fontFamily="@font/pretendard"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="to"
+                android:fontFamily="@font/pretendard"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/ImageView6"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/study_like" />
+
+            <TextView
+                android:id="@+id/tv_name3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="like"
+                android:fontFamily="@font/pretendard"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/ImageView7"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/study_view" />
+
+            <TextView
+                android:id="@+id/tv_name4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="view"
+                android:fontFamily="@font/pretendard"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

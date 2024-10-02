@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")  // kapt 플러그인 직접 선언
 }
 
 android {
@@ -40,7 +41,8 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.androidx.splashscreen)
+    implementation(libs.circleimageview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -53,8 +55,23 @@ dependencies {
     implementation(libs.flexbox)
     implementation(libs.kakaoSdkAll)
     implementation(libs.kakaoSdkUser)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.media3.common)
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.viewpager2)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.scalars)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.gson)
+    implementation(libs.glide)
+
+    implementation("androidx.room:room-runtime:2.5.0")
+    kapt("androidx.room:room-compiler:2.5.0")
+    implementation("androidx.room:room-ktx:2.5.0")
 }

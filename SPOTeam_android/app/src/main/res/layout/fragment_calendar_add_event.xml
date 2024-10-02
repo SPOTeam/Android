@@ -1,0 +1,171 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tx_new_schedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/pretendard"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="새로운 일정"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tx_schedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/pretendard"
+        android:padding="8dp"
+        android:text="일정"
+        android:textColor="@color/active_blue"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/write_content_prev_iv"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="37dp"
+        android:src="@drawable/ic_x_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/eventTitleEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/edittext_rounded_corner_rectangle"
+        android:fontFamily="@font/pretendard"
+        android:hint="제목"
+        android:maxLength="9"
+        android:padding="10dp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tx_schedule" />
+
+    <ImageView
+        android:id="@+id/ic_filter_active"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_marginBottom="3dp"
+        android:src="@drawable/interest_fragment_study_setcondition_active"
+        app:layout_constraintBottom_toTopOf="@+id/eventTitleEditText"
+        app:layout_constraintEnd_toEndOf="@+id/eventTitleEditText" />
+
+    <EditText
+        android:id="@+id/eventPositionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_rounded_corner_rectangle"
+        android:hint="위치메모"
+        android:fontFamily="@font/pretendard"
+        android:padding="10dp"
+        android:textSize="14sp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventTitleEditText"
+        tools:layout_editor_absoluteX="4dp" />
+
+    <TextView
+        android:id="@+id/tx_start_date_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/pretendard"
+        android:text="시작"
+        android:padding="8dp"
+        android:textColor="#2D2D2D"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventPositionEditText" />
+
+    <TextView
+        android:id="@+id/startDateTimeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/edittext_rounded_corner_rectangle"
+        android:fontFamily="@font/pretendard"
+        android:hint="시작 날짜와 시간을 입력해주세요"
+        android:padding="10dp"
+        android:textColor="@color/gray_03"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tx_start_date_time" />
+
+    <TextView
+        android:id="@+id/tx_end_date_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/pretendard"
+        android:text="종료"
+        android:padding="8dp"
+        android:textColor="#2D2D2D"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startDateTimeTextView" />
+
+    <TextView
+        android:id="@+id/endDateTimeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/edittext_rounded_corner_rectangle"
+        android:fontFamily="@font/pretendard"
+        android:hint="종료 날짜와 시간을 입력해주세요"
+        android:padding="10dp"
+        android:textColor="@color/gray_03"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tx_end_date_time" />
+
+    <android.widget.Button
+        android:id="@+id/fragment_introduce_study_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button_background"
+        android:enabled="false"
+        android:text="추가"
+        android:fontFamily="@font/pretendard"
+        android:textColor="@drawable/button_textcolor"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

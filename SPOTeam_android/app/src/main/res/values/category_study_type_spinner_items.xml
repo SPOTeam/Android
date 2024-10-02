@@ -1,0 +1,10 @@
+<resources>
+    <string-array name="category_study">
+        <item>전체</item>
+        <item>모집중</item>
+        <item>모집완료</item>
+        <item>조회수순</item>
+        <item>관심순</item>
+    </string-array>
+</resources>
+

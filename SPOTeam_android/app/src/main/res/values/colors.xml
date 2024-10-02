@@ -7,7 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
+    <color name="blue">#0019F4</color>
+    <color name="red">#F46258</color>
     <color name="chip_background_color">#588FF2</color>
     <color name="button_enabled_text">#186AFF</color>
     <color name="button_disabled_text">#8E8E8E</color>
@@ -17,6 +18,12 @@
     <color name="background_gray">#f8f8f8</color>
     <color name="active_blue">#588FF2</color>
     <color name="selector_blue">#588FF2</color>
+    <color name="gray_03">#8E8E8E</color>
+    <color name="splash">#D2E0FF</color>
+    <color name="spot_login">#186AFF</color>
+
+    <color name="active_color">#588FF2</color>
+    <color name="disabled_color">#D8D8D8</color>
 
 
 </resources>

@@ -5,6 +5,10 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="studystart">스터디 모집과 관리\n똑똑한 취준 생활 시작, SPOT</string>
+    <string name="locationcaution">위치 노출의 위험을 방지하기 위해 구체적인\n지역은 스터디원 확정 후 협의하시기 바랍니다.</string>
+    <string name="complete_message">스터디 모집이 시작됩니다!</string>
+    <string name="start_login"><u>로그인하기</u></string>
+    <string name="complete1_message">내 스터디에서 신청자들을 수락해주세요.</string>
 
     <string name="interest_study">관심 지역 스터디</string>
     <string-array name="signup_select_region">
@@ -12,6 +16,7 @@
         <item>남성</item>
         <item>여성</item>
     </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_interest">InterestActivity</string>
@@ -23,4 +28,9 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="member_count_format">%d</string>
+    <string name="heart_count_format">%d</string>
+    <string name="hit_num_format">%d</string>
+    <string name="max_people_format">%d</string>
 </resources>

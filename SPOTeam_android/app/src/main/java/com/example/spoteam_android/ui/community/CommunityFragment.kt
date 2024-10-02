@@ -1,6 +1,7 @@
 package com.example.spoteam_android.ui.community
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,9 @@ import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentCommunityBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CommunityFragment : Fragment() {
 
@@ -29,11 +33,22 @@ class CommunityFragment : Fragment() {
                 tab, position -> tab.text = tabList[position]
         }.attach()
 
-        binding.communityPrevIv.setOnClickListener {
+        // Bundle로부터 특정 조건을 체크
+        val showSpotNotice = arguments?.getBoolean("showSpotNotice", false) ?: false
+        if (showSpotNotice) {
+            val spotNoticeTabPosition = tabList.indexOf("SPOT공지")
+            if (spotNoticeTabPosition != -1) {
+                binding.categoryContentVp.setCurrentItem(spotNoticeTabPosition, true)
+            }
+        }
+
+        binding.communityPrevIv.setOnClickListener{
             (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, CommunityHomeFragment()
+                .replace(
+                    R.id.main_frm, CommunityHomeFragment()
                 ).commitAllowingStateLoss()
         }
+
         return binding.root
     }
 }

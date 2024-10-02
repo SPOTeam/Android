@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white">
+    <ImageView
+        android:id ="@+id/study_logo"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:src="@drawable/fragment_study_register_popup_ic_studylogo"/>
+
+    <TextView
+        android:id="@+id/popup_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="스터디 참여하기"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/popup_message"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:paddingTop="8dp"
+        android:text="한 번 신청한 스터디는 취소가 불가하니 신중하게 신청해주세요."
+        android:textColor="@color/gray_03" />
+
+    <EditText
+        android:id="@+id/popup_edit_text"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="150dp"
+        android:hint="스터디에 참여하고자 하는 이유, 자기소개 등을 간단하게 작성해주세요. (20자 이내)"
+        android:paddingTop="16dp"
+        android:textColorHint="@color/gray"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        android:textAlignment="center"
+        android:paddingBottom="16dp"/>
+
+    <ImageView
+        android:id="@+id/popup_apply_button"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:text="신청"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/fragment_study_register_popup_btn_register"/>
+</LinearLayout>

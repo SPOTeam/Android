@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="330dp"
+    android:layout_height="330dp"
+    android:layout_gravity="center"
+    android:background="@drawable/dialog_rounded_background">
+
+    <ImageView
+        android:id="@+id/complete_iv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/fragment_study_register_popup_ic_studylogo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dialog_complete_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="스터디 참여하기"
+        android:textColor="#000000"
+        android:fontFamily="@font/pretendard"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/complete_iv" />
+
+    <TextView
+        android:id="@+id/dialog_complete_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="한 번 신청한 스터디는 취소가 불가하니\n신중하게 신청해주세요."
+        android:textColor="#8E8E8E"
+        android:fontFamily="@font/pretendard"
+        android:textSize="14sp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_complete_title_tv" />
+
+    <EditText
+        android:id="@+id/dialog_apply_study_et"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:hint="스터디에 참여하고자 하는 이유,\n자기소개 등 간단하게 작성해주세요.\n(20자 이내)"
+        android:textColorHint="#D8D8D8"
+        android:inputType="textMultiLine"
+        android:padding="10dp"
+        android:textSize="15sp"
+        android:fontFamily="@font/pretendard"
+        android:maxLength="20"
+        android:background="@drawable/edittext_rounded_corner_rectangle"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_complete_content_tv"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/dialog_apply_study_bt"
+        android:layout_width="226dp"
+        android:layout_height="38dp"
+        android:text="신청"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
+        android:background="@drawable/button_background"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@drawable/button_textcolor"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:enabled="false"
+        app:layout_constraintTop_toBottomOf="@id/dialog_apply_study_et"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

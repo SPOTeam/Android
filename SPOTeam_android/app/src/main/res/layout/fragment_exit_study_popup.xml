@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="330dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginHorizontal="10dp"
+    android:background="@drawable/rounded_dialog"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/ic_x"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/fragment_exit_study_popup_ic_x"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="탈퇴하시겠습니까?"
+        android:textColor="@color/black"
+        android:fontFamily="@font/pretendard"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ic_x" />
+
+    <TextView
+        android:id="@+id/messageTextView"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="한 번 탈퇴하면,\n다시 이 스터디에 들어올 수 없습니다."
+        android:fontFamily="@font/pretendard"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+
+    <ImageButton
+        android:id="@+id/imgbtn_exit"
+        android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:scaleType="fitCenter"
+        android:src="@drawable/fragment_exit_study_popup_imgbtn_exit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/messageTextView" />
+
+    <ImageButton
+        android:id="@+id/imgbtn_cancel"
+        android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="5dp"
+        android:background="@color/white"
+        android:scaleType="fitCenter"
+        android:src="@drawable/fragment_exit_study_popup_imgbtn_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imgbtn_exit" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

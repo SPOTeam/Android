@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <ImageView
+        android:id="@+id/ic_bar"
+        android:layout_width="7dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="#D6E5FF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/eventTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="2dp"
+        android:text="Event Title"
+        android:textSize="16sp"
+        android:fontFamily="@font/pretendard"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/ic_bar"
+        app:layout_constraintTop_toTopOf="@+id/ic_bar" />
+
+    <ImageView
+        android:id="@+id/ic_check"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/fragment_calendar_ic_check"
+        app:layout_constraintStart_toEndOf="@+id/eventTitleTextView"
+        app:layout_constraintTop_toTopOf="@+id/eventTitleTextView" />
+
+
+    <TextView
+        android:id="@+id/tx_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="#F8F8F8"
+        android:padding="3dp"
+        android:text="일시"
+        android:textColor="#186AFF"
+        android:fontFamily="@font/pretendard"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/startDate"
+        app:layout_constraintTop_toTopOf="@+id/ic_check" />
+
+
+    <TextView
+        android:id="@+id/startDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Star Date"
+        android:fontFamily="@font/pretendard"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tx_date"
+        app:layout_constraintEnd_toStartOf="@+id/enddate"
+        app:layout_constraintTop_toTopOf="@+id/tx_date" />
+
+    <TextView
+        android:id="@+id/enddate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:text="End Date"
+        android:fontFamily="@font/pretendard"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tx_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tx_date" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

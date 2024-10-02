@@ -3,6 +3,7 @@ package com.example.spoteam_android.ui.community
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.spoteam_android.ui.community.communityContent.AllFragment
+//import com.example.spoteam_android.ui.community.communityContent.AllFragment
 import com.example.spoteam_android.ui.community.communityContent.CounselingFragment
 import com.example.spoteam_android.ui.community.communityContent.FreeTalkFragment
 import com.example.spoteam_android.ui.community.communityContent.JobSeekingTalkFragment

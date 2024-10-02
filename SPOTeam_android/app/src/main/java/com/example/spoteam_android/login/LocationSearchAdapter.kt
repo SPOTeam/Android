@@ -4,14 +4,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemLocationSearchBinding
 import com.example.spoteam_android.login.LocationItem
 
-class LocationSearchAdapter(private val dataList: List<LocationItem>) : RecyclerView.Adapter<LocationSearchAdapter.ViewHolder>() {
+class LocationSearchAdapter(
+    private val dataList: List<LocationItem>,
+    private val onItemClick: (LocationItem) -> Unit
+) : RecyclerView.Adapter<LocationSearchAdapter.ViewHolder>() {
 
     private var filteredList: MutableList<LocationItem> = dataList.toMutableList()
+    private var selectedItem: LocationItem? = null // 선택된 아이템을 저장하는 변수
 
     inner class ViewHolder(val binding: ItemLocationSearchBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: LocationItem) {
-            binding.itemLocationSearchTv.text = item.name
             binding.itemLocationConcreteTv.text = item.address
+            binding.root.setOnClickListener {
+                selectedItem = item // 아이템 클릭 시 선택된 아이템 저장
+                onItemClick(item)
+            }
         }
     }
 
@@ -34,11 +41,16 @@ class LocationSearchAdapter(private val dataList: List<LocationItem>) : Recycler
         } else {
             val lowerCaseQuery = query.lowercase()
             for (item in dataList) {
-                if (item.address.lowercase().contains(lowerCaseQuery)) {
+                if (item.address.lowercase().contains(lowerCaseQuery)) { // 텍스트 포함 여부로 필터링
                     filteredList.add(item)
                 }
             }
         }
         notifyDataSetChanged()
+    }
+
+
+    fun getSelectedItem(): LocationItem? {
+        return selectedItem
     }
 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:name=".GlobalApplication"
@@ -14,13 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SPOTeam_android"
         tools:targetApi="34">
+        <service
+            android:name=".ui.study.StudyRegisterApiService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
+            android:name=".login.LoginAPiService"
+            android:enabled="true"
+            android:exported="true" />
+        <activity
+            android:name=".ui.study.MyStudyPostContentActivity"
+            android:exported="false" />
         <activity
             android:name=".login.LocationSearchActivity"
             android:exported="false" />
-        <activity
-            android:name=".InterestFilterActivity"
-            android:exported="false" />
-
         <activity
             android:name=".login.LogoutActivity"
             android:exported="false">
@@ -28,7 +36,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
+        <activity
+            android:name=".ui.community.CommunityContentActivity"
+            android:exported="false" />
         <activity
             android:name=".checklist.CheckListLocationActivity"
             android:exported="false">
@@ -36,7 +46,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".checklist.CheckListStudyPurposeActivity"
             android:exported="false">
@@ -44,7 +53,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".checklist.CheckListCategoryActivity"
             android:exported="false">
@@ -52,7 +60,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".login.RegisterInformation"
             android:exported="false">
@@ -60,22 +67,18 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
-            android:name=".login.StartLoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".InterestActivity"
+            android:name=".MainActivity"
             android:exported="false">
-        </activity>
 
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+
+        </activity>
         <activity
             android:name=".login.LoginActivity"
             android:exported="false">
@@ -83,28 +86,33 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
-            android:name=".MainActivity"
-            android:exported="false">
+            android:name=".login.StartLoginActivity"
+            android:theme="@style/Theme.SPOTeam_android.SplashScreen"
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="oauth"
-                    android:scheme="dbd5ca7007d0fdd0b1b705db749a86f3" />
+                    android:scheme="kakao7878cb24cec56458df067991de5e7786" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>
