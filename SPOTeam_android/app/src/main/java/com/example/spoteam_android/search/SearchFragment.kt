@@ -63,31 +63,8 @@ class SearchFragment : Fragment() {
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
 
-//        val db = Room.databaseBuilder(
-//            requireContext(),
-//            AppDatabase::class.java, "database-name"
-//        ).build()
-//
-//        val userDao = db.userDao()
 
-//        // 비동기로 데이터베이스 작업을 수행
-//        CoroutineScope(Dispatchers.IO).launch {
-//            // 더미 데이터 삽입
-//            val user1 = User(firstName = "John", lastName = "Doe",uid = 3)
-//            val user2 = User(firstName = "Jane", lastName = "Smith",uid = 4)
-//            userDao.insertAll(user1, user2)
-//
-//            // 모든 유저 조회
-//            val users = userDao.getAll()
-//            users.forEach { user ->
-//                Log.d("MainActivity", "User: ${user.firstName} ${user.lastName}, ID: ${user.uid}")
-//            }
-//
-//            // 특정 이름으로 유저 검색
-//            val foundUser = userDao.findByName("John", "Doe")
-//            Log.d("MainActivity", "Found User: ${foundUser.firstName} ${foundUser.lastName}")
-//        }
-
+        // 최근 검색어 저장을 위한 DB 로드
         db = Room.databaseBuilder(
             requireContext(),
             AppDatabase::class.java, "search_database"
@@ -95,12 +72,12 @@ class SearchFragment : Fragment() {
 
         searchQueryDao = db.searchQueryDao()
 
-            // 최근 검색어 로드
+        // 최근 검색어 로드
         loadRecentSearches()
 
         val chipGroup = binding.chipGroup2
 
-// ChipGroup의 모든 자식 Chip의 클릭 이벤트를 비활성화
+        // 검색어들의 클릭 이벤트 비활성화
         for (i in 0 until chipGroup.childCount) {
             val chip = chipGroup.getChildAt(i) as Chip
             chip.isClickable = false
@@ -217,7 +194,6 @@ class SearchFragment : Fragment() {
             setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_chip_text))
         }
 
-
         chip.setChipDrawable(
             ChipDrawable.createFromAttributes(
                 requireContext(), null, 0, R.style.find_ChipStyle
@@ -227,12 +203,20 @@ class SearchFragment : Fragment() {
         chip.isCloseIconVisible = false
         chip.isCheckable = false
         binding.chipGroup.addView(chip, 0)
+
     }
 
     private fun saveSearchQuery(query: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val searchQuery = SearchQuery(query = query)
             searchQueryDao.insertSearchQuery(searchQuery)
+
+            // 검색어 개수 확인
+            val count = searchQueryDao.getSearchQueryCount()
+            if (count > 10) {
+                // 10개가 넘으면 가장 오래된 검색어 삭제
+                searchQueryDao.deleteOldestSearchQuery()
+            }
         }
     }
 
@@ -240,8 +224,17 @@ class SearchFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val recentSearches = searchQueryDao.getAllSearchQueries()
             recentSearches.forEach { searchQuery ->
-                Log.d("SearchFragment", "검색어: ${searchQuery.query}, 시간: ${searchQuery.timestamp}")
+                CoroutineScope(Dispatchers.Main).launch {
+                    addSearchChip(searchQuery.query)
+                }
             }
+        }
+    }
+
+    private fun clearSearchHistory() {
+        CoroutineScope(Dispatchers.IO).launch {
+            searchQueryDao.deleteAllSearchQueries()
+            Log.d("SearchFragment", "RoomDB 초기화 완료")
         }
     }
 
