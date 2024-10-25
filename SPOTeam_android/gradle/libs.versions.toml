@@ -25,6 +25,7 @@ room = "2.5.0"  # Room 버전
 
 
 
+
 #0723추가
 androidx-recyclerview = "1.2.1"
 material3Android = "1.2.1"

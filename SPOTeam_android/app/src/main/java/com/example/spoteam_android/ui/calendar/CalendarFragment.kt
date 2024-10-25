@@ -5,11 +5,13 @@ import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CalendarView
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
@@ -27,6 +29,9 @@ import com.example.spoteam_android.databinding.FragmentCalendarBinding
 import com.example.spoteam_android.ui.study.OnlineStudyFragment
 import com.example.spoteam_android.ui.study.StudyFragment
 import com.example.spoteam_android.ui.study.quiz.HostMakeQuizFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,12 +41,13 @@ class CalendarFragment : Fragment() {
 
     private lateinit var binding: FragmentCalendarBinding
     private lateinit var eventsRecyclerView: RecyclerView
-    private lateinit var calendarView: CalendarView
-    private lateinit var imgbtnAddEvent: ImageButton
+    private lateinit var calendarView: MaterialCalendarView
     private val eventViewModel: EventViewModel by activityViewModels()
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var eventAdapter: EventAdapter
-
+    private lateinit var fab: FloatingActionButton
+    private lateinit var todayDecorator: TodayDecorator
+    private lateinit var selectedDateDecorator: TodayDecorator
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,10 +56,29 @@ class CalendarFragment : Fragment() {
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
 
         calendarView = binding.calendarView
-        eventsRecyclerView = binding.eventrecyclerview
-        imgbtnAddEvent = binding.imgbtnAddEvent
 
-        binding.imgbtnAddEvent.visibility = View.GONE // 기본값을 GONE으로 설정하여 버튼 숨기기
+        // TodayDecorator를 CalendarView에 추가
+        todayDecorator = TodayDecorator(requireContext())
+        selectedDateDecorator = TodayDecorator(requireContext())
+
+        // Decorator 추가
+        calendarView.addDecorator(todayDecorator)
+        calendarView.addDecorator(selectedDateDecorator)
+//        calendarView.setSelectedDate(CalendarDay.today())
+
+
+
+
+        eventsRecyclerView = binding.eventrecyclerview
+
+        fab  = binding.fab
+        fab.setOnClickListener {
+            val studyId = studyViewModel.studyId.value ?: 0
+            val fragment = CalendarAddEventFragment.newInstance(studyId)
+            (activity as MainActivity).switchFragment(fragment)
+        }
+
+        binding.fab.visibility = View.GONE // 기본값을 GONE으로 설정하여 버튼 숨기기
 
         studyViewModel.studyOwner.observe(viewLifecycleOwner) { studyOwner ->
             val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -61,23 +86,14 @@ class CalendarFragment : Fragment() {
             val kakaoNickname = sharedPreferences.getString("${currentEmail}_nickname", "Unknown")
 
             if (kakaoNickname == studyOwner) {
-                binding.imgbtnAddEvent.visibility = View.VISIBLE // 닉네임이 일치할 경우 버튼 보이기
+                binding.fab.visibility = View.VISIBLE // 닉네임이 일치할 경우 버튼 보이기
             } else {
-                binding.imgbtnAddEvent.visibility = View.GONE // 닉네임이 일치하지 않을 경우 버튼 숨기기
+                binding.fab.visibility = View.GONE // 닉네임이 일치하지 않을 경우 버튼 숨기기
             }
         }
 
 
-        imgbtnAddEvent.setOnClickListener {
-            val studyId = studyViewModel.studyId.value ?: 0
-            val fragment = CalendarAddEventFragment.newInstance(studyId)
-            (activity as MainActivity).switchFragment(fragment)
 
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.main_frm, StudyFragment())
-//                .addToBackStack(null)
-//                .commit()
-        }
 
         eventAdapter = EventAdapter(emptyList(), { event ->
             val hostMakeQuizFragment = HostMakeQuizFragment()
@@ -87,15 +103,28 @@ class CalendarFragment : Fragment() {
         eventsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         eventsRecyclerView.adapter = eventAdapter
 
-        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            val studyId = studyViewModel.studyId.value ?: 0 // 기본값 0
-            fetchGetSchedule(studyId, year, month + 1) {
-                eventViewModel.loadEvents(year, month + 1, dayOfMonth)
-            }
+        calendarView.setOnDateChangedListener  { _, date, selected ->
+            if (selected) {
+                val year = date.year
+                val month = date.month
+                val day = date.day
 
+                val studyId = studyViewModel.studyId.value ?: 0
+
+                todayDecorator.setSelectedDate(date)
+                selectedDateDecorator.setSelectedDate(date)
+                calendarView.invalidateDecorators() // Decorator 강제 갱신
+
+
+                fetchGetSchedule(studyId, year, month) {
+                    eventViewModel.loadEvents(year, month, day)
+                }
+            }
         }
 
         eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
+            val eventDates = eventViewModel.getEventDates()
+            calendarView.addDecorator(EventDecorator(eventDates))
             eventAdapter.updateEvents(events)
         })
 
@@ -139,6 +168,7 @@ class CalendarFragment : Fragment() {
                     if (apiResponse?.isSuccess == true) {
                         apiResponse.result.scheduleList.forEach { schedule ->
                             val eventItem = Event(
+
                                 id = schedule.scheduleId,
                                 title = schedule.title,
                                 startYear = schedule.startedAt.substring(0, 4).toInt(),
@@ -155,6 +185,7 @@ class CalendarFragment : Fragment() {
 //                                    schedule.isAllDay
 //                                    schedule.location
                             )
+
                             EventItems.add(eventItem)
                         }
                         eventViewModel.updateEvents(EventItems)

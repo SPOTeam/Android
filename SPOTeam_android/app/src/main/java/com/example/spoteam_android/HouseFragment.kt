@@ -57,7 +57,7 @@ class HouseFragment : Fragment() {
 
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
-        fetchLivePopularContent()
+//        fetchLivePopularContent()
 
         binding.goPopularContentIv.setOnClickListener{
             val intent = Intent(requireContext(), CommunityContentActivity::class.java)

@@ -161,4 +161,8 @@
         <item name="postSplashScreenTheme">@style/Theme.SPOTeam_android</item>
     </style>
 
+    <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textColor">@drawable/my_date_text_color</item>
+    </style>
+
 </resources>
