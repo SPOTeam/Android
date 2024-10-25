@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 날짜가 선택된 상태 -->
+    <item
+        android:state_checked="true"
+        android:color="@android:color/white" />
+
+    <!-- 기본 색상 -->
+    <item android:color="@android:color/black" />
+</selector>

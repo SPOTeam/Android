@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import java.util.Calendar
 
 class EventViewModel : ViewModel() {
@@ -16,12 +17,40 @@ class EventViewModel : ViewModel() {
     // 전체 이벤트 리스트를 업데이트
     fun updateEvents(newEvents: List<Event>) {
         allEvents = newEvents
+        _events.value = newEvents
     }
 
     // 새로운 이벤트를 추가하고, 추가된 이벤트가 있는 날짜에 맞는 이벤트를 다시 로드
     fun addEvent(event: Event) {
         EventRepository.addEvent(event)
         loadEvents(event.startYear, event.startMonth, event.startDay)
+    }
+
+    fun getEventDates(): Set<CalendarDay> {
+        val eventDates = mutableSetOf<CalendarDay>()
+
+        allEvents.forEach { event ->
+            val startCalendar = Calendar.getInstance().apply {
+                set(event.startYear, event.startMonth - 1, event.startDay) // month는 0부터 시작
+            }
+
+            val endCalendar = Calendar.getInstance().apply {
+                set(event.endYear, event.endMonth - 1, event.endDay)
+            }
+
+            // 시작일에서 종료일까지의 모든 날짜를 추가
+            while (!startCalendar.after(endCalendar)) {
+                val date = CalendarDay.from(
+                    startCalendar.get(Calendar.YEAR),
+                    startCalendar.get(Calendar.MONTH) + 1, // Calendar.MONTH는 0부터 시작
+                    startCalendar.get(Calendar.DAY_OF_MONTH)
+                )
+                eventDates.add(date)
+                startCalendar.add(Calendar.DAY_OF_MONTH, 1) // 하루씩 증가
+            }
+        }
+
+        return eventDates
     }
 
     // 주어진 날짜에 맞는 이벤트를 필터링하여 _events에 반영

@@ -76,10 +76,12 @@ class DetailStudyFragment : Fragment() {
 
                 // ViewPager가 미리 모든 탭의 프래그먼트를 생성하고 캐싱하도록 설정
                 binding.fragmentDetailStudyVp.offscreenPageLimit = tabList.size
+                binding.fragmentDetailStudyVp.isUserInputEnabled = false
 
                 TabLayoutMediator(binding.fragmentDetailStudyTl, binding.fragmentDetailStudyVp) { tab, position ->
                     tab.text = tabList[position]
                 }.attach()
+
 
                 binding.fragmentDetailStudyTl.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                     override fun onTabSelected(tab: TabLayout.Tab?) {

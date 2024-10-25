@@ -9,7 +9,7 @@ data class ScheduleResponse(
     @SerializedName("result") val result: ResultData // 이 부분을 String이 아닌 ResultData로 수정
 )
 
-data class ResultData( // 클래스 이름은 대문자로 시작하는 것이 관례입니다.
+data class ResultData(
     @SerializedName("studyId") val studyId: Int,
     @SerializedName("scheduleList") val scheduleList: List<Schedule>
 )
