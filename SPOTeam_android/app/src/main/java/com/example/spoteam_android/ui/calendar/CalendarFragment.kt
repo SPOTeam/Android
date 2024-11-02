@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -48,6 +49,7 @@ class CalendarFragment : Fragment() {
     private lateinit var fab: FloatingActionButton
     private lateinit var todayDecorator: TodayDecorator
     private lateinit var selectedDateDecorator: TodayDecorator
+    private lateinit var addButton: ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,15 +66,20 @@ class CalendarFragment : Fragment() {
         // Decorator 추가
         calendarView.addDecorator(todayDecorator)
         calendarView.addDecorator(selectedDateDecorator)
-//        calendarView.setSelectedDate(CalendarDay.today())
-
+        addButton = binding.addButton
 
 
 
         eventsRecyclerView = binding.eventrecyclerview
 
-        fab  = binding.fab
-        fab.setOnClickListener {
+//        fab  = binding.fab
+//        fab.setOnClickListener {
+//            val studyId = studyViewModel.studyId.value ?: 0
+//            val fragment = CalendarAddEventFragment.newInstance(studyId)
+//            (activity as MainActivity).switchFragment(fragment)
+//        }
+
+        addButton.setOnClickListener {
             val studyId = studyViewModel.studyId.value ?: 0
             val fragment = CalendarAddEventFragment.newInstance(studyId)
             (activity as MainActivity).switchFragment(fragment)
@@ -102,6 +109,17 @@ class CalendarFragment : Fragment() {
 
         eventsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         eventsRecyclerView.adapter = eventAdapter
+
+        calendarView.setOnMonthChangedListener { _, date ->
+            val year = date.year
+            val month = date.month // Calendar.MONTH는 0부터 시작하므로 +1 필요
+            val day = date.day
+
+            val studyId = studyViewModel.studyId.value ?: 0
+            fetchGetSchedule(studyId, year, month) {
+                eventViewModel.loadEvents(year, month, day)
+            }
+        }
 
         calendarView.setOnDateChangedListener  { _, date, selected ->
             if (selected) {
