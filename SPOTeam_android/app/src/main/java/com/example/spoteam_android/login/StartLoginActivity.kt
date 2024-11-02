@@ -73,10 +73,17 @@ class StartLoginActivity : AppCompatActivity() {
             }
         }
 
+
+
 //        binding.loginwithspotBt.setOnClickListener {
 //            val intent = Intent(this, CheckListCategoryActivity::class.java)
 //            startActivity(intent)
 //        }
+
+        binding.activityStartLoginNextBt.setOnClickListener {
+            val loginIntent = Intent(this, NormalLoginActivity::class.java)
+            startActivity(loginIntent)
+        }
     }
 
 

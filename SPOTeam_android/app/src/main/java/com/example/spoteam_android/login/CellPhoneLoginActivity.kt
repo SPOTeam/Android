@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ActivityCellPhoneLoginBinding
 
-class LoginActivity : AppCompatActivity() {
+class CellPhoneLoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCellPhoneLoginBinding
     private val certificationCode = "1234"

@@ -4,6 +4,21 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
+
+data class UserInfo( //일반 로그인시 필요
+    val name: String,
+    val nickname: String = "TEMP_NICKNAME", // 임시 닉네임
+    val frontRID: String,
+    val backRID: String,
+    val email: String,
+    val loginId: String,
+    val password: String,
+    val pwCheck: String,
+    val personalInfo: Boolean = false, // 임시 값
+    val idInfo: Boolean = false        // 임시 값
+)
+
+
 data class IndexData(
     val index : String,
     val content : String,
