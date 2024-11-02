@@ -15,14 +15,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SPOTeam_android"
         tools:targetApi="34">
+        <activity
+            android:name=".login.NormalLoginActivity"
+            android:exported="false" />
+
         <service
             android:name=".ui.study.StudyRegisterApiService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <service
             android:name=".login.LoginAPiService"
             android:enabled="true"
             android:exported="true" />
+
         <activity
             android:name=".ui.study.MyStudyPostContentActivity"
             android:exported="false" />
@@ -80,7 +85,7 @@
 
         </activity>
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".login.CellPhoneLoginActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -88,8 +93,8 @@
         </activity>
         <activity
             android:name=".login.StartLoginActivity"
-            android:theme="@style/Theme.SPOTeam_android.SplashScreen"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.SPOTeam_android.SplashScreen">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -105,6 +110,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 

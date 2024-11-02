@@ -17,6 +17,7 @@
     <color name="gray">#D8D8D8</color>
     <color name="background_gray">#f8f8f8</color>
     <color name="active_blue">#588FF2</color>
+    <color name="selector_red">#F46258</color>
     <color name="selector_blue">#588FF2</color>
     <color name="gray_03">#8E8E8E</color>
     <color name="splash">#D2E0FF</color>
