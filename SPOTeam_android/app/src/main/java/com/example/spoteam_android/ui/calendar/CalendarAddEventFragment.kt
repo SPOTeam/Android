@@ -1,24 +1,32 @@
 package com.example.spoteam_android.ui.calendar
 
 import StudyApiService
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.ViewModelProvider
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.ScheduleRequest
@@ -40,7 +48,20 @@ class CalendarAddEventFragment : Fragment() {
     private lateinit var endDateTimeTextView: TextView
     private lateinit var saveButton: Button
     private lateinit var closeButton: ImageView
+    private lateinit var spinner: Spinner
+    private lateinit var checkBox: CheckBox
+    private lateinit var checkBoxViewModel: CheckBoxViewModel
+    private lateinit var startYearTx: TextView
+    private lateinit var startTimeTx: TextView
+    private lateinit var endYearTx: TextView
+    private lateinit var endTimeTx: TextView
     private var studyId: Int = 0
+    private var period: String = "NONE"
+    private var startDateTime = ""
+    private var endDateTime = ""
+    private var isAllDay = false
+
+
 
     private val eventViewModel: EventViewModel by activityViewModels()
 
@@ -49,14 +70,75 @@ class CalendarAddEventFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_calendar_add_event, container, false)
+
+        checkBoxViewModel = ViewModelProvider(this).get(CheckBoxViewModel::class.java)
+
+
         eventTitleEditText = view.findViewById(R.id.eventTitleEditText)
         eventPositionEditText = view.findViewById(R.id.eventPositionEditText)
         startDateTimeTextView = view.findViewById(R.id.startDateTimeTextView)
         endDateTimeTextView = view.findViewById(R.id.endDateTimeTextView)
+
         saveButton = view.findViewById(R.id.fragment_introduce_study_bt)
         closeButton = view.findViewById(R.id.write_content_prev_iv)
+        spinner = view.findViewById(R.id.routine_spinner)
+        checkBox = view.findViewById(R.id.checkBox_every_day)
+        startYearTx = view.findViewById(R.id.tx_start_year)
+        startTimeTx = view.findViewById(R.id.tx_start_time)
+        endYearTx = view.findViewById(R.id.tx_end_year)
+        endTimeTx = view.findViewById(R.id.tx_end_time)
 
         studyId = arguments?.getInt("studyId") ?: 0
+
+        val adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.routine_array,
+            R.layout.spinner_item
+        )
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+        spinner.adapter = adapter
+
+
+        checkBoxViewModel.isCheckBoxChecked.observe(viewLifecycleOwner) { isEnabled ->
+            spinner.isEnabled = isEnabled
+        }
+
+        // CheckBox 상태가 변경될 때 ViewModel의 isSpinnerEnabled 값 변경
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            isAllDay = isChecked
+            checkBoxViewModel.isCheckBoxChecked.value = !isChecked // CheckBox 체크 시 Spinner 비활성화
+        }
+
+        // Spinner의 onItemSelectedListener 설정
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                // Spinner가 비활성화 상태면 기본 period 값 설정 후 동작을 무시
+                if (checkBoxViewModel.isCheckBoxChecked.value == false) {
+                    period = "NONE"
+                    return
+                }
+
+//                 Spinner의 선택에 따라 period 값을 설정
+                period = when (position) {
+                    0 -> "NONE"
+                    1 -> "DAILY"
+                    2 -> "WEEKLY"
+                    3 -> "BIWEEKLY"
+                    4 -> "MONTHLY"
+                    else -> "NONE"
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // 선택되지 않았을 때 기본값 설정
+                period = "NONE"
+            }
+        }
 
 
         eventTitleEditText.addTextChangedListener(object : TextWatcher {
@@ -67,25 +149,8 @@ class CalendarAddEventFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // 기본값으로 오늘 날짜와 시간 설정
-        val calendar = Calendar.getInstance()
-        val today = String.format(
-            "%04d-%02d-%02d",
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH) + 1,
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        val now = String.format(
-            "%02d:%02d",
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE)
-        )
-
-        startDateTimeTextView.text = "$today $now"
-        endDateTimeTextView.text = "$today $now"
-
-        startDateTimeTextView.setOnClickListener { showDateTimePickerDialog(startDateTimeTextView) }
-        endDateTimeTextView.setOnClickListener { showDateTimePickerDialog(endDateTimeTextView) }
+        startDateTimeTextView.setOnClickListener { showDateTimePickerDialog(startYearTx,startTimeTx,true) }
+        endDateTimeTextView.setOnClickListener { showDateTimePickerDialog(endYearTx,endTimeTx,false) }
 
         saveButton.setOnClickListener {
             addEventToViewModel()
@@ -101,7 +166,8 @@ class CalendarAddEventFragment : Fragment() {
         return view
     }
 
-    private fun showDateTimePickerDialog(textView: TextView) {
+
+    private fun showDateTimePickerDialog(txYear: TextView, txTime: TextView, isStart: Boolean) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -114,17 +180,56 @@ class CalendarAddEventFragment : Fragment() {
             { _, selectedYear, selectedMonth, selectedDay ->
                 val timePickerDialog = TimePickerDialog(
                     requireContext(),
-                    { _, selectedHour, selectedMinute ->
-                        textView.text = String.format(
-                            "%04d-%02d-%02d %02d:%02d",
+                    { _, selectedHourOfDay, selectedMinute ->
+                        // AM/PM 및 12시간제 처리
+                        val isAm = selectedHourOfDay < 12
+                        val amPm = if (isAm) "am" else "pm"
+                        val hourFormatted =
+                            if (selectedHourOfDay % 12 == 0) 12 else selectedHourOfDay % 12
+
+                        if (isStart) {
+                            startDateTime = String.format(
+                                "%04d-%02d-%02d %02d:%02d",
+                                selectedYear,
+                                selectedMonth + 1,
+                                selectedDay,
+                                selectedHourOfDay,
+                                selectedMinute
+                            )
+                        } else {
+                            endDateTime = String.format(
+                                "%04d-%02d-%02d %02d:%02d",
+                                selectedYear,
+                                selectedMonth + 1,
+                                selectedDay,
+                                selectedHourOfDay,
+                                selectedMinute
+                            )
+                        }
+
+                        txYear.text = String.format(
+                            "%04d.%02d.%02d",
                             selectedYear,
                             selectedMonth + 1,
-                            selectedDay,
-                            selectedHour,
-                            selectedMinute
+                            selectedDay
                         )
+                        txTime.text = String.format(
+                            "%02d:%02d %s",
+                            hourFormatted,
+                            selectedMinute,
+                            amPm
+                        )
+
+                        // isStart 값에 따라 visibility 설정
+                        if (isStart) {
+                            startYearTx.visibility = View.VISIBLE
+                            startTimeTx.visibility = View.VISIBLE
+                        } else {
+                            endYearTx.visibility = View.VISIBLE
+                            endTimeTx.visibility = View.VISIBLE
+                        }
                     },
-                    hour, minute, true
+                    hour, minute, false // 'false' to show 12-hour format in the picker
                 )
                 timePickerDialog.show()
             },
@@ -136,10 +241,10 @@ class CalendarAddEventFragment : Fragment() {
     private fun uploadScheduleToServer() {
         val title = eventTitleEditText.text.toString()
         val location = eventPositionEditText.text.toString() // 위치 입력
-        val startDateTime = startDateTimeTextView.text.toString()
-        val endDateTime = endDateTimeTextView.text.toString()
-        val isAllDay = false
-        val period = "NONE"
+        val startDateTime = startDateTime
+        val endDateTime = endDateTime
+        val isAllDay = isAllDay
+        val period = period
 
         // ISO 8601 형식으로 변환
         val isoDateTimeFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
@@ -188,8 +293,8 @@ class CalendarAddEventFragment : Fragment() {
 
     private fun addEventToViewModel() {
         val title = eventTitleEditText.text.toString()
-        val startDateTime = startDateTimeTextView.text.toString()
-        val endDateTime = endDateTimeTextView.text.toString()
+        val startDateTime = startDateTime
+        val endDateTime = endDateTime
 
         val startParts = startDateTime.split(" ", "-", ":")
         val endParts = endDateTime.split(" ", "-", ":")

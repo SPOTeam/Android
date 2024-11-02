@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="routine_array">
+        <item>안함</item>
+        <item>매일</item>
+        <item>매주</item>
+        <item>격주</item>
+        <item>매월</item>
+    </string-array>
+</resources>
