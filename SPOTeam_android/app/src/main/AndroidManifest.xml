@@ -16,6 +16,9 @@
         android:theme="@style/Theme.SPOTeam_android"
         tools:targetApi="34">
         <activity
+            android:name=".login.NicNameActivity"
+            android:exported="false" />
+        <activity
             android:name=".login.NormalLoginActivity"
             android:exported="false" />
 
