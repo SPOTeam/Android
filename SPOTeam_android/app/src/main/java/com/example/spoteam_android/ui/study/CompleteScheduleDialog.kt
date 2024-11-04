@@ -3,12 +3,13 @@ package com.example.spoteam_android.ui.study
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.view.Window
 import android.widget.Button
 import androidx.fragment.app.FragmentManager
 import com.example.spoteam_android.R
 
-class CompleteScheduleDialog (private val context: Context) {
+class CompleteScheduleDialog (private val context: Context, private val startDateTime: String) {
 
     private val dlg = android.app.Dialog(context)
 
@@ -24,7 +25,14 @@ class CompleteScheduleDialog (private val context: Context) {
         val btnMove = dlg.findViewById<Button>(R.id.dialog_complete_bt)
         btnMove.setOnClickListener {
             val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.main_frm, StudyFragment())
+            val detailStudyFragment = DetailStudyFragment()
+
+            val args = Bundle()
+            args.putInt("tab_position", 1)
+            args.putString("startDateTime",startDateTime)
+            detailStudyFragment.arguments = args
+
+            transaction.replace(R.id.main_frm, detailStudyFragment)
             transaction.commit()
             dlg.dismiss()
         }

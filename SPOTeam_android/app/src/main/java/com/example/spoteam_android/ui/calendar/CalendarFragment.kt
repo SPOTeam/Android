@@ -32,10 +32,14 @@ import com.example.spoteam_android.ui.study.StudyFragment
 import com.example.spoteam_android.ui.study.quiz.HostMakeQuizFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.CalendarDay.from
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class CalendarFragment : Fragment() {
@@ -46,10 +50,10 @@ class CalendarFragment : Fragment() {
     private val eventViewModel: EventViewModel by activityViewModels()
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var eventAdapter: EventAdapter
-    private lateinit var fab: FloatingActionButton
     private lateinit var todayDecorator: TodayDecorator
     private lateinit var selectedDateDecorator: TodayDecorator
     private lateinit var addButton: ImageButton
+    private var start: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +62,56 @@ class CalendarFragment : Fragment() {
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
 
         calendarView = binding.calendarView
+
+
+        start = arguments?.getString("my_start")
+
+        // startDateTime 값이 전달되었는지 로그로 확인
+        Log.d("CalendarFragment", "Received startDateTime: $start")
+
+        // 초기 진입 시 오늘 날짜 이벤트 로드
+//        val calendar = Calendar.getInstance()
+//        val year = calendar.get(Calendar.YEAR)
+//        val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
+//        val day = calendar.get(Calendar.DAY_OF_MONTH)
+//
+        val studyId = studyViewModel.studyId.value ?: 0
+
+
+        start?.let { dateStr ->
+            try {
+                // 날짜 문자열을 Date로 변환
+                val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                val date = formatter.parse(dateStr)
+
+                // Calendar 객체를 생성하여 날짜 설정
+                val calendar = Calendar.getInstance()
+                calendar.time = date
+
+                // Calendar를 CalendarDay로 변환하여 MaterialCalendarView에서 사용
+                val calendarDay = CalendarDay.from(
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH) + 1, // 월은 0부터 시작하므로 1을 더해줌
+                    calendar.get(Calendar.DAY_OF_MONTH)
+                )
+
+                // 캘린더를 해당 날짜로 이동하고, 선택 상태로 설정합니다.
+                calendarView.setCurrentDate(calendarDay)
+                calendarView.setSelectedDate(calendarDay)
+
+                fetchGetSchedule(studyId, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1) {
+                    eventViewModel.loadEvents(
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH) + 1,
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                    )
+                }
+
+                Log.d("CalendarFragment", "Selected startDateTime: $calendarDay")
+            } catch (e: Exception) {
+                Log.e("CalendarFragment", "Error parsing date: ${e.message}")
+            }
+        }
 
         // TodayDecorator를 CalendarView에 추가
         todayDecorator = TodayDecorator(requireContext())
@@ -68,16 +122,7 @@ class CalendarFragment : Fragment() {
         calendarView.addDecorator(selectedDateDecorator)
         addButton = binding.addButton
 
-
-
         eventsRecyclerView = binding.eventrecyclerview
-
-//        fab  = binding.fab
-//        fab.setOnClickListener {
-//            val studyId = studyViewModel.studyId.value ?: 0
-//            val fragment = CalendarAddEventFragment.newInstance(studyId)
-//            (activity as MainActivity).switchFragment(fragment)
-//        }
 
         addButton.setOnClickListener {
             val studyId = studyViewModel.studyId.value ?: 0
@@ -85,7 +130,7 @@ class CalendarFragment : Fragment() {
             (activity as MainActivity).switchFragment(fragment)
         }
 
-        binding.fab.visibility = View.GONE // 기본값을 GONE으로 설정하여 버튼 숨기기
+        binding.addButton.visibility = View.GONE // 기본값을 GONE으로 설정하여 버튼 숨기기
 
         studyViewModel.studyOwner.observe(viewLifecycleOwner) { studyOwner ->
             val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -93,9 +138,9 @@ class CalendarFragment : Fragment() {
             val kakaoNickname = sharedPreferences.getString("${currentEmail}_nickname", "Unknown")
 
             if (kakaoNickname == studyOwner) {
-                binding.fab.visibility = View.VISIBLE // 닉네임이 일치할 경우 버튼 보이기
+                binding.addButton.visibility = View.VISIBLE // 닉네임이 일치할 경우 버튼 보이기
             } else {
-                binding.fab.visibility = View.GONE // 닉네임이 일치하지 않을 경우 버튼 숨기기
+                binding.addButton.visibility = View.GONE // 닉네임이 일치하지 않을 경우 버튼 숨기기
             }
         }
 
@@ -146,16 +191,7 @@ class CalendarFragment : Fragment() {
             eventAdapter.updateEvents(events)
         })
 
-        // 초기 진입 시 오늘 날짜 이벤트 로드
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val studyId = studyViewModel.studyId.value ?: 0
-        fetchGetSchedule(studyId, year, month) {
-            eventViewModel.loadEvents(year, month, day)
-        }
 
 
 

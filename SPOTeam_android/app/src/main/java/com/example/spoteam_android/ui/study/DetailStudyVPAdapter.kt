@@ -8,19 +8,19 @@ import com.example.spoteam_android.todolist.TodoListFragment
 import com.example.spoteam_android.ui.calendar.CalendarFragment
 import com.example.spoteam_android.ui.home.HomeFragment
 
-class DetailStudyVPAdapter(fragment: Fragment, private val studyId: Int) : FragmentStateAdapter(fragment) {
+class DetailStudyVPAdapter(fragment: Fragment, private val studyId: Int, private val startDateTime: String?) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = 5
 
-
     override fun createFragment(position: Int): Fragment {
-        return when(position){
+        return when (position) {
             //홈
             0 -> DetailStudyHomeFragment()
             //캘린더
             1 -> CalendarFragment().apply {
                 arguments = Bundle().apply {
                     putInt("studyId", studyId)
+                    putString("my_start", startDateTime)
                 }
             }
             //게시판
@@ -31,5 +31,4 @@ class DetailStudyVPAdapter(fragment: Fragment, private val studyId: Int) : Fragm
             else -> TodoListFragment()
         }
     }
-
 }
