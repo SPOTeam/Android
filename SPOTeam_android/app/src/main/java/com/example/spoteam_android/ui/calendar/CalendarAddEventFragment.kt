@@ -379,7 +379,7 @@ class CalendarAddEventFragment : Fragment() {
         }
     }
     private fun showCompletionDialog() {
-        val dialog = CompleteScheduleDialog(requireContext())
+        val dialog = CompleteScheduleDialog(requireContext(),startDateTime)
         dialog.start(parentFragmentManager)
     }
 }
