@@ -10,7 +10,6 @@ import retrofit2.http.Query
 interface SearchApiService {
     @GET("/spot/search/studies")
     fun PostSearchApi(
-        @Header("Authorization") authToken: String,
         @Query("keyword") keyword: String,  // Path parameter for memberId
         @Query("page") page: Int,
         @Query("size") size: Int,

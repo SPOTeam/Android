@@ -22,7 +22,7 @@ import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentCategoryStudyContentBinding
 import com.example.spoteam_android.ui.community.CategoryStudyDetail
 import com.example.spoteam_android.ui.community.CategoryStudyResponse
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -106,7 +106,8 @@ class RestFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun fetchBestCommunityContent(theme: String, page: Int, size: Int, sortBy: String) {
         isLoading = true
-        CommunityRetrofitClient.instance.getCategoryStudy(theme, page, size, sortBy)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getCategoryStudy(theme, page, size, sortBy)
             .enqueue(object : Callback<CategoryStudyResponse> {
                 override fun onResponse(
                     call: Call<CategoryStudyResponse>,

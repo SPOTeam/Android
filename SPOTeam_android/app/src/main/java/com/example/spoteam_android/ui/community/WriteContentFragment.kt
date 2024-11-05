@@ -15,6 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentWriteContentBinding
 import retrofit2.Callback
 import retrofit2.Response
@@ -94,7 +95,8 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
     }
 
     private fun sendContentToServer(requestBody: WriteContentRequest, memberId : Int) {
-        CommunityRetrofitClient.instance.postContent(memberId, requestBody)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postContent(memberId, requestBody)
             .enqueue(object : Callback<WriteContentResponse> {
                 override fun onResponse(call: Call<WriteContentResponse>, response: Response<WriteContentResponse>) {
                     Log.d("WriteContentFragment", response.body()?.isSuccess.toString())

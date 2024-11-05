@@ -20,7 +20,7 @@ import com.example.spoteam_android.ProfileItem
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMystudyCommunityBinding
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.PostDetail
 import com.example.spoteam_android.ui.community.StudyContentLikeResponse
 import com.example.spoteam_android.ui.community.StudyContentUnLikeResponse
@@ -143,7 +143,8 @@ class MyStudyCommunityFragment : Fragment() {
     }
 
     private fun fetchPages() {
-        CommunityRetrofitClient.instance.getStudyPost(currentStudyId, themeQuery, offset, limit)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getStudyPost(currentStudyId, themeQuery, offset, limit)
             .enqueue(object : Callback<StudyPostListResponse> {
                 override fun onResponse(
                     call: Call<StudyPostListResponse>,
@@ -172,7 +173,8 @@ class MyStudyCommunityFragment : Fragment() {
     }
 
     private fun postStudyContentLike(postId: Int) {
-        CommunityRetrofitClient.instance.postStudyContentLike(currentStudyId, postId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postStudyContentLike(currentStudyId, postId)
             .enqueue(object : Callback<StudyContentLikeResponse> {
                 override fun onResponse(
                     call: Call<StudyContentLikeResponse>,
@@ -199,7 +201,8 @@ class MyStudyCommunityFragment : Fragment() {
     }
 
     private fun deleteStudyContentLike(postId: Int) {
-        CommunityRetrofitClient.instance.deleteStudyContentLike(currentStudyId, postId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deleteStudyContentLike(currentStudyId, postId)
             .enqueue(object : Callback<StudyContentUnLikeResponse> {
                 override fun onResponse(
                     call: Call<StudyContentUnLikeResponse>,

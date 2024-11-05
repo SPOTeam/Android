@@ -122,6 +122,7 @@
                     android:scheme="kakao7878cb24cec56458df067991de5e7786" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

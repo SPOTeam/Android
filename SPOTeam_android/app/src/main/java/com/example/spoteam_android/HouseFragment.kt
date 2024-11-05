@@ -1,6 +1,5 @@
 package com.example.spoteam_android
 
-import RetrofitClient.getAuthToken
 import StudyApiService
 import StudyViewModel
 import android.content.Context
@@ -23,20 +22,23 @@ import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.calendar.CalendarFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.category.category_tabs.AllCategoryFragment
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.CommunityContentActivity
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.CommunityResponse
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
 import com.example.spoteam_android.ui.community.StudyContentLikeResponse
 import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
+import com.example.spoteam_android.ui.interestarea.InterestAreaApiService
 import com.example.spoteam_android.ui.interestarea.InterestFragment
+import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
 import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
 import com.example.spoteam_android.ui.recruiting.RecruitingStudyFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.create
 
 class HouseFragment : Fragment() {
 
@@ -220,11 +222,8 @@ class HouseFragment : Fragment() {
 
     private fun fetchDataAnyWhere(memberId: Int) {
         Log.d("HouseFragment", "fetchDataAnyWhere() 실행")
-
-        RetrofitClient.IaapiService.getInterestedBestStudies(
-            authToken = getAuthToken(),
-            memberId = memberId
-        ).enqueue(object : Callback<ApiResponse> {
+        val service = RetrofitInstance.retrofit.create(InterestAreaApiService::class.java)
+        service.getInterestedBestStudies(memberId = memberId).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     val boardItems = response.body()?.result?.content?.map { study ->
@@ -300,7 +299,8 @@ class HouseFragment : Fragment() {
     }
 
     private fun fetchLivePopularContent() {
-        CommunityRetrofitClient.instance.getBestCommunityContent("REAL_TIME")
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getBestCommunityContent("REAL_TIME")
             .enqueue(object : Callback<CommunityResponse> {
                 override fun onResponse(
                     call: Call<CommunityResponse>,
@@ -334,11 +334,8 @@ class HouseFragment : Fragment() {
 
     private fun fetchRecommendStudy(memberId: Int) {
         Log.d("HouseFragment", "fetchRecommendStudy() 실행")
-
-        RetrofitClient.GetRSService.GetRecommendStudy(
-            authToken = getAuthToken(),
-            memberId = memberId,
-        ).enqueue(object : Callback<ApiResponse> {
+        val service = RetrofitInstance.retrofit.create(RecommendStudyApiService::class.java)
+        service.GetRecommendStudy(memberId = memberId).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     val boardItems = response.body()?.result?.content?.map { study ->

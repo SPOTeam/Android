@@ -10,11 +10,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentCommunityCategoryContentBinding
 import com.example.spoteam_android.ui.community.CategoryPagesDetail
 import com.example.spoteam_android.ui.community.CategoryPagesResponse
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.CommunityContentActivity
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
 import com.example.spoteam_android.ui.community.ContentLikeResponse
 import com.example.spoteam_android.ui.community.ContentUnLikeResponse
 import retrofit2.Call
@@ -61,7 +62,8 @@ class AllFragment : Fragment() {
     }
 
     private fun fetchPages(type : String, pageNum : Int) {
-        CommunityRetrofitClient.instance.getCategoryPagesContent(type, pageNum)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getCategoryPagesContent(type, pageNum)
             .enqueue(object : Callback<CategoryPagesResponse> {
                 override fun onResponse(
                     call: Call<CategoryPagesResponse>,
@@ -90,7 +92,8 @@ class AllFragment : Fragment() {
     }
 
     private fun postLike(postId : Int) {
-        CommunityRetrofitClient.instance.postContentLike(postId, memberId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postContentLike(postId, memberId)
             .enqueue(object : Callback<ContentLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentLikeResponse>,
@@ -117,7 +120,8 @@ class AllFragment : Fragment() {
     }
 
     private fun deleteLike(postId : Int) {
-        CommunityRetrofitClient.instance.deleteContentLike(postId, memberId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deleteContentLike(postId, memberId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentUnLikeResponse>,

@@ -1,6 +1,5 @@
 package com.example.spoteam_android.ui.interestarea
 
-import RetrofitClient.getAuthToken
 import StudyApiService
 import StudyViewModel
 import android.annotation.SuppressLint
@@ -262,8 +261,8 @@ class InterestFragment : Fragment() {
         val checkcount: TextView = binding.checkAmount
 
         val call: Call<ApiResponse> = if (regionCode != null) {
-            RetrofitClient.IaSapiService.InterestSpecificArea(
-                authToken = getAuthToken(),
+            val service = RetrofitInstance.retrofit.create(InterestSpecificAreaApiService::class.java)
+            service.InterestSpecificArea(
                 regionCode = regionCode,
                 memberId = memberId,
                 gender = gender ?: "MALE",
@@ -277,8 +276,8 @@ class InterestFragment : Fragment() {
                 sortBy = selectedItem
             )
         } else {
-            RetrofitClient.IaapiService.InterestArea(
-                authToken = getAuthToken(),
+            val service = RetrofitInstance.retrofit.create(InterestAreaApiService::class.java)
+            service.InterestArea(
                 memberId = memberId,
                 gender = gender ?: "MALE",
                 minAge = minAge?.toIntOrNull() ?: 18,
@@ -347,8 +346,8 @@ class InterestFragment : Fragment() {
     }
 
     private fun fetchDataGetInterestArea(memberId: Int, callback: (List<Region>?) -> Unit) {
-        RetrofitClient.GetIaService.GetInterestArea(
-            authToken = getAuthToken(),
+        val service = RetrofitInstance.retrofit.create(GetMemberInterestAreaApiService::class.java)
+        service.GetInterestArea(
             memberId = memberId
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {

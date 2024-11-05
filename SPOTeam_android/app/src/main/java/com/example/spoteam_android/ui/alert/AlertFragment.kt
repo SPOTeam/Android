@@ -11,12 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentAlertBinding
 import com.example.spoteam_android.ui.community.AlertDetail
 import com.example.spoteam_android.ui.community.AlertResponse
 import com.example.spoteam_android.ui.community.AlertStudyDetail
 import com.example.spoteam_android.ui.community.AlertStudyResponse
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.NotificationStateResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,7 +54,8 @@ class AlertFragment : Fragment() {
     }
 
     private fun fetchAlert() {
-        CommunityRetrofitClient.instance.getAlert(page, size)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getAlert(page, size)
             .enqueue(object : Callback<AlertResponse> {
                 override fun onResponse(
                     call: Call<AlertResponse>,
@@ -82,7 +84,8 @@ class AlertFragment : Fragment() {
     }
 
     private fun fetchStudyAlert() {
-        CommunityRetrofitClient.instance.getStudyAlert(page, size)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getStudyAlert(page, size)
             .enqueue(object : Callback<AlertStudyResponse> {
                 override fun onResponse(
                     call: Call<AlertStudyResponse>,
@@ -133,7 +136,8 @@ class AlertFragment : Fragment() {
     }
 
     private fun updateState(data: AlertDetail) {
-        CommunityRetrofitClient.instance.postNotificationState(data.notificationId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postNotificationState(data.notificationId)
             .enqueue(object : Callback<NotificationStateResponse> {
                 override fun onResponse(
                     call: Call<NotificationStateResponse>,

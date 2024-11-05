@@ -17,9 +17,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMystudyWriteContentBinding
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.CommunityContentActivity
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
 import com.example.spoteam_android.ui.community.StudyPostResponse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -164,7 +165,8 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
         contentPart: RequestBody,
         imageParts: List<MultipartBody.Part>
     ) {
-        CommunityRetrofitClient.instance.postStudyPost(
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postStudyPost(
             studyId,
             isAnnouncementPart,
             themePart,

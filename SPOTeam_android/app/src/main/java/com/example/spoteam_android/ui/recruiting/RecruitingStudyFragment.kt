@@ -1,6 +1,5 @@
 package com.example.spoteam_android.ui.recruiting
 
-import RetrofitClient.getAuthToken
 import StudyApiService
 import StudyViewModel
 import android.content.Context
@@ -29,6 +28,7 @@ import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
+import com.example.spoteam_android.ui.interestarea.RecruitingStudyApiService
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -214,9 +214,8 @@ class RecruitingStudyFragment : Fragment() {
 
     private fun fetchAllRecruiting(selectedItem: String) {
         val boardItems = arrayListOf<BoardItem>()
-
-        RetrofitClient.RSService.GetRecruitingStudy(
-            authToken = getAuthToken(),
+        val service = RetrofitInstance.retrofit.create(RecruitingStudyApiService::class.java)
+        service.GetRecruitingStudy(
             gender = "MALE",
             minAge = 18,
             maxAge = 60,
@@ -282,9 +281,8 @@ class RecruitingStudyFragment : Fragment() {
         isOnline: String
     ) {
         val boardItems = arrayListOf<BoardItem>()
-
-        RetrofitClient.RSService.GetRecruitingStudy(
-            authToken = getAuthToken(),
+        val service = RetrofitInstance.retrofit.create(RecruitingStudyApiService::class.java)
+        service.GetRecruitingStudy(
             gender = gender,
             minAge = minAge.toInt(),
             maxAge = maxAge.toInt(),

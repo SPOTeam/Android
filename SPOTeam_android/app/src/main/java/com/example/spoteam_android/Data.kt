@@ -2,8 +2,32 @@ package com.example.spoteam_android
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.example.spoteam_android.data.ApiModels
 import com.google.gson.annotations.SerializedName
 
+
+
+// 카카오 로그인 토큰 정보 담기
+data class KaKaoTokens(
+    val accessToken: String,
+    val refreshToken: String,
+    val accessTokenExpiresIn: Long
+)
+
+// 카카오 로그인 서버 응답 결과 담기
+data class KaKaoResult(
+    val tokens: KaKaoTokens,
+    val email: String,
+    val memberId: Int
+)
+
+//카카오 로그인 서버 응답 담기
+data class YourResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: KaKaoResult
+)
 
 data class UserInfo( //일반 로그인시 필요
     val name: String,

@@ -1,6 +1,5 @@
 package com.example.spoteam_android.ui.calendar
 
-import RetrofitClient.getAuthToken
 import StudyApiService
 import StudyViewModel
 import android.content.Context
@@ -151,9 +150,9 @@ class CalendarFragment : Fragment() {
 
         val scheduleBoard = binding.eventrecyclerview
         val EventItems = arrayListOf<Event>()
+        val service = RetrofitInstance.retrofit.create(CalendarApiService::class.java)
 
-        RetrofitClient.CAService.GetScheuled(
-            authToken = getAuthToken(),
+        service.GetScheuled(
             studyId = studyId,
             year = year,
             month = month,
