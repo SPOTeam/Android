@@ -19,29 +19,29 @@
         app:mcv_leftArrow="@color/teal_200"
         app:mcv_rightArrow="@color/teal_200" />
 
-        <!-- RecyclerView -->
+
+    <!-- RecyclerView -->
+
+    <ImageButton
+        android:id="@+id/addButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_margin="15dp"
+        android:background="@color/white"
+        android:scaleType="centerInside"
+        android:src="@drawable/add_circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/calendarView" />
+
+    <!-- FloatingActionButton (항상 화면 하단 오른쪽에 고정) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventrecyclerview"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
         tools:listitem="@layout/item_event" />
 
-        <!-- FloatingActionButton (항상 화면 하단 오른쪽에 고정) -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/white"
-        android:src="@drawable/ic_plus"
-        app:borderWidth="1dp"
-        app:elevation="6dp"
-        app:fabSize="mini"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventrecyclerview"
-        app:tint="@color/black" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

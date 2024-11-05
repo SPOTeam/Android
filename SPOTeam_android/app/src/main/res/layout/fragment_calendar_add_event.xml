@@ -28,7 +28,7 @@
         android:fontFamily="@font/pretendard"
         android:padding="8dp"
         android:text="일정"
-        android:textColor="@color/active_blue"
+        android:textColor="@color/black"
         android:textSize="16dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,10 +91,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="10dp"
         android:fontFamily="@font/pretendard"
-        android:text="시작"
         android:padding="8dp"
+        android:text="일시"
         android:textColor="#2D2D2D"
         android:textSize="16dp"
         android:textStyle="bold"
@@ -110,45 +109,164 @@
         android:layout_marginEnd="25dp"
         android:background="@drawable/edittext_rounded_corner_rectangle"
         android:fontFamily="@font/pretendard"
-        android:hint="시작 날짜와 시간을 입력해주세요"
         android:padding="10dp"
         android:textColor="@color/gray_03"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tx_start_date_time" />
 
     <TextView
-        android:id="@+id/tx_end_date_time"
-        android:layout_width="match_parent"
+        android:id="@+id/tx_start_guide"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="10dp"
         android:fontFamily="@font/pretendard"
-        android:text="종료"
-        android:padding="8dp"
-        android:textColor="#2D2D2D"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startDateTimeTextView" />
+        android:padding="10dp"
+        android:text="시작"
+        android:textColor="@color/gray_03"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/startDateTimeTextView"
+        app:layout_constraintTop_toTopOf="@+id/startDateTimeTextView" />
+
+
+    <TextView
+        android:id="@+id/tx_start_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/round_background_blue"
+        android:fontFamily="@font/pretendard"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:text="날짜"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/startDateTimeTextView"
+        app:layout_constraintEnd_toStartOf="@+id/tx_start_time"
+        app:layout_constraintTop_toTopOf="@+id/startDateTimeTextView" />
+
+    <TextView
+        android:id="@+id/tx_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/round_background_blue"
+        android:fontFamily="@font/pretendard"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:text="시간"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/startDateTimeTextView"
+        app:layout_constraintEnd_toEndOf="@+id/startDateTimeTextView"
+        app:layout_constraintTop_toTopOf="@+id/startDateTimeTextView" />
 
     <TextView
         android:id="@+id/endDateTimeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="25dp"
         android:background="@drawable/edittext_rounded_corner_rectangle"
         android:fontFamily="@font/pretendard"
-        android:hint="종료 날짜와 시간을 입력해주세요"
         android:padding="10dp"
         android:textColor="@color/gray_03"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tx_end_date_time" />
+        app:layout_constraintTop_toBottomOf="@+id/startDateTimeTextView" />
+
+    <TextView
+        android:id="@+id/tx_end_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard"
+        android:padding="10dp"
+        android:text="종료"
+        android:textColor="@color/gray_03"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/endDateTimeTextView"
+        app:layout_constraintTop_toTopOf="@+id/endDateTimeTextView" />
+
+
+    <TextView
+        android:id="@+id/tx_end_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/round_background_blue"
+        android:fontFamily="@font/pretendard"
+        android:padding="5dp"
+        android:text="날짜"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/tx_end_time"
+        app:layout_constraintTop_toTopOf="@+id/tx_end_time" />
+
+    <TextView
+        android:id="@+id/tx_end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/round_background_blue"
+        android:fontFamily="@font/pretendard"
+        android:padding="5dp"
+        android:text="시간"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/endDateTimeTextView"
+        app:layout_constraintEnd_toEndOf="@+id/endDateTimeTextView"
+        app:layout_constraintTop_toTopOf="@+id/endDateTimeTextView" />
+
+
+    <TextView
+        android:id="@+id/tx_every_day"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="80dp"
+        android:fontFamily="@font/pretendard"
+        android:padding="8dp"
+        android:text="하루종일"
+        android:textColor="#2D2D2D"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/endDateTimeTextView" />
+
+    <CheckBox
+        android:id="@+id/checkBox_every_day"
+        android:layout_width="20dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toEndOf="@+id/tx_every_day"
+        app:layout_constraintTop_toTopOf="@+id/tx_every_day" />
+
+    <TextView
+        android:id="@+id/tx_routine"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/pretendard"
+        android:padding="8dp"
+        android:text="반복"
+        android:textColor="#2D2D2D"
+        android:textSize="16dp"
+        app:layout_constraintStart_toEndOf="@+id/checkBox_every_day"
+        app:layout_constraintTop_toTopOf="@+id/checkBox_every_day" />
+
+    <Spinner
+        android:id="@+id/routine_spinner"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_gravity="end|center"
+        android:background="@drawable/my_spinner_background"
+        android:spinnerMode="dropdown"
+        app:layout_constraintStart_toEndOf="@+id/tx_routine"
+        app:layout_constraintTop_toTopOf="@+id/tx_routine" />
 
     <android.widget.Button
         android:id="@+id/fragment_introduce_study_bt"

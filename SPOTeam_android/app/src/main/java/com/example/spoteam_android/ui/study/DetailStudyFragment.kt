@@ -38,6 +38,11 @@ class DetailStudyFragment : Fragment() {
     ): View? {
         binding = FragmentDetailStudyBinding.inflate(inflater, container, false)
 
+        val desiredTabPosition = arguments?.getInt("tab_position", 0) ?: 0
+        Log.d("DetailStudyFragment","{$desiredTabPosition}")
+        currentTabPosition = desiredTabPosition
+        val startDateTime = arguments?.getString("startDateTime")
+
         val OkDialogStudyId=  arguments?.getInt("FromOKToDetailStudy")
 
         Log.d("OKBUNDLE", OkDialogStudyId.toString())
@@ -56,32 +61,38 @@ class DetailStudyFragment : Fragment() {
 
         binding.fragmentDetailStudyTl.tabMode = TabLayout.MODE_SCROLLABLE
 
-        setupViews()
+        setupViews(startDateTime)
 
         binding.fragmentDetailStudyPreviousBt.setOnClickListener {
             // 현재 Fragment를 백스택에서 제거하고 이전 Fragment로 돌아갑니다.
             parentFragmentManager.popBackStack()
         }
 
+        // ViewPager2와 TabLayout 초기화
+        setupViews(startDateTime)
+
         return binding.root
     }
 
-    private fun setupViews() {
+    private fun setupViews(startDateTime: String?) {
         // ViewModel에서 studyId를 옵저빙하고 가져옵니다.
+
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
             if (studyId != null) {
                 // studyId를 DetailStudyVPAdapter에 전달합니다.
-                val detailStudyAdapter = DetailStudyVPAdapter(this, studyId)
+                val detailStudyAdapter = DetailStudyVPAdapter(this, studyId,startDateTime)
                 binding.fragmentDetailStudyVp.adapter = detailStudyAdapter
-
-                // ViewPager가 미리 모든 탭의 프래그먼트를 생성하고 캐싱하도록 설정
-                binding.fragmentDetailStudyVp.offscreenPageLimit = tabList.size
-                binding.fragmentDetailStudyVp.isUserInputEnabled = false
 
                 TabLayoutMediator(binding.fragmentDetailStudyTl, binding.fragmentDetailStudyVp) { tab, position ->
                     tab.text = tabList[position]
                 }.attach()
 
+                //캘린더 일정 추가 작업 이후 다시 캘린더 tab으로 돌아오게 함
+                binding.fragmentDetailStudyVp.setCurrentItem(currentTabPosition, false)
+
+                // ViewPager가 미리 모든 탭의 프래그먼트를 생성하고 캐싱하도록 설정
+                binding.fragmentDetailStudyVp.offscreenPageLimit = tabList.size
+                binding.fragmentDetailStudyVp.isUserInputEnabled = false
 
                 binding.fragmentDetailStudyTl.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                     override fun onTabSelected(tab: TabLayout.Tab?) {
