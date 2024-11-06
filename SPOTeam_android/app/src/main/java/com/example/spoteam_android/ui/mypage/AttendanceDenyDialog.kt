@@ -9,7 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.spoteam_android.R
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.RetrofitInstance
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MemberAcceptResponse
 import com.example.spoteam_android.ui.community.MemberIntroInfo
 import retrofit2.Call
@@ -49,7 +50,8 @@ class AttendanceDenyDialog(private val context: Context) {
     }
 
     private fun denyMemberAttendance() {
-        CommunityRetrofitClient.instance.postAttendanceMember(info!!.studyId, info!!.memberId,false)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postAttendanceMember(info!!.studyId, info!!.memberId,false)
             .enqueue(object : Callback<MemberAcceptResponse> {
                 override fun onResponse(
                     call: Call<MemberAcceptResponse>,

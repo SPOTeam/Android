@@ -1,7 +1,5 @@
 package com.example.spoteam_android.ui.myinterest
 
-import RetrofitClient
-import RetrofitClient.getAuthToken
 import StudyApiService
 import StudyViewModel
 import android.content.Context
@@ -30,7 +28,10 @@ import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
+import com.example.spoteam_android.ui.interestarea.GetInterestCategoryApiService
 import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
+import com.example.spoteam_android.ui.interestarea.MyInterestStudyAllApiService
+import com.example.spoteam_android.ui.interestarea.MyInterestStudySpecificApiService
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
@@ -235,8 +236,8 @@ class MyInterestStudyFragment : Fragment() {
 
     private fun fetchMyInterestAll(selectedItem: String) {
         val boardItems = arrayListOf<BoardItem>()
-        RetrofitClient.MIAService.GetMyInterestStudy(
-            authToken = getAuthToken(),
+        val service = RetrofitInstance.retrofit.create(MyInterestStudyAllApiService::class.java)
+        service.GetMyInterestStudy(
             memberId = getMemberId(requireContext()),
             gender = "MALE",
             minAge = 18,
@@ -293,8 +294,8 @@ class MyInterestStudyFragment : Fragment() {
 
     private fun fetchMyInterestAll2(selectedItem: String, gender: String, minAge: String, maxAge: String, activityFee: String, activityFeeAmount: String, isOnline: String) {
         val boardItems = arrayListOf<BoardItem>()
-        RetrofitClient.MIAService.GetMyInterestStudy(
-            authToken = getAuthToken(),
+        val service = RetrofitInstance.retrofit.create(MyInterestStudyAllApiService::class.java)
+        service.GetMyInterestStudy(
             memberId = getMemberId(requireContext()),
             gender = gender,
             minAge = minAge.toInt(),
@@ -347,8 +348,8 @@ class MyInterestStudyFragment : Fragment() {
 
     private fun fetchMyInterestSpecific(selectedItem: String, gender: String, minAge: String, maxAge: String, activityFee: String, activityFeeAmount: String, selectedStudyTheme: String, isOnline: String) {
         val boardItems = arrayListOf<BoardItem>()
-        RetrofitClient.MISSerivice.GetMyInterestStudys(
-            authToken = getAuthToken(),
+        val service = RetrofitInstance.retrofit.create(MyInterestStudySpecificApiService::class.java)
+        service.GetMyInterestStudys(
             memberId = getMemberId(requireContext()),
             gender = gender,
             minAge = minAge.toInt(),
@@ -404,8 +405,8 @@ class MyInterestStudyFragment : Fragment() {
     }
 
     private fun fetchDataGetInterestCategory(callback: (List<String>?) -> Unit) {
-        RetrofitClient.GICService.GetMyInterestStudy(
-            authToken = getAuthToken(),
+        val service = RetrofitInstance.retrofit.create(GetInterestCategoryApiService::class.java)
+        service.GetMyInterestStudy(
             memberId = getMemberId(requireContext())
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {

@@ -11,8 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentParticipatingStudyBinding
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MemberOnStudiesResponse
 import com.example.spoteam_android.ui.community.MyRecruitingStudyDetail
 import retrofit2.Call
@@ -53,7 +54,8 @@ class PermissionWaitFragment : Fragment() {
 
 
     private fun fetchInProgressStudy() {
-        CommunityRetrofitClient.instance.getMemberAppliedStudies(memberId, page, size)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getMemberAppliedStudies(memberId, page, size)
             .enqueue(object : Callback<MemberOnStudiesResponse> {
                 override fun onResponse(
                     call: Call<MemberOnStudiesResponse>,

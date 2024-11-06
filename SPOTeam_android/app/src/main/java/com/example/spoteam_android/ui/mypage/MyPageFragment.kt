@@ -13,9 +13,10 @@ import com.example.spoteam_android.MainActivity
 import androidx.fragment.app.replace
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMypageBinding
 import com.example.spoteam_android.login.StartLoginActivity
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.ContentLikeResponse
 import com.example.spoteam_android.ui.community.MyPageStudyNumInfo
 import com.example.spoteam_android.ui.community.MyPageStudyNumResponse
@@ -117,7 +118,8 @@ class MyPageFragment : Fragment() {
     }
 
     private fun fetchMyPageInfo() {
-        CommunityRetrofitClient.instance.getMyPageStudyNum(memberId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getMyPageStudyNum(memberId)
             .enqueue(object : Callback<MyPageStudyNumResponse> {
                 override fun onResponse(
                     call: Call<MyPageStudyNumResponse>,
@@ -224,16 +226,18 @@ class MyPageFragment : Fragment() {
                 // 로그아웃 성공
                 Toast.makeText(requireContext(), "로그아웃 성공", Toast.LENGTH_SHORT).show()
 
-                // SharedPreferences의 로그인 상태 및 이메일 정보만 삭제 (닉네임은 유지)
+                // SharedPreferences에서 모든 로그인 관련 정보 삭제
                 val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-                val email = sharedPreferences.getString("currentEmail", null)
 
                 with(sharedPreferences.edit()) {
-                    putBoolean("${email}_isLoggedIn", false)  // 로그인 상태 해제
-                    putString("currentEmail", null)  // 현재 로그인된 이메일 정보 삭제
-                    // 닉네임과 관련된 데이터는 삭제하지 않음
+                    remove("isLoggedIn")
+                    remove("accessToken")
+                    remove("memberId")
+                    remove("nickname")
+                    remove("kakaoProfileImageUrl")
+                    remove("currentEmail")
                     apply()
-                }
+                    }
 
                 // 로그인 화면으로 이동
                 val intent = Intent(requireActivity(), StartLoginActivity::class.java)
@@ -243,4 +247,5 @@ class MyPageFragment : Fragment() {
             }
         }
     }
+
 }

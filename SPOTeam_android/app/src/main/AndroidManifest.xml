@@ -16,6 +16,9 @@
         android:theme="@style/Theme.SPOTeam_android"
         tools:targetApi="34">
         <activity
+            android:name=".login.NicNameActivity"
+            android:exported="false" />
+        <activity
             android:name=".login.NormalLoginActivity"
             android:exported="false" />
 
@@ -119,6 +122,7 @@
                     android:scheme="kakao7878cb24cec56458df067991de5e7786" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

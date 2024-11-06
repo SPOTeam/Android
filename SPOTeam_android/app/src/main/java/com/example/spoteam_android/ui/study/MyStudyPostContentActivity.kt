@@ -12,8 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.ActivityMystudyCommunityContentBinding
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.DisLikeCommentResponse
 import com.example.spoteam_android.ui.community.LikeCommentResponse
 import com.example.spoteam_android.ui.community.ReportContentDialog
@@ -86,7 +87,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun postStudyContentLike() {
-        CommunityRetrofitClient.instance.postStudyContentLike(currentStudyId,postId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postStudyContentLike(currentStudyId,postId)
             .enqueue(object : Callback<StudyContentLikeResponse> {
                 override fun onResponse(
                     call: Call<StudyContentLikeResponse>,
@@ -113,7 +115,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun deleteStudyContentLike() {
-        CommunityRetrofitClient.instance.deleteStudyContentLike(currentStudyId, postId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deleteStudyContentLike(currentStudyId, postId)
             .enqueue(object : Callback<StudyContentUnLikeResponse> {
                 override fun onResponse(
                     call: Call<StudyContentUnLikeResponse>,
@@ -158,7 +161,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
 
     private fun sendCommentToServer(requestBody: WriteStudyCommentRequest) {
         Log.d("MyStudyWriteComment", "Reply : $parentCommentId")
-        CommunityRetrofitClient.instance.postStudyContentComment(currentStudyId, postId, requestBody)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postStudyContentComment(currentStudyId, postId, requestBody)
             .enqueue(object : Callback<WriteStudyCommentResponse> {
                 override fun onResponse(
                     call: Call<WriteStudyCommentResponse>,
@@ -202,8 +206,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     private fun sendReplyCommentToServer(requestBody: WriteStudyCommentRequest) {
 
         Log.d("MyStudyWriteComment", "Reply : $parentCommentId")
-
-        CommunityRetrofitClient.instance.postStudyContentReplyComment(currentStudyId, postId, parentCommentId!!, requestBody)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postStudyContentReplyComment(currentStudyId, postId, parentCommentId!!, requestBody)
             .enqueue(object : Callback<WriteStudyCommentResponse> {
                 override fun onResponse(
                     call: Call<WriteStudyCommentResponse>,
@@ -252,7 +256,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun fetchContentInfo() {
-        CommunityRetrofitClient.instance.getStudyPostContent(currentStudyId, postId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getStudyPostContent(currentStudyId, postId)
             .enqueue(object : Callback<StudyPostContentResponse> {
                 override fun onResponse(
                     call: Call<StudyPostContentResponse>,
@@ -286,7 +291,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun fetchContentCommentInfo() {
-        CommunityRetrofitClient.instance.getStudyPostContentComment(currentStudyId, postId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getStudyPostContentComment(currentStudyId, postId)
             .enqueue(object : Callback<StudyPostContentCommentResponse> {
                 override fun onResponse(
                     call: Call<StudyPostContentCommentResponse>,
@@ -313,7 +319,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun postCommentLike(commentId : Int) {
-        CommunityRetrofitClient.instance.postMyStudyCommentLike(currentStudyId, postId, commentId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postMyStudyCommentLike(currentStudyId, postId, commentId)
             .enqueue(object : Callback<LikeCommentResponse> {
                 override fun onResponse(
                     call: Call<LikeCommentResponse>,
@@ -341,7 +348,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun deleteCommentLike(commentId : Int) {
-        CommunityRetrofitClient.instance.deleteMyStudyCommentLike(currentStudyId, postId, commentId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deleteMyStudyCommentLike(currentStudyId, postId, commentId)
             .enqueue(object : Callback<UnLikeCommentResponse> {
                 override fun onResponse(
                     call: Call<UnLikeCommentResponse>,
@@ -369,7 +377,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun postCommentDisLike(commentId : Int) {
-        CommunityRetrofitClient.instance.postMyStudyCommentDisLike(currentStudyId, postId, commentId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postMyStudyCommentDisLike(currentStudyId, postId, commentId)
             .enqueue(object : Callback<DisLikeCommentResponse> {
                 override fun onResponse(
                     call: Call<DisLikeCommentResponse>,
@@ -397,7 +406,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun deleteCommentDisLike(commentId : Int) {
-        CommunityRetrofitClient.instance.deleteMyStudyCommentDisLike(currentStudyId, postId, commentId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deleteMyStudyCommentDisLike(currentStudyId, postId, commentId)
             .enqueue(object : Callback<UnDisLikeCommentResponse> {
                 override fun onResponse(
                     call: Call<UnDisLikeCommentResponse>,

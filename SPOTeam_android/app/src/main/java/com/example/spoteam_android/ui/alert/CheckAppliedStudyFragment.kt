@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentCheckAppliedStudyBinding
 import com.example.spoteam_android.ui.community.AcceptedAlertStudyResponse
 import com.example.spoteam_android.ui.community.AlertStudyDetail
 import com.example.spoteam_android.ui.community.AlertStudyResponse
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,7 +41,8 @@ class CheckAppliedStudyFragment : Fragment() {
     }
 
     private fun fetchStudyAlert() {
-        CommunityRetrofitClient.instance.getStudyAlert(page, size)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getStudyAlert(page, size)
             .enqueue(object : Callback<AlertStudyResponse> {
                 override fun onResponse(
                     call: Call<AlertStudyResponse>,
@@ -96,7 +98,8 @@ class CheckAppliedStudyFragment : Fragment() {
     }
 
     private fun postStudyAccept(studyId : Int) {
-        CommunityRetrofitClient.instance.postAcceptedStudyAlert(studyId, true)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postAcceptedStudyAlert(studyId, true)
             .enqueue(object : Callback<AcceptedAlertStudyResponse> {
                 override fun onResponse(
                     call: Call<AcceptedAlertStudyResponse>,

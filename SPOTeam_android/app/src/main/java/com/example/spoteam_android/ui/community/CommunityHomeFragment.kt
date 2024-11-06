@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.HouseFragment
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentCommunityHomeBinding
 import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
@@ -97,7 +98,8 @@ class CommunityHomeFragment : Fragment() {
     }
 
     private fun fetchBestCommunityContent(sortType: String) {
-        CommunityRetrofitClient.instance.getBestCommunityContent(sortType)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getBestCommunityContent(sortType)
             .enqueue(object : Callback<CommunityResponse> {
                 override fun onResponse(
                     call: Call<CommunityResponse>,
@@ -127,7 +129,8 @@ class CommunityHomeFragment : Fragment() {
     }
 
     private fun fetchAnnouncementContent() {
-        CommunityRetrofitClient.instance.getAnnouncementContent()
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getAnnouncementContent()
             .enqueue(object : Callback<AnnouncementResponse> {
                 override fun onResponse(
                     call: Call<AnnouncementResponse>,
@@ -157,7 +160,8 @@ class CommunityHomeFragment : Fragment() {
     }
 
     private fun fetchRepresentativeContent() {
-        CommunityRetrofitClient.instance.getRepresentativeContent()
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getRepresentativeContent()
             .enqueue(object : Callback<RepresentativeResponse> {
                 override fun onResponse(
                     call: Call<RepresentativeResponse>,

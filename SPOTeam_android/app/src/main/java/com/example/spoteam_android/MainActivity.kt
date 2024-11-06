@@ -113,6 +113,7 @@ class MainActivity : AppCompatActivity() {
                     showFragment(HouseFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(HouseFragment())
+                    logTokens(this)
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_category -> {
@@ -239,5 +240,15 @@ class MainActivity : AppCompatActivity() {
         // 아무 동작도 하지 않도록 설정
         // super.onBackPressed()를 호출하지 않으면 기본 동작(뒤로 가기)이 수행되지 않습니다.
     }
+    private fun logTokens(context: Context) {
+        val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+        val accessToken = email?.let { sharedPreferences.getString("${it}_accessToken", null) }
+        val refreshToken = email?.let { sharedPreferences.getString("${it}_refreshToken", null) }
+
+        Log.d("TokenLogger", "Current AccessToken: $accessToken")
+        Log.d("TokenLogger", "Current RefreshToken: $refreshToken")
+    }
+
 
 }

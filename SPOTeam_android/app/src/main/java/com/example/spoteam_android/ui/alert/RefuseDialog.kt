@@ -9,8 +9,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.ui.community.AcceptedAlertStudyResponse
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,7 +50,8 @@ class RefuseDialog(private val context: Context) {
     }
 
     private fun postStudyAccept(studyId : Int) {
-        CommunityRetrofitClient.instance.postAcceptedStudyAlert(studyId, false)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postAcceptedStudyAlert(studyId, false)
             .enqueue(object : Callback<AcceptedAlertStudyResponse> {
                 override fun onResponse(
                     call: Call<AcceptedAlertStudyResponse>,

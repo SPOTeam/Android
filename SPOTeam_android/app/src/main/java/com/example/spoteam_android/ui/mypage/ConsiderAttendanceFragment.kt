@@ -11,8 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentConsiderAttendanceBinding
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MyRecruitingStudiesResponse
 import com.example.spoteam_android.ui.community.MyRecruitingStudyDetail
 import retrofit2.Call
@@ -48,7 +49,8 @@ class ConsiderAttendanceFragment : Fragment() {
     }
 
     private fun fetchMyRecruitingStudies() {
-        CommunityRetrofitClient.instance.getMyPageRecruitingStudy(memberId, page, size)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getMyPageRecruitingStudy(memberId, page, size)
             .enqueue(object : Callback<MyRecruitingStudiesResponse> {
                 override fun onResponse(
                     call: Call<MyRecruitingStudiesResponse>,

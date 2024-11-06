@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentConsiderAttendanceMemberBinding
 import com.example.spoteam_android.ui.community.AttendanceMemberInfo
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MemberAttendanceIntroResponse
 import com.example.spoteam_android.ui.community.MyStudyAttendanceMemberResponse
 import retrofit2.Call
@@ -41,7 +42,8 @@ class ConsiderAttendanceMemberFragment : Fragment() {
     }
 
     private fun fetchStudyAttendanceMembers() {
-        CommunityRetrofitClient.instance.getMyStudyAttendanceMember(studyId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getMyStudyAttendanceMember(studyId)
             .enqueue(object : Callback<MyStudyAttendanceMemberResponse> {
                 override fun onResponse(
                     call: Call<MyStudyAttendanceMemberResponse>,
@@ -89,7 +91,8 @@ class ConsiderAttendanceMemberFragment : Fragment() {
     }
 
     private fun fetchIntroduction(memberId : Int) {
-        CommunityRetrofitClient.instance.getAttendanceIntroduction(studyId, memberId)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getAttendanceIntroduction(studyId, memberId)
             .enqueue(object : Callback<MemberAttendanceIntroResponse> {
                 override fun onResponse(
                     call: Call<MemberAttendanceIntroResponse>,

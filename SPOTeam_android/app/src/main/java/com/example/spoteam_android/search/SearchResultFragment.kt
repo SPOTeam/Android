@@ -1,6 +1,5 @@
 package com.example.spoteam_android.search
 
-import RetrofitClient.getAuthToken
 import StudyApiService
 import StudyViewModel
 import android.content.Context
@@ -119,9 +118,9 @@ class SearchResultFragment : Fragment() {
 
         val checkcount: TextView = binding.checkAmount
         val boardItems = arrayListOf<BoardItem>()
+        val service = RetrofitInstance.retrofit.create(SearchApiService::class.java)
 
-        RetrofitClient.SSService.PostSearchApi(
-            authToken = getAuthToken(),
+        service.PostSearchApi(
             keyword = keyword,
             page = 0,
             size = 3,

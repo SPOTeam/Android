@@ -6,6 +6,7 @@ import com.example.spoteam_android.RegionsPreferences
 import com.example.spoteam_android.StudyReasons
 import com.example.spoteam_android.ThemeApiResponse
 import com.example.spoteam_android.ThemePreferences
+import com.example.spoteam_android.YourResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -31,4 +32,10 @@ interface LoginApiService {
 
     @GET("/spot/member/{memberId}/region")
     fun getRegion(@Path("memberId") memberId: Int): Call<RegionApiResponse>
+
+
+    //카카오 로그인 api 서비스
+    @GET("/spot/members/sign-in/kakao")
+    fun getUserInfo(@Query("accessToken") accessToken: String): Call<YourResponse>
+
 }

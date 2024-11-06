@@ -8,7 +8,8 @@ import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
 import com.example.spoteam_android.R
-import com.example.spoteam_android.ui.community.CommunityRetrofitClient
+import com.example.spoteam_android.RetrofitInstance
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MemberAcceptResponse
 import com.example.spoteam_android.ui.community.MemberIntroInfo
 import retrofit2.Call
@@ -58,7 +59,8 @@ class AttendanceContentDialog(private val context: Context) {
         dlg.show()
     }
     private fun acceptMemberAttendance() {
-        CommunityRetrofitClient.instance.postAttendanceMember(info!!.studyId, info!!.memberId,true)
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postAttendanceMember(info!!.studyId, info!!.memberId,true)
             .enqueue(object : Callback<MemberAcceptResponse> {
                 override fun onResponse(
                     call: Call<MemberAcceptResponse>,

@@ -110,8 +110,8 @@ class StudyFragment : Fragment() {
                 studyApiService.getStudies(memberId, currentPage, size).enqueue(object : Callback<StudyResponse> {
                     override fun onResponse(call: Call<StudyResponse>, response: Response<StudyResponse>) {
                         if (response.isSuccessful) {
-                            response.body()?.let { studyResponse ->
-                                val content = studyResponse.result.content
+                            response.body()?.result?.let { result ->
+                                val content = result.content
                                 if (!content.isNullOrEmpty()) {
                                     Log.d("StudyFragment", "Received data: ${content.size} items")
 
@@ -134,7 +134,7 @@ class StudyFragment : Fragment() {
                                         )
                                     })
 
-                                    totalPages = studyResponse.result.totalPages
+                                    totalPages = result.totalPages
 
                                     // RecyclerView 업데이트
                                     studyAdapter.updateList(itemList)
@@ -144,15 +144,18 @@ class StudyFragment : Fragment() {
                                     binding.emptyMessage.visibility = View.GONE
 
                                     // 페이지 UI 업데이트
-                                    updatePageNumberUI(studyResponse.result.totalPages)
+                                    updatePageNumberUI(result.totalPages)
                                 } else {
                                     // 데이터가 없을 때 처리
                                     binding.fragmentStudyRv.visibility = View.GONE
                                     binding.emptyMessage.visibility = View.VISIBLE
                                 }
+                            } ?: run {
+                                Log.d("StudyFragment", "Result is null.")
+                                Toast.makeText(requireContext(), "결과가 없습니다.", Toast.LENGTH_SHORT).show()
                             }
                         } else {
-                            Toast.makeText(requireContext(), "마지막페이지입니다", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "마지막 페이지입니다", Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -167,6 +170,7 @@ class StudyFragment : Fragment() {
             Toast.makeText(requireContext(), "Email not provided", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun toggleLikeStatus(studyItem: StudyItem, likeButton: ImageView) {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)

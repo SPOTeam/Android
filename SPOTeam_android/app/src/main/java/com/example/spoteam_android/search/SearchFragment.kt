@@ -1,6 +1,5 @@
 package com.example.spoteam_android.search
 
-import RetrofitClient.getAuthToken
 import StudyApiService
 import StudyViewModel
 import android.content.Context
@@ -28,6 +27,8 @@ import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
+import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
+import com.example.spoteam_android.ui.interestarea.RecruitingStudyApiService
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.DetailStudyVPAdapter
 import com.google.android.material.chip.Chip
@@ -246,10 +247,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun fetchRecommendStudy(memberId: Int) {
-        RetrofitClient.GetRSService.GetRecommendStudy(
-            authToken = getAuthToken(),
-            memberId = memberId,
-        ).enqueue(object : Callback<ApiResponse> {
+        val service = RetrofitInstance.retrofit.create(RecommendStudyApiService::class.java)
+        service.GetRecommendStudy(memberId = memberId).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     val boardItems = response.body()?.result?.content?.map { study ->
@@ -338,9 +337,8 @@ class SearchFragment : Fragment() {
 
     private fun fetchAllRecruiting(selectedItem: String) {
         val boardItems = arrayListOf<BoardItem>()
-
-        RetrofitClient.RSService.GetRecruitingStudy(
-            authToken = getAuthToken(),
+        val service = RetrofitInstance.retrofit.create(RecruitingStudyApiService::class.java)
+        service.GetRecruitingStudy(
             gender = "MALE",
             minAge = 18,
             maxAge = 60,
