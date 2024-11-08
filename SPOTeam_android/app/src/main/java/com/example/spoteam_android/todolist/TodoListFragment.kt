@@ -1,5 +1,6 @@
 package com.example.spoteam_android.todolist
 
+import StudyViewModel
 import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
@@ -11,9 +12,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.R
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentTodoListBinding
 import com.example.spoteam_android.ui.calendar.EventAdapter
 import com.example.spoteam_android.ui.calendar.EventViewModel
@@ -25,7 +28,8 @@ class TodoListFragment : Fragment() {
     private lateinit var eventsRecyclerView: RecyclerView
     private lateinit var rvMyTodoList: RecyclerView
     private lateinit var rvDates: RecyclerView
-    private val todoViewModel: TodoViewModel by activityViewModels() // TodoViewModel을 공유
+    private lateinit var todoViewModel: TodoViewModel
+    private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var dateAdapter: DateAdapter
     private lateinit var myTodoAdapter: TodoAdapter
     private lateinit var layoutManager: LinearLayoutManager
@@ -33,12 +37,26 @@ class TodoListFragment : Fragment() {
     private lateinit var eventAdapter: EventAdapter
     private val todoList = mutableListOf<String>()
     private var selectedImageView: ImageView? = null
+    private var userEnteredContent: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTodoListBinding.inflate(inflater, container, false)
+
+        val studyId = studyViewModel.studyId.value ?: 0
+
+        val apiService = RetrofitInstance.retrofit.create(TodoApiService::class.java)
+        val repository = TodoRepository(apiService)
+        val factory = TodoViewModelFactory(repository)
+        todoViewModel = ViewModelProvider(this, factory).get(TodoViewModel::class.java)
+
+        myTodoAdapter = TodoAdapter(requireContext(), mutableListOf()) { content ->
+            val date = "2024-11-08" // 예시 날짜
+            todoViewModel.addTodoItem(studyId, content, date)  // 전달된 content로 API 요청
+        }
+
 
         eventsRecyclerView = binding.eventrecyclerviewto
 
@@ -116,15 +134,24 @@ class TodoListFragment : Fragment() {
         })
 
         // 투두 리스트 어댑터 설정
-        myTodoAdapter = TodoAdapter(requireContext(), todoList)
-
         binding.rvMyTodoList.layoutManager = LinearLayoutManager(requireContext())
         binding.rvMyTodoList.adapter = myTodoAdapter
 
         binding.imgbtnPlusTodolist.setOnClickListener {
-            myTodoAdapter.addTodo() // 항목 추가
-            binding.rvMyTodoList.scrollToPosition(todoList.size - 1) // 마지막 항목으로 스크롤
+            myTodoAdapter.addTodo()
+            binding.rvMyTodoList.scrollToPosition(myTodoAdapter.itemCount - 1)
         }
+
+
+        todoViewModel.addTodoResponse.observe(viewLifecycleOwner, Observer { response ->
+            if (response?.isSuccess == true) {
+                response.result?.let { newTodo ->
+                    Log.d("TodoListFragment", "Todo created: ${newTodo.content}")
+                }
+            } else {
+                Log.e("TodoListFragment", "Failed to add todo22")
+            }
+        })
 
         val cbTodo1 = binding.cbTodo1
         val cbTodo2 = binding.cbTodo2

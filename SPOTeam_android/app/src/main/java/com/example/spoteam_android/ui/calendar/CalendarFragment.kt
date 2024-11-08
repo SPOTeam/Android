@@ -95,7 +95,7 @@ class CalendarFragment : Fragment() {
                 )
 
                 // 캘린더를 해당 날짜로 이동하고, 선택 상태로 설정합니다.
-                calendarView.setCurrentDate(calendarDay)
+                    calendarView.setCurrentDate(calendarDay)
                 calendarView.setSelectedDate(calendarDay)
 
                 fetchGetSchedule(studyId, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1) {
