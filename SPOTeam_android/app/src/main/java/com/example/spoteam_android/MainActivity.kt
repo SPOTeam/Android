@@ -86,11 +86,9 @@ class MainActivity : AppCompatActivity() {
                     R.style.AppBottomSheetDialogBorder20WhiteTheme
                 )
             }
+
             getCurrentFragment()?.let {
                 if(it is CommunityHomeFragment) {
-                    writeCommunityFragment.show(supportFragmentManager, "Write Content")
-                }
-                if(it is CommunityFragment) {
                     writeCommunityFragment.show(supportFragmentManager, "Write Content")
                 }
                 if(it is DetailStudyFragment) {

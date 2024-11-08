@@ -37,6 +37,13 @@ interface CommunityAPIService {
         @Body requestBody : WriteContentRequest
     ): Call<WriteContentResponse>
 
+    @PATCH("/spot/posts/{memberId}/{postId}")
+    fun editContent(
+        @Path("memberId") memberId: Int,
+        @Path("postId") postId: String,
+        @Body requestBody : WriteContentRequest
+    ): Call<WriteContentResponse>
+
     @POST("/spot/posts/{postId}/{memberId}/like")
     fun postContentLike(
         @Path("postId") postId: Int,

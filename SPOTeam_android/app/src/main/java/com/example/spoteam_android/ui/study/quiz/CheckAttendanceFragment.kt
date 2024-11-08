@@ -42,6 +42,10 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
             }
         }
 
+        binding.writeContentPrevIv.setOnClickListener{
+            dismiss()
+        }
+
         return binding.root
     }
 

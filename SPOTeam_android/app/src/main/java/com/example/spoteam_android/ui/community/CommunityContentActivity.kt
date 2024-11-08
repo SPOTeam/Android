@@ -16,6 +16,7 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.ActivityCommunityContentBinding
 import com.example.spoteam_android.ui.community.contentComment.ContentCommentMultiViewRVAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +25,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class CommunityContentActivity : AppCompatActivity() {
+class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener  {
 
     private lateinit var binding: ActivityCommunityContentBinding
     var memberId : Int = -1
@@ -32,11 +33,16 @@ class CommunityContentActivity : AppCompatActivity() {
     var parentCommentId : Int = 0
     var ischecked : Boolean = false;
 
+    // 추가: 게시물 정보 저장을 위한 변수들
+    private var currentTitle: String = ""
+    private var currentContent: String = ""
+    private var currentType: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         postId = intent.getStringExtra("postInfo")!!.toInt()
-
+        Log.d("CommunityContentActivity", postId.toString())
         // SharedPreferences 사용
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val currentEmail = sharedPreferences.getString("currentEmail", null)
@@ -50,8 +56,6 @@ class CommunityContentActivity : AppCompatActivity() {
         buttonActions()
 
         fetchContentInfo()
-
-
     }
 
     private fun buttonActions() {
@@ -240,10 +244,10 @@ class CommunityContentActivity : AppCompatActivity() {
     private fun showPopupMenu(view: View) {
         val popupMenu = PopupMenu(view.context, view)
         val inflater: MenuInflater = popupMenu.menuInflater
-//        val exit = ExitStudyPopupFragment(view.context)
         val report = ReportContentDialog(view.context)
         val fragmentManager = (view.context as AppCompatActivity).supportFragmentManager
         inflater.inflate(R.menu.menu_community_home_options, popupMenu.menu)
+
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_report -> {
@@ -251,7 +255,21 @@ class CommunityContentActivity : AppCompatActivity() {
                     true
                 }
                 R.id.edit_content -> {
-//                    exit.start() // 편집하기로 수정
+                    // WriteContentFragment 생성 및 데이터 전달
+                    val editContext = EditContentFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("title", currentTitle)  // 수정할 게시물의 제목 전달
+                            putString("content", currentContent)  // 수정할 게시물의 내용 전달
+                            putString("type", currentType)
+                            putString("postId", postId.toString())
+                        }
+                        setStyle(
+                            BottomSheetDialogFragment.STYLE_NORMAL,
+                            R.style.AppBottomSheetDialogBorder20WhiteTheme
+                        )
+                    }
+
+                    editContext.show(fragmentManager, "EditContent")
                     true
                 }
                 else -> false
@@ -259,6 +277,7 @@ class CommunityContentActivity : AppCompatActivity() {
         }
         popupMenu.show()
     }
+
 
     private fun fetchContentInfo() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
@@ -273,13 +292,6 @@ class CommunityContentActivity : AppCompatActivity() {
                         if (contentResponse?.isSuccess == "true") {
                             val contentInfo = contentResponse.result
                             val commentInfo = contentInfo.commentResponses.comments
-//                            compareIsliked = contentInfo.likedByCurrentUser
-//                            compareIslikedNum = contentInfo.likeCount
-//                            initialIsliked = contentInfo.likedByCurrentUser
-//                            initialIsLikedNum = contentInfo.likeCount
-//                            //Glide를 사용하여 imageUrl을 ImageView에 로드
-//                            Log.d("Content", "items: $contentInfo")
-//                            Log.d("Comment", "items: $commentInfo")
                             initContentInfo(contentInfo)
                             ischecked = false;
                             val sortedComments = sortComments(commentInfo)
@@ -423,6 +435,10 @@ class CommunityContentActivity : AppCompatActivity() {
         binding.communityContentContentNumTv.text = contentInfo.commentCount.toString()
         binding.communityContentViewNumTv.text = contentInfo.viewCount.toString()
 
+        currentTitle = contentInfo.title
+        currentContent = contentInfo.content
+        currentType = contentInfo.type
+
         if(contentInfo.anonymous) {
             binding.communityContentWriterTv.text = "익명"
             Glide.with(binding.root.context)
@@ -506,8 +522,6 @@ class CommunityContentActivity : AppCompatActivity() {
             val replies = commentInfo.filter { it.parentCommentId == parentComment.commentId }
             sortedList.addAll(replies)
         }
-//        Log.d("sortedList", "$sortedList")
-//        Log.d("sortedListLength", "${sortedList.size}")
 
         return sortedList
     }
@@ -531,6 +545,11 @@ class CommunityContentActivity : AppCompatActivity() {
         } else {
             writtenTime // 원본 문자열 반환
         }
+    }
+
+    override fun onBottomSheetDismissed() {
+        Log.d("ActionListener", "IsIn")
+        fetchContentInfo()
     }
 }
 
