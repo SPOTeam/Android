@@ -27,7 +27,8 @@ interface CommunityAPIService {
 
     @GET("/spot/posts/{postId}")
     fun getContentInfo(
-        @Path("postId") postId: Int
+        @Path("postId") postId: Int,
+        @Query("likeOrScrap") isChecked : Boolean
     ): Call<ContentResponse>
 
     @POST("/spot/posts/{memberId}")
@@ -44,6 +45,18 @@ interface CommunityAPIService {
 
     @DELETE("/spot/posts/{postId}/{memberId}/like")
     fun deleteContentLike(
+        @Path("postId") postId: Int,
+        @Path("memberId") memberId: Int
+    ): Call<ContentUnLikeResponse>
+
+    @POST("/spot/posts/{postId}/{memberId}/scrap")
+    fun postContentScrap(
+        @Path("postId") postId: Int,
+        @Path("memberId") memberId: Int
+    ): Call<ContentLikeResponse>
+
+    @DELETE("/spot/posts/{postId}/{memberId}/scrap")
+    fun deleteContentScrap(
         @Path("postId") postId: Int,
         @Path("memberId") memberId: Int
     ): Call<ContentUnLikeResponse>
@@ -246,4 +259,15 @@ interface CommunityAPIService {
         @Path("postId") postId: Int,
         @Path("commentId") commentId: Int
     ): Call<UnDisLikeCommentResponse>
+
+    @GET("/spot/studies/{studyId}/members")
+    fun getStudyMembers(
+        @Path("studyId") studyId: Int
+    ): Call<StudyMemberResponse>
+
+    @POST("/spot/studies/{studyId}/quizzes")
+    fun MakeQuiz(
+        @Path("studyId") studyId: Int,
+        @Body requestBody : QuizContentRequest
+    ): Call<QuizContentResponse>
 }

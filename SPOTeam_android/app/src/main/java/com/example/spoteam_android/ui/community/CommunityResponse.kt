@@ -82,7 +82,8 @@ data class CategoryPagesDetail(
     val likeCount : Int,
     val commentCount : Int,
     val viewCount : Int,
-    val likedByCurrentUser : Boolean
+    val likedByCurrentUser : Boolean,
+    val scrapedByCurrentUser : Boolean
 )
 /************게시글 단건 조회***********/
 data class ContentResponse(
@@ -619,6 +620,39 @@ data class WriteStudyCommentInfo (
     val isAnonymous : Boolean,
     val content : String
 )
+
+/************스터디 멤버 정보***********/
+data class StudyMemberResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: StudyMemberInfo
+)
+
+data class StudyMemberInfo (
+    val totalElements: Int,
+    val members : List<MembersDetail>
+)
+
+data class MembersDetail (
+    val memberId : Int,
+    val nickname : String,
+    val profileImage : String
+)
+
+/************퀴즈 생성 완료***********/
+data class QuizContentResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: QuizContentInfo
+)
+
+data class QuizContentInfo (
+    val question: String,
+    val answer : String
+)
+
 
 
 

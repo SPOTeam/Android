@@ -2,6 +2,7 @@ package com.example.spoteam_android
 
 import android.content.Context
 import android.util.Log
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -45,7 +46,12 @@ object RetrofitInstance {
 
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(AuthInterceptor(appContext))
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("Authorization", "Bearer $authToken")
+                    .build()
+                chain.proceed(request)
+            }
             .build()
     }
 
@@ -55,5 +61,9 @@ object RetrofitInstance {
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    val communityApiService: CommunityAPIService by lazy {
+        retrofit.create(CommunityAPIService::class.java)
     }
 }
