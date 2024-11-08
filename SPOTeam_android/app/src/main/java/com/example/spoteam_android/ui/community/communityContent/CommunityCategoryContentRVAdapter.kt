@@ -18,6 +18,8 @@ class CommunityCategoryContentRVAdapter(private var dataList: List<CategoryPages
         fun onItemClick(data: CategoryPagesDetail)
         fun onLikeClick(data: CategoryPagesDetail)
         fun onUnLikeClick(data: CategoryPagesDetail)
+        fun onBookMarkClick(data: CategoryPagesDetail)
+        fun onUnBookMarkClick(data: CategoryPagesDetail)
     }
 
     private lateinit var itemClickListener: OnItemClickListener
@@ -49,12 +51,10 @@ class CommunityCategoryContentRVAdapter(private var dataList: List<CategoryPages
         }
 
         holder.binding.contentBookmarkCheckedIv.setOnClickListener {
-            holder.binding.contentBookmarkCheckedIv.visibility = View.GONE
-            holder.binding.contentBookmarkUncheckedIv.visibility = View.VISIBLE
+            itemClickListener.onBookMarkClick(dataList[position])
         }
         holder.binding.contentBookmarkUncheckedIv.setOnClickListener {
-            holder.binding.contentBookmarkCheckedIv.visibility = View.VISIBLE
-            holder.binding.contentBookmarkUncheckedIv.visibility = View.GONE
+            itemClickListener.onUnBookMarkClick(dataList[position])
         }
     }
 
@@ -70,12 +70,22 @@ class CommunityCategoryContentRVAdapter(private var dataList: List<CategoryPages
             binding.contentViewNumTv.text = data.viewCount.toString()
             binding.contentWriterTv.text = data.writer
             binding.contentDateTv.text = formatWrittenTime(data.writtenTime)
+            binding.contentSaveNumTv.text = data.scrapCount.toString()
+
             if (data.likedByCurrentUser) {
                 binding.contentLikeNumCheckedIv.visibility = View.VISIBLE
                 binding.contentLikeNumUncheckedIv.visibility = View.GONE
             } else {
                 binding.contentLikeNumCheckedIv.visibility = View.GONE
                 binding.contentLikeNumUncheckedIv.visibility = View.VISIBLE
+            }
+
+            if(data.scrapedByCurrentUser) {
+                binding.contentBookmarkCheckedIv.visibility = View.VISIBLE
+                binding.contentBookmarkUncheckedIv.visibility = View.GONE
+            } else {
+                binding.contentBookmarkCheckedIv.visibility = View.GONE
+                binding.contentBookmarkUncheckedIv.visibility = View.VISIBLE
             }
         }
 

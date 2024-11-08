@@ -31,3 +31,9 @@ data class WriteStudyCommentRequest(
     val isAnonymous : Boolean,
     val content : String
 )
+
+/*********퀴즈 생성 Request********/
+data class QuizContentRequest(
+    val question : String,
+    val answer : String
+)

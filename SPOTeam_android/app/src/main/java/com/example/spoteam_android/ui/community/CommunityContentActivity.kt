@@ -1,6 +1,7 @@
 package com.example.spoteam_android.ui.community
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuInflater
@@ -29,10 +30,7 @@ class CommunityContentActivity : AppCompatActivity() {
     var memberId : Int = -1
     var postId : Int = -1
     var parentCommentId : Int = 0
-    var initialIsliked : Boolean = false
-    var initialIsLikedNum : Int = 0
-    var compareIsliked : Boolean = false
-    var compareIslikedNum : Int = 0
+    var ischecked : Boolean = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,13 +43,19 @@ class CommunityContentActivity : AppCompatActivity() {
 
         // 현재 로그인된 사용자 정보를 로그
         memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
-//        Log.d("SharedPreferences", "MemberId: $memberId, PostId : $postId")
 
         binding = ActivityCommunityContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        buttonActions()
+
+        fetchContentInfo()
+
+
+    }
+
+    private fun buttonActions() {
         binding.communityPrevIv.setOnClickListener{
-//            compareLiked()
             finish()
         }
 
@@ -64,52 +68,37 @@ class CommunityContentActivity : AppCompatActivity() {
         }
 
         binding.communityContentLikeNumCheckedIv.setOnClickListener{
+            ischecked = true;
             deleteContentLike()
-//            compareIsliked = false
-//            compareIslikedNum--
-//
-//            binding.communityContentLikeNumCheckedIv.visibility = View.GONE
-//            binding.communityContentLikeNumUncheckedIv.visibility = View.VISIBLE
-//
-//            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
         }
 
         binding.communityContentLikeNumUncheckedIv.setOnClickListener{
+            ischecked = true;
             postContentLike()
-//            compareIsliked = true
-//            compareIslikedNum++
-//
-//            binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE
-//            binding.communityContentLikeNumUncheckedIv.visibility = View.GONE
-//
-//            binding.communityContentLikeNumTv.text = compareIslikedNum.toString()
         }
 
-        fetchContentInfo()
-    }
-
-    private fun compareLiked(){
-        if(compareIsliked != initialIsliked){
-            if(compareIsliked){
-                postContentLike()
-            } else {
-                deleteContentLike()
-            }
+        binding.communityContentBookMarkUncheckedIv.setOnClickListener{
+            ischecked = true;
+            postContentScrap()
         }
+
+        binding.communityContentBookMarkCheckedIv.setOnClickListener{
+            ischecked = true;
+            deleteContentScrap()
+        }
+
     }
 
-    private fun postContentLike() {
+    private fun postContentScrap() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postContentLike(postId, memberId)
+        service.postContentScrap(postId, memberId)
             .enqueue(object : Callback<ContentLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentLikeResponse>,
                     response: Response<ContentLikeResponse>
                 ) {
-//                    Log.d("LikeContent", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val likeResponse = response.body()
-//                        Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
                             fetchContentInfo()
                         } else {
@@ -126,6 +115,58 @@ class CommunityContentActivity : AppCompatActivity() {
             })
     }
 
+    private fun postContentLike() {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postContentLike(postId, memberId)
+            .enqueue(object : Callback<ContentLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentLikeResponse>,
+                    response: Response<ContentLikeResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val likeResponse = response.body()
+                        if (likeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                        } else {
+                            showError(likeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
+                    Log.e("LikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun deleteContentScrap() {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deleteContentScrap(postId, memberId)
+            .enqueue(object : Callback<ContentUnLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentUnLikeResponse>,
+                    response: Response<ContentUnLikeResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val unLikeResponse = response.body()
+                        if (unLikeResponse?.isSuccess == "true") {
+                            fetchContentInfo()
+                        } else {
+                            showError(unLikeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
+                    Log.e("UnLikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
     private fun deleteContentLike() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.deleteContentLike(postId, memberId)
@@ -134,10 +175,8 @@ class CommunityContentActivity : AppCompatActivity() {
                     call: Call<ContentUnLikeResponse>,
                     response: Response<ContentUnLikeResponse>
                 ) {
-//                    Log.d("UnLikeContent", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val unLikeResponse = response.body()
-//                        Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
                         if (unLikeResponse?.isSuccess == "true") {
                             fetchContentInfo()
                         } else {
@@ -223,7 +262,7 @@ class CommunityContentActivity : AppCompatActivity() {
 
     private fun fetchContentInfo() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getContentInfo(postId)
+        service.getContentInfo(postId, ischecked)
             .enqueue(object : Callback<ContentResponse> {
                 override fun onResponse(
                     call: Call<ContentResponse>,
@@ -242,7 +281,7 @@ class CommunityContentActivity : AppCompatActivity() {
 //                            Log.d("Content", "items: $contentInfo")
 //                            Log.d("Comment", "items: $commentInfo")
                             initContentInfo(contentInfo)
-
+                            ischecked = false;
                             val sortedComments = sortComments(commentInfo)
                             initMultiViewRecyclerView(sortedComments)
                         } else {
@@ -403,6 +442,14 @@ class CommunityContentActivity : AppCompatActivity() {
             binding.communityContentLikeNumCheckedIv.visibility = View.GONE
             binding.communityContentLikeNumUncheckedIv.visibility = View.VISIBLE
         }
+
+        if(contentInfo.scrapedByCurrentUser) {
+            binding.communityContentBookMarkCheckedIv.visibility = View.VISIBLE
+            binding.communityContentBookMarkUncheckedIv.visibility = View.GONE
+        } else {
+            binding.communityContentBookMarkCheckedIv.visibility = View.GONE
+            binding.communityContentBookMarkUncheckedIv.visibility = View.VISIBLE
+        }
     }
 
     private fun initMultiViewRecyclerView(commentInfo: List<CommentsInfo>) {
@@ -420,18 +467,22 @@ class CommunityContentActivity : AppCompatActivity() {
             }
 
             override fun onLikeClick(view: View, position: Int, commentId: Int) {
+                ischecked = true;
                 deleteCommentLike(commentId)
             }
 
             override fun onUnLikeClick(view: View, position: Int, commentId: Int) {
+                ischecked = true;
                 postCommentLike(commentId)
             }
 
             override fun onDisLikeClick(view: View, position: Int, commentId: Int) {
+                ischecked = true;
                 deleteCommentDisLike(commentId)
             }
 
             override fun onUnDisLikeClick(view: View, position: Int, commentId: Int) {
+                ischecked = true;
                 postCommentDisLike(commentId)
             }
         }

@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -28,6 +29,7 @@ import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentCalendarBinding
 import com.example.spoteam_android.ui.study.OnlineStudyFragment
 import com.example.spoteam_android.ui.study.StudyFragment
+import com.example.spoteam_android.ui.study.quiz.CheckAttendanceFragment
 import com.example.spoteam_android.ui.study.quiz.HostMakeQuizFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -147,8 +149,9 @@ class CalendarFragment : Fragment() {
 
 
         eventAdapter = EventAdapter(emptyList(), { event ->
-            val hostMakeQuizFragment = HostMakeQuizFragment()
+            val hostMakeQuizFragment = CheckAttendanceFragment()
             hostMakeQuizFragment.show(parentFragmentManager, "HostMakeQuizFragment")
+            hostMakeQuizFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
         }, false)
 
         eventsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
