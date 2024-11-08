@@ -34,6 +34,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/main_bnv"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/main_floatingButton_toUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/arrow_up"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            app:borderWidth="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/main_bnv"
+            android:visibility="gone"/>
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_bnv"
             android:layout_width="match_parent"

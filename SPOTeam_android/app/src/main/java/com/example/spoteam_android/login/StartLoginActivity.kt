@@ -49,6 +49,7 @@ class StartLoginActivity : AppCompatActivity() {
             } else if (token != null) {
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                 loginViewModel.sendTokenToServer(token.accessToken)
+                Log.d("Token_Success", token.accessToken)
             }
         }
 

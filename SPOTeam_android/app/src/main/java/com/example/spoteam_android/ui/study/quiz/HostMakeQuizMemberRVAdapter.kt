@@ -1,8 +1,10 @@
 package com.example.spoteam_android.ui.study.quiz
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Visibility
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemDetailStudyHomeMemberBinding
@@ -29,7 +31,7 @@ class HostMakeQuizMemberRVAdapter(private var dataList: List<MembersDetail>) : R
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position < dataList.size) {
-            holder.bind(dataList[position])
+            holder.bind(dataList[position] , position == 0)
         }
 
     }
@@ -37,7 +39,7 @@ class HostMakeQuizMemberRVAdapter(private var dataList: List<MembersDetail>) : R
     override fun getItemCount() = dataList.size
 
     inner class ViewHolder(val binding: ItemDetailStudyHomeMemberBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: MembersDetail) {
+        fun bind(data: MembersDetail, isHost : Boolean) {
             Glide.with(binding.root.context)
                 .load(data.profileImage)
                 .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
@@ -46,6 +48,11 @@ class HostMakeQuizMemberRVAdapter(private var dataList: List<MembersDetail>) : R
 
             binding.profileNickname.text = data.nickname
 
+            if(isHost) {
+                binding.fragmentConsiderAttendanceMemberHostIv.visibility = View.VISIBLE
+            } else {
+                binding.fragmentConsiderAttendanceMemberHostIv.visibility = View.GONE
+            }
         }
     }
 }
