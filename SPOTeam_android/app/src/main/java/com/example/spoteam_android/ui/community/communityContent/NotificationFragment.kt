@@ -115,6 +115,58 @@ class NotificationFragment : Fragment() {
             })
     }
 
+    private fun deleteContentScrap(postId: Int) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deleteContentScrap(postId, memberId)
+            .enqueue(object : Callback<ContentUnLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentUnLikeResponse>,
+                    response: Response<ContentUnLikeResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val unLikeResponse = response.body()
+                        if (unLikeResponse?.isSuccess == "true") {
+                            onResume()
+                        } else {
+                            showError(unLikeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
+                    Log.e("UnLikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun postContentScrap(postId : Int) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postContentScrap(postId, memberId)
+            .enqueue(object : Callback<ContentLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentLikeResponse>,
+                    response: Response<ContentLikeResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val likeResponse = response.body()
+                        if (likeResponse?.isSuccess == "true") {
+                            onResume()
+                        } else {
+                            showError(likeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
+                    Log.e("LikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
     private fun fetchPages(type: String, pageNum: Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.getCategoryPagesContent(type, pageNum)
@@ -176,6 +228,13 @@ class NotificationFragment : Fragment() {
                 fetchUnLike(data.postId)
             }
 
+            override fun onBookMarkClick(data: CategoryPagesDetail) {
+                deleteContentScrap(data.postId)
+            }
+
+            override fun onUnBookMarkClick(data: CategoryPagesDetail) {
+                postContentScrap(data.postId)
+            }
         })
     }
 }

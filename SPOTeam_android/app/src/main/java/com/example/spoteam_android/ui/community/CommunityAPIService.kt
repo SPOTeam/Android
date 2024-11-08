@@ -266,7 +266,7 @@ interface CommunityAPIService {
     ): Call<StudyMemberResponse>
 
     @POST("/spot/studies/{studyId}/quizzes")
-    fun MakeQuiz(
+    fun makeQuiz(
         @Path("studyId") studyId: Int,
         @Body requestBody : QuizContentRequest
     ): Call<QuizContentResponse>
