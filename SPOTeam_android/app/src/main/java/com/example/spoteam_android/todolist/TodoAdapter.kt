@@ -2,18 +2,18 @@ package com.example.spoteam_android.todolist
 
 import android.content.Context
 import android.graphics.Paint
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import androidx.core.content.ContextCompat
-import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.TodolistItemBinding
 
-class TodoAdapter(private val context: Context, private val todoList: MutableList<String>) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+class TodoAdapter(
+    private val context: Context,
+    private var todoList: MutableList<String>,
+    private val onAddTodo: (String) -> Unit
+) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
     inner class TodoViewHolder(val binding: TodolistItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -24,6 +24,12 @@ class TodoAdapter(private val context: Context, private val todoList: MutableLis
     }
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
+        if (position >= todoList.size || todoList.isEmpty()) {
+            // 데이터가 비어 있을 경우 리턴
+            Toast.makeText(context, "No items to display", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val item = todoList[position]
 
         // 초기 상태 설정
@@ -33,55 +39,48 @@ class TodoAdapter(private val context: Context, private val todoList: MutableLis
 
         holder.binding.etTodo.setText(item)
 
-        // 체크박스의 초기 체크 상태에 따른 텍스트 스타일 및 색상 설정
-        if (holder.binding.cbTodo.isChecked) {
-            holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-            holder.binding.cbTodo.setTextColor(ContextCompat.getColor(context, R.color.gray_03))
-        } else {
-            holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-            holder.binding.cbTodo.setTextColor(ContextCompat.getColor(context, R.color.black))
-        }
-
-        // EditText에서 엔터를 치거나 입력이 완료되었을 때 처리
-        holder.binding.etTodo.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE ||
-                event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER) {
-
-                val text = holder.binding.etTodo.text.toString()
-                if (text.isNotBlank()) {
-                    todoList[position] = text
-                    notifyItemChanged(position)
-                    hideKeyboard(v)  // 키보드 숨김
-                }
+        holder.binding.etTodo.setOnEditorActionListener { v, actionId, _ ->
+            val newText = holder.binding.etTodo.text.toString()
+            if (newText.isNotEmpty()) {
+                todoList[position] = newText  // 리스트 항목 업데이트
+                onAddTodo(newText)  // 콜백 실행 (Todo 추가 이벤트)
+                notifyItemChanged(position)  // UI 업데이트
                 true
             } else {
                 false
             }
         }
 
-        // 체크박스 클릭 시 텍스트 스타일 및 색상 변경
+        // 체크박스의 초기 체크 상태에 따른 텍스트 스타일 및 색상 설정
+        if (holder.binding.cbTodo.isChecked) {
+            holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        } else {
+            holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+        }
+
         holder.binding.cbTodo.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                holder.binding.cbTodo.setTextColor(ContextCompat.getColor(context, R.color.gray_03))
             } else {
                 holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                holder.binding.cbTodo.setTextColor(ContextCompat.getColor(context, R.color.black))
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return todoList.size
+    override fun getItemCount(): Int = todoList.size
+
+    fun updateData(newTodoList: List<String>) {
+        todoList.clear()
+        todoList.addAll(newTodoList)
+        notifyDataSetChanged() // 데이터 변경 후 RecyclerView 갱신
+    }
+
+    fun getCurrentData(): List<String> {
+        return todoList
     }
 
     fun addTodo() {
-        todoList.add("") // 빈 항목 추가
+        todoList.add("")
         notifyItemInserted(todoList.size - 1)
-    }
-
-    private fun hideKeyboard(view: View) {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
