@@ -14,8 +14,6 @@ class ConsiderAttendanceMembersRVAdapter(private var dataList: List<AttendanceMe
 
     interface OnItemClickListener {
         fun onItemClick(data: AttendanceMemberInfo)
-//        fun onLikeClick(data: CategoryPagesDetail)
-//        fun onUnLikeClick(data: CategoryPagesDetail)
     }
 
     private lateinit var itemClickListener: OnItemClickListener

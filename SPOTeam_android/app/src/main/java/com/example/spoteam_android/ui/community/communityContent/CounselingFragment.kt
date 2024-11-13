@@ -90,6 +90,57 @@ class CounselingFragment : Fragment() {
             })
     }
 
+    private fun deleteContentScrap(postId: Int) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deleteContentScrap(postId, memberId)
+            .enqueue(object : Callback<ContentUnLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentUnLikeResponse>,
+                    response: Response<ContentUnLikeResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val unLikeResponse = response.body()
+                        if (unLikeResponse?.isSuccess == "true") {
+                            onResume()
+                        } else {
+                            showError(unLikeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
+                    Log.e("UnLikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun postContentScrap(postId : Int) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postContentScrap(postId, memberId)
+            .enqueue(object : Callback<ContentLikeResponse> {
+                override fun onResponse(
+                    call: Call<ContentLikeResponse>,
+                    response: Response<ContentLikeResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val likeResponse = response.body()
+                        if (likeResponse?.isSuccess == "true") {
+                            onResume()
+                        } else {
+                            showError(likeResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
+                    Log.e("LikeContent", "Failure: ${t.message}", t)
+                }
+            })
+    }
 
     private fun postLike(postId : Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
@@ -160,22 +211,30 @@ class CounselingFragment : Fragment() {
         //리스너 객체 생성 및 전달
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
+      
+        dataRVAdapter.setItemClickListener(object : CommunityCategoryContentRVAdapter.OnItemClickListener {
+            override fun onItemClick(data: CategoryPagesDetail) {
+                val intent = Intent(requireContext(), CommunityContentActivity::class.java)
+                intent.putExtra("postInfo", data.postId.toString())
+                startActivity(intent)
+            }
 
-//        dataRVAdapter.setItemClickListener(object : CommunityCategoryContentRVAdapter.OnItemClickListener {
-//            override fun onItemClick(data: CategoryPagesDetail) {
-//                val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-//                intent.putExtra("postInfo", data.postId.toString())
-//                startActivity(intent)
-//            }
-//
-//            override fun onLikeClick(data: CategoryPagesDetail) {
-//                postLike(data.postId)
-//            }
-//
-//            override fun onUnLikeClick(data: CategoryPagesDetail) {
-//                deleteLike(data.postId)
-//            }
-//
-//        })
+            override fun onLikeClick(data: CategoryPagesDetail) {
+                postLike(data.postId)
+            }
+
+            override fun onUnLikeClick(data: CategoryPagesDetail) {
+                deleteLike(data.postId)
+            }
+
+            override fun onBookMarkClick(data: CategoryPagesDetail) {
+                deleteContentScrap(data.postId)
+            }
+
+            override fun onUnBookMarkClick(data: CategoryPagesDetail) {
+                postContentScrap(data.postId)
+            }
+
+        })
     }
 }

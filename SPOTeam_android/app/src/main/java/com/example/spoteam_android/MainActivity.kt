@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.todolist.TodoViewModel
+import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 //import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 //import com.example.spoteam_android.ui.bookMark.BookmarkFragment
@@ -64,6 +65,13 @@ class MainActivity : AppCompatActivity() {
             removeNavViewFragment()
         }
 
+        binding.mainFloatingButtonToUp.setOnClickListener{
+            val currentFragment = getCurrentFragment()
+            if (currentFragment is AlertFragment) {
+                currentFragment.scrollToTop()
+            }
+        }
+
         binding.mainFloatingButton.setOnClickListener {
             val writeCommunityFragment = WriteContentFragment().apply {
                 setStyle(
@@ -78,11 +86,9 @@ class MainActivity : AppCompatActivity() {
                     R.style.AppBottomSheetDialogBorder20WhiteTheme
                 )
             }
+
             getCurrentFragment()?.let {
                 if(it is CommunityHomeFragment) {
-                    writeCommunityFragment.show(supportFragmentManager, "Write Content")
-                }
-                if(it is CommunityFragment) {
                     writeCommunityFragment.show(supportFragmentManager, "Write Content")
                 }
                 if(it is DetailStudyFragment) {
@@ -213,6 +219,14 @@ class MainActivity : AppCompatActivity() {
             binding.mainFloatingButton.visibility = View.VISIBLE
         } else {
             binding.mainFloatingButton.visibility = View.GONE
+        }
+    }
+
+    fun isOnAlertFragment(fragment : Fragment) {
+        if(fragment is AlertFragment) {
+            binding.mainFloatingButtonToUp.visibility = View.VISIBLE
+        } else {
+            binding.mainFloatingButtonToUp.visibility = View.GONE
         }
     }
 

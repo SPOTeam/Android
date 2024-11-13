@@ -62,8 +62,4 @@ object RetrofitInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
-    val communityApiService: CommunityAPIService by lazy {
-        retrofit.create(CommunityAPIService::class.java)
-    }
 }

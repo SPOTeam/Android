@@ -3,7 +3,6 @@ package com.example.spoteam_android
 import StudyApiService
 import StudyViewModel
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -19,14 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
-import com.example.spoteam_android.ui.calendar.CalendarFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
-import com.example.spoteam_android.ui.category.category_tabs.AllCategoryFragment
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.CommunityContentActivity
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.CommunityResponse
-import com.example.spoteam_android.ui.community.StudyContentLikeResponse
 import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.example.spoteam_android.ui.interestarea.InterestAreaApiService
@@ -38,7 +33,6 @@ import com.example.spoteam_android.ui.study.DetailStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.create
 
 class HouseFragment : Fragment() {
 
@@ -59,7 +53,7 @@ class HouseFragment : Fragment() {
 
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
-//        fetchLivePopularContent()
+        fetchLivePopularContent()
 
         binding.goPopularContentIv.setOnClickListener{
             val intent = Intent(requireContext(), CommunityContentActivity::class.java)
@@ -149,6 +143,7 @@ class HouseFragment : Fragment() {
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
             (context as MainActivity).isOnCommunityHome(HomeFragment())
+            (context as MainActivity).isOnAlertFragment(AlertFragment())
         }
 
         val bundle = Bundle()

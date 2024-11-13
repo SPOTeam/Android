@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentAttendanceDefaultBinding
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MembersDetail
 import com.example.spoteam_android.ui.community.StudyMemberResponse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -41,6 +42,10 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
             }
         }
 
+        binding.writeContentPrevIv.setOnClickListener{
+            dismiss()
+        }
+
         return binding.root
     }
 
@@ -57,7 +62,8 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     }
 
     private fun fetchStudyMember(studyId: Int) {
-        RetrofitInstance.communityApiService.getStudyMembers(studyId)
+        RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+            .getStudyMembers(studyId)
             .enqueue(object : Callback<StudyMemberResponse> {
                 override fun onResponse(
                     call: Call<StudyMemberResponse>,

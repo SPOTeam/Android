@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentHostMakeQuizBinding
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.QuizContentRequest
 import com.example.spoteam_android.ui.community.QuizContentResponse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -61,7 +62,7 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
     }
 
     private fun postAttendanceQuiz(requestBody : QuizContentRequest) {
-        RetrofitInstance.communityApiService.MakeQuiz(studyId, requestBody)
+        RetrofitInstance.retrofit.create(CommunityAPIService::class.java).makeQuiz(studyId, requestBody)
             .enqueue(object : Callback<QuizContentResponse> {
                 override fun onResponse(
                     call: Call<QuizContentResponse>,

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spoteam_android.HouseFragment
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
@@ -38,6 +39,7 @@ class AlertFragment : Fragment() {
 
         binding.communityPrevIv.setOnClickListener{
             parentFragmentManager.popBackStack()
+            (context as MainActivity).isOnAlertFragment(HouseFragment())
         }
 
         binding.studyAlertCl.setOnClickListener {
@@ -51,6 +53,10 @@ class AlertFragment : Fragment() {
         fetchStudyAlert()
 
         return binding.root
+    }
+
+    fun scrollToTop() {
+        binding.alertContentRv.smoothScrollToPosition(0)
     }
 
     private fun fetchAlert() {
