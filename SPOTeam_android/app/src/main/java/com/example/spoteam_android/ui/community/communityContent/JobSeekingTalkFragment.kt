@@ -236,5 +236,6 @@ class JobSeekingTalkFragment : Fragment() {
                 postContentScrap(data.postId)
             }
         })
+
     }
 }

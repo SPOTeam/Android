@@ -203,8 +203,9 @@ class AllFragment : Fragment() {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
     }
 
-    private fun initRecyclerview(pageContent : List<CategoryPagesDetail>){
-        binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    private fun initRecyclerview(pageContent : List<CategoryPagesDetail>) {
+        binding.communityCategoryContentRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         val reversedPageContent = pageContent.reversed()
 
@@ -236,5 +237,6 @@ class AllFragment : Fragment() {
                 postContentScrap(data.postId)
             }
         })
+
     }
 }

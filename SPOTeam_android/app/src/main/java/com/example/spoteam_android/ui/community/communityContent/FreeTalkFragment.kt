@@ -237,5 +237,6 @@ class FreeTalkFragment : Fragment() {
                 postContentScrap(data.postId)
             }
         })
+
     }
 }

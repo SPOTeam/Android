@@ -237,5 +237,6 @@ class ShareInfoFragment : Fragment() {
                 postContentScrap(data.postId)
             }
         })
+
     }
 }

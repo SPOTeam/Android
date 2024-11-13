@@ -3,7 +3,6 @@ package com.example.spoteam_android.todolist
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Typeface
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,7 @@ import java.util.Calendar
 data class DateItem(val date: String, val isActive: Boolean)
 
 class DateAdapter(
-    private val dates: List<DateItem>,
+    val dates: List<DateItem>,
     private val onDateSelected: (String) -> Unit
 ) : RecyclerView.Adapter<DateAdapter.DateViewHolder>() {
 
@@ -64,6 +63,7 @@ class DateAdapter(
     }
 
     override fun getItemCount(): Int = dates.size
+
 
     class DateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dateTextView: TextView = itemView.findViewById(R.id.tx_calendar_date)

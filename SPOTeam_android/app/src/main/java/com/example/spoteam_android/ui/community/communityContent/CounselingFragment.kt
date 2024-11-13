@@ -211,7 +211,7 @@ class CounselingFragment : Fragment() {
         //리스너 객체 생성 및 전달
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
-
+      
         dataRVAdapter.setItemClickListener(object : CommunityCategoryContentRVAdapter.OnItemClickListener {
             override fun onItemClick(data: CategoryPagesDetail) {
                 val intent = Intent(requireContext(), CommunityContentActivity::class.java)

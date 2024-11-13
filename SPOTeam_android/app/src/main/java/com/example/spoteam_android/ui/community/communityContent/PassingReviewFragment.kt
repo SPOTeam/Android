@@ -236,5 +236,6 @@ class PassingReviewFragment : Fragment() {
                 postContentScrap(data.postId)
             }
         })
+
     }
 }

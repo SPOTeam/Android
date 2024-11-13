@@ -2,18 +2,19 @@ package com.example.spoteam_android.todolist
 
 import android.content.Context
 import android.graphics.Paint
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import androidx.core.content.ContextCompat
-import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.TodolistItemBinding
 
-class TodoAdapter(private val context: Context, private val todoList: MutableList<String>) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+class TodoAdapter(
+    private val context: Context,
+    private var todoList: MutableList<TodoTask>,       // TodoTask 리스트로 변경
+    private val onAddTodo: (String) -> Unit,
+    private val onCheckTodo: (Int) -> Unit            // 체크 시 ID를 전달하는 콜백
+) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
     inner class TodoViewHolder(val binding: TodolistItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -24,64 +25,66 @@ class TodoAdapter(private val context: Context, private val todoList: MutableLis
     }
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
-        val item = todoList[position]
-
-        // 초기 상태 설정
-        holder.binding.cbTodo.text = item
-        holder.binding.cbTodo.visibility = if (item.isEmpty()) View.GONE else View.VISIBLE
-        holder.binding.etTodo.visibility = if (item.isEmpty()) View.VISIBLE else View.GONE
-
-        holder.binding.etTodo.setText(item)
-
-        // 체크박스의 초기 체크 상태에 따른 텍스트 스타일 및 색상 설정
-        if (holder.binding.cbTodo.isChecked) {
-            holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-            holder.binding.cbTodo.setTextColor(ContextCompat.getColor(context, R.color.gray_03))
-        } else {
-            holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-            holder.binding.cbTodo.setTextColor(ContextCompat.getColor(context, R.color.black))
+        if (todoList.isEmpty()) {
+            Toast.makeText(context, "No items to display", Toast.LENGTH_SHORT).show()
+            return
         }
 
-        // EditText에서 엔터를 치거나 입력이 완료되었을 때 처리
-        holder.binding.etTodo.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE ||
-                event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER) {
+        val item = todoList[position]
 
-                val text = holder.binding.etTodo.text.toString()
-                if (text.isNotBlank()) {
-                    todoList[position] = text
-                    notifyItemChanged(position)
-                    hideKeyboard(v)  // 키보드 숨김
-                }
+        // 텍스트 및 체크박스 초기 상태 설정
+        holder.binding.cbTodo.text = item.content
+        holder.binding.cbTodo.visibility = if (item.content.isEmpty()) View.GONE else View.VISIBLE
+        holder.binding.etTodo.visibility = if (item.content.isEmpty()) View.VISIBLE else View.GONE
+        holder.binding.etTodo.setText(item.content)
+
+        // EditText 변경 이벤트
+        holder.binding.etTodo.setOnEditorActionListener { _, _, _ ->
+            val newText = holder.binding.etTodo.text.toString()
+            if (newText.isNotEmpty()) {
+                todoList[position] = item.copy(content = newText)
+                onAddTodo(newText)
+                holder.binding.etTodo.post { notifyItemChanged(position) }
                 true
             } else {
                 false
             }
         }
 
-        // 체크박스 클릭 시 텍스트 스타일 및 색상 변경
+        // 체크박스의 초기 상태에 따른 텍스트 스타일 설정
+        holder.binding.cbTodo.paintFlags = if (item.done) {
+            holder.binding.cbTodo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        } else {
+            holder.binding.cbTodo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+        }
+
+        // 기존 리스너 제거 후 체크박스 상태 반영
+        holder.binding.cbTodo.setOnCheckedChangeListener(null)  // 기존 리스너 제거
+        holder.binding.cbTodo.isChecked = item.done             // 체크 상태 반영
         holder.binding.cbTodo.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                holder.binding.cbTodo.setTextColor(ContextCompat.getColor(context, R.color.gray_03))
-            } else {
-                holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                holder.binding.cbTodo.setTextColor(ContextCompat.getColor(context, R.color.black))
+            if (item.done != isChecked) {
+                todoList[position] = item.copy(done = isChecked)   // 상태 업데이트
+                onCheckTodo(item.id)  // 체크 상태 변경 시 콜백 호출
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return todoList.size
+
+
+    override fun getItemCount(): Int = todoList.size
+
+    fun updateData(newTodoList: List<TodoTask>) {
+        todoList.clear()
+        todoList.addAll(newTodoList)
+        notifyDataSetChanged() // 데이터 변경 후 RecyclerView 갱신
+    }
+
+    fun getCurrentData(): List<TodoTask> {
+        return todoList
     }
 
     fun addTodo() {
-        todoList.add("") // 빈 항목 추가
+        todoList.add(TodoTask(0, "", "", false)) // 새로운 할 일 추가 (기본값 설정)
         notifyItemInserted(todoList.size - 1)
-    }
-
-    private fun hideKeyboard(view: View) {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

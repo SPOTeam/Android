@@ -236,5 +236,6 @@ class NotificationFragment : Fragment() {
                 postContentScrap(data.postId)
             }
         })
+
     }
 }
