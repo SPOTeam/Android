@@ -64,9 +64,11 @@ class TodoListFragment : Fragment() {
 
 
         // 투두 리스트 어댑터 초기화
-        myTodoAdapter = TodoAdapter(requireContext(), mutableListOf()) { content ->
+        myTodoAdapter = TodoAdapter(requireContext(), mutableListOf(), { content ->
             todoViewModel.addTodoItem(studyId, content, selectedDate)
-        }
+        }, { toDoId ->
+            todoViewModel.checkTodoItem(studyId, toDoId) // 체크박스 변경 시 API 호출
+        })
 
         binding.rvMyTodoList.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -88,9 +90,9 @@ class TodoListFragment : Fragment() {
 
         todoViewModel.todoListResponse.observe(viewLifecycleOwner, Observer { response ->
             response?.result?.content?.let { todos: List<TodoTask> ->
-                // 받은 할 일 목록이 있을 경우 RecyclerView 갱신
-                val todoContents = todos.map { it.content }.reversed() // 역순으로 정렬
-                myTodoAdapter.updateData(todoContents)
+                // 받은 할 일 목록을 역순으로 정렬하여 RecyclerView에 갱신
+                val reversedTodos = todos.reversed() // 역순으로 정렬
+                myTodoAdapter.updateData(reversedTodos) // TodoTask 리스트를 그대로 전달
             } ?: run {
                 // 받은 결과가 없거나 비어 있을 경우 빈 리스트로 RecyclerView 갱신
                 myTodoAdapter.updateData(emptyList()) // 빈 리스트 전달하여 RecyclerView 초기화

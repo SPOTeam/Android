@@ -19,6 +19,9 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
     private val _selectedDate = MutableLiveData<String>()
     val selectedDate: LiveData<String> get() = _selectedDate
 
+    private val _checkTodoResponse = MutableLiveData<TodolistResponse?>()
+    val checkTodoResponse: LiveData<TodolistResponse?> get() = _checkTodoResponse
+
     private val todayDate: String
         get() {
             val calendar = Calendar.getInstance()
@@ -55,6 +58,16 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
     fun addTodoItem(studyId: Int, content: String, date: String) {
         repository.addTodoItem(studyId, content, date) { response ->
             _addTodoResponse.postValue(response)
+        }
+    }
+
+    fun checkTodoItem(studyId: Int, toDoId: Int) {
+        repository.checkTodo(studyId, toDoId) { response ->
+            if (response != null && response.isSuccess) {
+                // 성공 시 UI 갱신 또는 데이터 갱신 로딩
+            } else {
+                // 실패 시 에러 처리 로직 추가 가능
+            }
         }
     }
 }

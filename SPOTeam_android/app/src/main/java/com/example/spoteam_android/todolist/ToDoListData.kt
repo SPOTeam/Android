@@ -20,7 +20,7 @@ data class ResultData(
 
 data class TodoTask( // 이름을 TodoTask로 변경
     @SerializedName("id") val id: Int,
-    @SerializedName("content") val content: String,
+    @SerializedName("content") var content: String,
     @SerializedName("date") val date: String,
-    @SerializedName("done") val done: Boolean
+    @SerializedName("done") var done: Boolean
 )

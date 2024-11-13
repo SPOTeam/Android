@@ -11,10 +11,8 @@ class TodoRepository(private val apiService: TodoApiService) {
         val request = TodoRequest(content, date)
         apiService.addTodo(studyId, request).enqueue(object : Callback<TodolistResponse> {
             override fun onResponse(call: Call<TodolistResponse>, response: Response<TodolistResponse>) {
-                Log.d("TodoRepository", "요청 Path - addTodo: ${call.request().url}")
 
                 if (response.isSuccessful) {
-                    Log.d("TodoRepository", "API 응답 성공 - addTodo: ${response.body()}")
                     callback(response.body())
                 } else {
                     logError(response)
@@ -23,7 +21,6 @@ class TodoRepository(private val apiService: TodoApiService) {
             }
 
             override fun onFailure(call: Call<TodolistResponse>, t: Throwable) {
-                Log.e("TodoRepository", "Error creating Todo", t)
                 callback(null)
             }
         })
@@ -62,11 +59,30 @@ class TodoRepository(private val apiService: TodoApiService) {
         }
     }
 
+
+    fun checkTodo(studyId: Int, toDoId: Int, callback: (TodolistResponse?) -> Unit) {
+        apiService.checkTodo(studyId, toDoId).enqueue(object : Callback<TodolistResponse> {
+            override fun onResponse(call: Call<TodolistResponse>, response: Response<TodolistResponse>) {
+                if (response.isSuccessful) {
+                    // 성공 응답 로그
+                    callback(response.body())
+                } else {
+                    // 실패 응답 로그
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<TodolistResponse>, t: Throwable) {
+                // 네트워크 오류나 기타 요청 실패 로그
+                callback(null)
+            }
+        })
+    }
+
+
     // Error logging helper
     private fun logError(response: Response<TodolistResponse>) {
         val errorCode = response.code()
         val errorBody = response.errorBody()?.string()
-        Log.e("TodoRepository", "API 응답 실패: 코드=$errorCode, 메시지=$errorBody")
-        Log.d("TodoRepository", "전체 응답: ${response.raw()}")
     }
 }

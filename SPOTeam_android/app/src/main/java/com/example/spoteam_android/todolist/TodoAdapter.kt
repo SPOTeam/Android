@@ -11,8 +11,9 @@ import com.example.spoteam_android.databinding.TodolistItemBinding
 
 class TodoAdapter(
     private val context: Context,
-    private var todoList: MutableList<String>,
-    private val onAddTodo: (String) -> Unit
+    private var todoList: MutableList<TodoTask>,       // TodoTask 리스트로 변경
+    private val onAddTodo: (String) -> Unit,
+    private val onCheckTodo: (Int) -> Unit            // 체크 시 ID를 전달하는 콜백
 ) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
     inner class TodoViewHolder(val binding: TodolistItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -24,63 +25,66 @@ class TodoAdapter(
     }
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
-        if (position >= todoList.size || todoList.isEmpty()) {
-            // 데이터가 비어 있을 경우 리턴
+        if (todoList.isEmpty()) {
             Toast.makeText(context, "No items to display", Toast.LENGTH_SHORT).show()
             return
         }
 
         val item = todoList[position]
 
-        // 초기 상태 설정
-        holder.binding.cbTodo.text = item
-        holder.binding.cbTodo.visibility = if (item.isEmpty()) View.GONE else View.VISIBLE
-        holder.binding.etTodo.visibility = if (item.isEmpty()) View.VISIBLE else View.GONE
+        // 텍스트 및 체크박스 초기 상태 설정
+        holder.binding.cbTodo.text = item.content
+        holder.binding.cbTodo.visibility = if (item.content.isEmpty()) View.GONE else View.VISIBLE
+        holder.binding.etTodo.visibility = if (item.content.isEmpty()) View.VISIBLE else View.GONE
+        holder.binding.etTodo.setText(item.content)
 
-        holder.binding.etTodo.setText(item)
-
-        holder.binding.etTodo.setOnEditorActionListener { v, actionId, _ ->
+        // EditText 변경 이벤트
+        holder.binding.etTodo.setOnEditorActionListener { _, _, _ ->
             val newText = holder.binding.etTodo.text.toString()
             if (newText.isNotEmpty()) {
-                todoList[position] = newText  // 리스트 항목 업데이트
-                onAddTodo(newText)  // 콜백 실행 (Todo 추가 이벤트)
-                notifyItemChanged(position)  // UI 업데이트
+                todoList[position] = item.copy(content = newText)
+                onAddTodo(newText)
+                holder.binding.etTodo.post { notifyItemChanged(position) }
                 true
             } else {
                 false
             }
         }
 
-        // 체크박스의 초기 체크 상태에 따른 텍스트 스타일 및 색상 설정
-        if (holder.binding.cbTodo.isChecked) {
-            holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        // 체크박스의 초기 상태에 따른 텍스트 스타일 설정
+        holder.binding.cbTodo.paintFlags = if (item.done) {
+            holder.binding.cbTodo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         } else {
-            holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            holder.binding.cbTodo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
 
+        // 기존 리스너 제거 후 체크박스 상태 반영
+        holder.binding.cbTodo.setOnCheckedChangeListener(null)  // 기존 리스너 제거
+        holder.binding.cbTodo.isChecked = item.done             // 체크 상태 반영
         holder.binding.cbTodo.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-            } else {
-                holder.binding.cbTodo.paintFlags = holder.binding.cbTodo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            if (item.done != isChecked) {
+                todoList[position] = item.copy(done = isChecked)   // 상태 업데이트
+                onCheckTodo(item.id)  // 체크 상태 변경 시 콜백 호출
             }
         }
     }
 
+
+
     override fun getItemCount(): Int = todoList.size
 
-    fun updateData(newTodoList: List<String>) {
+    fun updateData(newTodoList: List<TodoTask>) {
         todoList.clear()
         todoList.addAll(newTodoList)
         notifyDataSetChanged() // 데이터 변경 후 RecyclerView 갱신
     }
 
-    fun getCurrentData(): List<String> {
+    fun getCurrentData(): List<TodoTask> {
         return todoList
     }
 
     fun addTodo() {
-        todoList.add("")
+        todoList.add(TodoTask(0, "", "", false)) // 새로운 할 일 추가 (기본값 설정)
         notifyItemInserted(todoList.size - 1)
     }
 }

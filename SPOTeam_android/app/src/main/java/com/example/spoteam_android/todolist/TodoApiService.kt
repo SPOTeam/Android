@@ -21,4 +21,10 @@ interface TodoApiService {
         @Query("size") size: Int,
         @Query("date") date: String
     ): Call<TodolistResponse>
+
+    @POST("/spot/studies/{studyId}/to-do/{toDoId}/check")
+    fun checkTodo(
+        @Path("studyId") studyId: Int,          // URL 경로에 studyId 전달
+        @Path("toDoId") toDoId: Int
+    ): Call<TodolistResponse>
 }
