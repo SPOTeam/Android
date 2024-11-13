@@ -161,21 +161,21 @@ class CounselingFragment : Fragment() {
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
 
-        dataRVAdapter.setItemClickListener(object : CommunityCategoryContentRVAdapter.OnItemClickListener {
-            override fun onItemClick(data: CategoryPagesDetail) {
-                val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-                intent.putExtra("postInfo", data.postId.toString())
-                startActivity(intent)
-            }
-
-            override fun onLikeClick(data: CategoryPagesDetail) {
-                postLike(data.postId)
-            }
-
-            override fun onUnLikeClick(data: CategoryPagesDetail) {
-                deleteLike(data.postId)
-            }
-
-        })
+//        dataRVAdapter.setItemClickListener(object : CommunityCategoryContentRVAdapter.OnItemClickListener {
+//            override fun onItemClick(data: CategoryPagesDetail) {
+//                val intent = Intent(requireContext(), CommunityContentActivity::class.java)
+//                intent.putExtra("postInfo", data.postId.toString())
+//                startActivity(intent)
+//            }
+//
+//            override fun onLikeClick(data: CategoryPagesDetail) {
+//                postLike(data.postId)
+//            }
+//
+//            override fun onUnLikeClick(data: CategoryPagesDetail) {
+//                deleteLike(data.postId)
+//            }
+//
+//        })
     }
 }

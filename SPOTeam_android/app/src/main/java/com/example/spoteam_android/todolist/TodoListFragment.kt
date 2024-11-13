@@ -33,6 +33,8 @@ class TodoListFragment : Fragment() {
     private lateinit var eventAdapter: EventAdapter
     private var selectedDate: String = "" // 선택된 날짜를 저장할 변수
     private var selectedImageView: ImageView? = null
+    private val eventViewModel: EventViewModel by activityViewModels()
+    private lateinit var eventsRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,16 +54,21 @@ class TodoListFragment : Fragment() {
         selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
 
         // 이벤트 RecyclerView 초기화
-        binding.eventrecyclerviewto.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            eventAdapter = EventAdapter(emptyList(), { /* 클릭 이벤트 처리 (필요시 추가) */ }, true)
-            adapter = eventAdapter
-        }
+        eventAdapter = EventAdapter(emptyList(), { /* 클릭 이벤트 처리 (필요시 추가) */ }, true)
+        binding.eventrecyclerviewto.layoutManager = LinearLayoutManager(requireContext())
+        binding.eventrecyclerviewto.adapter = eventAdapter
+
+        eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
+            eventAdapter.updateEvents(events)
+        })
+
 
         // 투두 리스트 어댑터 초기화
-        myTodoAdapter = TodoAdapter(requireContext(), mutableListOf()) { content ->
+        myTodoAdapter = TodoAdapter(requireContext(), mutableListOf(), { content ->
             todoViewModel.addTodoItem(studyId, content, selectedDate)
-        }
+        }, { toDoId ->
+            todoViewModel.checkTodoItem(studyId, toDoId) // 체크박스 변경 시 API 호출
+        })
 
         binding.rvMyTodoList.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -83,9 +90,9 @@ class TodoListFragment : Fragment() {
 
         todoViewModel.todoListResponse.observe(viewLifecycleOwner, Observer { response ->
             response?.result?.content?.let { todos: List<TodoTask> ->
-                // 받은 할 일 목록이 있을 경우 RecyclerView 갱신
-                val todoContents = todos.map { it.content }.reversed() // 역순으로 정렬
-                myTodoAdapter.updateData(todoContents)
+                // 받은 할 일 목록을 역순으로 정렬하여 RecyclerView에 갱신
+                val reversedTodos = todos.reversed() // 역순으로 정렬
+                myTodoAdapter.updateData(reversedTodos) // TodoTask 리스트를 그대로 전달
             } ?: run {
                 // 받은 결과가 없거나 비어 있을 경우 빈 리스트로 RecyclerView 갱신
                 myTodoAdapter.updateData(emptyList()) // 빈 리스트 전달하여 RecyclerView 초기화
@@ -189,15 +196,28 @@ class TodoListFragment : Fragment() {
 
     private fun setupRecyclerViews(studyId: Int) {
         val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1
         selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
 
         // 날짜 RecyclerView 설정
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvDates.layoutManager = layoutManager
 
+        val day = selectedDate.split("-")[2].toInt()
+
+        // EventViewModel을 사용하여 선택한 날짜의 일정을 로드
+        eventViewModel.loadEvents(year, month, day)
+
+        // 이벤트 로드 후, UI에 업데이트
+        eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
+            eventAdapter.updateEvents(events)
+        })
+
         val dates = (1..31).map { DateItem(it.toString(), it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()) }
         dateAdapter = DateAdapter(dates) { date ->
             selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-$date"
+            loadEventsForSelectedDate()
             todoViewModel.onDateChanged(selectedDate)
         }
         binding.rvDates.adapter = dateAdapter
@@ -219,5 +239,13 @@ class TodoListFragment : Fragment() {
         selectedImageView?.setBackgroundResource(0)
         imageView.setBackgroundResource(R.drawable.selected_border_blue)  // 선택된 ImageView에 파란 테두리 설정
         selectedImageView = imageView  // 현재 선택된 ImageView 업데이트
+    }
+
+    private fun loadEventsForSelectedDate() {
+        val parts = selectedDate.split("-")
+        val year = parts[0].toInt()
+        val month = parts[1].toInt()
+        val day = parts[2].toInt()
+        eventViewModel.loadEvents(year, month, day) // EventViewModel에서 이벤트 로드 요청
     }
 }

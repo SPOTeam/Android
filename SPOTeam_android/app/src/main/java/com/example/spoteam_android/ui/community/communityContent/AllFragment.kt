@@ -151,8 +151,9 @@ class AllFragment : Fragment() {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
     }
 
-    private fun initRecyclerview(pageContent : List<CategoryPagesDetail>){
-        binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    private fun initRecyclerview(pageContent : List<CategoryPagesDetail>) {
+        binding.communityCategoryContentRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         val reversedPageContent = pageContent.reversed()
 
@@ -161,20 +162,21 @@ class AllFragment : Fragment() {
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
 
-        dataRVAdapter.setItemClickListener(object : CommunityCategoryContentRVAdapter.OnItemClickListener {
-            override fun onItemClick(data: CategoryPagesDetail) {
-                val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-                intent.putExtra("postInfo", data.postId.toString())
-                startActivity(intent)
-            }
-
-            override fun onLikeClick(data: CategoryPagesDetail) {
-                postLike(data.postId)
-            }
-
-            override fun onUnLikeClick(data: CategoryPagesDetail) {
-                deleteLike(data.postId)
-            }
-        })
+//        dataRVAdapter.setItemClickListener(object : CommunityCategoryContentRVAdapter.OnItemClickListener {
+//            override fun onItemClick(data: CategoryPagesDetail) {
+//                val intent = Intent(requireContext(), CommunityContentActivity::class.java)
+//                intent.putExtra("postInfo", data.postId.toString())
+//                startActivity(intent)
+//            }
+//
+//            override fun onLikeClick(data: CategoryPagesDetail) {
+//                postLike(data.postId)
+//            }
+//
+//            override fun onUnLikeClick(data: CategoryPagesDetail) {
+//                deleteLike(data.postId)
+//            }
+//        })
+//    }
     }
 }
