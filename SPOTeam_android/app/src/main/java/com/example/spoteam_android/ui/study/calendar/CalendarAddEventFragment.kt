@@ -282,6 +282,18 @@ class CalendarAddEventFragment : Fragment() {
             datePickerDialog.datePicker.maxDate = startCalendar.timeInMillis
         }
 
+        if (!isStart && period == "WEEKLY") {
+            val startParts = startDateTime.split(" ", "-", ":")
+            val startCalendar = Calendar.getInstance().apply {
+                set(startParts[0].toInt(), startParts[1].toInt() - 1, startParts[2].toInt())
+            }
+            val maxEndCalendar = (startCalendar.clone() as Calendar).apply {
+                add(Calendar.DAY_OF_MONTH, 7) // 시작 날짜 기준으로 7일 후
+            }
+            datePickerDialog.datePicker.minDate = startCalendar.timeInMillis
+            datePickerDialog.datePicker.maxDate = maxEndCalendar.timeInMillis
+        }
+
         datePickerDialog.show()
     }
 
