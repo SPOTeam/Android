@@ -60,6 +60,8 @@ class CalendarAddEventFragment : Fragment() {
     private var startDateTime = ""
     private var endDateTime = ""
     private var isAllDay = false
+    private var isStartDateSet = false
+    private var isEndDateSet = false
 
 
     private val eventViewModel: EventViewModel by activityViewModels()
@@ -119,14 +121,10 @@ class CalendarAddEventFragment : Fragment() {
                 endYearTx.visibility = View.GONE
                 endTimeTx.visibility = View.GONE
             } else {
-
                 resetDateTimeFields()
-
                 // 종료 시간 TextView 및 가이드 표시
                 endDateTimeTextView.visibility = View.VISIBLE
                 txEndGuide.visibility = View.VISIBLE
-
-
             }
         }
 
@@ -144,8 +142,8 @@ class CalendarAddEventFragment : Fragment() {
                     return
                 }
 
-//                 Spinner의 선택에 따라 period 값을 설정
-                period = when (position) {
+                // Spinner의 선택에 따라 period 값을 설정
+                val newPeriod = when (position) {
                     0 -> "NONE"
                     1 -> "DAILY"
                     2 -> "WEEKLY"
@@ -153,13 +151,21 @@ class CalendarAddEventFragment : Fragment() {
                     4 -> "MONTHLY"
                     else -> "NONE"
                 }
+
+                // period가 변경되었는지 확인
+                if (newPeriod != period) {
+                    period = newPeriod
+                    resetDateTimeFields() // 날짜 및 시간 관련 View 초기화
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // 선택되지 않았을 때 기본값 설정
                 period = "NONE"
+                resetDateTimeFields() // 기본값으로 초기화
             }
         }
+
 
 
         eventTitleEditText.addTextChangedListener(object : TextWatcher {
@@ -226,76 +232,123 @@ class CalendarAddEventFragment : Fragment() {
                     // 시작 날짜 및 시간 설정
                     startDateTime = "$selectedDate 00:00"
                     txYear.text = String.format("%04d.%02d.%02d", selectedYear, selectedMonth + 1, selectedDay)
+
+                    if (isAllDay) {
+                        // All Day가 체크된 경우 시간 기본값 설정 및 TimePickerDialog 생략
+                        txTime.text = "00:00 am" // 기본 시작 시간
+                        isStartDateSet = true // 시작 날짜 설정 완료
+                        updateSaveButtonState() // 버튼 상태 업데이트
+                    } else {
+                        // All Day가 체크되지 않은 경우 TimePickerDialog 표시
+                        showTimePickerDialog(selectedDate, txTime, isStart)
+                    }
                 } else {
-                    // 종료 날짜 설정 (endDateTime 유효성 확인)
+                    // 종료 날짜 설정
                     val endTime = if (endDateTime.isNotEmpty() && endDateTime.contains(" ")) {
                         endDateTime.split(" ")[1] // 기존 종료 시간 유지
                     } else {
-                        "23:59" // 기본 값
+                        "23:59" // 기본 종료 시간
                     }
                     endDateTime = "$selectedDate $endTime"
                     txYear.text = String.format("%04d.%02d.%02d", selectedYear, selectedMonth + 1, selectedDay)
+
+                    if (isAllDay) {
+                        // All Day가 체크된 경우 시간 기본값 설정 및 TimePickerDialog 생략
+                        txTime.text = "11:59 pm" // 기본 종료 시간
+                        isEndDateSet = true // 종료 날짜 설정 완료
+                        updateSaveButtonState() // 버튼 상태 업데이트
+                    } else {
+                        // All Day가 체크되지 않은 경우 TimePickerDialog 표시
+                        showTimePickerDialog(selectedDate, txTime, isStart)
+                    }
                 }
 
-                // TimePickerDialog 열기
-                val timePickerDialog = TimePickerDialog(
-                    requireContext(),
-                    { _, selectedHourOfDay, selectedMinute ->
-                        val isAm = selectedHourOfDay < 12
-                        val amPm = if (isAm) "am" else "pm"
-                        val hourFormatted =
-                            if (selectedHourOfDay % 12 == 0) 12 else selectedHourOfDay % 12
-
-                        val formattedTime = String.format("%02d:%02d %s", hourFormatted, selectedMinute, amPm)
-
-                        if (isStart) {
-                            startDateTime = String.format("%s %02d:%02d", selectedDate, selectedHourOfDay, selectedMinute)
-                            txTime.text = formattedTime
-                        } else {
-                            endDateTime = String.format("%s %02d:%02d", selectedDate, selectedHourOfDay, selectedMinute)
-                            txTime.text = formattedTime
-                        }
-
-                        // Visibility 업데이트
-                        if (isStart) {
-                            startYearTx.visibility = View.VISIBLE
-                            startTimeTx.visibility = View.VISIBLE
-                        } else {
-                            endYearTx.visibility = View.VISIBLE
-                            endTimeTx.visibility = View.VISIBLE
-                        }
-                    },
-                    calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false
-                )
-                timePickerDialog.show()
+                // Visibility 업데이트
+                if (isStart) {
+                    startYearTx.visibility = View.VISIBLE
+                    startTimeTx.visibility = View.VISIBLE
+                } else {
+                    endYearTx.visibility = View.VISIBLE
+                    endTimeTx.visibility = View.VISIBLE
+                }
             },
             year, month, day
         )
 
-        // 종료 날짜 선택 시 제한 적용
-        if (!isStart && period == "DAILY") {
-            val startParts = startDateTime.split(" ", "-", ":")
-            val startCalendar = Calendar.getInstance().apply {
-                set(startParts[0].toInt(), startParts[1].toInt() - 1, startParts[2].toInt())
-            }
-            datePickerDialog.datePicker.minDate = startCalendar.timeInMillis
-            datePickerDialog.datePicker.maxDate = startCalendar.timeInMillis
-        }
-
-        if (!isStart && period == "WEEKLY") {
-            val startParts = startDateTime.split(" ", "-", ":")
-            val startCalendar = Calendar.getInstance().apply {
-                set(startParts[0].toInt(), startParts[1].toInt() - 1, startParts[2].toInt())
-            }
-            val maxEndCalendar = (startCalendar.clone() as Calendar).apply {
-                add(Calendar.DAY_OF_MONTH, 7) // 시작 날짜 기준으로 7일 후
-            }
-            datePickerDialog.datePicker.minDate = startCalendar.timeInMillis
-            datePickerDialog.datePicker.maxDate = maxEndCalendar.timeInMillis
+        // 종료 날짜 제한 적용
+        if (!isStart) {
+            applyDateRestrictions(datePickerDialog)
         }
 
         datePickerDialog.show()
     }
+
+    // TimePickerDialog를 분리하여 가독성 개선
+    private fun showTimePickerDialog(selectedDate: String, txTime: TextView, isStart: Boolean) {
+        val calendar = Calendar.getInstance()
+        val timePickerDialog = TimePickerDialog(
+            requireContext(),
+            { _, selectedHourOfDay, selectedMinute ->
+                val isAm = selectedHourOfDay < 12
+                val amPm = if (isAm) "am" else "pm"
+                val hourFormatted =
+                    if (selectedHourOfDay % 12 == 0) 12 else selectedHourOfDay % 12
+
+                val formattedTime = String.format("%02d:%02d %s", hourFormatted, selectedMinute, amPm)
+
+                if (isStart) {
+                    startDateTime = String.format("%s %02d:%02d", selectedDate, selectedHourOfDay, selectedMinute)
+                    txTime.text = formattedTime
+                    isStartDateSet = true // 시작 날짜 설정 완료
+                } else {
+                    endDateTime = String.format("%s %02d:%02d", selectedDate, selectedHourOfDay, selectedMinute)
+                    txTime.text = formattedTime
+                    isEndDateSet = true // 종료 날짜 설정 완료
+                }
+
+                updateSaveButtonState() // 버튼 상태 업데이트
+            },
+            calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false
+        )
+        timePickerDialog.show()
+    }
+
+    // 종료 날짜 제한 로직
+    private fun applyDateRestrictions(datePickerDialog: DatePickerDialog) {
+        val startParts = startDateTime.split(" ", "-", ":")
+        val startCalendar = Calendar.getInstance().apply {
+            set(startParts[0].toInt(), startParts[1].toInt() - 1, startParts[2].toInt())
+        }
+
+        when (period) {
+            "DAILY" -> {
+                datePickerDialog.datePicker.minDate = startCalendar.timeInMillis
+                datePickerDialog.datePicker.maxDate = startCalendar.timeInMillis
+            }
+            "WEEKLY" -> {
+                val maxEndCalendar = (startCalendar.clone() as Calendar).apply {
+                    add(Calendar.DAY_OF_MONTH, 7)
+                }
+                datePickerDialog.datePicker.minDate = startCalendar.timeInMillis
+                datePickerDialog.datePicker.maxDate = maxEndCalendar.timeInMillis
+            }
+            "BIWEEKLY" -> {
+                val maxEndCalendar = (startCalendar.clone() as Calendar).apply {
+                    add(Calendar.DAY_OF_MONTH, 7)
+                }
+                datePickerDialog.datePicker.minDate = startCalendar.timeInMillis
+                datePickerDialog.datePicker.maxDate = maxEndCalendar.timeInMillis
+            }
+            "MONTHLY" -> {
+                val maxEndCalendar = (startCalendar.clone() as Calendar).apply {
+                    add(Calendar.DAY_OF_MONTH, 30)
+                }
+                datePickerDialog.datePicker.minDate = startCalendar.timeInMillis
+                datePickerDialog.datePicker.maxDate = maxEndCalendar.timeInMillis
+            }
+        }
+    }
+
 
 
 
@@ -408,7 +461,8 @@ class CalendarAddEventFragment : Fragment() {
         val isTitleValid = eventTitleEditText.text.isNotEmpty()
         val isPositionValid = eventPositionEditText.text.isNotEmpty()
 
-        saveButton.isEnabled = isTitleValid && isPositionValid
+        // 모든 조건이 만족되는 경우에만 saveButton 활성화
+        saveButton.isEnabled = isTitleValid && isPositionValid && isStartDateSet  && isEndDateSet
     }
 
     private fun clearFocusFromEditTexts() {
@@ -440,5 +494,9 @@ class CalendarAddEventFragment : Fragment() {
         startTimeTx.visibility = View.GONE
         endYearTx.visibility = View.GONE
         endTimeTx.visibility = View.GONE
+
+        isStartDateSet = false // 초기화
+        isEndDateSet = false   // 초기화
+        updateSaveButtonState()
     }
 }
