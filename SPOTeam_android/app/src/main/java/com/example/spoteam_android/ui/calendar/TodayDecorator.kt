@@ -24,13 +24,13 @@ class TodayDecorator(
     }
 
     override fun decorate(view: DayViewFacade) {
-        if (selectedDate == today) {
-            // 오늘 날짜가 선택된 경우 흰색으로 표시
-            view.addSpan(ForegroundColorSpan(whiteColor))
-        } else {
-            // 오늘 날짜가 선택되지 않았을 경우 파란색으로 표시
-            view.addSpan(ForegroundColorSpan(activeBlueColor))
-        }
+//        if (selectedDate == today) {
+//            // 오늘 날짜가 선택된 경우 흰색으로 표시
+//            view.addSpan(ForegroundColorSpan(whiteColor))
+//        } else {
+//            // 오늘 날짜가 선택되지 않았을 경우 파란색으로 표시
+//            view.addSpan(ForegroundColorSpan(activeBlueColor))
+//        }
         view.addSpan(StyleSpan(Typeface.BOLD)) // 굵게 표시
     }
 
@@ -38,5 +38,6 @@ class TodayDecorator(
     fun setSelectedDate(date: CalendarDay?) {
         selectedDate = date
     }
-}
 
+
+}

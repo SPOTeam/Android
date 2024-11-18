@@ -1,4 +1,3 @@
-
 package com.example.spoteam_android.ui.calendar
 
 object EventRepository {
