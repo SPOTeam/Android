@@ -1,5 +1,7 @@
 package com.example.spoteam_android.ui.calendar
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +13,8 @@ import com.example.spoteam_android.R
 class EventAdapter(
     private var events: List<Event>,
     private val onCheckClick: (Event) -> Unit,
-    private val isTodoList: Boolean
+    private val isTodoList: Boolean,
+    private var selectedDate: String = "" // 추가된 필드: 선택된 날짜 정보
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -21,10 +24,15 @@ class EventAdapter(
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
-        holder.bind(event)
+        holder.bind(event, selectedDate)
     }
 
     override fun getItemCount(): Int = events.size
+
+    fun updateSelectedDate(newSelectedDate: String) {
+        selectedDate = newSelectedDate
+        notifyDataSetChanged() // 선택된 날짜가 변경되면 어댑터 갱신
+    }
 
     fun updateEvents(newEvents: List<Event>) {
         events = newEvents
@@ -37,21 +45,71 @@ class EventAdapter(
         private val isTodoList: Boolean
     ) : RecyclerView.ViewHolder(itemView) {
         private val eventTitleTextView: TextView = itemView.findViewById(R.id.eventTitleTextView)
-        private val eventStartdate: TextView = itemView.findViewById(R.id.startDate)
-        private val eventEndtdate: TextView = itemView.findViewById(R.id.enddate)
+        private val eventTimeTextView: TextView = itemView.findViewById(R.id.eventTimeTextView)
         private val icCheck: ImageView = itemView.findViewById(R.id.ic_check)
 
-        fun bind(event: Event) {
+        @SuppressLint("DefaultLocale")
+        fun bind(event: Event, selectedDate: String) {
             eventTitleTextView.text = event.title
-            eventStartdate.text = event.startDateTime
-            eventEndtdate.text = event.endDateTime
 
+            if (selectedDate.isNotEmpty()) {
+                println("현재 선택된 날짜: $selectedDate")
+            }
+
+            // 이벤트의 날짜 정보를 yyyy-MM-dd 형식으로 변환
+            val eventStartDate = String.format("%04d-%02d-%02d", event.startYear, event.startMonth, event.startDay)
+            val eventEndDate = String.format("%04d-%02d-%02d", event.endYear, event.endMonth, event.endDay)
+
+            eventTimeTextView.text = when (event.period) {
+
+                "NONE" -> {
+                    if (isSingleDayEvent(event)) {
+                        "${event.startDateTime} ~ ${event.endDateTime}"
+                    } else {
+                        when {
+                            selectedDate == eventStartDate -> "${event.startDateTime} 시작"
+                            selectedDate == eventEndDate -> "${event.endDateTime} 종료"
+                            selectedDate > eventStartDate && selectedDate < eventEndDate -> "하루종일"
+                            else -> ""
+                        }
+                    }
+                }
+                "DAILY" -> {
+                    "${event.startDateTime} ~ ${event.endDateTime}"
+                }
+                "WEEKLY" -> {
+                    "${event.startDateTime} ~ ${event.endDateTime}"
+                }
+                "BIWEEKLY" -> {
+                    "${event.startDateTime} ~ ${event.endDateTime}"
+                }
+                "MONTHLY" -> {
+                    "${event.startDateTime} ~ ${event.endDateTime}"
+                }
+                else -> {
+                    "${event.startDateTime} ~ ${event.endDateTime}"
+                }
+            }
+            if (event.isAllDay) {
+                eventTimeTextView.text = "하루종일"
+            }
+
+
+
+            // 체크 아이콘 visibility 설정
             icCheck.visibility = if (isTodoList) View.GONE else View.VISIBLE
 
-
+            // 클릭 이벤트 설정
             icCheck.setOnClickListener {
                 onCheckClick(event)
             }
+        }
+
+        // 하루 일정인지 확인하는 함수
+        private fun isSingleDayEvent(event: Event): Boolean {
+            return event.startYear == event.endYear &&
+                    event.startMonth == event.endMonth &&
+                    event.startDay == event.endDay
         }
     }
 }

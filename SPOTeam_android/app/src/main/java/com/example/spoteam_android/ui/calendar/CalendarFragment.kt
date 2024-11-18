@@ -63,6 +63,12 @@ class CalendarFragment : Fragment() {
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
 
         calendarView = binding.calendarView
+        todayDecorator = TodayDecorator(requireContext())
+        selectedDateDecorator = TodayDecorator(requireContext())
+
+        // Decorator 추가
+        calendarView.addDecorator(todayDecorator)
+        calendarView.addDecorator(selectedDateDecorator)
 
 
         start = arguments?.getString("my_start")
@@ -71,12 +77,18 @@ class CalendarFragment : Fragment() {
         Log.d("CalendarFragment", "Received startDateTime: $start")
 
         // 초기 진입 시 오늘 날짜 이벤트 로드
-//        val calendar = Calendar.getInstance()
-//        val year = calendar.get(Calendar.YEAR)
-//        val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
-//        val day = calendar.get(Calendar.DAY_OF_MONTH)
-//
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
         val studyId = studyViewModel.studyId.value ?: 0
+
+        fetchGetSchedule(studyId, year, month) {
+            eventViewModel.loadEvents(year, month, day)
+        }
+
+
 
 
         start?.let { dateStr ->
@@ -96,9 +108,11 @@ class CalendarFragment : Fragment() {
                     calendar.get(Calendar.DAY_OF_MONTH)
                 )
 
+
                 // 캘린더를 해당 날짜로 이동하고, 선택 상태로 설정합니다.
-                    calendarView.setCurrentDate(calendarDay)
+                calendarView.setCurrentDate(calendarDay)
                 calendarView.setSelectedDate(calendarDay)
+                calendarView.invalidateDecorators() // Decorator 강제 갱신
 
                 fetchGetSchedule(studyId, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1) {
                     eventViewModel.loadEvents(
@@ -115,12 +129,7 @@ class CalendarFragment : Fragment() {
         }
 
         // TodayDecorator를 CalendarView에 추가
-        todayDecorator = TodayDecorator(requireContext())
-        selectedDateDecorator = TodayDecorator(requireContext())
 
-        // Decorator 추가
-        calendarView.addDecorator(todayDecorator)
-        calendarView.addDecorator(selectedDateDecorator)
         addButton = binding.addButton
 
         eventsRecyclerView = binding.eventrecyclerview
@@ -175,11 +184,12 @@ class CalendarFragment : Fragment() {
                 val day = date.day
 
                 val studyId = studyViewModel.studyId.value ?: 0
+                val selectedDate = String.format("%04d-%02d-%02d", year, month, day)
+                eventAdapter.updateSelectedDate(selectedDate)
 
                 todayDecorator.setSelectedDate(date)
                 selectedDateDecorator.setSelectedDate(date)
                 calendarView.invalidateDecorators() // Decorator 강제 갱신
-
 
                 fetchGetSchedule(studyId, year, month) {
                     eventViewModel.loadEvents(year, month, day)
@@ -205,7 +215,6 @@ class CalendarFragment : Fragment() {
 
     private fun fetchGetSchedule(studyId: Int, year: Int, month: Int, onComplete: () -> Unit) {
 
-        val scheduleBoard = binding.eventrecyclerview
         val EventItems = arrayListOf<Event>()
         val service = RetrofitInstance.retrofit.create(CalendarApiService::class.java)
 
@@ -220,11 +229,12 @@ class CalendarFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
+                    Log.d("CalendarFragment","$apiResponse" )
 
                     if (apiResponse?.isSuccess == true) {
+
                         apiResponse.result.scheduleList.forEach { schedule ->
                             val eventItem = Event(
-
                                 id = schedule.scheduleId,
                                 title = schedule.title,
                                 startYear = schedule.startedAt.substring(0, 4).toInt(),
@@ -237,9 +247,8 @@ class CalendarFragment : Fragment() {
                                 endDay = schedule.finishedAt.substring(8, 10).toInt(),
                                 endHour = schedule.finishedAt.substring(11, 13).toInt(),
                                 endMinute = schedule.finishedAt.substring(14, 16).toInt(),
-//                                    schedule.period
-//                                    schedule.isAllDay
-//                                    schedule.location
+                                period = schedule.period,
+                                isAllDay = schedule.isAllDay
                             )
 
                             EventItems.add(eventItem)
@@ -249,7 +258,6 @@ class CalendarFragment : Fragment() {
                     } else {
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                     }
-                } else {
                 }
             }
 

@@ -15,7 +15,10 @@ data class Event(
     val endDay: Int,
     val endHour: Int,
     val endMinute: Int,
+    val period: String = "NONE",
+    val isAllDay: Boolean = false
 ) {
+
     // 시작 시간 AM/PM 형식으로 반환
     val startDateTime: String
         get() = formatTime(startYear, startMonth, startDay, startHour, startMinute)
@@ -35,4 +38,5 @@ data class Event(
 
         return String.format("%02d:%02d%s", hourFormatted, minute, amPm)
     }
+
 }
