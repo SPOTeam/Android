@@ -22,6 +22,7 @@ androidx_lifecycle_runtime_ktx = "2.6.1"
 kotlinx_coroutines_android = "1.7.0"
 splashscreen = "1.0.1"
 room = "2.5.0"  # Room 버전
+androidx-security = "1.1.0-alpha04"
 
 
 
@@ -34,6 +35,7 @@ roomCommon = "2.6.1"
 roomKtx = "2.6.1"
 
 [libraries]
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidx-security" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
 circleimageview = { group = "de.hdodenhof", name = "circleimageview", version = "3.1.0" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

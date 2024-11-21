@@ -46,15 +46,40 @@ class AuthInterceptor(private val context: Context) : Interceptor {
         }
         return response
     }
+    private fun getNewTokens(refreshToken: String): TokenResult? {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://www.teamspot.site/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val authApi = retrofit.create(AuthApiService::class.java)
+        val response = authApi.refreshToken(refreshToken).execute()
+
+        return if (response.isSuccessful) {
+            val body = response.body()
+            if (body?.isSuccess == true) {
+//                Log.d("AuthInterceptor", "Token refresh succeeded: ${body.result}")
+                body.result
+            } else {
+                Log.e("AuthInterceptor", "Token refresh failed: code: ${body?.code}, message: ${body?.message}")
+                if (body?.code == "COMMON4009") {
+                    handleInvalidRefreshToken()  // 유효하지 않은 경우 재로그인
+                }
+                null
+            }
+        } else {
+            Log.e("AuthInterceptor", "Token refresh request failed with code: ${response.code()}, errorBody: ${response.errorBody()?.string()}")
+            null
+        }
+    }
+
 
     private fun refreshToken(): String? {
         val refreshToken = getRefreshTokenFromPreferences()
         return refreshToken?.let {
             val newTokens = getNewTokens(it)
             if (newTokens != null) {
-                // 새로 받은 accessToken과 refreshToken을 SharedPreferences에 저장
                 saveTokensToPreferences(newTokens.accessToken, newTokens.refreshToken)
-                // RetrofitInstance에 새로운 accessToken 설정
                 RetrofitInstance.setAuthToken(newTokens.accessToken)
                 newTokens.accessToken
             } else {
@@ -68,6 +93,11 @@ class AuthInterceptor(private val context: Context) : Interceptor {
         val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
         return email?.let { sharedPreferences.getString("${it}_accessToken", null) }
+    }
+    private fun getRefreshTokenFromPreferences(): String? {
+        val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+        return email?.let { sharedPreferences.getString("${it}_refreshToken", null) }
     }
 
     private fun saveAccessTokenToPreferences(accessToken: String) {
@@ -89,40 +119,13 @@ class AuthInterceptor(private val context: Context) : Interceptor {
         }
     }
 
-    private fun getNewTokens(refreshToken: String): TokenResult? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val authApi = retrofit.create(AuthApiService::class.java)
-        val response = authApi.refreshToken(refreshToken).execute()
-
-        return if (response.isSuccessful) {
-            val body = response.body()
-            if (body?.isSuccess == true) {
-                Log.d("AuthInterceptor", "Token refresh succeeded: ${body.result}")
-                body.result
-            } else {
-                Log.e("AuthInterceptor", "Token refresh failed: code: ${body?.code}, message: ${body?.message}")
-                if (body?.code == "COMMON4009") {
-                    handleInvalidRefreshToken()  // 유효하지 않은 경우 재로그인
-                }
-                null
-            }
-        } else {
-            Log.e("AuthInterceptor", "Token refresh request failed with code: ${response.code()}, errorBody: ${response.errorBody()?.string()}")
-            null
-        }
-    }
-
 
     private fun handleInvalidRefreshToken() {
         // SharedPreferences에 저장된 로그인 정보 지우기
         val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         sharedPreferences.edit().clear().apply()
 
-        // 로그인 화면으로 이동하면서 기존 액티비티 스택 제거
+        // 앱 내 데이터 초기화 및 오류 발생시 및 스택 모두 제거하고 로그인화면으로 이동 (현재는 회원가입 화면)
         val intent = Intent(context, StartLoginActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -132,9 +135,4 @@ class AuthInterceptor(private val context: Context) : Interceptor {
 
 
 
-    private fun getRefreshTokenFromPreferences(): String? {
-        val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("currentEmail", null)
-        return email?.let { sharedPreferences.getString("${it}_refreshToken", null) }
-    }
 }
