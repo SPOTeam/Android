@@ -3,11 +3,13 @@ package com.example.spoteam_android.todolist
 import StudyViewModel
 import android.graphics.Paint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,8 +20,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentTodoListBinding
+import com.example.spoteam_android.ui.calendar.CalendarApiService
+import com.example.spoteam_android.ui.calendar.Event
 import com.example.spoteam_android.ui.calendar.EventAdapter
+import com.example.spoteam_android.ui.calendar.EventDecorator
 import com.example.spoteam_android.ui.calendar.EventViewModel
+import com.example.spoteam_android.ui.calendar.ScheduleResponse
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Calendar
 
 class TodoListFragment : Fragment() {
@@ -57,6 +67,25 @@ class TodoListFragment : Fragment() {
         eventAdapter = EventAdapter(emptyList(), { /* 클릭 이벤트 처리 (필요시 추가) */ }, true)
         binding.eventrecyclerviewto.layoutManager = LinearLayoutManager(requireContext())
         binding.eventrecyclerviewto.adapter = eventAdapter
+
+//        eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
+//            eventAdapter.updateEvents(events)
+//        })
+
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        fetchGetSchedule(studyId, year, month) {
+            eventViewModel.loadEvents(year, month, day)
+
+            // 어댑터와 데코레이터 갱신 추가
+            val selectedDate = String.format("%04d-%02d-%02d", year, month, day)
+            eventAdapter.updateSelectedDate(selectedDate)
+
+            // 어댑터 데이터 갱신
+            eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
+        }
 
         eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
             eventAdapter.updateEvents(events)
@@ -247,5 +276,65 @@ class TodoListFragment : Fragment() {
         val month = parts[1].toInt()
         val day = parts[2].toInt()
         eventViewModel.loadEvents(year, month, day) // EventViewModel에서 이벤트 로드 요청
+    }
+
+    private fun fetchGetSchedule(studyId: Int, year: Int, month: Int, onComplete: () -> Unit) {
+
+        val EventItems = arrayListOf<Event>()
+        val service = RetrofitInstance.retrofit.create(CalendarApiService::class.java)
+
+        service.GetScheuled(
+            studyId = studyId,
+            year = year,
+            month = month,
+        ).enqueue(object : Callback<ScheduleResponse> {
+            override fun onResponse(
+                call: Call<ScheduleResponse>,
+                response: Response<ScheduleResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    Log.d("CalendarFragment", "$apiResponse")
+
+                    if (apiResponse?.isSuccess == true) {
+                        // EventItems 데이터 로드
+                        apiResponse.result.scheduleList.forEach { schedule ->
+                            val eventItem = Event(
+                                id = schedule.scheduleId,
+                                title = schedule.title,
+                                startYear = schedule.startedAt.substring(0, 4).toInt(),
+                                startMonth = schedule.startedAt.substring(5, 7).toInt(),
+                                startDay = schedule.startedAt.substring(8, 10).toInt(),
+                                startHour = schedule.startedAt.substring(11, 13).toInt(),
+                                startMinute = schedule.startedAt.substring(14, 16).toInt(),
+                                endYear = schedule.finishedAt.substring(0, 4).toInt(),
+                                endMonth = schedule.finishedAt.substring(5, 7).toInt(),
+                                endDay = schedule.finishedAt.substring(8, 10).toInt(),
+                                endHour = schedule.finishedAt.substring(11, 13).toInt(),
+                                endMinute = schedule.finishedAt.substring(14, 16).toInt(),
+                                period = schedule.period,
+                                isAllDay = schedule.isAllDay
+                            )
+                            EventItems.add(eventItem)
+                        }
+
+                        Log.d("fetchGetSchedule", "Loaded Events: $EventItems")
+
+                        // ViewModel 및 Adapter에 데이터 업데이트
+                        eventViewModel.updateEvents(EventItems)
+                        eventAdapter.updateEvents(EventItems)
+
+                        // 콜백 호출
+                        onComplete()
+                    } else {
+                        Log.d("fetchGetSchedule", "No matching events found")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ScheduleResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 }
