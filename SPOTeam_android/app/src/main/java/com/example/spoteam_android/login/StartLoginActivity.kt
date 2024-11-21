@@ -9,12 +9,15 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import com.example.spoteam_android.KaKaoResult
 import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.NaverResult
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.checklist.CheckListCategoryActivity
 import com.example.spoteam_android.databinding.ActivityStartLoginBinding
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.OAuthLoginCallback
 
 class StartLoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartLoginBinding
@@ -47,9 +50,8 @@ class StartLoginActivity : AppCompatActivity() {
                 }
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             } else if (token != null) {
-                Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "카카오 로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                 loginViewModel.sendTokenToServer(token.accessToken)
-                Log.d("Token_Success", token.accessToken)
             }
         }
 
@@ -61,6 +63,11 @@ class StartLoginActivity : AppCompatActivity() {
             }
         }
 
+        // 네이버 로그인 버튼 클릭 시 네이버 로그인 시작
+        binding.itemLogoNaverIb.setOnClickListener {
+            startNaverLogin()
+        }
+
         binding.activityStartLoginNextBt.setOnClickListener {
             val loginIntent = Intent(this, NormalLoginActivity::class.java)
             startActivity(loginIntent)
@@ -69,17 +76,16 @@ class StartLoginActivity : AppCompatActivity() {
 
     private fun checkIfAlreadyLoggedIn() {
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-        val email = sharedPreferences.getString("currentEmail", null)  // currentEmail 가져오기
+        val email = sharedPreferences.getString("currentEmail", null)
         val isLoggedIn = email?.let { sharedPreferences.getBoolean("${it}_isLoggedIn", false) } ?: false
         val accessToken = email?.let { sharedPreferences.getString("${it}_accessToken", null) }
 
         if (isLoggedIn && !accessToken.isNullOrEmpty()) {
-            RetrofitInstance.setAuthToken(accessToken)
+            SocialLoginRetrofitInstance.setToken(accessToken)
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
     }
-
 
     private fun setupObservers() {
         loginViewModel.loginResult.observe(this) { result ->
@@ -90,6 +96,25 @@ class StartLoginActivity : AppCompatActivity() {
                 Log.e("Token", "토큰 전송 실패: ${exception.message}")
             }
         }
+
+    }
+
+    private fun startNaverLogin() {
+        val naverCallback = object : OAuthLoginCallback {
+            override fun onSuccess() {
+                val accessToken = NaverIdLoginSDK.getAccessToken() ?: return
+                loginViewModel.sendNaverTokenToServer(accessToken)
+            }
+
+            override fun onFailure(httpStatus: Int, message: String) {
+                Toast.makeText(this@StartLoginActivity, "네이버 로그인 실패: $message", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onError(errorCode: Int, message: String) {
+                Toast.makeText(this@StartLoginActivity, "네이버 로그인 오류: $message", Toast.LENGTH_SHORT).show()
+            }
+        }
+        NaverIdLoginSDK.authenticate(this, naverCallback)
     }
 
     private fun fetchAndSaveKakaoUserInfo(userInfo: KaKaoResult) {
@@ -108,20 +133,20 @@ class StartLoginActivity : AppCompatActivity() {
     private fun saveUserInfo(userInfo: KaKaoResult, nickname: String, profileImageUrl: String) {
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         with(sharedPreferences.edit()) {
-            putBoolean("${userInfo.email}_isLoggedIn", true)
-            putString("${userInfo.email}_accessToken", userInfo.tokens.accessToken)
-            putString("${userInfo.email}_refreshToken", userInfo.tokens.refreshToken)
-            putInt("${userInfo.email}_memberId", userInfo.memberId)
-            putString("${userInfo.email}_nickname", nickname)
-            putString("${userInfo.email}_kakaoProfileImageUrl", profileImageUrl)
-            putString("currentEmail", userInfo.email)  // 현재 로그인된 사용자 추적용
+            putBoolean("${userInfo.signInDTO.email}_isLoggedIn", true)
+            putString("${userInfo.signInDTO.email}_accessToken", userInfo.signInDTO.tokens.accessToken)
+            putString("${userInfo.signInDTO.email}_refreshToken", userInfo.signInDTO.tokens.refreshToken)
+            putInt("${userInfo.signInDTO.email}_memberId", userInfo.signInDTO.memberId)
+            putString("${userInfo.signInDTO.email}_nickname", nickname)
+            putString("${userInfo.signInDTO.email}_kakaoProfileImageUrl", profileImageUrl)
+            putString("currentEmail", userInfo.signInDTO.email)
             apply()
         }
     }
 
     private fun navigateToNextScreen(userInfo: KaKaoResult) {
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-        val email = userInfo.email
+        val email = userInfo.signInDTO.email
         val isLoggedIn = sharedPreferences.getBoolean("${email}_isLoggedIn", false)
 
         val intent = if (isLoggedIn) {
@@ -133,5 +158,4 @@ class StartLoginActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
 }

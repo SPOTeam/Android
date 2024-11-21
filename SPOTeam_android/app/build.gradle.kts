@@ -70,11 +70,12 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.gson)
     implementation(libs.glide)
-    implementation ("com.github.prolificinteractive:material-calendarview:2.0.1")
-    implementation("com.navercorp.nid:oauth:5.9.1")
+    implementation("com.navercorp.nid:oauth:5.10.0")
     implementation("androidx.room:room-runtime:2.5.0")
     kapt("androidx.room:room-compiler:2.5.0")
     implementation("androidx.room:room-ktx:2.5.0")
+    implementation(libs.androidx.security.crypto)
+    implementation ("com.github.prolificinteractive:material-calendarview:2.0.1")
 }
 
 configurations {

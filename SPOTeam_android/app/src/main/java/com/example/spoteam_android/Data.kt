@@ -6,27 +6,46 @@ import com.example.spoteam_android.data.ApiModels
 import com.google.gson.annotations.SerializedName
 
 
-
-// 카카오 로그인 토큰 정보 담기
-data class KaKaoTokens(
-    val accessToken: String,
-    val refreshToken: String,
-    val accessTokenExpiresIn: Long
-)
-
-// 카카오 로그인 서버 응답 결과 담기
-data class KaKaoResult(
-    val tokens: KaKaoTokens,
-    val email: String,
-    val memberId: Int
-)
-
-//카카오 로그인 서버 응답 담기
+//카카오 로그인 서버 응답
 data class YourResponse(
     val isSuccess: Boolean,
     val code: String,
     val message: String,
     val result: KaKaoResult
+)
+
+
+// 카카오 로그인 서버 응답 결과 담기
+data class KaKaoResult(
+  val isSpotMember: Boolean,
+    val signInDTO: SignInDTO
+)
+// 카카오 로그인 토큰 정보 담기
+data class Tokens(
+    val accessToken: String,
+    val refreshToken: String,
+    val accessTokenExpiresIn: Long
+)
+
+
+// 네이버 로그인 서버 응답 결과 담기
+data class NaverResult(
+    val isSpotMember: Boolean,
+    val signInDTO: SignInDTO
+)
+
+data class SignInDTO(
+    val tokens: Tokens,
+    val email: String,
+    val memberId: Int,
+    val loginType: String
+)
+//네이버 로그인 서버 응답
+data class NaverResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: NaverResult?
 )
 
 data class UserInfo( //일반 로그인시 필요
