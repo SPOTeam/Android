@@ -73,20 +73,36 @@ class CalendarFragment : Fragment() {
 
         start = arguments?.getString("my_start")
 
-        // startDateTime 값이 전달되었는지 로그로 확인
-        Log.d("CalendarFragment", "Received startDateTime: $start")
 
-        // 초기 진입 시 오늘 날짜 이벤트 로드
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
+        val todayDate = CalendarDay.from(year, month, day)
+        calendarView.setCurrentDate(todayDate)  // 캘린더를 오늘 날짜로 설정
+        calendarView.setSelectedDate(todayDate) // 오늘 날짜를 선택
+        calendarView.invalidateDecorators()     // Decorator 강제 갱신
+
         val studyId = studyViewModel.studyId.value ?: 0
 
+        // 오늘 날짜의 일정을 로드
         fetchGetSchedule(studyId, year, month) {
             eventViewModel.loadEvents(year, month, day)
+
+            // 어댑터와 데코레이터 갱신 추가
+            val selectedDate = String.format("%04d-%02d-%02d", year, month, day)
+            eventAdapter.updateSelectedDate(selectedDate)
+
+            val date = CalendarDay.from(year, month, day)
+            todayDecorator.setSelectedDate(date)
+            selectedDateDecorator.setSelectedDate(date)
+            calendarView.invalidateDecorators() // Decorator 강제 갱신
+
+            // 어댑터 데이터 갱신
+            eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
         }
+
 
 
 
@@ -166,15 +182,9 @@ class CalendarFragment : Fragment() {
         eventsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         eventsRecyclerView.adapter = eventAdapter
 
+        // 월이 넘어가면 event 초기화
         calendarView.setOnMonthChangedListener { _, date ->
-            val year = date.year
-            val month = date.month // Calendar.MONTH는 0부터 시작하므로 +1 필요
-            val day = date.day
-
-            val studyId = studyViewModel.studyId.value ?: 0
-            fetchGetSchedule(studyId, year, month) {
-                eventViewModel.loadEvents(year, month, day)
-            }
+            eventAdapter.updateEvents(emptyList())
         }
 
         calendarView.setOnDateChangedListener  { _, date, selected ->
@@ -254,6 +264,7 @@ class CalendarFragment : Fragment() {
                             EventItems.add(eventItem)
                         }
                         eventViewModel.updateEvents(EventItems)
+                        eventAdapter.updateEvents(EventItems)
                         onComplete()
                     } else {
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
