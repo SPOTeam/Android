@@ -327,21 +327,21 @@ class CalendarAddEventFragment : Fragment() {
             }
             "WEEKLY" -> {
                 val maxEndCalendar = (startCalendar.clone() as Calendar).apply {
-                    add(Calendar.DAY_OF_MONTH, 7)
+                    add(Calendar.DAY_OF_MONTH, 6)
                 }
                 datePickerDialog.datePicker.minDate = startCalendar.timeInMillis
                 datePickerDialog.datePicker.maxDate = maxEndCalendar.timeInMillis
             }
             "BIWEEKLY" -> {
                 val maxEndCalendar = (startCalendar.clone() as Calendar).apply {
-                    add(Calendar.DAY_OF_MONTH, 7)
+                    add(Calendar.DAY_OF_MONTH, 6)
                 }
                 datePickerDialog.datePicker.minDate = startCalendar.timeInMillis
                 datePickerDialog.datePicker.maxDate = maxEndCalendar.timeInMillis
             }
             "MONTHLY" -> {
                 val maxEndCalendar = (startCalendar.clone() as Calendar).apply {
-                    add(Calendar.DAY_OF_MONTH, 30)
+                    add(Calendar.DAY_OF_MONTH, 29)
                 }
                 datePickerDialog.datePicker.minDate = startCalendar.timeInMillis
                 datePickerDialog.datePicker.maxDate = maxEndCalendar.timeInMillis
