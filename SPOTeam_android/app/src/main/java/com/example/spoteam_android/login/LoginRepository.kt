@@ -2,6 +2,7 @@ package com.example.spoteam_android.login
 
 import com.example.spoteam_android.YourResponse
 import com.example.spoteam_android.KaKaoResult
+import com.example.spoteam_android.NaverResult
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -27,6 +28,24 @@ class LoginRepository {
             }
         } catch (e: Exception) {
             Result.failure(e) // 예외 발생 시 실패 반환
+        }
+    }
+
+    suspend fun sendNaverTokenToServer(accessToken: String): Result<NaverResult> = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val response = api.getNaverUserInfo(accessToken).execute()
+            if (response.isSuccessful) {
+                val naverResult = response.body()?.result
+                if (naverResult != null) {
+                    Result.success(naverResult)
+                } else {
+                    Result.failure(Exception("사용자 정보를 가져올 수 없습니다"))
+                }
+            } else {
+                Result.failure(Exception("API 응답 실패: ${response.errorBody()?.string()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 

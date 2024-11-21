@@ -260,8 +260,8 @@ class MainActivity : AppCompatActivity() {
         val accessToken = email?.let { sharedPreferences.getString("${it}_accessToken", null) }
         val refreshToken = email?.let { sharedPreferences.getString("${it}_refreshToken", null) }
 
-        Log.d("TokenLogger", "Current AccessToken: $accessToken")
-        Log.d("TokenLogger", "Current RefreshToken: $refreshToken")
+//        Log.d("TokenLogger", "Current AccessToken: $accessToken")
+//        Log.d("TokenLogger", "Current RefreshToken: $refreshToken")
     }
 
 

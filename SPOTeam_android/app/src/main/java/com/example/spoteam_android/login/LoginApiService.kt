@@ -1,5 +1,7 @@
 package com.example.spoteam_android.login
 
+import com.example.spoteam_android.NaverResponse
+import com.example.spoteam_android.NaverResult
 import com.example.spoteam_android.ReasonApiResponse
 import com.example.spoteam_android.RegionApiResponse
 import com.example.spoteam_android.RegionsPreferences
@@ -37,5 +39,8 @@ interface LoginApiService {
     //카카오 로그인 api 서비스
     @GET("/spot/members/sign-in/kakao")
     fun getUserInfo(@Query("accessToken") accessToken: String): Call<YourResponse>
+
+    @GET("/spot/members/sign-in/naver/authorize")
+    fun getNaverUserInfo(@Query("accessToken") accessToken: String): Call<NaverResponse>
 
 }
