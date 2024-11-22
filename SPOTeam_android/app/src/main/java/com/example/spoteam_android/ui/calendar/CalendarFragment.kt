@@ -27,13 +27,8 @@ import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentCalendarBinding
-import com.example.spoteam_android.ui.study.OnlineStudyFragment
-import com.example.spoteam_android.ui.study.StudyFragment
 import com.example.spoteam_android.ui.study.quiz.CheckAttendanceFragment
-import com.example.spoteam_android.ui.study.quiz.HostMakeQuizFragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.prolificinteractive.materialcalendarview.CalendarDay
-import com.prolificinteractive.materialcalendarview.CalendarDay.from
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import retrofit2.Call
 import retrofit2.Callback
