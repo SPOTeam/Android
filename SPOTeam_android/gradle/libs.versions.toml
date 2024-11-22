@@ -32,6 +32,7 @@ material3Android = "1.2.1"
 media3Common = "1.4.0"
 roomCommon = "2.6.1"
 roomKtx = "2.6.1"
+filamentAndroid = "1.17.1"
 
 [libraries]
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
@@ -69,6 +70,7 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+filament-android = { group = "com.google.ar.sceneform", name = "filament-android", version.ref = "filamentAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

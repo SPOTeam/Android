@@ -9,7 +9,10 @@ import com.example.spoteam_android.ProfileItem
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemDetailStudyHomeMemberBinding
 
-class DetailStudyHomeProfileAdapter(private var profiles: MutableList<ProfileItem>) :
+class DetailStudyHomeProfileAdapter(
+    private var profiles: MutableList<ProfileItem>,
+    private val onItemClick: ((ProfileItem) -> Unit)? = null // 기본값 null
+) :
     RecyclerView.Adapter<DetailStudyHomeProfileAdapter.ProfileViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
@@ -53,6 +56,11 @@ class DetailStudyHomeProfileAdapter(private var profiles: MutableList<ProfileIte
             } else {
                 binding.fragmentConsiderAttendanceMemberHostIv.visibility = View.GONE
             }
+
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(profile) // onItemClick이 null이 아닌 경우에만 호출
+            }
+
         }
     }
 
