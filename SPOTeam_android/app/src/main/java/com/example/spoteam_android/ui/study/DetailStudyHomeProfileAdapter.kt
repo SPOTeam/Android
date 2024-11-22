@@ -1,11 +1,8 @@
 package com.example.spoteam_android.ui.study
 
-import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.ProfileItem
@@ -14,11 +11,9 @@ import com.example.spoteam_android.databinding.ItemDetailStudyHomeMemberBinding
 
 class DetailStudyHomeProfileAdapter(
     private var profiles: MutableList<ProfileItem>,
-    private val onItemClick: ((ProfileItem) -> Unit)? = null // 다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달용
+    private val onItemClick: ((ProfileItem) -> Unit)? = null // 기본값 null
 ) :
     RecyclerView.Adapter<DetailStudyHomeProfileAdapter.ProfileViewHolder>() {
-
-    private var selectedPosition: Int? = null // 다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달용
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
         val binding = ItemDetailStudyHomeMemberBinding.inflate(
@@ -31,8 +26,7 @@ class DetailStudyHomeProfileAdapter(
 
     override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
         val profile = profiles[position]
-        val isSelected = position == selectedPosition
-        holder.bind(profile, position == 0, isSelected)
+        holder.bind(profile, position == 0)
     }
 
     override fun getItemCount(): Int = profiles.size
@@ -40,7 +34,7 @@ class DetailStudyHomeProfileAdapter(
     inner class ProfileViewHolder(private val binding: ItemDetailStudyHomeMemberBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(profile: ProfileItem, isHost: Boolean, isSelected: Boolean) {
+        fun bind(profile: ProfileItem, isHost: Boolean) {
             // Glide를 사용하여 프로필 이미지 로드
             Glide.with(binding.root.context)
                 .load(profile.profileImage)
@@ -54,6 +48,7 @@ class DetailStudyHomeProfileAdapter(
                 profile.nickname
             }
 
+
             binding.profileNickname.text = nickname
 
             if (isHost) {
@@ -62,46 +57,16 @@ class DetailStudyHomeProfileAdapter(
                 binding.fragmentConsiderAttendanceMemberHostIv.visibility = View.GONE
             }
 
-            //다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달용
-            if (isSelected) {
-                binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
-                    ColorStateList.valueOf(ContextCompat.getColor(binding.root.context, R.color.active_blue))
-                binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 8f
-            } else {
-                binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
-                    ColorStateList.valueOf(ContextCompat.getColor(binding.root.context, android.R.color.transparent))
-                binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 0f
-            }
-
-            // 다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달 후 테두리 표시
             binding.root.setOnClickListener {
-                // 기존 선택된 위치와 현재 선택된 위치가 다를 경우 업데이트
-                if (selectedPosition != bindingAdapterPosition) {
-                    val previousPosition = selectedPosition
-                    selectedPosition = bindingAdapterPosition
-
-                    // 이전 선택된 항목과 현재 선택된 항목 UI 갱신
-                    previousPosition?.let { notifyItemChanged(it) }
-                    notifyItemChanged(bindingAdapterPosition)
-                }
-                // 콜백 실행
-                onItemClick?.invoke(profile)
+                onItemClick?.invoke(profile) // onItemClick이 null이 아닌 경우에만 호출
             }
+
         }
     }
 
     fun updateList(newProfiles: List<ProfileItem>) {
         profiles.clear()
         profiles.addAll(newProfiles)
-        selectedPosition = null // 선택 상태 초기화
         notifyDataSetChanged()
-    }
-
-    fun resetBorder() {
-        val previousPosition = selectedPosition
-        selectedPosition = null // 선택 상태 초기화
-        previousPosition?.let {
-            notifyItemChanged(it)
-        }
     }
 }
