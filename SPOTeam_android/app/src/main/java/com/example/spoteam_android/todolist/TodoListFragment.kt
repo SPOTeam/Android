@@ -45,10 +45,10 @@ class TodoListFragment : Fragment() {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var eventAdapter: EventAdapter
     private var selectedDate: String = "" // 선택된 날짜를 저장할 변수
-    private var selectedImageView: ImageView? = null
     private val eventViewModel: EventViewModel by activityViewModels()
     private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
     private lateinit var memberIdMap: Map<ProfileItem, Int>
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -248,6 +248,10 @@ class TodoListFragment : Fragment() {
             })
         }
         binding.rvDates.adapter = dateAdapter
+
+
+
+
     }
 
     private fun scrollToTodayPosition() {
@@ -301,6 +305,7 @@ class TodoListFragment : Fragment() {
                             EventItems.add(eventItem)
                         }
 
+                        Log.d("fetchGetSchedule", "Loaded Events: $EventItems")
 
                         // ViewModel 및 Adapter에 데이터 업데이트
                         eventViewModel.updateEvents(EventItems)
@@ -309,6 +314,7 @@ class TodoListFragment : Fragment() {
                         // 콜백 호출
                         onComplete()
                     } else {
+                        Log.d("fetchGetSchedule", "No matching events found")
                     }
                 }
             }
@@ -322,10 +328,15 @@ class TodoListFragment : Fragment() {
     private fun fetchStudyMembers(studyId: Int) {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+        val kakaoNickname = sharedPreferences.getString("${email}_nickname", null)
+
         api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
             override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let { memberResponse ->
+
                         Log.d("TodoFragment","$memberResponse")
                         val members = memberResponse.result.members
 
@@ -345,6 +356,23 @@ class TodoListFragment : Fragment() {
 
                         // RecyclerView 업데이트
                         profileAdapter.updateList(profileItems)
+
+                        // 닉네임 리스트에서 현재 사용자의 닉네임과 일치하는지 확인
+                        val nicknames = members.map { it.nickname }
+                        val isNicknameFound = kakaoNickname?.let { nicknames.contains(it) } ?: false
+
+                        // maxPeople과 memberCount 값을 가져오기 위해 ViewModel을 옵저빙
+                        val maxPeople = studyViewModel.maxPeople.value
+                        val memberCount = studyViewModel.memberCount.value
+                        Log.d("max","${maxPeople},${memberCount}")
+
+                        // 닉네임이 리스트에 있거나, memberCount와 maxPeople이 일치하면 버튼을 숨김
+                        val shouldHideButton = isNicknameFound || (maxPeople != null && memberCount != null && memberCount >= maxPeople)
+
+
+                        // RecyclerView의 제약 조건 설정
+                        val layoutParams = binding.fragmentDetailStudyHomeProfileRv.layoutParams as ConstraintLayout.LayoutParams
+                        binding.fragmentDetailStudyHomeProfileRv.layoutParams = layoutParams
                     }
                 } else {
                     Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
@@ -356,5 +384,4 @@ class TodoListFragment : Fragment() {
             }
         })
     }
-
 }
