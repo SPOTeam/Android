@@ -170,9 +170,6 @@ class CalendarFragment : Fragment() {
             }
         }
 
-
-
-
         eventAdapter = EventAdapter(emptyList(), { event ->
             val hostMakeQuizFragment = CheckAttendanceFragment()
             hostMakeQuizFragment.show(parentFragmentManager, "HostMakeQuizFragment")
