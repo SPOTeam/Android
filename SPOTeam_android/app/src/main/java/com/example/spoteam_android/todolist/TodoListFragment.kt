@@ -30,6 +30,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class TodoListFragment : Fragment() {
@@ -74,13 +76,13 @@ class TodoListFragment : Fragment() {
 
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val today = calendar.get(Calendar.DAY_OF_MONTH)
 
         fetchGetSchedule(studyId, year, month) {
-            eventViewModel.loadEvents(year, month, day)
+            eventViewModel.loadEvents(year, month, today)
 
             // 어댑터와 데코레이터 갱신 추가
-            val selectedDate = String.format("%04d-%02d-%02d", year, month, day)
+            val selectedDate = String.format("%04d-%02d-%02d", year, month, today)
             eventAdapter.updateSelectedDate(selectedDate)
 
             // 어댑터 데이터 갱신
@@ -235,21 +237,35 @@ class TodoListFragment : Fragment() {
 
         val day = selectedDate.split("-")[2].toInt()
 
-        // EventViewModel을 사용하여 선택한 날짜의 일정을 로드
-        eventViewModel.loadEvents(year, month, day)
-
-        // 이벤트 로드 후, UI에 업데이트
-        eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
-            eventAdapter.updateEvents(events)
-        })
-
         val dates = (1..31).map { DateItem(it.toString(), it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()) }
         dateAdapter = DateAdapter(dates) { date ->
             selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-$date"
-            loadEventsForSelectedDate()
+            Log.d("TodoListFragment", "Date selected: $selectedDate")
             todoViewModel.onDateChanged(selectedDate)
+
+            val day = selectedDate.split("-").last() // "22"
+
+            fetchGetSchedule(studyId, year, month) {
+                Log.d("TodoListFragment", "fetchGetSchedule called with selectedDate: $selectedDate")
+                eventViewModel.loadEvents(year, month, day.toInt())
+
+                // 어댑터와 데코레이터 갱신 추가
+                val selectedDate = String.format("%04d-%02d-%02d", year, month, day.toInt())
+                eventAdapter.updateSelectedDate(selectedDate)
+
+                // 어댑터 데이터 갱신
+                eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
+            }
+
+            eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
+                eventAdapter.updateEvents(events)
+            })
         }
         binding.rvDates.adapter = dateAdapter
+
+
+
+
     }
 
     private fun scrollToTodayPosition() {
