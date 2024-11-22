@@ -1,7 +1,6 @@
 package com.example.spoteam_android.ui.calendar
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,50 +52,50 @@ class EventAdapter(
             eventTitleTextView.text = event.title
 
             if (selectedDate.isNotEmpty()) {
-                println("현재 선택된 날짜: $selectedDate")
             }
 
             // 이벤트의 날짜 정보를 yyyy-MM-dd 형식으로 변환
             val eventStartDate = String.format("%04d-%02d-%02d", event.startYear, event.startMonth, event.startDay)
             val eventEndDate = String.format("%04d-%02d-%02d", event.endYear, event.endMonth, event.endDay)
 
-            eventTimeTextView.text = when (event.period) {
-
+            val eventTimeText = when (event.period) {
                 "NONE" -> {
                     if (isSingleDayEvent(event)) {
                         "${event.startDateTime} ~ ${event.endDateTime}"
                     } else {
                         when {
-                            selectedDate == eventStartDate -> "${event.startDateTime} 시작"
-                            selectedDate == eventEndDate -> "${event.endDateTime} 종료"
-                            selectedDate > eventStartDate && selectedDate < eventEndDate -> "하루종일"
-                            else -> ""
+                            selectedDate == eventStartDate -> {
+                                "${event.startDateTime} 시작"
+                            }
+                            selectedDate == eventEndDate -> {
+                                "${event.endDateTime} 종료"
+                            }
+                            selectedDate > eventStartDate && selectedDate < eventEndDate -> {
+                                "하루종일"
+                            }
+                            else -> {
+                                ""
+                            }
                         }
                     }
                 }
-                "DAILY" -> {
-                    "${event.startDateTime} ~ ${event.endDateTime}"
-                }
-                "WEEKLY" -> {
-                    "${event.startDateTime} ~ ${event.endDateTime}"
-                }
-                "BIWEEKLY" -> {
-                    "${event.startDateTime} ~ ${event.endDateTime}"
-                }
-                "MONTHLY" -> {
+                "DAILY", "WEEKLY", "BIWEEKLY", "MONTHLY" -> {
                     "${event.startDateTime} ~ ${event.endDateTime}"
                 }
                 else -> {
                     "${event.startDateTime} ~ ${event.endDateTime}"
                 }
             }
+
             if (event.isAllDay) {
                 eventTimeTextView.text = "하루종일"
+            } else {
+                eventTimeTextView.text = eventTimeText
             }
 
+            // 최종 텍스트 로그 출력
 
-
-            // 체크 아이콘 visibility 설정
+        // 체크 아이콘 visibility 설정
             icCheck.visibility = if (isTodoList) View.GONE else View.VISIBLE
 
             // 클릭 이벤트 설정
