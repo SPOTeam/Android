@@ -1,6 +1,8 @@
 package com.example.spoteam_android.todolist
 
+import StudyApiService
 import StudyViewModel
+import android.content.Context
 import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
@@ -10,28 +12,27 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.spoteam_android.MemberResponse
+import com.example.spoteam_android.ProfileItem
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentTodoListBinding
 import com.example.spoteam_android.ui.calendar.CalendarApiService
 import com.example.spoteam_android.ui.calendar.Event
 import com.example.spoteam_android.ui.calendar.EventAdapter
-import com.example.spoteam_android.ui.calendar.EventDecorator
 import com.example.spoteam_android.ui.calendar.EventViewModel
 import com.example.spoteam_android.ui.calendar.ScheduleResponse
-import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.example.spoteam_android.ui.study.DetailStudyHomeProfileAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class TodoListFragment : Fragment() {
@@ -46,7 +47,7 @@ class TodoListFragment : Fragment() {
     private var selectedDate: String = "" // 선택된 날짜를 저장할 변수
     private var selectedImageView: ImageView? = null
     private val eventViewModel: EventViewModel by activityViewModels()
-    private lateinit var eventsRecyclerView: RecyclerView
+    private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,9 +71,11 @@ class TodoListFragment : Fragment() {
         binding.eventrecyclerviewto.layoutManager = LinearLayoutManager(requireContext())
         binding.eventrecyclerviewto.adapter = eventAdapter
 
-//        eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
-//            eventAdapter.updateEvents(events)
-//        })
+
+        profileAdapter = DetailStudyHomeProfileAdapter(ArrayList())
+        binding.fragmentDetailStudyHomeProfileRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.fragmentDetailStudyHomeProfileRv.adapter = profileAdapter
+
 
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
@@ -147,30 +150,6 @@ class TodoListFragment : Fragment() {
             binding.rvMyTodoList.scrollToPosition(myTodoAdapter.itemCount - 1)
         }
 
-
-
-        val userImageViews = listOf(
-            binding.imvStudyowner,
-            binding.imvStudyone1,
-            binding.imvStudyone2,
-            binding.imvStudyone3,
-            binding.imvStudyone4,
-            binding.imvStudyone5,
-            binding.imvStudyone6,
-            binding.imvStudyone7,
-            binding.imvStudyone8,
-            binding.imvStudyone9,
-            binding.imvStudyone10
-        ).filterNotNull()
-
-
-
-        userImageViews.forEach { imageView ->
-            imageView.setOnClickListener {
-                highlightImageView(imageView)
-            }
-        }
-
         val cbTodo1 = binding.cbTodo1
         val cbTodo2 = binding.cbTodo2
         val cbTodo3 = binding.cbTodo3
@@ -205,6 +184,8 @@ class TodoListFragment : Fragment() {
                 cbTodo3.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
             }
         }
+
+        fetchStudyMembers(studyId)
 
         return binding.root
     }
@@ -292,5 +273,109 @@ class TodoListFragment : Fragment() {
         val month = parts[1].toInt()
         val day = parts[2].toInt()
         eventViewModel.loadEvents(year, month, day) // EventViewModel에서 이벤트 로드 요청
+    }
+
+    private fun fetchGetSchedule(studyId: Int, year: Int, month: Int, onComplete: () -> Unit) {
+
+        val EventItems = arrayListOf<Event>()
+        val service = RetrofitInstance.retrofit.create(CalendarApiService::class.java)
+
+        service.GetScheuled(
+            studyId = studyId,
+            year = year,
+            month = month,
+        ).enqueue(object : Callback<ScheduleResponse> {
+            override fun onResponse(
+                call: Call<ScheduleResponse>,
+                response: Response<ScheduleResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    Log.d("CalendarFragment", "$apiResponse")
+
+                    if (apiResponse?.isSuccess == true) {
+                        // EventItems 데이터 로드
+                        apiResponse.result.scheduleList.forEach { schedule ->
+                            val eventItem = Event(
+                                id = schedule.scheduleId,
+                                title = schedule.title,
+                                startYear = schedule.startedAt.substring(0, 4).toInt(),
+                                startMonth = schedule.startedAt.substring(5, 7).toInt(),
+                                startDay = schedule.startedAt.substring(8, 10).toInt(),
+                                startHour = schedule.startedAt.substring(11, 13).toInt(),
+                                startMinute = schedule.startedAt.substring(14, 16).toInt(),
+                                endYear = schedule.finishedAt.substring(0, 4).toInt(),
+                                endMonth = schedule.finishedAt.substring(5, 7).toInt(),
+                                endDay = schedule.finishedAt.substring(8, 10).toInt(),
+                                endHour = schedule.finishedAt.substring(11, 13).toInt(),
+                                endMinute = schedule.finishedAt.substring(14, 16).toInt(),
+                                period = schedule.period,
+                                isAllDay = schedule.isAllDay
+                            )
+                            EventItems.add(eventItem)
+                        }
+
+                        Log.d("fetchGetSchedule", "Loaded Events: $EventItems")
+
+                        // ViewModel 및 Adapter에 데이터 업데이트
+                        eventViewModel.updateEvents(EventItems)
+                        eventAdapter.updateEvents(EventItems)
+
+                        // 콜백 호출
+                        onComplete()
+                    } else {
+                        Log.d("fetchGetSchedule", "No matching events found")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ScheduleResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+    private fun fetchStudyMembers(studyId: Int) {
+        val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+        val kakaoNickname = sharedPreferences.getString("${email}_nickname", null)
+
+        api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
+            override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { memberResponse ->
+                        val members = memberResponse.result?.members ?: emptyList()
+                        profileAdapter.updateList(members.map {
+                            ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
+                        })
+
+                        // 닉네임 리스트에서 현재 사용자의 닉네임과 일치하는지 확인
+                        val nicknames = members.map { it.nickname }
+                        val isNicknameFound = kakaoNickname?.let { nicknames.contains(it) } ?: false
+
+                        // maxPeople과 memberCount 값을 가져오기 위해 ViewModel을 옵저빙
+                        val maxPeople = studyViewModel.maxPeople.value
+                        val memberCount = studyViewModel.memberCount.value
+                        Log.d("max","${maxPeople},${memberCount}")
+
+                        // 닉네임이 리스트에 있거나, memberCount와 maxPeople이 일치하면 버튼을 숨김
+                        val shouldHideButton = isNicknameFound || (maxPeople != null && memberCount != null && memberCount >= maxPeople)
+
+
+                        // RecyclerView의 제약 조건 설정
+                        val layoutParams = binding.fragmentDetailStudyHomeProfileRv.layoutParams as ConstraintLayout.LayoutParams
+                        binding.fragmentDetailStudyHomeProfileRv.layoutParams = layoutParams
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
