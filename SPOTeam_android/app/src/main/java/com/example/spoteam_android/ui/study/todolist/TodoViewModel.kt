@@ -61,7 +61,7 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
                 Log.d("TodoViewModel","response가 null이에용")
             } else {
                 _otherTodoListResponse.postValue(response)
-                Log.d("TodoViewModel","$response")
+                Log.d("fetchOtherToDoList","$response")
             }
         }
     }
@@ -91,6 +91,11 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
                 Log.e("TodoViewModel", "체크 상태 변경 실패")
             }
         }
+    }
+
+    fun clearOtherTodoList() {
+        Log.d("OtherTodoViewModel","clearOtherTodoList 실행")
+        _otherTodoListResponse.postValue(null)
     }
 
 
