@@ -1,5 +1,6 @@
-package com.example.spoteam_android.todolist
+package com.example.spoteam_android.ui.study.todolist
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,14 +14,16 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
     private val _addTodoResponse = MutableLiveData<TodolistResponse?>()
     val addTodoResponse: LiveData<TodolistResponse?> get() = _addTodoResponse
 
-    private val _todoListResponse = MutableLiveData<TodolistResponse?>()
-    val todoListResponse: LiveData<TodolistResponse?> get() = _todoListResponse
+
+    private val _myTodoListResponse = MutableLiveData<TodolistResponse?>()
+    val myTodoListResponse: LiveData<TodolistResponse?> get() = _myTodoListResponse
+
+    private val _otherTodoListResponse = MutableLiveData<TodolistResponse?>()
+    val otherTodoListResponse: LiveData<TodolistResponse?> get() = _otherTodoListResponse
 
     private val _selectedDate = MutableLiveData<String>()
     val selectedDate: LiveData<String> get() = _selectedDate
 
-    private val _checkTodoResponse = MutableLiveData<TodolistResponse?>()
-    val checkTodoResponse: LiveData<TodolistResponse?> get() = _checkTodoResponse
 
     private val todayDate: String
         get() {
@@ -41,12 +44,28 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
     fun fetchTodoList(studyId: Int, page: Int, size: Int, date: String = todayDate) {
         repository.lookTodo(studyId, page, size, date) { response ->
             if (response == null) {
-                _todoListResponse.postValue(null) // Update LiveData on failure or empty response
+                _myTodoListResponse.postValue(null) // Update LiveData on failure or empty response
+
             } else {
-                _todoListResponse.postValue(response)
+                _myTodoListResponse.postValue(response)
             }
         }
     }
+
+    fun fetchOtherToDoList(studyId: Int, memberId: Int, page: Int, size: Int, date: String) {
+
+        Log.d("TodoViewModel", "$studyId, $memberId,$page, $size, $date ")
+        repository.lookOtherTodo(studyId, memberId, page, size, date) { response ->
+            if (response == null) {
+                _otherTodoListResponse.postValue(null)// Update LiveData on failure or empty response
+                Log.d("TodoViewModel","response가 null이에용")
+            } else {
+                _otherTodoListResponse.postValue(response)
+                Log.d("TodoViewModel","$response")
+            }
+        }
+    }
+
 
     // Updates the selected date and fetches data for the new date
     fun onDateChanged(newDate: String) {
@@ -61,13 +80,19 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
         }
     }
 
-    fun checkTodoItem(studyId: Int, toDoId: Int) {
+    fun checkTodo(studyId: Int, toDoId: Int) {
+        Log.d("TodoViewModel", "체크 요청: studyId=$studyId, toDoId=$toDoId")
         repository.checkTodo(studyId, toDoId) { response ->
             if (response != null && response.isSuccess) {
-                // 성공 시 UI 갱신 또는 데이터 갱신 로딩
+                Log.d("TodoViewModel", "체크 상태 변경 성공")
+                // 변경된 데이터를 다시 가져오기
+                fetchTodoList(studyId, page = 0, size = 10, date = _selectedDate.value ?: todayDate)
             } else {
-                // 실패 시 에러 처리 로직 추가 가능
+                Log.e("TodoViewModel", "체크 상태 변경 실패")
             }
         }
     }
+
+
+
 }

@@ -1,4 +1,4 @@
-package com.example.spoteam_android.ui.calendar
+package com.example.spoteam_android.ui.study.calendar
 
 object EventRepository {
     private val events = mutableListOf<Event>()

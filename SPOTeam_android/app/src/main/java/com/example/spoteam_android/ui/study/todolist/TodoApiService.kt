@@ -1,4 +1,4 @@
-package com.example.spoteam_android.todolist
+package com.example.spoteam_android.ui.study.todolist
 
 import retrofit2.Call
 import retrofit2.http.Body
@@ -26,5 +26,14 @@ interface TodoApiService {
     fun checkTodo(
         @Path("studyId") studyId: Int,          // URL 경로에 studyId 전달
         @Path("toDoId") toDoId: Int
+    ): Call<TodolistResponse>
+
+    @GET(" /spot/studies/{studyId}/to-do/members/{memberId}")
+    fun lookOtherTodo(
+        @Path("studyId") studyId: Int,
+        @Path("memberId") memberId: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("date") date: String
     ): Call<TodolistResponse>
 }
