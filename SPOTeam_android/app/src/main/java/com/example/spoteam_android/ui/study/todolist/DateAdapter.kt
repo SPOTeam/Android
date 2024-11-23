@@ -1,4 +1,4 @@
-package com.example.spoteam_android.todolist
+package com.example.spoteam_android.ui.study.todolist
 
 import android.annotation.SuppressLint
 import android.graphics.Color

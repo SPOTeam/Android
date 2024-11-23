@@ -1,19 +1,16 @@
-package com.example.spoteam_android.todolist
+package com.example.spoteam_android.ui.study.todolist
 
 import StudyApiService
 import StudyViewModel
 import android.content.Context
-import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -21,14 +18,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.MemberResponse
 import com.example.spoteam_android.ProfileItem
-import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentTodoListBinding
-import com.example.spoteam_android.ui.calendar.CalendarApiService
-import com.example.spoteam_android.ui.calendar.Event
-import com.example.spoteam_android.ui.calendar.EventAdapter
-import com.example.spoteam_android.ui.calendar.EventViewModel
-import com.example.spoteam_android.ui.calendar.ScheduleResponse
+import com.example.spoteam_android.ui.study.calendar.CalendarApiService
+import com.example.spoteam_android.ui.study.calendar.Event
+import com.example.spoteam_android.ui.study.calendar.EventAdapter
+import com.example.spoteam_android.ui.study.calendar.EventViewModel
+import com.example.spoteam_android.ui.study.calendar.ScheduleResponse
 import com.example.spoteam_android.ui.study.DetailStudyHomeProfileAdapter
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,12 +38,14 @@ class TodoListFragment : Fragment() {
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var dateAdapter: DateAdapter
     private lateinit var myTodoAdapter: TodoAdapter
+    private lateinit var otherTodoAdapter: OtherTodoAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var eventAdapter: EventAdapter
     private var selectedDate: String = "" // 선택된 날짜를 저장할 변수
     private val eventViewModel: EventViewModel by activityViewModels()
     private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
     private lateinit var memberIdMap: Map<ProfileItem, Int>
+    private var selectedMemberId: Int? = null
 
 
     override fun onCreateView(
@@ -76,10 +74,19 @@ class TodoListFragment : Fragment() {
         profileAdapter = DetailStudyHomeProfileAdapter(ArrayList()) { profileItem ->
             val memberId = memberIdMap[profileItem]
             Log.d("TodoListFragment", "Clicked Member ID: $memberId")
+
+            if (memberId != null) {
+                selectedMemberId = memberId
+                Log.d("ToDoListFragment","$selectedMemberId")
+                fetchOtherTodoList(studyId,memberId)
+            }
         }
+
 
         binding.fragmentDetailStudyHomeProfileRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.fragmentDetailStudyHomeProfileRv.adapter = profileAdapter
+
+
 
 
         val year = calendar.get(Calendar.YEAR)
@@ -106,7 +113,7 @@ class TodoListFragment : Fragment() {
         myTodoAdapter = TodoAdapter(requireContext(), mutableListOf(), { content ->
             todoViewModel.addTodoItem(studyId, content, selectedDate)
         }, { toDoId ->
-            todoViewModel.checkTodoItem(studyId, toDoId) // 체크박스 변경 시 API 호출
+            todoViewModel.checkTodo(studyId, toDoId) // 체크박스 변경 시 API 호출
         })
 
         binding.rvMyTodoList.apply {
@@ -118,25 +125,58 @@ class TodoListFragment : Fragment() {
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvDates.layoutManager = layoutManager
 
+
+        otherTodoAdapter = OtherTodoAdapter(requireContext(), mutableListOf())
+
+        binding.rvOtherTodo.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = otherTodoAdapter
+        }
+
+        // 날짜 선택 RecyclerView 설정
+        layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvDates.layoutManager = layoutManager
+
+
+
         val dates = (1..31).map { DateItem(it.toString(), it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()) }
         dateAdapter = DateAdapter(dates) { date ->
             selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-$date"
             todoViewModel.onDateChanged(selectedDate)
+            fetchTodoList(studyId)
+            selectedMemberId?.let { fetchOtherTodoList(studyId, it) }
         }
         binding.rvDates.adapter = dateAdapter
 
-        fetchTodoList(studyId)
-
-        todoViewModel.todoListResponse.observe(viewLifecycleOwner, Observer { response ->
-            response?.result?.content?.let { todos: List<TodoTask> ->
-                // 받은 할 일 목록을 역순으로 정렬하여 RecyclerView에 갱신
-                val reversedTodos = todos.reversed() // 역순으로 정렬
-                myTodoAdapter.updateData(reversedTodos) // TodoTask 리스트를 그대로 전달
+        todoViewModel.myTodoListResponse.observe(viewLifecycleOwner) { response ->
+            response?.result?.content?.let { todos ->
+                // 받은 데이터가 이전과 동일한 경우 RecyclerView를 갱신하지 않음
+                if (todos != myTodoAdapter.getCurrentData()) {
+                    Log.d("TodoFragment", "RecyclerView 데이터 갱신: $todos")
+                    val reversedTodos = todos.reversed() // 역순으로 정렬
+                    myTodoAdapter.updateData(reversedTodos.toMutableList())
+                }
             } ?: run {
-                // 받은 결과가 없거나 비어 있을 경우 빈 리스트로 RecyclerView 갱신
-                myTodoAdapter.updateData(emptyList()) // 빈 리스트 전달하여 RecyclerView 초기화
+                myTodoAdapter.updateData(emptyList<TodoTask>().toMutableList())
+                Log.d("TodoFragment", "받은 데이터가 없습니다.")
             }
-        })
+        }
+
+        todoViewModel.otherTodoListResponse.observe(viewLifecycleOwner) { response ->
+            response?.result?.content?.let { todos ->
+                // 받은 데이터가 이전과 동일한 경우 RecyclerView를 갱신하지 않음
+                if (todos != myTodoAdapter.getCurrentData()) {
+                    Log.d("TodoFragment", "RecyclerView 데이터 갱신: $todos")
+                    val reversedTodos = todos.reversed() // 역순으로 정렬
+                    otherTodoAdapter.updateData(reversedTodos.toMutableList())
+                }
+            } ?: run {
+                otherTodoAdapter.updateData(emptyList<TodoTask>().toMutableList())
+                Log.d("TodoFragment", "받은 데이터가 없습니다.")
+            }
+        }
+
+
 
         setupRecyclerViews(studyId)
 
@@ -155,42 +195,9 @@ class TodoListFragment : Fragment() {
             binding.rvMyTodoList.scrollToPosition(myTodoAdapter.itemCount - 1)
         }
 
-        val cbTodo1 = binding.cbTodo1
-        val cbTodo2 = binding.cbTodo2
-        val cbTodo3 = binding.cbTodo3
-
-        binding.cbTodo1.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                cbTodo1.paintFlags = cbTodo3.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                cbTodo1.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray))
-            } else {
-                cbTodo1.paintFlags = cbTodo3.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                cbTodo1.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
-            }
-        }
-        binding.cbTodo2.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                cbTodo2.paintFlags = cbTodo3.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                cbTodo2.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray))
-            } else {
-                cbTodo2.paintFlags = cbTodo3.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                cbTodo2.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
-            }
-        }
-
-
-
-        binding.cbTodo3.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                cbTodo3.paintFlags = cbTodo3.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                cbTodo3.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray))
-            } else {
-                cbTodo3.paintFlags = cbTodo3.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                cbTodo3.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
-            }
-        }
 
         fetchStudyMembers(studyId)
+
 
         return binding.root
     }
@@ -200,6 +207,12 @@ class TodoListFragment : Fragment() {
         val formattedDate = formatToDate(selectedDate)
         todoViewModel.fetchTodoList(studyId, page = 0, size = 10, date = formattedDate)
     }
+
+    private fun fetchOtherTodoList(studyId: Int, memberId: Int){
+        val formattedDate = formatToDate(selectedDate)
+        todoViewModel.fetchOtherToDoList(studyId, memberId, page = 0, size = 10, date = formattedDate)
+    }
+
 
 
     private fun formatToDate(date: String): String {
@@ -248,10 +261,6 @@ class TodoListFragment : Fragment() {
             })
         }
         binding.rvDates.adapter = dateAdapter
-
-
-
-
     }
 
     private fun scrollToTodayPosition() {
