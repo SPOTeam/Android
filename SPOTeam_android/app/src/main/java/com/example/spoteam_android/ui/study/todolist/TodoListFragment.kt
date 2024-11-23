@@ -87,6 +87,8 @@ class TodoListFragment : Fragment() {
         binding.fragmentDetailStudyHomeProfileRv.adapter = profileAdapter
 
 
+
+
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
         val today = calendar.get(Calendar.DAY_OF_MONTH)
@@ -139,12 +141,11 @@ class TodoListFragment : Fragment() {
 
         val dates = (1..31).map { DateItem(it.toString(), it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()) }
         dateAdapter = DateAdapter(dates) { date ->
-            Log.d("DateAdapter", "Date clicked: $date")
             selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-$date"
             todoViewModel.onDateChanged(selectedDate)
-
+            fetchTodoList(studyId)
+            selectedMemberId?.let { fetchOtherTodoList(studyId, it) }
         }
-
         binding.rvDates.adapter = dateAdapter
 
         todoViewModel.myTodoListResponse.observe(viewLifecycleOwner) { response ->
@@ -163,16 +164,15 @@ class TodoListFragment : Fragment() {
 
         todoViewModel.otherTodoListResponse.observe(viewLifecycleOwner) { response ->
             response?.result?.content?.let { todos ->
-                Log.d("TodoFragment", "Other todos fetched: $todos")
-                if (todos.isNotEmpty()) {
-                    otherTodoAdapter.updateData(todos.toMutableList())
-                } else {
-                    Log.d("TodoFragment", "No todos to display.")
-                    otherTodoAdapter.updateData(emptyList())
+                // 받은 데이터가 이전과 동일한 경우 RecyclerView를 갱신하지 않음
+                if (todos != myTodoAdapter.getCurrentData()) {
+                    Log.d("TodoFragment", "RecyclerView 데이터 갱신: $todos")
+                    val reversedTodos = todos.reversed() // 역순으로 정렬
+                    otherTodoAdapter.updateData(reversedTodos.toMutableList())
                 }
             } ?: run {
-                Log.d("TodoFragment", "Clearing other todos.")
-                otherTodoAdapter.updateData(emptyList())
+                otherTodoAdapter.updateData(emptyList<TodoTask>().toMutableList())
+                Log.d("TodoFragment", "받은 데이터가 없습니다.")
             }
         }
 
@@ -242,7 +242,6 @@ class TodoListFragment : Fragment() {
             Log.d("TodoListFragment", "Date selected: $selectedDate")
             todoViewModel.onDateChanged(selectedDate)
 
-            val day = selectedDate.split("-").last()
 
             fetchGetSchedule(studyId, year, month) {
                 Log.d("TodoListFragment", "fetchGetSchedule called with selectedDate: $selectedDate")
@@ -255,12 +254,6 @@ class TodoListFragment : Fragment() {
                 // 어댑터 데이터 갱신
                 eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
             }
-            fetchTodoList(studyId)
-            profileAdapter.resetBorder()
-
-            //날짜 이동 시 Other Todo List 초기화
-            todoViewModel.clearOtherTodoList()
-            otherTodoAdapter.clearData()
 
             eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
                 eventAdapter.updateEvents(events)

@@ -24,6 +24,8 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
     private val _selectedDate = MutableLiveData<String>()
     val selectedDate: LiveData<String> get() = _selectedDate
 
+    private val _checkTodoResponse = MutableLiveData<TodolistResponse?>()
+    val checkTodoResponse: LiveData<TodolistResponse?> get() = _checkTodoResponse
 
     private val todayDate: String
         get() {
@@ -61,7 +63,7 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
                 Log.d("TodoViewModel","response가 null이에용")
             } else {
                 _otherTodoListResponse.postValue(response)
-                Log.d("fetchOtherToDoList","$response")
+                Log.d("TodoViewModel","$response")
             }
         }
     }
@@ -91,11 +93,6 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
                 Log.e("TodoViewModel", "체크 상태 변경 실패")
             }
         }
-    }
-
-    fun clearOtherTodoList() {
-        Log.d("OtherTodoViewModel","clearOtherTodoList 실행")
-        _otherTodoListResponse.postValue(null)
     }
 
 

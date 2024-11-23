@@ -47,11 +47,5 @@ class OtherTodoAdapter(
         notifyDataSetChanged()
     }
 
-    fun clearData(){
-        todoList.clear()
-        Log.d("OtherTodoAdapter","clearData 실행")
-        notifyDataSetChanged()
-    }
-
 
 }
