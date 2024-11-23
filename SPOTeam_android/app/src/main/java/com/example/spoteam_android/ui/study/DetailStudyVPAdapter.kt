@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.provider.Settings.Global.putInt
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.spoteam_android.todolist.TodoListFragment
-import com.example.spoteam_android.ui.calendar.CalendarFragment
+import com.example.spoteam_android.ui.study.todolist.TodoListFragment
+import com.example.spoteam_android.ui.study.calendar.CalendarFragment
 import com.example.spoteam_android.ui.home.HomeFragment
 
 class DetailStudyVPAdapter(fragment: Fragment, private val studyId: Int, private val startDateTime: String?) : FragmentStateAdapter(fragment) {

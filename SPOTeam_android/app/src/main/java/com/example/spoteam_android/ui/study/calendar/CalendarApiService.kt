@@ -1,4 +1,4 @@
-package com.example.spoteam_android.ui.calendar
+package com.example.spoteam_android.ui.study.calendar
 
 import retrofit2.Call
 import retrofit2.http.GET

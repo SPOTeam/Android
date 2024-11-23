@@ -1,4 +1,4 @@
-package com.example.spoteam_android.ui.calendar
+package com.example.spoteam_android.ui.study.calendar
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
