@@ -34,6 +34,7 @@ data class WriteStudyCommentRequest(
 
 /*********퀴즈 생성 Request********/
 data class QuizContentRequest(
+    val createdAt : String,
     val question : String,
     val answer : String
 )

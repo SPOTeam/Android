@@ -23,23 +23,6 @@ class CrewTakeAttendanceFragment : Fragment() {
     ): View? {
         binding = FragmentCrewTakeAttendanceBinding.inflate(inflater, container, false)
 
-        startTimer()
-
         return binding.root
-    }
-
-    private fun startTimer() {
-        countDownTimer = object : CountDownTimer(timeInMillis, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                val minutes = (millisUntilFinished / 1000) / 60
-                val seconds = (millisUntilFinished / 1000) % 60
-                binding.timerTv.text = String.format("%02d:%02d", minutes, seconds)
-            }
-
-            override fun onFinish() {
-                binding.timerTv.text = "00:00"
-
-            }
-        }.start()
     }
 }

@@ -649,6 +649,7 @@ data class QuizContentResponse(
 )
 
 data class QuizContentInfo (
+    val createdAt : String,
     val question: String,
     val answer : String
 )

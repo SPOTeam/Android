@@ -18,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.Instant
 
 
 class HostMakeQuizFragment : BottomSheetDialogFragment() {
@@ -25,7 +26,7 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentHostMakeQuizBinding
     val studyViewModel: StudyViewModel by activityViewModels()
     var studyId : Int = -1
-
+    private lateinit var scheduleId : String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +34,10 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentHostMakeQuizBinding.inflate(inflater, container, false)
+
+        val parent = parentFragment as? CheckAttendanceFragment
+        scheduleId = parent?.arguments?.getString("scheduleId").toString()
+        Log.d("HostMakeQuizFragment", "Received scheduleId from parentFragment: $scheduleId")
 
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
 //            Log.d("MakeQuiz", "Received studyId from ViewModel: $studyId")
@@ -48,6 +53,7 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
             val input2 = binding.makeAnswerEt.text.toString()
 
             val requestBody = QuizContentRequest(
+                createdAt = Instant.now().toString(),
                 question = input1,
                 answer = input2
             )
@@ -62,7 +68,8 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
     }
 
     private fun postAttendanceQuiz(requestBody : QuizContentRequest) {
-        RetrofitInstance.retrofit.create(CommunityAPIService::class.java).makeQuiz(studyId, requestBody)
+        Log.d("CreatedAt", requestBody.createdAt)
+        RetrofitInstance.retrofit.create(CommunityAPIService::class.java).makeQuiz(studyId, scheduleId.toInt(), requestBody)
             .enqueue(object : Callback<QuizContentResponse> {
                 override fun onResponse(
                     call: Call<QuizContentResponse>,
