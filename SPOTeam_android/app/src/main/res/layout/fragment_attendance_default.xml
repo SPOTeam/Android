@@ -21,6 +21,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/timer_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_timer"
+        android:text="05:00"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="15dp"
+        android:textStyle="bold"
+        android:textColor="@color/active_blue"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/take_attendance_title_tv"
+        android:visibility="gone"/>
+
     <!--    X 이미지 변경    -->
     <ImageView
         android:id="@+id/write_content_prev_iv"
@@ -39,14 +55,14 @@
         android:text="퀴즈의 정답을 맞추면 출석이 인증됩니다.\n 오늘 스터디에 참석한 팀원들과 정답을 공유해보세요!"
         android:layout_marginTop="13dp"
         android:textColor="#8E8E8E"
-        app:layout_constraintTop_toBottomOf="@id/take_attendance_title_tv"
+        app:layout_constraintTop_toBottomOf="@id/timer_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/member_tl"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="158dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="33.5dp"

@@ -2,6 +2,7 @@ package com.example.spoteam_android.ui.study.quiz
 
 import StudyViewModel
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ class HostMakeQuizFirstFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentToMakeQuizBinding
     val studyViewModel: StudyViewModel by activityViewModels()
+    private lateinit var scheduleId: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,9 +25,19 @@ class HostMakeQuizFirstFragment : BottomSheetDialogFragment() {
     ): View? {
         binding = FragmentToMakeQuizBinding.inflate(inflater, container, false)
 
-        binding.startAttendanceTv.setOnClickListener{
+        // 전달받은 scheduleId를 arguments에서 가져옴
+        scheduleId = arguments?.getString("scheduleId").orEmpty()
+        Log.d("HostMakeQuizFirstFragment", "Received scheduleId: $scheduleId")
+
+        binding.startAttendanceTv.setOnClickListener {
+            val hostMakeQuizFragment = HostMakeQuizFragment().apply {
+                arguments = Bundle().apply {
+                    putString("scheduleId", scheduleId) // scheduleId 다시 전달
+                }
+            }
+
             parentFragmentManager.beginTransaction()
-                .replace(R.id.child_fragment, HostMakeQuizFragment())
+                .replace(R.id.child_fragment, hostMakeQuizFragment)
                 .commitAllowingStateLoss()
         }
 
