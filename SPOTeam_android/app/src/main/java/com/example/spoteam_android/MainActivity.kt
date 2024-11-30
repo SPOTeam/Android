@@ -14,7 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
-import com.example.spoteam_android.todolist.TodoViewModel
+import com.example.spoteam_android.ui.study.todolist.TodoViewModel
 import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 //import com.example.spoteam_android.ui.bookMark.BookmarkFragment

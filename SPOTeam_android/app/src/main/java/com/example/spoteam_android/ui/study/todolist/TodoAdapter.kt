@@ -1,4 +1,4 @@
-package com.example.spoteam_android.todolist
+package com.example.spoteam_android.ui.study.todolist
 
 import android.content.Context
 import android.graphics.Paint
@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.TodolistItemBinding
 
+// My Todo Adapter
 class TodoAdapter(
     private val context: Context,
     private var todoList: MutableList<TodoTask>,       // TodoTask 리스트로 변경

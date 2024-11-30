@@ -15,9 +15,10 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:mcv_leftArrow="@color/teal_200"
-        app:mcv_rightArrow="@color/teal_200" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    app:mcv_leftArrow="@color/teal_200"-->
+<!--    app:mcv_rightArrow="@color/teal_200"-->
 
 
     <!-- RecyclerView -->

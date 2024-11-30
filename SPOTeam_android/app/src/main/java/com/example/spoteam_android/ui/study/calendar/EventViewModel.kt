@@ -1,6 +1,5 @@
-package com.example.spoteam_android.ui.calendar
+package com.example.spoteam_android.ui.study.calendar
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -55,7 +54,6 @@ class EventViewModel : ViewModel() {
 
     // 주어진 날짜에 맞는 이벤트를 필터링하여 _events에 반영
     fun loadEvents(year: Int, month: Int, day: Int) {
-        Log.d("EventViewModel", "Calendar clicked date: Year: $year, Month: $month, Day: $day")
         _events.value = filterEventsByDate(allEvents, year, month, day)
     }
 

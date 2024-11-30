@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/SPOTeam_android.iml" filepath="$PROJECT_DIR$/.idea/modules/SPOTeam_android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SPOTeam_android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SPOTeam_android.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SPOTeam_android.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SPOTeam_android.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SPOTeam_android.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SPOTeam_android.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SPOTeam_android.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SPOTeam_android.app.unitTest.iml" />
