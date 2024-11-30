@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.R
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class EventAdapter(
     private var events: List<Event>,
@@ -95,6 +97,9 @@ class EventAdapter(
             }
 
 
+
+            // 체크 아이콘 visibility 설정
+//            icCheck.visibility = if(selectedDate.equals(LocalDate.now())) View.VISIBLE else View.GONE
 
             // 체크 아이콘 visibility 설정
             icCheck.visibility = if (isTodoList) View.GONE else View.VISIBLE

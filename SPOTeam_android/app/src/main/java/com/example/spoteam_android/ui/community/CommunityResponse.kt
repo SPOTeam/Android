@@ -654,8 +654,16 @@ data class QuizContentInfo (
     val answer : String
 )
 
+/************퀴즈 가져오기 완료***********/
+data class GetQuizResponse(
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: QuizInfo
+)
 
-
-
-
+data class QuizInfo (
+    val quizId : Long,
+    val question: String
+)
 

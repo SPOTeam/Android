@@ -15,7 +15,7 @@
         android:gravity="center"
         android:paddingVertical="3dp"
         android:textStyle="bold"
-        android:text="출석 제크"
+        android:text="출석 체크"
         android:textColor="@drawable/button_textcolor"
         android:textSize="25sp"
         android:layout_marginTop="153dp"

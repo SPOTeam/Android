@@ -159,9 +159,18 @@ class CalendarFragment : Fragment() {
 
         eventAdapter = EventAdapter(emptyList(), { event ->
             val hostMakeQuizFragment = CheckAttendanceFragment()
+
+            // scheduleId를 전달하기 위해 Bundle 생성
+            val bundle = Bundle().apply {
+                putInt("scheduleId", event.id) // Event 객체의 id를 scheduleId로 전달
+            }
+            hostMakeQuizFragment.arguments = bundle
+
+            // DialogFragment 설정 및 표시
             hostMakeQuizFragment.show(parentFragmentManager, "HostMakeQuizFragment")
             hostMakeQuizFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
         }, false)
+
 
         eventsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         eventsRecyclerView.adapter = eventAdapter
@@ -232,7 +241,6 @@ class CalendarFragment : Fragment() {
                     Log.d("CalendarFragment","$apiResponse" )
 
                     if (apiResponse?.isSuccess == true) {
-
                         apiResponse.result.scheduleList.forEach { schedule ->
                             val eventItem = Event(
                                 id = schedule.scheduleId,

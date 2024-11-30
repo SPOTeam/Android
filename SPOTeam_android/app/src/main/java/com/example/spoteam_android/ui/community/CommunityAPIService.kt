@@ -4,6 +4,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
+import java.time.LocalDate
 
 interface CommunityAPIService {
     @GET("/spot/posts/best")
@@ -278,4 +279,11 @@ interface CommunityAPIService {
         @Path("scheduleId") scheduleId: Int,
         @Body requestBody : QuizContentRequest
     ): Call<QuizContentResponse>
+
+    @GET("/spot/studies/{studyId}/schedules/{scheduleId}/quiz")
+    fun getStudyScheduleQuiz(
+        @Path("studyId") studyId: Int,
+        @Path("scheduleId") scheduleId: Int,
+        @Query("date") date : LocalDate
+    ) : Call<GetQuizResponse>
 }
