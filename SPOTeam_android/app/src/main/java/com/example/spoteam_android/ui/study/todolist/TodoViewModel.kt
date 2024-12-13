@@ -42,6 +42,8 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
 
     // Fetches the to-do list for a specific date and updates LiveData
     fun fetchTodoList(studyId: Int, page: Int, size: Int, date: String = todayDate) {
+        Log.d("fetchTodoList", "studyId: $studyId, page: $page, size: $size, date: $date")
+
         repository.lookTodo(studyId, page, size, date) { response ->
             if (response == null) {
                 _myTodoListResponse.postValue(null) // Update LiveData on failure or empty response
