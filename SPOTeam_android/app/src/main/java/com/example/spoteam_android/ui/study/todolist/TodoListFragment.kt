@@ -41,11 +41,12 @@ class TodoListFragment : Fragment() {
     private lateinit var otherTodoAdapter: OtherTodoAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var eventAdapter: EventAdapter
-    private var selectedDate: String = "" // 선택된 날짜를 저장할 변수
+    private lateinit var selectedDate: String // 멤버 변수로 선언
     private val eventViewModel: EventViewModel by activityViewModels()
     private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
     private lateinit var memberIdMap: Map<ProfileItem, Int>
     private var selectedMemberId: Int? = null
+
 
 
     override fun onCreateView(
@@ -63,7 +64,7 @@ class TodoListFragment : Fragment() {
 
         // 오늘 날짜로 selectedDate 초기화
         val calendar = Calendar.getInstance()
-        val selectedDate = "${calendar.get(Calendar.YEAR)}-" +
+        selectedDate  = "${calendar.get(Calendar.YEAR)}-" +
                 "${(calendar.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-" +
                 "${calendar.get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0')}"
 
@@ -78,7 +79,7 @@ class TodoListFragment : Fragment() {
         val dates = (1..31).map { DateItem(it.toString(), it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()) }
         dateAdapter = DateAdapter(dates) { date ->
             Log.d("DateAdapter", "Date clicked: $date")
-            val selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-$date"
+            selectedDate  = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-$date"
             todoViewModel.onDateChanged(selectedDate)
         }
         binding.rvDates.adapter = dateAdapter
@@ -96,7 +97,7 @@ class TodoListFragment : Fragment() {
             eventViewModel.loadEvents(year, month, today)
 
             // 어댑터와 데코레이터 갱신 추가
-            val selectedDate = String.format("%04d-%02d-%02d", year, month, today)
+            selectedDate = String.format("%04d-%02d-%02d", year, month, today)
             eventAdapter.updateSelectedDate(selectedDate)
 
             // 어댑터 데이터 갱신
@@ -195,17 +196,39 @@ class TodoListFragment : Fragment() {
     }
 
     // 내 투두리스트 조회
+    // 내 투두리스트 조회
     private fun fetchTodoList(studyId: Int) {
-        // selectedDate의 형식을 yyyy-MM-dd로 보장
         val formattedDate = formatToDate(selectedDate)
         todoViewModel.fetchTodoList(studyId, page = 0, size = 10, date = formattedDate)
+
+        todoViewModel.myTodoListResponse.observe(viewLifecycleOwner) { response ->
+            response?.result?.content?.let { todos ->
+                // 데이터를 역순으로 정렬
+                val reversedTodos = todos.reversed()
+                myTodoAdapter.updateData(reversedTodos.toMutableList())
+            } ?: run {
+                myTodoAdapter.updateData(emptyList<TodoTask>().toMutableList())
+            }
+        }
     }
 
+
     // 스터디원 투두 리스트 조회
-    private fun fetchOtherTodoList(studyId: Int, memberId: Int){
+    private fun fetchOtherTodoList(studyId: Int, memberId: Int) {
         val formattedDate = formatToDate(selectedDate)
         todoViewModel.fetchOtherToDoList(studyId, memberId, page = 0, size = 10, date = formattedDate)
+
+        todoViewModel.otherTodoListResponse.observe(viewLifecycleOwner) { response ->
+            response?.result?.content?.let { todos ->
+                // 데이터를 역순으로 정렬
+                val reversedTodos = todos.reversed()
+                otherTodoAdapter.updateData(reversedTodos.toMutableList())
+            } ?: run {
+                otherTodoAdapter.updateData(emptyList())
+            }
+        }
     }
+
 
 
     //날짜 형식 조정
