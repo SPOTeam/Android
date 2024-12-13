@@ -41,11 +41,12 @@ class TodoListFragment : Fragment() {
     private lateinit var otherTodoAdapter: OtherTodoAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var eventAdapter: EventAdapter
-    private var selectedDate: String = "" // 선택된 날짜를 저장할 변수
+    private lateinit var selectedDate: String // 멤버 변수로 선언
     private val eventViewModel: EventViewModel by activityViewModels()
     private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
     private lateinit var memberIdMap: Map<ProfileItem, Int>
     private var selectedMemberId: Int? = null
+
 
 
     override fun onCreateView(
@@ -63,51 +64,106 @@ class TodoListFragment : Fragment() {
 
         // 오늘 날짜로 selectedDate 초기화
         val calendar = Calendar.getInstance()
-        selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
+        selectedDate  = "${calendar.get(Calendar.YEAR)}-" +
+                "${(calendar.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-" +
+                "${calendar.get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0')}"
 
-        // 이벤트 RecyclerView 초기화
-        eventAdapter = EventAdapter(emptyList(), { /* 클릭 이벤트 처리 (필요시 추가) */ }, true)
-        binding.eventrecyclerviewto.layoutManager = LinearLayoutManager(requireContext())
-        binding.eventrecyclerviewto.adapter = eventAdapter
-
-
-        profileAdapter = DetailStudyHomeProfileAdapter(ArrayList()) { profileItem ->
-            val memberId = memberIdMap[profileItem]
-            Log.d("TodoListFragment", "Clicked Member ID: $memberId")
-
-            if (memberId != null) {
-                selectedMemberId = memberId
-                Log.d("ToDoListFragment","$selectedMemberId")
-                fetchOtherTodoList(studyId,memberId)
-            }
-        }
-
-
-        binding.fragmentDetailStudyHomeProfileRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.fragmentDetailStudyHomeProfileRv.adapter = profileAdapter
-
+        // 리사이클러뷰 초기화, 변수 선언등 UI 표시 이전에 선행되어야 할 작업 수행
+        setUpBeforeView(studyId, selectedDate)
 
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
         val today = calendar.get(Calendar.DAY_OF_MONTH)
 
+        // 미니 한 줄 달력 어댑터 연결, 날짜 클릭 시 해당 날자 일정 및 투두리스트 로드
+        val dates = (1..31).map { DateItem(it.toString(), it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()) }
+        dateAdapter = DateAdapter(dates) { date ->
+            Log.d("DateAdapter", "Date clicked: $date")
+            selectedDate  = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-$date"
+            todoViewModel.onDateChanged(selectedDate)
+        }
+        binding.rvDates.adapter = dateAdapter
+
+        // ViewTreeObserver를 사용하여 날짜 목록 가운데로 스크롤
+        binding.rvDates.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.rvDates.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                scrollToTodayPosition()
+            }
+        })
+
+        //캘린더 일정 조회 API 최초 호출
         fetchGetSchedule(studyId, year, month) {
             eventViewModel.loadEvents(year, month, today)
 
             // 어댑터와 데코레이터 갱신 추가
-            val selectedDate = String.format("%04d-%02d-%02d", year, month, today)
+            selectedDate = String.format("%04d-%02d-%02d", year, month, today)
             eventAdapter.updateSelectedDate(selectedDate)
 
             // 어댑터 데이터 갱신
             eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
         }
 
-        eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
-            eventAdapter.updateEvents(events)
-        })
+        // 내 투두리스트 조회 API
+        todoViewModel.myTodoListResponse.observe(viewLifecycleOwner) { response ->
+            response?.result?.content?.let { todos ->
+                // 받은 데이터가 이전과 동일한 경우 RecyclerView를 갱신하지 않음
+                if (todos != myTodoAdapter.getCurrentData()) {
+                    val reversedTodos = todos.reversed() // 역순으로 정렬
+                    myTodoAdapter.updateData(reversedTodos.toMutableList())
+                }
+            } ?: run {
+                myTodoAdapter.updateData(emptyList<TodoTask>().toMutableList())
+            }
+        }
+
+        // 스터디원 투두리스트 조회 API
+        todoViewModel.otherTodoListResponse.observe(viewLifecycleOwner) { response ->
+            response?.result?.content?.let { todos ->
+                if (todos.isNotEmpty()) {
+                    otherTodoAdapter.updateData(todos.toMutableList())
+                } else {
+                    otherTodoAdapter.updateData(emptyList())
+                }
+            } ?: run {
+                otherTodoAdapter.updateData(emptyList())
+            }
+        }
+
+        setupRecyclerViews(studyId)
 
 
-        // 투두 리스트 어댑터 초기화
+        // + 버튼을 통해 내 투두리스트를 추가할 수 있음
+        binding.imgbtnPlusTodolist.setOnClickListener {
+            myTodoAdapter.addTodo()
+            binding.rvMyTodoList.scrollToPosition(myTodoAdapter.itemCount - 1)
+        }
+
+        //스터디원 프로필 조회 API 호출
+        fetchStudyMembers(studyId)
+
+
+        return binding.root
+    }
+
+    private fun setUpBeforeView(studyId: Int, selectedDate: String){
+        eventAdapter = EventAdapter(emptyList(), { /* 클릭 이벤트 처리 (필요시 추가) */ }, true)
+        binding.eventrecyclerviewto.layoutManager = LinearLayoutManager(requireContext())
+        binding.eventrecyclerviewto.adapter = eventAdapter
+
+        profileAdapter = DetailStudyHomeProfileAdapter(ArrayList()) { profileItem ->
+            val memberId = memberIdMap[profileItem]
+
+            if (memberId != null) {
+                selectedMemberId = memberId
+                fetchOtherTodoList(studyId,memberId)
+            }
+        }
+
+        binding.fragmentDetailStudyHomeProfileRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.fragmentDetailStudyHomeProfileRv.adapter = profileAdapter
+
+        //내 투두리스트
         myTodoAdapter = TodoAdapter(requireContext(), mutableListOf(), { content ->
             todoViewModel.addTodoItem(studyId, content, selectedDate)
         }, { toDoId ->
@@ -123,8 +179,9 @@ class TodoListFragment : Fragment() {
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvDates.layoutManager = layoutManager
 
-
+        //다른 스터디원 투두리스트
         otherTodoAdapter = OtherTodoAdapter(requireContext(), mutableListOf())
+
 
         binding.rvOtherTodo.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -136,85 +193,45 @@ class TodoListFragment : Fragment() {
         binding.rvDates.layoutManager = layoutManager
 
 
+    }
 
-        val dates = (1..31).map { DateItem(it.toString(), it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()) }
-        dateAdapter = DateAdapter(dates) { date ->
-            Log.d("DateAdapter", "Date clicked: $date")
-            selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-$date"
-            todoViewModel.onDateChanged(selectedDate)
-
-        }
-
-        binding.rvDates.adapter = dateAdapter
+    // 내 투두리스트 조회
+    // 내 투두리스트 조회
+    private fun fetchTodoList(studyId: Int) {
+        val formattedDate = formatToDate(selectedDate)
+        todoViewModel.fetchTodoList(studyId, page = 0, size = 10, date = formattedDate)
 
         todoViewModel.myTodoListResponse.observe(viewLifecycleOwner) { response ->
             response?.result?.content?.let { todos ->
-                // 받은 데이터가 이전과 동일한 경우 RecyclerView를 갱신하지 않음
-                if (todos != myTodoAdapter.getCurrentData()) {
-                    Log.d("TodoFragment", "RecyclerView 데이터 갱신: $todos")
-                    val reversedTodos = todos.reversed() // 역순으로 정렬
-                    myTodoAdapter.updateData(reversedTodos.toMutableList())
-                }
+                // 데이터를 역순으로 정렬
+                val reversedTodos = todos.reversed()
+                myTodoAdapter.updateData(reversedTodos.toMutableList())
             } ?: run {
                 myTodoAdapter.updateData(emptyList<TodoTask>().toMutableList())
-                Log.d("TodoFragment", "받은 데이터가 없습니다.")
             }
         }
+    }
+
+
+    // 스터디원 투두 리스트 조회
+    private fun fetchOtherTodoList(studyId: Int, memberId: Int) {
+        val formattedDate = formatToDate(selectedDate)
+        todoViewModel.fetchOtherToDoList(studyId, memberId, page = 0, size = 10, date = formattedDate)
 
         todoViewModel.otherTodoListResponse.observe(viewLifecycleOwner) { response ->
             response?.result?.content?.let { todos ->
-                Log.d("TodoFragment", "Other todos fetched: $todos")
-                if (todos.isNotEmpty()) {
-                    otherTodoAdapter.updateData(todos.toMutableList())
-                } else {
-                    Log.d("TodoFragment", "No todos to display.")
-                    otherTodoAdapter.updateData(emptyList())
-                }
+                // 데이터를 역순으로 정렬
+                val reversedTodos = todos.reversed()
+                otherTodoAdapter.updateData(reversedTodos.toMutableList())
             } ?: run {
-                Log.d("TodoFragment", "Clearing other todos.")
                 otherTodoAdapter.updateData(emptyList())
             }
         }
-
-
-
-        setupRecyclerViews(studyId)
-
-        // ViewTreeObserver를 사용하여 날짜 목록 가운데로 스크롤
-        binding.rvDates.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                binding.rvDates.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                scrollToTodayPosition()
-            }
-        })
-
-
-        // imgbtnPlusTodolist 버튼 클릭 리스너
-        binding.imgbtnPlusTodolist.setOnClickListener {
-            myTodoAdapter.addTodo()
-            binding.rvMyTodoList.scrollToPosition(myTodoAdapter.itemCount - 1)
-        }
-
-
-        fetchStudyMembers(studyId)
-
-
-        return binding.root
-    }
-
-    private fun fetchTodoList(studyId: Int) {
-        // selectedDate의 형식을 yyyy-MM-dd로 보장
-        val formattedDate = formatToDate(selectedDate)
-        todoViewModel.fetchTodoList(studyId, page = 0, size = 10, date = formattedDate)
-    }
-
-    private fun fetchOtherTodoList(studyId: Int, memberId: Int){
-        val formattedDate = formatToDate(selectedDate)
-        todoViewModel.fetchOtherToDoList(studyId, memberId, page = 0, size = 10, date = formattedDate)
     }
 
 
 
+    //날짜 형식 조정
     private fun formatToDate(date: String): String {
         val parts = date.split("-")
         return if (parts.size == 3) {
@@ -224,6 +241,7 @@ class TodoListFragment : Fragment() {
         }
     }
 
+    // UI 재조정
     private fun setupRecyclerViews(studyId: Int) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -234,10 +252,10 @@ class TodoListFragment : Fragment() {
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvDates.layoutManager = layoutManager
 
-        val day = selectedDate.split("-")[2].toInt()
 
         val dates = (1..31).map { DateItem(it.toString(), it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()) }
         dateAdapter = DateAdapter(dates) { date ->
+
             selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-$date"
             Log.d("TodoListFragment", "Date selected: $selectedDate")
             todoViewModel.onDateChanged(selectedDate)
@@ -269,6 +287,7 @@ class TodoListFragment : Fragment() {
         binding.rvDates.adapter = dateAdapter
     }
 
+    //오늘 날짜가 가운데로 오도록 이동시킴
     private fun scrollToTodayPosition() {
         val today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString()
         val todayPosition = dateAdapter.dates.indexOfFirst { it.date == today }
@@ -280,6 +299,7 @@ class TodoListFragment : Fragment() {
         }
     }
 
+    // 캘린더 일정 조회
     private fun fetchGetSchedule(studyId: Int, year: Int, month: Int, onComplete: () -> Unit) {
 
         val EventItems = arrayListOf<Event>()
@@ -340,6 +360,7 @@ class TodoListFragment : Fragment() {
         })
     }
 
+    // 스터디 멤버 조회
     private fun fetchStudyMembers(studyId: Int) {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 

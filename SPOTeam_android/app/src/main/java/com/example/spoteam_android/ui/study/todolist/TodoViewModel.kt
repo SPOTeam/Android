@@ -24,6 +24,8 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
     private val _selectedDate = MutableLiveData<String>()
     val selectedDate: LiveData<String> get() = _selectedDate
 
+    private var currentSelectedDate: String = ""
+
 
     private val todayDate: String
         get() {
@@ -37,11 +39,13 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
     init {
         // Initialize with today's date and fetch today's todo list
         _selectedDate.value = todayDate
-        fetchTodoList(studyId = studyId, page = 0, size = 10, date = todayDate)
+        Log.d("TodoViewModel", "Initialized with todayDate: $todayDate")
     }
 
     // Fetches the to-do list for a specific date and updates LiveData
-    fun fetchTodoList(studyId: Int, page: Int, size: Int, date: String = todayDate) {
+    fun fetchTodoList(studyId: Int, page: Int, size: Int, date: String) {
+        Log.d("fetchTodoList", "studyId: $studyId, page: $page, size: $size, date: $date")
+
         repository.lookTodo(studyId, page, size, date) { response ->
             if (response == null) {
                 _myTodoListResponse.postValue(null) // Update LiveData on failure or empty response
@@ -69,13 +73,18 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
 
     // Updates the selected date and fetches data for the new date
     fun onDateChanged(newDate: String) {
+        currentSelectedDate = newDate // 선택된 날짜 갱신
         _selectedDate.value = newDate
+        Log.d("TodoViewModel","${_selectedDate.value}")
+
         fetchTodoList(studyId = studyId, page = 0, size = 10, date = newDate)
     }
 
     // Adds a new to-do item
     fun addTodoItem(studyId: Int, content: String, date: String) {
-        repository.addTodoItem(studyId, content, date) { response ->
+        Log.d("addTodoItem", "Adding todo item: studyId=$studyId, content=$content, date=$date")
+
+        repository.addTodoItem(studyId, content, currentSelectedDate) { response ->
             _addTodoResponse.postValue(response)
         }
     }
@@ -97,7 +106,4 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
         Log.d("OtherTodoViewModel","clearOtherTodoList 실행")
         _otherTodoListResponse.postValue(null)
     }
-
-
-
 }

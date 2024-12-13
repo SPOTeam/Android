@@ -1,6 +1,5 @@
 package com.example.spoteam_android.ui.study.calendar
 
-import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
@@ -8,12 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CalendarView
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,8 +16,6 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.spoteam_android.BoardAdapter
-import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
@@ -34,8 +27,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class CalendarFragment : Fragment() {
@@ -45,9 +36,8 @@ class CalendarFragment : Fragment() {
     private lateinit var calendarView: MaterialCalendarView
     private val eventViewModel: EventViewModel by activityViewModels()
     private val studyViewModel: StudyViewModel by activityViewModels()
+    private lateinit var customRectangleDecorator: CustomRectangleDecorator
     private lateinit var eventAdapter: EventAdapter
-    private lateinit var todayDecorator: TodayDecorator
-    private lateinit var selectedDateDecorator: TodayDecorator
     private lateinit var addButton: ImageButton
     private var start: String? = null
 
@@ -58,12 +48,9 @@ class CalendarFragment : Fragment() {
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
 
         calendarView = binding.calendarView
-        todayDecorator = TodayDecorator(requireContext())
-        selectedDateDecorator = TodayDecorator(requireContext())
 
-        // Decorator 추가
-        calendarView.addDecorator(todayDecorator)
-        calendarView.addDecorator(selectedDateDecorator)
+        customRectangleDecorator = CustomRectangleDecorator(requireContext())
+        calendarView.addDecorator(customRectangleDecorator)
 
 
         start = arguments?.getString("my_start")
@@ -90,9 +77,10 @@ class CalendarFragment : Fragment() {
             eventAdapter.updateSelectedDate(selectedDate)
 
             val date = CalendarDay.from(year, month, day)
-            todayDecorator.setSelectedDate(date)
-            selectedDateDecorator.setSelectedDate(date)
-            calendarView.invalidateDecorators() // Decorator 강제 갱신
+            customRectangleDecorator.setSelectedDate(date)
+            calendarView.invalidateDecorators() // 데코레이터 갱신
+
+            calendarView.setDateTextAppearance(R.style.CustomDateTextAppearance)
 
             // 어댑터 데이터 갱신
             eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
@@ -198,9 +186,10 @@ class CalendarFragment : Fragment() {
                 val selectedDate = String.format("%04d-%02d-%02d", year, month, day)
                 eventAdapter.updateSelectedDate(selectedDate)
 
-                todayDecorator.setSelectedDate(date)
-                selectedDateDecorator.setSelectedDate(date)
-                calendarView.invalidateDecorators() // Decorator 강제 갱신
+                calendarView.setDateTextAppearance(R.style.CustomDateTextAppearance)
+                customRectangleDecorator.setSelectedDate(date)
+                calendarView.invalidateDecorators() // 데코레이터 갱신
+
 
                 fetchGetSchedule(studyId, year, month) {
                     eventViewModel.loadEvents(year, month, day)
