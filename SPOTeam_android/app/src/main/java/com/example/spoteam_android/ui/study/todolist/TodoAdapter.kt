@@ -36,6 +36,7 @@ class TodoAdapter(
         // 텍스트 및 체크박스 초기 상태 설정
         holder.binding.cbTodo.text = item.content
         holder.binding.cbTodo.visibility = if (item.content.isEmpty()) View.GONE else View.VISIBLE
+        holder.binding.todoMoreButton.visibility = if (item.content.isEmpty()) View.GONE else View.VISIBLE
         holder.binding.etTodo.visibility = if (item.content.isEmpty()) View.VISIBLE else View.GONE
         holder.binding.etTodo.setText(item.content)
 

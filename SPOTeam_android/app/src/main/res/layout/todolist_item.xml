@@ -15,6 +15,7 @@
         android:layout_weight="1"
         android:background="@drawable/edittext_rounded_corner_rectangle"
         android:ems="10"
+
         android:hint="오늘의 할 일을 입력해주세요."
         android:inputType="text"
         android:textSize="12sp"
@@ -31,11 +32,25 @@
         android:layout_height="30dp"
         android:text="투두 리스트 항목"
         android:textSize="12sp"
-        android:visibility="gone"
         android:fontFamily="@font/pretendard"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/todoMoreButton"
+        android:layout_width="25dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/white"
+        android:padding="5dp"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        android:src="@drawable/ic_more_todolist"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
