@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 체크된 상태 -->
-    <item android:drawable="@drawable/fragment_todo_list_imv_checked_box" android:state_checked="true"/>
-    <!-- 기본 상태 (체크되지 않음) -->
-    <item android:drawable="@drawable/fragment_todo_list_imv_unchecked_box" />
+    <!-- Unchecked -->
+    <item android:state_checked="false">
+        <shape>
+            <stroke android:color="@color/gray_03" android:width="1dp" />
+            <corners android:radius="4dp" />
+            <solid android:color="#FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Checked -->
+    <item android:state_checked="true">
+        <layer-list>
+            <!-- 배경 -->
+            <item>
+                <shape>
+                    <corners android:radius="4dp" />
+                    <solid android:color="@color/white" />
+                    <stroke
+                        android:color="@color/active_color"
+                        android:width="2dp" />
+                </shape>
+            </item>
+            <!-- 이미지 영역 -->
+            <item
+                android:drawable="@drawable/true_check" />
+        </layer-list>
+    </item>
 </selector>

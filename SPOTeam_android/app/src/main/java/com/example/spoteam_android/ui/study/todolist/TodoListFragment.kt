@@ -104,6 +104,8 @@ class TodoListFragment : Fragment() {
             eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
         }
 
+        fetchTodoList(studyId)
+
         // 내 투두리스트 조회 API
         todoViewModel.myTodoListResponse.observe(viewLifecycleOwner) { response ->
             response?.result?.content?.let { todos ->

@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.spoteam_android.databinding.TodolistItemBinding
+import com.example.spoteam_android.databinding.ItemTodoListBinding
 
-// My Todo Adapter
+// MyTodoAdapter
 class TodoAdapter(
     private val context: Context,
     private var todoList: MutableList<TodoTask>,       // TodoTask 리스트로 변경
@@ -17,11 +17,11 @@ class TodoAdapter(
     private val onCheckTodo: (Int) -> Unit            // 체크 시 ID를 전달하는 콜백
 ) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
-    inner class TodoViewHolder(val binding: TodolistItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class TodoViewHolder(val binding: ItemTodoListBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val inflater = LayoutInflater.from(context)
-        val binding = TodolistItemBinding.inflate(inflater, parent, false)
+        val binding = ItemTodoListBinding.inflate(inflater, parent, false)
         return TodoViewHolder(binding)
     }
 
@@ -34,8 +34,9 @@ class TodoAdapter(
         val item = todoList[position]
 
         // 텍스트 및 체크박스 초기 상태 설정
-        holder.binding.cbTodo.text = item.content
+        holder.binding.tvTodoText.text = item.content
         holder.binding.cbTodo.visibility = if (item.content.isEmpty()) View.GONE else View.VISIBLE
+        holder.binding.tvTodoText.visibility = if (item.content.isEmpty()) View.GONE else View.VISIBLE
         holder.binding.todoMoreButton.visibility = if (item.content.isEmpty()) View.GONE else View.VISIBLE
         holder.binding.etTodo.visibility = if (item.content.isEmpty()) View.VISIBLE else View.GONE
         holder.binding.etTodo.setText(item.content)
@@ -54,10 +55,10 @@ class TodoAdapter(
         }
 
         // 체크박스의 초기 상태에 따른 텍스트 스타일 설정
-        holder.binding.cbTodo.paintFlags = if (item.done) {
-            holder.binding.cbTodo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        holder.binding.tvTodoText.paintFlags = if (item.done) {
+            holder.binding.tvTodoText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         } else {
-            holder.binding.cbTodo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            holder.binding.tvTodoText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
 
         // 기존 리스너 제거 후 체크박스 상태 반영
@@ -70,8 +71,6 @@ class TodoAdapter(
             }
         }
     }
-
-
 
     override fun getItemCount(): Int = todoList.size
 

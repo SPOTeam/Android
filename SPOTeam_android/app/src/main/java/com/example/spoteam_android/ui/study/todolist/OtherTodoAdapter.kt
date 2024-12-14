@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemTodoListBinding
+import com.example.spoteam_android.databinding.ItemViewTodoListBinding
 
 // 다른 스터디원 Todo apapter
 class OtherTodoAdapter(
@@ -15,11 +16,11 @@ class OtherTodoAdapter(
 ) : RecyclerView.Adapter<OtherTodoAdapter.OtherTodoViewHolder>() {
 
     // ViewHolder 정의
-    inner class OtherTodoViewHolder(val binding: ItemTodoListBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class OtherTodoViewHolder(val binding: ItemViewTodoListBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OtherTodoViewHolder {
         val inflater = LayoutInflater.from(context)
-        val binding = ItemTodoListBinding.inflate(inflater, parent, false)
+        val binding = ItemViewTodoListBinding.inflate(inflater, parent, false)
         return OtherTodoViewHolder(binding)
     }
 
