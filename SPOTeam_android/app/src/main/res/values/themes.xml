@@ -170,4 +170,7 @@
         <item name="android:textSize">12sp</item> <!-- 텍스트 크기 -->
     </style>
 
+
+
+
 </resources>
