@@ -176,6 +176,10 @@
         <item name="android:background">#F9FBFF</item>
     </style>
 
+    <style name="CustomPopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/custom_popup_background</item>
+    </style>
+
 
 
 

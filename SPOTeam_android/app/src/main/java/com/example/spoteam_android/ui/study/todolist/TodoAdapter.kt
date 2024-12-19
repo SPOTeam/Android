@@ -5,11 +5,15 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.spoteam_android.R
+import com.example.spoteam_android.databinding.CustomPopupMenuBinding
 import com.example.spoteam_android.databinding.ItemTodoListBinding
 
-// MyTodoAdapter
+// TodoAdapter
 class TodoAdapter(
     private val context: Context,
     private var todoList: MutableList<TodoTask>,       // TodoTask 리스트로 변경
@@ -26,11 +30,6 @@ class TodoAdapter(
     }
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
-        if (todoList.isEmpty()) {
-            Toast.makeText(context, "No items to display", Toast.LENGTH_SHORT).show()
-            return
-        }
-
         val item = todoList[position]
 
         // 텍스트 및 체크박스 초기 상태 설정
@@ -40,6 +39,11 @@ class TodoAdapter(
         holder.binding.todoMoreButton.visibility = if (item.content.isEmpty()) View.GONE else View.VISIBLE
         holder.binding.etTodo.visibility = if (item.content.isEmpty()) View.VISIBLE else View.GONE
         holder.binding.etTodo.setText(item.content)
+
+        // "더보기" 버튼 클릭 시 PopupWindow 표시
+        holder.binding.todoMoreButton.setOnClickListener { view ->
+            showPopupWindow(view, item) // 현재 TodoTask 전달
+        }
 
         // EditText 변경 이벤트
         holder.binding.etTodo.setOnEditorActionListener { _, _, _ ->
@@ -61,7 +65,7 @@ class TodoAdapter(
             holder.binding.tvTodoText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
 
-        // 기존 리스너 제거 후 체크박스 상태 반영
+        // 체크박스 상태 반영
         holder.binding.cbTodo.setOnCheckedChangeListener(null)  // 기존 리스너 제거
         holder.binding.cbTodo.isChecked = item.done             // 체크 상태 반영
         holder.binding.cbTodo.setOnCheckedChangeListener { _, isChecked ->
@@ -87,5 +91,36 @@ class TodoAdapter(
     fun addTodo() {
         todoList.add(TodoTask(0, "", "", false)) // 새로운 할 일 추가 (기본값 설정)
         notifyItemInserted(todoList.size - 1)
+    }
+
+    fun showPopupWindow(anchorView: View, todoTask: TodoTask) {
+        val inflater = LayoutInflater.from(context)
+        val popupBinding = CustomPopupMenuBinding.inflate(inflater)
+
+        val popupWindow = PopupWindow(
+            popupBinding.root,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        // 배경 클릭 시 닫힘 설정
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.custom_popup_background))
+        popupWindow.isOutsideTouchable = true
+
+        // 옵션 클릭 이벤트
+        popupBinding.deleteTodos.setOnClickListener {
+            Toast.makeText(context, "삭제할 아이디: ${todoTask.id}", Toast.LENGTH_SHORT).show()
+            // 삭제 로직 추가
+            popupWindow.dismiss()
+        }
+        popupBinding.editTodos.setOnClickListener {
+            Toast.makeText(context, "수정할 아이디: ${todoTask.id}", Toast.LENGTH_SHORT).show()
+            // 수정 로직 추가
+            popupWindow.dismiss()
+        }
+
+        // PopupWindow 표시
+        popupWindow.showAsDropDown(anchorView, -290, -20)
     }
 }
