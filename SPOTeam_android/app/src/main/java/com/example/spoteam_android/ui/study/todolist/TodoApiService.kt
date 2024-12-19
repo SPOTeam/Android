@@ -2,6 +2,7 @@ package com.example.spoteam_android.ui.study.todolist
 
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -35,5 +36,11 @@ interface TodoApiService {
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("date") date: String
+    ): Call<TodolistResponse>
+
+    @DELETE("/spot/studies/{studyId}/to-do/{toDoId}")
+    fun deleteTodo(
+        @Path("studyId") studyId: Int,
+        @Path("toDoId") toDoId: Int
     ): Call<TodolistResponse>
 }

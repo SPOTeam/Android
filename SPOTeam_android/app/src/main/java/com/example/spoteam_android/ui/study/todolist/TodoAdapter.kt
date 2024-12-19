@@ -18,7 +18,9 @@ class TodoAdapter(
     private val context: Context,
     private var todoList: MutableList<TodoTask>,       // TodoTask 리스트로 변경
     private val onAddTodo: (String) -> Unit,
-    private val onCheckTodo: (Int) -> Unit            // 체크 시 ID를 전달하는 콜백
+    private val onCheckTodo: (Int) -> Unit,           // 체크 시 ID를 전달하는 콜백
+    private val repository: TodoRepository,
+    private val studyId: Int                          // 추가된 스터디 ID
 ) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
     inner class TodoViewHolder(val binding: ItemTodoListBinding) : RecyclerView.ViewHolder(binding.root)
@@ -108,12 +110,20 @@ class TodoAdapter(
         popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.custom_popup_background))
         popupWindow.isOutsideTouchable = true
 
-        // 옵션 클릭 이벤트
+        // 삭제 버튼 클릭 이벤트
         popupBinding.deleteTodos.setOnClickListener {
-            Toast.makeText(context, "삭제할 아이디: ${todoTask.id}", Toast.LENGTH_SHORT).show()
-            // 삭제 로직 추가
-            popupWindow.dismiss()
+            repository.deleteTodo(studyId, todoTask.id) { response -> // studyId와 todoId 전달
+                if (response != null) {
+                    Toast.makeText(context, "삭제 성공!", Toast.LENGTH_SHORT).show()
+                    removeTodoFromList(todoTask) // RecyclerView 갱신
+                } else {
+                    Toast.makeText(context, "삭제 실패", Toast.LENGTH_SHORT).show()
+                }
+                popupWindow.dismiss()
+            }
         }
+
+        // 수정 버튼 클릭 이벤트
         popupBinding.editTodos.setOnClickListener {
             Toast.makeText(context, "수정할 아이디: ${todoTask.id}", Toast.LENGTH_SHORT).show()
             // 수정 로직 추가
@@ -122,5 +132,13 @@ class TodoAdapter(
 
         // PopupWindow 표시
         popupWindow.showAsDropDown(anchorView, -290, -20)
+    }
+
+    private fun removeTodoFromList(todoTask: TodoTask) {
+        val position = todoList.indexOf(todoTask)
+        if (position != -1) {
+            todoList.removeAt(position)
+            notifyItemRemoved(position)
+        }
     }
 }

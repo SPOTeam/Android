@@ -74,6 +74,23 @@ class TodoRepository(private val apiService: TodoApiService) {
         })
     }
 
+    fun deleteTodo(studyId: Int,todoId: Int, callback: (TodolistResponse?) -> Unit) {
+        apiService.deleteTodo(studyId, todoId).enqueue(object : Callback<TodolistResponse> {
+            override fun onResponse(call: Call<TodolistResponse>, response: Response<TodolistResponse>) {
+
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    logError(response)
+                    callback(null)
+                }
+            }
+            override fun onFailure(call: Call<TodolistResponse>, t: Throwable) {
+                callback(null)
+            }
+        })
+    }
+
     private fun formatToDate(date: String): String {
         val parts = date.split("-")
         return if (parts.size == 3) {
@@ -107,4 +124,6 @@ class TodoRepository(private val apiService: TodoApiService) {
         val errorCode = response.code()
         val errorBody = response.errorBody()?.string()
     }
+
+
 }
