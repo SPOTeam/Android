@@ -61,6 +61,7 @@
         android:ems="10"
         android:fontFamily="@font/pretendard"
         android:hint="오늘의 할 일을 입력해주세요."
+        android:imeOptions="actionDone"
         android:inputType="text"
         android:paddingStart="5dp"
         android:textSize="12sp"

@@ -138,7 +138,7 @@ class TodoListFragment : Fragment() {
 
         // + 버튼을 통해 내 투두리스트를 추가할 수 있음
         binding.imgbtnPlusTodolist.setOnClickListener {
-            myTodoAdapter.addTodo()
+            myTodoAdapter.addTodo(selectedDate)
             binding.rvMyTodoList.scrollToPosition(myTodoAdapter.itemCount - 1)
         }
 
@@ -171,11 +171,9 @@ class TodoListFragment : Fragment() {
             context = requireContext(),
             todoList = mutableListOf(),
             onAddTodo = { content ->
-                // Todo 추가 API 호출
                 todoViewModel.addTodoItem(studyId, content, selectedDate)
             },
             onCheckTodo = { toDoId ->
-                // Todo 체크 API 호출
                 todoViewModel.checkTodo(studyId, toDoId)
             },
             repository = repository, // TodoRepository 전달

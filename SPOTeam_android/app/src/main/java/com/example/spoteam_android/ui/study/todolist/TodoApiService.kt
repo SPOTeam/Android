@@ -13,7 +13,7 @@ interface TodoApiService {
     fun addTodo(
         @Path("studyId") studyId: Int,          // URL 경로에 studyId 전달
         @Body request: TodoRequest               // 요청 본문에 TodoRequest 객체 전달
-    ): Call<TodolistResponse>
+    ): Call<CreateTodoResponse>
 
     @GET("/spot/studies/{studyId}/to-do/my")
     fun lookTodo(
@@ -27,6 +27,13 @@ interface TodoApiService {
     fun checkTodo(
         @Path("studyId") studyId: Int,          // URL 경로에 studyId 전달
         @Path("toDoId") toDoId: Int
+    ): Call<TodolistResponse>
+
+    @POST("/spot/studies/{studyId}/to-do/{toDoId}/update")
+    fun updateTodo(
+        @Path("studyId") studyId: Int,
+        @Path("toDoId") toDoId: Int,
+        @Body request: TodoRequest
     ): Call<TodolistResponse>
 
     @GET(" /spot/studies/{studyId}/to-do/members/{memberId}")
