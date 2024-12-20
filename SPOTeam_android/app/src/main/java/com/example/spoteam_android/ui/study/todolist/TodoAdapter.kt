@@ -18,6 +18,7 @@ import com.example.spoteam_android.databinding.ItemTodoListBinding
 class TodoAdapter(
     private val context: Context,
     private var todoList: MutableList<TodoTask>,       // TodoTask 리스트로 변경
+    private val onAddTodo: (String) -> Unit,
     private val onCheckTodo: (Int) -> Unit,           // 체크 시 ID를 전달하는 콜백
     private val repository: TodoRepository,
     private val studyId: Int                          // 추가된 스터디 ID
