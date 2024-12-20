@@ -11,8 +11,8 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
     private val _myTodos = MutableLiveData<List<String>>()
     val myTodos: LiveData<List<String>> get() = _myTodos
 
-    private val _addTodoResponse = MutableLiveData<TodolistResponse?>()
-    val addTodoResponse: LiveData<TodolistResponse?> get() = _addTodoResponse
+    private val _addTodoResponse = MutableLiveData<CreateTodoResponse?>()
+    val addTodoResponse: LiveData<CreateTodoResponse?> get() = _addTodoResponse
 
 
     private val _myTodoListResponse = MutableLiveData<TodolistResponse?>()

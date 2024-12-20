@@ -9,6 +9,7 @@ data class TodolistResponse(
 )
 
 data class ResultData(
+    @SerializedName("id") var id: Int,
     @SerializedName("totalPages") val totalPages: Int,
     @SerializedName("totalElements") val totalElements: Int,
     @SerializedName("first") val first: Boolean,
@@ -19,8 +20,23 @@ data class ResultData(
 )
 
 data class TodoTask( // 이름을 TodoTask로 변경
-    @SerializedName("id") val id: Int,
+    @SerializedName("id") var id: Int,
     @SerializedName("content") var content: String,
-    @SerializedName("date") val date: String,
-    @SerializedName("done") var done: Boolean
+    @SerializedName("date") var date: String,
+    @SerializedName("done") var done: Boolean,
+    var isEditing: Boolean = false,
+    var isNew: Boolean = false // 새로운 항목 여부
+)
+
+data class CreateTodoResponse(
+    @SerializedName("isSuccess") val isSuccess: Boolean,
+    @SerializedName("code") val code: String,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: CreatedTodo
+)
+
+data class CreatedTodo(
+    @SerializedName("id") val id: Int,
+    @SerializedName("content") val content: String,
+    @SerializedName("createdAt") val createdAt: String
 )

@@ -46,6 +46,7 @@ class TodoListFragment : Fragment() {
     private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
     private lateinit var memberIdMap: Map<ProfileItem, Int>
     private var selectedMemberId: Int? = null
+    private lateinit var repository: TodoRepository // repository 선언
 
 
 
@@ -58,7 +59,7 @@ class TodoListFragment : Fragment() {
         val studyId = studyViewModel.studyId.value ?: 0
 
         val apiService = RetrofitInstance.retrofit.create(TodoApiService::class.java)
-        val repository = TodoRepository(apiService)
+        repository = TodoRepository(apiService) // 기존 로직 유지
         val factory = TodoViewModelFactory(repository, studyId)
         todoViewModel = ViewModelProvider(this, factory).get(TodoViewModel::class.java)
 
@@ -104,6 +105,8 @@ class TodoListFragment : Fragment() {
             eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
         }
 
+        fetchTodoList(studyId)
+
         // 내 투두리스트 조회 API
         todoViewModel.myTodoListResponse.observe(viewLifecycleOwner) { response ->
             response?.result?.content?.let { todos ->
@@ -135,7 +138,7 @@ class TodoListFragment : Fragment() {
 
         // + 버튼을 통해 내 투두리스트를 추가할 수 있음
         binding.imgbtnPlusTodolist.setOnClickListener {
-            myTodoAdapter.addTodo()
+            myTodoAdapter.addTodo(selectedDate)
             binding.rvMyTodoList.scrollToPosition(myTodoAdapter.itemCount - 1)
         }
 
@@ -164,11 +167,18 @@ class TodoListFragment : Fragment() {
         binding.fragmentDetailStudyHomeProfileRv.adapter = profileAdapter
 
         //내 투두리스트
-        myTodoAdapter = TodoAdapter(requireContext(), mutableListOf(), { content ->
-            todoViewModel.addTodoItem(studyId, content, selectedDate)
-        }, { toDoId ->
-            todoViewModel.checkTodo(studyId, toDoId) // 체크박스 변경 시 API 호출
-        })
+        myTodoAdapter = TodoAdapter(
+            context = requireContext(),
+            todoList = mutableListOf(),
+            onAddTodo = { content ->
+                todoViewModel.addTodoItem(studyId, content, selectedDate)
+            },
+            onCheckTodo = { toDoId ->
+                todoViewModel.checkTodo(studyId, toDoId)
+            },
+            repository = repository, // TodoRepository 전달
+            studyId = studyId // 스터디 ID 전달
+        )
 
         binding.rvMyTodoList.apply {
             layoutManager = LinearLayoutManager(requireContext())

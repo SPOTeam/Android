@@ -7,24 +7,27 @@ import retrofit2.Response
 
 class TodoRepository(private val apiService: TodoApiService) {
 
-    fun addTodoItem(studyId: Int, content: String, date: String, callback: (TodolistResponse?) -> Unit) {
+    fun addTodoItem(studyId: Int, content: String, date: String, callback: (CreateTodoResponse?) -> Unit) {
         val request = TodoRequest(content, date)
-        apiService.addTodo(studyId, request).enqueue(object : Callback<TodolistResponse> {
-            override fun onResponse(call: Call<TodolistResponse>, response: Response<TodolistResponse>) {
-
+        apiService.addTodo(studyId, request).enqueue(object : Callback<CreateTodoResponse> {
+            override fun onResponse(call: Call<CreateTodoResponse>, response: Response<CreateTodoResponse>) {
                 if (response.isSuccessful) {
+                    Log.d("TodoRepository", "CreateTodo Response: ${response.body()}")
                     callback(response.body())
                 } else {
-                    logError(response)
+                    Log.e("TodoRepository", "CreateTodo Failed: ${response.errorBody()?.string()}")
                     callback(null)
                 }
             }
 
-            override fun onFailure(call: Call<TodolistResponse>, t: Throwable) {
+            override fun onFailure(call: Call<CreateTodoResponse>, t: Throwable) {
+                Log.e("TodoRepository", "CreateTodo Failure: ${t.message}")
                 callback(null)
             }
         })
     }
+
+
 
     fun lookTodo(studyId: Int, page: Int, size: Int, date: String, callback: (TodolistResponse?) -> Unit) {
         val formattedDate = formatToDate(date)  // 날짜 형식을 보장
@@ -74,6 +77,45 @@ class TodoRepository(private val apiService: TodoApiService) {
         })
     }
 
+    fun deleteTodo(studyId: Int,todoId: Int, callback: (TodolistResponse?) -> Unit) {
+        apiService.deleteTodo(studyId, todoId).enqueue(object : Callback<TodolistResponse> {
+            override fun onResponse(call: Call<TodolistResponse>, response: Response<TodolistResponse>) {
+
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    logError(response)
+                    callback(null)
+                }
+            }
+            override fun onFailure(call: Call<TodolistResponse>, t: Throwable) {
+                callback(null)
+            }
+        })
+    }
+
+    fun updateTodo(studyId: Int, toDoId: Int, content: String, date: String, callback: (TodolistResponse?) -> Unit) {
+        Log.d("repository","updateTodo 실행")
+        val request = TodoRequest(content, date)
+        apiService.updateTodo(
+            studyId = studyId,
+            toDoId = toDoId,
+            request
+        ).enqueue(object : Callback<TodolistResponse> {
+            override fun onResponse(call: Call<TodolistResponse>, response: Response<TodolistResponse>) {
+                if (response.isSuccessful) {
+                    callback(response.body()) // 성공 시 결과 전달
+                } else {
+                    callback(null) // 실패 시 null 전달
+                }
+            }
+
+            override fun onFailure(call: Call<TodolistResponse>, t: Throwable) {
+                callback(null) // 네트워크 에러 시 null 전달
+            }
+        })
+    }
+
     private fun formatToDate(date: String): String {
         val parts = date.split("-")
         return if (parts.size == 3) {
@@ -107,4 +149,6 @@ class TodoRepository(private val apiService: TodoApiService) {
         val errorCode = response.code()
         val errorBody = response.errorBody()?.string()
     }
+
+
 }

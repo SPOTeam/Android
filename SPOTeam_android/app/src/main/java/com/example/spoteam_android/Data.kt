@@ -495,3 +495,4 @@ data class GalleryItems(
     val imageUrl: String,
     val postId: Int
 )
+

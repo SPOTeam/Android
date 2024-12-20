@@ -170,4 +170,17 @@
         <item name="android:textSize">12sp</item> <!-- 텍스트 크기 -->
     </style>
 
+    <style name="CustomCheckBoxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/custom_checkbox</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:background">#F9FBFF</item>
+    </style>
+
+    <style name="CustomPopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/custom_popup_background</item>
+    </style>
+
+
+
+
 </resources>
