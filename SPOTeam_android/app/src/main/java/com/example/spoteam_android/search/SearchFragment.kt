@@ -4,7 +4,6 @@ import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -15,25 +14,21 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
-import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentSearchBinding
-import com.example.spoteam_android.ui.alert.AlertFragment
-import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
 import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
 import com.example.spoteam_android.ui.interestarea.RecruitingStudyApiService
 import com.example.spoteam_android.ui.study.DetailStudyFragment
-import com.example.spoteam_android.ui.study.DetailStudyVPAdapter
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
-import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,19 +36,17 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class SearchFragment : Fragment() {
 
     lateinit var binding: FragmentSearchBinding
-    private val recentSearches = mutableListOf<String>()
+    private val gson = Gson()
+    private val preferencesName = "RecentSearches"
+    private val recentSearchKey = "recent_search_list"
+    private val maxRecentSearches = 10
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var recommendBoardAdapter: InterestVPAdapter
     private lateinit var studyApiService: StudyApiService
     private lateinit var recruitingStudyAdapter: InterestVPAdapter
-    private lateinit var db: AppDatabase
-    private lateinit var searchQueryDao: SearchQueryDao
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,45 +56,11 @@ class SearchFragment : Fragment() {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
-
-//        val db = Room.databaseBuilder(
-//            requireContext(),
-//            AppDatabase::class.java, "database-name"
-//        ).build()
-//
-//        val userDao = db.userDao()
-
-//        // 비동기로 데이터베이스 작업을 수행
-//        CoroutineScope(Dispatchers.IO).launch {
-//            // 더미 데이터 삽입
-//            val user1 = User(firstName = "John", lastName = "Doe",uid = 3)
-//            val user2 = User(firstName = "Jane", lastName = "Smith",uid = 4)
-//            userDao.insertAll(user1, user2)
-//
-//            // 모든 유저 조회
-//            val users = userDao.getAll()
-//            users.forEach { user ->
-//                Log.d("MainActivity", "User: ${user.firstName} ${user.lastName}, ID: ${user.uid}")
-//            }
-//
-//            // 특정 이름으로 유저 검색
-//            val foundUser = userDao.findByName("John", "Doe")
-//            Log.d("MainActivity", "Found User: ${foundUser.firstName} ${foundUser.lastName}")
-//        }
-
-        db = Room.databaseBuilder(
-            requireContext(),
-            AppDatabase::class.java, "search_database"
-        ).build()
-
-        searchQueryDao = db.searchQueryDao()
-
-            // 최근 검색어 로드
         loadRecentSearches()
 
-        val chipGroup = binding.chipGroup2
+        val chipGroup = binding.chipGroup
 
-// ChipGroup의 모든 자식 Chip의 클릭 이벤트를 비활성화
+        // ChipGroup의 모든 자식 Chip의 클릭 이벤트를 비활성화
         for (i in 0 until chipGroup.childCount) {
             val chip = chipGroup.getChildAt(i) as Chip
             chip.isClickable = false
@@ -159,8 +118,6 @@ class SearchFragment : Fragment() {
             adapter = recruitingStudyAdapter
         }
 
-
-
         val memberId = getMemberId(requireContext())
         fetchRecommendStudy(memberId)
         fetchAllRecruiting("ALL")
@@ -169,21 +126,16 @@ class SearchFragment : Fragment() {
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
-                    // 검색어를 SharedPreferences에 저장
                     saveSearchQuery(it)
-
-                    // Chip 추가
                     addSearchChip(it)
 
                     binding.searchView.setQuery("", false)
                     binding.searchView.clearFocus()
 
-                    // 키워드를 번들로 전달
                     val bundle = Bundle().apply {
                         putString("search_keyword", it)
                     }
 
-                    // SearchResultFragment로 이동
                     val fragment = SearchResultFragment().apply {
                         arguments = bundle
                     }
@@ -204,46 +156,71 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
-    private fun addSearchChip(query: String) {
+    private fun saveSearchQuery(query: String) {
+        val sharedPreferences = requireContext().getSharedPreferences(preferencesName, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
 
+        val currentList = loadRecentSearches()
+        val updatedList = (listOf(query) + currentList.filter { it != query }).take(maxRecentSearches)
+
+        val json = gson.toJson(updatedList)
+        editor.putString(recentSearchKey, json)
+        editor.apply()
+
+        loadRecentSearches() // UI 업데이트
+    }
+
+    private fun loadRecentSearches(): List<String> {
+        val sharedPreferences = requireContext().getSharedPreferences(preferencesName, Context.MODE_PRIVATE)
+        val json = sharedPreferences.getString(recentSearchKey, null) ?: return emptyList()
+        return try {
+            val type = object : TypeToken<List<String>>() {}.type
+            gson.fromJson<List<String>>(json, type).also { updateChips(it) }
+        } catch (e: Exception) {
+            emptyList() // JSON 파싱 실패 시 빈 리스트 반환
+        }
+    }
+
+
+    private fun updateChips(recentSearches: List<String>) {
+        binding.chipGroup.removeAllViews()
+        recentSearches.forEach { addSearchChip(it) }
+    }
+
+    private fun addSearchChip(query: String) {
         val chip = Chip(requireContext()).apply {
             text = query
-            isCloseIconVisible = false
-            isClickable = false
-            isFocusable = false
-            isChecked = true
-            setEnsureMinTouchTargetSize(false)
-
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)  // 텍스트 크기 (14sp)
+            isCloseIconVisible = true
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_chip_text))
-        }
-
-
-        chip.setChipDrawable(
-            ChipDrawable.createFromAttributes(
-                requireContext(), null, 0, R.style.find_ChipStyle
+            setChipDrawable(
+                ChipDrawable.createFromAttributes(
+                    requireContext(), null, 0, R.style.find_ChipStyle
+                )
             )
-        )
 
-        chip.isCloseIconVisible = false
-        chip.isCheckable = false
+            setOnCloseIconClickListener {
+                removeSearchQuery(query)
+            }
+
+            setOnClickListener {
+                binding.searchView.setQuery(query, true)
+            }
+        }
         binding.chipGroup.addView(chip, 0)
     }
 
-    private fun saveSearchQuery(query: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val searchQuery = SearchQuery(query = query)
-            searchQueryDao.insertSearchQuery(searchQuery)
-        }
-    }
+    private fun removeSearchQuery(query: String) {
+        val sharedPreferences = requireContext().getSharedPreferences(preferencesName, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
 
-    private fun loadRecentSearches() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val recentSearches = searchQueryDao.getAllSearchQueries()
-            recentSearches.forEach { searchQuery ->
-                Log.d("SearchFragment", "검색어: ${searchQuery.query}, 시간: ${searchQuery.timestamp}")
-            }
-        }
+        val currentList = loadRecentSearches().filter { it != query }
+        val json = gson.toJson(currentList)
+
+        editor.putString(recentSearchKey, json)
+        editor.apply()
+
+        loadRecentSearches() // UI 업데이트
     }
 
     private fun fetchRecommendStudy(memberId: Int) {
@@ -386,5 +363,6 @@ class SearchFragment : Fragment() {
     private fun updateRecyclerView(boardItems: List<BoardItem>) {
         recruitingStudyAdapter.updateList(boardItems)
     }
+
 
 }

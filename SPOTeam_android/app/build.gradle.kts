@@ -78,6 +78,12 @@ dependencies {
     implementation("androidx.room:room-ktx:2.5.0")
 }
 
+kapt {
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
+}
+
 configurations {
     all {
         exclude(group = "com.android.support", module = "support-compat")

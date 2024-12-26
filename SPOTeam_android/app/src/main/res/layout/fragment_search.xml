@@ -36,24 +36,24 @@
         android:id="@+id/chipLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tx_recently_searched_word"
-        android:scrollbars="none">
+        app:layout_constraintTop_toBottomOf="@+id/tx_recently_searched_word">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:paddingTop="8dp"
-            android:paddingRight="15dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="10dp"
+            android:paddingTop="8dp"
+            android:paddingRight="15dp"
             app:singleLine="true">
 
 
-            </com.google.android.material.chip.ChipGroup>
+        </com.google.android.material.chip.ChipGroup>
 
-        </HorizontalScrollView>
+    </HorizontalScrollView>
 
     <TextView
         android:id="@+id/tx_populared_word"

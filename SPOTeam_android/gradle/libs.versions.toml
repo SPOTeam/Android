@@ -21,7 +21,7 @@ glide = "4.14.2"
 androidx_lifecycle_runtime_ktx = "2.6.1"
 kotlinx_coroutines_android = "1.7.0"
 splashscreen = "1.0.1"
-room = "2.5.0"  # Room 버전
+room = "2.6.1"  # Room 버전
 androidx-security = "1.1.0-alpha04"
 
 
