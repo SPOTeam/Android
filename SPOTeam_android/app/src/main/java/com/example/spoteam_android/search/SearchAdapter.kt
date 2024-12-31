@@ -85,13 +85,6 @@ class SearchAdapter(
     }
 
 
-    fun removeItem(position: Int) {
-        if (position >= 0 && position < itemList.size) {
-            itemList.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, itemCount)
-        }
-    }
 
     fun updateList(newList: List<BoardItem>) {
         itemList.clear()

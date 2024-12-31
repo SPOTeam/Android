@@ -79,3 +79,31 @@ data class SearchContent(
     @SerializedName("liked")
     val liked: Boolean
 )
+
+data class PopularKeywordResponse(
+    @SerializedName("isSuccess")
+    val isSuccess: Boolean,
+    @SerializedName("code")
+    val code: String,
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("result")
+    val result: PopularKeywordResult
+)
+
+data class PopularKeywordResult(
+    @SerializedName("keyword")
+    val keyword: List<KeywordItem>,
+
+    @SerializedName("updatedAt")
+    val updatedAt: String
+)
+
+data class KeywordItem(
+    @SerializedName("keyword")
+    val keyword: String,
+
+    @SerializedName("point")
+    val point: Int
+)
+

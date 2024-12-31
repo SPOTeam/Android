@@ -4,6 +4,7 @@ import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,9 @@ import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
 import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
 import com.example.spoteam_android.ui.interestarea.RecruitingStudyApiService
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.example.spoteam_android.ui.study.calendar.CalendarApiService
+import com.example.spoteam_android.ui.study.calendar.Event
+import com.example.spoteam_android.ui.study.calendar.ScheduleResponse
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.gson.Gson
@@ -122,6 +126,8 @@ class SearchFragment : Fragment() {
         fetchRecommendStudy(memberId)
         fetchAllRecruiting("ALL")
 
+        fetchPopularKeywords()
+
         binding.searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -175,7 +181,7 @@ class SearchFragment : Fragment() {
         val json = sharedPreferences.getString(recentSearchKey, null) ?: return emptyList()
         return try {
             val type = object : TypeToken<List<String>>() {}.type
-            gson.fromJson<List<String>>(json, type).also { updateChips(it) }
+            gson.fromJson<List<String>>(json, type).reversed().also { updateChips(it) }
         } catch (e: Exception) {
             emptyList() // JSON 파싱 실패 시 빈 리스트 반환
         }
@@ -191,7 +197,7 @@ class SearchFragment : Fragment() {
         val chip = Chip(requireContext()).apply {
             text = query
             isCloseIconVisible = true
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+
             setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_chip_text))
             setChipDrawable(
                 ChipDrawable.createFromAttributes(
@@ -364,5 +370,69 @@ class SearchFragment : Fragment() {
         recruitingStudyAdapter.updateList(boardItems)
     }
 
+
+    private fun fetchPopularKeywords() {
+        val keywordItems = arrayListOf<KeywordItem>()
+        val service = RetrofitInstance.retrofit.create(PopularKeywordApiService::class.java)
+
+        service.getPopularKeywords().enqueue(object : Callback<PopularKeywordResponse> {
+            override fun onResponse(
+                call: Call<PopularKeywordResponse>,
+                response: Response<PopularKeywordResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    Log.d("SearchFragment", "$apiResponse")
+
+                    if (apiResponse?.isSuccess == true) {
+                        apiResponse.result.keyword.forEach { keywordData ->
+                            val keywordItem = KeywordItem(
+                                keyword = keywordData.keyword,
+                                point = keywordData.point
+                            )
+                            keywordItems.add(keywordItem)
+                        }
+                        updateChipGroup(keywordItems)
+                    } else {
+                        Toast.makeText(requireContext(), "인기 검색어를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Log.e("SearchFragment", "API 호출 실패: ${response.code()}")
+                    Toast.makeText(requireContext(), "서버 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<PopularKeywordResponse>, t: Throwable) {
+                Log.e("SearchFragment", "네트워크 오류: ${t.message}")
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun updateChipGroup(keywordItems: List<KeywordItem>) {
+        val chipGroup = binding.chipGroup2
+        chipGroup.removeAllViews()
+
+        for (keyword in keywordItems) {
+            val chip = Chip(requireContext()).apply {
+                text = "${keyword.keyword}"
+                isCloseIconVisible = false // 인기 검색어에서는 닫기 버튼 비활성화
+                isClickable = true
+
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_chip_text))
+                setChipDrawable(
+                    ChipDrawable.createFromAttributes(
+                        requireContext(), null, 0, R.style.find_ChipStyle
+                    )
+                )
+
+                // 클릭 이벤트
+                setOnClickListener {
+                    binding.searchView.setQuery(keyword.keyword, true)
+                }
+            }
+            chipGroup.addView(chip)
+        }
+    }
 
 }
