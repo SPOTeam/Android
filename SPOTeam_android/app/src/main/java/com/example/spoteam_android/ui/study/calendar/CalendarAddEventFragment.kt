@@ -462,7 +462,8 @@ class CalendarAddEventFragment : Fragment() {
         val isPositionValid = eventPositionEditText.text.isNotEmpty()
 
         // 모든 조건이 만족되는 경우에만 saveButton 활성화
-        saveButton.isEnabled = isTitleValid && isPositionValid && isStartDateSet  && isEndDateSet
+        saveButton.isEnabled = isTitleValid && isPositionValid && isStartDateSet  && isEndDateSet || isTitleValid && isPositionValid && checkBox.isChecked
+
     }
 
     private fun clearFocusFromEditTexts() {

@@ -80,7 +80,6 @@ class TodoListFragment : Fragment() {
         val dates = (1..31).map { DateItem(it.toString(), it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()) }
         dateAdapter = DateAdapter(dates) { date ->
             Log.d("DateAdapter", "Date clicked: $date")
-            selectedDate  = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-$date"
             todoViewModel.onDateChanged(selectedDate)
         }
         binding.rvDates.adapter = dateAdapter
@@ -98,7 +97,6 @@ class TodoListFragment : Fragment() {
             eventViewModel.loadEvents(year, month, today)
 
             // 어댑터와 데코레이터 갱신 추가
-            selectedDate = String.format("%04d-%02d-%02d", year, month, today)
             eventAdapter.updateSelectedDate(selectedDate)
 
             // 어댑터 데이터 갱신
@@ -206,7 +204,6 @@ class TodoListFragment : Fragment() {
     }
 
     // 내 투두리스트 조회
-    // 내 투두리스트 조회
     private fun fetchTodoList(studyId: Int) {
         val formattedDate = formatToDate(selectedDate)
         todoViewModel.fetchTodoList(studyId, page = 0, size = 10, date = formattedDate)
@@ -256,7 +253,6 @@ class TodoListFragment : Fragment() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1
-        selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
 
         // 날짜 RecyclerView 설정
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -266,7 +262,6 @@ class TodoListFragment : Fragment() {
         val dates = (1..31).map { DateItem(it.toString(), it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()) }
         dateAdapter = DateAdapter(dates) { date ->
 
-            selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-$date"
             Log.d("TodoListFragment", "Date selected: $selectedDate")
             todoViewModel.onDateChanged(selectedDate)
 
@@ -277,7 +272,6 @@ class TodoListFragment : Fragment() {
                 eventViewModel.loadEvents(year, month, day.toInt())
 
                 // 어댑터와 데코레이터 갱신 추가
-                val selectedDate = String.format("%04d-%02d-%02d", year, month, day.toInt())
                 eventAdapter.updateSelectedDate(selectedDate)
 
                 // 어댑터 데이터 갱신
