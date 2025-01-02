@@ -18,7 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:mcv_rightArrow="@null"/>
 
 <!--    app:mcv_leftArrow="@color/teal_200"-->
 <!--    app:mcv_rightArrow="@color/teal_200"-->
@@ -26,16 +27,19 @@
 
     <!-- RecyclerView -->
 
+
     <ImageButton
         android:id="@+id/addButton"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:layout_margin="15dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:background="@color/white"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
         android:scaleType="centerInside"
         android:src="@drawable/add_circle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/calendarView" />
+        app:layout_constraintTop_toTopOf="@+id/calendarView"/>
 
     <!-- FloatingActionButton (항상 화면 하단 오른쪽에 고정) -->
     <androidx.recyclerview.widget.RecyclerView
@@ -43,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
         tools:listitem="@layout/item_event" />

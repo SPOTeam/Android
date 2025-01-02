@@ -30,16 +30,10 @@
 
             <ImageView
                 android:id="@+id/ic_spot_logo"
-                android:layout_width="85dp"
-                android:layout_height="40dp"
-                android:src="@drawable/fragment_house_spot_logo_tx" />
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/new_logo" />
 
-            <ImageView
-                android:id="@+id/ic_spot_logo_ic"
-                android:layout_width="30dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="3dp"
-                android:src="@drawable/study_spot_logo" />
 
             <View
                 android:layout_width="0dp"
@@ -126,7 +120,7 @@
                 android:paddingVertical="16dp"
                 android:paddingStart="12dp"
                 android:paddingEnd="9dp"
-                android:background="@drawable/content_tmpl">
+                android:background="@drawable/content_tpl_go_community">
 
 
                 <TextView
@@ -157,8 +151,8 @@
 
                 <ImageView
                     android:id="@+id/go_popular_content_iv"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/fragment_mypage_ic_arrow"
                     android:layout_marginTop="2dp"
@@ -305,8 +299,6 @@
                     android:fontFamily="@font/pretendard"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
         </LinearLayout>
 
 
@@ -326,7 +318,7 @@
                 android:id="@+id/tx_interest_study"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="관심 스터디 BEST"
+                android:text="지금 인기 있는 스터디"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:fontFamily="@font/pretendard"
@@ -351,6 +343,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_board"
+            android:elevation="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"

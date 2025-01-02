@@ -24,8 +24,14 @@
     <color name="spot_login">#186AFF</color>
 
     <color name="active_color">#588FF2</color>
-    <color name="background_blue">#D6E5FF</color>
-    <color name="disabled_color">#D8D8D8</color>
+    <color name="background_blue">#D6EFFF</color>
+    <color name="disabled_color">#8E8E8E</color>
+
+    <color name="MainColor_01">#005BFF</color>
+    <color name="MainColor_02">#2573FF</color>
+    <color name="MainColor_03">#3E83FF</color>
+    <color name="MainColor_04">#D6EFFF</color>
+    <color name="MainColor_05">#F7FAFF</color>
 
 
 </resources>

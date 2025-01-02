@@ -242,7 +242,10 @@
     <CheckBox
         android:id="@+id/checkBox_every_day"
         android:layout_width="20dp"
-        android:layout_height="40dp"
+        android:layout_height="20dp"
+        android:background="@drawable/todolist_custom_checkbox"
+        android:button="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/tx_every_day"
         app:layout_constraintStart_toEndOf="@+id/tx_every_day"
         app:layout_constraintTop_toTopOf="@+id/tx_every_day" />
 
@@ -257,7 +260,7 @@
         android:textColor="#2D2D2D"
         android:textSize="16dp"
         app:layout_constraintStart_toEndOf="@+id/checkBox_every_day"
-        app:layout_constraintTop_toTopOf="@+id/checkBox_every_day" />
+        app:layout_constraintTop_toTopOf="@+id/tx_every_day" />
 
     <Spinner
         android:id="@+id/routine_spinner"
