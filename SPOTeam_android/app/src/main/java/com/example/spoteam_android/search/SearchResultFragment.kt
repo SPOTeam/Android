@@ -117,7 +117,6 @@ class SearchResultFragment : Fragment() {
     private fun fetchGetSearchStudy(keyword: String) {
 
         val checkcount: TextView = binding.checkAmount
-        val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(SearchApiService::class.java)
 
         service.PostSearchApi(

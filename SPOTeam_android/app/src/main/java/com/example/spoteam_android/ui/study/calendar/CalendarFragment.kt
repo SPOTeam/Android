@@ -50,7 +50,7 @@ class CalendarFragment : Fragment() {
 
         calendarView = binding.calendarView
 
-        calendarView.setLeftArrow(R.drawable.left_arrow);
+        calendarView.setLeftArrow(R.drawable.left_arrow)
 
         customRectangleDecorator = CustomRectangleDecorator(requireContext())
         calendarView.addDecorator(customRectangleDecorator)
@@ -63,11 +63,7 @@ class CalendarFragment : Fragment() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val todayDate = CalendarDay.from(year, month, day)
-        calendarView.setCurrentDate(todayDate)  // 캘린더를 오늘 날짜로 설정
-        calendarView.setSelectedDate(todayDate) // 오늘 날짜를 선택
-        calendarView.invalidateDecorators()     // Decorator 강제 갱신
+        val date = CalendarDay.from(year, month, day)
 
         val studyId = studyViewModel.studyId.value ?: 0
 
@@ -79,7 +75,7 @@ class CalendarFragment : Fragment() {
             val selectedDate = String.format("%04d-%02d-%02d", year, month, day)
             eventAdapter.updateSelectedDate(selectedDate)
 
-            val date = CalendarDay.from(year, month, day)
+
             customRectangleDecorator.setSelectedDate(date)
             calendarView.invalidateDecorators() // 데코레이터 갱신
 
@@ -87,48 +83,63 @@ class CalendarFragment : Fragment() {
 
             // 어댑터 데이터 갱신
             eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
+
         }
+        // 이벤트 추가 시 해당 날짜로 이동하는 코드
+//            start?.let { dateStr ->
+//                try {
+//                    // 날짜 문자열을 Date로 변환
+//                    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+//                    val dateParse = formatter.parse(dateStr)
+//
+//                    // Calendar 객체를 생성하여 날짜 설정
+//                    val calendar = Calendar.getInstance()
+//                    calendar.time = dateParse
+//
+//                    // Calendar를 CalendarDay로 변환하여 MaterialCalendarView에서 사용
+//                    val calendarDay = CalendarDay.from(
+//                        calendar.get(Calendar.YEAR),
+//                        calendar.get(Calendar.MONTH) + 1, // 월은 0부터 시작하므로 1을 더해줌
+//                        calendar.get(Calendar.DAY_OF_MONTH)
+//                    )
+//
+//                    // 선택된 날짜를 기준으로 API 호출 및 데이터를 처리
+//                    fetchGetSchedule(
+//                        studyId,
+//                        calendar.get(Calendar.YEAR),
+//                        calendar.get(Calendar.MONTH) + 1 // Calendar의 월은 0부터 시작하므로 1을 더함
+//                    ) {
+//
+//                        Log.d("CalendarFragment22", "Selected startDateTime: $calendarDay")
+//                        // 선택된 날짜를 기준으로 이벤트 로드
+//                        eventViewModel.loadEvents(
+//                            calendar.get(Calendar.YEAR),
+//                            calendar.get(Calendar.MONTH) + 1,
+//                            calendar.get(Calendar.DAY_OF_MONTH)
+//                        )
+//
+//                        // 선택된 날짜를 기준으로 데코레이터 설정
+//                        customRectangleDecorator.setSelectedDate(
+//                            CalendarDay.from(
+//                                calendar.get(Calendar.YEAR),
+//                                calendar.get(Calendar.MONTH) + 1,
+//                                calendar.get(Calendar.DAY_OF_MONTH)
+//                            )
+//                        )
+//                        calendarView.invalidateDecorators() // 데코레이터 강제 갱신
+//
+//                        // 날짜 텍스트 스타일 변경
+//                        calendarView.setDateTextAppearance(R.style.CustomDateTextAppearance)
+//
+//                        // 어댑터 데이터 갱신
+//                        eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
+//                    }
+//
+//                } catch (e: Exception) {
+//                    Log.e("CalendarFragment", "Error parsing date: ${e.message}")
+//                }
+//            }
 
-
-
-
-
-        start?.let { dateStr ->
-            try {
-                // 날짜 문자열을 Date로 변환
-                val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-                val date = formatter.parse(dateStr)
-
-                // Calendar 객체를 생성하여 날짜 설정
-                val calendar = Calendar.getInstance()
-                calendar.time = date
-
-                // Calendar를 CalendarDay로 변환하여 MaterialCalendarView에서 사용
-                val calendarDay = CalendarDay.from(
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH) + 1, // 월은 0부터 시작하므로 1을 더해줌
-                    calendar.get(Calendar.DAY_OF_MONTH)
-                )
-
-
-                // 캘린더를 해당 날짜로 이동하고, 선택 상태로 설정합니다.
-                calendarView.setCurrentDate(calendarDay)
-                calendarView.setSelectedDate(calendarDay)
-                calendarView.invalidateDecorators() // Decorator 강제 갱신
-
-                fetchGetSchedule(studyId, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1) {
-                    eventViewModel.loadEvents(
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH) + 1,
-                        calendar.get(Calendar.DAY_OF_MONTH)
-                    )
-                }
-
-                Log.d("CalendarFragment", "Selected startDateTime: $calendarDay")
-            } catch (e: Exception) {
-                Log.e("CalendarFragment", "Error parsing date: ${e.message}")
-            }
-        }
 
         // TodayDecorator를 CalendarView에 추가
 
@@ -193,7 +204,6 @@ class CalendarFragment : Fragment() {
                 customRectangleDecorator.setSelectedDate(date)
                 calendarView.invalidateDecorators() // 데코레이터 갱신
 
-
                 fetchGetSchedule(studyId, year, month) {
                     eventViewModel.loadEvents(year, month, day)
                 }
@@ -205,9 +215,6 @@ class CalendarFragment : Fragment() {
             calendarView.addDecorator(EventDecorator(eventDates))
             eventAdapter.updateEvents(events)
         })
-
-
-
 
 
         return binding.root

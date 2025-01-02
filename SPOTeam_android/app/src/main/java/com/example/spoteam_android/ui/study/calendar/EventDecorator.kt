@@ -17,6 +17,6 @@ class EventDecorator(
 
     // 점 추가
     override fun decorate(view: DayViewFacade) {
-        view.addSpan(DotSpan(7f, Color.parseColor("#7DABFC")))
+        view.addSpan(DotSpan(7f, Color.parseColor("#3E83FF")))
     }
 }

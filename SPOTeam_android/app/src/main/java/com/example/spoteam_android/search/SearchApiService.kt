@@ -2,6 +2,7 @@ package com.example.spoteam_android.search
 
 import com.example.spoteam_android.ui.interestarea.ApiResponse
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -15,6 +16,11 @@ interface SearchApiService {
         @Query("size") size: Int,
         @Query("sortBy") sortBy: String,
     ): Call<ApiResponse>
+}
+
+interface PopularKeywordApiService {
+    @GET("/spot/search/studies/hot-keywords")
+    fun getPopularKeywords(): Call<PopularKeywordResponse>
 }
 
 
