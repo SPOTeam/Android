@@ -24,6 +24,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
             val result = loginRepository.sendTokenToServer(accessToken)
             result.onSuccess { userInfo ->
                 // 받은 accessToken을 RetrofitInstance에 설정
+                Log.d("kakaoLogin333", "서버 응답 성공: ${userInfo.signInDTO}")
                 RetrofitInstance.setAuthToken(userInfo.signInDTO.tokens.accessToken)
                 _loginResult.value = Result.success(userInfo) // MutableLiveData인 _loginResult에 값 설정
 
@@ -33,15 +34,29 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
     //서버로 토큰 전송
-    fun sendNaverTokenToServer(accessToken: String) {
+    fun sendNaverTokenToServer(
+        accessToken: String,
+        refreshToken: String,
+        tokenType: String,
+        expiresIn: Long
+    ) {
         viewModelScope.launch {
-            val result = loginRepository.sendNaverTokenToServer(accessToken)
+            val result = loginRepository.sendNaverTokenToServer(
+                accessToken = accessToken,
+                refreshToken = refreshToken,
+                tokenType = tokenType,
+                expiresIn = expiresIn
+            )
             result.onSuccess { userInfo ->
+                Log.d("NaverLogin333", "서버 응답 성공: ${userInfo.signInDTO}")
                 RetrofitInstance.setAuthToken(userInfo.signInDTO.tokens.accessToken)
                 _naverLoginResult.value = Result.success(userInfo)
             }.onFailure { exception ->
+                Log.e("NaverLogin333", "서버 응답 실패: ${exception.message}")
                 _naverLoginResult.value = Result.failure(exception)
             }
         }
     }
+
+
 }
