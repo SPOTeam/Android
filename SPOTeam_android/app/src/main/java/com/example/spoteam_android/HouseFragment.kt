@@ -124,8 +124,8 @@ class HouseFragment : Fragment() {
 
         val memeberId = getMemberId(requireContext())
 
-        fetchDataAnyWhere(memeberId) //관심 지역 스터디
-        fetchRecommendStudy(memeberId) //추천 스터디
+        fetchDataAnyWhere() //관심 지역 스터디
+        fetchRecommendStudy() //추천 스터디
 
 
 
@@ -216,10 +216,9 @@ class HouseFragment : Fragment() {
         return binding.root
     }
 
-    private fun fetchDataAnyWhere(memberId: Int) {
-        Log.d("HouseFragment", "fetchDataAnyWhere() 실행")
+    private fun fetchDataAnyWhere() {
         val service = RetrofitInstance.retrofit.create(InterestAreaApiService::class.java)
-        service.getInterestedBestStudies(memberId = memberId).enqueue(object : Callback<ApiResponse> {
+        service.getInterestedBestStudies().enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     val boardItems = response.body()?.result?.content?.map { study ->
@@ -276,8 +275,8 @@ class HouseFragment : Fragment() {
                         studyItem.heartCount = if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
 
                         // 최신 데이터 동기화를 위해 fetchDataAnyWhere와 fetchRecommendStudy를 다시 호출
-                        fetchDataAnyWhere(memberId)
-                        fetchRecommendStudy(memberId)
+                        fetchDataAnyWhere()
+                        fetchRecommendStudy()
                     } else {
                         Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
                         Log.d("studyid","${studyItem.studyId}")
@@ -328,10 +327,10 @@ class HouseFragment : Fragment() {
     }
 
 
-    private fun fetchRecommendStudy(memberId: Int) {
+    private fun fetchRecommendStudy() {
         Log.d("HouseFragment", "fetchRecommendStudy() 실행")
         val service = RetrofitInstance.retrofit.create(RecommendStudyApiService::class.java)
-        service.GetRecommendStudy(memberId = memberId).enqueue(object : Callback<ApiResponse> {
+        service.GetRecommendStudy().enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     val boardItems = response.body()?.result?.content?.map { study ->

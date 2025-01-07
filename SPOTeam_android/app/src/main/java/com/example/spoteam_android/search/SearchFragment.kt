@@ -123,7 +123,7 @@ class SearchFragment : Fragment() {
         }
 
         val memberId = getMemberId(requireContext())
-        fetchRecommendStudy(memberId)
+        fetchRecommendStudy()
         fetchAllRecruiting("ALL")
 
         fetchPopularKeywords()
@@ -229,9 +229,9 @@ class SearchFragment : Fragment() {
         loadRecentSearches() // UI 업데이트
     }
 
-    private fun fetchRecommendStudy(memberId: Int) {
+    private fun fetchRecommendStudy() {
         val service = RetrofitInstance.retrofit.create(RecommendStudyApiService::class.java)
-        service.GetRecommendStudy(memberId = memberId).enqueue(object : Callback<ApiResponse> {
+        service.GetRecommendStudy().enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     val boardItems = response.body()?.result?.content?.map { study ->

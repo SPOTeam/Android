@@ -111,23 +111,24 @@ class InterestFragment : Fragment() {
         val selectedStudyTheme = arguments?.getString("selectedStudyTheme")
         val activityFeeAmount = arguments?.getString("activityFeeAmount")
 
+        Log.d("InterestFragment","$gender, $minAge, $maxAge,$activityFee,$selectedStudyTheme,$activityFeeAmount")
+
         tabLayout = binding.tabs
-        val memberId = getMemberId(requireContext())
+//        val memberId = getMemberId(requireContext())
         val source = arguments?.getString("source")
 
         when (source) {
             "HouseFragment" -> {
                 binding.icFilterActive.visibility = View.GONE
-                fetchData("ALL", memberId)
-                fetchDataGetInterestArea(memberId) { regions ->
-                    setupTabs(regions, memberId, gender, minAge, maxAge, activityFee, activityFeeAmount, selectedStudyTheme)
+                fetchData("ALL" )
+                fetchDataGetInterestArea() { regions ->
+                    setupTabs(regions, gender, minAge, maxAge, activityFee, activityFeeAmount, selectedStudyTheme)
                 }
             }
             "InterestFilterFragment" -> {
                 binding.icFilterActive.visibility = View.VISIBLE
                 fetchData(
                     "ALL",
-                    memberId,
                     gender = gender,
                     minAge = minAge,
                     maxAge = maxAge,
@@ -135,8 +136,8 @@ class InterestFragment : Fragment() {
                     activityFeeAmount = activityFeeAmount,
                     selectedStudyTheme = selectedStudyTheme
                 )
-                fetchDataGetInterestArea(memberId) { regions ->
-                    setupTabs(regions, memberId, gender, minAge, maxAge, activityFee, activityFeeAmount, selectedStudyTheme)
+                fetchDataGetInterestArea() { regions ->
+                    setupTabs(regions, gender, minAge, maxAge, activityFee, activityFeeAmount, selectedStudyTheme)
                 }
             }
         }
@@ -149,7 +150,6 @@ class InterestFragment : Fragment() {
 
     private fun setupTabs(
         regions: List<Region>?,
-        memberId: Int,
         gender: String?,
         minAge: String?,
         maxAge: String?,
@@ -157,7 +157,12 @@ class InterestFragment : Fragment() {
         activityFeeAmount: String?,
         selectedStudyTheme: String?
     ) {
+        // 로그 태그 정의
+        val TAG = "SetupTabs"
+
         regions?.let {
+            // "전체" 탭 로그
+            Log.d(TAG, "Adding '전체' tab")
             val allTab = tabLayout.newTab().apply {
                 customView = LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null).apply {
                     findViewById<TextView>(R.id.tabText).text = "전체"
@@ -166,7 +171,9 @@ class InterestFragment : Fragment() {
             }
             tabLayout.addTab(allTab)
 
+            // 지역별 탭 로그
             regions.forEach { region ->
+                Log.d(TAG, "Adding tab for region: ${region.neighborhood}, code: ${region.code}")
                 val tab = tabLayout.newTab().apply {
                     customView = LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null).apply {
                         findViewById<TextView>(R.id.tabText).text = region.neighborhood
@@ -176,13 +183,15 @@ class InterestFragment : Fragment() {
                 tabLayout.addTab(tab)
             }
 
+            // 탭 선택 리스너 로그
             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     val selectedRegionCode = tab.tag as String
+                    Log.d(TAG, "Tab selected: ${tab.tag}, region code: $selectedRegionCode")
                     if (selectedRegionCode == "0000000000") {
+                        Log.d(TAG, "Fetching data for '전체'")
                         fetchData(
                             "ALL",
-                            memberId,
                             gender = gender,
                             minAge = minAge,
                             maxAge = maxAge,
@@ -191,9 +200,9 @@ class InterestFragment : Fragment() {
                             selectedStudyTheme = selectedStudyTheme
                         )
                     } else {
+                        Log.d(TAG, "Fetching data for region code: $selectedRegionCode")
                         fetchData(
                             "ALL",
-                            memberId,
                             regionCode = selectedRegionCode,
                             gender = gender,
                             minAge = minAge,
@@ -206,14 +215,20 @@ class InterestFragment : Fragment() {
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
+                    Log.d(TAG, "Tab unselected: ${tab?.tag}")
                     tab?.customView?.findViewById<TextView>(R.id.tabText)
                         ?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
                 }
 
-                override fun onTabReselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    Log.d(TAG, "Tab reselected: ${tab?.tag}")
+                }
             })
+        } ?: run {
+            Log.w(TAG, "Regions list is null or empty")
         }
     }
+
 
     private fun setupSpinner() {
         val spinner: Spinner = binding.filterToggle
@@ -229,7 +244,6 @@ class InterestFragment : Fragment() {
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val memberId = getMemberId(requireContext())
                 val selectedItem = when (position) {
                     1 -> "RECRUITING"
                     2 -> "COMPLETED"
@@ -237,7 +251,7 @@ class InterestFragment : Fragment() {
                     4 -> "LIKED"
                     else -> "ALL"
                 }
-                fetchData(selectedItem, memberId)
+                fetchData(selectedItem)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -246,7 +260,6 @@ class InterestFragment : Fragment() {
 
     private fun fetchData(
         selectedItem: String,
-        memberId: Int,
         regionCode: String? = null,
         gender: String? = null,
         minAge: String? = null,
@@ -264,7 +277,6 @@ class InterestFragment : Fragment() {
             val service = RetrofitInstance.retrofit.create(InterestSpecificAreaApiService::class.java)
             service.InterestSpecificArea(
                 regionCode = regionCode,
-                memberId = memberId,
                 gender = gender ?: "MALE",
                 minAge = minAge?.toIntOrNull() ?: 18,
                 maxAge = maxAge?.toIntOrNull() ?: 60,
@@ -278,7 +290,6 @@ class InterestFragment : Fragment() {
         } else {
             val service = RetrofitInstance.retrofit.create(InterestAreaApiService::class.java)
             service.InterestArea(
-                memberId = memberId,
                 gender = gender ?: "MALE",
                 minAge = minAge?.toIntOrNull() ?: 18,
                 maxAge = maxAge?.toIntOrNull() ?: 60,
@@ -345,10 +356,9 @@ class InterestFragment : Fragment() {
         return if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
     }
 
-    private fun fetchDataGetInterestArea(memberId: Int, callback: (List<Region>?) -> Unit) {
+    private fun fetchDataGetInterestArea( callback: (List<Region>?) -> Unit) {
         val service = RetrofitInstance.retrofit.create(GetMemberInterestAreaApiService::class.java)
         service.GetInterestArea(
-            memberId = memberId
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {

@@ -238,7 +238,6 @@ class MyInterestStudyFragment : Fragment() {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(MyInterestStudyAllApiService::class.java)
         service.GetMyInterestStudy(
-            memberId = getMemberId(requireContext()),
             gender = "MALE",
             minAge = 18,
             maxAge = 60,
@@ -296,7 +295,6 @@ class MyInterestStudyFragment : Fragment() {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(MyInterestStudyAllApiService::class.java)
         service.GetMyInterestStudy(
-            memberId = getMemberId(requireContext()),
             gender = gender,
             minAge = minAge.toInt(),
             maxAge = maxAge.toInt(),
@@ -350,7 +348,6 @@ class MyInterestStudyFragment : Fragment() {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(MyInterestStudySpecificApiService::class.java)
         service.GetMyInterestStudys(
-            memberId = getMemberId(requireContext()),
             gender = gender,
             minAge = minAge.toInt(),
             maxAge = maxAge.toInt(),
@@ -407,7 +404,6 @@ class MyInterestStudyFragment : Fragment() {
     private fun fetchDataGetInterestCategory(callback: (List<String>?) -> Unit) {
         val service = RetrofitInstance.retrofit.create(GetInterestCategoryApiService::class.java)
         service.GetMyInterestStudy(
-            memberId = getMemberId(requireContext())
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
