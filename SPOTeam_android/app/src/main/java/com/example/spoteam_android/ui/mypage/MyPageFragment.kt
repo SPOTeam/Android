@@ -21,6 +21,7 @@ import com.example.spoteam_android.ui.community.ContentLikeResponse
 import com.example.spoteam_android.ui.community.MyPageStudyNumInfo
 import com.example.spoteam_android.ui.community.MyPageStudyNumResponse
 import com.kakao.sdk.user.UserApiClient
+import com.navercorp.nid.NaverIdLoginSDK
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -84,7 +85,9 @@ class MyPageFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
             }
-
+            binding.framelayout8.setOnClickListener {
+                performNaverLogout()
+            }
 
             binding.framelayout10.setOnClickListener {
                 // 회원 탈퇴 버튼 클릭 시
@@ -158,23 +161,29 @@ class MyPageFragment : Fragment() {
     private fun setNickname() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
+
         if (email != null) {
             // SharedPreferences에서 닉네임 가져오기
-            val nickname = getNicknameFromPreferences(email)
-            binding.tvNickname.text = nickname ?: "닉네임 없음"  // 닉네임이 없는 경우의 기본 값
+            val nickname = sharedPreferences.getString("${email}_nickname", null)
+            binding.tvNickname.text = nickname ?: "닉네임 없음" // 닉네임이 없는 경우의 기본 값
 
-            // SharedPreferences에서 카카오 프로필 이미지 URL 가져오기
-            val kakaoProfileImageUrl = sharedPreferences.getString("${email}_kakaoProfileImageUrl", null)
+            // 로그인 플랫폼 확인
+            val loginPlatform = sharedPreferences.getString("loginPlatform", null)
+            val profileImageUrl = when (loginPlatform) {
+                "kakao" -> sharedPreferences.getString("${email}_kakaoProfileImageUrl", null)
+                "naver" -> sharedPreferences.getString("${email}_naverProfileImageUrl", null)
+                else -> null
+            }
 
             // Glide를 사용하여 이미지 로드
             Glide.with(binding.root.context)
-                .load(kakaoProfileImageUrl)
+                .load(profileImageUrl)
                 .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
                 .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
-                .into(binding.ivProfile)  // 이미지를 로드할 ImageView
+                .into(binding.ivProfile) // 이미지를 로드할 ImageView
 
         } else {
-            binding.tvNickname.text = "이메일 없음"  // 이메일이 없는 경우의 기본 값
+            binding.tvNickname.text = "이메일 없음" // 이메일이 없는 경우의 기본 값
         }
 
         // memberId 가져오기
@@ -247,5 +256,30 @@ class MyPageFragment : Fragment() {
             }
         }
     }
+
+    private fun performNaverLogout() {
+        // 네이버 로그아웃 호출
+        NaverIdLoginSDK.logout()
+
+        // SharedPreferences에서 네이버 관련 데이터 삭제
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            remove("isLoggedIn")
+            remove("accessToken")
+            remove("refreshToken")
+            remove("memberId")
+            remove("nickname")
+            remove("currentEmail")
+            apply()
+        }
+
+        // 로그인 화면으로 이동
+        Toast.makeText(requireContext(), "네이버 로그아웃 성공", Toast.LENGTH_SHORT).show()
+        val intent = Intent(requireActivity(), StartLoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK) // 모든 액티비티 제거 후 새로운 로그인 화면으로 이동
+        startActivity(intent)
+        requireActivity().finish() // 현재 액티비티 종료
+    }
+
 
 }

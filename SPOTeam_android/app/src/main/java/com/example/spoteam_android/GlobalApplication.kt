@@ -12,8 +12,8 @@ class GlobalApplication: Application() {
         KakaoSdk.init(this, "7878cb24cec56458df067991de5e7786")
         NaverIdLoginSDK.initialize(
             this,
-            "FymiLaGqw2ad12vsqb_H",
-            "QVFVNzWxfm",
+            "PgLxwOn8SAdjXBkdilNA",
+            "jx5U6lWiCq",
             "SPOT",
         )
         var keyHash = Utility.getKeyHash(this)

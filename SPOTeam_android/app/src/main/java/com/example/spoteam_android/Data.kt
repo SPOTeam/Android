@@ -29,7 +29,7 @@ data class Tokens(
 
 
 // 네이버 로그인 서버 응답 결과 담기
-data class NaverResult(
+data class  NaverResult(
     val isSpotMember: Boolean,
     val signInDTO: SignInDTO
 )
@@ -47,6 +47,15 @@ data class NaverResponse(
     val message: String,
     val result: NaverResult?
 )
+data class NaverLoginRequest(
+    val access_token: String,
+    val refresh_token: String,
+    val token_type: String,
+    val expires_in: Long,
+    val error: String? = null,
+    val error_description: String? = null
+)
+
 
 data class UserInfo( //일반 로그인시 필요
     val name: String,
