@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.interestarea
 
+import StudyViewModel
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,8 @@ import com.example.spoteam_android.databinding.ItemRecyclerViewBinding
 
 class InterestVPAdapter(
     var dataList: ArrayList<BoardItem>,
-    private val onLikeClick: (BoardItem, ImageView) -> Unit
+    private val onLikeClick: (BoardItem, ImageView) -> Unit,
+    private val studyViewModel: StudyViewModel // ViewModel 추가
 ) : RecyclerView.Adapter<InterestVPAdapter.BoardViewHolder>() {
 
     interface OnItemClickListeners {
@@ -49,6 +51,7 @@ class InterestVPAdapter(
             if (::itemClickListener.isInitialized) {
                 itemClickListener.onItemClick(currentItem)
             }
+            studyViewModel.setRecentStudyId(currentItem.studyId)
         }
 
         // 좋아요 클릭 이벤트 설정

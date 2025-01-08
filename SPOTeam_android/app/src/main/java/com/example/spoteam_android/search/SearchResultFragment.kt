@@ -50,7 +50,7 @@ class SearchResultFragment : Fragment() {
 
         interestBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
-        })
+        },studyViewModel = studyViewModel)
 
         binding.spotLogo.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()

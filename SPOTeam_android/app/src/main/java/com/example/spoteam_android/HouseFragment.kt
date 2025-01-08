@@ -71,7 +71,6 @@ class HouseFragment : Fragment() {
         interestBoardAdapter = BoardAdapter(
                         ArrayList(),
                 onItemClick = { selectedItem ->
-                    Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
                     studyViewModel.setStudyData(
                         selectedItem.studyId,
                         selectedItem.imageUrl,
@@ -93,7 +92,6 @@ class HouseFragment : Fragment() {
         recommendBoardAdapter = BoardAdapter(
             ArrayList(),
             onItemClick = { selectedItem ->
-                Log.d("HouseFragment", "이벤트 클릭: ${selectedItem.title}")
                 studyViewModel.setStudyData(
                     selectedItem.studyId,
                     selectedItem.imageUrl,
@@ -279,8 +277,6 @@ class HouseFragment : Fragment() {
                         fetchRecommendStudy()
                     } else {
                         Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
-                        Log.d("studyid","${studyItem.studyId}")
-                        Log.d("memberid", "${memberId}")
                     }
                 }
 
@@ -301,10 +297,8 @@ class HouseFragment : Fragment() {
                     call: Call<CommunityResponse>,
                     response: Response<CommunityResponse>
                 ) {
-                    Log.d("LivePopularContent", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val popularResponse = response.body()
-                        Log.d("LivePopularContent", "responseBody: ${popularResponse?.isSuccess}")
                         if (popularResponse?.isSuccess == "true") {
                             binding.popularContentTv.text = popularResponse.result.postBest5Responses[0].postTitle
                             popularContentId = popularResponse.result.postBest5Responses[0].postId
@@ -328,7 +322,6 @@ class HouseFragment : Fragment() {
 
 
     private fun fetchRecommendStudy() {
-        Log.d("HouseFragment", "fetchRecommendStudy() 실행")
         val service = RetrofitInstance.retrofit.create(RecommendStudyApiService::class.java)
         service.GetRecommendStudy().enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {

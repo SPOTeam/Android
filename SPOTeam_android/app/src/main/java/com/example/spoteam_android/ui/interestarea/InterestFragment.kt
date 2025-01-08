@@ -53,7 +53,7 @@ class InterestFragment : Fragment() {
 
         interestBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
-        })
+        },studyViewModel = studyViewModel)
 
         interestBoardAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
             override fun onItemClick(data: BoardItem) {
