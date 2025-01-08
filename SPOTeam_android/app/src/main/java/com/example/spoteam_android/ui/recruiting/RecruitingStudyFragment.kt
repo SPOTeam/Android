@@ -53,7 +53,8 @@ class RecruitingStudyFragment : Fragment() {
             ArrayList(),
             onLikeClick = { selectedItem, likeButton ->
                 toggleLikeStatus(selectedItem, likeButton)
-            }
+            },
+            studyViewModel = studyViewModel
         )
 
         recruitingStudyAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {

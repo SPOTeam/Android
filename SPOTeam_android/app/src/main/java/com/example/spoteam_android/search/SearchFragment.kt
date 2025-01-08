@@ -62,6 +62,14 @@ class SearchFragment : Fragment() {
 
         loadRecentSearches()
 
+        studyViewModel.recentStudyId.observe(viewLifecycleOwner) { recentId ->
+            if (recentId != null) {
+                Log.d("SearchFragment", "최근 조회한 스터디 ID: $recentId")
+            } else {
+                Log.d("SearchFragment", "최근 조회한 스터디가 없습니다.")
+            }
+        }
+
         val chipGroup = binding.chipGroup
 
         // ChipGroup의 모든 자식 Chip의 클릭 이벤트를 비활성화
@@ -74,7 +82,7 @@ class SearchFragment : Fragment() {
 
         recommendBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
-        })
+        },studyViewModel = studyViewModel)
 
         recommendBoardAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
             override fun onItemClick(data: BoardItem) {
@@ -99,7 +107,7 @@ class SearchFragment : Fragment() {
 
         recruitingStudyAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
-        })
+        },studyViewModel = studyViewModel)
 
         recruitingStudyAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
             override fun onItemClick(data: BoardItem) {

@@ -31,6 +31,9 @@ class StudyViewModel : ViewModel() {
     private val _memberCount = MutableLiveData<Int>()
     val memberCount: LiveData<Int> = _memberCount
 
+    private val _recentStudyId = MutableLiveData<Int?>()
+    val recentStudyId: LiveData<Int?> get() = _recentStudyId
+
     fun setMaxPeople(value: Int) {
         _maxPeople.value = value
     }
@@ -138,5 +141,11 @@ class StudyViewModel : ViewModel() {
         val json = gson.toJson(studyRequest)
         return json.toRequestBody("application/json".toMediaType())
     }
+
+    fun setRecentStudyId(id: Int) {
+        _recentStudyId.value = id
+        Log.d("StudyViewModel", "최근 조회한 스터디 ID 설정: $id")
+    }
+
 
 }

@@ -20,7 +20,7 @@ interface InterestAreaApiService {
         @Query("fee") fee: Int?
     ): Call<ApiResponse>
 
-    @GET("/spot//search/studies/main/interested")
+    @GET("/spot/search/studies/main/interested")
     fun getInterestedBestStudies(
     ): Call<ApiResponse>
 }
