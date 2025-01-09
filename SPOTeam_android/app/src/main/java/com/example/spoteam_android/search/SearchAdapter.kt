@@ -20,15 +20,20 @@ class SearchAdapter(
 ) : RecyclerView.Adapter<SearchAdapter.BoardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
-        val binding = ItemRecyclerViewPlusToggleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemRecyclerViewPlusToggleBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return BoardViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: BoardViewHolder, position: Int) {
         val currentItem = itemList[position]
-        holder.bind(currentItem)
+        holder.bind(currentItem) // ViewHolder의 bind 메서드로 데이터 전달
+
         holder.itemView.setOnClickListener {
-            Log.d("SearchAdapter","{$currentItem}이 선택되었습니다")
+            Log.d("SearchAdapter", "{$currentItem}이 선택되었습니다")
             onItemClick(currentItem)
             Log.d("SearchAdapter", "onItemClick 호출됨")
         }

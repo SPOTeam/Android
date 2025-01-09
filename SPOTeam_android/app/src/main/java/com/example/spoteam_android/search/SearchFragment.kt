@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MainActivity
@@ -57,13 +58,14 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        binding = FragmentSearchBinding.inflate(inflater, container,    false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
         loadRecentSearches()
 
         studyViewModel.recentStudyId.observe(viewLifecycleOwner) { recentId ->
             if (recentId != null) {
+                fetchRecruitingByRecentId(recentId)
                 Log.d("SearchFragment", "최근 조회한 스터디 ID: $recentId")
             } else {
                 Log.d("SearchFragment", "최근 조회한 스터디가 없습니다.")
@@ -79,6 +81,7 @@ class SearchFragment : Fragment() {
             chip.isFocusable = false
             chip.isCheckable = false
         }
+
 
         recommendBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
@@ -132,7 +135,6 @@ class SearchFragment : Fragment() {
 
         val memberId = getMemberId(requireContext())
         fetchRecommendStudy()
-        fetchAllRecruiting("ALL")
 
         fetchPopularKeywords()
 
@@ -326,54 +328,50 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun fetchAllRecruiting(selectedItem: String) {
+    private fun fetchRecruitingByRecentId(recentId: Int) {
         val boardItems = arrayListOf<BoardItem>()
-        val service = RetrofitInstance.retrofit.create(RecruitingStudyApiService::class.java)
-        service.GetRecruitingStudy(
-            gender = "MALE",
-            minAge = 18,
-            maxAge = 60,
-            isOnline = false,
-            hasFee = false,
-            fee = null,
-            page = 0,
-            size = 1,
-            sortBy = selectedItem
-        ).enqueue(object : Callback<ApiResponse> {
-            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+        val service = RetrofitInstance.retrofit.create(GetStudyApiService::class.java)
+
+        service.GetStudyApi(recentId).enqueue(object : Callback<StudyDetailResponse> {
+            override fun onResponse(call: Call<StudyDetailResponse>, response: Response<StudyDetailResponse>) {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse?.isSuccess == true) {
                         boardItems.clear()
-                        apiResponse.result?.content?.forEach { study ->
-                            val boardItem = BoardItem(
-                                studyId = study.studyId,
-                                title = study.title,
-                                goal = study.goal,
-                                introduction = study.introduction,
-                                memberCount = study.memberCount,
-                                heartCount = study.heartCount,
-                                hitNum = study.hitNum,
-                                maxPeople = study.maxPeople,
-                                studyState = study.studyState,
-                                themeTypes = study.themeTypes,
-                                regions = study.regions,
-                                imageUrl = study.imageUrl,
-                                liked = study.liked
-                            )
-                            boardItems.add(boardItem)
-                        }
+                        val result = apiResponse.result
+                        val boardItem = BoardItem(
+                            studyId = result.studyId,
+                            title = result.studyName,
+                            goal = result.goal,
+                            introduction = result.introduction,
+                            memberCount = result.memberCount,
+                            heartCount = result.heartCount,
+                            hitNum = result.hitNum,
+                            maxPeople = result.maxPeople,
+                            studyState = "", // Study state 관련 데이터 추가 필요
+                            themeTypes = result.themes,
+                            regions = listOf(), // 지역 정보가 없다면 빈 리스트 사용
+                            imageUrl = "",
+                            liked = false // Like 정보가 없으면 기본값 사용
+                        )
+                        boardItems.add(boardItem)
                         updateRecyclerView(boardItems)
                     } else {
+                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                     }
                 } else {
+                    Log.e("SearchFragment", "API 호출 실패: ${response.code()}")
+                    Toast.makeText(requireContext(), "서버 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+            override fun onFailure(call: Call<StudyDetailResponse>, t: Throwable) {
+                Log.e("SearchFragment", "네트워크 오류: ${t.message}")
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
     private fun updateRecyclerView(boardItems: List<BoardItem>) {
         recruitingStudyAdapter.updateList(boardItems)
     }
