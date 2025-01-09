@@ -104,6 +104,8 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="15dp"
+        android:overScrollMode="never"
+        android:nestedScrollingEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tx_recently_viewed_study"/>
@@ -128,6 +130,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="15dp"
         android:paddingBottom="0dp"
+        android:overScrollMode="never"
+        android:nestedScrollingEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tx_recommendation_study" />

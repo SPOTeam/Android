@@ -90,6 +90,7 @@ class HouseFragment : Fragment() {
             }
         })
 
+
         recommendBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
         toggleLikeStatus(selectedItem, likeButton)
         },studyViewModel = studyViewModel)
