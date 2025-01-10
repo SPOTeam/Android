@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")  // kapt 플러그인 직접 선언
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -76,12 +77,18 @@ dependencies {
     implementation("androidx.room:room-runtime:2.5.0")
     kapt("androidx.room:room-compiler:2.5.0")
     implementation("androidx.room:room-ktx:2.5.0")
+
+    implementation("com.squareup.retrofit2:converter-simplexml:2.9.0")
+
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 }
 
 kapt {
     arguments {
         arg("room.schemaLocation", "$projectDir/schemas")
     }
+    correctErrorTypes = true
 }
 
 configurations {

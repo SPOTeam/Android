@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.FragmentHouseBinding
@@ -32,9 +33,11 @@ import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
 import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
 import com.example.spoteam_android.ui.recruiting.RecruitingStudyFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.example.spoteam_android.weather.WeatherViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class HouseFragment : Fragment() {
 
@@ -44,6 +47,8 @@ class HouseFragment : Fragment() {
     private lateinit var recommendBoardAdapter: InterestVPAdapter
     private var popularContentId : Int = -1
     private lateinit var studyApiService: StudyApiService
+    private val viewModel by viewModels<WeatherViewModel>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +59,7 @@ class HouseFragment : Fragment() {
         binding = FragmentHouseBinding.inflate(inflater, container, false)
 
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
 
         fetchLivePopularContent()
 
@@ -89,6 +95,7 @@ class HouseFragment : Fragment() {
                     .commit()
             }
         })
+
 
 
         recommendBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
@@ -363,6 +370,8 @@ class HouseFragment : Fragment() {
             }
         })
     }
+
+
 
     fun getMemberId(context: Context): Int {
 

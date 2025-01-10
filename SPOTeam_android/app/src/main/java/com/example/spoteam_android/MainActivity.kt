@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.ui.study.todolist.TodoViewModel
@@ -31,14 +32,18 @@ import com.example.spoteam_android.ui.study.MyStudyCommunityFragment
 import com.example.spoteam_android.ui.study.MyStudyWriteContentFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.example.spoteam_android.ui.study.StudyFragment
+import com.example.spoteam_android.weather.WeatherViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val todoViewModel: TodoViewModel by viewModels()
+    private val viewModel by viewModels<WeatherViewModel>()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +62,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             true
+        }
+
+        viewModel.getWeather("JSON",14,1,
+            20250110,1100,"63","89")
+
+        viewModel.weatherResponse.observe(this) { response ->
+            response.body()?.response?.body?.items?.item?.forEach {
+                Log.d("HouseFragment", "$it")
+            }
         }
 
 
