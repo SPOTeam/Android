@@ -68,14 +68,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/interest_study_bold"
             app:tabMode="scrollable"
-            app:tabPaddingStart="8dp"
-            app:tabPaddingEnd="8dp"
-            app:tabMinWidth="80dp"
-            app:tabMaxWidth="200dp"
             app:tabIndicatorColor="#186AFF"
             app:tabIndicatorFullWidth="false"
             app:tabIndicatorHeight="2dp"
-            app:tabSelectedTextColor="#186AFF"
+            app:tabMinWidth="0dp"
             app:tabGravity="fill" />
 
 

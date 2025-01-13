@@ -3,8 +3,10 @@ package com.example.spoteam_android.ui.myinterest
 import StudyApiService
 import StudyViewModel
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -144,11 +146,23 @@ class MyInterestStudyFragment : Fragment() {
     private fun setupTabs() {
         tabLayout = binding.tabs
 
+        tabLayout.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_MOVE) {
+                // 스크롤 동작 무시
+                true
+            } else {
+                // 다른 이벤트는 정상 처리
+                false
+            }
+        }
+
         fetchDataGetInterestCategory { themes ->
             if (themes != null) {
                 val allTab = tabLayout.newTab().apply {
                     customView = LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null).apply {
-                        findViewById<TextView>(R.id.tabText).text = "전체"
+                        val textView = findViewById<TextView>(R.id.tabText)
+                        textView.text = "전체"
+                        textView.setTypeface(null, Typeface.BOLD) // 최초 "전체" Bold 처리
                     }
                     tag = "전체"
                 }
@@ -166,6 +180,12 @@ class MyInterestStudyFragment : Fragment() {
 
                 tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                     override fun onTabSelected(tab: TabLayout.Tab) {
+                        val textView = tab.view?.findViewById<TextView>(R.id.tabText)
+                        textView?.apply {
+                            setTypeface(null, Typeface.BOLD) // Bold 설정
+                            setTextColor(ContextCompat.getColor(requireContext(), R.color.MainColor_01)) // 텍스트 색상 변경
+                        }
+
                         val selectedCategory = tab.tag as String
                         if (selectedCategory == "전체") {
                             fetchMyInterestAll("ALL")
@@ -184,8 +204,9 @@ class MyInterestStudyFragment : Fragment() {
                     }
 
                     override fun onTabUnselected(tab: TabLayout.Tab?) {
-                        tab?.customView?.findViewById<TextView>(R.id.tabText)
-                            ?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                        val textView = tab?.view?.findViewById<TextView>(R.id.tabText)
+                        textView?.setTypeface(null, Typeface.NORMAL)
+                        textView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.Gray04))
                     }
 
                     override fun onTabReselected(tab: TabLayout.Tab?) {}
