@@ -168,7 +168,7 @@
         <LinearLayout
             android:id="@+id/house_fragment_ll"
             android:layout_width="match_parent"
-            android:layout_height="85dp"
+            android:layout_height="80dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
@@ -180,10 +180,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/house_location_cl"
-                android:layout_width="85dp"
-                android:layout_height="85dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/content_tmpl">
 
                 <ImageView
@@ -191,7 +191,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/house_location"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -200,7 +200,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="내 지역"
-                    android:textColor="#588FF2"
+                    android:textColor="@color/MainColor_02"
                     android:layout_marginTop="2dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -210,10 +210,10 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/house_community_cl"
-                android:layout_width="85dp"
-                android:layout_height="85dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/content_tmpl">
 
                 <ImageView
@@ -221,7 +221,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/house_community"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -230,7 +230,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="게시판"
-                    android:textColor="#588FF2"
+                    android:textColor="@color/MainColor_02"
                     android:layout_marginTop="2dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -241,10 +241,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/house_recruit_cl"
-                android:layout_width="85dp"
-                android:layout_height="85dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/content_tmpl">
 
                 <ImageView
@@ -252,7 +252,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/house_recruit"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -261,7 +261,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="모집중"
-                    android:textColor="#588FF2"
+                    android:textColor="@color/MainColor_02"
                     android:layout_marginTop="2dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -272,8 +272,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/house_interest_cl"
-                android:layout_width="85dp"
-                android:layout_height="85dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_weight="1"
                 android:background="@drawable/content_tmpl">
 
@@ -282,7 +282,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/house_interest"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -291,7 +291,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="내 관심사"
-                    android:textColor="#588FF2"
+                    android:textColor="@color/MainColor_02"
                     android:layout_marginTop="2dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -308,7 +308,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/house_fragment_ll">
