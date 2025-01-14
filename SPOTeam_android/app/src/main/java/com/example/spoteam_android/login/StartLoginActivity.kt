@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.spoteam_android.KaKaoResult
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.NaverResult
+import com.example.spoteam_android.checklist.CheckListCategoryActivity
 import com.example.spoteam_android.databinding.ActivityStartLoginBinding
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
@@ -217,7 +218,15 @@ class StartLoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToNextScreen() {
-        val intent = Intent(this, MainActivity::class.java)
+        val sharedPreferences =getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+        val isLoggedIn = sharedPreferences.getBoolean("${email}_isLoggedIn", false)
+        val intent = if (isLoggedIn){
+            Intent(this, MainActivity::class.java)
+        }else{
+            Intent(this, CheckListCategoryActivity::class.java)
+        }
+
         startActivity(intent)
         finish()
     }

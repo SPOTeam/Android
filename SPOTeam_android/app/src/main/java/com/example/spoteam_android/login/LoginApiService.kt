@@ -43,16 +43,6 @@ interface LoginApiService {
 
     //네이버 로그인 api 서비스
     @POST("/spot/members/sign-in/naver")
-    fun getNaverUserInfo(
-        @Query("access_token") accessToken: String,
-        @Query("refresh_token") refreshToken: String,
-        @Query("token_type") tokenType: String,
-        @Query("expires_in") expiresIn: Long,
-        @Query("error") error: String? = null,
-        @Query("error_description") errorDescription: String? = null
-    ): Call<NaverResponse>
-
-    @POST("/spot/members/sign-in/naver")
     suspend fun signInWithNaver(@Body request: NaverLoginRequest): NaverResponse
 
 

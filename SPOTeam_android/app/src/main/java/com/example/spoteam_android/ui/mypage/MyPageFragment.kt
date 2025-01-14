@@ -2,22 +2,25 @@ package com.example.spoteam_android.ui.mypage
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import com.example.spoteam_android.MainActivity
-import androidx.fragment.app.replace
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMypageBinding
 import com.example.spoteam_android.login.StartLoginActivity
 import com.example.spoteam_android.ui.community.CommunityAPIService
-import com.example.spoteam_android.ui.community.ContentLikeResponse
 import com.example.spoteam_android.ui.community.MyPageStudyNumInfo
 import com.example.spoteam_android.ui.community.MyPageStudyNumResponse
 import com.kakao.sdk.user.UserApiClient
@@ -29,123 +32,65 @@ import retrofit2.Response
 class MyPageFragment : Fragment() {
 
     private lateinit var binding: FragmentMypageBinding
-    private var memberId : Int = -1
+    private var memberId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-        ): View {
-            binding = FragmentMypageBinding.inflate(inflater, container, false)
+    ): View {
+        binding = FragmentMypageBinding.inflate(inflater, container, false)
 
-            setNickname()
+        setupUI()
+        setNickname()
+        fetchMyPageInfo()
 
-            binding.tvInProgress.setOnClickListener{
-                (activity as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, ParticipatingStudyFragment())
-                    .addToBackStack(null)
-                    .commit()
-            }
+        return binding.root
+    }
 
-            binding.tvInProgressNum.setOnClickListener{
-                (activity as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, ParticipatingStudyFragment())
-                    .addToBackStack(null)
-                    .commit()
-            }
+    private fun setupUI() {
+        binding.apply {
+            tvInProgress.setOnClickListener { navigateToFragment(ParticipatingStudyFragment()) }
+            tvInProgressNum.setOnClickListener { navigateToFragment(ParticipatingStudyFragment()) }
+            tvRecruiting.setOnClickListener { navigateToFragment(ConsiderAttendanceFragment()) }
+            tvRecruitingNum.setOnClickListener { navigateToFragment(ConsiderAttendanceFragment()) }
+            tvApplied.setOnClickListener { navigateToFragment(PermissionWaitFragment()) }
+            tvAppliedNum.setOnClickListener { navigateToFragment(PermissionWaitFragment()) }
+            framelayout8.setOnClickListener { performNaverLogout() }
+            framelayout10.setOnClickListener { showConfirmationDialog("회원 탈퇴", "정말로 회원 탈퇴를 진행하시겠습니까? 탈퇴 시 모든 데이터가 삭제됩니다.") { performAccountDeletion() } }
+            framelayout11.setOnClickListener { performLogout() }
+            framelayout1.setOnClickListener { navigateToFragment(ThemePreferenceFragment()) }
+            framelayout2.setOnClickListener { navigateToFragment(RegionPreferenceFragment()) }
+            framelayout3.setOnClickListener { navigateToFragment(PurposePreferenceFragment()) }
+        }
+    }
 
-            binding.tvMyPage.setOnClickListener{
-                parentFragmentManager.popBackStack()
-            }
-
-            binding.tvRecruiting.setOnClickListener{
-                (activity as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, ConsiderAttendanceFragment())
-                    .addToBackStack(null)
-                    .commit()
-            }
-
-            binding.tvRecruitingNum.setOnClickListener{
-                (activity as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, ConsiderAttendanceFragment())
-                    .addToBackStack(null)
-                    .commit()
-            }
-
-            binding.tvApplied.setOnClickListener{
-                (activity as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, PermissionWaitFragment())
-                    .addToBackStack(null)
-                    .commit()
-            }
-
-            binding.tvAppliedNum.setOnClickListener{
-                (activity as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, PermissionWaitFragment())
-                    .addToBackStack(null)
-                    .commit()
-            }
-            binding.framelayout8.setOnClickListener {
-                performNaverLogout()
-            }
-
-            binding.framelayout10.setOnClickListener {
-                // 회원 탈퇴 버튼 클릭 시
-                performAccountDeletion()
-            }
-
-            // 로그아웃 버튼 클릭 시
-            binding.framelayout11.setOnClickListener {
-                performLogout()
-            }
-
-            binding.framelayout1.setOnClickListener {
-                val transaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.main_frm, ThemePreferenceFragment())
-                transaction.commit()
-            }
-            binding.framelayout2.setOnClickListener {
-                (context as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, RegionPreferenceFragment())
-                    .addToBackStack(null)
-                    .commitAllowingStateLoss()
-            }
-
-            binding.framelayout3.setOnClickListener {
-                val transaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.main_frm, PurposePreferenceFragment())
-                transaction.commit()
-            }
-
-            return binding.root
+    private fun navigateToFragment(fragment: Fragment) {
+        (activity as MainActivity).supportFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun fetchMyPageInfo() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getMyPageStudyNum(memberId)
-            .enqueue(object : Callback<MyPageStudyNumResponse> {
-                override fun onResponse(
-                    call: Call<MyPageStudyNumResponse>,
-                    response: Response<MyPageStudyNumResponse>
-                ) {
-                    Log.d("MyPage", "response: ${response.isSuccessful}")
-                    if (response.isSuccessful) {
-                        val myPageResponse = response.body()
-                        Log.d("MyPage", "responseBody: ${myPageResponse?.isSuccess}")
-                        if (myPageResponse?.isSuccess == "true") {
-                            initMyStudyNum(myPageResponse.result)
-                        } else {
-                            showError(myPageResponse?.message)
-                        }
-                    } else {
-                        showError(response.code().toString())
+        service.getMyPageStudyNum(memberId).enqueue(object : Callback<MyPageStudyNumResponse> {
+            override fun onResponse(call: Call<MyPageStudyNumResponse>, response: Response<MyPageStudyNumResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        if (it.isSuccess == "true") initMyStudyNum(it.result)
+                        else showError(it.message)
                     }
+                } else {
+                    showError("Error Code: ${response.code()}")
                 }
+            }
 
-                override fun onFailure(call: Call<MyPageStudyNumResponse>, t: Throwable) {
-                    Log.e("LikeContent", "Failure: ${t.message}", t)
-                }
-            })
+            override fun onFailure(call: Call<MyPageStudyNumResponse>, t: Throwable) {
+                showError("Network Error: ${t.message}")
+                Log.e("MyPageFragment", "Failure: ${t.message}", t)
+            }
+        })
     }
 
     private fun initMyStudyNum(result: MyPageStudyNumInfo) {
@@ -192,94 +137,60 @@ class MyPageFragment : Fragment() {
         fetchMyPageInfo()
     }
 
-
-    private fun getNicknameFromPreferences(email: String): String? {
-        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("${email}_nickname", null)
-    }
-
     private fun performAccountDeletion() {
         UserApiClient.instance.unlink { error ->
             if (error != null) {
-                // 탈퇴 실패
                 Toast.makeText(requireContext(), "회원탈퇴 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-                Log.e("MyPageFragment", "회원탈퇴 실패: $error")
+                Log.e("MyPageFragment", "Account Deletion Failed: ${error.message}")
             } else {
-                // 탈퇴 성공
+                clearSharedPreferences()
                 Toast.makeText(requireContext(), "회원탈퇴 성공", Toast.LENGTH_SHORT).show()
-
-                // SharedPreferences의 사용자 데이터 삭제
-                val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-                with(sharedPreferences.edit()) {
-                    clear()  // 모든 SharedPreferences 데이터 삭제
-                    apply()
-                }
-
-                // 로그인 화면으로 이동
-                val intent = Intent(requireActivity(), StartLoginActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK) // 모든 액티비티 제거 후 새로운 로그인 화면으로 이동
-                startActivity(intent)
-                requireActivity().finish()  // 현재 액티비티 종료
+                navigateToLoginScreen()
             }
         }
     }
 
-
     private fun performLogout() {
         UserApiClient.instance.logout { error ->
             if (error != null) {
-                // 로그아웃 실패
                 Toast.makeText(requireContext(), "로그아웃 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-                Log.e("MyPageFragment", "로그아웃 실패: $error")
+                Log.e("MyPageFragment", "Logout Failed: ${error.message}")
             } else {
-                // 로그아웃 성공
+                clearSharedPreferences()
                 Toast.makeText(requireContext(), "로그아웃 성공", Toast.LENGTH_SHORT).show()
-
-                // SharedPreferences에서 모든 로그인 관련 정보 삭제
-                val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-
-                with(sharedPreferences.edit()) {
-                    remove("isLoggedIn")
-                    remove("accessToken")
-                    remove("memberId")
-                    remove("nickname")
-                    remove("kakaoProfileImageUrl")
-                    remove("currentEmail")
-                    apply()
-                    }
-
-                // 로그인 화면으로 이동
-                val intent = Intent(requireActivity(), StartLoginActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK) // 모든 액티비티 제거 후 새로운 로그인 화면으로 이동
-                startActivity(intent)
-                requireActivity().finish()  // 현재 액티비티 종료
+                navigateToLoginScreen()
             }
         }
     }
 
     private fun performNaverLogout() {
-        // 네이버 로그아웃 호출
         NaverIdLoginSDK.logout()
-
-        // SharedPreferences에서 네이버 관련 데이터 삭제
-        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        with(sharedPreferences.edit()) {
-            remove("isLoggedIn")
-            remove("accessToken")
-            remove("refreshToken")
-            remove("memberId")
-            remove("nickname")
-            remove("currentEmail")
-            apply()
-        }
-
-        // 로그인 화면으로 이동
+        clearSharedPreferences()
         Toast.makeText(requireContext(), "네이버 로그아웃 성공", Toast.LENGTH_SHORT).show()
-        val intent = Intent(requireActivity(), StartLoginActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK) // 모든 액티비티 제거 후 새로운 로그인 화면으로 이동
-        startActivity(intent)
-        requireActivity().finish() // 현재 액티비티 종료
+        navigateToLoginScreen()
     }
 
+    private fun clearSharedPreferences() {
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            clear()
+            apply()
+        }
+    }
 
+    private fun navigateToLoginScreen() {
+        val intent = Intent(requireActivity(), StartLoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
+    private fun showConfirmationDialog(title: String, message: String, onConfirm: () -> Unit) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("확인") { _, _ -> onConfirm() }
+            .setNegativeButton("취소", null)
+            .show()
+    }
 }

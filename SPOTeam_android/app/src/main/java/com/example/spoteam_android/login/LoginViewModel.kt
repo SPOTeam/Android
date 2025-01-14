@@ -24,7 +24,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
             val result = loginRepository.sendTokenToServer(accessToken)
             result.onSuccess { userInfo ->
                 // 받은 accessToken을 RetrofitInstance에 설정
-                Log.d("kakaoLogin333", "서버 응답 성공: ${userInfo.signInDTO}")
+                Log.d("kakaoLogin333", "서버 응답 성공: ${userInfo.isSpotMember}")
                 RetrofitInstance.setAuthToken(userInfo.signInDTO.tokens.accessToken)
                 _loginResult.value = Result.success(userInfo) // MutableLiveData인 _loginResult에 값 설정
 
