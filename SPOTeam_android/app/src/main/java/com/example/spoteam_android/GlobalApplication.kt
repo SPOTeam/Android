@@ -5,7 +5,9 @@ import android.util.Log
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import com.navercorp.nid.NaverIdLoginSDK
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class GlobalApplication: Application() {
     override fun onCreate() {
         super.onCreate()

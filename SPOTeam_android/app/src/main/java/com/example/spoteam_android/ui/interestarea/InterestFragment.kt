@@ -4,9 +4,11 @@ import StudyApiService
 import StudyViewModel
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -114,7 +116,6 @@ class InterestFragment : Fragment() {
         Log.d("InterestFragment","$gender, $minAge, $maxAge,$activityFee,$selectedStudyTheme,$activityFeeAmount")
 
         tabLayout = binding.tabs
-//        val memberId = getMemberId(requireContext())
         val source = arguments?.getString("source")
 
         when (source) {
@@ -160,12 +161,25 @@ class InterestFragment : Fragment() {
         // 로그 태그 정의
         val TAG = "SetupTabs"
 
+        tabLayout.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_MOVE) {
+                // 스크롤 동작 무시
+                true
+            } else {
+                // 다른 이벤트는 정상 처리
+                false
+            }
+        }
+
         regions?.let {
             // "전체" 탭 로그
             Log.d(TAG, "Adding '전체' tab")
             val allTab = tabLayout.newTab().apply {
                 customView = LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null).apply {
-                    findViewById<TextView>(R.id.tabText).text = "전체"
+                    val textView = findViewById<TextView>(R.id.tabText)
+                    textView.text = "전체"
+                    textView.setTypeface(null, Typeface.BOLD) // 최초 "전체" Bold 처리
+
                 }
                 tag = "0000000000"
             }
@@ -186,6 +200,9 @@ class InterestFragment : Fragment() {
             // 탭 선택 리스너 로그
             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
+                    val textView = tab.view?.findViewById<TextView>(R.id.tabText)
+                    textView?.setTypeface(null, Typeface.BOLD)
+
                     val selectedRegionCode = tab.tag as String
                     Log.d(TAG, "Tab selected: ${tab.tag}, region code: $selectedRegionCode")
                     if (selectedRegionCode == "0000000000") {
@@ -216,8 +233,8 @@ class InterestFragment : Fragment() {
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
                     Log.d(TAG, "Tab unselected: ${tab?.tag}")
-                    tab?.customView?.findViewById<TextView>(R.id.tabText)
-                        ?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    val textView = tab?.view?.findViewById<TextView>(R.id.tabText)
+                    textView?.setTypeface(null, Typeface.NORMAL)
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {

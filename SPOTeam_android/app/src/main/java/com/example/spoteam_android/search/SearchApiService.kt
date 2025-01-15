@@ -23,4 +23,10 @@ interface PopularKeywordApiService {
     fun getPopularKeywords(): Call<PopularKeywordResponse>
 }
 
+interface GetStudyApiService {
+    @GET("/spot/studies/{studyId}")
+    fun GetStudyApi(
+        @Path("studyId") studyId: Int,
+    ): Call<StudyDetailResponse>
+}
 

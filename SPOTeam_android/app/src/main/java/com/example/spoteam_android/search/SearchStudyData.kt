@@ -107,3 +107,37 @@ data class KeywordItem(
     val point: Int
 )
 
+data class StudyDetailResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: StudyDetailResult
+)
+
+data class StudyDetailResult(
+    val studyId: Int,
+    val imageUrl: String,
+    val studyName: String,
+    val studyOwner: StudyOwner,
+    val hitNum: Int,
+    val heartCount: Int,
+    val memberCount: Int,
+    val maxPeople: Int,
+    val gender: String,
+    val minAge: Int,
+    val maxAge: Int,
+    val fee: Int,
+    val isOnline: Boolean,
+    val themes: List<String>,
+    val goal: String,
+    val introduction: String
+)
+
+data class StudyOwner(
+    val ownerId: Int,
+    val ownerName: String
+)
+
+
+
+

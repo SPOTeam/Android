@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.FragmentHouseBinding
@@ -27,22 +28,27 @@ import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.example.spoteam_android.ui.interestarea.InterestAreaApiService
 import com.example.spoteam_android.ui.interestarea.InterestFragment
+import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
 import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
 import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
 import com.example.spoteam_android.ui.recruiting.RecruitingStudyFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.example.spoteam_android.weather.WeatherViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class HouseFragment : Fragment() {
 
     lateinit var binding: FragmentHouseBinding
     private val studyViewModel: StudyViewModel by activityViewModels()
-    private lateinit var interestBoardAdapter: BoardAdapter
-    private lateinit var recommendBoardAdapter: BoardAdapter
+    private lateinit var interestBoardAdapter: InterestVPAdapter
+    private lateinit var recommendBoardAdapter: InterestVPAdapter
     private var popularContentId : Int = -1
     private lateinit var studyApiService: StudyApiService
+    private val viewModel by viewModels<WeatherViewModel>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +59,7 @@ class HouseFragment : Fragment() {
         binding = FragmentHouseBinding.inflate(inflater, container, false)
 
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
 
         fetchLivePopularContent()
 
@@ -68,47 +75,48 @@ class HouseFragment : Fragment() {
             startActivity(intent)
         }
 
-        interestBoardAdapter = BoardAdapter(
-                        ArrayList(),
-                onItemClick = { selectedItem ->
-                    studyViewModel.setStudyData(
-                        selectedItem.studyId,
-                        selectedItem.imageUrl,
-                        selectedItem.introduction
-                    )
 
-                    // Fragment 전환
-                    val fragment = DetailStudyFragment()
-                    parentFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, fragment)
-                    .addToBackStack(null)
-                    .commit()
-            },
-            onLikeClick = { selectedItem, likeButton ->
-                toggleLikeStatus(selectedItem, likeButton)
-            }
-        )
+        interestBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
+            toggleLikeStatus(selectedItem, likeButton)
+        },studyViewModel = studyViewModel)
 
-        recommendBoardAdapter = BoardAdapter(
-            ArrayList(),
-            onItemClick = { selectedItem ->
+        interestBoardAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
+            override fun onItemClick(data: BoardItem) {
                 studyViewModel.setStudyData(
-                    selectedItem.studyId,
-                    selectedItem.imageUrl,
-                    selectedItem.introduction
+                    data.studyId,
+                    data.imageUrl,
+                    data.introduction
                 )
 
-                // Fragment 전환
                 val fragment = DetailStudyFragment()
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.main_frm, fragment)
                     .addToBackStack(null)
                     .commit()
-            },
-            onLikeClick = { selectedItem, likeButton ->
-                toggleLikeStatus(selectedItem, likeButton)
             }
-        )
+        })
+
+
+
+        recommendBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
+        toggleLikeStatus(selectedItem, likeButton)
+        },studyViewModel = studyViewModel)
+
+        recommendBoardAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
+            override fun onItemClick(data: BoardItem) {
+                studyViewModel.setStudyData(
+                    data.studyId,
+                    data.imageUrl,
+                    data.introduction
+                )
+
+                val fragment = DetailStudyFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        })
 
         binding.rvBoard.apply {
             layoutManager = LinearLayoutManager(context)
@@ -362,6 +370,8 @@ class HouseFragment : Fragment() {
             }
         })
     }
+
+
 
     fun getMemberId(context: Context): Int {
 
