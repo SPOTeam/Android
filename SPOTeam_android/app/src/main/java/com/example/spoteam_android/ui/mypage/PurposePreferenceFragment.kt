@@ -41,7 +41,7 @@ class PurposePreferenceFragment : Fragment() {
         if (email != null) {
             val memberId = sharedPreferences.getInt("${email}_memberId", -1)
             if (memberId != -1) {
-                fetchReasons(memberId) // GET 요청으로 이유 리스트 가져오기
+                fetchReasons() // GET 요청으로 이유 리스트 가져오기
             } else {
                 Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT).show()
             }
@@ -73,7 +73,7 @@ class PurposePreferenceFragment : Fragment() {
             if (email != null) {
                 val memberId = sharedPreferences.getInt("${email}_memberId", -1)
                 if (memberId != -1) {
-                    postReasonsToServer(memberId, selectedPurpose) // POST 요청으로 이유 전송
+                    postReasonsToServer(selectedPurpose) // POST 요청으로 이유 전송
                 } else {
                     Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT)
                         .show()
@@ -84,10 +84,10 @@ class PurposePreferenceFragment : Fragment() {
         return binding.root
     }
 
-    private fun fetchReasons(memberId: Int) {
+    private fun fetchReasons() {
         val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
 
-        service.getReasons(memberId).enqueue(object : Callback<ReasonApiResponse> {
+        service.getReasons().enqueue(object : Callback<ReasonApiResponse> {
             override fun onResponse(
                 call: Call<ReasonApiResponse>,
                 response: Response<ReasonApiResponse>
@@ -195,11 +195,11 @@ class PurposePreferenceFragment : Fragment() {
         }
     }
 
-    private fun postReasonsToServer(memberId: Int, selectedPurpose: List<Int>) {
+    private fun postReasonsToServer(selectedPurpose: List<Int>) {
         val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
         val purposePreferences = StudyReasons(selectedPurpose)
 
-        service.postPurposes(memberId, purposePreferences).enqueue(object : Callback<Void> {
+        service.postPurposes(purposePreferences).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     Log.d("PurposePreferenceFragment", "Reasons POST request success")

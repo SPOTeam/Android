@@ -261,7 +261,7 @@ class HouseFragment : Fragment() {
         val memberId = getMemberId(requireContext())
 
         if (memberId != -1) {
-            studyApiService.toggleStudyLike(studyItem.studyId, memberId).enqueue(object : Callback<LikeResponse> {
+            studyApiService.toggleStudyLike(studyItem.studyId).enqueue(object : Callback<LikeResponse> {
                 override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
                     if (response.isSuccessful) {
                         val newStatus = response.body()?.result?.status

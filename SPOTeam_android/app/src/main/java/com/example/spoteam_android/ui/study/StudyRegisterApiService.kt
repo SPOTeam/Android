@@ -22,24 +22,21 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 interface StudyApiService {
-    @POST("/spot/members/{memberId}/studies")
+    @POST("/spot//studies")
     fun submitStudyData(
-        @Path("memberId") memberId: Int,
         @Body studyRequest: RequestBody // @Body로 변경하여 JSON 데이터만 전송
     ): Call<ApiResponsed> // ApiResponse의 타입도 확인 필요
 
 
-
-    @GET("/spot/search/studies/on-studies/members/{memberId}")
+    //내가 참여하고 있는 스터디 불러오기
+    @GET("/spot/search/studies/on-studies")
     fun getStudies(
-        @Path("memberId") memberId: Int,
         @Query("page") page: Int,
         @Query("size") size: Int
     ): Call<StudyResponse>
-
-    @GET("/spot/search/studies/liked/members/{memberId}")
+    //찜한 스터디 조회
+    @GET("/spot/search/studies/liked")
     fun getBookmark(
-        @Path("memberId") memberId: Int,
         @Query("page") page: Int,
         @Query("size") size: Int
     ): Call<BookmarkResponse>
@@ -82,17 +79,15 @@ interface StudyApiService {
     ): Call<RecentAnnounceResponse>
 
     //스터디 참여 신청하기
-    @POST("/spot/members/{memberId}/studies/{studyId}")
+    @POST("/spot//studies/{studyId}")
     fun applyStudy(
-        @Path("memberId") memberId: Int,
         @Path("studyId") studyId: Int,
         @Body introduction: String
     ): Call<StudyApplyResponse>
-
-    @POST("/spot/studies/{studyId}/members/{memberId}/like")
+    //스터디 찜하기
+    @POST("/spot/studies/{studyId}/like")
     fun toggleStudyLike(
         @Path("studyId") studyId: Int,
-        @Path("memberId") memberId: Int
     ): Call<LikeResponse>
 
     @GET("/spot/studies/{studyId}/is-applied")

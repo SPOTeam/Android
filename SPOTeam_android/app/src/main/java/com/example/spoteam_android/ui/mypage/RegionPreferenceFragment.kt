@@ -39,7 +39,7 @@ class RegionPreferenceFragment : Fragment() {
         if (email != null) {
             val memberId = sharedPreferences.getInt("${email}_memberId", -1)
             if (memberId != -1) {
-                fetchRegions(memberId) // GET 요청으로 이유 리스트 가져오기
+                fetchRegions() // GET 요청으로 이유 리스트 가져오기
             } else {
                 Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT).show()
             }
@@ -74,10 +74,10 @@ class RegionPreferenceFragment : Fragment() {
         return binding.root
     }
 
-    private fun fetchRegions(memberId: Int) {
+    private fun fetchRegions() {
         val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
 
-        service.getRegion(memberId).enqueue(object : Callback<RegionApiResponse> {
+        service.getRegion().enqueue(object : Callback<RegionApiResponse> {
             override fun onResponse(
                 call: Call<RegionApiResponse>,
                 response: Response<RegionApiResponse>

@@ -18,23 +18,23 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface LoginApiService {
-    @POST("spot/member/{memberId}/theme")
-    fun postThemes(@Path("memberId") memberId: Int, @Body themePreferences: ThemePreferences): Call<Void>
+    @POST("spot/members/theme")
+    fun postThemes(@Body themePreferences: ThemePreferences): Call<Void>
 
-    @POST("spot/member/{memberId}/region")
-    fun postRegions(@Path("memberId") memberId: Int, @Body regionsPreferences: RegionsPreferences): Call<Void>
+    @POST("spot/members/region")
+    fun postRegions(@Body regionsPreferences: RegionsPreferences): Call<Void>
 
-    @POST("spot/member/{memberId}/study-reasons")
-    fun postPurposes(@Path("memberId") memberId: Int, @Body purposePreferences: StudyReasons): Call<Void>
+    @POST("spot/members/study-reasons")
+    fun postPurposes(@Body purposePreferences: StudyReasons): Call<Void>
 
-    @GET("spot/member/{memberId}/theme")
-    fun getThemes(@Path("memberId") memberId: Int): Call<ThemeApiResponse>
+    @GET("spot/members/theme")
+    fun getThemes(): Call<ThemeApiResponse>
 
-    @GET("spot/member/{memberId}/study-reasons")
-    fun getReasons(@Path("memberId") memberId: Int): Call<ReasonApiResponse>
+    @GET("spot/members/study-reasons")
+    fun getReasons(): Call<ReasonApiResponse>
 
-    @GET("/spot/member/{memberId}/region")
-    fun getRegion(@Path("memberId") memberId: Int): Call<RegionApiResponse>
+    @GET("spot/members/region")
+    fun getRegion(): Call<RegionApiResponse>
 
 
     //카카오 로그인 api 서비스

@@ -43,7 +43,7 @@ class ThemePreferenceFragment : Fragment() {
             val memberId = sharedPreferences.getInt("${email}_memberId", -1)
 
             if (memberId != -1) {
-                fetchThemes(memberId) // GET 요청으로 테마 가져오기
+                fetchThemes() // GET 요청으로 테마 가져오기
             } else {
                 Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT).show()
             }
@@ -85,10 +85,10 @@ class ThemePreferenceFragment : Fragment() {
         return binding.root
     }
 
-    private fun fetchThemes(memberId: Int) {
+    private fun fetchThemes() {
         val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
 
-        service.getThemes(memberId).enqueue(object : Callback<ThemeApiResponse> {
+        service.getThemes().enqueue(object : Callback<ThemeApiResponse> {
             override fun onResponse(
                 call: Call<ThemeApiResponse>,
                 response: RetrofitResponse<ThemeApiResponse>
@@ -204,7 +204,7 @@ class ThemePreferenceFragment : Fragment() {
         val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
         val themePreferences = ThemePreferences(themes) // 서버에 보낼 테마 리스트
 
-        service.postThemes(memberId, themePreferences).enqueue(object : Callback<Void> {
+        service.postThemes(themePreferences).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: RetrofitResponse<Void>) {
                 if (response.isSuccessful) {
                     Log.d("ThemePreferenceFragment", "Themes POST request success")

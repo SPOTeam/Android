@@ -291,7 +291,7 @@ class SearchFragment : Fragment() {
         val memberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
 
         if (memberId != -1) {
-            studyApiService.toggleStudyLike(studyItem.studyId, memberId)
+            studyApiService.toggleStudyLike(studyItem.studyId)
                 .enqueue(object : Callback<LikeResponse> {
                     override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
                         if (response.isSuccessful) {

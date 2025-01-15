@@ -58,7 +58,7 @@ class AuthInterceptor(private val context: Context) : Interceptor {
         return if (response.isSuccessful) {
             val body = response.body()
             if (body?.isSuccess == true) {
-//                Log.d("AuthInterceptor", "Token refresh succeeded: ${body.result}")
+                    Log.d("AuthInterceptor", "Token refresh succeeded: ${body.result}")
                 body.result
             } else {
                 Log.e("AuthInterceptor", "Token refresh failed: code: ${body?.code}, message: ${body?.message}")
