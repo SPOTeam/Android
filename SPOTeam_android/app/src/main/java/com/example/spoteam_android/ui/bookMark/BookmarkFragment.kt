@@ -101,7 +101,7 @@ class BookmarkFragment : Fragment() {
         val memberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
 
         if (memberId != -1) {
-            studyApiService.getBookmark(memberId, currentPage, size).enqueue(object : Callback<BookmarkResponse> {
+            studyApiService.getBookmark(currentPage, size).enqueue(object : Callback<BookmarkResponse> {
                 override fun onResponse(call: Call<BookmarkResponse>, response: Response<BookmarkResponse>) {
                     if (response.isSuccessful) {
                         val bookmarkResponse = response.body()
@@ -165,7 +165,7 @@ class BookmarkFragment : Fragment() {
         val memberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
 
         if (memberId != -1) {
-            studyApiService.toggleStudyLike(studyItem.studyId, memberId).enqueue(object : Callback<LikeResponse> {
+            studyApiService.toggleStudyLike(studyItem.studyId).enqueue(object : Callback<LikeResponse> {
                 override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
                     if (response.isSuccessful) {
                         response.body()?.let { likeResponse ->

@@ -112,7 +112,7 @@ class RegisterInformation : ComponentActivity() {
         Log.d("RegisterInformation", "Regions Preferences JSON: $regionsPreferencesJson")
 
         // POST 요청 보내기 성공 실패 로그
-        service.postThemes(memberId, themePreferences).enqueue(object : Callback<Void> {
+        service.postThemes(themePreferences).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 Log.d("RegisterInformation", "Themes POST request success")
             }
@@ -122,7 +122,7 @@ class RegisterInformation : ComponentActivity() {
             }
         })
 
-        service.postPurposes(memberId, purposePreferences).enqueue(object : Callback<Void> {
+        service.postPurposes(purposePreferences).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 Log.d("RegisterInformation", "Purposes POST request success")
             }
@@ -132,7 +132,7 @@ class RegisterInformation : ComponentActivity() {
             }
         })
 
-        service.postRegions(memberId, regionsPreferences).enqueue(object : Callback<Void> {
+        service.postRegions(regionsPreferences).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 Log.d("RegisterInformation", "Regions POST request success")
             }

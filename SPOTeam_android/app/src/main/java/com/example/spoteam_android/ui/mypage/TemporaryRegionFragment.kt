@@ -83,7 +83,7 @@ class TemporaryRegionFragment : Fragment() {
             val apiService = RetrofitInstance.retrofit.create(LoginApiService::class.java)
 
             // Retrofit POST 요청 보내기
-            apiService.postRegions(memberId, regionsPreferences).enqueue(object : retrofit2.Callback<Void> {
+            apiService.postRegions(regionsPreferences).enqueue(object : retrofit2.Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         Log.d("TemporaryRegionFragment", "POST 성공")

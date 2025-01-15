@@ -95,14 +95,14 @@ class QuizViewModel : ViewModel() {
         updateStudyRequest()
     }
 
-    fun submitStudyData(memberId: Int) {
+    fun submitStudyData() {
         val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
         val studyData = _studyRequest.value
 
         if (studyData != null) {
             val studyRequestBody = createStudyRequestBody(studyData)
 
-            apiService.submitStudyData(memberId, studyRequestBody)
+            apiService.submitStudyData(studyRequestBody)
                 .enqueue(object : Callback<ApiResponsed> {
                     override fun onResponse(call: Call<ApiResponsed>, response: Response<ApiResponsed>) {
                         if (response.isSuccessful) {

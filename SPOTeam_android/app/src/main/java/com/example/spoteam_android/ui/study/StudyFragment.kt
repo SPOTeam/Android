@@ -107,7 +107,7 @@ class StudyFragment : Fragment() {
             if (memberId != -1) {
                 Log.d("StudyFragment", "Fetching data for memberId: $memberId, page: $currentPage, size: $size")
 
-                studyApiService.getStudies(memberId, currentPage, size).enqueue(object : Callback<StudyResponse> {
+                studyApiService.getStudies(currentPage, size).enqueue(object : Callback<StudyResponse> {
                     override fun onResponse(call: Call<StudyResponse>, response: Response<StudyResponse>) {
                         if (response.isSuccessful) {
                             response.body()?.result?.let { result ->
@@ -177,7 +177,7 @@ class StudyFragment : Fragment() {
         val memberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
 
         if (memberId != -1) {
-            studyApiService.toggleStudyLike(studyItem.studyId, memberId).enqueue(object : Callback<LikeResponse> {
+            studyApiService.toggleStudyLike(studyItem.studyId).enqueue(object : Callback<LikeResponse> {
                 override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
                     if (response.isSuccessful) {
                         response.body()?.let { likeResponse ->
