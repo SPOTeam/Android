@@ -47,13 +47,19 @@ object RetrofitInstance {
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer $authToken")
-                    .build()
+                val originalRequest = chain.request()
+                val requestBuilder = originalRequest.newBuilder()
+
+                if (authToken != null && !originalRequest.url.toString().contains("/spot/check/login-id")) {
+                    requestBuilder.addHeader("Authorization", "Bearer $authToken")
+                }
+
+                val request = requestBuilder.build()
                 chain.proceed(request)
             }
             .build()
     }
+
 
     val retrofit: Retrofit by lazy {
         Retrofit.Builder()
@@ -62,4 +68,7 @@ object RetrofitInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
+
+
 }
