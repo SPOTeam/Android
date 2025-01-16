@@ -1,5 +1,6 @@
 package com.example.spoteam_android.login
 
+import com.example.spoteam_android.IdResponse
 import com.example.spoteam_android.NaverLoginRequest
 import com.example.spoteam_android.NaverResponse
 import com.example.spoteam_android.NaverResult
@@ -44,6 +45,10 @@ interface LoginApiService {
     //네이버 로그인 api 서비스
     @POST("/spot/members/sign-in/naver")
     suspend fun signInWithNaver(@Body request: NaverLoginRequest): NaverResponse
+
+    //일반 로그인 아이디 사용 가능 여부 확인
+    @GET("/spot/check/login-id")
+    fun checkID(@Query("loginId") loginId: String): Call<IdResponse>
 
 
 }

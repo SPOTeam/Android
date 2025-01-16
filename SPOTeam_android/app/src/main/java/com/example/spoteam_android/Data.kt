@@ -70,6 +70,17 @@ data class UserInfo( //일반 로그인시 필요
     val idInfo: Boolean = false        // 임시 값
 )
 
+data class IdResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: IdResult?
+)
+data class IdResult(
+    val reason: String,
+    val available: Boolean
+)
+
 
 data class IndexData(
     val index : String,
