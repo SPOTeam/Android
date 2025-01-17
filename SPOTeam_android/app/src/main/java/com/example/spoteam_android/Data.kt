@@ -74,13 +74,25 @@ data class IdResponse(
     val isSuccess: Boolean,
     val code: String,
     val message: String,
-    val result: IdResult?
+    val result: IdResult?,
 )
+
 data class IdResult(
+    val reason: String,
+    val available: Boolean,
+)
+
+data class EmailResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: EmailResult?,
+)
+
+data class EmailResult(
     val reason: String,
     val available: Boolean
 )
-
 
 data class IndexData(
     val index : String,
