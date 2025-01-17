@@ -50,7 +50,9 @@ object RetrofitInstance {
                 val originalRequest = chain.request()
                 val requestBuilder = originalRequest.newBuilder()
 
-                if (authToken != null && !originalRequest.url.toString().contains("/spot/check/login-id")) {
+                if (authToken != null &&
+                    !originalRequest.url.toString().contains("/spot/check/login-id") &&
+                    !originalRequest.url.toString().contains("/spot/check/email")) {
                     requestBuilder.addHeader("Authorization", "Bearer $authToken")
                 }
 

@@ -3,6 +3,7 @@ package com.example.spoteam_android.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -12,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.spoteam_android.EmailResponse
 import com.example.spoteam_android.IdResponse
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
@@ -39,9 +41,10 @@ class NormalLoginActivity : AppCompatActivity() {
         binding = ActivityNormalLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadUserInfoFromSharedPreferences()
+        clearSharedPreferences()
+        clearInputFields()
         setupTextWatchers()
-        setupIdFocusListener()
+        setupFocusListeners()
 
         binding.activityStartloginLoginwithspotNextBt.setOnClickListener {
             saveAllInputsToSharedPrefs()
@@ -50,17 +53,58 @@ class NormalLoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupIdFocusListener() {
+    private fun setupFocusListeners() {
         binding.activityNormalLoginIdTextInputEt.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) { // 포커스가 해제될 때만 동작
-                val inputId = binding.activityNormalLoginIdTextInputEt.text.toString()
-                if (inputId.isNotBlank()) {
-                    checkIdDuplicate(inputId)
+            if (!hasFocus) {
+                val loginId = binding.activityNormalLoginIdTextInputEt.text.toString()
+                if (loginId.isNotBlank()) {
+                    checkIdDuplicate(loginId)
                 }
+            }
+        }
+
+        binding.activityNormalLoginEmailTextInputEt.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val email = binding.activityNormalLoginEmailTextInputEt.text.toString()
+                if (email.isNotBlank()) {
+                    if (isEmailFormatValid(email)) { // 정규식 검증
+                        checkEmailDuplicate(email) // 정규식 통과 시 API 호출
+                    } else {
+                        // 정규식 검증 실패 시 메시지 표시
+                        updateValidationUI(
+                            isValid = false,
+                            binding.activityNormalLoginEmailTextInputEt,
+                            binding.activityNormalLoginEmailErrorTv,
+                            successMessage = "",
+                            errorMessage = "이메일 형식이 올바르지 않습니다."
+                        )
+                    }
+                }
+            }
+        }
+
+        binding.activityNormalLoginPasswordTextInputEt.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val password = binding.activityNormalLoginPasswordTextInputEt.text.toString()
+                validatePassword(password)
+            }
+        }
+
+        binding.activityNormalLoginPasswordCheckTextInputEt.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val password = binding.activityNormalLoginPasswordTextInputEt.text.toString()
+                val confirmPassword = binding.activityNormalLoginPasswordCheckTextInputEt.text.toString()
+                validatePasswordCheck(password, confirmPassword)
             }
         }
     }
 
+    private fun isEmailFormatValid(email: String): Boolean {
+        val emailPattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.(com|net|kr)$".toRegex()
+        return emailPattern.matches(email)
+    }
+
+    //ID APi
     private fun checkIdDuplicate(loginId: String) {
         val api = RetrofitInstance.retrofit.create(LoginApiService::class.java)
         val call = api.checkID(loginId)
@@ -77,7 +121,7 @@ class NormalLoginActivity : AppCompatActivity() {
                             binding.activityNormalLoginIdTextInputEt,
                             binding.activityNormalLoginIdErrorTv,
                             "사용 가능한 아이디입니다.",
-                            result.reason?.ifBlank { "사용 불가능한 아이디입니다." } ?: "사용 불가능한 아이디입니다."
+                            "사용 불가능한 아이디입니다."
                         )
                     } else {
                         Log.e("NormalLoginActivity", "결과가 null입니다.")
@@ -95,22 +139,56 @@ class NormalLoginActivity : AppCompatActivity() {
         })
     }
 
+    //Email Api
+    private fun checkEmailDuplicate(email: String) {
+        val api = RetrofitInstance.retrofit.create(LoginApiService::class.java)
+        val call = api.checkEmail(email)
+
+        call.enqueue(object : Callback<EmailResponse> {
+            override fun onResponse(call: Call<EmailResponse>, response: Response<EmailResponse>) {
+                if (response.isSuccessful) {
+                    val result = response.body()?.result
+                    if (result != null) {
+                        val isAvailable = result.available
+                        val errorMessage = when (result.reason) {
+                            "NOT_MATCH_INPUT_CONDITION" -> "사용 불가능한 이메일입니다."
+                            "EMAIL_ALREADY_EXISTS" -> "이미 가입된 이메일입니다."
+                            else -> "사용 불가능한 이메일입니다."
+                        }
+                        updateValidationUI(
+                            isAvailable,
+                            binding.activityNormalLoginEmailTextInputEt,
+                            binding.activityNormalLoginEmailErrorTv,
+                            " ",
+                            errorMessage
+                        )
+                    } else {
+                        Log.e("NormalLoginActivity", "결과가 null입니다.")
+                    }
+                } else {
+                    Log.e("NormalLoginActivity", "이메일 중복 확인 실패: ${response.code()}")
+                    Toast.makeText(this@NormalLoginActivity, "이메일 확인 실패: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+                updateButtonState()
+            }
+
+            override fun onFailure(call: Call<EmailResponse>, t: Throwable) {
+                Log.e("NormalLoginActivity", "이메일 중복 확인 요청 실패", t)
+            }
+        })
+    }
+
+
 
     private fun setupTextWatchers() {
         binding.activityNormalLoginNameTextInputEt.addTextChangedListener(createTextWatcher("name", binding.activityNormalLoginNameTextInputEt))
         binding.activityNormalLoginBirthTextInputEt.addTextChangedListener(createTextWatcher("birth", binding.activityNormalLoginBirthTextInputEt))
         binding.activityNormalLoginBirthBehindTextInputEt.addTextChangedListener(createTextWatcher("birthSuffix", binding.activityNormalLoginBirthBehindTextInputEt))
-        binding.activityNormalLoginEmailTextInputEt.addTextChangedListener(createTextWatcher("email", binding.activityNormalLoginEmailTextInputEt) { input ->
-            validateEmail(input)
-        })
-        binding.activityNormalLoginPasswordTextInputEt.addTextChangedListener(createTextWatcher("password", binding.activityNormalLoginPasswordTextInputEt) { input ->
-            validatePassword(input)
-        })
-        binding.activityNormalLoginPasswordCheckTextInputEt.addTextChangedListener(createTextWatcher("passwordCheck", binding.activityNormalLoginPasswordCheckTextInputEt) {
-            val password = binding.activityNormalLoginPasswordTextInputEt.text.toString()
-            validatePasswordCheck(password, it)
-        })
+        binding.activityNormalLoginEmailTextInputEt.addTextChangedListener(createTextWatcher("email", binding.activityNormalLoginEmailTextInputEt))
+        binding.activityNormalLoginPasswordTextInputEt.addTextChangedListener(createTextWatcher("password", binding.activityNormalLoginPasswordTextInputEt))
+        binding.activityNormalLoginPasswordCheckTextInputEt.addTextChangedListener(createTextWatcher("passwordCheck", binding.activityNormalLoginPasswordCheckTextInputEt))
     }
+
 
     private fun createTextWatcher(key: String, editText: EditText, afterTextChanged: ((String) -> Unit)? = null) = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -155,16 +233,32 @@ class NormalLoginActivity : AppCompatActivity() {
         val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{10,}$".toRegex()
         val isValid = input.length >= minLength && passwordPattern.matches(input)
         inputStates["password"] = isValid
-        updateValidationUI(isValid, binding.activityNormalLoginPasswordTextInputEt, binding.activityNormalLoginIdErrorTv, "", "비밀번호 형식이 올바르지 않습니다.")
+
+        updateValidationUI(
+            isValid,
+            binding.activityNormalLoginPasswordTextInputEt,
+            binding.activityNormalLoginPasswordErrorTv, // 올바른 Error TextView를 지정
+            successMessage = "",
+            errorMessage = "사용 불가능한 비밀번호입니다."
+        )
         updateButtonState()
     }
+
 
     private fun validatePasswordCheck(password: String, confirmPassword: String) {
         val isMatch = password == confirmPassword
         inputStates["passwordCheck"] = isMatch
-        updateValidationUI(isMatch, binding.activityNormalLoginPasswordCheckTextInputEt, binding.activityNormalLoginEmailErrorTv, "", "비밀번호가 일치하지 않습니다.")
+
+        updateValidationUI(
+            isMatch,
+            binding.activityNormalLoginPasswordCheckTextInputEt,
+            binding.activityNormalLoginPasswordErrorTv, // 올바른 Error TextView를 지정
+            successMessage = "",
+            errorMessage = "비밀번호가 일치하지 않습니다."
+        )
         updateButtonState()
     }
+
 
     private fun updateValidationUI(isValid: Boolean, editText: EditText, errorTextView: TextView, successMessage: String, errorMessage: String) {
         val drawable = if (isValid) ContextCompat.getDrawable(this, R.drawable.beforecheck) else ContextCompat.getDrawable(this, R.drawable.false_check)
@@ -211,33 +305,25 @@ class NormalLoginActivity : AppCompatActivity() {
         Log.d("NormalLoginActivity", "Saved User Info: $userInfoJson")
     }
 
-    private fun loadUserInfoFromSharedPreferences() {
+    private fun clearSharedPreferences() {
         val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val userInfoJson = sharedPref.getString("USER_INFO", null)
-        if (userInfoJson != null) {
-            val userInfo = Gson().fromJson(userInfoJson, UserInfo::class.java)
-            binding.activityNormalLoginNameTextInputEt.setText(userInfo.name)
-            binding.activityNormalLoginBirthTextInputEt.setText(userInfo.frontRID)
-            binding.activityNormalLoginBirthBehindTextInputEt.setText(userInfo.backRID)
-            binding.activityNormalLoginEmailTextInputEt.setText(userInfo.email)
-            binding.activityNormalLoginIdTextInputEt.setText(userInfo.loginId)
-            binding.activityNormalLoginPasswordTextInputEt.setText(userInfo.password)
-            binding.activityNormalLoginPasswordCheckTextInputEt.setText(userInfo.pwCheck)
+        sharedPref.edit().clear().apply()
+    }
 
-            inputStates["name"] = userInfo.name.isNotBlank()
-            inputStates["birth"] = userInfo.frontRID.isNotBlank()
-            inputStates["birthSuffix"] = userInfo.backRID.isNotBlank()
-            inputStates["email"] = userInfo.email.isNotBlank()
-            inputStates["id"] = userInfo.loginId.isNotBlank()
-            inputStates["password"] = userInfo.password.isNotBlank()
-            inputStates["passwordCheck"] = userInfo.pwCheck.isNotBlank()
+    // 입력 필드 초기화
+    private fun clearInputFields() {
+        binding.activityNormalLoginNameTextInputEt.text.clear()
+        binding.activityNormalLoginBirthTextInputEt.text.clear()
+        binding.activityNormalLoginBirthBehindTextInputEt.text.clear()
+        binding.activityNormalLoginEmailTextInputEt.text.clear()
+        binding.activityNormalLoginIdTextInputEt.text.clear()
+        binding.activityNormalLoginPasswordTextInputEt.text.clear()
+        binding.activityNormalLoginPasswordCheckTextInputEt.text.clear()
 
-            validateId(userInfo.loginId)
-            validateEmail(userInfo.email)
-            validatePassword(userInfo.password)
-            validatePasswordCheck(userInfo.password, userInfo.pwCheck)
-
-            updateButtonState()
+        // 모든 입력 상태 초기화
+        inputStates.forEach { key, _ ->
+            inputStates[key] = false
         }
+        updateButtonState()
     }
 }
