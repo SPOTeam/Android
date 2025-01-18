@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MainActivity

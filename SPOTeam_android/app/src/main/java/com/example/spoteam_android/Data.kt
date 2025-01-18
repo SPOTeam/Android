@@ -516,3 +516,21 @@ data class GalleryItems(
     val postId: Int
 )
 
+data class RegionData(
+    val category: String,              // 구분
+    val administrativeCode: String,    // 행정구역코드
+    val level1: String?,               // 단계1
+    val level2: String?,               // 단계2
+    val level3: String?,               // 단계3
+    val gridX: Int,                    // 격자 X
+    val gridY: Int,                    // 격자 Y
+    val longitudeHour: Int,            // 경도(시)
+    val longitudeMinute: Int,          // 경도(분)
+    val longitudeSecond: Double,       // 경도(초)
+    val latitudeHour: Int,             // 위도(시)
+    val latitudeMinute: Int,           // 위도(분)
+    val latitudeSecond: Double,        // 위도(초)
+    val longitudeSecond100: Double,    // 경도(초/100)
+    val latitudeSecond100: Double,     // 위도(초/100)
+    val locationUpdate: String?        // 위치업데이트
+)
