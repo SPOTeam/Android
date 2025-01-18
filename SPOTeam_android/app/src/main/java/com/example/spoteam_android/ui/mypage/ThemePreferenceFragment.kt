@@ -85,45 +85,45 @@ class ThemePreferenceFragment : Fragment() {
         return binding.root
     }
 
-    private fun fetchThemes() {
-        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
+        private fun fetchThemes() {
+            val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
 
-        service.getThemes().enqueue(object : Callback<ThemeApiResponse> {
-            override fun onResponse(
-                call: Call<ThemeApiResponse>,
-                response: RetrofitResponse<ThemeApiResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    if (apiResponse != null && apiResponse.isSuccess) {
-                        val themes = apiResponse.result.themes // 서버에서 받아오는 테마 리스트
-                        if (themes.isNotEmpty()) {
-                            displayThemes(themes)
+            service.getThemes().enqueue(object : Callback<ThemeApiResponse> {
+                override fun onResponse(
+                    call: Call<ThemeApiResponse>,
+                    response: RetrofitResponse<ThemeApiResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val apiResponse = response.body()
+                        if (apiResponse != null && apiResponse.isSuccess) {
+                            val themes = apiResponse.result.themes // 서버에서 받아오는 테마 리스트
+                            if (themes.isNotEmpty()) {
+                                displayThemes(themes)
+                            }
+                        } else {
+                            val errorMessage = apiResponse?.message ?: "알 수 없는 오류 발생"
+                            Log.e("ThemePreferenceFragment", "테마 가져오기 실패: $errorMessage")
+                            Toast.makeText(
+                                requireContext(),
+                                "테마 가져오기 실패: $errorMessage",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     } else {
-                        val errorMessage = apiResponse?.message ?: "알 수 없는 오류 발생"
+                        val errorMessage = response.errorBody()?.string() ?: "응답 실패"
                         Log.e("ThemePreferenceFragment", "테마 가져오기 실패: $errorMessage")
-                        Toast.makeText(
-                            requireContext(),
-                            "테마 가져오기 실패: $errorMessage",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        Toast.makeText(requireContext(), "테마 가져오기 실패: $errorMessage", Toast.LENGTH_LONG)
+                            .show()
                     }
-                } else {
-                    val errorMessage = response.errorBody()?.string() ?: "응답 실패"
-                    Log.e("ThemePreferenceFragment", "테마 가져오기 실패: $errorMessage")
-                    Toast.makeText(requireContext(), "테마 가져오기 실패: $errorMessage", Toast.LENGTH_LONG)
+                }
+
+                override fun onFailure(call: Call<ThemeApiResponse>, t: Throwable) {
+                    Log.e("ThemePreferenceFragment", "테마 가져오기 오류", t)
+                    Toast.makeText(requireContext(), "테마 가져오기 오류: ${t.message}", Toast.LENGTH_LONG)
                         .show()
                 }
-            }
-
-            override fun onFailure(call: Call<ThemeApiResponse>, t: Throwable) {
-                Log.e("ThemePreferenceFragment", "테마 가져오기 오류", t)
-                Toast.makeText(requireContext(), "테마 가져오기 오류: ${t.message}", Toast.LENGTH_LONG)
-                    .show()
-            }
-        })
-    }
+            })
+        }
 
     private fun displayThemes(themes: List<String>) {
         val flexboxLayout = binding.fragmentThemePreferenceFlexboxLayout

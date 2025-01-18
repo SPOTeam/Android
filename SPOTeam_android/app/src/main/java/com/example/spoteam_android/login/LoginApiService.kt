@@ -55,5 +55,15 @@ interface LoginApiService {
     @GET("/spot/check/email")
     fun checkEmail(@Query("email") email: String): Call<EmailResponse>
 
+    //닉네임 생성 및 약관 동의
+//    @GET("/spot/sign-up/update")
+//    fun getNicName(
+//        @Query("nickname") nickname: String,
+//        @Query("personalInfo") personalInfo: Boolean,
+//        @Query("idInfo") idInfo: Boolean
+//    ): Call<NickNameResponse>
+//    }
+
+
 
 }
