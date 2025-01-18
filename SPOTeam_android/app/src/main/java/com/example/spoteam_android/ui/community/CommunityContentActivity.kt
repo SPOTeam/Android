@@ -95,7 +95,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
 
     private fun postContentScrap() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postContentScrap(postId, memberId)
+        service.postContentScrap(postId)
             .enqueue(object : Callback<ContentLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentLikeResponse>,
@@ -121,7 +121,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
 
     private fun postContentLike() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postContentLike(postId, memberId)
+        service.postContentLike(postId)
             .enqueue(object : Callback<ContentLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentLikeResponse>,
@@ -147,7 +147,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
 
     private fun deleteContentScrap() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.deleteContentScrap(postId, memberId)
+        service.deleteContentScrap(postId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentUnLikeResponse>,
@@ -173,7 +173,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
 
     private fun deleteContentLike() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.deleteContentLike(postId, memberId)
+        service.deleteContentLike(postId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentUnLikeResponse>,
@@ -217,7 +217,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
 
     private fun sendCommentToServer(requestBody: WriteCommentRequest) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postContentComment(postId, memberId, requestBody)
+        service.postContentComment(postId, requestBody)
             .enqueue(object : Callback<WriteCommentResponse> {
                 override fun onResponse(
                     call: Call<WriteCommentResponse>,
@@ -316,7 +316,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
 
     private fun postCommentLike(commentId : Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postCommentLike(commentId, memberId)
+        service.postCommentLike(commentId)
             .enqueue(object : Callback<LikeCommentResponse> {
                 override fun onResponse(
                     call: Call<LikeCommentResponse>,
@@ -344,7 +344,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
 
     private fun deleteCommentLike(commentId : Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.deleteCommentLike(commentId, memberId)
+        service.deleteCommentLike(commentId)
             .enqueue(object : Callback<UnLikeCommentResponse> {
                 override fun onResponse(
                     call: Call<UnLikeCommentResponse>,
@@ -372,7 +372,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
 
     private fun postCommentDisLike(commentId : Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postCommentDisLike(commentId, memberId)
+        service.postCommentDisLike(commentId)
             .enqueue(object : Callback<DisLikeCommentResponse> {
                 override fun onResponse(
                     call: Call<DisLikeCommentResponse>,
@@ -400,7 +400,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
 
     private fun deleteCommentDisLike(commentId : Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.deleteCommentDisLike(commentId, memberId)
+        service.deleteCommentDisLike(commentId)
             .enqueue(object : Callback<UnDisLikeCommentResponse> {
                 override fun onResponse(
                     call: Call<UnDisLikeCommentResponse>,

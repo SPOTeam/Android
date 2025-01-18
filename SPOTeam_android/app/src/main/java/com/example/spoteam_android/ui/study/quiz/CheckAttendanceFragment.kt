@@ -83,6 +83,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
 
 
     private fun makeHostMakeQuizFragment() {
+        Log.d("makeHostMakeQuizFragment", scheduleId.toString())
         val hostMakeQuizFirstFragment = HostMakeQuizFirstFragment().apply {
             arguments = Bundle().apply {
                 putInt("scheduleId", scheduleId) // scheduleId 전달
@@ -101,7 +102,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
 
     private fun fetchQuiz() {
         RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-            .getStudyScheduleQuiz(studyId, scheduleId.toInt(), LocalDate.of(2024,11,7))
+            .getStudyScheduleQuiz(studyId, scheduleId, LocalDate.now().toString())
             .enqueue(object : Callback<GetQuizResponse> {
                 override fun onResponse(
                     call: Call<GetQuizResponse>,
@@ -155,10 +156,10 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
                         if (memberResponse?.isSuccess == "true") {
 
                             if(memberResponse.result.members[0].memberId == currentMemberId) {
-//                                makeHostMakeQuizFragment()
-                                contentToCrew()
-                            } else {
+                                makeHostMakeQuizFragment()
 //                                contentToCrew()
+                            } else {
+                                contentToCrew()
                             }
                             initMemberRecyclerView(memberResponse.result.members)
                         } else {

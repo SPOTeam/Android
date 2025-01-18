@@ -52,7 +52,7 @@ class ParticipatingStudyFragment : Fragment() {
 
     private fun fetchInProgressStudy() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getMemberOnStudies(memberId, page, size)
+        service.getMemberOnStudies(page, size)
             .enqueue(object : Callback<MemberOnStudiesResponse> {
                 override fun onResponse(
                     call: Call<MemberOnStudiesResponse>,

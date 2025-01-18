@@ -96,7 +96,7 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
 
     private fun sendContentToServer(requestBody: WriteContentRequest, memberId : Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postContent(memberId, requestBody)
+        service.postContent(requestBody)
             .enqueue(object : Callback<WriteContentResponse> {
                 override fun onResponse(call: Call<WriteContentResponse>, response: Response<WriteContentResponse>) {
                     Log.d("WriteContentFragment", response.body()?.isSuccess.toString())
