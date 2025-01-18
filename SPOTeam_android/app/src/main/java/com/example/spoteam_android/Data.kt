@@ -57,7 +57,7 @@ data class NaverLoginRequest(
 )
 
 
-data class UserInfo( //일반 로그인시 필요
+data class UserInfo( //일반 로그인
     val name: String,
     val nickname: String = "TEMP_NICKNAME", // 임시 닉네임
     val frontRID: String,
@@ -93,6 +93,17 @@ data class EmailResult(
     val reason: String,
     val available: Boolean
 )
+
+//data class NicNameResponse(
+//    val isSuccess: Boolean,
+//    val code: String,
+//    val message: String,
+//    val result: NickNameResult?,
+//)
+//
+//data class NickNameResult(
+//
+//)
 
 data class IndexData(
     val index : String,
