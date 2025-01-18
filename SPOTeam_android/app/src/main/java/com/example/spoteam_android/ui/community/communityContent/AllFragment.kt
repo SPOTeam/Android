@@ -93,7 +93,7 @@ class AllFragment : Fragment() {
 
     private fun deleteContentScrap(postId: Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.deleteContentScrap(postId, memberId)
+        service.deleteContentScrap(postId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentUnLikeResponse>,
@@ -119,7 +119,7 @@ class AllFragment : Fragment() {
 
     private fun postContentScrap(postId : Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postContentScrap(postId, memberId)
+        service.postContentScrap(postId)
             .enqueue(object : Callback<ContentLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentLikeResponse>,
@@ -145,7 +145,7 @@ class AllFragment : Fragment() {
 
     private fun postLike(postId : Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postContentLike(postId, memberId)
+        service.postContentLike(postId)
             .enqueue(object : Callback<ContentLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentLikeResponse>,
@@ -173,7 +173,7 @@ class AllFragment : Fragment() {
 
     private fun deleteLike(postId : Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.deleteContentLike(postId, memberId)
+        service.deleteContentLike(postId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
                 override fun onResponse(
                     call: Call<ContentUnLikeResponse>,

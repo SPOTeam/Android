@@ -16,7 +16,7 @@ class HostMakeQuizFirstFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentToMakeQuizBinding
     val studyViewModel: StudyViewModel by activityViewModels()
-    private lateinit var scheduleId: String
+    private var scheduleId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,13 +26,13 @@ class HostMakeQuizFirstFragment : BottomSheetDialogFragment() {
         binding = FragmentToMakeQuizBinding.inflate(inflater, container, false)
 
         // 전달받은 scheduleId를 arguments에서 가져옴
-        scheduleId = arguments?.getString("scheduleId").orEmpty()
+        scheduleId = arguments?.getInt("scheduleId")!!
         Log.d("HostMakeQuizFirstFragment", "Received scheduleId: $scheduleId")
 
         binding.startAttendanceTv.setOnClickListener {
             val hostMakeQuizFragment = HostMakeQuizFragment().apply {
                 arguments = Bundle().apply {
-                    putString("scheduleId", scheduleId) // scheduleId 다시 전달
+                    putInt("scheduleId", scheduleId) // scheduleId 다시 전달
                 }
             }
 

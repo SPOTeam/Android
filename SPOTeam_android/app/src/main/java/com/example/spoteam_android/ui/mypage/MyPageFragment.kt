@@ -74,7 +74,7 @@ class MyPageFragment : Fragment() {
 
     private fun fetchMyPageInfo() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getMyPageStudyNum(memberId).enqueue(object : Callback<MyPageStudyNumResponse> {
+        service.getMyPageStudyNum().enqueue(object : Callback<MyPageStudyNumResponse> {
             override fun onResponse(call: Call<MyPageStudyNumResponse>, response: Response<MyPageStudyNumResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let {
