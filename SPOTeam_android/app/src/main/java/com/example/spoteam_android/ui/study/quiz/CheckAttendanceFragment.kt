@@ -17,7 +17,8 @@ import com.example.spoteam_android.databinding.FragmentAttendanceDefaultBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.GetQuizResponse
 import com.example.spoteam_android.ui.community.GetScheduleResponse
-import com.example.spoteam_android.ui.community.ScheduleMemberInfo
+import com.example.spoteam_android.ui.community.MembersDetail
+import com.example.spoteam_android.ui.community.StudyMemberResponse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -104,7 +105,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
     }
 
-    private fun fetchQuiz(members: List<ScheduleMemberInfo>) {
+    private fun fetchQuiz(members: List<MembersDetail>) {
         RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
             .getStudyScheduleQuiz(studyId, scheduleId, LocalDate.now().toString())
             .enqueue(object : Callback<GetQuizResponse> {
@@ -114,22 +115,10 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
                 ) {
                     if (response.isSuccessful) {
                         val quizResponse = response.body()
-                        if (quizResponse?.isSuccess == "true") {
+                        if(quizResponse?.isSuccess == "true") {
                             quiz = quizResponse.result.question
                             createdAt = quizResponse.result.createdAt
-                            if(members[0].memberId == currentMemberId) {
-                                Log.d("checkIng", "initHostAlreadyMakeQuiz")
-                                initHostAlreadyMakeQuiz()
-                            } else {
-                                Log.d("checkIng", "initCrewFragment")
-                                val m = members.find { it.memberId == currentMemberId }
-                                if(m?.isAttending == false) {
-                                    initCrewFragment()
-                                } else {
-                                    initCrewFinishFragment()
-                                }
-                            }
-                            Log.d("MAKEDQUIZ", "quiz : $quiz && createdAt : $createdAt")
+                            fetchScheduleMember()
                         } else {
                             if(members[0].memberId == currentMemberId) {
                                 Log.d("checkIng", "makeHostMakeQuizFragment")
@@ -183,8 +172,34 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
             .commitAllowingStateLoss()
     }
 
-
     private fun fetchStudyMember() {
+        RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+            .getStudyMembers(studyId)
+            .enqueue(object : Callback<StudyMemberResponse> {
+                override fun onResponse(
+                    call: Call<StudyMemberResponse>,
+                    response: Response<StudyMemberResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val memberResponse = response.body()
+                        if (memberResponse?.isSuccess == "true") {
+                            initMemberRecyclerView(memberResponse.result.members)
+                            fetchQuiz(memberResponse.result.members)
+                        } else {
+                            showError(memberResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<StudyMemberResponse>, t: Throwable) {
+                    Log.e("QuizMember", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun fetchScheduleMember() {
         RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
             .getScheduleInfo(studyId, scheduleId, LocalDate.now().toString())
             .enqueue(object : Callback<GetScheduleResponse> {
@@ -195,13 +210,28 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
                     if (response.isSuccessful) {
                         val scheduleResponse = response.body()
                         if (scheduleResponse?.isSuccess == "true") {
-                            initMemberRecyclerView(scheduleResponse.result.studyMembers)
-                            fetchQuiz(scheduleResponse.result.studyMembers)
+                            if(scheduleResponse.result.studyMembers[0].isOwned) {
+                                Log.d("checkIng", "initHostAlreadyMakeQuiz")
+                                initHostAlreadyMakeQuiz()
+//                                CREW TEST용
+//                                if(!scheduleResponse.result.studyMembers[0].isAttending) {
+//                                    initCrewFragment()
+//                                } else {
+//                                    initCrewFinishFragment()
+//                                }
+                            } else {
+                                Log.d("checkIng", "initCrewFragment")
+                                val m = scheduleResponse.result.studyMembers.find { it.memberId == currentMemberId }
+                                if(m?.isAttending == false) {
+                                    initCrewFragment()
+                                } else {
+                                    initCrewFinishFragment()
+                                }
+                            }
                         } else {
                             showError(scheduleResponse?.message)
                         }
                     } else {
-                        // 퀴즈 없을 경우
                         showError(response.code().toString())
                     }
                 }
@@ -212,7 +242,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
             })
     }
 
-    private fun initMemberRecyclerView(studyMembers: List<ScheduleMemberInfo>) {
+    private fun initMemberRecyclerView(studyMembers: List<MembersDetail>) {
         binding.memberTl.layoutManager = GridLayoutManager(context, 5)
 
         val dataRVAdapter = HostMakeQuizMemberRVAdapter(studyMembers, currentMemberId)
@@ -220,6 +250,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
 
         binding.memberTl.adapter = dataRVAdapter
     }
+
 
     private fun calculateTimeLeftInMillis(createdAt: String): Long {
         return try {
