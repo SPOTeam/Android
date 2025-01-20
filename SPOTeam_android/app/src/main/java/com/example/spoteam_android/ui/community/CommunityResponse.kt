@@ -1,6 +1,7 @@
 package com.example.spoteam_android.ui.community
 
 import com.example.spoteam_android.ProfileItem
+import com.example.spoteam_android.ScheduleResult
 
 /*********Best 인기글 조회********/
 data class CommunityResponse(
@@ -664,6 +665,47 @@ data class GetQuizResponse(
 
 data class QuizInfo (
     val quizId : Long,
-    val question: String
+    val question: String,
+    val createdAt : String
 )
+
+/************ schedule quiz 정보 가져오기 ***********/
+data class GetScheduleResponse (
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: ScheduleInfo
+)
+
+data class ScheduleInfo (
+    val scheduleId : Long,
+    val quizId: Int,
+    val studyMembers : List<ScheduleMemberInfo>,
+)
+
+data class ScheduleMemberInfo (
+    val memberId : Int,
+    val name : String,
+    val profileImage: String,
+    val isOwned : Boolean,
+    val isAttending : Boolean
+)
+
+/************crew quiz 확인 완료***********/
+data class GetCrewQuizResponse (
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: CrewQuizInfo
+)
+
+data class CrewQuizInfo (
+    val memberId : Long,
+    val quizId: Int,
+    val attendanceId : Int,
+    val isCorrect : Boolean,
+    val tryNum : Int,
+    val createdAt : String
+)
+
 

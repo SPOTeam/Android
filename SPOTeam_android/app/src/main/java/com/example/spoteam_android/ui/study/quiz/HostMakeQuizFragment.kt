@@ -59,10 +59,6 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
             )
 
             postAttendanceQuiz(requestBody)
-
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.child_fragment, HostFinishMakeQuizFragment())
-                .commitAllowingStateLoss()
         }
         return binding.root
     }
@@ -75,12 +71,19 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
                     call: Call<QuizContentResponse>,
                     response: Response<QuizContentResponse>
                 ) {
-//                    Log.d("LikeComment", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val likeResponse = response.body()
-//                        Log.d("LikeComment", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
-                            Log.e("MakeQuiz", "성공적으로 생성하였습니다.")
+
+                            val hostFinishMakeQuizFragment =  HostFinishMakeQuizFragment().apply {
+                                arguments = Bundle().apply {
+                                    putString("createdAt", likeResponse.result.createdAt)
+                                }
+                            }
+
+                            parentFragmentManager.beginTransaction()
+                                .replace(R.id.child_fragment, hostFinishMakeQuizFragment)
+                                .commitAllowingStateLoss()
                         } else {
                             showError(likeResponse?.message)
                         }

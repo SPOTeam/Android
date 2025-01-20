@@ -271,4 +271,18 @@ interface CommunityAPIService {
         @Path("scheduleId") scheduleId: Int,
         @Query("date") date : String
     ) : Call<GetQuizResponse>
+
+    @POST("/spot/studies/{studyId}/schedules/{scheduleId}/attendance")
+    fun checkCrewAnswer(
+        @Path("studyId") studyId: Int,
+        @Path("scheduleId") scheduleId: Int,
+        @Body requestBody : CrewAnswerRequest
+    ) : Call<GetCrewQuizResponse>
+
+    @GET("/spot/studies/{studyId}/schedules/{scheduleId}/attendance")
+    fun getScheduleInfo(
+        @Path("studyId") studyId: Int,
+        @Path("scheduleId") scheduleId: Int,
+        @Query("date") date : String
+    ) : Call<GetScheduleResponse>
 }

@@ -23,7 +23,6 @@ class CrewCorrectQuizFragment : Fragment() {
     ): View? {
         binding = FragmentCrewCorrectQuizBinding.inflate(inflater, container, false)
 
-
         return binding.root
     }
 
