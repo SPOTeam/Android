@@ -19,6 +19,7 @@
         android:textColor="@drawable/button_textcolor"
         android:textSize="25sp"
         android:layout_marginTop="153dp"
+        android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

@@ -7,248 +7,6 @@
     android:background="@drawable/bottomsheetfragment_style"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
-    <TextView
-        android:id="@+id/take_attendance_title_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="출석체크"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!--    X 이미지 변경    -->
-    <ImageView
-        android:id="@+id/write_content_prev_iv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/ic_x_button"
-        android:layout_marginStart="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/take_attendance_title_tv" />
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="퀴즈의 정답을 맞추면 출석됩니다."
-        android:layout_marginTop="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/take_attendance_title_tv"/>
-
-    <TableLayout
-        android:id="@+id/member_tl"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintTop_toBottomOf="@id/take_attendance_title_tv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:stretchColumns="0,1,2,3,4,5">
-
-        <TableRow>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/host_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile" />
-
-                <TextView
-                    android:id="@+id/host_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew1_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile" />
-
-                <TextView
-                    android:id="@+id/crew1_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew2_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile" />
-
-                <TextView
-                    android:id="@+id/crew2_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew3_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile" />
-
-                <TextView
-                    android:id="@+id/crew3_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew4_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile" />
-
-                <TextView
-                    android:id="@+id/crew4_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임" />
-            </LinearLayout>
-        </TableRow>
-
-        <TableRow>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew5_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile" />
-
-                <TextView
-                    android:id="@+id/crew5_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew6_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile" />
-
-                <TextView
-                    android:id="@+id/crew6_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew7_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile" />
-
-                <TextView
-                    android:id="@+id/crew7_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew8_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile" />
-
-                <TextView
-                    android:id="@+id/crew8_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew9_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile" />
-
-                <TextView
-                    android:id="@+id/crew9_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임" />
-            </LinearLayout>
-        </TableRow>
-    </TableLayout>
-
-    <ImageView
-        android:id="@+id/sp_iv"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:src="@drawable/line_img"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="@id/member_tl"
-        app:layout_constraintEnd_toEndOf="@id/member_tl"
-        app:layout_constraintTop_toBottomOf="@id/member_tl"/>
-
     <ImageView
         android:id="@+id/wrong_iv"
         android:layout_width="35dp"
@@ -257,7 +15,7 @@
         android:layout_marginTop="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sp_iv"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/wrong_tv"
@@ -273,6 +31,7 @@
         app:layout_constraintTop_toBottomOf="@id/wrong_iv"/>
 
     <LinearLayout
+        android:id="@+id/count_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -303,8 +62,9 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/retry_tv"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
         android:text="다시 풀기"
         android:textSize="25sp"
         android:background="@drawable/button_wrong_backgground"
@@ -312,9 +72,11 @@
         android:gravity="center"
         android:paddingVertical="5dp"
         android:textStyle="bold"
-        android:layout_marginBottom="180dp"
-        app:layout_constraintStart_toStartOf="@id/member_tl"
-        app:layout_constraintEnd_toEndOf="@id/member_tl"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/count_ll" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,3 +38,9 @@ data class QuizContentRequest(
     val question : String,
     val answer : String
 )
+
+/*********퀴즈 정답 확인 Request********/
+data class CrewAnswerRequest(
+    val dateTime : String,
+    val answer : String
+)
