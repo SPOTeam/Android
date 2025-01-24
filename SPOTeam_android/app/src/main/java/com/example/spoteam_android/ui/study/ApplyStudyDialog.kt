@@ -61,7 +61,7 @@ class ApplyStudyDialog(private val context: Context, private val fragment: Detai
                         if (memberCount >= maxPeople) {
                             Toast.makeText(context, "인원이 가득 찼습니다.", Toast.LENGTH_SHORT).show()
                         } else {
-                            applyToStudy(studyId, introduction) { applySuccess ->
+                            applyToStudy(studyId, memberId, introduction) { applySuccess ->
                                 if (applySuccess) {
                                     dlg.dismiss()
 
@@ -125,9 +125,9 @@ class ApplyStudyDialog(private val context: Context, private val fragment: Detai
         })
     }
 
-    private fun applyToStudy(studyId: Int, introduction: String, callback: (Boolean) -> Unit) {
+    private fun applyToStudy(studyId: Int, memberId: Int, introduction: String, callback: (Boolean) -> Unit) {
         val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
-        val call = apiService.applyStudy(studyId, introduction)
+        val call = apiService.applyStudy(studyId, memberId, introduction)
 
         call.enqueue(object : Callback<StudyApplyResponse> {
             override fun onResponse(call: Call<StudyApplyResponse>, response: Response<StudyApplyResponse>) {
