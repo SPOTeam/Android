@@ -50,7 +50,7 @@ class ConsiderAttendanceFragment : Fragment() {
 
     private fun fetchMyRecruitingStudies() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getMyPageRecruitingStudy(memberId, page, size)
+        service.getMyPageRecruitingStudy(page, size)
             .enqueue(object : Callback<MyRecruitingStudiesResponse> {
                 override fun onResponse(
                     call: Call<MyRecruitingStudiesResponse>,

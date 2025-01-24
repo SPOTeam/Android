@@ -32,47 +32,40 @@ interface CommunityAPIService {
         @Query("likeOrScrap") isChecked : Boolean
     ): Call<ContentResponse>
 
-    @POST("/spot/posts/{memberId}")
+    @POST("/spot/posts")
     fun postContent(
-        @Path("memberId") memberId: Int,
         @Body requestBody : WriteContentRequest
     ): Call<WriteContentResponse>
 
-    @PATCH("/spot/posts/{memberId}/{postId}")
+    @PATCH("/spot/posts/{postId}")
     fun editContent(
-        @Path("memberId") memberId: Int,
         @Path("postId") postId: String,
         @Body requestBody : WriteContentRequest
     ): Call<WriteContentResponse>
 
-    @POST("/spot/posts/{postId}/{memberId}/like")
+    @POST("/spot/posts/{postId}/like")
     fun postContentLike(
         @Path("postId") postId: Int,
-        @Path("memberId") memberId: Int
     ): Call<ContentLikeResponse>
 
-    @DELETE("/spot/posts/{postId}/{memberId}/like")
+    @DELETE("/spot/posts/{postId}/like")
     fun deleteContentLike(
         @Path("postId") postId: Int,
-        @Path("memberId") memberId: Int
     ): Call<ContentUnLikeResponse>
 
-    @POST("/spot/posts/{postId}/{memberId}/scrap")
+    @POST("/spot/posts/{postId}/scrap")
     fun postContentScrap(
         @Path("postId") postId: Int,
-        @Path("memberId") memberId: Int
     ): Call<ContentLikeResponse>
 
-    @DELETE("/spot/posts/{postId}/{memberId}/scrap")
+    @DELETE("/spot/posts/{postId}/scrap")
     fun deleteContentScrap(
         @Path("postId") postId: Int,
-        @Path("memberId") memberId: Int
     ): Call<ContentUnLikeResponse>
 
-    @POST("/spot/posts/{postId}/{memberId}/comments")
+    @POST("/spot/posts/{postId}/comments")
     fun postContentComment(
         @Path("postId") postId: Int,
-        @Path("memberId") memberId: Int,
         @Body requestBody : WriteCommentRequest
     ): Call<WriteCommentResponse>
 
@@ -91,28 +84,24 @@ interface CommunityAPIService {
         @Query("sortBy") sortBy: String
     ): Call<CategoryStudyResponse>
 
-    @POST("/spot/posts/comments/{commentId}/{memberId}/like")
+    @POST("/spot/posts/comments/{commentId}//like")
     fun postCommentLike(
         @Path("commentId") postId: Int,
-        @Path("memberId") memberId: Int
     ): Call<LikeCommentResponse>
 
-    @DELETE("/spot/posts/comments/{commentId}/{memberId}/like")
+    @DELETE("/spot/posts/comments/{commentId}/like")
     fun deleteCommentLike(
         @Path("commentId") postId: Int,
-        @Path("memberId") memberId: Int
     ): Call<UnLikeCommentResponse>
 
-    @POST("/spot/posts/comments/{commentId}/{memberId}/dislike")
+    @POST("/spot/posts/comments/{commentId}/dislike")
     fun postCommentDisLike(
         @Path("commentId") postId: Int,
-        @Path("memberId") memberId: Int
     ): Call<DisLikeCommentResponse>
 
-    @DELETE("/spot/posts/comments/{commentId}/{memberId}/dislike")
+    @DELETE("/spot/posts/comments/{commentId}/dislike")
     fun deleteCommentDisLike(
         @Path("commentId") postId: Int,
-        @Path("memberId") memberId: Int
     ): Call<UnDisLikeCommentResponse>
 
     @Multipart
@@ -146,14 +135,12 @@ interface CommunityAPIService {
         @Path("postId") postId: Int
     ): Call<StudyPostContentCommentResponse>
 
-    @GET("/spot/search/studies/my-page/members/{memberId}")
+    @GET("/spot/search/studies/my-page/")
     fun getMyPageStudyNum(
-        @Path("memberId") memberId: Int
     ): Call<MyPageStudyNumResponse>
 
-    @GET("/spot/search/studies/my-recruiting-studies/members/{memberId}/")
+    @GET("/spot/search/studies/my-recruiting-studies")
     fun getMyPageRecruitingStudy(
-        @Path("memberId") memberId: Int,
         @Query("page") page: Int,
         @Query("size") size : Int
     ): Call<MyRecruitingStudiesResponse>
@@ -199,16 +186,14 @@ interface CommunityAPIService {
         @Path("notificationId") notificationId: Int
     ): Call<NotificationStateResponse>
 
-    @GET("/spot/search/studies/on-studies/members/{memberId}")
+    @GET("/spot/search/studies/on-studies")
     fun getMemberOnStudies(
-        @Path("memberId") memberId: Int,
         @Query("page") page: Int,
         @Query("size") size: Int
     ): Call<MemberOnStudiesResponse>
 
-    @GET("/spot/search/studies/applied-studies/members/{memberId}/")
+    @GET("/spot/search/studies/applied-studies")
     fun getMemberAppliedStudies(
-        @Path("memberId") memberId: Int,
         @Query("page") page: Int,
         @Query("size") size: Int
     ): Call<MemberOnStudiesResponse>
@@ -284,6 +269,20 @@ interface CommunityAPIService {
     fun getStudyScheduleQuiz(
         @Path("studyId") studyId: Int,
         @Path("scheduleId") scheduleId: Int,
-        @Query("date") date : LocalDate
+        @Query("date") date : String
     ) : Call<GetQuizResponse>
+
+    @POST("/spot/studies/{studyId}/schedules/{scheduleId}/attendance")
+    fun checkCrewAnswer(
+        @Path("studyId") studyId: Int,
+        @Path("scheduleId") scheduleId: Int,
+        @Body requestBody : CrewAnswerRequest
+    ) : Call<GetCrewQuizResponse>
+
+    @GET("/spot/studies/{studyId}/schedules/{scheduleId}/attendance")
+    fun getScheduleInfo(
+        @Path("studyId") studyId: Int,
+        @Path("scheduleId") scheduleId: Int,
+        @Query("date") date : String
+    ) : Call<GetScheduleResponse>
 }

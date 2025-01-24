@@ -1,5 +1,6 @@
 package com.example.spoteam_android.login
 
+import com.example.spoteam_android.EmailResponse
 import com.example.spoteam_android.IdResponse
 import com.example.spoteam_android.NaverLoginRequest
 import com.example.spoteam_android.NaverResponse
@@ -49,6 +50,20 @@ interface LoginApiService {
     //일반 로그인 아이디 사용 가능 여부 확인
     @GET("/spot/check/login-id")
     fun checkID(@Query("loginId") loginId: String): Call<IdResponse>
+
+    //일반 로그인 이메일 사용 가능 여부 확인
+    @GET("/spot/check/email")
+    fun checkEmail(@Query("email") email: String): Call<EmailResponse>
+
+    //닉네임 생성 및 약관 동의
+//    @GET("/spot/sign-up/update")
+//    fun getNicName(
+//        @Query("nickname") nickname: String,
+//        @Query("personalInfo") personalInfo: Boolean,
+//        @Query("idInfo") idInfo: Boolean
+//    ): Call<NickNameResponse>
+//    }
+
 
 
 }

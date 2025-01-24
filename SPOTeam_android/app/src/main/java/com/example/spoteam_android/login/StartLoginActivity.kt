@@ -7,10 +7,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.example.spoteam_android.KaKaoResult
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.NaverResult
+import com.example.spoteam_android.RetrofitInstance
+import com.example.spoteam_android.ThemeApiResponse
 import com.example.spoteam_android.checklist.CheckListCategoryActivity
 import com.example.spoteam_android.databinding.ActivityStartLoginBinding
 import com.kakao.sdk.auth.model.OAuthToken
@@ -21,6 +22,9 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class StartLoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartLoginBinding
@@ -218,16 +222,50 @@ class StartLoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToNextScreen() {
-        val sharedPreferences =getSharedPreferences("MyPrefs", MODE_PRIVATE)
-        val email = sharedPreferences.getString("currentEmail", null)
-        val isLoggedIn = sharedPreferences.getBoolean("${email}_isLoggedIn", false)
-        val intent = if (isLoggedIn){
-            Intent(this, MainActivity::class.java)
-        }else{
-            Intent(this, CheckListCategoryActivity::class.java)
-        }
+        // 테마 정보 확인 후 화면 이동
+        fetchThemesAndNavigate()
+    }
 
+
+    private fun fetchThemesAndNavigate() {
+        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
+
+        service.getThemes().enqueue(object : Callback<ThemeApiResponse> {
+            override fun onResponse(
+                call: Call<ThemeApiResponse>,
+                response: Response<ThemeApiResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse != null && apiResponse.isSuccess) {
+                        val themes = apiResponse.result.themes
+                        if (themes.isNotEmpty()) {
+                            // 테마가 존재하면 MainActivity로 이동
+                            navigateToActivity(MainActivity::class.java)
+                        } else {
+                            // 테마가 없으면 CheckListCategoryActivity로 이동
+                            navigateToActivity(CheckListCategoryActivity::class.java)
+                        }
+                    } else {
+                        val errorMessage = apiResponse?.message ?: "알 수 없는 오류 발생"
+                        Log.e("NavigateToNextScreen", "테마 가져오기 실패: $errorMessage")
+                    }
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "응답 실패"
+                    Log.e("NavigateToNextScreen", "테마 가져오기 실패: $errorMessage")
+                }
+            }
+
+            override fun onFailure(call: Call<ThemeApiResponse>, t: Throwable) {
+                Log.e("NavigateToNextScreen", "테마 가져오기 오류", t)
+            }
+        })
+    }
+
+    private fun navigateToActivity(activityClass: Class<*>) {
+        val intent = Intent(this, activityClass)
         startActivity(intent)
         finish()
     }
+
 }

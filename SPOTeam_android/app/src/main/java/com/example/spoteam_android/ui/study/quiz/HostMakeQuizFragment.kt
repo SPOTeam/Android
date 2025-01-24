@@ -26,7 +26,7 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentHostMakeQuizBinding
     val studyViewModel: StudyViewModel by activityViewModels()
     var studyId : Int = -1
-    private lateinit var scheduleId : String
+    private var scheduleId : Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,8 +35,8 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
     ): View? {
         binding = FragmentHostMakeQuizBinding.inflate(inflater, container, false)
 
-        val parent = parentFragment as? CheckAttendanceFragment
-        scheduleId = parent?.arguments?.getString("scheduleId").toString()
+//        val parent = parentFragment as? CheckAttendanceFragment
+        scheduleId = arguments?.getInt("scheduleId")!!
         Log.d("HostMakeQuizFragment", "Received scheduleId from parentFragment: $scheduleId")
 
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
@@ -59,28 +59,31 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
             )
 
             postAttendanceQuiz(requestBody)
-
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.child_fragment, HostFinishMakeQuizFragment())
-                .commitAllowingStateLoss()
         }
         return binding.root
     }
 
     private fun postAttendanceQuiz(requestBody : QuizContentRequest) {
         Log.d("CreatedAt", requestBody.createdAt)
-        RetrofitInstance.retrofit.create(CommunityAPIService::class.java).makeQuiz(studyId, scheduleId.toInt(), requestBody)
+        RetrofitInstance.retrofit.create(CommunityAPIService::class.java).makeQuiz(studyId, scheduleId, requestBody)
             .enqueue(object : Callback<QuizContentResponse> {
                 override fun onResponse(
                     call: Call<QuizContentResponse>,
                     response: Response<QuizContentResponse>
                 ) {
-//                    Log.d("LikeComment", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val likeResponse = response.body()
-//                        Log.d("LikeComment", "responseBody: ${likeResponse?.isSuccess}")
                         if (likeResponse?.isSuccess == "true") {
-                            Log.e("MakeQuiz", "성공적으로 생성하였습니다.")
+
+                            val hostFinishMakeQuizFragment =  HostFinishMakeQuizFragment().apply {
+                                arguments = Bundle().apply {
+                                    putString("createdAt", likeResponse.result.createdAt)
+                                }
+                            }
+
+                            parentFragmentManager.beginTransaction()
+                                .replace(R.id.child_fragment, hostFinishMakeQuizFragment)
+                                .commitAllowingStateLoss()
                         } else {
                             showError(likeResponse?.message)
                         }

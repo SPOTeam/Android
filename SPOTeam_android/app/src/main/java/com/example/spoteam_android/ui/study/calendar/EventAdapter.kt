@@ -96,7 +96,8 @@ class EventAdapter(
             }
 
             // 체크 아이콘 visibility 당일에 활성화
-            icCheck.visibility = if(selectedDate.equals(LocalDate.now().toString())) View.VISIBLE else View.GONE
+
+            icCheck.visibility = if(selectedDate==LocalDate.now().toString()) View.VISIBLE else View.GONE
 
             // 체크 아이콘 visibility 설정
 //            icCheck.visibility = if (isTodoList) View.GONE else View.VISIBLE

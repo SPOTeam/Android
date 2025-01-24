@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentCrewTakeAttendanceBinding
 import com.example.spoteam_android.databinding.FragmentHostFinishMakeQuizBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 
 class CrewTakeAttendanceFragment : Fragment() {
@@ -17,8 +20,6 @@ class CrewTakeAttendanceFragment : Fragment() {
     private lateinit var binding: FragmentCrewTakeAttendanceBinding
     private var scheduleId = -1;
     private var question = "";
-    private lateinit var countDownTimer: CountDownTimer
-    private val timeInMillis = 300000L // 5분 (5 * 60 * 1000 milliseconds)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +32,17 @@ class CrewTakeAttendanceFragment : Fragment() {
             scheduleId = it.getInt("scheduleId")
             question = it.getString("question").toString()
             Log.d("CheckAttendanceFragment", "Received scheduleId: $scheduleId")
+        }
+
+        if(question != "") {
+            binding.startAttendanceTv.isEnabled = true;
+        }
+
+        // parentFragment 접근 후 수정
+        parentFragment?.let { parent ->
+            if (parent is CheckAttendanceFragment) { // YourParentFragmentInterface는 수정하려는 메서드를 포함
+                parent.changeDescription()
+            }
         }
 
         binding.startAttendanceTv.setOnClickListener {

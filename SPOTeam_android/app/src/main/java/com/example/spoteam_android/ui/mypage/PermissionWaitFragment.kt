@@ -55,7 +55,7 @@ class PermissionWaitFragment : Fragment() {
 
     private fun fetchInProgressStudy() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getMemberAppliedStudies(memberId, page, size)
+        service.getMemberAppliedStudies(page, size)
             .enqueue(object : Callback<MemberOnStudiesResponse> {
                 override fun onResponse(
                     call: Call<MemberOnStudiesResponse>,
