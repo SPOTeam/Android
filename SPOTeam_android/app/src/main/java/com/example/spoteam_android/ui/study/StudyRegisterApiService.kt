@@ -79,9 +79,10 @@ interface StudyApiService {
     ): Call<RecentAnnounceResponse>
 
     //스터디 참여 신청하기
-    @POST("/spot//studies/{studyId}")
+    @POST("/spot/studies/{studyId}")
     fun applyStudy(
         @Path("studyId") studyId: Int,
+        @Query("memberId") memberId: Int,
         @Body introduction: String
     ): Call<StudyApplyResponse>
     //스터디 찜하기

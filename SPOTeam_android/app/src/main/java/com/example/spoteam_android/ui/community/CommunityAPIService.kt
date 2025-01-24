@@ -69,7 +69,7 @@ interface CommunityAPIService {
         @Body requestBody : WriteCommentRequest
     ): Call<WriteCommentResponse>
 
-    @GET("/spot/search/studies/theme/")
+    @GET("/spot/search/studies/theme")
     fun getCategoryStudy(
         @Query("theme") theme: String,
         @Query("page") page: Int,
@@ -135,7 +135,7 @@ interface CommunityAPIService {
         @Path("postId") postId: Int
     ): Call<StudyPostContentCommentResponse>
 
-    @GET("/spot/search/studies/my-page/")
+    @GET("/spot/search/studies/my-page")
     fun getMyPageStudyNum(
     ): Call<MyPageStudyNumResponse>
 
