@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MainActivity
@@ -52,6 +51,8 @@ class SearchFragment : Fragment() {
     private lateinit var recommendBoardAdapter: InterestVPAdapter
     private lateinit var studyApiService: StudyApiService
     private lateinit var recruitingStudyAdapter: InterestVPAdapter
+    private lateinit var searchQueryDao: SearchQueryDao
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +61,9 @@ class SearchFragment : Fragment() {
     ): View {
         binding = FragmentSearchBinding.inflate(inflater, container,    false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
+        val database = AppDatabase.getDatabase(requireContext())
+        searchQueryDao = database.searchQueryDao()
 
         loadRecentSearches()
 
@@ -173,27 +177,25 @@ class SearchFragment : Fragment() {
     }
 
     private fun saveSearchQuery(query: String) {
-        val sharedPreferences = requireContext().getSharedPreferences(preferencesName, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        CoroutineScope(Dispatchers.IO).launch {
+            searchQueryDao.insertQuery(SearchQuery(query = query))
+            searchQueryDao.deleteOldQueries(maxRecentSearches)
 
-        val currentList = loadRecentSearches()
-        val updatedList = (listOf(query) + currentList.filter { it != query }).take(maxRecentSearches)
-
-        val json = gson.toJson(updatedList)
-        editor.putString(recentSearchKey, json)
-        editor.apply()
-
-        loadRecentSearches() // UI 업데이트
+            // UI 업데이트는 메인 스레드에서 수행
+            CoroutineScope(Dispatchers.Main).launch {
+                loadRecentSearches()
+            }
+        }
     }
 
-    private fun loadRecentSearches(): List<String> {
-        val sharedPreferences = requireContext().getSharedPreferences(preferencesName, Context.MODE_PRIVATE)
-        val json = sharedPreferences.getString(recentSearchKey, null) ?: return emptyList()
-        return try {
-            val type = object : TypeToken<List<String>>() {}.type
-            gson.fromJson<List<String>>(json, type).reversed().also { updateChips(it) }
-        } catch (e: Exception) {
-            emptyList() // JSON 파싱 실패 시 빈 리스트 반환
+    private fun loadRecentSearches() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val recentSearches = searchQueryDao.getRecentQueries(maxRecentSearches)
+
+            // UI 업데이트
+            CoroutineScope(Dispatchers.Main).launch {
+                updateChips(recentSearches.map { it.query })
+            }
         }
     }
 
@@ -227,16 +229,14 @@ class SearchFragment : Fragment() {
     }
 
     private fun removeSearchQuery(query: String) {
-        val sharedPreferences = requireContext().getSharedPreferences(preferencesName, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        CoroutineScope(Dispatchers.IO).launch {
+            searchQueryDao.deleteQuery(query)
 
-        val currentList = loadRecentSearches().filter { it != query }
-        val json = gson.toJson(currentList)
-
-        editor.putString(recentSearchKey, json)
-        editor.apply()
-
-        loadRecentSearches() // UI 업데이트
+            // UI 업데이트
+            CoroutineScope(Dispatchers.Main).launch {
+                loadRecentSearches()
+            }
+        }
     }
 
     private fun fetchRecommendStudy() {

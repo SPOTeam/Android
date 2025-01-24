@@ -1,6 +1,7 @@
 package com.example.spoteam_android.ui.study.calendar
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,6 +96,7 @@ class EventAdapter(
             }
 
             // 체크 아이콘 visibility 당일에 활성화
+
             icCheck.visibility = if(selectedDate==LocalDate.now().toString()) View.VISIBLE else View.GONE
 
             // 체크 아이콘 visibility 설정
