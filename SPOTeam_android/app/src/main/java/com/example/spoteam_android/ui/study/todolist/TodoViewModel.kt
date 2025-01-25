@@ -42,7 +42,6 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
         Log.d("TodoViewModel", "Initialized with todayDate: $todayDate")
     }
 
-    // Fetches the to-do list for a specific date and updates LiveData
     fun fetchTodoList(studyId: Int, page: Int, size: Int, date: String) {
         Log.d("fetchTodoList", "studyId: $studyId, page: $page, size: $size, date: $date")
 
@@ -77,7 +76,6 @@ class TodoViewModel(private val repository: TodoRepository, private val studyId:
         _selectedDate.value = newDate
         Log.d("TodoViewModel","${_selectedDate.value}")
 
-        fetchTodoList(studyId = studyId, page = 0, size = 10, date = newDate)
     }
 
     // Adds a new to-do item
