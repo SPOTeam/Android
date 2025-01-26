@@ -67,31 +67,38 @@ class MyStudyCommunityFragment : Fragment() {
     private fun fetchStudyMembers(studyId: Int) {
         profileAdapter = DetailStudyHomeProfileAdapter(ArrayList())
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
+        // SharedPreferences에서 현재 사용자의 memberId 가져오기
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("currentEmail", null)
-        val kakaoNickname = sharedPreferences.getString("${email}_nickname", null)
+        val currentMemberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
+
         api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
             override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let { memberResponse ->
                         val members = memberResponse.result?.members ?: emptyList()
+
+                        // RecyclerView에 프로필 업데이트
                         profileAdapter.updateList(members.map {
                             ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
                         })
 
-                        // 닉네임 리스트에서 현재 사용자의 닉네임과 일치하는지 확인
-                        val nicknames = members.map { it.nickname }
-                        val isNicknameFound = kakaoNickname?.let { nicknames.contains(it) } ?: false
-                        if(isNicknameFound) {
+                        // 멤버 리스트에서 현재 사용자의 memberId와 비교
+                        val memberIds = members.map { it.memberId }
+                        val isMemberFound = memberIds.contains(currentMemberId)
+
+                        if (isMemberFound) {
+                            // 현재 사용자가 멤버일 경우
                             binding.categoryHsv.visibility = View.VISIBLE
                             (activity as? MainActivity)?.isOnCommunityHome(MyStudyCommunityFragment())
                             fetchPages()
                         } else {
+                            // 현재 사용자가 멤버가 아닐 경우
                             binding.noneMemberAlert.visibility = View.VISIBLE
                         }
                     }
                 } else {
-//                    Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -100,6 +107,7 @@ class MyStudyCommunityFragment : Fragment() {
             }
         })
     }
+
 
     private fun initBTN() {
         binding.allRb.setOnClickListener{
