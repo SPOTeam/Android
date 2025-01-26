@@ -91,29 +91,29 @@ class DetailStudyHomeFragment : Fragment() {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("currentEmail", null)
-        val kakaoNickname = sharedPreferences.getString("${email}_nickname", null)
+        val currentMemberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
 
         api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
             override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let { memberResponse ->
                         val members = memberResponse.result?.members ?: emptyList()
+
+                        // 프로필 어댑터 업데이트
                         profileAdapter.updateList(members.map {
                             ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
                         })
 
-                        // 닉네임 리스트에서 현재 사용자의 닉네임과 일치하는지 확인
-                        val nicknames = members.map { it.nickname }
-                        val isNicknameFound = kakaoNickname?.let { nicknames.contains(it) } ?: false
+                        // 멤버 ID 리스트에서 현재 사용자의 ID와 비교
+                        val memberIds = members.map { it.memberId }
+                        val isMember = memberIds.contains(currentMemberId)
 
                         // maxPeople과 memberCount 값을 가져오기 위해 ViewModel을 옵저빙
                         val maxPeople = studyViewModel.maxPeople.value
                         val memberCount = studyViewModel.memberCount.value
-                        Log.d("max","${maxPeople},${memberCount}")
 
-                        // 닉네임이 리스트에 있거나, memberCount와 maxPeople이 일치하면 버튼을 숨김
-                        val shouldHideButton = isNicknameFound || (maxPeople != null && memberCount != null && memberCount >= maxPeople)
+                        // 현재 사용자가 멤버인지 확인하거나, 최대 인원을 초과한 경우 버튼 숨김 처리
+                        val shouldHideButton = isMember || (maxPeople != null && memberCount != null && memberCount >= maxPeople)
 
                         binding.fragmentDetailStudyHomeRegisterBt.visibility = if (shouldHideButton) {
                             View.GONE
@@ -142,6 +142,7 @@ class DetailStudyHomeFragment : Fragment() {
             }
         })
     }
+
 
     private fun fetchIsApplied(studyId: Int) {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)

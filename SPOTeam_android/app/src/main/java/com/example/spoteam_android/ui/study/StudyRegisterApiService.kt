@@ -22,8 +22,9 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 interface StudyApiService {
-    @POST("/spot//studies")
+    @POST("/spot/studies")
     fun submitStudyData(
+        @Query("memberId") memberId: Int,
         @Body studyRequest: RequestBody // @Body로 변경하여 JSON 데이터만 전송
     ): Call<ApiResponsed> // ApiResponse의 타입도 확인 필요
 

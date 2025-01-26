@@ -1,3 +1,4 @@
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -98,14 +99,14 @@ class StudyViewModel : ViewModel() {
         updateStudyRequest()
     }
 
-    fun submitStudyData() {
+    fun submitStudyData(memberId: Int) {
         val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
         val studyData = _studyRequest.value
 
         if (studyData != null) {
             val studyRequestBody = createStudyRequestBody(studyData)
 
-            apiService.submitStudyData(studyRequestBody)
+            apiService.submitStudyData(memberId, studyRequestBody)
                 .enqueue(object : Callback<ApiResponsed> {
                     override fun onResponse(call: Call<ApiResponsed>, response: Response<ApiResponsed>) {
                         if (response.isSuccessful) {

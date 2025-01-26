@@ -169,7 +169,7 @@ class MyStudyRegisterPreviewFragment : Fragment() {
                                 viewModel.setProfileImageUri(imageUrl)
                                 Log.d("MyStudy", "imageUrl: $imageUrl")
                             }
-                            viewModel.submitStudyData()  // memberId를 사용하여 데이터 전송
+                            viewModel.submitStudyData(memberId)  // memberId를 사용하여 데이터 전송
 
                             showCompletionDialog()
                         } else {
