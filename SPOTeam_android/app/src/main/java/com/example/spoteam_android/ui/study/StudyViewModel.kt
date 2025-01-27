@@ -76,7 +76,7 @@ class StudyViewModel : ViewModel() {
             goal = goal,
             introduction = introduction,
             isOnline = isOnline,
-            profileImage = profileImage,  // Use the image URL or path here
+            profileImage = profileImage,
             regions = regions,
             maxPeople = maxPeople,
             gender = gender,

@@ -70,7 +70,6 @@ class StartLoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this) { result ->
             result.onSuccess { userInfo ->
                 fetchAndSaveUserInfo(userInfo, "kakao")
-                navigateToNextScreen()
             }.onFailure { exception ->
                 Log.e("Token", "카카오 토큰 전송 실패: ${exception.message}")
             }
@@ -79,9 +78,15 @@ class StartLoginActivity : AppCompatActivity() {
         loginViewModel.naverLoginResult.observe(this) { result ->
             result.onSuccess { userInfo ->
                 fetchAndSaveUserInfo(userInfo, "naver")
-                navigateToNextScreen()
             }.onFailure { exception ->
                 Log.e("Token", "네이버 토큰 전송 실패: ${exception.message}")
+            }
+        }
+
+        // 사용자 정보 저장 완료 후 화면 이동을 분리
+        loginViewModel.userInfoSaved.observe(this) { isSaved ->
+            if (isSaved) {
+                navigateToNextScreen() // 화면 이동
             }
         }
     }
@@ -166,6 +171,7 @@ class StartLoginActivity : AppCompatActivity() {
                             val profileImageUrl = user.kakaoAccount?.profile?.profileImageUrl ?: ""
 
                             saveUserInfo(platform, userInfo.signInDTO.email, nickname, profileImageUrl, userInfo.signInDTO.tokens.accessToken, userInfo.signInDTO.tokens.refreshToken, userInfo.signInDTO.memberId)
+                            loginViewModel.saveUserInfoToPreferences() // ViewModel 상태 업데이트
                         }
                     }
                 }
@@ -180,6 +186,7 @@ class StartLoginActivity : AppCompatActivity() {
                                 val profileImageUrl = profile.profileImage ?: ""
 
                                 saveUserInfo(platform, userInfo.signInDTO.email, nickname, profileImageUrl, userInfo.signInDTO.tokens.accessToken, userInfo.signInDTO.tokens.refreshToken, userInfo.signInDTO.memberId)
+                                loginViewModel.saveUserInfoToPreferences() // ViewModel 상태 업데이트
                             } else {
                                 Log.e("Naver", "프로필 정보를 가져올 수 없습니다.")
                             }
@@ -197,6 +204,7 @@ class StartLoginActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun saveUserInfo(
         platform: String,
