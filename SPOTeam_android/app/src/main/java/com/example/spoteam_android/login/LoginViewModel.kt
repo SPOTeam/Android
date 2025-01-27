@@ -18,6 +18,9 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _naverLoginResult = MutableLiveData<Result<NaverResult>>()
     val naverLoginResult: LiveData<Result<NaverResult>> get() = _naverLoginResult
 
+    private val _userInfoSaved = MutableLiveData<Boolean>()
+    val userInfoSaved: LiveData<Boolean> get() = _userInfoSaved
+
     // 서버로 토큰 전송
     fun sendTokenToServer(accessToken: String) {
         viewModelScope.launch {
@@ -56,6 +59,10 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
                 _naverLoginResult.value = Result.failure(exception)
             }
         }
+    }
+
+    fun saveUserInfoToPreferences() {
+        _userInfoSaved.postValue(true) // 사용자 정보 저장 완료 후 상태 업데이트
     }
 
 
