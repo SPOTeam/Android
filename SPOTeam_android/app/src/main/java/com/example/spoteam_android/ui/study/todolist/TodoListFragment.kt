@@ -65,6 +65,11 @@ class TodoListFragment : Fragment() {
 
         // 오늘 날짜로 selectedDate 초기화
         val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
+        val today = calendar.get(Calendar.DAY_OF_MONTH)
+
+
         selectedDate  = "${calendar.get(Calendar.YEAR)}-" +
                 "${(calendar.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-" +
                 "${calendar.get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0')}"
@@ -123,27 +128,7 @@ class TodoListFragment : Fragment() {
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvDates.layoutManager = layoutManager
 
-
-
-
-
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
-        val today = calendar.get(Calendar.DAY_OF_MONTH)
-
-        // 미니 한 줄 달력 어댑터 연결, 날짜 클릭 시 해당 날자 일정 및 투두리스트 로드
-        val dates = (1..31).map { DateItem(it.toString(), it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()) }
-        dateAdapter = DateAdapter(dates) { date ->}
-        binding.rvDates.adapter = dateAdapter
-
-        // ViewTreeObserver를 사용하여 날짜 목록 가운데로 스크롤
-        binding.rvDates.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                binding.rvDates.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                scrollToTodayPosition()
-            }
-        })
-
+        // 최초 투두리스트, 스케쥴 조회
         todoViewModel.onDateChanged(selectedDate)
         fetchTodoList(studyId, today.toString().padStart(2, '0'))
 
@@ -157,6 +142,58 @@ class TodoListFragment : Fragment() {
             // 어댑터 데이터 갱신
             eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
         }
+
+
+        //날짜가 바뀔 때마다 새로 API 요청
+        val dates = (1..31).map {
+            DateItem(
+                it.toString(),
+                it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()
+            )
+        }
+        dateAdapter = DateAdapter(dates) { date ->
+            selectedDate = formatToDate("${calendar.get(Calendar.YEAR)}-" +
+                    "${(calendar.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-" +
+                    date)
+
+            todoViewModel.onDateChanged(selectedDate)
+            val formattedDate = formatToDate("${calendar.get(Calendar.YEAR)}-" +
+                    "${(calendar.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-" +
+                    date)
+
+            fetchGetSchedule(studyId, year, month) {
+                eventViewModel.loadEvents(year, month, date.toInt())
+
+                // 어댑터와 데코레이터 갱신 추가
+                eventAdapter.updateSelectedDate(formattedDate)
+
+                // 어댑터 데이터 갱신
+                eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
+            }
+
+            profileAdapter.resetBorder()
+
+            //날짜 이동 시 Other Todo List 초기화
+            todoViewModel.clearOtherTodoList()
+            otherTodoAdapter.clearData()
+
+            fetchTodoList(studyId, date)
+
+            eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
+                eventAdapter.updateEvents(events)
+            })
+        }
+        binding.rvDates.adapter = dateAdapter
+
+        // ViewTreeObserver를 사용하여 날짜 목록 가운데로 스크롤
+        binding.rvDates.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.rvDates.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                scrollToTodayPosition()
+            }
+        })
+
+
 
         // 내 투두리스트 조회 API
         todoViewModel.myTodoListResponse.observe(viewLifecycleOwner) { response ->
@@ -184,7 +221,6 @@ class TodoListFragment : Fragment() {
             }
         }
 
-        setupRecyclerViews(studyId)
 
 
         // + 버튼을 통해 내 투두리스트를 추가할 수 있음
@@ -249,56 +285,6 @@ class TodoListFragment : Fragment() {
         }
     }
 
-    // UI 재조정
-    private fun setupRecyclerViews(studyId: Int) {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH) + 1
-
-        // 날짜 RecyclerView 설정
-        layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rvDates.layoutManager = layoutManager
-
-        val dates = (1..31).map {
-            DateItem(
-                it.toString(),
-                it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()
-            )
-        }
-        dateAdapter = DateAdapter(dates) { date ->
-            selectedDate = formatToDate("${calendar.get(Calendar.YEAR)}-" +
-                    "${(calendar.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-" +
-                    date)
-
-            todoViewModel.onDateChanged(selectedDate)
-            val formattedDate = formatToDate("${calendar.get(Calendar.YEAR)}-" +
-                    "${(calendar.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-" +
-                    date)
-
-            fetchGetSchedule(studyId, year, month) {
-                eventViewModel.loadEvents(year, month, date.toInt())
-
-                // 어댑터와 데코레이터 갱신 추가
-                eventAdapter.updateSelectedDate(formattedDate)
-
-                // 어댑터 데이터 갱신
-                eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
-            }
-
-            profileAdapter.resetBorder()
-
-            //날짜 이동 시 Other Todo List 초기화
-            todoViewModel.clearOtherTodoList()
-            otherTodoAdapter.clearData()
-
-            fetchTodoList(studyId, date)
-
-            eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
-                eventAdapter.updateEvents(events)
-            })
-        }
-        binding.rvDates.adapter = dateAdapter
-    }
 
     //오늘 날짜가 가운데로 오도록 이동시킴
     private fun scrollToTodayPosition() {

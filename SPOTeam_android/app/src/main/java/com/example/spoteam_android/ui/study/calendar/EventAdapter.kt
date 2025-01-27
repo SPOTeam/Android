@@ -14,7 +14,7 @@ import java.time.LocalDate
 class EventAdapter(
     private var events: List<Event>,
     private val onCheckClick: (Event) -> Unit,
-    private val isTodoList: Boolean,
+    private var isTodoList: Boolean,
     private var selectedDate: String = "" // 추가된 필드: 선택된 날짜 정보
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
@@ -37,6 +37,11 @@ class EventAdapter(
 
     fun updateEvents(newEvents: List<Event>) {
         events = newEvents
+        notifyDataSetChanged()
+    }
+
+    fun hideCheckIcons() {
+        isTodoList = true  // true로 설정하면 아이콘이 숨겨짐
         notifyDataSetChanged()
     }
 
@@ -94,10 +99,14 @@ class EventAdapter(
             } else {
                 eventTimeTextView.text = eventTimeText
             }
-
             // 체크 아이콘 visibility 당일에 활성화
-
             icCheck.visibility = if(selectedDate==LocalDate.now().toString()) View.VISIBLE else View.GONE
+
+            if (isTodoList){
+                icCheck.visibility = View.GONE
+            }
+
+
 
             // 체크 아이콘 visibility 설정
 //            icCheck.visibility = if (isTodoList) View.GONE else View.VISIBLE
@@ -114,5 +123,8 @@ class EventAdapter(
                     event.startMonth == event.endMonth &&
                     event.startDay == event.endDay
         }
+
+
     }
+
 }

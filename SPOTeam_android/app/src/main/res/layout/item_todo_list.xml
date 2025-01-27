@@ -42,7 +42,7 @@
         android:id="@+id/todoMoreButton"
         android:layout_width="25dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="15dp"
         android:background="#F9FBFF"
         android:padding="5dp"
         android:scaleType="centerInside"
