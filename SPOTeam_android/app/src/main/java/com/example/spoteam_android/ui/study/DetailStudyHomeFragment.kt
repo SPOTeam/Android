@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -114,23 +115,9 @@ class DetailStudyHomeFragment : Fragment() {
 
                         // 현재 사용자가 멤버인지 확인하거나, 최대 인원을 초과한 경우 버튼 숨김 처리
                         val shouldHideButton = isMember || (maxPeople != null && memberCount != null && memberCount >= maxPeople)
+                        binding.fragmentDetailStudyHomeRegisterBt.visibility = if (shouldHideButton) View.GONE else View.VISIBLE
 
-                        binding.fragmentDetailStudyHomeRegisterBt.visibility = if (shouldHideButton) {
-                            View.GONE
-                        } else {
-                            View.VISIBLE
-                        }
 
-                        // RecyclerView의 제약 조건 설정
-                        val layoutParams = binding.fragmentDetailStudyHomeProfileRv.layoutParams as ConstraintLayout.LayoutParams
-                        if (binding.fragmentDetailStudyHomeRegisterBt.visibility == View.GONE) {
-                            layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-                            layoutParams.bottomToTop = ConstraintLayout.LayoutParams.UNSET
-                        } else {
-                            layoutParams.bottomToTop = R.id.fragment_detail_study_home_register_bt
-                            layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.UNSET
-                        }
-                        binding.fragmentDetailStudyHomeProfileRv.layoutParams = layoutParams
                     }
                 } else {
                     Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()

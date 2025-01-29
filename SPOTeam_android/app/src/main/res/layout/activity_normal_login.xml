@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"
         app:navigationIcon="@drawable/ic_arrow">
 
     </androidx.appcompat.widget.Toolbar>
@@ -32,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text="회원가입"
         android:textStyle="bold"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:fontFamily="@font/pretendard"
         android:textColor="#588FF2"
         android:layout_marginStart="25dp"
@@ -48,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="이름"
         android:textColor="#2D2D2D"
         android:textSize="16sp"
@@ -67,8 +66,8 @@
             android:textColorHint="#D8D8D8"
             android:maxLines="1"
             android:inputType="text"
-            android:padding="10dp"
-            android:textSize="15sp"
+            android:padding="8.5dp"
+            android:textSize="13sp"
             android:background="@drawable/normal_login_edittext_corner_rectangle"
             android:layout_marginTop="10dp"
             android:layout_marginStart="25dp"
@@ -118,8 +117,8 @@
             android:maxLines="1"
             android:inputType="number"
             android:maxLength="6"
-            android:padding="10dp"
-            android:textSize="15sp"
+            android:padding="8.5dp"
+            android:textSize="13sp"
             android:letterSpacing="0.4"
             android:background="@drawable/normal_login_edittext_corner_rectangle">
         </EditText>
@@ -131,7 +130,7 @@
             android:layout_marginStart="15dp"
             android:text="-"
             android:textColor="#2D2D2D"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:textStyle="bold"
             android:fontFamily="@font/pretendard" />
 
@@ -145,8 +144,8 @@
             android:maxLines="1"
             android:inputType="number"
             android:maxLength="1"
-            android:padding="10dp"
-            android:textSize="15sp"
+            android:padding="8.5dp"
+            android:textSize="13sp"
             android:letterSpacing="0.4"
             android:background="@drawable/normal_login_edittext_corner_rectangle">
         </EditText>
@@ -159,9 +158,9 @@
             android:text="●●●●●●"
             android:letterSpacing="0.3"
             android:textColor="#2D2D2D"
-            android:textSize="15sp"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
+            android:textSize="13sp"
+            android:paddingBottom="8.5dp"
+            android:paddingTop="8.5dp"
             android:textStyle="bold"
             android:fontFamily="@font/pretendard" />
 
@@ -207,8 +206,8 @@
         android:maxLines="1"
         android:maxLength="15"
         android:inputType="text"
-        android:padding="10dp"
-        android:textSize="15sp"
+        android:padding="8.5dp"
+        android:textSize="13sp"
         android:background="@drawable/normal_login_edittext_corner_rectangle"
         android:layout_marginTop="10dp"
         android:layout_marginStart="25dp"
@@ -257,8 +256,8 @@
         android:textColorHint="#D8D8D8"
         android:maxLines="1"
         android:inputType="text"
-        android:padding="10dp"
-        android:textSize="15sp"
+        android:padding="8.5dp"
+        android:textSize="13sp"
         android:background="@drawable/normal_login_edittext_corner_rectangle"
         android:layout_marginTop="10dp"
         android:layout_marginStart="25dp"
@@ -307,8 +306,8 @@
         android:textColorHint="#D8D8D8"
         android:maxLines="1"
         android:inputType="text"
-        android:padding="10dp"
-        android:textSize="15sp"
+        android:padding="8.5dp"
+        android:textSize="13sp"
         android:background="@drawable/normal_login_edittext_corner_rectangle"
         android:layout_marginTop="10dp"
         android:layout_marginStart="25dp"
@@ -325,8 +324,8 @@
         android:textColorHint="#D8D8D8"
         android:maxLines="1"
         android:inputType="textPassword"
-        android:padding="10dp"
-        android:textSize="15sp"
+        android:padding="8.5dp"
+        android:textSize="13sp"
         android:background="@drawable/normal_login_edittext_corner_rectangle"
         android:layout_marginTop="5dp"
         android:layout_marginStart="25dp"
@@ -355,7 +354,6 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_password_check_text_input_et"
         app:layout_constraintStart_toStartOf="parent" />
 
 
