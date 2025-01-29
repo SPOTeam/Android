@@ -13,8 +13,8 @@
         android:id="@+id/activity_start_login_logo_iv"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/spot_login_logo"
-        android:layout_marginTop="130dp"
+        android:src="@drawable/spot_real_logo"
+        android:layout_marginTop="80dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/studystart"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
         android:textColor="#FFFFFF"
@@ -42,14 +42,14 @@
         android:background="@drawable/startlogin"
         android:text="스터디 신청 완료!"
         android:alpha="0.5"
-        android:textSize="9.5sp"
+        android:textSize="7sp"
         android:textStyle="bold"
         android:fontFamily="@font/pretendard"
         android:textColor="#186AFF"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingBottom="7dp"
-        android:paddingTop="7dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:layout_marginTop="40dp"
         app:layout_constraintTop_toBottomOf="@id/startstudy_tv"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,14 +62,14 @@
         android:background="@drawable/startlogin"
         android:text="오늘은 카공을 추천해요."
         android:alpha="0.7"
-        android:textSize="11.5sp"
+        android:textSize="8sp"
         android:fontFamily="@font/pretendard"
         android:textColor="#186AFF"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingBottom="7dp"
-        android:paddingTop="7dp"
-        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintTop_toBottomOf="@id/studyrequest_et"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -80,16 +80,16 @@
         android:layout_height="wrap_content"
         android:background="@drawable/startlogin"
         android:text="스터디 참여가 수락되었어요!"
-        android:textSize="15sp"
+        android:textSize="11.5sp"
         android:textStyle="bold"
         android:alpha="0.7"
         android:fontFamily="@font/pretendard"
         android:textColor="#186AFF"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="9dp"
-        android:paddingTop="9dp"
-        android:layout_marginTop="20dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintTop_toBottomOf="@id/studyrecommand_et"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -100,11 +100,11 @@
         android:layout_height="wrap_content"
         android:text="간편 가입하기"
         android:textColor="#FFFFFF"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:fontFamily="@font/pretendard"
         android:textStyle="bold"
-        android:layout_marginTop="50dp"
-        app:layout_constraintTop_toBottomOf="@id/studyaccept_et"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@id/activity_start_login_logo_ll"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -113,10 +113,10 @@
         android:id="@+id/activity_start_login_logo_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_start_login_convenient_tv">
+        app:layout_constraintBottom_toTopOf="@id/activity_start_login_or_ll">
 
 
         <ImageButton
@@ -158,7 +158,8 @@
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_start_login_logo_ll">
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@id/activity_start_login_next_bt">
 
         <View
             android:layout_width="80dp"
@@ -200,9 +201,10 @@
         android:textColor="#2D2D2D"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/activity_start_login_or_ll"
+        android:layout_marginBottom="15dp"
         app:layout_constraintEnd_toEndOf="@id/activity_start_login_or_ll"
-        app:layout_constraintStart_toStartOf="@id/activity_start_login_or_ll" />
+        app:layout_constraintStart_toStartOf="@id/activity_start_login_or_ll"
+        app:layout_constraintBottom_toTopOf="@id/activity_start_login_already_ll"/>
 
 
     <LinearLayout
@@ -210,9 +212,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_start_login_next_bt">
+        app:layout_constraintBottom_toBottomOf="parent">
 
 
 
@@ -221,7 +224,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="이미 스팟 계정이 있으신가요?"
-            android:textSize="11sp"
+            android:textSize="9sp"
             android:fontFamily="@font/pretendard"
             android:textColor="#FFFFFF" />
 
@@ -230,7 +233,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/start_login"
-            android:textSize="11sp"
+            android:textSize="9sp"
             android:textStyle="bold"
             android:fontFamily="@font/pretendard"
             android:textColor="#FFFFFF"
