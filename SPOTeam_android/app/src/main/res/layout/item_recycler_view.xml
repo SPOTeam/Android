@@ -18,8 +18,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ImageView4"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="15dp"
@@ -31,19 +31,19 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="9dp"
                 android:fontFamily="@font/pretendardsource"
                 android:text="스터디 이름"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -55,12 +55,13 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/pretendardsource"
                 android:text="스터디 목표"
-                android:textSize="12sp" />
+                android:textSize="11sp" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="3dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -76,14 +77,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="po"
-                    android:textSize="12sp" />
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/tv_name5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/"
-                    android:textSize="12sp" />
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/tv_name"
@@ -91,13 +92,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="to"
-                    android:textSize="12sp" />
+                    android:textSize="11sp" />
 
 
                 <ImageView
                     android:id="@+id/heart_count_iv"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
                     android:layout_marginEnd="4dp"
                     android:src="@drawable/study_like" />
 
@@ -107,12 +108,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="like"
-                    android:textSize="12sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/ImageView7"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
                     android:layout_marginEnd="4dp"
                     android:src="@drawable/study_view" />
 
@@ -121,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="view"
-                    android:textSize="12sp" />
+                    android:textSize="11sp" />
 
             </LinearLayout>
 
