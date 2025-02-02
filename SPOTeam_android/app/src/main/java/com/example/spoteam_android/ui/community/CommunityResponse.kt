@@ -108,6 +108,7 @@ data class ContentInfo(
     val viewCount : Int,
     var likedByCurrentUser : Boolean,
     var scrapedByCurrentUser : Boolean,
+    val createdByCurrentUser : Boolean,
     val commentResponses : CommentResponse,
     val reported : Boolean
 )
@@ -707,5 +708,14 @@ data class CrewQuizInfo (
     val tryNum : Int,
     val createdAt : String
 )
+
+/************ 게시글 삭제 완료 ***********/
+data class DeletePostContentResponse (
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: Any?
+)
+
 
 
