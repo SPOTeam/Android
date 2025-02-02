@@ -1,187 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <TextView
-        android:id="@+id/fragment_detail_study_home_notification_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="최근 공지"
-        android:textColor="#186AFF"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-
+    android:fillViewport="true"
+    android:background="@color/white"
+    android:scrollbars="vertical">
 
     <LinearLayout
-        android:id="@+id/fragment_detail_study_home_title_ll"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:background="@drawable/detail_study_home_title_background"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_notification_tv">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="0dp">
 
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/icon_detail_home_title"/>
+        <TextView
+            android:id="@+id/fragment_detail_study_home_notification_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="최근 공지"
+            android:textColor="#186AFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/pretendard"
+            android:layout_marginTop="20dp"/>
+
+
+        <LinearLayout
+            android:id="@+id/fragment_detail_study_home_title_ll"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/detail_study_home_title_background"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/icon_detail_home_title"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_study_home_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="가장 최근 공지의 제목"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginTop="15dp"/>
 
 
         <TextView
-            android:id="@+id/fragment_detail_study_home_title_tv"
+            android:id="@+id/fragment_detail_study_home_schedule_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="가장 최근 공지의 제목"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
+            android:text="⏰ 다가오는 모임"
+            android:textColor="#2D2D2D"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:fontFamily="@font/pretendard"
-            android:layout_marginStart="10dp"/>
-    </LinearLayout>
+            android:layout_marginTop="20dp"/>
 
-
-    <View
-        android:id="@+id/fragment_detail_study_home_notification_v"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="15dp"
-        android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_title_ll"/>
-
-    <TextView
-        android:id="@+id/fragment_detail_study_home_schedule_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="⏰ 다가오는 모임"
-        android:textColor="#2D2D2D"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        android:layout_marginTop="25dp"
-        android:layout_marginStart="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_title_ll"/>
-
-    <FrameLayout
-        android:id="@+id/fragment_detail_study_home_rv_fl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_detail_study_home_schedule_tv">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_detail_study_home_schedule_rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/item_detail_fragment_scedule_rv" />
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            tools:listitem="@layout/item_detail_fragment_scedule_rv"
+            android:layout_marginTop="10dp"/>
 
-    </FrameLayout>
-
-
-
-    <View
-        android:id="@+id/fragment_detail_study_home_schedule_v"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_rv_fl"/>
-
-    <TextView
-        android:id="@+id/fragment_detail_study_home_introduce_title_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="스터디 소개"
-        android:textColor="#2D2D2D"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_schedule_v"/>
-
-    <TextView
-        android:id="@+id/fragment_detail_study_home_introduce_tv"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:hint="스터디를 소개해봅시다 ! 자유롭게 작성해봐요"
-        android:inputType="textMultiLine"
-        android:padding="10dp"
-        android:textSize="15sp"
-        android:fontFamily="@font/pretendard"
-        android:background="@drawable/edittext_rounded_corner_rectangle"
-        android:gravity="top"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_introduce_title_tv"/>
-
-    <TextView
-        android:id="@+id/fragment_detail_study_home_member_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="함께 스터디하는 멤버"
-        android:textColor="#2D2D2D"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_introduce_tv"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginTop="10dp"/>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_detail_study_home_profile_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_member_tv"
-        app:layout_constraintBottom_toTopOf="@id/fragment_detail_study_home_register_bt"
-        app:layout_goneMarginBottom="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/item_detail_study_home_member">
-    </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:id="@+id/fragment_detail_study_home_introduce_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="스터디 소개"
+            android:textColor="#2D2D2D"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"/>
 
-    <android.widget.Button
-        android:id="@+id/fragment_detail_study_home_register_bt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/button_background"
-        android:text="신청하기"
-        android:fontFamily="@font/pretendard"
-        android:textColor="@drawable/button_textcolor"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_profile_rv"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/fragment_detail_study_home_introduce_tv"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:hint="스터디를 소개해봅시다! 자유롭게 작성해봐요"
+            android:background="@drawable/edittext_rounded_corner_rectangle"
+            android:padding="10dp"
+            android:gravity="top"
+            android:textSize="15sp"
+            android:layout_marginTop="10dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/fragment_detail_study_home_member_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="함께 스터디하는 멤버"
+            android:textColor="#2D2D2D"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_detail_study_home_profile_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            tools:listitem="@layout/item_detail_study_home_member"
+            android:layout_marginTop="10dp" />
+
+
+        <android.widget.Button
+            android:id="@+id/fragment_detail_study_home_register_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="신청하기"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
