@@ -30,6 +30,8 @@ import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentInterestBinding
 import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
+import com.example.spoteam_android.ui.community.CategoryStudyResponse
+import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.google.android.material.tabs.TabLayout
@@ -44,12 +46,25 @@ class InterestFragment : Fragment() {
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var studyApiService: StudyApiService
     private lateinit var interestBoardAdapter: InterestVPAdapter
+    private var currentPage: Int = 0
+    private var totalPages: Int = 0
+    private var gender: String? = null
+    private var minAge: String? = null
+    private var maxAge: String? = null
+    private var activityFee: String? = null
+    private var selectedStudyTheme: String? = null
+    private var activityFeeAmount: String? = null
+    private var source: String? = null
+    private var selectedItem: String = "ALL"
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         binding = FragmentInterestBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
@@ -106,22 +121,22 @@ class InterestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gender = arguments?.getString("gender")
-        val minAge = arguments?.getString("minAge")
-        val maxAge = arguments?.getString("maxAge")
-        val activityFee = arguments?.getString("activityFee")
-        val selectedStudyTheme = arguments?.getString("selectedStudyTheme")
-        val activityFeeAmount = arguments?.getString("activityFeeAmount")
+        gender = arguments?.getString("gender")
+        minAge = arguments?.getString("minAge")
+        maxAge = arguments?.getString("maxAge")
+        activityFee = arguments?.getString("activityFee")
+        selectedStudyTheme = arguments?.getString("selectedStudyTheme")
+        activityFeeAmount = arguments?.getString("activityFeeAmount")
+        source = arguments?.getString("source")
 
         Log.d("InterestFragment","$gender, $minAge, $maxAge,$activityFee,$selectedStudyTheme,$activityFeeAmount")
 
         tabLayout = binding.tabs
-        val source = arguments?.getString("source")
 
         when (source) {
             "HouseFragment" -> {
                 binding.icFilterActive.visibility = View.GONE
-                fetchData("ALL" )
+                fetchData(selectedItem ,currentPage = currentPage,isFirst=true)
                 fetchDataGetInterestArea() { regions ->
                     setupTabs(regions, gender, minAge, maxAge, activityFee, activityFeeAmount, selectedStudyTheme)
                 }
@@ -129,13 +144,15 @@ class InterestFragment : Fragment() {
             "InterestFilterFragment" -> {
                 binding.icFilterActive.visibility = View.VISIBLE
                 fetchData(
-                    "ALL",
+                    selectedItem,
                     gender = gender,
                     minAge = minAge,
                     maxAge = maxAge,
                     activityFee = activityFee,
                     activityFeeAmount = activityFeeAmount,
-                    selectedStudyTheme = selectedStudyTheme
+                    selectedStudyTheme = selectedStudyTheme,
+                    currentPage = currentPage,
+                    isFirst = true
                 )
                 fetchDataGetInterestArea() { regions ->
                     setupTabs(regions, gender, minAge, maxAge, activityFee, activityFeeAmount, selectedStudyTheme)
@@ -179,7 +196,6 @@ class InterestFragment : Fragment() {
                     val textView = findViewById<TextView>(R.id.tabText)
                     textView.text = "전체"
                     textView.setTypeface(null, Typeface.BOLD) // 최초 "전체" Bold 처리
-
                 }
                 tag = "0000000000"
             }
@@ -196,6 +212,7 @@ class InterestFragment : Fragment() {
                 }
                 tabLayout.addTab(tab)
             }
+            setupPageNavigationButtons()
 
             // 탭 선택 리스너 로그
             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -208,25 +225,27 @@ class InterestFragment : Fragment() {
                     if (selectedRegionCode == "0000000000") {
                         Log.d(TAG, "Fetching data for '전체'")
                         fetchData(
-                            "ALL",
+                            selectedItem,
                             gender = gender,
                             minAge = minAge,
                             maxAge = maxAge,
                             activityFee = activityFee,
                             activityFeeAmount = activityFeeAmount,
-                            selectedStudyTheme = selectedStudyTheme
+                            selectedStudyTheme = selectedStudyTheme,
+                            currentPage = currentPage
                         )
                     } else {
                         Log.d(TAG, "Fetching data for region code: $selectedRegionCode")
                         fetchData(
-                            "ALL",
+                            selectedItem,
                             regionCode = selectedRegionCode,
                             gender = gender,
                             minAge = minAge,
                             maxAge = maxAge,
                             activityFee = activityFee,
                             activityFeeAmount = activityFeeAmount,
-                            selectedStudyTheme = selectedStudyTheme
+                            selectedStudyTheme = selectedStudyTheme,
+                            currentPage = currentPage
                         )
                     }
                 }
@@ -258,17 +277,16 @@ class InterestFragment : Fragment() {
             spinner.adapter = adapter
         }
 
-
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedItem = when (position) {
+                selectedItem = when (position) {
                     1 -> "RECRUITING"
                     2 -> "COMPLETED"
                     3 -> "HIT"
                     4 -> "LIKED"
                     else -> "ALL"
                 }
-                fetchData(selectedItem)
+                fetchData(selectedItem, currentPage = currentPage)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -283,7 +301,9 @@ class InterestFragment : Fragment() {
         maxAge: String? = null,
         activityFee: String? = null,
         activityFeeAmount: String? = null,
-        selectedStudyTheme: String? = null
+        selectedStudyTheme: String? = null,
+        currentPage: Int?= null,
+        isFirst: Boolean ?= false
     ) {
         val boardItems = arrayListOf<BoardItem>()
         val activityFeeAmountInt = activityFeeAmount?.toIntOrNull()
@@ -291,34 +311,63 @@ class InterestFragment : Fragment() {
         val checkcount: TextView = binding.checkAmount
 
         val call: Call<ApiResponse> = if (regionCode != null) {
-            val service = RetrofitInstance.retrofit.create(InterestSpecificAreaApiService::class.java)
-            service.InterestSpecificArea(
-                regionCode = regionCode,
-                gender = gender ?: "MALE",
-                minAge = minAge?.toIntOrNull() ?: 18,
-                maxAge = maxAge?.toIntOrNull() ?: 60,
-                isOnline = false,
-                hasFee = activityFee?.toBoolean() ?: false,
-                fee = activityFeeAmountInt,
-                page = 0,
-                size = 5,
-                sortBy = selectedItem
-            )
+            if (isFirst == true){
+                val service = RetrofitInstance.retrofit.create(InterestSpecificAreaApiService::class.java)
+                service.InterestSpecificArea(
+                    regionCode = regionCode,
+                    gender = gender ?: "MALE",
+                    minAge = minAge?.toIntOrNull() ?: 18,
+                    maxAge = maxAge?.toIntOrNull() ?: 60,
+                    isOnline = false,
+                    hasFee = activityFee?.toBoolean() ?: false,
+                    fee = activityFeeAmountInt,
+                    page = currentPage ?: 0,
+                    size = 100,
+                    sortBy = selectedItem)
+            } else{
+                val service = RetrofitInstance.retrofit.create(InterestSpecificAreaApiService::class.java)
+                service.InterestSpecificArea(
+                    regionCode = regionCode,
+                    gender = gender ?: "MALE",
+                    minAge = minAge?.toIntOrNull() ?: 18,
+                    maxAge = maxAge?.toIntOrNull() ?: 60,
+                    isOnline = false,
+                    hasFee = activityFee?.toBoolean() ?: false,
+                    fee = activityFeeAmountInt,
+                    page = currentPage ?: 0,
+                    size = 1,
+                    sortBy = selectedItem)
+            }
         } else {
-            val service = RetrofitInstance.retrofit.create(InterestAreaApiService::class.java)
-            service.InterestArea(
-                gender = gender ?: "MALE",
-                minAge = minAge?.toIntOrNull() ?: 18,
-                maxAge = maxAge?.toIntOrNull() ?: 60,
-                isOnline = false,
-                hasFee = activityFee?.toBoolean() ?: false,
-                fee = activityFeeAmountInt,
-                page = 0,
-                size = 5,
-                sortBy = selectedItem
-            )
-        }
+            if (isFirst == true){
+                val service = RetrofitInstance.retrofit.create(InterestAreaApiService::class.java)
+                service.InterestArea(
+                    gender = gender ?: "MALE",
+                    minAge = minAge?.toIntOrNull() ?: 18,
+                    maxAge = maxAge?.toIntOrNull() ?: 60,
+                    isOnline = false,
+                    hasFee = activityFee?.toBoolean() ?: false,
+                    fee = activityFeeAmountInt,
+                    page = currentPage ?: 0,
+                    size = 100,
+                    sortBy = selectedItem
+                )
+            }else{
+                val service = RetrofitInstance.retrofit.create(InterestAreaApiService::class.java)
+                service.InterestArea(
+                    gender = gender ?: "MALE",
+                    minAge = minAge?.toIntOrNull() ?: 18,
+                    maxAge = maxAge?.toIntOrNull() ?: 60,
+                    isOnline = false,
+                    hasFee = activityFee?.toBoolean() ?: false,
+                    fee = activityFeeAmountInt,
+                    page = currentPage ?: 0,
+                    size = 1,
+                    sortBy = selectedItem
+                )
+            }
 
+        }
         call.enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
@@ -326,6 +375,7 @@ class InterestFragment : Fragment() {
                     val apiResponse = response.body()
                     if (apiResponse?.isSuccess == true) {
                         apiResponse.result?.content?.forEach { study ->
+                            totalPages = apiResponse.result.totalPages
                             val boardItem = BoardItem(
                                 studyId = study.studyId,
                                 title = study.title,
@@ -342,6 +392,7 @@ class InterestFragment : Fragment() {
                                 liked = study.liked
                             )
                             boardItems.add(boardItem)
+                            updatePageNumberUI()
                         }
                         updateRecyclerView(boardItems)
                         checkcount.text = String.format("%01d 건", boardItems.size)
@@ -367,11 +418,38 @@ class InterestFragment : Fragment() {
         interestBoardAdapter.updateList(boardItems)
     }
 
-    private fun getMemberId(context: Context): Int {
-        val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val currentEmail = sharedPreferences.getString("currentEmail", null)
-        return if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
+    private fun setupPageNavigationButtons() {
+        binding.previousPage.setOnClickListener {
+            if (currentPage > 0) {
+                currentPage--
+                fetchData(selectedItem, currentPage = currentPage)
+            }
+        }
+
+        binding.nextPage.setOnClickListener {
+            if (currentPage < totalPages - 1) {
+                currentPage++
+                fetchData(selectedItem, currentPage = currentPage)
+            }
+        }
     }
+
+    private fun updatePageNumberUI() {
+        binding.currentPage.text = (currentPage + 1).toString()
+
+        binding.previousPage.isEnabled = currentPage > 0
+        binding.previousPage.setTextColor(resources.getColor(
+            if (currentPage > 0) R.color.active_color else R.color.disabled_color,
+            null
+        ))
+
+        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        binding.nextPage.setTextColor(resources.getColor(
+            if (currentPage < totalPages - 1) R.color.active_color else R.color.disabled_color,
+            null
+        ))
+    }
+
 
     private fun fetchDataGetInterestArea( callback: (List<Region>?) -> Unit) {
         val service = RetrofitInstance.retrofit.create(GetMemberInterestAreaApiService::class.java)
@@ -380,6 +458,7 @@ class InterestFragment : Fragment() {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     val regions = response.body()?.result?.regions
+                    Log.d("InterestFragment","$regions")
                     callback(regions)
                 } else {
                     Log.e("InterestFragment", "fetchDataGetInterestArea: Response failed")
