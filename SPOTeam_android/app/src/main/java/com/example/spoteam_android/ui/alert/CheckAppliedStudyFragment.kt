@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentCheckAppliedStudyBinding
 import com.example.spoteam_android.ui.community.AcceptedAlertStudyResponse
@@ -31,10 +32,14 @@ class CheckAppliedStudyFragment : Fragment() {
     ): View {
         binding = FragmentCheckAppliedStudyBinding.inflate(inflater, container, false)
 
+        (context as MainActivity).isOnAlertFragment(CheckAppliedStudyFragment())
+
         binding.communityPrevIv.setOnClickListener{
             requireActivity().supportFragmentManager.beginTransaction().remove(this).commitAllowingStateLoss()
             requireActivity().supportFragmentManager.popBackStack()
+            (context as MainActivity).isOnAlertFragment(AlertFragment())
         }
+
         fetchStudyAlert()
 
         return binding.root

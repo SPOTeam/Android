@@ -69,7 +69,7 @@ interface CommunityAPIService {
         @Body requestBody : WriteCommentRequest
     ): Call<WriteCommentResponse>
 
-    @GET("/spot/search/studies/theme")
+    @GET("/spot/search/studies/theme/")
     fun getCategoryStudy(
         @Query("theme") theme: String,
         @Query("page") page: Int,
