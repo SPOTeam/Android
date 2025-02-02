@@ -1,7 +1,6 @@
 package com.example.spoteam_android.ui.community
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuInflater
@@ -10,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
@@ -32,6 +32,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
     var postId : Int = -1
     var parentCommentId : Int = 0
     var ischecked : Boolean = false;
+    var createdByThisMember : Boolean = false;
 
     // 추가: 게시물 정보 저장을 위한 변수들
     private var currentTitle: String = ""
@@ -241,37 +242,97 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
             })
     }
 
+    private fun deleteContent(view: View, fragmentManager: FragmentManager) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deletePostContent(postId)
+            .enqueue(object : Callback<DeletePostContentResponse> {
+                override fun onResponse(
+                    call: Call<DeletePostContentResponse>,
+                    response: Response<DeletePostContentResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val deletePostResponse = response.body()
+                        if (deletePostResponse?.isSuccess == "true") {
+                            showSuccessDeleteDialog(view, fragmentManager)
+
+                        } else {
+                            showFailedDeleteDialog(view, fragmentManager)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<DeletePostContentResponse>, t: Throwable) {
+                    Log.e("CommunityHomeFragment", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    /**게시글 신고 알고리즘 구현**/
+
+
+    /**************************/
+
+    private fun showSuccessReportDialog(view: View, fragmentManager: FragmentManager) {
+        val reportContentDialog = ReportContentDialog(view.context)
+        reportContentDialog.start(fragmentManager)
+    }
+
+    private fun showFailedDeleteDialog(view: View, fragmentManager: FragmentManager) {
+        val failedDeletePost = FailedDeleteContentDialog(view.context)
+        failedDeletePost.start(fragmentManager)
+    }
+
+    private fun showSuccessDeleteDialog(view: View, fragmentManager: FragmentManager) {
+        val completeDeletePost = DeleteContentDialog(view.context)
+        completeDeletePost.start(fragmentManager)
+    }
+
     private fun showPopupMenu(view: View) {
         val popupMenu = PopupMenu(view.context, view)
         val inflater: MenuInflater = popupMenu.menuInflater
-        val report = ReportContentDialog(view.context)
+        val reportContentDialog = ReportContentDialog(view.context) // 임시
         val fragmentManager = (view.context as AppCompatActivity).supportFragmentManager
         inflater.inflate(R.menu.menu_community_home_options, popupMenu.menu)
+
+        // ✅ "수정하기" 버튼을 동적으로 숨기거나 보이게 설정
+        val editMenuItem = popupMenu.menu.findItem(R.id.edit_content)
+        editMenuItem.isVisible = createdByThisMember // createdByThisMember가 true일 때만 보이도록 설정
 
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_report -> {
-                    report.start(fragmentManager)
+//                    reportContent(view, fragmentManager)
+                    reportContentDialog.start(fragmentManager)
                     true
                 }
                 R.id.edit_content -> {
-                    // WriteContentFragment 생성 및 데이터 전달
-                    val editContext = EditContentFragment().apply {
-                        arguments = Bundle().apply {
-                            putString("title", currentTitle)  // 수정할 게시물의 제목 전달
-                            putString("content", currentContent)  // 수정할 게시물의 내용 전달
-                            putString("type", currentType)
-                            putString("postId", postId.toString())
-                        }
-                        setStyle(
-                            BottomSheetDialogFragment.STYLE_NORMAL,
-                            R.style.AppBottomSheetDialogBorder20WhiteTheme
-                        )
-                    }
 
-                    editContext.show(fragmentManager, "EditContent")
+                    if(createdByThisMember) {
+
+                        // WriteContentFragment 생성 및 데이터 전달
+                        val editContext = EditContentFragment().apply {
+                            arguments = Bundle().apply {
+                                putString("title", currentTitle)  // 수정할 게시물의 제목 전달
+                                putString("content", currentContent)  // 수정할 게시물의 내용 전달
+                                putString("type", currentType)
+                                putString("postId", postId.toString())
+                            }
+                            setStyle(
+                                BottomSheetDialogFragment.STYLE_NORMAL,
+                                R.style.AppBottomSheetDialogBorder20WhiteTheme
+                            )
+                        }
+                        editContext.show(fragmentManager, "EditContent")
+                    }
                     true
                 }
+                R.id.delete_content -> {
+                    deleteContent(view, fragmentManager)
+                    true
+                }
+
                 else -> false
             }
         }
@@ -293,6 +354,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
                             val contentInfo = contentResponse.result
                             val commentInfo = contentInfo.commentResponses.comments
                             initContentInfo(contentInfo)
+                            createdByThisMember = contentInfo.createdByCurrentUser
                             ischecked = false;
                             val sortedComments = sortComments(commentInfo)
                             initMultiViewRecyclerView(sortedComments)

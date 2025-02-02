@@ -6,4 +6,7 @@
     <item
         android:id="@+id/edit_content"
         android:title="편집하기" />
+    <item
+        android:id="@+id/delete_content"
+        android:title="삭제하기" />
 </menu>

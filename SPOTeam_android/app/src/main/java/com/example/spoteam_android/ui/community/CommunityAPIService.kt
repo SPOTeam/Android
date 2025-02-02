@@ -285,4 +285,9 @@ interface CommunityAPIService {
         @Path("scheduleId") scheduleId: Int,
         @Query("date") date : String
     ) : Call<GetScheduleResponse>
+
+    @DELETE("/spot/posts/{postId}")
+    fun deletePostContent(
+        @Path("postId") postId: Int
+    ) : Call<DeletePostContentResponse>
 }
