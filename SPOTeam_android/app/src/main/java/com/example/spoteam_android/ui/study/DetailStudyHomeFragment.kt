@@ -4,6 +4,7 @@ import ApplyStudyDialog
 import StudyApiService
 import StudyViewModel
 import android.content.Context
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -99,6 +101,10 @@ class DetailStudyHomeFragment : Fragment() {
                 if (response.isSuccessful) {
                     response.body()?.let { memberResponse ->
                         val members = memberResponse.result?.members ?: emptyList()
+                        members.forEach { member ->
+                            Log.d("StudyMembers", "Member ID: ${member.memberId}, Nickname: ${member.nickname}, Profile Image: ${member.profileImage ?: "NULL"}")
+                        }
+
 
                         // 프로필 어댑터 업데이트
                         profileAdapter.updateList(members.map {
@@ -150,14 +156,36 @@ class DetailStudyHomeFragment : Fragment() {
     }
 
     private fun updateRegisterButton(isApplied: Boolean) {
-        if (isApplied) {
-            binding.fragmentDetailStudyHomeRegisterBt.isEnabled = false
-            binding.fragmentDetailStudyHomeRegisterBt.text = "신청 완료"
-        } else {
-            binding.fragmentDetailStudyHomeRegisterBt.isEnabled = true
-            binding.fragmentDetailStudyHomeRegisterBt.text = "신청하기"
+        val button = binding.fragmentDetailStudyHomeRegisterBt
+
+
+        val backgroundDrawable = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE  // 사각형 형태
+            cornerRadius = 16f  // 둥근 모서리 반경 (픽셀 단위)
         }
+
+        if (isApplied) {
+            button.isEnabled = false
+            button.text = "신청완료"
+
+            backgroundDrawable.setColor(ContextCompat.getColor(requireContext(), R.color.white))
+            backgroundDrawable.setStroke(3, ContextCompat.getColor(requireContext(), R.color.button_disabled_text)) // 테두리 설정
+
+            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.button_disabled_text))
+        } else {
+            button.isEnabled = true
+            button.text = "신청하기"
+
+            backgroundDrawable.setColor(ContextCompat.getColor(requireContext(), R.color.white))
+            backgroundDrawable.setStroke(3, ContextCompat.getColor(requireContext(), R.color.button_enabled_text)) // 테두리 설정
+
+            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.MainColor_01))
+        }
+
+        button.background = backgroundDrawable
     }
+
+
 
     private fun fetchStudySchedules(studyId: Int) {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)

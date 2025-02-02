@@ -216,6 +216,8 @@ class StartLoginActivity : AppCompatActivity() {
         memberId: Int
     ) {
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        // 기존 저장된 프로필 이미지 불러오기
+
         with(sharedPreferences.edit()) {
             putBoolean("${email}_isLoggedIn", true)
             putString("${email}_accessToken", accessToken)
@@ -248,19 +250,27 @@ class StartLoginActivity : AppCompatActivity() {
                     if (apiResponse != null && apiResponse.isSuccess) {
                         val themes = apiResponse.result.themes
                         if (themes.isNotEmpty()) {
-                            // 테마가 존재하면 MainActivity로 이동
                             navigateToActivity(MainActivity::class.java)
                         } else {
-                            // 테마가 없으면 CheckListCategoryActivity로 이동
                             navigateToActivity(CheckListCategoryActivity::class.java)
                         }
                     } else {
                         val errorMessage = apiResponse?.message ?: "알 수 없는 오류 발생"
                         Log.e("NavigateToNextScreen", "테마 가져오기 실패: $errorMessage")
+
+                        // 관심 테마를 찾을 수 없는 경우 CheckListCategoryActivity로 이동
+                        if (errorMessage.contains("해당하는 회원의 관심 테마를 찾을 수 없습니다.")) {
+                            navigateToActivity(CheckListCategoryActivity::class.java)
+                        }
                     }
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "응답 실패"
                     Log.e("NavigateToNextScreen", "테마 가져오기 실패: $errorMessage")
+
+                    //  서버 오류 응답에서도 처리
+                    if (errorMessage.contains("해당하는 회원의 관심 테마를 찾을 수 없습니다.")) {
+                        navigateToActivity(CheckListCategoryActivity::class.java)
+                    }
                 }
             }
 
@@ -269,6 +279,7 @@ class StartLoginActivity : AppCompatActivity() {
             }
         })
     }
+
 
     private fun navigateToActivity(activityClass: Class<*>) {
         val intent = Intent(this, activityClass)
