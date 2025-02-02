@@ -143,14 +143,18 @@ class MainActivity : AppCompatActivity() {
                     showFragment(HouseFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(HouseFragment())
+                    isOnAlertFragment(HouseFragment())
                     logTokens(this)
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_category -> {
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
+//                    isOnCommunityHome(CategoryFragment())
+//                    addCategoryFragmentOnTop()
+//                    showBlur()
+                    switchFragment(CategoryFragment()) // categoryFragment 바로 이동
                     isOnCommunityHome(CategoryFragment())
-                    addCategoryFragmentOnTop()
-                    showBlur()
+                    isOnAlertFragment(CategoryFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_study -> {
@@ -158,6 +162,7 @@ class MainActivity : AppCompatActivity() {
                     hideBlur()
                     showStudyFrameLayout(true)
                     isOnCommunityHome(StudyFragment())
+                    isOnAlertFragment(StudyFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_bookmark -> {
@@ -165,6 +170,7 @@ class MainActivity : AppCompatActivity() {
                     showFragment(BookmarkFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(BookmarkFragment())
+                    isOnAlertFragment(BookmarkFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_mypage -> {
@@ -172,6 +178,7 @@ class MainActivity : AppCompatActivity() {
                     showFragment(MyPageFragment())
                     showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(MyPageFragment())
+                    isOnAlertFragment(MyPageFragment())
                     return@setOnItemSelectedListener true
                 }
                 else -> false
