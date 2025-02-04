@@ -322,7 +322,7 @@ class InterestFragment : Fragment() {
                     hasFee = activityFee?.toBoolean() ?: false,
                     fee = activityFeeAmountInt,
                     page = currentPage ?: 0,
-                    size = 100,
+                    size = 5,
                     sortBy = selectedItem)
             } else{
                 val service = RetrofitInstance.retrofit.create(InterestSpecificAreaApiService::class.java)
@@ -335,7 +335,7 @@ class InterestFragment : Fragment() {
                     hasFee = activityFee?.toBoolean() ?: false,
                     fee = activityFeeAmountInt,
                     page = currentPage ?: 0,
-                    size = 1,
+                    size = 5,
                     sortBy = selectedItem)
             }
         } else {
@@ -349,7 +349,7 @@ class InterestFragment : Fragment() {
                     hasFee = activityFee?.toBoolean() ?: false,
                     fee = activityFeeAmountInt,
                     page = currentPage ?: 0,
-                    size = 100,
+                    size = 5,
                     sortBy = selectedItem
                 )
             }else{
@@ -362,7 +362,7 @@ class InterestFragment : Fragment() {
                     hasFee = activityFee?.toBoolean() ?: false,
                     fee = activityFeeAmountInt,
                     page = currentPage ?: 0,
-                    size = 1,
+                    size = 5,
                     sortBy = selectedItem
                 )
             }
