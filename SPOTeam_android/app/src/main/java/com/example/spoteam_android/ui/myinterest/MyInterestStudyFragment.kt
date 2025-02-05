@@ -47,6 +47,16 @@ class MyInterestStudyFragment : Fragment() {
     private lateinit var studyApiService: StudyApiService
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var interestBoardAdapter: InterestVPAdapter
+    private var currentPage: Int = 0
+    private var totalPages: Int = 0
+    private var gender: String? = null
+    private var minAge: String? = null
+    private var maxAge: String? = null
+    private var activityFee: String? = null
+    private var selectedStudyTheme: String? = null
+    private var activityFeeAmount: String? = null
+    private var source: String? = null
+    private var selectedItem: String = "ALL"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -500,5 +510,37 @@ class MyInterestStudyFragment : Fragment() {
     private fun updateLikeButtonUI(likeButton: ImageView, isLiked: Boolean) {
         val newIcon = if (isLiked) R.drawable.ic_heart_filled else R.drawable.study_like
         likeButton.setImageResource(newIcon)
+    }
+
+//    private fun setupPageNavigationButtons() {
+//        binding.previousPage.setOnClickListener {
+//            if (currentPage > 0) {
+//                currentPage--
+//                fetchData(selectedItem, currentPage = currentPage)
+//            }
+//        }
+//
+//        binding.nextPage.setOnClickListener {
+//            if (currentPage < totalPages - 1) {
+//                currentPage++
+//                fetchData(selectedItem, currentPage = currentPage)
+//            }
+//        }
+//    }
+
+    private fun updatePageNumberUI() {
+        binding.currentPage.text = (currentPage + 1).toString()
+
+        binding.previousPage.isEnabled = currentPage > 0
+        binding.previousPage.setTextColor(resources.getColor(
+            if (currentPage > 0) R.color.active_color else R.color.disabled_color,
+            null
+        ))
+
+        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        binding.nextPage.setTextColor(resources.getColor(
+            if (currentPage < totalPages - 1) R.color.active_color else R.color.disabled_color,
+            null
+        ))
     }
 }
