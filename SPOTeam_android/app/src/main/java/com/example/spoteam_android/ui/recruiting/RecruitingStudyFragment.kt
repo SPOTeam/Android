@@ -4,6 +4,7 @@ import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,17 @@ class RecruitingStudyFragment : Fragment() {
     private lateinit var recruitingStudyAdapter: InterestVPAdapter
     private lateinit var studyApiService: StudyApiService
     private val studyViewModel: StudyViewModel by activityViewModels()
+    private var currentPage: Int = 0
+    private var totalPages: Int = 0
+    private var gender: String? = null
+    private var minAge: String? = null
+    private var maxAge: String? = null
+    private var isOnline: String? = null
+    private var isFee: String? = null
+    private var selectedStudyTheme: String? = null
+    private var activityFeeAmount: String? = null
+    private var source: String? = null
+    private var selectedItem: String = "ALL"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,15 +99,16 @@ class RecruitingStudyFragment : Fragment() {
 
         val bundle = Bundle()
 
-        val gender = arguments?.getString("gender2")
-        val minAge = arguments?.getString("minAge2")
-        val maxAge = arguments?.getString("maxAge2")
-        val activityFee01 = arguments?.getString("activityFee_01")
-        val activityFee02 = arguments?.getString("activityFee_02")
-        val selectedStudyTheme = arguments?.getString("selectedStudyTheme2")
-        val activityFeeinput = arguments?.getString("activityFeeAmount2")
-        val source = arguments?.getString("source")
-        val mysource = arguments?.getString("mysource")
+        gender = arguments?.getString("gender2")
+        minAge = arguments?.getString("minAge2")
+        maxAge = arguments?.getString("maxAge2")
+        isOnline = arguments?.getString("activityFee_01") //  온 오프라인
+        isFee = arguments?.getString("activityFee_02") // 활동비 유무 변수
+        activityFeeAmount = arguments?.getString("activityFeeAmount2")// 구체적인 활동비
+        selectedStudyTheme = arguments?.getString("selectedStudyTheme2")
+        source = arguments?.getString("source")
+
+        setupPageNavigationButtons()
 
         val spinner: Spinner = binding.filterToggle
 
@@ -128,70 +141,60 @@ class RecruitingStudyFragment : Fragment() {
                 .commitAllowingStateLoss()
         }
 
-        when (mysource) {
-            "HouseFragment" -> {
-                fetchAllRecruiting("LIKED")
-                spinner.setSelection(4)
-            }
-        }
-
         when (source) {
             "RecruitingStudyFilterFragment" -> {
                 binding.icFilterActive.visibility = View.VISIBLE
-
-                if (gender != null && minAge != null && maxAge != null && activityFee02 != null && selectedStudyTheme != null && activityFee01 != null) {
-                    fetchSpecificRecruiting(
-                        "ALL",
-                        gender,
-                        minAge,
-                        maxAge,
-                        activityFee02,
-                        activityFeeinput ?: "",
-                        selectedStudyTheme,
-                        activityFee01
+                fetchSpecificRecruiting(
+                    selectedItem,
+                    gender = gender,
+                    minAge = minAge,
+                    maxAge = maxAge,
+                    activityFee = isFee,
+                    activityFeeAmount = activityFeeAmount,
+                    selectedStudyTheme = selectedStudyTheme,
+                    isOnline = isOnline,
+                    currentPage = currentPage
                     )
-                }
             }
 
             else -> {
-                fetchAllRecruiting("ALL")
+                fetchAllRecruiting(selectedItem)
                 binding.icFilterActive.visibility = View.GONE
             }
         }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val source = arguments?.getString("source")
                 when (source) {
                     "HouseFragment" -> {
-                        // HouseFragment에서 접근했을 때의 API 처리
-                        when (position) {
-                            0 -> fetchAllRecruiting("ALL")
-                            1 -> fetchAllRecruiting("RECRUITING")
-                            2 -> fetchAllRecruiting("COMPLETED")
-                            3 -> fetchAllRecruiting("HIT")
-                            4 -> fetchAllRecruiting("LIKED")
+                        selectedItem = when (position) {
+                            1 -> "RECRUITING"
+                            2 -> "COMPLETED"
+                            3 -> "HIT"
+                            4 -> "LIKED"
+                            else -> "ALL"
                         }
+                        fetchAllRecruiting(selectedItem)
                     }
                     "RecruitingStudyFilterFragment" -> {
-                        if (gender != null && minAge != null && maxAge != null && activityFee02 != null && selectedStudyTheme != null && activityFee01 != null) {
-                            fetchSpecificRecruiting(
-                                when (position) {
-                                    1 -> "RECRUITING"
-                                    2 -> "COMPLETED"
-                                    3 -> "HIT"
-                                    4 -> "LIKED"
-                                    else -> "ALL"
-                                },
-                                gender,
-                                minAge,
-                                maxAge,
-                                activityFee02,
-                                activityFeeinput ?: "",
-                                selectedStudyTheme,
-                                activityFee01
-                            )
+                        selectedItem = when (position) {
+                            1 -> "RECRUITING"
+                            2 -> "COMPLETED"
+                            3 -> "HIT"
+                            4 -> "LIKED"
+                            else -> "ALL"
                         }
+                        fetchSpecificRecruiting(
+                            selectedItem,
+                            gender = gender,
+                            minAge = minAge,
+                            maxAge = maxAge,
+                            activityFee = isFee,
+                            activityFeeAmount = activityFeeAmount,
+                            selectedStudyTheme = selectedStudyTheme,
+                            isOnline = isOnline,
+                            currentPage = currentPage
+                        )
                     }
                 }
             }
@@ -213,6 +216,59 @@ class RecruitingStudyFragment : Fragment() {
         }
     }
 
+    private fun setupPageNavigationButtons() {
+        binding.previousPage.setOnClickListener {
+            if (currentPage > 0) {
+                currentPage--
+                requestPageUpdate()
+            }
+        }
+
+        binding.nextPage.setOnClickListener {
+            if (currentPage < totalPages - 1) {
+                currentPage++
+                requestPageUpdate()
+            }
+        }
+    }
+
+    private fun requestPageUpdate() {
+        when (source) {
+            "RecruitingStudyFilterFragment" -> {
+                fetchSpecificRecruiting(
+                    selectedItem,
+                    gender = gender,
+                    minAge = minAge,
+                    maxAge = maxAge,
+                    activityFee = isFee,
+                    activityFeeAmount = activityFeeAmount,
+                    selectedStudyTheme = selectedStudyTheme,
+                    isOnline = isOnline,
+                    currentPage = currentPage  // currentPage 유지
+                )
+            }
+            else -> {
+                fetchAllRecruiting(selectedItem)
+            }
+        }
+    }
+
+    private fun updatePageNumberUI() {
+        binding.currentPage.text = (currentPage + 1).toString()
+
+        binding.previousPage.isEnabled = currentPage > 0
+        binding.previousPage.setTextColor(resources.getColor(
+            if (currentPage > 0) R.color.active_color else R.color.disabled_color,
+            null
+        ))
+
+        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        binding.nextPage.setTextColor(resources.getColor(
+            if (currentPage < totalPages - 1) R.color.active_color else R.color.disabled_color,
+            null
+        ))
+    }
+
     private fun fetchAllRecruiting(selectedItem: String) {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(RecruitingStudyApiService::class.java)
@@ -223,7 +279,7 @@ class RecruitingStudyFragment : Fragment() {
             isOnline = false,
             hasFee = false,
             fee = null,
-            page = 0,
+            page = currentPage,
             size = 5,
             sortBy = selectedItem
         ).enqueue(object : Callback<ApiResponse> {
@@ -250,10 +306,16 @@ class RecruitingStudyFragment : Fragment() {
                             )
                             boardItems.add(boardItem)
                         }
-                        updateRecyclerView(boardItems)
+                        totalPages = apiResponse.result.totalPages
+                        Log.d("RecruitingStudyFragment", "$totalPages")
+                        updatePageNumberUI()
+
                         val totalElements = apiResponse.result.totalElements
                         binding.checkAmount.text = totalElements.toString()+"건"
                         binding.recruitingStudyReyclerview.visibility = View.VISIBLE
+
+                        updateRecyclerView(boardItems)
+
                     } else {
                         binding.checkAmount.text = "0건"
                         binding.recruitingStudyReyclerview.visibility = View.GONE
@@ -273,24 +335,25 @@ class RecruitingStudyFragment : Fragment() {
 
     private fun fetchSpecificRecruiting(
         selectedItem: String,
-        gender: String,
-        minAge: String,
-        maxAge: String,
-        activityFee: String,
-        activityFeeAmount: String,
-        selectedStudyTheme: String,
-        isOnline: String
+        gender: String? = null,
+        minAge: String? = null,
+        maxAge: String? = null,
+        activityFee: String? = null,
+        activityFeeAmount: String? = null,
+        selectedStudyTheme: String? = null,
+        isOnline: String? = null,
+        currentPage: Int?= null,
     ) {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(RecruitingStudyApiService::class.java)
         service.GetRecruitingStudy(
             gender = gender,
-            minAge = minAge.toInt(),
-            maxAge = maxAge.toInt(),
-            isOnline = isOnline.toBoolean(),
-            hasFee = activityFee.toBoolean(),
-            fee = activityFeeAmount.toIntOrNull(),
-            page = 0,
+            minAge = minAge?.toInt(),
+            maxAge = maxAge?.toInt(),
+            isOnline = isOnline?.toBoolean(),
+            hasFee = activityFee?.toBoolean(),
+            fee = activityFeeAmount?.toIntOrNull(),
+            page = currentPage ?: 0,
             size = 5,
             sortBy = selectedItem
         ).enqueue(object : Callback<ApiResponse> {
@@ -317,9 +380,14 @@ class RecruitingStudyFragment : Fragment() {
                             )
                             boardItems.add(boardItem)
                         }
-                        updateRecyclerView(boardItems)
+                        totalPages = apiResponse.result.totalPages
+                        updatePageNumberUI()
+
                         val totalElements = apiResponse.result.totalElements
                         binding.checkAmount.text = totalElements.toString()+"건"
+                        binding.recruitingStudyReyclerview.visibility = View.VISIBLE
+
+                        updateRecyclerView(boardItems)
                     } else {
                         binding.checkAmount.text = "0건"
                         showNoResults()

@@ -5,6 +5,7 @@ import StudyViewModel
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -39,6 +40,7 @@ import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Query
 
 class MyInterestStudyFragment : Fragment() {
 
@@ -47,7 +49,17 @@ class MyInterestStudyFragment : Fragment() {
     private lateinit var studyApiService: StudyApiService
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var interestBoardAdapter: InterestVPAdapter
-
+    private var currentPage: Int = 0
+    private var totalPages: Int = 0
+    private var gender: String? = "MALE"
+    private var minAge: String? = "18"
+    private var maxAge: String? = "60"
+    private var activityFee01: String? = "false" //온 오프라인 변수
+    private var activityFee02: String? = "false" // 활동비 유무 변수
+    private var activityFeeAmount: String? = "" // 활동비 구체적인 금액
+    private var source: String? = null
+    private var selectedItem: String = "ALL"
+    private var selectedStudyCategory: String? = "전체"
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,14 +74,24 @@ class MyInterestStudyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val source = arguments?.getString("source")
+        source = arguments?.getString("source")
+        gender = arguments?.getString("gender3") ?: gender
+        minAge = arguments?.getString("minAge3") ?: minAge
+        maxAge = arguments?.getString("maxAge3") ?: maxAge
+        activityFee01 = arguments?.getString("activityFee01") ?: activityFee01
+        activityFee02 = arguments?.getString("activityFee02") ?: activityFee02
+        activityFeeAmount = arguments?.getString("activityFeeAmount3") ?: activityFeeAmount
 
-        val gender = arguments?.getString("gender3")
-        val minAge = arguments?.getString("minAge3")
-        val maxAge = arguments?.getString("maxAge3")
-        val activityFee01 = arguments?.getString("activityFee01")
-        val activityFee02 = arguments?.getString("activityFee02")
-        val activityFeeinput = arguments?.getString("activityFeeAmount3")
+        fetchMyInterestAll(
+            selectedItem,
+            gender = gender,
+            minAge = minAge,
+            maxAge = maxAge,
+            activityFee = activityFee02,
+            activityFeeAmount = activityFeeAmount,
+            isOnline = activityFee01,
+            currentPage = currentPage  // currentPage 유지
+        )
 
 
         interestBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
@@ -120,27 +142,38 @@ class MyInterestStudyFragment : Fragment() {
 
         when (source) {
             "HouseFragment" -> {
-                fetchMyInterestAll("ALL")
+                fetchMyInterestAll(
+                    selectedItem,
+                    gender = gender,
+                    minAge = minAge,
+                    maxAge = maxAge,
+                    activityFee = activityFee02,
+                    activityFeeAmount = activityFeeAmount,
+                    isOnline = activityFee01,
+                    currentPage = currentPage  // currentPage 유지
+                )
             }
             "MyInterestStudyFilterFragment" -> {
                 binding.icFilterActive.visibility = View.VISIBLE
-                if (gender != null && minAge != null && maxAge != null && activityFee02 != null && activityFee01 != null) {
-                    fetchMyInterestAll2(
-                        "ALL",
-                        gender,
-                        minAge,
-                        maxAge,
-                        activityFee02,
-                        activityFeeinput ?: "",
-                        activityFee01
-                    )
-                }
+                Log.d("MyInterestStudyFragment","1")
+                fetchMyInterestSpecific(
+                    selectedItem,
+                    gender = gender,
+                    minAge = minAge,
+                    maxAge = maxAge,
+                    activityFee = activityFee02,
+                    activityFeeAmount = activityFeeAmount,
+                    isOnline = activityFee01,
+                    currentPage = currentPage,
+                    selectedStudyTheme = selectedStudyCategory// currentPage 유지
+                )
             }
         }
 
         setupTabs()
         setupSpinner()
         setupFilterIcon()
+        setupPageNavigationButtons()
     }
 
     private fun setupTabs() {
@@ -188,17 +221,30 @@ class MyInterestStudyFragment : Fragment() {
 
                         val selectedCategory = tab.tag as String
                         if (selectedCategory == "전체") {
-                            fetchMyInterestAll("ALL")
+                            selectedStudyCategory = selectedCategory
+                            fetchMyInterestAll(
+                                selectedItem,
+                                gender = gender,
+                                minAge = minAge,
+                                maxAge = maxAge,
+                                activityFee = activityFee02,
+                                activityFeeAmount = activityFeeAmount,
+                                isOnline = activityFee01,
+                                currentPage = currentPage  // currentPage 유지
+                            )
                         } else {
+                            selectedStudyCategory = selectedCategory
+                            Log.d("MyInterestStudyFragment","2")
                             fetchMyInterestSpecific(
-                                "ALL",
-                                gender = "MALE",
-                                minAge = "18",
-                                maxAge = "60",
-                                activityFee = "false",
-                                activityFeeAmount = "",
-                                selectedStudyTheme = selectedCategory,
-                                isOnline = "false"
+                                selectedItem = selectedItem,
+                                gender = gender,
+                                minAge = minAge,
+                                maxAge = maxAge,
+                                isOnline = activityFee01,
+                                activityFee = activityFee02,
+                                activityFeeAmount = activityFeeAmount,
+                                selectedStudyTheme = selectedStudyCategory,
+                                currentPage = currentPage
                             )
                         }
                     }
@@ -228,14 +274,23 @@ class MyInterestStudyFragment : Fragment() {
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedItem = when (position) {
+                selectedItem = when (position) {
                     1 -> "RECRUITING"
                     2 -> "COMPLETED"
                     3 -> "HIT"
                     4 -> "LIKED"
                     else -> "ALL"
                 }
-                fetchMyInterestAll(selectedItem)
+                fetchMyInterestAll(
+                    selectedItem,
+                    gender = gender,
+                    minAge = minAge,
+                    maxAge = maxAge,
+                    activityFee = activityFee02,
+                    activityFeeAmount = activityFeeAmount,
+                    isOnline = activityFee01,
+                    currentPage = currentPage  // currentPage 유지
+                )
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -255,26 +310,53 @@ class MyInterestStudyFragment : Fragment() {
         }
     }
 
-    private fun fetchMyInterestAll(selectedItem: String) {
+//
+//    @Query("page") page: Int,
+//    @Query("size") size: Int,
+//    @Query("sortBy") sortBy: String,
+//    @Query("gender") gender: String?,
+//    @Query("minAge") minAge: Int?,
+//    @Query("maxAge") maxAge: Int?,
+//    @Query("isOnline") isOnline: Boolean?,
+//    @Query("hasFee") hasFee: Boolean?,
+//    @Query("fee") fee: Int?
+
+    private fun fetchMyInterestAll(
+                                    selectedItem: String?,
+                                    gender: String?,
+                                    minAge: String?,
+                                    maxAge: String?,
+                                    activityFee: String?,
+                                    activityFeeAmount: String?,
+                                    isOnline: String?,
+                                    currentPage: Int?= null)
+    {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(MyInterestStudyAllApiService::class.java)
+
+        Log.d("API_REQUEST", "fetchMyInterestAll() called with params: " +
+                "selectedItem=$selectedItem, gender=$gender, minAge=$minAge, maxAge=$maxAge, " +
+                "isOnline=$isOnline, activityFee=$activityFee, activityFeeAmount=$activityFeeAmount")
         service.GetMyInterestStudy(
-            gender = "MALE",
-            minAge = 18,
-            maxAge = 60,
-            isOnline = false,
-            hasFee = false,
-            fee = null,
-            page = 0,
+            gender = gender,
+            minAge = minAge?.toInt(),
+            maxAge = maxAge?.toInt(),
+            isOnline = isOnline?.toBoolean(),
+            hasFee = activityFee?.toBoolean(),
+            fee = activityFeeAmount?.toIntOrNull(),
+            page = currentPage ?: 0 ,
             size = 5,
-            sortBy = selectedItem
+            sortBy = selectedItem ?: "ALL"
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse?.isSuccess == true) {
+                        Log.d("API_RESPONSE", "fetchMyInterestALL()22 response: ${response.body()}")
                         boardItems.clear()
-                        apiResponse.result?.content?.forEach { study ->
+                        apiResponse.result.content.forEach { study ->
+                            totalPages = apiResponse.result.totalPages
                             val boardItem = BoardItem(
                                 studyId = study.studyId,
                                 title = study.title,
@@ -292,10 +374,11 @@ class MyInterestStudyFragment : Fragment() {
                             )
                             boardItems.add(boardItem)
                         }
+                        updatePageNumberUI()
                         binding.myInterestStudyReyclerview.visibility = View.VISIBLE
-                        updateRecyclerView(boardItems)
                         val totalElements = apiResponse.result.totalElements
                         binding.checkAmount.text = totalElements.toString()+"건"
+                        updateRecyclerView(boardItems)
                     } else {
                         binding.checkAmount.text = "0건"
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
@@ -312,80 +395,42 @@ class MyInterestStudyFragment : Fragment() {
         })
     }
 
-    private fun fetchMyInterestAll2(selectedItem: String, gender: String, minAge: String, maxAge: String, activityFee: String, activityFeeAmount: String, isOnline: String) {
-        val boardItems = arrayListOf<BoardItem>()
-        val service = RetrofitInstance.retrofit.create(MyInterestStudyAllApiService::class.java)
-        service.GetMyInterestStudy(
-            gender = gender,
-            minAge = minAge.toInt(),
-            maxAge = maxAge.toInt(),
-            isOnline = isOnline.toBoolean(),
-            hasFee = activityFee.toBoolean(),
-            fee = activityFeeAmount.toIntOrNull(),
-            page = 0,
-            size = 5,
-            sortBy = selectedItem
-        ).enqueue(object : Callback<ApiResponse> {
-            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    if (apiResponse?.isSuccess == true) {
-                        boardItems.clear()
-                        apiResponse.result?.content?.forEach { study ->
-                            val boardItem = BoardItem(
-                                studyId = study.studyId,
-                                title = study.title,
-                                goal = study.goal,
-                                introduction = study.introduction,
-                                memberCount = study.memberCount,
-                                heartCount = study.heartCount,
-                                hitNum = study.hitNum,
-                                maxPeople = study.maxPeople,
-                                studyState = study.studyState,
-                                themeTypes = study.themeTypes,
-                                regions = study.regions,
-                                imageUrl = study.imageUrl,
-                                liked = study.liked
-                            )
-                            boardItems.add(boardItem)
-                        }
-                        updateRecyclerView(boardItems)
-                    } else {
-                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
-                        binding.myInterestStudyReyclerview.visibility = View.GONE
-                    }
-                } else {
-                    Toast.makeText(requireContext(), "API 호출 실패", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "API 호출 실패", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun fetchMyInterestSpecific(selectedItem: String, gender: String, minAge: String, maxAge: String, activityFee: String, activityFeeAmount: String, selectedStudyTheme: String, isOnline: String) {
+    private fun fetchMyInterestSpecific(selectedItem: String,
+                                        gender: String?,
+                                        minAge: String?,
+                                        maxAge: String?,
+                                        activityFee: String?,
+                                        activityFeeAmount: String?,
+                                        selectedStudyTheme: String?,
+                                        isOnline: String?,
+                                        currentPage: Int?= null)
+    {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(MyInterestStudySpecificApiService::class.java)
+        Log.d("API_REQUEST", "fetchMyInterestSpecific() called with params: " +
+                "selectedItem=$selectedItem, gender=$gender, minAge=$minAge, maxAge=$maxAge, " +
+                "isOnline=$isOnline, activityFee=$activityFee, activityFeeAmount=$activityFeeAmount"+"theme=$selectedStudyTheme"  )
         service.GetMyInterestStudys(
             gender = gender,
-            minAge = minAge.toInt(),
-            maxAge = maxAge.toInt(),
-            isOnline = isOnline.toBoolean(),
-            hasFee = activityFee.toBoolean(),
-            fee = activityFeeAmount.toIntOrNull(),
-            page = 0,
+            minAge = minAge?.toInt(),
+            maxAge = maxAge?.toInt(),
+            isOnline = isOnline?.toBoolean(),
+            hasFee = activityFee?.toBoolean(),
+            fee = activityFeeAmount?.toIntOrNull(),
+            page = currentPage ?: 0,
             size = 5,
             sortBy = selectedItem,
             theme = selectedStudyTheme
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
+
                     val apiResponse = response.body()
                     if (apiResponse?.isSuccess == true) {
+                        Log.d("API_RESPONSE", "fetchMyInterestSpecific()22 response: ${response.body()}")
                         boardItems.clear()
                         apiResponse.result?.content?.forEach { study ->
+                            totalPages = apiResponse.result.totalPages
                             val boardItem = BoardItem(
                                 studyId = study.studyId,
                                 title = study.title,
@@ -403,9 +448,11 @@ class MyInterestStudyFragment : Fragment() {
                             )
                             boardItems.add(boardItem)
                         }
-                        updateRecyclerView(boardItems)
+                        updatePageNumberUI()
+                        binding.myInterestStudyReyclerview.visibility = View.VISIBLE
                         val totalElements = apiResponse.result.totalElements
                         binding.checkAmount.text = totalElements.toString()+"건"
+                        updateRecyclerView(boardItems)
                     } else {
                         binding.checkAmount.text = "0건"
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
@@ -500,5 +547,69 @@ class MyInterestStudyFragment : Fragment() {
     private fun updateLikeButtonUI(likeButton: ImageView, isLiked: Boolean) {
         val newIcon = if (isLiked) R.drawable.ic_heart_filled else R.drawable.study_like
         likeButton.setImageResource(newIcon)
+    }
+
+    private fun setupPageNavigationButtons() {
+        binding.previousPage.setOnClickListener {
+            if (currentPage > 0) {
+                currentPage--
+                requestPageUpdate()
+            }
+        }
+
+        binding.nextPage.setOnClickListener {
+            if (currentPage < totalPages - 1) {
+                currentPage++
+                requestPageUpdate()
+            }
+        }
+    }
+    private fun requestPageUpdate(){
+        when (selectedStudyCategory) {
+
+            "전체" -> {
+                Log.d("MyInterestStudyFragment","$selectedStudyCategory")
+                fetchMyInterestAll(
+                    selectedItem,
+                    gender = gender,
+                    minAge = minAge,
+                    maxAge = maxAge,
+                    activityFee = activityFee02,
+                    activityFeeAmount = activityFeeAmount,
+                    isOnline = activityFee01,
+                    currentPage = currentPage  // currentPage 유지
+                )
+            }
+            else -> {
+                Log.d("MyInterestStudyFragment","$selectedStudyCategory")
+                fetchMyInterestSpecific(
+                    selectedItem,
+                    gender = gender,
+                    minAge = minAge,
+                    maxAge = maxAge,
+                    isOnline = activityFee01,
+                    activityFee = activityFee02,
+                    activityFeeAmount = activityFeeAmount,
+                    selectedStudyTheme = selectedStudyCategory,
+                    currentPage = currentPage
+                )
+            }
+        }
+    }
+
+    private fun updatePageNumberUI() {
+        binding.currentPage.text = (currentPage + 1).toString()
+
+        binding.previousPage.isEnabled = currentPage > 0
+        binding.previousPage.setTextColor(resources.getColor(
+            if (currentPage > 0) R.color.active_color else R.color.disabled_color,
+            null
+        ))
+
+        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        binding.nextPage.setTextColor(resources.getColor(
+            if (currentPage < totalPages - 1) R.color.active_color else R.color.disabled_color,
+            null
+        ))
     }
 }

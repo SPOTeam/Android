@@ -24,9 +24,6 @@ data class Result(
     @SerializedName("regions")
     val regions: List<Region>,
 
-    @SerializedName("memberId")
-    val memberId: Int,
-
     @SerializedName("totalPages")
     val totalPages: Int,
 

@@ -141,10 +141,11 @@
             android:id="@+id/page_number_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="28dp"
             android:gravity="center"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/interest_area_study_reyclerview">
+            app:layout_constraintTop_toBottomOf="@+id/interest_area_study_reyclerview"
+            tools:layout_editor_absoluteX="0dp">
 
             <TextView
                 android:id="@+id/previous_page"
