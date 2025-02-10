@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Custom font 적용 -->
+
+    <!-- TextView -->
+    <style name="customTextViewFontStyle" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/suit_variable</item>
+    </style>
+
+    <!-- Button -->
+    <style name="customButtonFontStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:fontFamily">@font/suit_variable</item>
+    </style>
+
+    <!-- EditText -->
+    <style name="customEditTextFontStyle" parent="Widget.MaterialComponents.TimePicker.Display.TextInputEditText">
+        <item name="android:fontFamily">@font/suit_variable</item>
+    </style>
+
+    <!-- RadioButton -->
+    <style name="customRadioButtonFontStyle" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/suit_variable</item>
+    </style>
+
+    <!-- Checkbox -->
+    <style name="customCheckboxFontStyle" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/suit_variable</item>
+    </style>
+
+</resources>
