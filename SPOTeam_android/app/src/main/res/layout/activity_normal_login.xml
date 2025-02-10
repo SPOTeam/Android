@@ -18,12 +18,6 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <View
-        android:id="@+id/activity_normal_login_v"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#D8D8D8"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_tb"/>
 
     <TextView
         android:id="@+id/activity_normal_login_tv"
@@ -37,7 +31,7 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_v"/>
+        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_tb"/>
 
 
 

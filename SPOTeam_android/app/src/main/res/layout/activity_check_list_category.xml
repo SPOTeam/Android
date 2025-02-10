@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
-
-
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/activity_checklist_tb"
         android:layout_width="match_parent"
@@ -20,21 +20,15 @@
         <TextView
             android:id="@+id/activity_checklist_toolbar_title_tv"
             android:text="체크리스트"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/pretendard"
+            android:fontFamily="@font/suit_variable"
+            android:textSize="15sp"
+            android:textFontWeight="700"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
     </androidx.appcompat.widget.Toolbar>
 
-    <View
-        android:id="@+id/activity_checklist_checklist_v"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#D8D8D8"
-        app:layout_constraintTop_toBottomOf="@id/activity_checklist_tb"/>
-
+    <!-- 체크리스트 제목 -->
     <TextView
         android:id="@+id/activity_checklist_tv"
         android:layout_width="wrap_content"
@@ -42,160 +36,183 @@
         android:text="내가 원하는 스터디 분야는"
         android:textColor="@color/black"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="15dp"
+        android:textFontWeight="700"
+        android:layout_marginTop="70dp"
+        android:layout_marginStart="20dp"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_checklist_checklist_v">
+        app:layout_constraintTop_toBottomOf="@id/activity_checklist_tb"/>
 
-    </TextView>
-
-
-    <com.google.android.material.chip.ChipGroup
+    <!-- GridLayout을 ChipGroup 바깥으로 이동 -->
+    <GridLayout
         android:id="@+id/activity_checklist_chipGroup"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="5"
+        android:orientation="horizontal"
+        android:layout_marginTop="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_checklist_tv"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
-        app:chipSpacingHorizontal="12dp"
-        app:singleLine="false">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_checklist_tv">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_chip_language"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="76.2dp"
+            app:chipMinHeight="76.2dp"
+            android:layout_columnWeight="1"
             android:text="어학"
-            android:fontFamily="@font/pretendard"
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
-
+            android:textSize="18.3sp"
+            android:textAlignment="center"
+            android:layout_marginEnd="7dp"
+            android:layout_marginBottom="7dp"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_chip_license"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="76.2dp"
+            app:chipMinHeight="76.2dp"
+            android:layout_columnWeight="1"
             android:text="자격증"
-            android:fontFamily="@font/pretendard"
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            android:textSize="18.3sp"
+            android:textAlignment="center"
+            android:layout_marginStart="7dp"
+            android:layout_marginBottom="7dp"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_chip_job"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/pretendard"
+            android:layout_width="0dp"
+            android:layout_height="76.2dp"
+            app:chipMinHeight="76.2dp"
+            android:textAlignment="center"
+            android:layout_columnWeight="1"
             android:text="취업"
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            android:fontFamily="@font/suit_variable"
+            android:textSize="18.3sp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_chip_discussion"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="76.2dp"
+            app:chipMinHeight="76.2dp"
+            android:layout_columnWeight="1"
             android:text="토론"
-            android:fontFamily="@font/pretendard"
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            android:textAlignment="center"
+            android:fontFamily="@font/suit_variable"
+            android:textSize="18.3sp"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_chip_news"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="76.2dp"
+            app:chipMinHeight="76.2dp"
+            android:layout_columnWeight="1"
             android:text="시사/뉴스"
-            android:fontFamily="@font/pretendard"
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
-
-
+            android:textAlignment="center"
+            android:fontFamily="@font/suit_variable"
+            android:textSize="18.3sp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_chip_selfstudy"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="76.2dp"
+            android:layout_columnWeight="1"
             android:text="자율 학습"
-            android:fontFamily="@font/pretendard"
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            app:chipMinHeight="76.2dp"
+            android:textAlignment="center"
+            android:fontFamily="@font/suit_variable"
+            android:textSize="18.3sp"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_chip_project"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="76.2dp"
+            app:chipMinHeight="76.2dp"
+            android:layout_columnWeight="1"
             android:text="프로젝트"
-            android:textSize="16sp"
-            android:fontFamily="@font/pretendard"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            android:textAlignment="center"
+            android:fontFamily="@font/suit_variable"
+            android:textSize="18.3sp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_chip_exhibit"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="76.2dp"
+            android:layout_columnWeight="1"
             android:text="공모전"
-            android:textSize="16sp"
-            android:fontFamily="@font/pretendard"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            app:chipMinHeight="76.2dp"
+            android:textAlignment="center"
+            android:fontFamily="@font/suit_variable"
+            android:textSize="18.3sp"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
+
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_chip_major"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="76.2dp"
+            android:layout_columnWeight="1"
+            app:chipMinHeight="76.2dp"
             android:text="전공/진로학습"
-            android:fontFamily="@font/pretendard"
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            android:fontFamily="@font/suit_variable"
+            android:textSize="18.3sp"
+            android:textAlignment="center"
+            android:layout_marginEnd="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_chip_etc"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="76.2dp"
+            android:layout_columnWeight="1"
             android:text="기타"
-            android:fontFamily="@font/pretendard"
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            app:chipMinHeight="76.2dp"
+            android:textAlignment="center"
+            android:fontFamily="@font/suit_variable"
+            android:textSize="18.3sp"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
+    </GridLayout>
 
-
-    </com.google.android.material.chip.ChipGroup>
-
-
+    <!-- 다음 버튼 -->
     <android.widget.Button
         android:id="@+id/checklistspot_next_bt"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/button_background"
         android:enabled="false"
         android:text="다음"
@@ -206,7 +223,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

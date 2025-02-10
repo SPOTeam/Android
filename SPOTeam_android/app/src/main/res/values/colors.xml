@@ -5,8 +5,6 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
     <color name="blue">#0019F4</color>
     <color name="red">#F46258</color>
     <color name="chip_background_color">#588FF2</color>
@@ -34,6 +32,21 @@
     <color name="MainColor_05">#F7FAFF</color>
 
     <color name="Gray04">#555555</color>
+
+    <color name="b500">#005BFF</color>
+    <color name="b400">#337BFF</color>
+    <color name="b200">#D3E1FD</color>
+    <color name="b100">#EDF4FF</color>
+    <color name="r500">#F34343</color>
+    <color name="black">#1E1E1E</color>
+    <color name="white">#FCFCFF</color>
+    <color name="g500">#4F4F56</color>
+    <color name="g400">#8F8F99</color>
+    <color name="g300">#C5C5CD</color>
+    <color name="g200">#F0F0F4</color>
+    <color name="g100">#F6F6F9</color>
+
+
 
 
 
