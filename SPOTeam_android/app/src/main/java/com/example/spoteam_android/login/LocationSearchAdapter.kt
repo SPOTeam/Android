@@ -39,9 +39,15 @@ class LocationSearchAdapter(
         if (query.isEmpty()) {
             filteredList.addAll(dataList)
         } else {
-            val lowerCaseQuery = query.lowercase()
+            val normalizedQueryWords = normalizeLocationName(query.lowercase()).split(" ")  // ✅ 검색어를 단어별로 분리
+
             for (item in dataList) {
-                if (item.address.lowercase().contains(lowerCaseQuery)) { // 텍스트 포함 여부로 필터링
+                val normalizedAddressWords = normalizeLocationName(item.address.lowercase()).split(" ")  // ✅ 주소도 단어별로 분리
+
+
+                if (normalizedQueryWords.all { queryWord ->
+                        normalizedAddressWords.any { addressWord -> addressWord.contains(queryWord) }
+                    }) {
                     filteredList.add(item)
                 }
             }
@@ -50,7 +56,23 @@ class LocationSearchAdapter(
     }
 
 
+
+
     fun getSelectedItem(): LocationItem? {
         return selectedItem
     }
+
+    fun normalizeLocationName(name: String): String {
+        return name.replace("특별자치도", "도")
+            .replace("특별자치시", "시")
+            .replace("광역시", "시")
+            .replace("자치시", "시")
+            .replace("도", " 도")
+            .replace("시", " 시")
+            .replace("군", " 군")
+            .replace("구", " 구")
+            .replace("\\s+".toRegex(), " ")
+            .trim()
+    }
+
 }

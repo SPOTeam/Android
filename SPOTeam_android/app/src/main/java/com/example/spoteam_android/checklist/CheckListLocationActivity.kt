@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.spoteam_android.R
@@ -42,8 +43,13 @@ class CheckListLocationActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = ""
         binding.activityChecklistLocationTb.setNavigationOnClickListener {
-            onBackPressed()
+            val intent = Intent(this, CheckListStudyPurposeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+
+
         }
+
 
         binding.checklistspotLocationPlusBt.setOnClickListener {
             if (selectedLocations.size < 5) {
@@ -75,7 +81,7 @@ class CheckListLocationActivity : AppCompatActivity() {
 
             val chip = Chip(this).apply {
                 text = address
-                setTextColor(getColor(R.color.active_blue))
+                setTextColor(getColor(R.color.b500))
                 setChipDrawable(ChipDrawable.createFromAttributes(this@CheckListLocationActivity, null, 0, R.style.CustomChipCloseStyle))
                 isCloseIconVisible = true
                 setOnCloseIconClickListener {
@@ -86,7 +92,12 @@ class CheckListLocationActivity : AppCompatActivity() {
                     }
                     updateButtonStates()
                 }
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
             }
+
             binding.chipGroup.addView(chip)
             binding.activityChecklistLocationCl.visibility = View.GONE
             updateButtonStates()

@@ -21,7 +21,8 @@ class CheckListCategoryActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = ""
         binding.activityChecklistTb.setNavigationOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
+
         }
 
         setChipGroup()

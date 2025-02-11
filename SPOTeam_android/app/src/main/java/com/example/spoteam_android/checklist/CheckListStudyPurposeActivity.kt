@@ -25,7 +25,11 @@
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             title = ""
             binding.activityChecklistStudypurposeTb.setNavigationOnClickListener {
-                onBackPressed()
+                val intent = Intent(this, CheckListCategoryActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                startActivity(intent)
+
+
             }
 
             binding.activityChecklistStudypurposeChecklistspotNextBt.setOnClickListener {
@@ -34,7 +38,6 @@
                     putIntegerArrayListExtra("selectedPurpose", ArrayList(selectedPurpose))
                 }
                 startActivity(locationIntent)
-                finish()
             }
 
             setChipGroup()
@@ -45,11 +48,12 @@
             binding.activityChecklistStudypurposeChecklistspotNextBt.isEnabled = false
 
             val chipMap = mapOf(
-                R.id.activity_checklist_studypurpose_chip_language to 1,
-                R.id.activity_checklist_studypurpose_chip_license to 2,
-                R.id.activity_checklist_studypurpose_chip_job to 3,
-                R.id.activity_checklist_studypurpose_chip_discussion to 4,
-                R.id.activity_checklist_studypurpose_chip_news to 5
+                R.id.activity_checklist_studypurpose_chip_habit to 1,
+                R.id.activity_checklist_studypurpose_chip_feedback to 2,
+                R.id.activity_checklist_studypurpose_chip_network to 3,
+                R.id.activity_checklist_studypurpose_chip_license to 4,
+                R.id.activity_checklist_studypurpose_chip_contest to 5,
+                R.id.activity_checklist_studypurpose_chip_opinion to 6
             )
 
             // chip 선택 상태 리스너
