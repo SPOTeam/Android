@@ -24,24 +24,27 @@
         <item name="chipStrokeColor">@color/custom_chip_stroke</item>
         <item name="chipStrokeWidth">1dp</item>
         <item name="chipCornerRadius">10dp</item>
+        <item name="android:textColor">@color/custom_chip_text</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textAppearance">@style/CustomChipTextAppearance</item>
     </style>
     <style name="CustomChipTextAppearance" parent="TextAppearance.MaterialComponents.Chip">
         <item name="android:fontFamily">@font/suit_bold</item>
-        <item name="android:textColor">@color/custom_chip_text</item>
     </style>
 
     <style name="CustomChipCloseStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/white</item>
         <item name="chipStrokeColor">#588FFE</item>
         <item name="chipStrokeWidth">1dp</item>
+        <item name="chipCornerRadius">10dp</item>
         <item name="android:textColor">#588FFE</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="closeIcon">@drawable/ic_close</item>
         <item name="closeIconTint">#588FFE</item>
+        <item name="chipMinHeight">42dp</item>
+        <item name="android:textAppearance">@style/CustomChipTextAppearance</item>
     </style>
 
     <style name="CustomChipthemeStyle" parent="Widget.MaterialComponents.Chip.Choice">

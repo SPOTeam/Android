@@ -46,6 +46,10 @@ class StartLoginActivity : AppCompatActivity() {
 
         binding.itemLogoKakaoIb.setOnClickListener { startKakaoLogin() }
         binding.itemLogoNaverIb.setOnClickListener { startNaverLogin() }
+        binding.itemLogoGoogleIb.setOnClickListener {
+            val loginIntent = Intent(this, CheckListCategoryActivity::class.java)
+            startActivity(loginIntent)
+        }
 
         binding.activityStartLoginNextBt.setOnClickListener {
             val loginIntent = Intent(this, NormalLoginActivity::class.java)
