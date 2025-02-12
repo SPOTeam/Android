@@ -206,7 +206,7 @@
             android:layout_marginBottom="7dp"/>
     </GridLayout>
 
-    <!-- 다음 버튼 -->
+
     <android.widget.Button
         android:id="@+id/checklistspot_next_bt"
         android:layout_width="0dp"

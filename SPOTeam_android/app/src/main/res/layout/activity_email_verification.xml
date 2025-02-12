@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.EmailVerificationActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_email_verification_tb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp">
+
+        <TextView
+            android:id="@+id/activity_email_verification_toolbar_title_tv"
+            android:text="회원가입"
+            android:fontFamily="@font/suit_bold"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/activity_email_verfication_greet_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/emailstart"
+        android:textColor="@color/b500"
+        android:textSize="16sp"
+        android:lineSpacingExtra="8dp"
+        android:fontFamily="@font/suit_bold"
+        android:layout_marginTop="55dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_email_verification_tb"/>
+
+    <TextView
+        android:id="@+id/activity_email_verfication_email_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="이메일"
+        android:textColor="@color/black"
+        android:textSize="13.3sp"
+        android:fontFamily="@font/suit_bold"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_email_verfication_greet_tv"/>
+
+    <LinearLayout
+        android:id="@+id/activity_email_verfication_email_ll"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_email_verfication_email_tv">
+
+            <EditText
+                android:id="@+id/activity_normal_login_email_text_input_et"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:maxLines="1"
+                android:padding="8.5dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/suit_bold"
+                android:inputType="textEmailAddress"
+                android:textSize="13.3sp"
+                android:background="@drawable/normal_login_edittext_corner_rectangle"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/activity_email_verification_login_verify_bt"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="인증"
+                android:fontFamily="@font/suit_bold"
+                android:textSize="13.3sp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/button_background"
+                android:textColor="@color/g400"
+                android:enabled="false"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/activity_email_verfication_number_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인증번호"
+        android:textColor="@color/black"
+        android:fontFamily="@font/suit_bold"
+        android:textSize="13.3sp"
+        android:visibility="gone"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_email_verfication_email_ll"/>
+
+    <EditText
+        android:id="@+id/activity_normal_login_email_number_input_et"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_weight="4"
+        android:maxLines="1"
+        android:padding="8.5dp"
+        android:letterSpacing="0.4"
+        android:textColor="@color/black"
+        android:inputType="number"
+        android:textSize="13.3sp"
+        android:fontFamily="@font/suit_bold"
+        android:background="@drawable/normal_login_edittext_corner_rectangle"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_email_verfication_number_tv"/>
+
+    <TextView
+        android:id="@+id/activity_normal_login_email_error_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인증번호가 일치하지 않습니다."
+        android:textColor="#F34343"
+        android:visibility="gone"
+        android:textSize="13.3sp"
+        android:textFontWeight="600"
+        android:fontFamily="@font/suit_variable"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_email_number_input_et" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/activity_email_verfication_problem_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="문제가 있나요?"
+        android:textSize="13.3sp"
+        android:textColor="@color/b500"
+        android:textFontWeight="700"
+        android:fontFamily="@font/suit_variable"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="15dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/activity_email_verfication_email_next_bt"/>
+    <TextView
+        android:id="@+id/activity_email_verfication_retransmit_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/re_verify"
+        android:textSize="13.3sp"
+        android:textStyle="bold"
+        android:textColor="@color/b500"
+        android:textFontWeight="700"
+        android:fontFamily="@font/suit_variable"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="15dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/activity_email_verfication_email_next_bt"/>
+
+
+
+
+    <android.widget.Button
+        android:id="@+id/activity_email_verfication_email_next_bt"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/button_background"
+        android:enabled="false"
+        android:text="다음"
+        android:fontFamily="@font/suit_bold"
+        android:textColor="@drawable/button_textcolor"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

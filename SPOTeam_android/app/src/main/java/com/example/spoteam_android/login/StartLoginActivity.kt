@@ -52,7 +52,7 @@ class StartLoginActivity : AppCompatActivity() {
         }
 
         binding.activityStartLoginNextBt.setOnClickListener {
-            val loginIntent = Intent(this, NormalLoginActivity::class.java)
+            val loginIntent = Intent(this, EmailVerificationActivity::class.java)
             startActivity(loginIntent)
         }
     }
