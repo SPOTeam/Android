@@ -1,6 +1,7 @@
 package com.example.spoteam_android.login
 
 import com.example.spoteam_android.EmailResponse
+import com.example.spoteam_android.EmailVerifyResponse
 import com.example.spoteam_android.IdResponse
 import com.example.spoteam_android.NaverLoginRequest
 import com.example.spoteam_android.NaverResponse
@@ -11,6 +12,7 @@ import com.example.spoteam_android.RegionsPreferences
 import com.example.spoteam_android.StudyReasons
 import com.example.spoteam_android.ThemeApiResponse
 import com.example.spoteam_android.ThemePreferences
+import com.example.spoteam_android.ValidateEmailResponse
 import com.example.spoteam_android.YourResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -54,6 +56,15 @@ interface LoginApiService {
     //일반 로그인 이메일 사용 가능 여부 확인
     @GET("/spot/check/email")
     fun checkEmail(@Query("email") email: String): Call<EmailResponse>
+    //이메일 인증 코드 발급 api
+    @POST("/spot/send-verification-code")
+    fun getVerifyCode(@Query("email") email: String) : Call<EmailVerifyResponse>
+
+    //이메일 인증 코드를 입력해 이메일의 유효성 확인
+    @POST("/spot/verify")
+    fun validateEmailCode(
+        @Query("verificationCode") verificationCode: String, @Query("email") email: String)
+    :Call<ValidateEmailResponse>
 
     //닉네임 생성 및 약관 동의
 //    @GET("/spot/sign-up/update")

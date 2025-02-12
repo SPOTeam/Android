@@ -94,6 +94,23 @@ data class EmailResult(
     val available: Boolean
 )
 
+data class EmailVerifyResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String
+)
+
+data class ValidateEmailResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ValidateEmailResult?,
+)
+data class ValidateEmailResult(
+    val tempToken: String,
+    val tempTokenExpiresIn: Int
+)
+
 //data class NicNameResponse(
 //    val isSuccess: Boolean,
 //    val code: String,
