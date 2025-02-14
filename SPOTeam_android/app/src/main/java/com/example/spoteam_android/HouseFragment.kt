@@ -10,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.FragmentHouseBinding
@@ -34,11 +36,12 @@ import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
 import com.example.spoteam_android.ui.recruiting.RecruitingStudyFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.weather.WeatherViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
+@AndroidEntryPoint
 class HouseFragment : Fragment() {
 
     lateinit var binding: FragmentHouseBinding
@@ -47,7 +50,8 @@ class HouseFragment : Fragment() {
     private lateinit var recommendBoardAdapter: InterestVPAdapter
     private var popularContentId : Int = -1
     private lateinit var studyApiService: StudyApiService
-    private val viewModel by viewModels<WeatherViewModel>()
+    private lateinit var weatherViewModel: WeatherViewModel
+    private lateinit var presentTemperature: TextView
 
 
     override fun onCreateView(
@@ -57,9 +61,10 @@ class HouseFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentHouseBinding.inflate(inflater, container, false)
+        val activity = requireActivity() as? MainActivity
 
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
-
+        presentTemperature = binding.txTemperature
 
         fetchLivePopularContent()
 
@@ -128,30 +133,32 @@ class HouseFragment : Fragment() {
             adapter = recommendBoardAdapter
         }
 
-        val memeberId = getMemberId(requireContext())
-
         fetchDataAnyWhere() //관심 지역 스터디
         fetchRecommendStudy() //추천 스터디
 
-
-
         binding.icFind.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, SearchFragment())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-            (context as MainActivity).isOnCommunityHome(HomeFragment())
+            activity?.let {
+                it.supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, SearchFragment())
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
+
+                it.isOnCommunityHome(HomeFragment())
+            }
         }
 
 
         binding.icAlarm.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, AlertFragment())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-            (context as MainActivity).isOnCommunityHome(HomeFragment())
-            (context as MainActivity).isOnAlertFragment(AlertFragment())
+            activity?.let {
+                it.supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, AlertFragment())
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
+
+                it.isOnCommunityHome(HomeFragment())
+            }
         }
+
 
         val bundle = Bundle()
         val bundle2 = Bundle()
@@ -167,35 +174,42 @@ class HouseFragment : Fragment() {
         recruitingStudyFragment.arguments = bundle3
         categoryFragment.arguments = bundle4
 
-        binding.houseLocationCl.setOnClickListener{
-            bundle.putString("source", "HouseFragment")
-            //스터디 참여하기 팝업으로 이동
 
-            (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, interestFragment)
-                .addToBackStack(null)
-                .commit()
+        binding.houseLocationCl.setOnClickListener {
+            bundle.putString("source", "HouseFragment")
+            activity?.let {
+                it.supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, interestFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
+
+                it.isOnCommunityHome(interestFragment)
+            }
         }
 
         binding.houseRecruitCl.setOnClickListener {
-            bundle3.putString("source", "HouseFragment")
+            bundle.putString("source", "HouseFragment")
+            activity?.let {
+                it.supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, recruitingStudyFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
 
-            (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, recruitingStudyFragment)
-                .addToBackStack(null)
-                .commit()
+                it.isOnCommunityHome(recruitingStudyFragment)
+            }
         }
 
         binding.houseInterestCl.setOnClickListener {
             bundle2.putString("source", "HouseFragment")
-            //스터디 참여하기 팝업으로 이동
+            activity?.let {
+                it.supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, myInterestStudyFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
 
-            (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, myInterestStudyFragment)
-                .addToBackStack(null)
-                .commit()
+                it.isOnCommunityHome(myInterestStudyFragment)
+            }
         }
-
 
         binding.icGoInterest.setOnClickListener {
             val bundle4 = Bundle().apply {
@@ -204,19 +218,73 @@ class HouseFragment : Fragment() {
             val categoryFragment = CategoryFragment().apply {
                 arguments = bundle4
             }
-            (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, categoryFragment)
-                .addToBackStack(null)
-                .commit()
+            activity?.let {
+                it.supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, categoryFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
+
+                it.isOnCommunityHome(categoryFragment)
+            }
         }
 
-
-
         binding.houseCommunityCl.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, CommunityHomeFragment())
-                .commitAllowingStateLoss()
-            (activity as? MainActivity)?.isOnCommunityHome(CommunityHomeFragment())
+            activity?.let {
+                it.supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, CommunityHomeFragment())
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
+
+                it.isOnCommunityHome(CommunityHomeFragment())
+            }
+        }
+
+        weatherViewModel = ViewModelProvider(requireActivity()).get(WeatherViewModel::class.java)
+
+        // LiveData 관찰하여 데이터 가져오기
+        weatherViewModel.weatherResponse.observe(viewLifecycleOwner) { response ->
+            Log.d("HouseFragment", "Observer triggered")
+
+            if (response.isSuccessful) {
+                val responseBody = response.body()?.response
+                if (responseBody?.body != null) {
+                    val items = responseBody.body.items
+                    if (!items?.item.isNullOrEmpty()) {
+                        Log.d("HouseFragment", "Weather data received: ${items.item.size} items")
+
+                        val tmpItem = items.item.find { it.category == "TMP" }
+                        val skyItem = items.item.find { it.category == "SKY" }
+                        val ptyItem = items.item.find { it.category == "PTY" }
+
+                        if (tmpItem != null && skyItem != null && ptyItem != null) {
+                            val temperature = tmpItem.fcstValue
+                            val skyCondition = when (skyItem.fcstValue.toInt()) {
+                                1 -> "맑음"
+                                3 -> "구름많음"
+                                4 -> "흐림"
+                                else -> "알 수 없음"
+                            }
+                            val precipitationType = when (ptyItem.fcstValue.toInt()) {
+                                0 -> "없음"
+                                1 -> "비"
+                                2 -> "비/눈"
+                                3 -> "눈"
+                                4 -> "소나기"
+                                else -> "알 수 없음"
+                            }
+                            presentTemperature.text = String.format("%.1f °C", temperature.toFloat())
+                        } else {
+                            Log.e("HouseFragment", "TMP, SKY, PTY 데이터 중 일부가 누락됨")
+                        }
+                    } else {
+                        Log.e("HouseFragment", "날씨 데이터가 비어 있음")
+                    }
+                } else {
+                    Log.e("HouseFragment", "응답 body가 null")
+                }
+            } else {
+                Log.e("HouseFragment", "Weather API 응답 실패: ${response.errorBody()} ")
+            }
         }
 
         return binding.root

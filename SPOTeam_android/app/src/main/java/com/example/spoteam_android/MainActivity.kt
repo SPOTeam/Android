@@ -51,8 +51,7 @@ import java.util.Calendar
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val todoViewModel: TodoViewModel by viewModels()
-    private val viewModel by viewModels<WeatherViewModel>()
+    private val weatherViewModel: WeatherViewModel by viewModels() // Hilt 사용
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +70,9 @@ class MainActivity : AppCompatActivity() {
         val baseDate = year+month+day
         val baseTime = getUpdatedTime()
 
+
         fetchRegions(baseDate.toInt(), baseTime.toInt())
+
 
         // 다른 아무 화면 클릭시 스터디 화면 사라지도록
         binding.root.setOnTouchListener{_, _ ->
@@ -303,27 +304,19 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse != null && apiResponse.isSuccess) {
-                        val regions = apiResponse.result.regions // 서버에서 받아오는 지역 리스트
+                        val regions = apiResponse.result.regions
                         if (regions.isNotEmpty()) {
                             Log.d("region", "Received regions: $regions")
 
-                            // CSV 파일에서 데이터를 로드
                             val regionDataList = parseCsv(this@MainActivity)
-
-                            // 첫 번째 Region의 그리드 값을 계산
                             regions.firstOrNull()?.let { region ->
                                 val gridCoordinates = findGridByCode(region.code, regionDataList)
                                 if (gridCoordinates != null) {
                                     val (gridX, gridY) = gridCoordinates
                                     Log.d("RegionGrid", "Region: ${region.neighborhood}, GridX: $gridX, GridY: $gridY")
 
-                                    Log.d(
-                                        "WeatherParams",
-                                        "baseDate: $myDate, baseTime: $myTime, nx: ${gridX}, ny: $gridY"
-                                    )
-
-                                    // 동적으로 viewModel.getWeather 호출
-                                    viewModel.getWeather(
+                                    // WeatherViewModel을 통해 날씨 데이터 요청
+                                    weatherViewModel.getWeather(
                                         dataType = "JSON",
                                         numOfRows = 14,
                                         pageNo = 1,
@@ -332,76 +325,21 @@ class MainActivity : AppCompatActivity() {
                                         nx = gridX.toString(),
                                         ny = gridY.toString()
                                     )
-
-                                    // Observe하여 결과 처리
-                                    viewModel.weatherResponse.observe(this@MainActivity) { weatherResponse ->
-                                        Log.d("WeatherResponseDebug", "Observer triggered")
-
-                                        if (weatherResponse.body() != null) {
-                                            val responseBody = weatherResponse.body()?.response
-                                            if (responseBody?.body != null) {
-                                                val items = responseBody.body.items
-                                                if (!items?.item.isNullOrEmpty()) {
-                                                    Log.d("WeatherResponseDebug", "Items count: ${items.item.size}")
-
-                                                    // TMP와 SKY 데이터만 필터링
-                                                    val tmpItem = items.item.find { it.category == "TMP" }
-                                                    val skyItem = items.item.find { it.category == "SKY" }
-                                                    val ptyItem = items.item.find { it.category == "PTY" }
-
-                                                    if (tmpItem != null && skyItem != null && ptyItem != null) {
-                                                        val temperature = tmpItem.fcstValue
-                                                        val skyCondition = when (skyItem.fcstValue.toInt()) {
-                                                            1 -> "맑음"
-                                                            3 -> "구름많음"
-                                                            4 -> "흐림"
-                                                            else -> "알 수 없음"
-                                                        }
-                                                        val precipitationType = when (ptyItem.fcstValue.toInt()) {
-                                                            0 -> "없음"
-                                                            1 -> "비"
-                                                            2 -> "비/눈"
-                                                            3 -> "눈"
-                                                            4 -> "소나기"
-                                                            else -> "알 수 없음"
-                                                        }
-
-                                                        // 지역명과 함께 로그 출력
-                                                        Log.d(
-                                                            "WeatherInfo",
-                                                            "지역명: ${region.neighborhood}, 기온: $temperature°C, 하늘 상태: $skyCondition, 강수 형태: $precipitationType"
-                                                        )
-                                                    } else {
-                                                        Log.e("WeatherInfo", "TMP or SKY data not found")
-                                                    }
-                                                } else {
-                                                    Log.e("WeatherResponseDebug", "Items are null or empty")
-                                                }
-                                            } else {
-                                                Log.e("WeatherResponseDebug", "Response body is null or empty")
-                                            }
-                                        } else {
-                                            Log.e("WeatherResponseDebug", "weatherResponse.body() is null")
-                                        }
-                                    }
-
                                 } else {
                                     Log.e("RegionGrid", "Grid coordinates not found for region code: ${region.code}")
                                 }
                             }
                         }
                     } else {
-                        val errorMessage = apiResponse?.message ?: "알 수 없는 오류 발생"
-                        Log.e("RegionPreferenceFragment", "지역 가져오기 실패: $errorMessage")
+                        Log.e("RegionAPI", "Failed to get region data")
                     }
                 } else {
-                    val errorMessage = response.errorBody()?.string() ?: "응답 실패"
-                    Log.e("RegionPreferenceFragment", "지역 가져오기 실패: $errorMessage")
+                    Log.e("RegionAPI", "API Response failed")
                 }
             }
 
             override fun onFailure(call: Call<RegionApiResponse>, t: Throwable) {
-                Log.e("RegionPreferenceFragment", "네트워크 오류: ${t.message}")
+                Log.e("RegionAPI", "Network error: ${t.message}")
             }
         })
     }
@@ -417,21 +355,17 @@ class MainActivity : AppCompatActivity() {
         // 현재 시간 가져오기
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-
-        // 현재 시간의 분을 기준으로 조정
-        val adjustedHour = if (minute > 0) hour + 1 else hour
 
         // 기상청에서 지원하는 갱신 시간 목록 (3시간 간격)
         val updateTimes = listOf(2, 5, 8, 11, 14, 17, 20, 23)
 
-        // 현재 시간에 맞는 TIME 계산
-        val nextTime = updateTimes.firstOrNull { adjustedHour <= it }
-            ?: updateTimes.first() // 23:01 이후라면 다음 날 첫 타임(02:00) 설정
+        // 현재 시간에 맞는 TIME 계산 (API 제공 시간이 지난 경우, 현재 시간보다 작은 가장 가까운 값 선택)
+        val previousTime = updateTimes.lastOrNull { hour >= it } ?: updateTimes.last()
 
-        // 두 자리 문자열로 변환하여 반환
-        return String.format("%02d00", nextTime)
+        // 두 자리 문자열로 변환하여 반환 (API 제공 시간 + 5분 고려)
+        return String.format("%02d00", previousTime)
     }
+
 
 
 
