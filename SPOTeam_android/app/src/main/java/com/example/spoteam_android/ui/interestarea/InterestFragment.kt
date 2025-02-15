@@ -231,7 +231,6 @@ class InterestFragment : Fragment() {
                         selectedRegion = "0000000000"
                         fetchData(
                             selectedItem,
-                            regionCode = selectedRegion,
                             gender = gender,
                             minAge = minAge,
                             maxAge = maxAge,
