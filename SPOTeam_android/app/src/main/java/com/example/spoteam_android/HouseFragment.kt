@@ -63,9 +63,16 @@ class HouseFragment : Fragment() {
         binding = FragmentHouseBinding.inflate(inflater, container, false)
         val activity = requireActivity() as? MainActivity
 
+        //날씨 배경 정의
+        val backgroundRes = activity?.getWeatherBackground()
+
+        // 🟢 기본값은 ic_weather_background로 설정되어 있으므로 밤일 경우에만 업데이트
+        if (backgroundRes == R.drawable.ic_weather_night_background) {
+            binding.icWeatherBackground.setImageResource(backgroundRes)
+        }
+
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
         presentTemperature = binding.txTemperature
-
         fetchLivePopularContent()
 
         binding.goPopularContentIv.setOnClickListener{
@@ -241,7 +248,6 @@ class HouseFragment : Fragment() {
 
         weatherViewModel = ViewModelProvider(requireActivity()).get(WeatherViewModel::class.java)
 
-        // LiveData 관찰하여 데이터 가져오기
         weatherViewModel.weatherResponse.observe(viewLifecycleOwner) { response ->
             Log.d("HouseFragment", "Observer triggered")
 
@@ -252,29 +258,29 @@ class HouseFragment : Fragment() {
                     if (!items?.item.isNullOrEmpty()) {
                         Log.d("HouseFragment", "Weather data received: ${items.item.size} items")
 
-                        val tmpItem = items.item.find { it.category == "TMP" }
-                        val skyItem = items.item.find { it.category == "SKY" }
-                        val ptyItem = items.item.find { it.category == "PTY" }
+                        val tmpItem = items.item.find { it.category.trim() == "TMP" }
+                        val tmnItem = items.item.find { it.category.trim() == "TMN" }
+                        val pcpItem = items.item.find { it.category.trim() == "PCP" }
+                        val snoItem = items.item.find { it.category.trim() == "SNO" }
+                        val wsdItem = items.item.find { it.category.trim() == "WSD" }
 
-                        if (tmpItem != null && skyItem != null && ptyItem != null) {
-                            val temperature = tmpItem.fcstValue
-                            val skyCondition = when (skyItem.fcstValue.toInt()) {
-                                1 -> "맑음"
-                                3 -> "구름많음"
-                                4 -> "흐림"
-                                else -> "알 수 없음"
-                            }
-                            val precipitationType = when (ptyItem.fcstValue.toInt()) {
-                                0 -> "없음"
-                                1 -> "비"
-                                2 -> "비/눈"
-                                3 -> "눈"
-                                4 -> "소나기"
-                                else -> "알 수 없음"
-                            }
-                            presentTemperature.text = String.format("%.1f °C", temperature.toFloat())
+                        if (tmpItem != null || pcpItem != null || snoItem != null || wsdItem != null || tmnItem != null) {
+                            val temperature = tmpItem?.fcstValue?.toDoubleOrNull() ?: 0.0
+                            val minTemperature = tmnItem?.fcstValue?.toDoubleOrNull() ?: 0.0
+                            val precipitation = parseDouble(pcpItem?.fcstValue ?: "-")
+                            val snowfall = parseDouble(snoItem?.fcstValue ?: "-")
+                            val windSpeed = wsdItem?.fcstValue?.toDoubleOrNull() ?: 0.0
+
+                            presentTemperature.text = String.format("%.1f °C", temperature)
+
+                            // 날씨에 맞는 메시지 & 이미지 가져오기
+                            val (weatherMessage, weatherImage) = getWeatherInfo(precipitation, snowfall, temperature, minTemperature, windSpeed)
+
+                            // UI 업데이트
+                            binding.txExplainWeather.text = weatherMessage
+                            binding.icSun.setImageResource(weatherImage)
                         } else {
-                            Log.e("HouseFragment", "TMP, SKY, PTY 데이터 중 일부가 누락됨")
+                            Log.e("HouseFragment", "TMP, TMN, PCP, SNO, WSD 데이터 중 일부가 누락됨")
                         }
                     } else {
                         Log.e("HouseFragment", "날씨 데이터가 비어 있음")
@@ -287,8 +293,35 @@ class HouseFragment : Fragment() {
             }
         }
 
+
+
+
+
         return binding.root
     }
+
+    // 날씨 상태에 따른 메시지와 이미지 설정 함수
+    fun getWeatherInfo(pcp: Double, sno: Double, tmp: Double, tmn: Double, wsd: Double): Pair<String, Int> {
+        return when {
+            pcp >= 10 -> "실내에서 집중! 목표는 선명히!" to R.drawable.ic_rainy // 강한 비
+            sno >= 5 -> "눈길 조심! 한 걸음씩 나아가요!" to R.drawable.ic_snow // 폭설
+            wsd >= 9 -> "바람 조심! 흔들려도 전진!" to R.drawable.ic_gale // 강풍
+            tmn <= 0 || (tmp in 0.0..10.0) -> "따뜻하게! 오늘도 열정 가득!" to R.drawable.ic_cold // 추운 날씨
+            tmp >= 25 -> "수분 보충! 더위도 이겨내요!" to R.drawable.ic_hot // 더운 날씨
+            pcp in 1.0..4.0 -> "우산 챙기고 오늘도 파이팅!" to R.drawable.ic_light_rainy // 약한 비
+            pcp == 0.0 && tmp in 10.0..25.0 -> "좋은 날! 목표 향해 달려요!" to R.drawable.ic_sun // 맑고 쾌적한 날씨
+            else -> "오늘도 힘내세요!" to R.drawable.ic_sun // 기본 메시지
+        }
+    }
+
+
+    fun parseDouble(value: String): Double {
+        return when (value) {
+            "-", "강수없음", "적설없음" -> 0.0
+            else -> value.toDoubleOrNull() ?: 0.0
+        }
+    }
+
 
     private fun fetchDataAnyWhere() {
         val service = RetrofitInstance.retrofit.create(InterestAreaApiService::class.java)

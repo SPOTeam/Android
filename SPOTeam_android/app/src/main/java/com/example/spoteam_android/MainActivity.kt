@@ -366,6 +366,24 @@ class MainActivity : AppCompatActivity() {
         return String.format("%02d00", previousTime)
     }
 
+    fun getWeatherBackground(): Int {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+
+        // 기상청 갱신 시간 목록 (3시간 간격)
+        val updateTimes = listOf(2, 5, 8, 11, 14, 17, 20, 23)
+        val previousTime = updateTimes.lastOrNull { hour >= it } ?: updateTimes.last()
+
+        // 🟢 밤일 경우에만 ic_weather_night_background 반환
+        return if (previousTime in listOf(2, 5, 17, 20, 23)) {
+            R.drawable.ic_weather_night_background
+        } else {
+            R.drawable.ic_weather_background // 낮일 경우 기본값 유지
+        }
+    }
+
+
+
 
 
 

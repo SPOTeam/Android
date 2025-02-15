@@ -12,33 +12,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/spot_logo"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="50dp"
-            android:src="@drawable/study_spot_logo"
+        <LinearLayout
+            android:id="@+id/fragment_house_logo_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/ic_alarm_interest"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="20dp"
-            android:src="@drawable/activity_main_ic_alaram"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ic_find_interest" />
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
 
-        <ImageView
-            android:id="@+id/ic_find_interest"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="3dp"
-            android:src="@drawable/activity_main_ic_find"
-            app:layout_constraintEnd_toStartOf="@+id/ic_alarm_interest"
-            app:layout_constraintTop_toTopOf="@+id/spot_logo" />
+            <ImageView
+                android:id="@+id/spot_logo"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/new_logo" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/ic_find_interest"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/activity_main_ic_find" />
+
+            <ImageView
+                android:id="@+id/ic_alarm_interest"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/activity_main_ic_alaram" />
+
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/interest_study_bold"

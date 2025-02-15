@@ -44,15 +44,12 @@
                 android:id="@+id/ic_find"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="10dp"
                 android:src="@drawable/activity_main_ic_find" />
 
             <ImageView
                 android:id="@+id/ic_alarm"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="10dp"
-                android:layout_gravity="right"
                 android:src="@drawable/activity_main_ic_alaram" />
 
 
@@ -62,7 +59,7 @@
             android:id="@+id/fragment_house_weather_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +89,6 @@
                     android:layout_height="40dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/activity_main_ic_sun"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -113,13 +109,13 @@
                     android:id="@+id/tx_explain_weather"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:layout_marginBottom="15dp"
                     android:fontFamily="@font/pretendardsource"
-                    android:text="좋은 날! 목표 향해 달려요!"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/ic_weather_background"
-                    app:layout_constraintStart_toStartOf="@+id/ic_sun" />
+                    app:layout_constraintStart_toStartOf="@+id/ic_weather_background" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -145,12 +141,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:fontFamily="@font/pretendardsource"
-                    android:text="실시간 인기글 🔥"
+                    android:text="실시간 인기글"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ic_fire"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="2dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_fire"
+                    app:layout_constraintBottom_toBottomOf="@+id/live_popular_tv"
+                    app:layout_constraintStart_toEndOf="@+id/live_popular_tv"
+                    app:layout_constraintTop_toTopOf="@+id/live_popular_tv" />
 
                 <TextView
                     android:id="@+id/popular_content_tv"
@@ -169,12 +176,13 @@
 
                 <ImageView
                     android:id="@+id/go_popular_content_iv"
-                    android:layout_width="15dp"
+                    android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginStart="10dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/fragment_mypage_ic_arrow"
-                    app:layout_constraintStart_toEndOf="@+id/live_popular_tv"
+                    app:layout_constraintBottom_toBottomOf="@+id/popular_content_tv"
+                    app:layout_constraintStart_toEndOf="@+id/ic_fire"
                     app:layout_constraintTop_toTopOf="@id/popular_content_tv" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -201,8 +209,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/content_tmpl">
+                android:layout_marginEnd="8dp">
 
                 <ImageView
                     android:id="@+id/house_location_iv"
@@ -217,13 +224,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/pretendardsource"
                     android:text="내 지역"
-                    android:textColor="@color/MainColor_02"
-                    android:layout_marginTop="2dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/house_location_iv"
-                    android:fontFamily="@font/pretendard"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/house_location_iv" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -231,8 +238,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/content_tmpl">
+                android:layout_marginEnd="8dp">
 
                 <ImageView
                     android:id="@+id/house_community_iv"
@@ -247,13 +253,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/pretendardsource"
                     android:text="게시판"
-                    android:textColor="@color/MainColor_02"
-                    android:layout_marginTop="2dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/house_community_iv"
-                    android:fontFamily="@font/pretendard"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/house_community_iv" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -262,8 +268,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/content_tmpl">
+                android:layout_marginEnd="8dp">
 
                 <ImageView
                     android:id="@+id/house_recruit_iv"
@@ -278,13 +283,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/pretendardsource"
                     android:text="모집중"
-                    android:textColor="@color/MainColor_02"
-                    android:layout_marginTop="2dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/house_recruit_iv"
-                    android:fontFamily="@font/pretendard"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/house_recruit_iv" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -292,8 +297,7 @@
                 android:id="@+id/house_interest_cl"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_weight="1"
-                android:background="@drawable/content_tmpl">
+                android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/house_interest_iv"
@@ -308,13 +312,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/pretendardsource"
                     android:text="내 관심사"
-                    android:textColor="@color/MainColor_02"
-                    android:layout_marginTop="2dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/house_interest_iv"
-                    android:fontFamily="@font/pretendard"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/house_interest_iv" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
@@ -336,10 +340,10 @@
                 android:id="@+id/tx_interest_study"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="지금 인기 있는 스터디"
+                android:fontFamily="@font/pretendardsource"
+                android:text="지금 가장 인기 있는 스터디"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:fontFamily="@font/pretendard"
                 android:textStyle="bold" />
 
             <View
@@ -352,9 +356,8 @@
                 android:id="@+id/ic_go_interest"
                 android:layout_width="25dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:padding="7dp"
-                android:src="@drawable/fragment_house_ic_arrow" />
+                android:padding="3dp"
+                android:src="@drawable/fragment_mypage_ic_arrow" />
 
 
         </LinearLayout>
@@ -379,11 +382,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="추천 스터디"
+            android:text="당신을 기다리는 추천 스터디"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:fontFamily="@font/pretendard"
+            android:fontFamily="@font/pretendardsource"
             android:layout_marginStart="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_board" />
@@ -397,6 +400,7 @@
             android:layout_marginEnd="15dp"
             android:overScrollMode="never"
             android:nestedScrollingEnabled="false"
+            android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tx_recommendation_study"
