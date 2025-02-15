@@ -24,11 +24,11 @@ class LocationSearchActivity : AppCompatActivity() {
         binding = ActivityLocationSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.activityChecklistLocationSearchTb)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = ""
-        binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+        binding.activityChecklistLocationSearchTb.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
 
         setupRecyclerView()
