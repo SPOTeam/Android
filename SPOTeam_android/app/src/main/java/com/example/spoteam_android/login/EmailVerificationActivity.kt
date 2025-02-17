@@ -184,7 +184,7 @@ class EmailVerificationActivity : AppCompatActivity() {
     }
 
     private fun updateValidationUI(isValid: Boolean, editText: EditText, errorTextView: TextView, successMessage: String, errorMessage: String) {
-        val drawable = if (isValid) ContextCompat.getDrawable(this, R.drawable.beforecheck) else ContextCompat.getDrawable(this, R.drawable.after_alert)
+        val drawable = if (isValid) ContextCompat.getDrawable(this, R.drawable.aftercheck) else ContextCompat.getDrawable(this, R.drawable.after_alert)
         drawable?.let {
             val textSizeInPx = editText.textSize.toInt()
             val iconSize = (textSizeInPx * 1.5).toInt()

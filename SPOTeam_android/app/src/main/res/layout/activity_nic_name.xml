@@ -8,108 +8,72 @@
     tools:context=".login.NicNameActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/activity_nick_name_tb"
+        android:id="@+id/activity_nickname_login_tb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"
-        app:navigationIcon="@drawable/ic_arrow">
+        app:navigationIcon="@drawable/ic_arrow"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp">
 
+        <TextView
+            android:id="@+id/activity_nickname_login_toolbar_tv"
+            android:text="회원가입"
+            android:fontFamily="@font/suit_bold"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
     </androidx.appcompat.widget.Toolbar>
 
-    <View
-        android:id="@+id/activity_nick_name_v"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#D8D8D8"
-        app:layout_constraintTop_toBottomOf="@id/activity_nick_name_tb"/>
-    
+
     <TextView
         android:id="@+id/activity_nick_name_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="반가워요!\n스팟에서 내 닉네임을 정해봐요."
-        android:textColor="#588FF2"
-        android:textSize="24sp"
+        android:textColor="@color/b500"
+        android:textSize="18dp"
         android:lineSpacingExtra="8dp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        android:layout_marginStart="25dp"
+        android:fontFamily="@font/suit_bold"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="60dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_nick_name_v"/>
+        app:layout_constraintTop_toBottomOf="@id/activity_nickname_login_tb"/>
 
 
     <EditText
         android:id="@+id/activity_nick_name_nickname_et"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:hint="닉네임을 입력하세요."
-        android:textColorHint="#D8D8D8"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
         android:maxLines="1"
         android:maxLength="8"
         android:inputType="text"
-        android:padding="10dp"
-        android:textSize="17sp"
+        android:textSize="13.3dp"
         android:background="@drawable/normal_login_edittext_corner_rectangle"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="25dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activity_nick_name_title_tv"/>
 
     <TextView
         android:id="@+id/activity_nick_name_valid_message_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="이모지, 특수문자(‘_’, ‘/’ 제외) 사용할 수 없습니다."
-        android:textColor="#8E8E8E"
-        android:textSize="11dp"
-        android:fontFamily="@font/pretendard"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="15dp"
+        android:text="@string/nick_name"
+        android:textColor="@color/g400"
+        android:textSize="12dp"
+        android:textFontWeight="600"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activity_nick_name_nickname_et"/>
-    <TextView
-        android:id="@+id/activity_nick_name_valid_message_start_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="("
-        android:textColor="#8E8E8E"
-        android:textSize="11dp"
-        android:fontFamily="@font/pretendard"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toEndOf="@id/activity_nick_name_valid_message_tv"
-        app:layout_constraintTop_toBottomOf="@id/activity_nick_name_nickname_et"/>
-    <TextView
-        android:id="@+id/activity_nick_name_valid_message_min_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textColor="#8E8E8E"
-        android:textSize="11dp"
-        android:fontFamily="@font/pretendard"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toEndOf="@id/activity_nick_name_valid_message_start_tv"
-        app:layout_constraintTop_toBottomOf="@id/activity_nick_name_nickname_et"/>
-    <TextView
-        android:id="@+id/activity_nick_name_valid_message_finish_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="/8)"
-        android:textColor="#8E8E8E"
-        android:textSize="11dp"
-        android:fontFamily="@font/pretendard"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toEndOf="@id/activity_nick_name_valid_message_min_tv"
-        app:layout_constraintTop_toBottomOf="@id/activity_nick_name_nickname_et"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:background="#D6E5FF"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@id/activity_startlogin_circle_tv"/>
+
+
 
     <TextView
         android:id="@+id/activity_startlogin_circle_tv"
@@ -117,9 +81,9 @@
         android:layout_height="wrap_content"
         android:text="약관 동의"
         android:textColor="@color/black"
-        android:fontFamily="@font/pretendard"
-        android:textSize="17sp"
-        android:layout_marginStart="25dp"
+        android:fontFamily="@font/suit_bold"
+        android:textSize="16dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/activity_startlogin_check_box1_ll"
         android:layout_marginBottom="10dp"/>
@@ -129,85 +93,92 @@
     <RelativeLayout
         android:id="@+id/activity_startlogin_check_box1_ll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="43dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/normal_login_edittext_corner_rectangle"
         app:layout_constraintBottom_toTopOf="@id/activity_startlogin_check_box2_ll">
 
+        <!-- 텍스트 왼쪽 정렬 -->
+        <TextView
+            android:id="@+id/activity_nickname_login_tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="개인정보 이용 및 활용 동의"
+            android:textSize="12dp"
+            android:textColor="@color/black"
+            android:textFontWeight="600"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="7dp"
+            android:layout_marginEnd="7dp"/>
+
+        <!-- 체크박스 오른쪽 정렬 -->
         <CheckBox
             android:id="@+id/activity_startlogin_check_box1"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:button="@null"
-            android:layout_margin="7dp"
             android:background="@drawable/custom_checkbox"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="개인정보 이용 및 활용 동의"
-            android:textColor="@color/black"
-            android:layout_toEndOf="@id/activity_startlogin_check_box1"
+            android:clickable="false"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="7dp"
             android:layout_marginEnd="7dp"/>
-
-
     </RelativeLayout>
+
 
 
     <RelativeLayout
         android:id="@+id/activity_startlogin_check_box2_ll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
+        android:layout_height="43dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="25dp"
         android:background="@drawable/normal_login_edittext_corner_rectangle"
-        android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toTopOf="@id/activity_startlogin_loginwithspot_next_bt">
+
+
+        <TextView
+            android:id="@+id/activity_nickname_login_tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="고유식별정보 처리 동의"
+            android:textSize="12dp"
+            android:textColor="@color/black"
+            android:textFontWeight="600"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="7dp"
+            android:layout_marginEnd="7dp"/>
+
 
         <CheckBox
             android:id="@+id/activity_startlogin_check_box2"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:button="@null"
-            android:layout_margin="7dp"
             android:background="@drawable/custom_checkbox"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"/>
-
-        <TextView
-            android:id="@+id/activity_startlogin_text_view_checkbox2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="고유식별정보 처리동의"
-            android:textColor="@color/black"
-            android:layout_toEndOf="@id/activity_startlogin_check_box2"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="7dp"
+            android:clickable="false"
             android:layout_marginEnd="7dp"/>
-
-
     </RelativeLayout>
 
     <android.widget.Button
         android:id="@+id/activity_startlogin_loginwithspot_next_bt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/button_background"
         android:enabled="false"
         android:text="다음"
+        android:fontFamily="@font/suit_bold"
         android:textColor="@drawable/button_textcolor"
-        android:textSize="17sp"
-        android:textStyle="bold"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

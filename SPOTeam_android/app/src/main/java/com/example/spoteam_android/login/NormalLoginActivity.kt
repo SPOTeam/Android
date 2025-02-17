@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.spoteam_android.R
@@ -23,8 +22,7 @@ class NormalLoginActivity : AppCompatActivity() {
         "name" to false,
         "birth" to false,
         "birthSuffix" to false,
-        "password" to false,
-        "passwordCheck" to false
+        "password" to false
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,9 +30,11 @@ class NormalLoginActivity : AppCompatActivity() {
         binding = ActivityNormalLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 🔥 데이터 초기화
         clearSharedPreferences()
         clearInputFields()
         setupTextWatchers()
+        setupFocusListeners()
 
         binding.activityStartloginLoginwithspotNextBt.setOnClickListener {
             saveAllInputsToSharedPrefs()
@@ -53,8 +53,37 @@ class NormalLoginActivity : AppCompatActivity() {
         binding.activityNormalLoginBirthTextInputEt.addTextChangedListener(showPasswordFieldsWatcher)
         binding.activityNormalLoginBirthBehindTextInputEt.addTextChangedListener(showPasswordFieldsWatcher)
 
-        binding.activityNormalLoginPasswordInputEt.addTextChangedListener(createTextWatcher("password", binding.activityNormalLoginPasswordInputEt))
-        binding.activityNormalLoginPasswordCheckInputEt.addTextChangedListener(createTextWatcher("passwordCheck", binding.activityNormalLoginPasswordCheckInputEt))
+        // ✅ 비밀번호는 먼저 입력하고, 비밀번호 확인 필드가 실시간 감지되도록 함
+        binding.activityNormalLoginPasswordInputEt.addTextChangedListener(passwordWatcher)
+        binding.activityNormalLoginPasswordCheckInputEt.addTextChangedListener(passwordConfirmWatcher)
+    }
+    // ✅ 비밀번호 입력 감지 (비밀번호 확인 X)
+    private val passwordWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            // 🔥 비밀번호 입력 후에도 버튼 활성화는 안 함 (비밀번호 확인을 기다림)
+            updateButtonState()
+        }
+    }
+
+    // ✅ 비밀번호 확인 필드 실시간 감지 (비밀번호와 비교)
+    private val passwordConfirmWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            updateButtonState() // ✅ 비밀번호 확인이 변경될 때만 버튼 활성화 검토
+        }
+
+        override fun afterTextChanged(s: Editable?) {}
+    }
+
+    private fun setupFocusListeners() {
+        binding.activityNormalLoginPasswordCheckInputEt.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) validatePassword()
+        }
     }
 
     private val showPasswordFieldsWatcher = object : TextWatcher {
@@ -65,7 +94,6 @@ class NormalLoginActivity : AppCompatActivity() {
             val birth = binding.activityNormalLoginBirthTextInputEt.text.toString().trim()
             val birthSuffix = binding.activityNormalLoginBirthBehindTextInputEt.text.toString().trim()
 
-            // 이름과 생년월일 입력 완료 시 비밀번호 필드 표시
             if (name.isNotEmpty() && birth.length == 6 && birthSuffix.isNotEmpty()) {
                 showPasswordFields()
             } else {
@@ -112,43 +140,60 @@ class NormalLoginActivity : AppCompatActivity() {
         val isNameValid = inputStates["name"] == true
         val isBirthValid = inputStates["birth"] == true
         val isBirthSuffixValid = inputStates["birthSuffix"] == true
-        val isPasswordValid = inputStates["password"] == true
-        val isPasswordCheckValid = inputStates["passwordCheck"] == true
+        val isPasswordValid = binding.activityNormalLoginPasswordInputEt.text.toString().length >= 10
+        val isPasswordMatch = binding.activityNormalLoginPasswordInputEt.text.toString() ==
+                binding.activityNormalLoginPasswordCheckInputEt.text.toString()
 
-        val isPasswordFieldsVisible = binding.activityNormalLoginPasswordInputEt.visibility == View.VISIBLE
-
+        // 🔥 비밀번호 확인 필드가 입력 중일 때만 버튼 활성화 검토
         binding.activityStartloginLoginwithspotNextBt.isEnabled =
-            (isNameValid && isBirthValid && isBirthSuffixValid) && (!isPasswordFieldsVisible || (isPasswordValid && isPasswordCheckValid))
+            isNameValid && isBirthValid && isBirthSuffixValid && isPasswordValid && isPasswordMatch
     }
 
-    private fun saveAllInputsToSharedPrefs() {
-        val userInfo = UserInfo(
-            name = binding.activityNormalLoginNameInputEt.text.toString(),
-            nickname = "TEMP_NICKNAME",
-            frontRID = binding.activityNormalLoginBirthTextInputEt.text.toString(),
-            backRID = binding.activityNormalLoginBirthBehindTextInputEt.text.toString(),
-            email = "", // 이메일은 전 화면에서 이미 사용
-            loginId = "", // 이메일이 아이디 역할을 함
-            password = binding.activityNormalLoginPasswordInputEt.text.toString(),
-            pwCheck = binding.activityNormalLoginPasswordCheckInputEt.text.toString(),
-            personalInfo = false,
-            idInfo = false
+    private fun validatePassword() {
+        val password = binding.activityNormalLoginPasswordInputEt.text.toString().trim()
+        val confirmPassword = binding.activityNormalLoginPasswordCheckInputEt.text.toString().trim()
+
+        val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{10,}$".toRegex()
+        val isPasswordValid = passwordPattern.matches(password)
+        val isMatch = password == confirmPassword
+
+        inputStates["password"] = isPasswordValid && isMatch
+
+        updateValidationUI(
+            isValid = isPasswordValid,
+            editText = binding.activityNormalLoginPasswordInputEt,
+            errorTextView = binding.activityNormalLoginPasswordErrorTv,
+            successMessage = "사용 가능한 비밀번호입니다.",
+            errorMessage = "비밀번호는 영문+숫자+특수문자 포함 10자 이상 입력해야 합니다."
         )
-        saveUserInfoToSharedPreferences(userInfo)
+
+        updateButtonState()
     }
 
-    private fun saveUserInfoToSharedPreferences(userInfo: UserInfo) {
-        val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        val userInfoJson = Gson().toJson(userInfo)
-        editor.putString("USER_INFO", userInfoJson)
-        editor.apply()
-    }
+    private fun updateValidationUI(
+        isValid: Boolean,
+        editText: EditText,
+        errorTextView: TextView,
+        successMessage: String,
+        errorMessage: String
+    ) {
+        val drawable = if (isValid) ContextCompat.getDrawable(this, R.drawable.aftercheck)
+        else ContextCompat.getDrawable(this, R.drawable.after_alert)
 
-    private fun logUserInfo() {
-        val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val userInfoJson = sharedPref.getString("USER_INFO", "No Data Found")
-        Log.d("NormalLoginActivity", "Saved User Info: $userInfoJson")
+        drawable?.let {
+            val textSizeInPx = editText.textSize.toInt()
+            val iconSize = (textSizeInPx * 1.5).toInt()
+            it.setBounds(0, 0, iconSize, iconSize)
+            editText.setCompoundDrawables(null, null, it, null)
+        }
+
+        editText.setBackgroundResource(if (isValid) R.drawable.edittext_with_text_background else R.drawable.error_background)
+
+        errorTextView.apply {
+            visibility = View.VISIBLE
+            text = if (isValid) successMessage else errorMessage
+            setTextColor(ContextCompat.getColor(context, if (isValid) R.color.selector_blue else R.color.selector_red))
+        }
     }
 
     private fun clearSharedPreferences() {
@@ -162,8 +207,31 @@ class NormalLoginActivity : AppCompatActivity() {
         binding.activityNormalLoginBirthBehindTextInputEt.text.clear()
         binding.activityNormalLoginPasswordInputEt.text.clear()
         binding.activityNormalLoginPasswordCheckInputEt.text.clear()
+    }
 
-        inputStates.forEach { key, _ -> inputStates[key] = false }
-        updateButtonState()
+    private fun saveAllInputsToSharedPrefs() {
+        val userInfo = UserInfo(
+            name = "Temp",
+            nickname = "",
+            frontRID = "",
+            backRID = "",
+            email = "",
+            loginId = "",
+            password = "",
+            pwCheck = "",
+            personalInfo = false, // Boolean 값
+            idInfo = false        // Boolean 값
+        )
+
+        val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        val userInfoJson = Gson().toJson(userInfo)
+
+        editor.putString("USER_INFO", userInfoJson) // JSON 형태로 저장
+        editor.apply()
+    }
+
+    private fun logUserInfo() {
+        Log.d("NormalLoginActivity", "Saved User Info: ${getSharedPreferences("UserPrefs", Context.MODE_PRIVATE).getString("USER_INFO", "No Data")}")
     }
 }
