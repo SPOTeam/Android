@@ -55,6 +55,10 @@ class StartLoginActivity : AppCompatActivity() {
             val loginIntent = Intent(this, EmailVerificationActivity::class.java)
             startActivity(loginIntent)
         }
+        binding.activityStartLoginAlreadyLoginTv.setOnClickListener {
+            val loginIntent = Intent(this, NicNameActivity::class.java)
+            startActivity(loginIntent)
+        }
     }
 
     private fun checkIfAlreadyLoggedIn() {
