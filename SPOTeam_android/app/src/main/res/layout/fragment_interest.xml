@@ -60,7 +60,7 @@
             android:text="@string/interest_study"
             android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -96,7 +96,7 @@
             android:text="--건"
             android:fontFamily="@font/pretendard"
             android:textColor="@color/gray_03"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabs" />
@@ -166,7 +166,7 @@
                 android:padding="10dp"
                 android:text="&lt;"
                 android:textColor="#588FF2"
-                android:textSize="18sp" />
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/current_page"
@@ -175,7 +175,7 @@
                 android:padding="3dp"
                 android:text="1"
                 android:textColor="#186AFF"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/next_page"
@@ -185,7 +185,7 @@
                 android:padding="10dp"
                 android:text="&gt;"
                 android:textColor="#588FF2"
-                android:textSize="18sp" />
+                android:textSize="18dp" />
         </LinearLayout>
 
 

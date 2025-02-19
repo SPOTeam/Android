@@ -3,6 +3,7 @@ package com.example.spoteam_android
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -38,6 +40,7 @@ import com.example.spoteam_android.ui.study.StudyFragment
 import com.example.spoteam_android.weather.WeatherViewModel
 import com.example.spoteam_android.weather.parseCsv
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +54,7 @@ import java.util.Calendar
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var fab: FloatingActionButton
     private val weatherViewModel: WeatherViewModel by viewModels() // Hilt 사용
 
     @SuppressLint("ClickableViewAccessibility")
@@ -63,6 +67,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+
         val calendar = Calendar.getInstance()
         val year =  String.format("%04d", calendar.get(Calendar.YEAR))
         val month = String.format("%02d", calendar.get(Calendar.MONTH) + 1) // 두 자리로 변환
@@ -71,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         val baseTime = getUpdatedTime()
 
 
-        fetchRegions(baseDate.toInt(), baseTime.toInt())
+        fetchRegions(baseDate.toInt(), baseTime)
 
 
         // 다른 아무 화면 클릭시 스터디 화면 사라지도록
@@ -296,7 +302,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("TokenLogger", "Current RefreshToken: $refreshToken")
     }
 
-    private fun fetchRegions(myDate: Int, myTime: Int) {
+    private fun fetchRegions(myDate: Int, myTime: String) {
         val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
 
         service.getRegion().enqueue(object : Callback<RegionApiResponse> {
@@ -346,6 +352,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+
     fun findGridByCode(regionCode: String, regionDataList: List<RegionData>): Pair<Int, Int>? {
         val regionData = regionDataList.find { it.administrativeCode == regionCode }
         return regionData?.let { Pair(it.gridX, it.gridY) }
@@ -363,7 +371,9 @@ class MainActivity : AppCompatActivity() {
         val previousTime = updateTimes.lastOrNull { hour >= it } ?: updateTimes.last()
 
         // 두 자리 문자열로 변환하여 반환 (API 제공 시간 + 5분 고려)
-        return String.format("%02d00", previousTime)
+        val formattedTime = String.format("%02d00", previousTime)
+        Log.d("WeatherViewModel", "getUpdatedTime() 호출됨 - 반환 값: $formattedTime")
+        return formattedTime
     }
 
     fun getWeatherBackground(): Int {
@@ -381,11 +391,5 @@ class MainActivity : AppCompatActivity() {
             R.drawable.ic_weather_background // 낮일 경우 기본값 유지
         }
     }
-
-
-
-
-
-
 
 }

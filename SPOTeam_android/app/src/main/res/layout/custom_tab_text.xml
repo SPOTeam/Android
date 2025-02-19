@@ -3,7 +3,7 @@
     android:id="@+id/tabText"
     android:layout_width="40dp"
     android:layout_height="wrap_content"
-    android:textSize="14sp"
+    android:textSize="14dp"
     android:gravity="center"
     android:textColor="@drawable/tab_text_color"
     />

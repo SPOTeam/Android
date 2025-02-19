@@ -40,12 +40,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="9dp"
-                android:fontFamily="@font/pretendardsource"
                 android:text="스터디 이름"
                 android:textColor="@color/black"
-                android:textStyle="bold"
+                android:fontFamily="@font/suit_bold"
                 android:autoSizeTextType="uniform"
-                android:textSize="13sp" />
+                android:textSize="13dp" />
 
 
             <TextView
@@ -55,9 +54,10 @@
                 android:layout_marginTop="5dp"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:fontFamily="@font/pretendardsource"
+                android:textFontWeight="700"
+                android:textColor="#1E1E1E"
                 android:text="스터디 목표"
-                android:textSize="11sp" />
+                android:textSize="11dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,14 +79,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="po"
-                    android:textSize="11sp" />
+                    android:textFontWeight="500"
+                    android:textSize="11dp" />
 
                 <TextView
                     android:id="@+id/tv_name5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/"
-                    android:textSize="11sp" />
+                    android:textFontWeight="500"
+                    android:textSize="11dp" />
 
                 <TextView
                     android:id="@+id/tv_name"
@@ -94,7 +96,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="to"
-                    android:textSize="11sp" />
+                    android:textFontWeight="500"
+                    android:textSize="11dp" />
 
 
                 <ImageView
@@ -110,7 +113,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="like"
-                    android:textSize="11sp" />
+                    android:textFontWeight="500"
+                    android:textSize="11dp" />
 
                 <ImageView
                     android:id="@+id/ImageView7"
@@ -124,7 +128,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="view"
-                    android:textSize="11sp" />
+                    android:textFontWeight="500"
+                    android:textSize="11dp" />
 
             </LinearLayout>
 

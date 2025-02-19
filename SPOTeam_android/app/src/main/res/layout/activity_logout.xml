@@ -29,7 +29,7 @@
             android:enabled="true"
             android:text="로그아웃"
             android:textColor="@drawable/button_textcolor"
-            android:textSize="17sp"
+            android:textSize="17dp"
             android:textStyle="bold" />
 
         <android.widget.Button
@@ -41,7 +41,7 @@
             android:enabled="false"
             android:text="회원탈퇴"
             android:textColor="@drawable/button_textcolor"
-            android:textSize="17sp"
+            android:textSize="17dp"
             android:textStyle="bold" />
     </LinearLayout>
 

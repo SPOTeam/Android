@@ -33,7 +33,7 @@
                 android:id="@+id/fragment_study_tv"
                 android:text="마이페이지"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:fontFamily="@font/pretendard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                 android:layout_marginStart="10dp"
                 android:text="닉네임"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:fontFamily="@font/pretendard"
                 android:textStyle="bold"
                 android:layout_marginTop="18dp"
@@ -91,7 +91,7 @@
                 android:text="37.5°C"
                 android:fontFamily="@font/pretendard"
                 android:textColor="#186AFF"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toEndOf="@id/iv_profile"
                 app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
 
@@ -133,7 +133,7 @@
                     android:fontFamily="@font/pretendard"
                     android:textAlignment="center"
                     android:textColor="#7DABFC"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -150,7 +150,7 @@
                     android:fontFamily="@font/pretendard"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -178,7 +178,7 @@
                     android:fontFamily="@font/pretendard"
                     android:textAlignment="center"
                     android:textColor="#7DABFC"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     app:layout_constraintStart_toEndOf="@+id/tv_in_progress"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -195,7 +195,7 @@
                     android:fontFamily="@font/pretendard"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/tv_in_progress"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -223,7 +223,7 @@
                     android:fontFamily="@font/pretendard"
                     android:textAlignment="center"
                     android:textColor="#7DABFC"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     app:layout_constraintStart_toEndOf="@+id/tv_recruiting"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -240,7 +240,7 @@
                     android:fontFamily="@font/pretendard"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/tv_recruiting"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -263,7 +263,7 @@
                 android:text="관심 분야"
                 android:textFontWeight="700"
                 android:textColor="#7DABFC"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
             <ImageView
                 android:id="@+id/iv_interest_field_arrow"
@@ -298,7 +298,7 @@
                 android:layout_marginStart="50dp"
                 android:text="관심 지역"
                 android:textStyle="bold"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:fontFamily="@font/pretendard"
                 android:textColor="#7DABFC"/>
 
@@ -337,7 +337,7 @@
                 android:textStyle="bold"
                 android:textColor="#7DABFC"
                 android:fontFamily="@font/pretendard"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
             <ImageView
                 android:id="@+id/iv_why_spot"
@@ -376,7 +376,7 @@
                 android:text="커뮤니티"
                 android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textStyle="bold" />
         </FrameLayout>
 
@@ -394,7 +394,7 @@
                 android:text="이용 제한 내역"
                 android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
         </FrameLayout>
 
         <FrameLayout
@@ -411,7 +411,7 @@
                 android:text="커뮤니티 이용 규칙"
                 android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
         </FrameLayout>
 
         <FrameLayout
@@ -430,7 +430,7 @@
                 android:text="이용 안내"
                 android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textStyle="bold" />
         </FrameLayout>
 
@@ -448,7 +448,7 @@
                 android:text="앱 버전"
                 android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/tv_using_01_02"
@@ -459,7 +459,7 @@
                 android:text="v2.1234"
                 android:fontFamily="@font/pretendard"
                 android:textColor="#7DABFC"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
         </FrameLayout>
 
         <FrameLayout
@@ -476,7 +476,7 @@
                 android:text="개인정보 처리 방침"
                 android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
         </FrameLayout>
 
         <FrameLayout
@@ -493,7 +493,7 @@
                 android:text="스팟 이용 약관"
                 android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
         </FrameLayout>
 
         <FrameLayout
@@ -510,7 +510,7 @@
                 android:text="배타 버전"
                 android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/tv_using_04_02"
@@ -521,7 +521,7 @@
                 android:text="Beta10+"
                 android:fontFamily="@font/pretendard"
                 android:textColor="#7DABFC"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
         </FrameLayout>
 
     </LinearLayout>
