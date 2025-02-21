@@ -7,7 +7,7 @@ import com.example.spoteam_android.StudyInfo
 import com.example.spoteam_android.databinding.ItemAppliedStudyBinding
 import com.example.spoteam_android.ui.community.AlertStudyDetail
 
-class CheckAppliedStudyFragmentRVAdapter(private val dataList: List<AlertStudyDetail>, ) : RecyclerView.Adapter<CheckAppliedStudyFragmentRVAdapter.ViewHolder>() {
+class CheckAppliedStudyFragmentRVAdapter(private val dataList: List<AlertStudyDetail>) : RecyclerView.Adapter<CheckAppliedStudyFragmentRVAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onOKClick(data : AlertStudyDetail)

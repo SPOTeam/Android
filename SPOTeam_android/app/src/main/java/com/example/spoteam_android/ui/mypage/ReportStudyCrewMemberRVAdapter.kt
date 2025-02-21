@@ -1,4 +1,4 @@
-package com.example.spoteam_android.ui.study.quiz
+package com.example.spoteam_android.ui.mypage
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +9,15 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemDetailStudyHomeMemberBinding
 import com.example.spoteam_android.ui.community.MembersDetail
 
-class HostMakeQuizMemberRVAdapter(
+class ReportStudyCrewMemberRVAdapter(
     private var dataList: List<MembersDetail>,
-) : RecyclerView.Adapter<HostMakeQuizMemberRVAdapter.ViewHolder>() {
+    private val listener: Any // ✅ 클릭 이벤트 리스너 추가
+) : RecyclerView.Adapter<ReportStudyCrewMemberRVAdapter.ViewHolder>() {
+    interface OnMemberClickListener {
+        fun onProfileClick(member: MembersDetail)
+    }
+
+    private lateinit var itemClickListener: OnMemberClickListener
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemDetailStudyHomeMemberBinding = ItemDetailStudyHomeMemberBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
@@ -41,6 +47,12 @@ class HostMakeQuizMemberRVAdapter(
             } else {
                 binding.fragmentConsiderAttendanceMemberHostIv.visibility = View.GONE
             }
+
+
+            binding.fragmentDetailStudyHomeHostuserIv.setOnClickListener{
+                binding.fragmentDetailStudyHomeHostuserIv.setBackgroundResource(R.drawable.selected_border)
+            }
+
         }
     }
 }

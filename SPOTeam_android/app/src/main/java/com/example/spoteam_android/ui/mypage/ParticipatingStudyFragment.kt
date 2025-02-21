@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentParticipatingStudyBinding

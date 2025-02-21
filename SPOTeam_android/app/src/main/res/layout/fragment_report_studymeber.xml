@@ -39,237 +39,23 @@
         android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="신고하고자 하는 스터디원을 선택 후, 이유를 작성해주세요.\n SPOT이  살핀 후 탈퇴 신청을 용인합니다."
-        app:layout_constraintBottom_toTopOf="@+id/member_tl"
+        app:layout_constraintBottom_toTopOf="@+id/report_member_tl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/take_attendance_title_tv" />
 
-    <TableLayout
-        android:id="@+id/member_tl"
+    <androidx.recyclerview.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/report_member_tl"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintTop_toBottomOf="@id/take_attendance_title_tv"
+        android:layout_height="108dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:stretchColumns="0,1,2,3,4,5">
-
-        <TableRow>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/host_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_host_profile" />
-
-                <TextView
-                    android:id="@+id/host_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임 1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew1_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_normal_study_profile" />
-
-                <TextView
-                    android:id="@+id/crew1_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임 2" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew2_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_normal_study_profile" />
-
-                <TextView
-                    android:id="@+id/crew2_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임 3" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew3_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_normal_study_profile" />
-
-                <TextView
-                    android:id="@+id/crew3_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임 4" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew4_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_normal_study_profile" />
-
-                <TextView
-                    android:id="@+id/crew4_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임 5" />
-            </LinearLayout>
-        </TableRow>
-
-        <TableRow>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew5_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_normal_study_profile" />
-
-                <TextView
-                    android:id="@+id/crew5_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임 6" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew6_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_normal_study_profile" />
-
-                <TextView
-                    android:id="@+id/crew6_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임 7" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew7_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_normal_study_profile" />
-
-                <TextView
-                    android:id="@+id/crew7_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임 8" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew8_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_normal_study_profile" />
-
-                <TextView
-                    android:id="@+id/crew8_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임 9"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/crew9_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_normal_study_profile"
-                    android:background="@drawable/user_avatar_background" />
-
-                <TextView
-                    android:id="@+id/crew9_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="닉네임 10" />
-            </LinearLayout>
-        </TableRow>
-    </TableLayout>
-
-
-    <ImageView
-        android:id="@+id/ic_small_check"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="70dp"
-        android:src="@drawable/fragment_report_studymember_ic_small_check"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/member_tl" />
-
-    <TextView
-        android:id="@+id/tx_report_complete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:paddingBottom="200dp"
-        android:visibility="gone"
-        android:text="신고 완료"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ic_small_check" />
-
+        android:layout_marginTop="33.5dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/description"
+        tools:listitem="@layout/item_detail_study_home_member"
+        tools:itemCount="10"/>
 
     <TextView
         android:id="@+id/tx_reason_report"
@@ -283,7 +69,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/member_tl" />
+        app:layout_constraintTop_toBottomOf="@+id/report_member_tl" />
 
     <EditText
         android:id="@+id/popup_edit_text"
@@ -291,7 +77,7 @@
         android:layout_height="100dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/my_edittext_background"
         android:hint="이유를 작성해주세요."
         android:paddingTop="16dp"
@@ -303,17 +89,22 @@
         app:layout_constraintStart_toStartOf="@+id/tx_reason_report"
         app:layout_constraintTop_toBottomOf="@+id/tx_reason_report" />
 
-    <ImageButton
-        android:id="@+id/imgbtn_report"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_marginTop="15dp"
-        android:background="#00ff0000"
-        android:scaleType="fitCenter"
-        android:src="@drawable/fragment_report_studymember_imgbtn_complete"
-        app:layout_constraintEnd_toEndOf="parent"
+    <TextView
+        android:id="@+id/report_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/report_crew_selector"
+        android:textColor="@color/selector_report_crew"
+        android:paddingVertical="10dp"
+        android:gravity="center"
+        android:textSize="25dp"
+        android:text="완료"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popup_edit_text" />
+        android:fontFamily="@font/suit_bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/popup_edit_text"
+        android:enabled="false"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

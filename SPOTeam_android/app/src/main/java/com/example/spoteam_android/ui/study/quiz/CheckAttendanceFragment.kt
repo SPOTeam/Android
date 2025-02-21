@@ -245,7 +245,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     private fun initMemberRecyclerView(studyMembers: List<MembersDetail>) {
         binding.memberTl.layoutManager = GridLayoutManager(context, 5)
 
-        val dataRVAdapter = HostMakeQuizMemberRVAdapter(studyMembers, currentMemberId)
+        val dataRVAdapter = HostMakeQuizMemberRVAdapter(studyMembers)
         //리스너 객체 생성 및 전달
 
         binding.memberTl.adapter = dataRVAdapter
