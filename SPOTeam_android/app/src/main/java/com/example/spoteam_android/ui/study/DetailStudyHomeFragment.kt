@@ -308,7 +308,7 @@ class DetailStudyHomeFragment : Fragment() {
     // Null 체크를 추가한 날짜 변경 로직
     private fun formatDate(startedAt: String?): String {
         if (startedAt.isNullOrEmpty()) {
-            return "N/A" // 기본값 또는 에러 메시지
+            return "N/A"
         }
 
         val inputFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
