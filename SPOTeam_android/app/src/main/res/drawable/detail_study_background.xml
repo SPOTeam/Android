@@ -7,7 +7,7 @@
                 android:color="#F9FBFF" />
             <corners android:radius="8dp"/>
             <solid
-                android:color="#F9FBFF" />
+                android:color="#EDF4FF" />
         </shape>
     </item>
     <item android:state_focused="false">
@@ -17,7 +17,7 @@
                 android:color="#F9FBFF" />
             <corners android:radius="8dp"/>
             <solid
-                android:color="#F9FBFF" />
+                android:color="#EDF4FF" />
         </shape>
     </item>
 </selector>
