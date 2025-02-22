@@ -321,7 +321,7 @@ class DetailStudyHomeFragment : Fragment() {
     // Null 체크를 추가한 시간 변경 로직
     private fun formatTime(staredAt: String?): String {
         if (staredAt.isNullOrEmpty()) {
-            return "N/A" // 기본값 또는 에러 메시지
+            return "N/A"
         }
 
         val inputFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
@@ -336,7 +336,7 @@ class DetailStudyHomeFragment : Fragment() {
         dialog.start {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.main_frm, HouseFragment())
-            transaction.addToBackStack(null)  // 백스택에 추가하여 뒤로 가기 가능하게 함
+            transaction.addToBackStack(null)
             transaction.commit()
         }
     }
