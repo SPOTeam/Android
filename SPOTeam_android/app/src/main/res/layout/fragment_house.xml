@@ -406,6 +406,7 @@
                 android:layout_width="22dp"
                 android:layout_height="match_parent"
                 android:scaleType="centerInside"
+                android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_recommendation_refresh" />
 
         </LinearLayout>

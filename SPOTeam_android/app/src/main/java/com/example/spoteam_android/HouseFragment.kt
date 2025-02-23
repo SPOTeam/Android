@@ -37,6 +37,7 @@ import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
 import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
 import com.example.spoteam_android.ui.recruiting.RecruitingStudyFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.example.spoteam_android.weather.WeatherViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,6 +63,13 @@ class HouseFragment : Fragment() {
         (activity as? MainActivity)?.let {
             it.findViewById<FloatingActionButton>(R.id.add_study_btn)?.visibility = View.VISIBLE
             it.findViewById<FloatingActionButton>(R.id.add_study_btn)?.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white)))
+            it.findViewById<FloatingActionButton>(R.id.add_study_btn)?.setOnClickListener {
+                val fragment = RegisterStudyFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
     }
 
@@ -88,6 +96,7 @@ class HouseFragment : Fragment() {
         if (backgroundRes == R.drawable.ic_weather_night_background) {
             binding.icWeatherBackground.setImageResource(backgroundRes)
         }
+
 
 
 
@@ -266,6 +275,10 @@ class HouseFragment : Fragment() {
             }
         }
 
+        binding.icRecommendationRefresh.setOnClickListener {
+            fetchRecommendStudy()
+        }
+
         weatherViewModel = ViewModelProvider(requireActivity()).get(WeatherViewModel::class.java)
 
         weatherViewModel.weatherResponse.observe(viewLifecycleOwner) { response ->
@@ -313,9 +326,6 @@ class HouseFragment : Fragment() {
                 Log.e("HouseFragment", "Weather API 응답 실패: ${response.errorBody()} ")
             }
         }
-
-
-
 
 
         return binding.root
