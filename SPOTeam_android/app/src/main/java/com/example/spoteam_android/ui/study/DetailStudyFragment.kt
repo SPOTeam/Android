@@ -28,7 +28,7 @@ import retrofit2.Response
 class DetailStudyFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailStudyBinding
-    private val tabList = arrayListOf("홈", "캘린더", "게시판", "갤러리", "투두 리스트")
+    private val tabList = arrayListOf("홈", "캘린더", "게시판", "갤러리", "투두리스트")
     private var currentTabPosition: Int = 0
     private val studyViewModel: StudyViewModel by activityViewModels()
 

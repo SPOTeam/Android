@@ -154,6 +154,11 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerFamily.Cut1" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
     </style>
@@ -189,9 +194,17 @@
         <item name="android:popupBackground">@drawable/custom_popup_background</item>
     </style>
 
+    <style name="CustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">13.3dp</item>
+        <item name="android:fontFamily">@font/suit_semi_bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 
 
 
 
 
-    </resources>
+
+
+
+</resources>

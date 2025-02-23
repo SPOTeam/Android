@@ -206,7 +206,7 @@
             android:textSize="13dp"
             android:padding="7dp"
             android:textColor="@color/black"
-            android:fontFamily="@font/suit_variable"
+            android:fontFamily="@font/suit_semi_bold"
             android:textFontWeight="600"
             android:background="@drawable/detail_study_background"
             android:layout_marginStart="15dp"
@@ -233,7 +233,7 @@
                 android:textSize="10.3dp"
                 android:padding="7dp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/suit_variable"
+                android:fontFamily="@font/suit_semi_bold"
                 android:textFontWeight="600"
                 android:background="@drawable/detail_study_background"/>
 
@@ -245,7 +245,7 @@
                 android:textSize="10.3dp"
                 android:padding="7dp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/suit_variable"
+                android:fontFamily="@font/suit_semi_bold"
                 android:textFontWeight="600"
                 android:background="@drawable/detail_study_background"
                 android:layout_marginStart="5dp"/>
@@ -257,7 +257,7 @@
                 android:text="무료"
                 android:textSize="10.3dp"
                 android:padding="7dp"
-                android:fontFamily="@font/suit_variable"
+                android:fontFamily="@font/suit_semi_bold"
                 android:textFontWeight="600"
                 android:textColor="@color/black"
                 android:background="@drawable/detail_study_background"
@@ -268,7 +268,7 @@
                 android:layout_height="wrap_content"
                 android:text="25세 이하"
                 android:textSize="10.3dp"
-                android:fontFamily="@font/suit_variable"
+                android:fontFamily="@font/suit_semi_bold"
                 android:padding="7dp"
                 android:textColor="@color/black"
                 android:textFontWeight="600"
@@ -280,18 +280,19 @@
             android:id="@+id/fragment_detail_study_tl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabTextAppearance="@style/CustomTabText"
             app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_group_ll"
             android:layout_marginTop="15dp"
             app:tabIndicatorColor="#186AFF"
             app:tabIndicatorFullWidth="false"
             app:tabRippleColor="#FFFFFFFF"
-            app:tabSelectedTextColor="#186AFF">
+            app:tabSelectedTextColor="@color/black">
         </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/fragment_detail_study_vp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:overScrollMode="never"
             app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_tl"
             app:layout_constraintStart_toStartOf="parent"

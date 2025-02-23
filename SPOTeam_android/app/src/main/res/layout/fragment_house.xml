@@ -97,9 +97,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:textColor="@color/white"
                     android:textSize="26dp"
-                    android:fontFamily="@font/suit_bold"
                     app:layout_constraintBottom_toBottomOf="@+id/ic_sun"
                     app:layout_constraintStart_toEndOf="@+id/ic_sun"
                     app:layout_constraintTop_toTopOf="@+id/ic_sun" />
@@ -110,8 +110,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="15dp"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:textColor="@color/white"
-                    android:textFontWeight="600"
                     android:textSize="14dp"
                     app:layout_constraintBottom_toBottomOf="@+id/ic_weather_background"
                     app:layout_constraintStart_toStartOf="@+id/ic_weather_background" />
@@ -138,11 +138,11 @@
                     android:id="@+id/live_popular_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/suit_bold"
                     android:text="실시간 인기글"
                     android:textColor="@color/black"
                     android:textSize="16dp"
-                    android:textFontWeight="700"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -159,14 +159,15 @@
 
                 <TextView
                     android:id="@+id/popular_content_tv"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="#555555"
-                    android:textSize="14dp"
+                    android:textColor="@color/g400"
+                    android:fontFamily="@font/suit_variable"
                     android:textFontWeight="600"
+                    android:textSize="14dp"
                     app:layout_constraintEnd_toStartOf="@id/go_popular_content_iv"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -223,8 +224,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:text="내 지역"
-                    android:textFontWeight="700"
+                    android:textSize="12dp"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -252,8 +254,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:text="게시판"
-                    android:textFontWeight="700"
+                    android:textSize="12dp"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -282,8 +285,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:text="모집중"
-                    android:textFontWeight="700"
+                    android:textSize="12dp"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -311,8 +315,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:text="내 관심사"
-                    android:textFontWeight="700"
+                    android:textSize="12dp"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -338,10 +343,10 @@
                 android:id="@+id/tx_interest_study"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="지금 가장 인기 있는 스터디"
                 android:fontFamily="@font/suit_bold"
+                android:text="지금 가장 인기 있는 스터디"
                 android:textColor="@color/black"
-                android:textSize="20dp"
+                android:textSize="18dp"
                 android:textStyle="bold" />
 
             <View
@@ -375,42 +380,18 @@
             app:layout_constraintTop_toBottomOf="@+id/fragment_house_interest_ll"
             tools:listitem="@layout/item_recycler_view" />
 
-        <LinearLayout
-            android:id="@+id/fragment_house_recommendation_ll"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tx_recommendation_study"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="당신을 기다리는 추천 스터디"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:fontFamily="@font/suit_bold"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_board">
-
-            <TextView
-                android:id="@+id/tx_recommendation_study"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/suit_bold"
-                android:text="당신을 기다리는 추천 스터디"
-                android:textColor="@color/black"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-            <ImageView
-                android:id="@+id/ic_recommendation_refresh"
-                android:layout_width="22dp"
-                android:layout_height="match_parent"
-                android:scaleType="centerInside"
-                android:background="?attr/selectableItemBackground"
-                android:src="@drawable/ic_recommendation_refresh" />
-
-        </LinearLayout>
-
+            app:layout_constraintTop_toBottomOf="@+id/rv_board" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_board2"
@@ -424,10 +405,8 @@
             android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_house_recommendation_ll"
+            app:layout_constraintTop_toBottomOf="@+id/tx_recommendation_study"
             tools:listitem="@layout/item_recycler_view"/>
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
