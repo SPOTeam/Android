@@ -11,7 +11,6 @@ import com.example.spoteam_android.ui.community.MembersDetail
 
 class HostMakeQuizMemberRVAdapter(
     private var dataList: List<MembersDetail>,
-    private val currentMemberId: Int
 ) : RecyclerView.Adapter<HostMakeQuizMemberRVAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {

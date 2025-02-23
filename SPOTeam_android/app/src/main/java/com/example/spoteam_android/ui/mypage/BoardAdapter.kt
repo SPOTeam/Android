@@ -1,4 +1,4 @@
-package com.example.spoteam_android
+package com.example.spoteam_android.ui.mypage
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,8 +9,9 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
-import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
 
 class BoardAdapter(
     private val itemList: ArrayList<BoardItem>,
@@ -66,15 +67,15 @@ class BoardAdapter(
             binding.heartCountIv.setImageResource(heartIcon)
 
             binding.toggle.setOnClickListener {
-                showPopupMenu(it)
+                showPopupMenu(it, item.studyId)
             }
         }
 
-        private fun showPopupMenu(view: View) {
+        private fun showPopupMenu(view: View, studyId : Int) {
             val popupMenu = PopupMenu(view.context, view)
             val inflater: MenuInflater = popupMenu.menuInflater
             val exit = ExitStudyPopupFragment(view.context, this@BoardAdapter, adapterPosition)
-            val report = ReportStudymemberFragment(view.context)
+            val report = ReportStudyCrewDialog(view.context, studyId)
             inflater.inflate(R.menu.menu_item_options, popupMenu.menu)
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {

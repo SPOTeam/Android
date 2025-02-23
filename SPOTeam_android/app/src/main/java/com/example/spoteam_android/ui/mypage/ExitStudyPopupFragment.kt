@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import android.widget.ImageButton
 import android.widget.Toast
-import com.example.spoteam_android.BoardAdapter
 import com.example.spoteam_android.R
 
 class ExitStudyPopupFragment(private val context: Context, private val adapter: BoardAdapter, private val position: Int) {
