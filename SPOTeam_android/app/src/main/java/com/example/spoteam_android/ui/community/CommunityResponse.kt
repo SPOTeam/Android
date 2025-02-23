@@ -717,5 +717,16 @@ data class DeletePostContentResponse (
     val result: Any?
 )
 
+/************ 스터디원 신고 완료 ***********/
+data class ReportCrewResponse (
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: ReportCrewContent
+)
 
+data class ReportCrewContent (
+    val memberId : Int,
+    val name : String
+)
 

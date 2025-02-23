@@ -1,7 +1,6 @@
 package com.example.spoteam_android.ui.mypage
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,48 +10,57 @@ import com.example.spoteam_android.ui.community.MembersDetail
 
 class ReportStudyCrewMemberRVAdapter(
     private var dataList: List<MembersDetail>,
-    private val listener: Any // ✅ 클릭 이벤트 리스너 추가
+    private val listener: OnMemberClickListener
 ) : RecyclerView.Adapter<ReportStudyCrewMemberRVAdapter.ViewHolder>() {
+
     interface OnMemberClickListener {
         fun onProfileClick(member: MembersDetail)
     }
 
-    private lateinit var itemClickListener: OnMemberClickListener
+    private var selectedPosition = RecyclerView.NO_POSITION // ✅ 선택된 프로필 위치 저장
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val binding: ItemDetailStudyHomeMemberBinding = ItemDetailStudyHomeMemberBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
+        val binding: ItemDetailStudyHomeMemberBinding =
+            ItemDetailStudyHomeMemberBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (position < dataList.size) {
-            holder.bind(dataList[position], position == 0)
-        }
+        holder.bind(dataList[position], position)
     }
 
     override fun getItemCount() = dataList.size
 
-    inner class ViewHolder(val binding: ItemDetailStudyHomeMemberBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: MembersDetail, isOwned: Boolean) {
+    inner class ViewHolder(private val binding: ItemDetailStudyHomeMemberBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: MembersDetail, position: Int) {
             Glide.with(binding.root.context)
                 .load(data.profileImage)
-                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
-                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
+                .error(R.drawable.fragment_calendar_spot_logo)
+                .fallback(R.drawable.fragment_calendar_spot_logo)
                 .into(binding.fragmentDetailStudyHomeHostuserIv)
 
             binding.profileNickname.text = data.nickname
 
-            if(isOwned) {
-                binding.fragmentConsiderAttendanceMemberHostIv.visibility = View.VISIBLE
-            } else {
-                binding.fragmentConsiderAttendanceMemberHostIv.visibility = View.GONE
-            }
-
-
-            binding.fragmentDetailStudyHomeHostuserIv.setOnClickListener{
+            // ✅ 선택된 프로필이면 테두리 추가, 그렇지 않으면 초기화
+            if (position == selectedPosition) {
                 binding.fragmentDetailStudyHomeHostuserIv.setBackgroundResource(R.drawable.selected_border)
+            } else {
+                binding.fragmentDetailStudyHomeHostuserIv.setBackgroundResource(0) // 기본 배경
             }
 
+            // ✅ 클릭 이벤트 처리
+            binding.fragmentDetailStudyHomeHostuserIv.setOnClickListener {
+                val previousPosition = selectedPosition
+                selectedPosition = position
+
+                // ✅ 이전 선택된 항목 갱신 (테두리 제거)
+                notifyItemChanged(previousPosition)
+                // ✅ 새로 선택된 항목 갱신 (테두리 추가)
+                notifyItemChanged(selectedPosition)
+
+                // ✅ 클릭 리스너 호출
+                listener.onProfileClick(data)
+            }
         }
     }
 }
