@@ -29,7 +29,7 @@
             android:padding="5dp"
             android:text="토익 스피킹 IH 스터디"
             android:fontFamily="@font/pretendard"
-            android:textSize="18sp"
+            android:textSize="18dp"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
@@ -40,7 +40,7 @@
             android:padding="5dp"
             android:text="스터디 목표"
             android:fontFamily="@font/pretendard"
-            android:textSize="14sp" />
+            android:textSize="14dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="po"
                 android:fontFamily="@font/pretendard"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/tv_name5"
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:text="/"
                 android:fontFamily="@font/pretendard"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/tv_name"
@@ -78,7 +78,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="to"
                 android:fontFamily="@font/pretendard"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
             <ImageView
                 android:id="@+id/ImageView6"
@@ -94,7 +94,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="like"
                 android:fontFamily="@font/pretendard"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
             <ImageView
                 android:id="@+id/ImageView7"
@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:text="view"
                 android:fontFamily="@font/pretendard"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
         </LinearLayout>
 
