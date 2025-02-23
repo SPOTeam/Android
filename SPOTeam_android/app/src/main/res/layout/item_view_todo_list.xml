@@ -24,7 +24,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/pretendard"
         android:maxLines="1"
-        android:textSize="14sp"
+        android:textSize="14dp"
         android:textColor="@color/black"
         android:layout_gravity="center_vertical"
         android:text="투두 리스트입니다."

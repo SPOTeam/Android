@@ -4,6 +4,7 @@ import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -35,7 +37,9 @@ import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
 import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
 import com.example.spoteam_android.ui.recruiting.RecruitingStudyFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.example.spoteam_android.weather.WeatherViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
@@ -54,6 +58,28 @@ class HouseFragment : Fragment() {
     private lateinit var presentTemperature: TextView
 
 
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.let {
+            it.findViewById<FloatingActionButton>(R.id.add_study_btn)?.visibility = View.VISIBLE
+            it.findViewById<FloatingActionButton>(R.id.add_study_btn)?.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white)))
+            it.findViewById<FloatingActionButton>(R.id.add_study_btn)?.setOnClickListener {
+                val fragment = RegisterStudyFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        (activity as? MainActivity)?.let {
+            it.findViewById<FloatingActionButton>(R.id.add_study_btn)?.visibility = View.GONE
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -70,6 +96,9 @@ class HouseFragment : Fragment() {
         if (backgroundRes == R.drawable.ic_weather_night_background) {
             binding.icWeatherBackground.setImageResource(backgroundRes)
         }
+
+
+
 
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
         presentTemperature = binding.txTemperature
@@ -246,6 +275,10 @@ class HouseFragment : Fragment() {
             }
         }
 
+        binding.icRecommendationRefresh.setOnClickListener {
+            fetchRecommendStudy()
+        }
+
         weatherViewModel = ViewModelProvider(requireActivity()).get(WeatherViewModel::class.java)
 
         weatherViewModel.weatherResponse.observe(viewLifecycleOwner) { response ->
@@ -253,6 +286,7 @@ class HouseFragment : Fragment() {
 
             if (response.isSuccessful) {
                 val responseBody = response.body()?.response
+                Log.d("HouseFragment", "Response: ${response.body()}")
                 if (responseBody?.body != null) {
                     val items = responseBody.body.items
                     if (!items?.item.isNullOrEmpty()) {
@@ -292,9 +326,6 @@ class HouseFragment : Fragment() {
                 Log.e("HouseFragment", "Weather API 응답 실패: ${response.errorBody()} ")
             }
         }
-
-
-
 
 
         return binding.root

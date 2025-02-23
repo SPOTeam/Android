@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="서울특별시 중구 서소문동"
-        android:textSize="15sp"
+        android:textSize="15dp"
         android:textColor="#1E1E1E"
         android:fontFamily="@font/suit_bold"
         android:layout_marginStart="15dp"

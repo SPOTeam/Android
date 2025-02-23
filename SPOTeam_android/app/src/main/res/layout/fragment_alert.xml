@@ -23,7 +23,7 @@
         android:text="알림"
         android:fontFamily="@font/pretendard"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="18dp"
         android:layout_marginStart="30dp"
         app:layout_constraintStart_toEndOf="@id/community_prev_iv"
         app:layout_constraintTop_toTopOf="@id/community_prev_iv" />
@@ -67,7 +67,7 @@
             android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="18dp"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toEndOf="@id/alert_check_iv"
             app:layout_constraintTop_toTopOf="@id/alert_check_iv"/>

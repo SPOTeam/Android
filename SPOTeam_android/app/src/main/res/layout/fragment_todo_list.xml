@@ -27,7 +27,7 @@
         android:fontFamily="@font/pretendard"
         android:text="⏰ 예정된 일정"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_dates" />

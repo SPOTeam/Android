@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Recent Search"
         android:textColor="@color/active_blue"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:fontFamily="@font/pretendard"
         android:checkable="false"
         app:chipBackgroundColor="@color/white"
