@@ -1,11 +1,17 @@
 package com.example.spoteam_android.login
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ActivityNicNameBinding
+import com.example.spoteam_android.databinding.DialogAgreementBinding
+import com.example.spoteam_android.databinding.DialogIdentificationAgreementBinding
 
 class NicNameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNicNameBinding
@@ -15,27 +21,82 @@ class NicNameActivity : AppCompatActivity() {
         binding = ActivityNicNameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 글자 수 업데이트를 위한 TextWatcher 설정
-        setupNicknameTextWatcher()
-
         // Toolbar 클릭 시 이전 화면으로 이동
-        binding.activityNickNameTb.setOnClickListener {
+        binding.activityNicknameLoginTb.setOnClickListener {
             val intent = Intent(this, NormalLoginActivity::class.java)
             startActivity(intent)
         }
+
+        // ✅ 체크박스 직접 클릭 방지 (다이얼로그를 통해서만 체크 가능)
+        binding.activityStartloginCheckBox1.isClickable = false
+        binding.activityStartloginCheckBox1.isFocusable = false
+
+        // ✅ 약관 동의 레이아웃 클릭 시 다이얼로그 표시
+        binding.activityStartloginCheckBox1Ll.setOnClickListener {
+            showAgreementDialog()
+        }
+        binding.activityStartloginCheckBox2Ll.setOnClickListener {
+            showIdentifyAgreementDialog()
+        }
     }
 
-    private fun setupNicknameTextWatcher() {
-        binding.activityNickNameNicknameEt.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+    private fun showAgreementDialog() {
+        // ✅ 1. 다이얼로그 생성 후 즉시 requestFeature() 호출
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        val dialogBinding = DialogAgreementBinding.inflate(LayoutInflater.from(this))
+        dialog.setContentView(dialogBinding.root)
+        dialog.setCancelable(false)
 
-            override fun afterTextChanged(s: Editable?) {
-                val inputLength = s?.length ?: 0
-                binding.activityNickNameValidMessageMinTv.text = inputLength.toString()
+        // ✅ 2. 다이얼로그를 먼저 띄운 후 크기 및 배경 설정
+        dialog.show()
 
-            }
-        })
+        dialog.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setLayout(
+                (resources.displayMetrics.widthPixels * 0.9).toInt(),
+                resources.getDimensionPixelSize(R.dimen.dialog_fixed_height)
+            )
+        }
+
+
+        // ✅ 3. "동의" 버튼 클릭 시 체크박스 활성화 및 다이얼로그 닫기
+        dialogBinding.dialogAgreementAcceptBtn.setOnClickListener {
+            binding.activityStartloginCheckBox1.isChecked = true
+            binding.activityStartloginCheckBox1Ll.setBackgroundResource(R.drawable.agreement_background)
+            dialog.dismiss()
+        }
     }
+
+    private fun showIdentifyAgreementDialog() {
+        // ✅ 1. 다이얼로그 생성 후 즉시 requestFeature() 호출
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        val dialogBinding = DialogIdentificationAgreementBinding.inflate(LayoutInflater.from(this))
+        dialog.setContentView(dialogBinding.root)
+        dialog.setCancelable(false)
+
+        // ✅ 2. 다이얼로그를 먼저 띄운 후 크기 및 배경 설정
+        dialog.show()
+
+        dialog.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setLayout(
+                (resources.displayMetrics.widthPixels * 0.9).toInt(),
+                resources.getDimensionPixelSize(R.dimen.dialog_fixed_height)
+            )
+        }
+
+
+        // ✅ 3. "동의" 버튼 클릭 시 체크박스 활성화 및 다이얼로그 닫기
+        dialogBinding.dialogAgreementAcceptBtn.setOnClickListener {
+            binding.activityStartloginCheckBox2.isChecked = true
+            binding.activityStartloginCheckBox2Ll.setBackgroundResource(R.drawable.agreement_background)
+            dialog.dismiss()
+        }
+    }
+
+
 }

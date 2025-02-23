@@ -7,6 +7,7 @@
     <string name="studystart">스터디 모집과 관리\n똑똑한 취준 생활 시작, SPOT</string>
     <string name ="emailstart">반가워요!\n회원가입하고, 스팟과 함께해요!</string>
     <string name="locationcaution">위치 노출의 위험을 방지하기 위해 구체적인\n지역은 스터디원 확정 후 협의하시기 바랍니다.</string>
+    <string name= "nick_name">한글, 영문, 숫자 입력 가능, 최대 8자까지 입력해주세요.\n공백, 이모지, 특수문자(‘_’, ‘/’ 제외)는 사용할 수 없습니다.</string>
     <string name="complete_message">스터디 모집이 시작됩니다!</string>
     <string name="start_login"><u>로그인하기</u></string>
     <string name="re_verify"><u>인증번호 다시 보내기</u></string>

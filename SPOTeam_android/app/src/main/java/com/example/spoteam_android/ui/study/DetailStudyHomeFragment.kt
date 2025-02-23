@@ -194,29 +194,37 @@ class DetailStudyHomeFragment : Fragment() {
             override fun onResponse(call: Call<ScheduleListResponse>, response: Response<ScheduleListResponse>) {
                 if (response.isSuccessful) {
                     val scheduleListResponse = response.body()
-                    val schedules = scheduleListResponse?.result?.schedules
+                    val schedules = scheduleListResponse?.result?.schedules ?: emptyList()
 
-                    if (schedules.isNullOrEmpty()) {
-                        // Schedules가 없을 때
+                    if (schedules.isEmpty()) {
                         binding.fragmentDetailStudyHomeScheduleRv.visibility = View.GONE
                     } else {
-                        // 현재 날짜 이후의 일정만 필터링
+                        // 현재 시간
+                        val now = Calendar.getInstance().time
+
+                        // 현재 시간 이후이거나, 일정이 진행 중인 것만 필터링
                         val validSchedules = schedules.filter { schedule ->
-                            val scheduleDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(schedule.staredAt)
-                            scheduleDate?.after(Calendar.getInstance().time) ?: false
+                            val startDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(schedule.startedAt)
+                            val endDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(schedule.finishedAt)
+
+                            // 시작 시간이 현재보다 미래이거나, 종료 시간이 현재보다 미래이면 표시
+                            (startDate != null && startDate.after(now)) || (endDate != null && endDate.after(now))
                         }
 
-                        if (validSchedules.isEmpty()) {
+                        // 가장 가까운 일정 2개만 가져오기 (시작일 기준 정렬)
+                        val nearestSchedules = validSchedules.sortedBy { it.startedAt }.take(2)
+
+                        if (nearestSchedules.isEmpty()) {
                             binding.fragmentDetailStudyHomeScheduleRv.visibility = View.GONE
                         } else {
                             binding.fragmentDetailStudyHomeScheduleRv.visibility = View.VISIBLE
 
-                            val scheduleItems = validSchedules.map { schedule ->
+                            val scheduleItems = nearestSchedules.map { schedule ->
                                 SceduleItem(
-                                    dday = calculateDday(schedule.staredAt),
-                                    day = formatDate(schedule.staredAt),
+                                    dday = calculateDday(schedule.startedAt, schedule.finishedAt),
+                                    day = formatDate(schedule.startedAt),
                                     scheduleContent = schedule.title,
-                                    concreteTime = formatTime(schedule.staredAt),
+                                    concreteTime = formatTime(schedule.startedAt),
                                     place = schedule.location
                                 )
                             }
@@ -224,17 +232,16 @@ class DetailStudyHomeFragment : Fragment() {
                         }
                     }
                 } else {
-                    // 응답이 실패한 경우
                     Toast.makeText(requireContext(), "Failed to fetch study schedules", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ScheduleListResponse>, t: Throwable) {
-                // 네트워크 실패 등
                 Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 
     private fun fetchRecentAnnounce(studyId: Int) {
         val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
@@ -261,48 +268,47 @@ class DetailStudyHomeFragment : Fragment() {
         })
     }
 
-    // Null 체크를 추가한 D-day 변경 로직
-    private fun calculateDday(staredAt: String?): String {
-        if (staredAt.isNullOrEmpty()) {
-            return "N/A" // 기본값 또는 에러 메시지
+    private fun calculateDday(startedAt: String?, finishedAt: String?): String {
+        if (startedAt.isNullOrEmpty() || finishedAt.isNullOrEmpty()) {
+            return "N/A"
         }
 
         val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        val scheduleDateTime = formatter.parse(staredAt)
+        val startDate = formatter.parse(startedAt)
+        val endDate = formatter.parse(finishedAt)
 
-        // 자정을 기준으로 하는 날짜 계산을 위해, 시간, 분, 초를 0으로 설정
-        //왜냐하면 이걸 안하면 다음주 토요일 오후 3시에 약속이있어도 지금 시각이 오후 4시면 디데이 오류
-        val calendar = Calendar.getInstance()
-        calendar.time = scheduleDateTime
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        val scheduleDate = calendar.time
+        if (startDate == null || endDate == null) {
+            return "N/A"
+        }
 
         val today = Calendar.getInstance()
         today.set(Calendar.HOUR_OF_DAY, 0)
         today.set(Calendar.MINUTE, 0)
         today.set(Calendar.SECOND, 0)
         today.set(Calendar.MILLISECOND, 0)
+
         val todayDate = today.time
 
-        val diff = scheduleDate.time - todayDate.time
-        val daysLeft = (diff / (1000 * 60 * 60 * 24)).toInt()
-
-        return if (daysLeft > 0) {
-            "D-${daysLeft}"
-        } else if (daysLeft == 0) {
-            "D-day"
-        } else {
-            "D+${-daysLeft}"
+        return when {
+            todayDate.before(startDate) -> { // 일정 시작 전
+                val daysLeft = ((startDate.time - todayDate.time) / (1000 * 60 * 60 * 24)).toInt()
+                "D-${daysLeft}"
+            }
+            todayDate in startDate..endDate -> { // 일정 진행 중
+                "D-day"
+            }
+            else -> { // 일정 종료 후
+                val daysPassed = ((todayDate.time - endDate.time) / (1000 * 60 * 60 * 24)).toInt()
+                "D+${daysPassed}"
+            }
         }
     }
+
 
     // Null 체크를 추가한 날짜 변경 로직
     private fun formatDate(startedAt: String?): String {
         if (startedAt.isNullOrEmpty()) {
-            return "N/A" // 기본값 또는 에러 메시지
+            return "N/A"
         }
 
         val inputFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
