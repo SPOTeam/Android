@@ -14,77 +14,85 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_arrow">
+        app:navigationIcon="@drawable/ic_arrow"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp">
 
+        <TextView
+            android:id="@+id/activity_normal_login_toolbar_tv"
+            android:text="회원가입"
+            android:fontFamily="@font/suit_bold"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
     </androidx.appcompat.widget.Toolbar>
 
 
     <TextView
-        android:id="@+id/activity_normal_login_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="회원가입"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:fontFamily="@font/pretendard"
-        android:textColor="#588FF2"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="40dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_tb"/>
+    android:id="@+id/activity_normal_login_greet_tv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/emailstart"
+    android:textColor="@color/b500"
+    android:textSize="16sp"
+    android:lineSpacingExtra="8dp"
+    android:fontFamily="@font/suit_bold"
+    android:layout_marginTop="55dp"
+    android:layout_marginStart="20dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/activity_normal_login_tb"/>
 
 
 
 
     <TextView
-        android:id="@+id/activity_normal_login_name_tv"
+        android:id="@+id/activity_nomarl_login_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="20dp"
         android:text="이름"
-        android:textColor="#2D2D2D"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
+        android:textColor="@color/black"
+        android:textSize="13.3sp"
+        android:fontFamily="@font/suit_bold"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_tv" />
+        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_greet_tv"/>
 
-
-
-        <EditText
-            android:id="@+id/activity_normal_login_name_text_input_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="성명입력"
-            android:textColorHint="#D8D8D8"
-            android:maxLines="1"
-            android:inputType="text"
-            android:padding="8.5dp"
-            android:textSize="13sp"
-            android:background="@drawable/normal_login_edittext_corner_rectangle"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/activity_normal_login_name_tv">
-
-        </EditText>
+    <EditText
+        android:id="@+id/activity_normal_login_name_input_et"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_weight="4"
+        android:maxLines="1"
+        android:padding="8.5dp"
+        android:textColor="@color/black"
+        android:textSize="13.3dp"
+        android:fontFamily="@font/suit_bold"
+        android:background="@drawable/normal_login_edittext_corner_rectangle"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_nomarl_login_name_tv"/>
 
     <TextView
-        android:id="@+id/activity_normal_login_birth_tv"
+        android:id="@+id/activity_email_verfication_number_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="20dp"
         android:text="생년월일"
-        android:textColor="#2D2D2D"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
+        android:textColor="@color/black"
+        android:fontFamily="@font/suit_bold"
+        android:textSize="13.3sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_name_text_input_et" />
+        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_name_input_et"/>
+
+
+
 
 
 
@@ -93,27 +101,28 @@
     <LinearLayout
         android:id="@+id/activity_normal_login_birth_text_input_ll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_birth_tv"
+        android:layout_height="35dp"
+        app:layout_constraintTop_toBottomOf="@id/activity_email_verfication_number_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/activity_normal_login_birth_text_input_et"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="●●●●●●"
-            android:textColorHint="#D8D8D8"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
             android:maxLines="1"
+            android:fontFamily="@font/suit_bold"
+            android:textColor="@color/black"
             android:inputType="number"
             android:maxLength="6"
             android:padding="8.5dp"
-            android:textSize="13sp"
-            android:letterSpacing="0.4"
+            android:textSize="13dp"
+            android:letterSpacing="0.5"
             android:background="@drawable/normal_login_edittext_corner_rectangle">
         </EditText>
 
@@ -121,213 +130,165 @@
             android:id="@+id/activity_normal_minus_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="10dp"
             android:text="-"
             android:textColor="#2D2D2D"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/pretendard" />
+            android:textSize="20dp"
+            android:layout_marginHorizontal="5dp"
+            android:fontFamily="@font/suit_bold" />
 
         <EditText
             android:id="@+id/activity_normal_login_birth_behind_text_input_et"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="●"
-            android:layout_marginStart="15dp"
-            android:textColorHint="#D8D8D8"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:layout_marginStart="10dp"
             android:maxLines="1"
             android:inputType="number"
             android:maxLength="1"
             android:padding="8.5dp"
-            android:textSize="13sp"
+            android:textSize="13dp"
+            android:fontFamily="@font/suit_bold"
+            android:textColor="@color/black"
             android:letterSpacing="0.4"
             android:background="@drawable/normal_login_edittext_corner_rectangle">
         </EditText>
 
-        <TextView
-            android:id="@+id/activity_normal_login_birth_behind_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="●●●●●●"
-            android:letterSpacing="0.3"
-            android:textColor="#2D2D2D"
-            android:textSize="13sp"
-            android:paddingBottom="8.5dp"
-            android:paddingTop="8.5dp"
-            android:textStyle="bold"
-            android:fontFamily="@font/pretendard" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:layout_marginStart="3dp"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/circle_oval"
+                android:layout_margin="5dp"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/circle_oval"
+                android:layout_margin="5dp"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/circle_oval"
+                android:layout_margin="5dp"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/circle_oval"
+                android:layout_margin="5dp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/circle_oval"
+                android:layout_margin="5dp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/circle_oval"
+                android:layout_margin="5dp"/>
+
+        </LinearLayout>
 
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/activity_normal_login_id_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="20dp"
-        android:text="아이디"
-        android:textColor="#2D2D2D"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_birth_text_input_ll" />
 
-    <TextView
-        android:id="@+id/activity_normal_login_id_error_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="사용 불가능한 아이디입니다."
-        android:textColor="#F46258"
-        android:visibility="gone"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        app:layout_constraintEnd_toEndOf="@id/activity_normal_login_id_text_input_et"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_birth_text_input_ll" />
-
-
-
-    <EditText
-        android:id="@+id/activity_normal_login_id_text_input_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="영문, 숫자가 조합된 6자 이상"
-        android:textColorHint="#D8D8D8"
-        android:maxLines="1"
-        android:maxLength="15"
-        android:inputType="text"
-        android:padding="8.5dp"
-        android:textSize="13sp"
-        android:background="@drawable/normal_login_edittext_corner_rectangle"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_id_tv">
-
-    </EditText>
-
-    <TextView
-        android:id="@+id/activity_normal_login_email_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="20dp"
-        android:text="이메일"
-        android:textColor="#2D2D2D"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_id_text_input_et" />
-
-    <TextView
-        android:id="@+id/activity_normal_login_email_error_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="사용 불가능한 이메일입니다."
-        android:textColor="#F46258"
-        android:visibility="gone"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        app:layout_constraintEnd_toEndOf="@id/activity_normal_login_email_text_input_et"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_id_text_input_et" />
-
-
-
-    <EditText
-        android:id="@+id/activity_normal_login_email_text_input_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="이메일 주소 입력"
-        android:textColorHint="#D8D8D8"
-        android:maxLines="1"
-        android:inputType="text"
-        android:padding="8.5dp"
-        android:textSize="13sp"
-        android:background="@drawable/normal_login_edittext_corner_rectangle"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_email_tv">
-
-    </EditText>
 
     <TextView
         android:id="@+id/activity_normal_login_password_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
         android:text="비밀번호"
-        android:textColor="#2D2D2D"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
+        android:textColor="@color/black"
+        android:textSize="13.3sp"
+        android:visibility="gone"
+        android:fontFamily="@font/suit_bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_email_text_input_et" />
+        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_birth_text_input_ll" />
+
+    <EditText
+        android:id="@+id/activity_normal_login_password_input_et"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:maxLines="1"
+        android:padding="8.5dp"
+        android:textColor="@color/black"
+        android:textSize="13.3dp"
+        android:visibility="gone"
+        android:fontFamily="@font/suit_bold"
+        android:background="@drawable/normal_login_edittext_corner_rectangle"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_password_tv"/>
 
     <TextView
         android:id="@+id/activity_normal_login_password_error_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="사용 불가능한 비밀번호입니다."
-        android:textColor="#F46258"
+        android:text="영문, 숫자 포함 10자 이상 입력해주세요."
+        android:textColor="#8F8F99"
         android:visibility="gone"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        app:layout_constraintEnd_toEndOf="@id/activity_normal_login_password_text_input_et"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_email_text_input_et" />
+        android:textSize="13.3dp"
+        android:textFontWeight="600"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="7dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_password_input_et" />
 
-
+    <TextView
+        android:id="@+id/activity_normal_login_password_check_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:text="비밀번호 확인"
+        android:textColor="@color/black"
+        android:textSize="13.3sp"
+        android:visibility="gone"
+        android:fontFamily="@font/suit_bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_password_input_et" />
 
     <EditText
-        android:id="@+id/activity_normal_login_password_text_input_et"
+        android:id="@+id/activity_normal_login_password_check_input_et"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="영문, 숫자가 조합된 10자 이상"
-        android:textColorHint="#D8D8D8"
+        android:layout_height="35dp"
         android:maxLines="1"
-        android:inputType="text"
         android:padding="8.5dp"
-        android:textSize="13sp"
+        android:textColor="@color/black"
+        android:textSize="13.3dp"
+        android:visibility="gone"
+        android:fontFamily="@font/suit_bold"
         android:background="@drawable/normal_login_edittext_corner_rectangle"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_password_tv">
-    </EditText>
-    <EditText
-        android:id="@+id/activity_normal_login_password_check_text_input_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="비밀번호 확인"
-        android:textColorHint="#D8D8D8"
-        android:maxLines="1"
-        android:inputType="textPassword"
-        android:padding="8.5dp"
-        android:textSize="13sp"
-        android:background="@drawable/normal_login_edittext_corner_rectangle"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_password_text_input_et">
-    </EditText>
+        app:layout_constraintTop_toBottomOf="@id/activity_normal_login_password_check_tv"/>
+
+
+
 
 
 

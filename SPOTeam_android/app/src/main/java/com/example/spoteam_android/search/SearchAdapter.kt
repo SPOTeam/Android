@@ -1,18 +1,14 @@
 package com.example.spoteam_android.search
 
-import com.example.spoteam_android.BoardItem
-import com.example.spoteam_android.R
-import com.example.spoteam_android.ReportStudymemberFragment
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
-import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
-import com.example.spoteam_android.ui.mypage.ExitStudyPopupFragment
 import com.bumptech.glide.Glide
+import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.R
+import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 
 class SearchAdapter(
     private val itemList: ArrayList<BoardItem>,

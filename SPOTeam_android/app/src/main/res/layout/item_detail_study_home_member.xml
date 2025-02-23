@@ -10,7 +10,7 @@
         android:id="@+id/fragment_detail_study_home_hostuser_iv"
         android:layout_width="41dp"
         android:layout_height="41dp"
-        android:padding="3dp"
+        android:padding="10dp"
         android:src="@drawable/ic_host_profile"
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut"/>

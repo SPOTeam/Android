@@ -44,3 +44,8 @@ data class CrewAnswerRequest(
     val dateTime : String,
     val answer : String
 )
+
+/*********스터디원 신고 Request********/
+data class ReportCrewRequest(
+    val content : String
+)

@@ -419,7 +419,8 @@ data class ScheduleListResult(
 )
 
 data class ScheduleItem(
-    val staredAt: String,
+    val startedAt: String,
+    val finishedAt: String,
     val title: String,
     val location: String
 )
