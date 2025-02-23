@@ -145,6 +145,7 @@ class DetailStudyHomeFragment : Fragment() {
                     val isApplied = response.body()?.result?.applied ?: false
                     updateRegisterButton(isApplied)
                 } else {
+                    
                     Toast.makeText(requireContext(), "Failed to check application status", Toast.LENGTH_SHORT).show()
                 }
             }
