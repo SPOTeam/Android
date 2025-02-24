@@ -189,9 +189,19 @@
         <item name="android:popupBackground">@drawable/custom_popup_background</item>
     </style>
 
+    <style name="MyDatePickerTheme" parent="Theme.MaterialComponents.Light.Dialog">
+        <!-- 배경색 변경 -->
+        <item name="android:windowBackground">@color/white</item>
+        <!-- 버튼 색상 -->
+        <item name="colorPrimary">@color/b400</item>
+        <item name="colorSecondary">@color/b400</item>
+    </style>
 
+    <style name="MyTimePickerTheme" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:windowBackground">@color/white</item>
+        <!-- 버튼 색상 -->
+        <item name="colorPrimary">@color/b400</item>
+        <item name="colorSecondary">@color/b400</item>
+    </style>
 
-
-
-
-    </resources>
+</resources>
