@@ -9,7 +9,7 @@
     <color name="red">#F46258</color>
     <color name="chip_background_color">#588FF2</color>
     <color name="button_enabled_text">#005BFF</color>
-    <color name="button_disabled_text">#C5C5CD</color>
+    <color name="button_disabled_text">#8F8F99</color>
     <color name="button_pressed_text">#FFFFFF</color>
     <color name="active_green">#01B777</color>
 

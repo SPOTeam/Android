@@ -58,7 +58,6 @@ class DetailStudyHomeFragment : Fragment() {
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
             Log.d("DetailStudyHomeFragment", "Received studyId from ViewModel: $studyId")
             if (studyId != null) {
-                fetchIsApplied(studyId)
                 fetchStudySchedules(studyId)
                 fetchStudyMembers(studyId)
                 fetchRecentAnnounce(studyId)
@@ -67,9 +66,6 @@ class DetailStudyHomeFragment : Fragment() {
             }
         }
 
-        binding.fragmentDetailStudyHomeRegisterBt.setOnClickListener {
-            showCompletionDialog()
-        }
 
         return binding.root
     }
@@ -111,19 +107,6 @@ class DetailStudyHomeFragment : Fragment() {
                             ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
                         })
 
-                        // 멤버 ID 리스트에서 현재 사용자의 ID와 비교
-                        val memberIds = members.map { it.memberId }
-                        val isMember = memberIds.contains(currentMemberId)
-
-                        // maxPeople과 memberCount 값을 가져오기 위해 ViewModel을 옵저빙
-                        val maxPeople = studyViewModel.maxPeople.value
-                        val memberCount = studyViewModel.memberCount.value
-
-                        // 현재 사용자가 멤버인지 확인하거나, 최대 인원을 초과한 경우 버튼 숨김 처리
-                        val shouldHideButton = isMember || (maxPeople != null && memberCount != null && memberCount >= maxPeople)
-                        binding.fragmentDetailStudyHomeRegisterBt.visibility = if (shouldHideButton) View.GONE else View.VISIBLE
-
-
                     }
                 } else {
                     Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
@@ -137,54 +120,7 @@ class DetailStudyHomeFragment : Fragment() {
     }
 
 
-    private fun fetchIsApplied(studyId: Int) {
-        val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
-        api.getIsApplied(studyId).enqueue(object : Callback<IsAppliedResponse> {
-            override fun onResponse(call: Call<IsAppliedResponse>, response: Response<IsAppliedResponse>) {
-                if (response.isSuccessful) {
-                    val isApplied = response.body()?.result?.applied ?: false
-                    updateRegisterButton(isApplied)
-                } else {
-                    
-                    Toast.makeText(requireContext(), "Failed to check application status", Toast.LENGTH_SHORT).show()
-                }
-            }
 
-            override fun onFailure(call: Call<IsAppliedResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun updateRegisterButton(isApplied: Boolean) {
-        val button = binding.fragmentDetailStudyHomeRegisterBt
-
-
-        val backgroundDrawable = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE  // 사각형 형태
-            cornerRadius = 16f  // 둥근 모서리 반경 (픽셀 단위)
-        }
-
-        if (isApplied) {
-            button.isEnabled = false
-            button.text = "신청완료"
-
-            backgroundDrawable.setColor(ContextCompat.getColor(requireContext(), R.color.white))
-            backgroundDrawable.setStroke(3, ContextCompat.getColor(requireContext(), R.color.button_disabled_text)) // 테두리 설정
-
-            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.button_disabled_text))
-        } else {
-            button.isEnabled = true
-            button.text = "신청하기"
-
-            backgroundDrawable.setColor(ContextCompat.getColor(requireContext(), R.color.white))
-            backgroundDrawable.setStroke(3, ContextCompat.getColor(requireContext(), R.color.button_enabled_text)) // 테두리 설정
-
-            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.MainColor_01))
-        }
-
-        button.background = backgroundDrawable
-    }
 
 
 
@@ -332,13 +268,4 @@ class DetailStudyHomeFragment : Fragment() {
         return outputFormatter.format(date)
     }
 
-    private fun showCompletionDialog() {
-        val dialog = ApplyStudyDialog(requireContext(), this)
-        dialog.start {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.main_frm, HouseFragment())
-            transaction.addToBackStack(null)
-            transaction.commit()
-        }
-    }
 }
