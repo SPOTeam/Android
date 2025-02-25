@@ -13,12 +13,13 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.StudyApplyResponse
 import com.example.spoteam_android.StudyDetailsResponse
+import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.DetailStudyHomeFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ApplyStudyDialog(private val context: Context, private val fragment: DetailStudyHomeFragment) {
+class ApplyStudyDialog(private val context: Context, private val fragment: DetailStudyFragment) {
 
     private val dlg = Dialog(context)
 

@@ -6,8 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="16dp"
     android:paddingStart="20dp"
-    android:paddingEnd="20dp"
-    android:paddingBottom="0dp">
+    android:paddingEnd="20dp">
 
     <TextView
         android:id="@+id/fragment_detail_study_home_notification_tv"
@@ -82,7 +81,7 @@
     <TextView
         android:id="@+id/fragment_detail_study_home_introduce_tv"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="115dp"
         android:hint="스터디를 소개해봅시다! 자유롭게 작성해봐요"
         android:background="@drawable/edittext_rounded_corner_rectangle"
         android:padding="10dp"
@@ -110,25 +109,12 @@
         android:id="@+id/fragment_detail_study_home_profile_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"
-        android:clipToPadding="false"
         tools:listitem="@layout/item_detail_study_home_member"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_member_tv"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <android.widget.Button
-        android:id="@+id/fragment_detail_study_home_register_bt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="신청하기"
-        android:textSize="17dp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_profile_rv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
