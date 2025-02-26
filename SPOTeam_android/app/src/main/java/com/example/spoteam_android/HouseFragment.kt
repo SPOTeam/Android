@@ -275,9 +275,9 @@ class HouseFragment : Fragment() {
             }
         }
 
-        binding.icRecommendationRefresh.setOnClickListener {
-            fetchRecommendStudy()
-        }
+//        binding.icRecommendationRefresh.setOnClickListener {
+//            fetchRecommendStudy()
+//        }
 
         weatherViewModel = ViewModelProvider(requireActivity()).get(WeatherViewModel::class.java)
 

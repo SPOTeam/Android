@@ -34,6 +34,7 @@ class StudyFragment : Fragment() {
     private var currentPage = 0
     private val size = 5 // 페이지당 항목 수
     private var totalPages = 0
+    private var startPage = 0
     private val studyViewModel: StudyViewModel by activityViewModels()
 
     // Retrofit API Service
@@ -81,6 +82,24 @@ class StudyFragment : Fragment() {
             adapter = studyAdapter
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        }
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            textView.setOnClickListener {
+                val selectedPage = startPage + index
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    fetchStudyData()
+                }
+            }
         }
 
         // 페이지 전환 버튼 설정
@@ -159,7 +178,7 @@ class StudyFragment : Fragment() {
                                         binding.emptyMessage.visibility = View.GONE
 
                                         // 페이지 UI 업데이트
-                                        updatePageNumberUI(result.totalPages)
+                                        updatePageUI()
                                     } else {
                                         // 데이터가 없을 때 처리
                                         binding.fragmentStudyRv.visibility = View.GONE
@@ -243,26 +262,46 @@ class StudyFragment : Fragment() {
         }
     }
 
-    private fun updatePageNumberUI(totalPages: Int) {
-        binding.currentPage.text = "${currentPage + 1}"
+    private fun updatePageUI() {
+
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            minOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+
+        val endPage = minOf(totalPages, startPage + 5)
+        val pages = (startPage until endPage).toList()
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+
+        pageButtons.forEach { it.text = "" }
+
+
+        pageButtons.forEachIndexed { index, textView ->
+            if (index < pages.size) {
+                textView.text = (pages[index] + 1).toString()
+                textView.setBackgroundResource(
+                    if (pages[index] == currentPage) R.drawable.btn_page_bg
+                    else 0
+                )
+                textView.visibility = View.VISIBLE
+            } else {
+                textView.visibility = View.INVISIBLE
+            }
+        }
 
         binding.previousPage.isEnabled = currentPage > 0
-        binding.previousPage.setTextColor(
-            resources.getColor(
-                if (currentPage > 0) R.color.active_color else R.color.disabled_color,
-                null
-            )
-        )
-
-        // 다음 페이지 버튼 활성화/비활성화
         binding.nextPage.isEnabled = currentPage < totalPages - 1
-        binding.nextPage.setTextColor(
-            resources.getColor(
-                if (currentPage < totalPages - 1) R.color.active_color else R.color.disabled_color,
-                null
-            )
-        )
     }
+
 
     private fun getTotalPages(): Int {
         return totalPages // 올바른 페이지 수 계산
