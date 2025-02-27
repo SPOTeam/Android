@@ -294,26 +294,26 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/house_interest_cl"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/house_interest_iv"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/house_interest"
                     android:layout_marginTop="12dp"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/house_interest"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="내 관심사"
-                    android:textFontWeight="700"
                     android:textColor="@color/black"
+                    android:textFontWeight="700"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/house_interest_iv" />
