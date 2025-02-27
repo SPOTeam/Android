@@ -1,5 +1,6 @@
 package com.example.spoteam_android.weather
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,11 +17,24 @@ class WeatherViewModel @Inject constructor(
     private val _weatherResponse : MutableLiveData<Response<Weather>> = MutableLiveData()
     val weatherResponse get() = _weatherResponse
 
-    fun getWeather(dataType : String, numOfRows : Int, pageNo : Int,
-                   baseDate : Int, baseTime : String, nx : String, ny : String){
+    fun getWeather(
+        dataType: String, numOfRows: Int, pageNo: Int,
+        baseDate: Int, baseTime: String, nx: String, ny: String
+    ) {
+        Log.d(
+            "WeatherRequest",
+            "Requesting weather data with params: dataType=$dataType, numOfRows=$numOfRows, pageNo=$pageNo, baseDate=$baseDate, baseTime=$baseTime, nx=$nx, ny=$ny"
+        )
+
         viewModelScope.launch {
-            val response = repository.getWeather(dataType, numOfRows, pageNo, baseDate, baseTime, nx, ny)
-            _weatherResponse.value = response
+            try {
+                val response =
+                    repository.getWeather(dataType, numOfRows, pageNo, baseDate, baseTime, nx, ny)
+                _weatherResponse.value = response
+                Log.d("WeatherResponse", "Response received: $response")
+            } catch (e: Exception) {
+                Log.e("WeatherError", "Failed to fetch weather data", e)
+            }
         }
     }
 }
