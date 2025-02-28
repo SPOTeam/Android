@@ -59,6 +59,7 @@ class CalendarAddEventFragment : Fragment() {
     private lateinit var endYearTx: TextView
     private lateinit var endTimeTx: TextView
     private lateinit var txEndGuide: TextView
+    private lateinit var txEveryDay: TextView
     private var studyId: Int = 0
     private var period: String = "NONE"
     private var startDateTime = ""
@@ -92,6 +93,10 @@ class CalendarAddEventFragment : Fragment() {
         endYearTx = view.findViewById(R.id.tx_end_year)
         endTimeTx = view.findViewById(R.id.tx_end_time)
         txEndGuide = view.findViewById(R.id.tx_end_guide)
+        txEveryDay = view.findViewById(R.id.tx_every_day)
+
+
+
 
         studyId = arguments?.getInt("studyId") ?: 0
 
@@ -104,6 +109,11 @@ class CalendarAddEventFragment : Fragment() {
         )
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spinner.adapter = adapter
+
+        //'하루종일' 텍스트 클릭 시 체크박스 상태 변경 반영
+        txEveryDay.setOnClickListener {
+            checkBox.isChecked = !checkBox.isChecked
+        }
 
 
         // CheckBox 상태가 변경될 때 ViewModel의 isSpinnerEnabled 값 변경

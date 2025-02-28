@@ -218,35 +218,36 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="80dp"
+        android:layout_marginEnd="15dp"
         android:padding="8dp"
         android:text="하루종일"
         android:textColor="#2D2D2D"
         android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toStartOf="@+id/tx_routine"
         app:layout_constraintTop_toBottomOf="@+id/endDateTimeTextView" />
 
     <CheckBox
         android:id="@+id/checkBox_every_day"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:background="@drawable/todolist_custom_checkbox"
         android:button="@android:color/transparent"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/tx_every_day"
-        app:layout_constraintStart_toEndOf="@+id/tx_every_day"
+        app:layout_constraintEnd_toStartOf="@+id/tx_every_day"
         app:layout_constraintTop_toTopOf="@+id/tx_every_day" />
 
     <TextView
         android:id="@+id/tx_routine"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginStart="10dp"
         android:padding="8dp"
         android:text="반복"
         android:textColor="#2D2D2D"
         android:textSize="16dp"
-        app:layout_constraintStart_toEndOf="@+id/checkBox_every_day"
+        app:layout_constraintEnd_toStartOf="@+id/routine_spinner"
         app:layout_constraintTop_toTopOf="@+id/tx_every_day" />
 
     <Spinner
@@ -254,9 +255,10 @@
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_gravity="end|center"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/my_spinner_background"
         android:spinnerMode="dropdown"
-        app:layout_constraintStart_toEndOf="@+id/tx_routine"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tx_routine" />
 
     <android.widget.Button
