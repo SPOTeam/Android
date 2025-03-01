@@ -51,6 +51,8 @@ class CalendarFragment : Fragment() {
         calendarView = binding.calendarView
 
         calendarView.setLeftArrow(R.drawable.left_arrow)
+        calendarView.setRightArrow(R.drawable.right_arrow)
+        calendarView.setWeekDayFormatter(CustomWeekDayFormatter(requireContext()))
 
         customRectangleDecorator = CustomRectangleDecorator(requireContext())
         calendarView.addDecorator(customRectangleDecorator)

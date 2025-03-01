@@ -48,7 +48,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.sql.Time
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -65,15 +67,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-
-
-
-
-        val calendar = Calendar.getInstance()
-        val year =  String.format("%04d", calendar.get(Calendar.YEAR))
-        val month = String.format("%02d", calendar.get(Calendar.MONTH) + 1) // 두 자리로 변환
-        val day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH)) // 두 자리로 변환
-        val baseDate = year+month+day
+        val baseDate = getUpdatedDate()
         val baseTime = getUpdatedTime()
 
 
@@ -358,6 +352,21 @@ class MainActivity : AppCompatActivity() {
         val regionData = regionDataList.find { it.administrativeCode == regionCode }
         return regionData?.let { Pair(it.gridX, it.gridY) }
     }
+
+
+    fun getUpdatedDate(): String {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+
+        // 00:00 ~ 02:59 사이라면 baseDate를 하루 전으로 설정
+        if (hour < 3) {
+            calendar.add(Calendar.DAY_OF_MONTH, -1)  // 하루 빼기
+        }
+
+        // yyyyMMdd 형식의 날짜 반환
+        return SimpleDateFormat("yyyyMMdd", Locale.KOREA).format(calendar.time)
+    }
+
 
     fun getUpdatedTime(): String {
         // 현재 시간 가져오기

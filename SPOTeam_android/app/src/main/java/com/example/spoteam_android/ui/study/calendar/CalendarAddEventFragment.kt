@@ -2,8 +2,11 @@ package com.example.spoteam_android.ui.study.calendar
 
 import StudyApiService
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,6 +23,7 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -55,6 +59,7 @@ class CalendarAddEventFragment : Fragment() {
     private lateinit var endYearTx: TextView
     private lateinit var endTimeTx: TextView
     private lateinit var txEndGuide: TextView
+    private lateinit var txEveryDay: TextView
     private var studyId: Int = 0
     private var period: String = "NONE"
     private var startDateTime = ""
@@ -88,8 +93,14 @@ class CalendarAddEventFragment : Fragment() {
         endYearTx = view.findViewById(R.id.tx_end_year)
         endTimeTx = view.findViewById(R.id.tx_end_time)
         txEndGuide = view.findViewById(R.id.tx_end_guide)
+        txEveryDay = view.findViewById(R.id.tx_every_day)
+
+
+
 
         studyId = arguments?.getInt("studyId") ?: 0
+
+
 
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
@@ -98,6 +109,11 @@ class CalendarAddEventFragment : Fragment() {
         )
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spinner.adapter = adapter
+
+        //'하루종일' 텍스트 클릭 시 체크박스 상태 변경 반영
+        txEveryDay.setOnClickListener {
+            checkBox.isChecked = !checkBox.isChecked
+        }
 
 
         // CheckBox 상태가 변경될 때 ViewModel의 isSpinnerEnabled 값 변경
@@ -220,6 +236,7 @@ class CalendarAddEventFragment : Fragment() {
 
         val datePickerDialog = DatePickerDialog(
             requireContext(),
+            R.style.MyDatePickerTheme,
             { _, selectedYear, selectedMonth, selectedDay ->
                 val selectedDate = String.format(
                     "%04d-%02d-%02d",
@@ -281,6 +298,17 @@ class CalendarAddEventFragment : Fragment() {
         }
 
         datePickerDialog.show()
+        datePickerDialog.setCanceledOnTouchOutside(false) // 바깥 터치 방지
+
+        datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE)?.apply {
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.black)) // 텍스트 색상
+            setTypeface(typeface, Typeface.BOLD) // Bold 적용
+        }
+
+        datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE)?.apply {
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.black)) // 텍스트 색상
+            setTypeface(typeface, Typeface.BOLD) // Bold 적용
+        }
     }
 
     // TimePickerDialog를 분리하여 가독성 개선
@@ -288,12 +316,12 @@ class CalendarAddEventFragment : Fragment() {
         val calendar = Calendar.getInstance()
         val timePickerDialog = TimePickerDialog(
             requireContext(),
+            R.style.MyTimePickerTheme, // 스타일 적용
             { _, selectedHourOfDay, selectedMinute ->
                 val isAm = selectedHourOfDay < 12
                 val amPm = if (isAm) "am" else "pm"
                 val hourFormatted =
                     if (selectedHourOfDay % 12 == 0) 12 else selectedHourOfDay % 12
-
                 val formattedTime = String.format("%02d:%02d %s", hourFormatted, selectedMinute, amPm)
 
                 if (isStart) {
@@ -311,6 +339,15 @@ class CalendarAddEventFragment : Fragment() {
             calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false
         )
         timePickerDialog.show()
+        timePickerDialog.setCanceledOnTouchOutside(false) // 바깥 터치 방지
+
+        val negativeButton = timePickerDialog.findViewById<Button>(android.R.id.button2)
+        negativeButton?.visibility = View.GONE
+
+        timePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE)?.apply {
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.black)) // 텍스트 색상
+            setTypeface(typeface, Typeface.BOLD) // Bold 적용
+        }
     }
 
     // 종료 날짜 제한 로직
