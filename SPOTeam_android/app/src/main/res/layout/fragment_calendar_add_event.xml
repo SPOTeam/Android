@@ -219,7 +219,8 @@
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="15dp"
-        android:padding="8dp"
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="8dp"
         android:text="하루종일"
         android:textColor="#2D2D2D"
         android:textSize="16dp"
@@ -234,7 +235,7 @@
         android:layout_height="25dp"
         android:background="@drawable/todolist_custom_checkbox"
         android:button="@android:color/transparent"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/tx_every_day"
         app:layout_constraintEnd_toStartOf="@+id/tx_every_day"
         app:layout_constraintTop_toTopOf="@+id/tx_every_day" />

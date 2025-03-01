@@ -15,33 +15,16 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:orientation="horizontal"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:mcv_rightArrow="@null"/>
-
-<!--    app:mcv_leftArrow="@color/teal_200"-->
-<!--    app:mcv_rightArrow="@color/teal_200"-->
-
+        app:mcv_headerTextAppearance="@style/CalendarTitleTextStyle"
+        app:mcv_weekDayTextAppearance="@style/CalendarWeekDayTextStyle"/>
 
     <!-- RecyclerView -->
 
-
-    <ImageButton
-        android:id="@+id/addButton"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:background="@color/white"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="5dp"
-        android:padding="10dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/add_circle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/calendarView"/>
-
-    <!-- FloatingActionButton (항상 화면 하단 오른쪽에 고정) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventrecyclerview"
         android:layout_width="match_parent"
@@ -51,5 +34,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
         tools:listitem="@layout/item_event" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/eventrecyclerview">
+
+        <ImageButton
+            android:id="@+id/addButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:padding="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/add_circle" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -79,14 +79,12 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp("androidx.room:room-compiler:2.6.1")
-
     implementation ("com.github.prolificinteractive:material-calendarview:2.0.1")
     implementation("com.navercorp.nid:oauth:5.9.1")
-
     implementation("com.squareup.retrofit2:converter-simplexml:2.9.0")
-
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("com.jakewharton.threetenabp:threetenabp:1.4.4")
 
 
 }

@@ -204,4 +204,16 @@
         <item name="colorSecondary">@color/b400</item>
     </style>
 
+    <style name="CalendarTitleTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/suit_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="CalendarWeekDayTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>
