@@ -3,6 +3,7 @@
     <style name="Theme.SPOTeam_android" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
         <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorOnPrimary">#000000</item>
         <!-- Secondary brand color. -->
@@ -154,6 +155,11 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerFamily.Cut1" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
     </style>
@@ -189,19 +195,17 @@
         <item name="android:popupBackground">@drawable/custom_popup_background</item>
     </style>
 
-    <style name="MyDatePickerTheme" parent="Theme.MaterialComponents.Light.Dialog">
-        <!-- 배경색 변경 -->
+    <style name="MyTimePickerTheme" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="android:windowBackground">@color/white</item>
         <!-- 버튼 색상 -->
         <item name="colorPrimary">@color/b400</item>
         <item name="colorSecondary">@color/b400</item>
     </style>
 
-    <style name="MyTimePickerTheme" parent="Theme.MaterialComponents.Light.Dialog">
-        <item name="android:windowBackground">@color/white</item>
-        <!-- 버튼 색상 -->
-        <item name="colorPrimary">@color/b400</item>
-        <item name="colorSecondary">@color/b400</item>
+    <style name="CustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">13dp</item>
+        <item name="android:fontFamily">@font/suit_semi_bold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="CalendarTitleTextStyle" parent="TextAppearance.AppCompat">
@@ -215,5 +219,4 @@
         <item name="android:fontWeight">500</item>
         <item name="android:textColor">@color/black</item>
     </style>
-
 </resources>
