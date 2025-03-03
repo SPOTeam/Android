@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMystudyCommunityBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
@@ -18,6 +19,7 @@ import com.example.spoteam_android.ui.community.PostDetail
 import com.example.spoteam_android.ui.community.StudyContentLikeResponse
 import com.example.spoteam_android.ui.community.StudyContentUnLikeResponse
 import com.example.spoteam_android.ui.community.StudyPostListResponse
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,6 +50,17 @@ class MyStudyCommunityFragment : Fragment() {
             }
         }
         initBTN()
+
+        binding.writeContentIv.setOnClickListener{
+            val fragment = MyStudyWriteContentFragment().apply {
+                setStyle(
+                    BottomSheetDialogFragment.STYLE_NORMAL,
+                    R.style.AppBottomSheetDialogBorder20WhiteTheme
+                )
+            }
+
+            fragment.show(parentFragmentManager,"MyStudyWriteContent")
+        }
 
         return binding.root
     }

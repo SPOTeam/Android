@@ -10,10 +10,11 @@
                     <corners android:radius="8dp"/>
                 </shape>
             </item>
-            <item
+            <!-- Inset to reduce the size of the drawable -->
+            <item android:drawable="@drawable/spinner_arrow_up"
                 android:width="10dp"
-                android:height="10dp"
-                android:drawable="@drawable/spinner_arrow_up"
+                android:height="6dp"
+                android:end="10dp"
                 android:gravity="center|end"/>
         </layer-list>
     </item>

@@ -16,7 +16,7 @@
                 android:height="7dp"
                 android:right="10dp"
                 android:top="16dp"
-                android:gravity="right"/>
+                android:gravity="center|end"/>
         </layer-list>
     </item>
 

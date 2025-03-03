@@ -338,15 +338,10 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
-
-
-
     fun findGridByCode(regionCode: String, regionDataList: List<RegionData>): Pair<Int, Int>? {
         val regionData = regionDataList.find { it.administrativeCode == regionCode }
         return regionData?.let { Pair(it.gridX, it.gridY) }
     }
-
 
     fun getUpdatedDate(): String {
         val calendar = Calendar.getInstance()
@@ -360,7 +355,6 @@ class MainActivity : AppCompatActivity() {
         // yyyyMMdd 형식의 날짜 반환
         return SimpleDateFormat("yyyyMMdd", Locale.KOREA).format(calendar.time)
     }
-
 
     fun getUpdatedTime(): String {
         // 현재 시간 가져오기

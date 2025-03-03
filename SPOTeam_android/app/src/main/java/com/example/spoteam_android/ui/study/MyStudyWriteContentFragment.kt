@@ -3,6 +3,7 @@ package com.example.spoteam_android.ui.study
 import StudyViewModel
 import android.app.Activity
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
@@ -76,20 +78,38 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
             binding.mystudyCategorySpinner.adapter = adapter
         }
 
+        binding.checkIc.setOnClickListener{
+            if(isAnnouncement) {
+                binding.checkIc.setColorFilter(
+                    ContextCompat.getColor(requireContext(), R.color.gray),
+                    PorterDuff.Mode.SRC_IN
+                )
+                isAnnouncement = false
+                Log.d("MyStudyWriteContentFragment", isAnnouncement.toString())
+
+            } else {
+                binding.checkIc.setColorFilter(
+                    ContextCompat.getColor(requireContext(), R.color.selector_blue),
+                    PorterDuff.Mode.SRC_IN
+                )
+                isAnnouncement = true
+                Log.d("MyStudyWriteContentFragment", isAnnouncement.toString())
+            }
+        }
 
         // 이미지 선택을 위한 Launcher 설정
         getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val selectedImageURI : Uri? = result.data?.data
                 if(selectedImageURI != null) {
-                    binding.fragmentIntroduceStudyIv.setImageURI(selectedImageURI)
+                    binding.addImageIv.setImageURI(selectedImageURI)
                     profileImageURI = selectedImageURI
                     Log.d("imageFormat", "$profileImageURI")
                 }
             }
         }
 
-        binding.fragmentIntroduceStudyIv.setOnClickListener{
+        binding.addImageIv.setOnClickListener{
             getImageFromAlbum()
             Log.d("imageFormat", "$profileImageURI")
         }
@@ -112,7 +132,6 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
     private fun submitContent(studyId: Int) {
         val title = binding.writeContentTitleEt.text.toString().trim()
         val content = binding.writeContentContentEt.text.toString().trim()
-        isAnnouncement = binding.mystudyWriteContentInfoLl.findViewById<CheckBox>(R.id.isAnnouncement_cb).isChecked
 
         if (title.isEmpty() || content.isEmpty()) {
             Toast.makeText(requireContext(), "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()

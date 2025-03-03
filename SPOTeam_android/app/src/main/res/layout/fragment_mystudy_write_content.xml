@@ -64,6 +64,7 @@
         android:layout_height="250dp"
         android:hint="내용을 입력해주세요"
         android:gravity="top"
+        android:background="@null"
         android:layout_marginTop="10dp"
         android:inputType="none"
         android:textSize="14sp"
@@ -85,23 +86,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:textColor="#1E1E1E"
             android:text="테마" />
 
         <Spinner
             android:id="@+id/mystudy_category_spinner"
-            android:layout_centerHorizontal="true"
             android:background="@drawable/study_write_content_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="40dp" />
-        
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end|center"
+            android:spinnerMode="dropdown"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:dropDownVerticalOffset="-1dp" />
+
         <ImageView
             android:id="@+id/check_ic"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/announce_check"/>
 
         <TextView
@@ -109,12 +112,13 @@
             android:layout_height="wrap_content"
             android:text="공지"
             android:textColor="@color/black"
-            android:textSize="25sp"
+            android:textSize="15sp"
             android:layout_marginStart="12dp"/>
             
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/add_image_iv"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/camera_ic"
@@ -126,7 +130,7 @@
         android:id="@+id/write_content_finish_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:text="완료"
         android:background="@drawable/selector_category_background"
         android:textColor="@drawable/button_textcolor"
@@ -137,5 +141,6 @@
         app:layout_constraintStart_toStartOf="@id/write_content_content_et"
         app:layout_constraintEnd_toEndOf="@id/write_content_content_et"
         app:layout_constraintTop_toBottomOf="@id/mystudy_write_content_info_ll" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

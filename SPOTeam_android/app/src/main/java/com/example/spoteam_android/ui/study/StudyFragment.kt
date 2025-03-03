@@ -46,7 +46,7 @@ class StudyFragment : Fragment() {
     ): View {
         _binding = FragmentStudyBinding.inflate(inflater, container, false)
 
-        binding.fragmentStudyTv.setOnClickListener {
+        binding.prevIv.setOnClickListener {
             // 현재 Fragment를 백스택에서 제거하고 이전 Fragment로 돌아갑니다.
             parentFragmentManager.popBackStack()
         }
