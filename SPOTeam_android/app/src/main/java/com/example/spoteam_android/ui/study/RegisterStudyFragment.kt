@@ -32,6 +32,10 @@ class RegisterStudyFragment : Fragment() {
             goToNextFragment()
         }
 
+        binding.fragmentRegisterStudyBackBt.setOnClickListener{
+            parentFragmentManager.popBackStack()
+        }
+
         return binding.root
     }
 

@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingStart="20dp"
-    android:paddingTop="20dp"
-    android:paddingEnd="20dp">
+    android:paddingHorizontal="20dp"
+    android:paddingTop="20dp">
 
     <LinearLayout
         android:id="@+id/content_ll"
@@ -87,7 +86,7 @@
             android:id="@+id/content_likeNum_unchecked_iv"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/ic_like_unchecked"
+            android:src="@drawable/like_off"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
 
@@ -95,10 +94,11 @@
             android:id="@+id/content_likeNum_checked_iv"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/ic_like_checked"
+            android:src="@drawable/like_off"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
+            app:layout_constraintTop_toBottomOf="@id/content_summary_tv"
+            app:tint="@color/selector_blue" />
 
         <TextView
             android:id="@+id/content_likeNum_tv"
@@ -115,7 +115,7 @@
             android:id="@+id/contetn_commentNum_iv"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:src="@drawable/ic_comment"
+            android:src="@drawable/comment_count"
             android:layout_gravity="center"
             android:layout_marginStart="18dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -136,7 +136,7 @@
             android:id="@+id/content_viewNum_iv"
             android:layout_width="19dp"
             android:layout_height="19dp"
-            android:src="@drawable/ic_view"
+            android:src="@drawable/view_count"
             android:layout_marginStart="18dp"
             android:layout_gravity="center"
             app:layout_constraintStart_toStartOf="parent"

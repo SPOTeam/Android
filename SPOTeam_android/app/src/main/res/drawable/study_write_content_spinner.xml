@@ -11,11 +11,10 @@
                 </shape>
             </item>
             <!-- Inset to reduce the size of the drawable -->
-            <item android:drawable="@drawable/fragment_my_interest_study_imgbtn_spinner"
-                android:width="15dp"
-                android:height="7dp"
-                android:right="10dp"
-                android:top="16dp"
+            <item android:drawable="@drawable/spinner_arrow_up"
+                android:width="10dp"
+                android:height="6dp"
+                android:end="10dp"
                 android:gravity="center|end"/>
         </layer-list>
     </item>
