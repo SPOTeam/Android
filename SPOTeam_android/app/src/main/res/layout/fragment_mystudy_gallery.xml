@@ -17,6 +17,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_gallery_picture"/>
 
+    <ImageView
+        android:id="@+id/image_none_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_ic"
+        android:layout_marginTop="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/noImagesText"
         android:layout_width="wrap_content"
@@ -24,12 +35,11 @@
         android:layout_centerInParent="true"
         android:text="아직 등록된 사진이 없습니다"
         android:textSize="18sp"
-        android:visibility="gone"
-        android:layout_marginTop="100dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/image_none_iv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="MissingConstraints" />
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/page_number_layout"

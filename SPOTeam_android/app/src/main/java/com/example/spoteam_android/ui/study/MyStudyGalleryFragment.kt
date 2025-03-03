@@ -128,12 +128,16 @@ class MyStudyGalleryFragment : Fragment() {
     private fun showGallery() {
         binding.communityCategoryContentRv.visibility = View.VISIBLE
         binding.noImagesText.visibility = View.GONE
+        binding.imageNoneIv.visibility = View.GONE
+        binding.pageNumberLayout.visibility = View.VISIBLE
         Log.d("MyStudyGalleryFragment", "Images loaded, hiding no images text")
     }
 
     private fun showNoImagesText() {
         binding.communityCategoryContentRv.visibility = View.GONE
         binding.noImagesText.visibility = View.VISIBLE
+        binding.imageNoneIv.visibility = View.VISIBLE
+        binding.pageNumberLayout.visibility = View.GONE
         Log.d("MyStudyGalleryFragment", "No images found, showing no images text")
     }
 

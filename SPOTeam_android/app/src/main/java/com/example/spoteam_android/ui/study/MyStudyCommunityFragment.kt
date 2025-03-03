@@ -1,23 +1,16 @@
 package com.example.spoteam_android.ui.study
 
-import StudyApiService
 import StudyViewModel
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.MainActivity
-import com.example.spoteam_android.MemberResponse
-import com.example.spoteam_android.ProfileItem
-import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMystudyCommunityBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
@@ -25,11 +18,9 @@ import com.example.spoteam_android.ui.community.PostDetail
 import com.example.spoteam_android.ui.community.StudyContentLikeResponse
 import com.example.spoteam_android.ui.community.StudyContentUnLikeResponse
 import com.example.spoteam_android.ui.community.StudyPostListResponse
-import com.example.spoteam_android.ui.home.HomeFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 class MyStudyCommunityFragment : Fragment() {
 
@@ -52,62 +43,14 @@ class MyStudyCommunityFragment : Fragment() {
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
             if (studyId != null) {
                 currentStudyId = studyId
-//                fetchStudyMembers(currentStudyId)
-//                fetchPages()
             } else {
                 Toast.makeText(requireContext(), "Study ID is missing", Toast.LENGTH_SHORT).show()
             }
         }
-//        fetchStudyMembers(currentStudyId)
         initBTN()
 
         return binding.root
     }
-
-    private fun fetchStudyMembers(studyId: Int) {
-        profileAdapter = DetailStudyHomeProfileAdapter(ArrayList())
-        val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
-
-        // SharedPreferences에서 현재 사용자의 memberId 가져오기
-        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val currentMemberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
-
-        api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
-            override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
-                if (response.isSuccessful) {
-                    response.body()?.let { memberResponse ->
-                        val members = memberResponse.result?.members ?: emptyList()
-
-                        // RecyclerView에 프로필 업데이트
-                        profileAdapter.updateList(members.map {
-                            ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
-                        })
-
-                        // 멤버 리스트에서 현재 사용자의 memberId와 비교
-                        val memberIds = members.map { it.memberId }
-                        val isMemberFound = memberIds.contains(currentMemberId)
-
-                        if (isMemberFound) {
-                            // 현재 사용자가 멤버일 경우
-                            binding.categoryHsv.visibility = View.VISIBLE
-                            (activity as? MainActivity)?.isOnCommunityHome(MyStudyCommunityFragment())
-                            fetchPages()
-                        } else {
-                            // 현재 사용자가 멤버가 아닐 경우
-                            binding.noneMemberAlert.visibility = View.VISIBLE
-                        }
-                    }
-                } else {
-                    Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
 
     private fun initBTN() {
         binding.allRb.setOnClickListener{
@@ -140,14 +83,9 @@ class MyStudyCommunityFragment : Fragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        (activity as? MainActivity)?.isOnCommunityHome(HomeFragment())
-    }
-
     override fun onResume() {
         super.onResume()
-        fetchStudyMembers(currentStudyId)
+        fetchPages()
     }
 
     private fun fetchPages() {
@@ -161,12 +99,20 @@ class MyStudyCommunityFragment : Fragment() {
                     if (response.isSuccessful) {
                         val pagesResponse = response.body()
                         if (pagesResponse?.isSuccess == "true") {
-                            val pagesResponseList = pagesResponse.result?.posts
-//                            Log.d("ALL", "items: $pagesResponseList")
-                            if (pagesResponseList != null) {
+                            val pagesResponseList = pagesResponse.result.posts
+                            if (pagesResponseList.isNotEmpty()) {
+                                binding.fileNoneIv.visibility = View.GONE
+                                binding.noneMemberAlertTv.visibility = View.GONE
                                 initRecyclerview(pagesResponseList)
+                            } else {
+                                binding.fileNoneIv.visibility = View.VISIBLE
+                                binding.noneMemberAlertTv.visibility = View.VISIBLE
                             }
                         } else {
+                            binding.fileNoneIv.visibility = View.VISIBLE
+                            binding.noneMemberAlertTv.visibility = View.VISIBLE
+                            binding.writeContentIv.visibility = View.GONE
+                            Log.d("OtherStudy1", "PASS")
                             showError(pagesResponse?.message)
                         }
                     } else {
@@ -175,7 +121,7 @@ class MyStudyCommunityFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<StudyPostListResponse>, t: Throwable) {
-//                    Log.e("ALL", "Failure: ${t.message}", t)
+                    Log.e("ALL", "Failure: ${t.message}", t)
                 }
             })
     }

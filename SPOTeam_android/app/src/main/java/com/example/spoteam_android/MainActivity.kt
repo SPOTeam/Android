@@ -195,10 +195,6 @@ class MainActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
     }
 
-    private fun showBlur() {
-        findViewById<View>(R.id.blur_overlay_container).visibility = View.VISIBLE
-    }
-
     fun hideBlur() {
         findViewById<View>(R.id.blur_overlay_container).visibility = View.GONE
     }
@@ -246,8 +242,6 @@ class MainActivity : AppCompatActivity() {
 
     fun isOnCommunityHome(fragment: Fragment) {
         if (fragment is CommunityHomeFragment) {
-            binding.mainFloatingButton.visibility = View.VISIBLE
-        } else if (fragment is MyStudyCommunityFragment){
             binding.mainFloatingButton.visibility = View.VISIBLE
         } else {
             binding.mainFloatingButton.visibility = View.GONE
