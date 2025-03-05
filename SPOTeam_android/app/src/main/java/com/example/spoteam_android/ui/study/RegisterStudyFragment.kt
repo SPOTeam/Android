@@ -41,13 +41,10 @@ class RegisterStudyFragment : Fragment() {
 
         // Chip 선택 상태 리스너
         val chipCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, _ ->
-            val isAnyChipChecked =
-                binding.fragmentRegisterStudyChipgroup.checkedChipIds.isNotEmpty()
-            binding.fragmentRegisterStudyBt.isEnabled = isAnyChipChecked
-
             updateSelectedThemes()
         }
 
+        // ChipGroup 내 모든 Chip에 리스너 추가
         for (i in 0 until binding.fragmentRegisterStudyChipgroup.childCount) {
             val chip = binding.fragmentRegisterStudyChipgroup.getChildAt(i) as? CompoundButton
             chip?.setOnCheckedChangeListener(chipCheckedChangeListener)
@@ -56,20 +53,26 @@ class RegisterStudyFragment : Fragment() {
 
     private fun updateSelectedThemes() {
         val selectedThemes = mutableListOf<String>()
+
         for (i in 0 until binding.fragmentRegisterStudyChipgroup.childCount) {
             val chip = binding.fragmentRegisterStudyChipgroup.getChildAt(i) as? CompoundButton
             if (chip?.isChecked == true) {
-
                 val chipText = chip.text.toString()
                 val processedText = when {
-                    chipText.contains("전공") -> chipText.replace("/", "및") //
-                    else -> chipText.replace("/", "").replace(" ", "") // 공백 및 슬래시를 제거
+                    chipText.contains("전공") -> chipText.replace("/", "및") // "전공/진로학습" → "전공 및 진로학습"
+                    else -> chipText.replace("/", "").replace(" ", "") // 공백 및 슬래시 제거
                 }
                 selectedThemes.add(processedText)
             }
-            viewModel.updateThemes(selectedThemes)
         }
+
+        // 버튼 활성화 여부 업데이트
+        binding.fragmentRegisterStudyBt.isEnabled = selectedThemes.isNotEmpty()
+
+        // ViewModel에 선택된 테마 업데이트
+        viewModel.updateThemes(selectedThemes)
     }
+
 
     private fun updateProgressBar() {
         currentStep++

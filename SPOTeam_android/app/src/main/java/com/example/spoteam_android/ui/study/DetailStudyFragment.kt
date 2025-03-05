@@ -191,6 +191,7 @@ class DetailStudyFragment : Fragment() {
                             binding.fragmentDetailStudyLl.setPadding(0, 50, 0, 50)
                         }
 
+
                         // maxPeople과 memberCount 값을 가져오기 위해 ViewModel을 옵저빙
                         val maxPeople = studyViewModel.maxPeople.value
                         val memberCount = studyViewModel.memberCount.value
