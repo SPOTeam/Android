@@ -41,6 +41,7 @@ class TodoListFragment : Fragment() {
     private lateinit var otherTodoAdapter: OtherTodoAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var eventAdapter: EventAdapter
+    private lateinit var todoEventAdapter: TodoEventAdapter
     private lateinit var selectedDate: String // 멤버 변수로 선언
     private val eventViewModel: EventViewModel by activityViewModels()
     private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
@@ -76,9 +77,9 @@ class TodoListFragment : Fragment() {
 
         // 리사이클러뷰 초기화, 변수 선언등 UI 표시 이전에 선행되어야 할 작업 수행
 
-        eventAdapter = EventAdapter(emptyList(), { /* 클릭 이벤트 처리 (필요시 추가) */ }, true)
+        todoEventAdapter = TodoEventAdapter(emptyList(), { /* 클릭 이벤트 처리 (필요시 추가) */ }, true)
         binding.eventrecyclerviewto.layoutManager = LinearLayoutManager(requireContext())
-        binding.eventrecyclerviewto.adapter = eventAdapter
+        binding.eventrecyclerviewto.adapter = todoEventAdapter
 
         profileAdapter = DetailStudyHomeProfileAdapter(ArrayList()) { profileItem ->
             val memberId = memberIdMap[profileItem]
@@ -137,10 +138,10 @@ class TodoListFragment : Fragment() {
             eventViewModel.loadEvents(year, month, today)
 
             // 어댑터와 데코레이터 갱신 추가
-            eventAdapter.updateSelectedDate(selectedDate)
+            todoEventAdapter.updateSelectedDate(selectedDate)
 
             // 어댑터 데이터 갱신
-            eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
+            todoEventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
         }
 
 
@@ -165,10 +166,10 @@ class TodoListFragment : Fragment() {
                 eventViewModel.loadEvents(year, month, date.toInt())
 
                 // 어댑터와 데코레이터 갱신 추가
-                eventAdapter.updateSelectedDate(formattedDate)
+                todoEventAdapter.updateSelectedDate(formattedDate)
 
                 // 어댑터 데이터 갱신
-                eventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
+                todoEventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
             }
 
             profileAdapter.resetBorder()
@@ -180,7 +181,7 @@ class TodoListFragment : Fragment() {
             fetchTodoList(studyId, date)
 
             eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
-                eventAdapter.updateEvents(events)
+                todoEventAdapter.updateEvents(events)
             })
         }
         binding.rvDates.adapter = dateAdapter
@@ -343,7 +344,7 @@ class TodoListFragment : Fragment() {
 
                         // ViewModel 및 Adapter에 데이터 업데이트
                         eventViewModel.updateEvents(EventItems)
-                        eventAdapter.updateEvents(EventItems)
+                        todoEventAdapter.updateEvents(EventItems)
 
                         // 콜백 호출
                         onComplete()
