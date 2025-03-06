@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+
+<androidx.core.widget.NestedScrollView xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_dates"
@@ -24,11 +29,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/pretendard"
+        android:fontFamily="@font/suit_bold"
         android:text="예정된 일정"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_dates" />
 
@@ -54,19 +58,18 @@
         app:layout_constraintTop_toBottomOf="@+id/tx_my_todo_list"
         tools:listitem="@layout/item_todo_list" />
 
-    <TextView
-        android:id="@+id/tx_my_todo_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/pretendard"
-        android:text="My Todo-List"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventrecyclerviewto" />
+        <TextView
+            android:id="@+id/tx_my_todo_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/suit_bold"
+            android:text="My Todo-List"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventrecyclerviewto" />
 
     <ImageView
         android:id="@+id/imgbtn_plus_todolist"
@@ -79,34 +82,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tx_my_todo_list" />
 
-    <ImageView
-        android:id="@+id/imv_others_todo_list"
-        android:layout_width="160dp"
-        android:layout_height="30dp"
+    <TextView
+        android:id="@+id/tx_others_todo_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/fragment_todo_list_imv_others_todo_list"
+        android:fontFamily="@font/suit_bold"
+        android:text="Other's Todo-List"
+        android:textColor="@color/black"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_my_todo_list" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_detail_study_home_profile_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imv_others_todo_list"
-        tools:listitem="@layout/item_detail_study_home_member"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_detail_study_home_profile_rv"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tx_others_todo_list"
+            tools:listitem="@layout/item_detail_study_home_member" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_other_todo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:paddingStart="5dp"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_detail_study_home_profile_rv" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

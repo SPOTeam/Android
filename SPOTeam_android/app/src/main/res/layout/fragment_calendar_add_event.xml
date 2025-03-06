@@ -233,7 +233,7 @@
         android:id="@+id/checkBox_every_day"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:background="@drawable/todolist_custom_checkbox"
+        android:background="@drawable/calendar_custom_checkbox"
         android:button="@android:color/transparent"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/tx_every_day"

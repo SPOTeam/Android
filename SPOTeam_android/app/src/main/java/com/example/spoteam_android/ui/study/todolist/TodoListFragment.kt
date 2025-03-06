@@ -40,7 +40,6 @@ class TodoListFragment : Fragment() {
     private lateinit var myTodoAdapter: TodoAdapter
     private lateinit var otherTodoAdapter: OtherTodoAdapter
     private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var eventAdapter: EventAdapter
     private lateinit var todoEventAdapter: TodoEventAdapter
     private lateinit var selectedDate: String // 멤버 변수로 선언
     private val eventViewModel: EventViewModel by activityViewModels()
@@ -118,7 +117,6 @@ class TodoListFragment : Fragment() {
 
         //다른 스터디원 투두리스트
         otherTodoAdapter = OtherTodoAdapter(requireContext(), mutableListOf())
-
 
         binding.rvOtherTodo.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -212,6 +210,7 @@ class TodoListFragment : Fragment() {
         // 스터디원 투두리스트 조회 API
         todoViewModel.otherTodoListResponse.observe(viewLifecycleOwner) { response ->
             response?.result?.content?.let { todos ->
+                Log.d("TodoFramgment_other","${todos}")
                 if (todos.isNotEmpty()) {
                     otherTodoAdapter.updateData(todos.toMutableList())
                 } else {
@@ -264,6 +263,7 @@ class TodoListFragment : Fragment() {
 
         todoViewModel.fetchOtherToDoList(studyId, memberId, page = 0, size = 10, date = date)
         todoViewModel.otherTodoListResponse.observe(viewLifecycleOwner) { response ->
+            Log.d("OtherTodo","${response}")
             response?.result?.content?.let { todos ->
                 // 데이터를 역순으로 정렬
                 val reversedTodos = todos.reversed()

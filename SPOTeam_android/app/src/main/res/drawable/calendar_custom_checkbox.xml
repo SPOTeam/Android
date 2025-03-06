@@ -2,17 +2,16 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Unchecked 상태에서는 아무 UI도 표시되지 않음 -->
     <item android:state_checked="false">
-        <layer-list>
-            <item
-                android:drawable="@drawable/cbx_todo_unchecked" />
-        </layer-list>
+        <shape>
+            <solid android:color="@android:color/transparent" />
+        </shape>
     </item>
 
     <!-- Checked 상태에서 체크 이미지 표시 -->
     <item android:state_checked="true">
         <layer-list>
             <item
-                android:drawable="@drawable/cbx_todo_checked" />
+                android:drawable="@drawable/img_check_box_checked" />
         </layer-list>
     </item>
 </selector>
