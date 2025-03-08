@@ -43,9 +43,6 @@ android {
 }
 
 dependencies {
-
-
-
     implementation(libs.androidx.splashscreen)
     implementation(libs.circleimageview)
     implementation(libs.androidx.core.ktx)
@@ -74,8 +71,6 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.gson)
     implementation(libs.glide)
-
-
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp("androidx.room:room-compiler:2.6.1")

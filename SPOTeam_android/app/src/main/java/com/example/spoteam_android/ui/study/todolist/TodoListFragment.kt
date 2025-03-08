@@ -29,7 +29,10 @@ import com.example.spoteam_android.ui.study.DetailStudyHomeProfileAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.DayOfWeek
+import java.time.LocalDate
 import java.util.Calendar
+import java.time.YearMonth
 
 class TodoListFragment : Fragment() {
 
@@ -41,12 +44,14 @@ class TodoListFragment : Fragment() {
     private lateinit var otherTodoAdapter: OtherTodoAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var todoEventAdapter: TodoEventAdapter
+    private lateinit var todoDateAdapter: TodoDateAdapter
     private lateinit var selectedDate: String // 멤버 변수로 선언
     private val eventViewModel: EventViewModel by activityViewModels()
     private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
     private lateinit var memberIdMap: Map<ProfileItem, Int>
     private var selectedMemberId: Int? = null
     private lateinit var repository: TodoRepository // repository 선언
+
 
 
 
@@ -68,6 +73,25 @@ class TodoListFragment : Fragment() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작
         val today = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val currentYear = LocalDate.now().year // 현재 연도
+        val currentMonth = LocalDate.now().monthValue // 현재 월
+
+        // 현재 월의 날짜 리스트 가져오기
+        val daysOfCurrentMonth = getDaysOfMonthWithPadding(currentYear, currentMonth)
+
+// 선택된 날짜 기본값 설정 (1일)
+        var selectedDate2 = 1
+
+// Adapter 설정
+        todoDateAdapter = TodoDateAdapter(daysOfCurrentMonth, selectedDate2) { newSelectedDate ->
+            selectedDate2 = newSelectedDate
+            todoDateAdapter.updateDates(daysOfCurrentMonth, selectedDate2)
+        }
+
+        binding.rvCalendar.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvCalendar.adapter = todoDateAdapter
+
 
 
         selectedDate  = "${calendar.get(Calendar.YEAR)}-" +
@@ -420,4 +444,45 @@ class TodoListFragment : Fragment() {
             }
         })
     }
+
+
+    fun getDaysOfMonthWithPadding(year: Int, month: Int): List<Triple<Int?, Boolean, Boolean>> {
+        val yearMonth = YearMonth.of(year, month)
+        val daysInMonth = yearMonth.lengthOfMonth()
+
+        val firstDayOfMonth = LocalDate.of(year, month, 1).dayOfWeek
+        val lastDayOfMonth = LocalDate.of(year, month, daysInMonth).dayOfWeek
+
+        // 월요일부터 시작하도록 인덱스 계산 (DayOfWeek.MONDAY = 1)
+        val startPadding = (if (firstDayOfMonth == DayOfWeek.MONDAY) 0 else firstDayOfMonth.value - 1)
+        val endPadding = 7 - lastDayOfMonth.value
+
+        val previousMonth = if (month == 1) 12 else month - 1
+        val previousYear = if (month == 1) year - 1 else year
+        val previousMonthDays = YearMonth.of(previousYear, previousMonth).lengthOfMonth()
+
+        val nextMonth = if (month == 12) 1 else month + 1
+        val nextYear = if (month == 12) year + 1 else year
+
+        val daysList = mutableListOf<Triple<Int?, Boolean, Boolean>>() // (날짜, 현재 달 여부, 클릭 가능 여부)
+
+        // 이전 달의 날짜 추가 (회색 처리, 클릭 비활성화)
+        for (i in startPadding downTo 1) {
+            daysList.add(Triple(previousMonthDays - i + 1, false, false)) // 이전 달, 클릭 불가
+        }
+
+        // 현재 월의 날짜 추가 (정상 처리)
+        for (i in 1..daysInMonth) {
+            daysList.add(Triple(i, true, true)) // 현재 달, 클릭 가능
+        }
+
+        // 다음 달의 날짜 추가 (회색 처리, 클릭 비활성화)
+        for (i in 1..endPadding) {
+            daysList.add(Triple(i, false, false)) // 다음 달, 클릭 불가
+        }
+
+        return daysList
+    }
+
+
 }
