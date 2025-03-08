@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:paddingHorizontal="16dp"
     android:paddingVertical="25dp"
     android:background="@drawable/bottomsheetfragment_style"
@@ -28,7 +29,7 @@
         android:id="@+id/write_content_prev_iv"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_x_button"
+        android:src="@drawable/ic_new_close"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/write_content_title_tv" />
@@ -70,7 +71,30 @@
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@id/write_content_title_et"
         app:layout_constraintEnd_toEndOf="@id/write_content_title_et"
-        app:layout_constraintTop_toBottomOf="@id/community_sp_iv"/>
+        app:layout_constraintTop_toBottomOf="@id/community_sp_iv"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/added_images_rv"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginBottom="10dp"
+        android:nestedScrollingEnabled="false"
+        android:orientation="horizontal"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@+id/mystudy_write_content_info_ll"
+        app:layout_constraintEnd_toEndOf="@id/write_content_title_et"
+        app:layout_constraintStart_toStartOf="@id/write_content_title_et"
+        tools:listitem="@layout/item_image_recycler" />
+
+    <ImageView
+        android:id="@+id/add_image_iv"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/camera_ic"
+        app:layout_constraintTop_toTopOf="@id/mystudy_write_content_info_ll"
+        app:layout_constraintBottom_toBottomOf="@id/mystudy_write_content_info_ll"
+        app:layout_constraintStart_toStartOf="@id/write_content_content_et"/>
 
     <LinearLayout
         android:id="@+id/mystudy_write_content_info_ll"
@@ -78,28 +102,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        app:layout_constraintStart_toStartOf="@id/write_content_content_et"
+        android:layout_marginTop="80dp"
+        app:layout_constraintEnd_toEndOf="@id/write_content_prev_iv"
         app:layout_constraintTop_toBottomOf="@id/write_content_content_et">
-
-        <TextView
-            android:id="@+id/category_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:textSize="15sp"
-            android:textColor="#1E1E1E"
-            android:text="테마" />
-
-        <Spinner
-            android:id="@+id/mystudy_category_spinner"
-            android:background="@drawable/study_write_content_spinner"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_gravity="end|center"
-            android:spinnerMode="dropdown"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="20dp"
-            android:dropDownVerticalOffset="-1dp" />
 
         <ImageView
             android:id="@+id/check_ic"
@@ -113,33 +118,46 @@
             android:text="공지"
             android:textColor="@color/black"
             android:textSize="15sp"
-            android:layout_marginStart="12dp"/>
-            
-    </LinearLayout>
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="20dp"/>
 
-    <ImageView
-        android:id="@+id/add_image_iv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/camera_ic"
-        app:layout_constraintTop_toTopOf="@id/mystudy_write_content_info_ll"
-        app:layout_constraintBottom_toBottomOf="@id/mystudy_write_content_info_ll"
-        app:layout_constraintEnd_toEndOf="@id/write_content_prev_iv"/>
+        <TextView
+            android:id="@+id/theme_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:textSize="15sp"
+            android:textColor="#1E1E1E"
+            android:text="테마" />
+
+        <Spinner
+            android:id="@+id/mystudy_category_spinner"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end|center"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/study_write_content_spinner"
+            android:dropDownVerticalOffset="-1dp"
+
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/write_content_finish_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="완료"
+        android:layout_marginTop="28dp"
         android:background="@drawable/selector_category_background"
-        android:textColor="@drawable/button_textcolor"
-        android:padding="10dp"
-        android:gravity="center"
-        android:textSize="20sp"
         android:enabled="false"
-        app:layout_constraintStart_toStartOf="@id/write_content_content_et"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="완료"
+        android:textColor="@drawable/button_textcolor"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@id/write_content_content_et"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/write_content_content_et"
         app:layout_constraintTop_toBottomOf="@id/mystudy_write_content_info_ll" />
 
 

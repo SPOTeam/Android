@@ -27,7 +27,6 @@ import retrofit2.Response
 class MyStudyCommunityFragment : Fragment() {
 
     private lateinit var binding: FragmentMystudyCommunityBinding
-    private lateinit var profileAdapter: DetailStudyHomeProfileAdapter
     private var currentStudyId : Int = -1
     private var offset : Int = 0
     private var limit : Int = 30
@@ -50,6 +49,7 @@ class MyStudyCommunityFragment : Fragment() {
             }
         }
         initBTN()
+
 
         binding.writeContentIv.setOnClickListener{
             val fragment = MyStudyWriteContentFragment().apply {

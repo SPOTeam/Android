@@ -1,7 +1,11 @@
 package com.example.spoteam_android.ui.study
 
+import StudyContentImageRVAdapter
 import android.content.Context
+import android.graphics.PorterDuff
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuInflater
 import android.view.View
@@ -9,15 +13,22 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.ActivityMystudyCommunityContentBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
+import com.example.spoteam_android.ui.community.DeleteContentDialog
+import com.example.spoteam_android.ui.community.DeletePostContentResponse
+import com.example.spoteam_android.ui.community.DeleteStudyPostContentResponse
 import com.example.spoteam_android.ui.community.DisLikeCommentResponse
+import com.example.spoteam_android.ui.community.FailedDeleteContentDialog
 import com.example.spoteam_android.ui.community.LikeCommentResponse
-import com.example.spoteam_android.ui.community.ReportContentDialog
+import com.example.spoteam_android.ui.community.PostImages
+import com.example.spoteam_android.ui.community.ReportStudyPostResponse
 import com.example.spoteam_android.ui.community.StudyContentLikeResponse
 import com.example.spoteam_android.ui.community.StudyContentUnLikeResponse
 import com.example.spoteam_android.ui.community.StudyPostContentCommentDetail
@@ -42,6 +53,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     var currentStudyId : Int = -1
     var postId : Int = -1
     var parentCommentId : Int? = 0
+    var canComment : Boolean = false
 
 //    var initialIsliked : Boolean = false
 //    var initialIsLikedNum : Int = 0
@@ -68,10 +80,12 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         }
 
         binding.applyCommentIv.setOnClickListener {
-            if(parentCommentId != 0) {
-                submitReplyComment()
-            } else {
-                submitComment()
+            if(canComment) {
+                if (parentCommentId != 0) {
+                    submitReplyComment()
+                } else {
+                    submitComment()
+                }
             }
         }
 
@@ -84,6 +98,44 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         }
 
         fetchContentInfo()
+
+        initTextWatcher()
+    }
+
+    private fun initTextWatcher() {
+        val textWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                checkFieldsForEmptyValues()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        }
+
+        binding.writeCommentContentEt.addTextChangedListener(textWatcher)
+    }
+
+    private fun checkFieldsForEmptyValues() {
+        val comment = binding.writeCommentContentEt.text.toString().trim()
+
+        if (comment.isEmpty()) {
+            // 입력이 있으면 비활성화
+            binding.applyCommentIv.setColorFilter(
+                ContextCompat.getColor(this, R.color.g300),  // 🔥 빨간색 적용
+                PorterDuff.Mode.SRC_IN
+            )
+            canComment = false
+
+        } else {
+            // 입력이 있으면 활성화
+            binding.applyCommentIv.setColorFilter(
+                ContextCompat.getColor(this, R.color.selector_blue),  // 🔥 원래 색상 적용
+                PorterDuff.Mode.SRC_IN
+            )
+
+            canComment = true
+        }
     }
 
     private fun postStudyContentLike() {
@@ -143,7 +195,6 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun submitComment() {
-        val isAnonymous = binding.writeCommentAnonymous.isChecked
         val commentContent = binding.writeCommentContentEt.text.toString().trim()
 
         if (commentContent.isEmpty()) {
@@ -151,7 +202,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
             return
         }
         val requestBody = WriteStudyCommentRequest(
-            isAnonymous = isAnonymous,
+            isAnonymous = false,
             content = commentContent
         )
 
@@ -187,7 +238,6 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun submitReplyComment() {
-        val isAnonymous = binding.writeCommentAnonymous.isChecked
         val commentContent = binding.writeCommentContentEt.text.toString().trim()
 
         if (commentContent.isEmpty()) {
@@ -195,7 +245,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
             return
         }
         val requestBody = WriteStudyCommentRequest(
-            isAnonymous = isAnonymous,
+            isAnonymous = false,
             content = commentContent
         )
 
@@ -235,24 +285,94 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     private fun showPopupMenu(view: View) {
         val popupMenu = PopupMenu(view.context, view)
         val inflater: MenuInflater = popupMenu.menuInflater
-//        val exit = ExitStudyPopupFragment(view.context)
-        val report = ReportContentDialog(view.context)
+        val report = ReportStudyContentDialog(view.context)
         val fragmentManager = (view.context as AppCompatActivity).supportFragmentManager
         inflater.inflate(R.menu.menu_community_home_options, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_report -> {
-                    report.start(fragmentManager)
+                    reportStudyPost()
+                    report.start()
                     true
                 }
                 R.id.edit_content -> {
 //                    exit.start() // 편집하기로 수정
                     true
                 }
+
+                R.id.delete_content -> {
+                    deleteStudyPostContent(view, fragmentManager)
+                    true
+                }
                 else -> false
             }
         }
         popupMenu.show()
+    }
+
+    private fun deleteStudyPostContent(view: View, fragmentManager: FragmentManager) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deleteStudyPostContent(currentStudyId, postId)
+            .enqueue(object : Callback<DeleteStudyPostContentResponse> {
+                override fun onResponse(
+                    call: Call<DeleteStudyPostContentResponse>,
+                    response: Response<DeleteStudyPostContentResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val deletePostResponse = response.body()
+                        if (deletePostResponse?.isSuccess == "true") {
+                            showSuccessDeleteDialog(view, fragmentManager)
+
+                        } else {
+                            showFailedDeleteDialog(view, fragmentManager)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<DeleteStudyPostContentResponse>, t: Throwable) {
+                    Log.e("CommunityHomeFragment", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun showFailedDeleteDialog(view: View, fragmentManager: FragmentManager) {
+        val failedDeletePost = FailedDeleteStudyContentDialog(view.context)
+        failedDeletePost.start(fragmentManager)
+    }
+
+    private fun showSuccessDeleteDialog(view: View, fragmentManager: FragmentManager) {
+        val completeDeletePost = DeleteStudyContentDialog(view.context)
+        completeDeletePost.start(fragmentManager)
+    }
+
+    private fun reportStudyPost() {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.reportStudyPost(currentStudyId, postId)
+            .enqueue(object : Callback<ReportStudyPostResponse> {
+                override fun onResponse(
+                    call: Call<ReportStudyPostResponse>,
+                    response: Response<ReportStudyPostResponse>
+                ) {
+
+                    if (response.isSuccessful) {
+                        val postContentResponse = response.body()
+                        if (postContentResponse?.isSuccess == "true") {
+                            val postContent = postContentResponse.result
+                            Log.d("ReportedStudyPost", "response: ${postContent.title}")
+                        } else {
+                            showError(postContentResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ReportStudyPostResponse>, t: Throwable) {
+                    Log.e("MyStudyContent", "Failure: ${t.message}", t)
+                }
+            })
     }
 
     private fun fetchContentInfo() {
@@ -270,9 +390,9 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                             val postContent = postContentResponse.result
                             Log.d("MyStudyContent", "response: ${postContent}")
                             if(postContent.studyPostImages.isEmpty()) {
-                                binding.communityContentImageIv.visibility = View.GONE
+                                binding.communityContentImagesRv.visibility = View.GONE
                             } else {
-                                binding.communityContentImageIv.visibility = View.VISIBLE
+                                binding.communityContentImagesRv.visibility = View.VISIBLE
                             }
                             initContentInfo(postContent)
                             fetchContentCommentInfo()
@@ -452,16 +572,21 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         binding.communityContentContentNumTv.text = contentInfo.commentNum.toString()
         binding.communityContentViewNumTv.text = contentInfo.hitNum.toString()
 
+        if(contentInfo.theme == "WELCOME") binding.communityContentThemeTv.text = "#가입인사"
+        else if(contentInfo.theme == "INFO_SHARING") binding.communityContentThemeTv.text = "#정보공유"
+        else if(contentInfo.theme == "FREE_TALK") binding.communityContentThemeTv.text = "#자유"
+        else if(contentInfo.theme == "STUDY_REVIEW") binding.communityContentThemeTv.text = "#스터디후기"
+        else if(contentInfo.theme == "QNA") binding.communityContentThemeTv.text = "#Q&A"
+
+
         Glide.with(binding.root.context)
             .load(contentInfo.member.profileImage)
             .into(binding.communityContentProfileIv)
 
-
-        if(!contentInfo.studyPostImages.isEmpty()) {
-            Glide.with(binding.root.context)
-                .load(contentInfo.studyPostImages[0].imageUrl)
-                .into(binding.communityContentImageIv)
+        if(contentInfo.studyPostImages.isNotEmpty()) {
+            initContentImage(contentInfo.studyPostImages)
         }
+
 
         if(contentInfo.isLiked) {
             binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE
@@ -470,6 +595,14 @@ class MyStudyPostContentActivity : AppCompatActivity() {
             binding.communityContentLikeNumCheckedIv.visibility = View.GONE
             binding.communityContentLikeNumUncheckedIv.visibility = View.VISIBLE
         }
+    }
+
+    private fun initContentImage(studyPostImages: List<PostImages>) {
+        binding.communityContentImagesRv.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        val adapter = StudyContentImageRVAdapter(studyPostImages)
+        binding.communityContentImagesRv.adapter = adapter
     }
 
     private fun resetAdapterState() {

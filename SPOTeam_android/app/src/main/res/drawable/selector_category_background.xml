@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true" >
+    <!-- 버튼 활성화 상태 -->
+    <item android:state_enabled="true">
         <shape android:shape="rectangle">
             <stroke android:width="2dp" android:color="@color/selector_blue"/>
-            <corners android:radius="8dp" />
+            <solid android:color="@android:color/white"/>
+            <corners android:radius="8dp"/>
         </shape>
     </item>
 
-    <item android:state_checked="false">
+    <!-- 버튼 비활성화 상태 -->
+    <item android:state_enabled="false">
         <shape android:shape="rectangle">
             <stroke android:width="2dp" android:color="@color/gray"/>
-            <corners android:radius="8dp" />
+            <solid android:color="@android:color/white"/>
+            <corners android:radius="8dp"/>
         </shape>
     </item>
 </selector>
