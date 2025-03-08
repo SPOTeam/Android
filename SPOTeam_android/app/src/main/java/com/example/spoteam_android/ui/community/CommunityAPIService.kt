@@ -297,4 +297,17 @@ interface CommunityAPIService {
         @Path("memberId") memberId: Int,
         @Body requestBody : ReportCrewRequest
     ) : Call<ReportCrewResponse>
+
+    @POST("/spot/studies/{studyId}/posts/{postId}/reports")
+    fun reportStudyPost(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int
+    ) : Call<ReportStudyPostResponse>
+
+    @DELETE("/spot/studies/{studyId}/posts/{postId}")
+    fun deleteStudyPostContent(
+        @Path("studyId") studyId : Int,
+        @Path("postId") postId: Int
+    ) : Call<DeleteStudyPostContentResponse>
+
 }

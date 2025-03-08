@@ -1,4 +1,4 @@
-package com.example.spoteam_android.ui.community
+package com.example.spoteam_android.ui.study
 
 import android.content.Context
 import android.content.Intent
@@ -13,20 +13,30 @@ import android.widget.CheckBox
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentWriteContentBinding
+import com.example.spoteam_android.ui.community.CommunityAPIService
+import com.example.spoteam_android.ui.community.WriteContentRequest
+import com.example.spoteam_android.ui.community.WriteContentResponse
 import retrofit2.Callback
 import retrofit2.Response
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 
-class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
+// 인터페이스 정의
+interface BottomSheetDismissListener {
+    fun onBottomSheetDismissed()
+}
+
+class EditContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
 
     lateinit var binding: FragmentWriteContentBinding
     private var selectedCategory: String = ""
     private var isAnonymous: Boolean = false
+    private var postId : String = ""
+
+    private var dismissListener: BottomSheetDismissListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,23 +44,34 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentWriteContentBinding.inflate(inflater, container, false)
+        // 전달된 데이터 받아와서 UI에 반영
+        arguments?.let {
+            val title = it.getString("title", "")
+            val content = it.getString("content", "")
+            val type = it.getString("type","")
+            val postId = it.getString("postId","")
+            Log.d("EditContentFragment", postId)
 
-        isCancelable = false // 외부 클릭으로 닫히지 않도록 설정
+            binding.writeContentTitleEt.setText(title)
+            binding.writeContentContentEt.setText(content)
+            selectedCategory = type
 
-        // SharedPreferences 사용
-        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val currentEmail = sharedPreferences.getString("currentEmail", null)
+            this.postId = postId
+        }
 
-        // 현재 로그인된 사용자 정보를 로그
-        val memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
-//        Log.d("SharedPreferences", "MemberId: $memberId")
+        binding.writeContentTitleTv.text = "글수정"
 
         binding.categorySpinner.onItemSelectedListener = this
 
-        binding.writeContentFinishBtn.setOnClickListener{
+        binding.writeContentFinishBtn.setOnClickListener {
+            val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+            val currentEmail = sharedPreferences.getString("currentEmail", null)
+            val memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
+
             submitContent(memberId)
         }
 
+        // Spinner 어댑터 설정
         ArrayAdapter.createFromResource(
             requireContext(),
             R.array.category_list,
@@ -58,6 +79,12 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.categorySpinner.adapter = adapter
+
+            // Spinner의 초기값 설정
+            val position = getCategoryPosition(selectedCategory)
+            if (position != -1) {
+                binding.categorySpinner.setSelection(position)
+            }
         }
 
         binding.writeContentPrevIv.setOnClickListener{
@@ -65,6 +92,30 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
         }
 
         return binding.root
+    }
+
+    override fun onDismiss(dialog: android.content.DialogInterface) {
+        super.onDismiss(dialog)
+        // 다이얼로그 종료를 호출한 쪽에 알림
+        dismissListener?.onBottomSheetDismissed()
+    }
+
+    // 카테고리의 위치를 반환하는 함수
+    private fun getCategoryPosition(category: String): Int {
+        val categories = resources.getStringArray(R.array.category_list)
+        return categories.indexOfFirst { it == getCategoryDisplayName(category) }
+    }
+
+    // 서버에서 사용하는 카테고리 값을 사용자에게 보여줄 텍스트로 변환하는 함수
+    private fun getCategoryDisplayName(category: String): String {
+        return when (category) {
+            "PASS_EXPERIENCE" -> "합격후기"
+            "INFORMATION_SHARING" -> "정보공유"
+            "COUNSELING" -> "고민상담"
+            "JOB_TALK" -> "취준토크"
+            "FREE_TALK" -> "자유토크"
+            else -> "합격후기"
+        }
     }
 
     private fun submitContent(memberId : Int) {
@@ -84,33 +135,23 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
             anonymous = isAnonymous
         )
 
-        Log.d("WriteContentFragment", "${requestBody} , ${memberId}")
+        Log.d("EditContentFragment", "${requestBody} , ${memberId} , ${postId}")
 
         // 서버로 데이터 전송
-        sendContentToServer(requestBody, memberId)
-        resetWriting()
+        sendEditContentToServer(requestBody, memberId)
     }
 
-    private fun resetWriting() {
-        binding.writeContentTitleEt.text = null
-        binding.writeContentContentEt.text = null
-    }
-
-    private fun sendContentToServer(requestBody: WriteContentRequest, memberId : Int) {
+    private fun sendEditContentToServer(requestBody: WriteContentRequest, memberId : Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postContent(requestBody)
+        service.editContent(postId, requestBody)
             .enqueue(object : Callback<WriteContentResponse> {
                 override fun onResponse(call: Call<WriteContentResponse>, response: Response<WriteContentResponse>) {
                     Log.d("WriteContentFragment", response.body()?.isSuccess.toString())
                     if (response.isSuccessful && response.body()?.isSuccess == "true") {
-                        val writeContentResponseBody = response.body()!!.result
-//                        showLog(writeContentResponseBody.toString())
-                        setFragmentResult("requestKey", bundleOf("resultKey" to "SUCCESS"))
-                        dismiss()
-                        val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-                        intent.putExtra("postInfo", writeContentResponseBody.id)
-                        startActivity(intent)
+                        val editContentResponseBody = response.body()
+                        Log.d("EditContent", editContentResponseBody!!.code)
 
+                        dismiss()
                     } else {
                         Toast.makeText(requireContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
                     }
@@ -120,11 +161,6 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
                 }
         })
     }
-
-    private fun showLog(message: String?) {
-        Toast.makeText(requireContext(), "WriteContentFragment: $message", Toast.LENGTH_SHORT).show()
-    }
-
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         // Spinner에서 선택된 항목의 텍스트를 가져옴

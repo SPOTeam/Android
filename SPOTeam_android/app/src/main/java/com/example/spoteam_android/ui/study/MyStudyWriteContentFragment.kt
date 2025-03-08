@@ -6,23 +6,24 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMystudyWriteContentBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
-import com.example.spoteam_android.ui.community.CommunityContentActivity
 import com.example.spoteam_android.ui.community.StudyPostResponse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -35,6 +36,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
+import java.util.UUID
 
 class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
 
@@ -44,7 +46,8 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
     private var selectedTheme: String = ""
     private var isAnnouncement: Boolean = false
     private lateinit var getImageLauncher: ActivityResultLauncher<Intent>
-    private var profileImageURI: Uri? = null // 이미지 URI를 저장할 변수 추가
+    private val imageList = mutableListOf<Uri>()
+    private lateinit var imageAdapter: WriteContentImageRVadapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +55,10 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMystudyWriteContentBinding.inflate(inflater, container, false)
+
+        isCancelable = false // 외부 클릭으로 닫히지 않도록 설정
+
+        initTextWatchers()
 
         // ViewModel에서 studyId를 관찰하고 변경될 때마다 fetchStudyMembers 호출
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
@@ -85,7 +92,10 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
                     PorterDuff.Mode.SRC_IN
                 )
                 isAnnouncement = false
-                Log.d("MyStudyWriteContentFragment", isAnnouncement.toString())
+//                Log.d("MyStudyWriteContentFragment", isAnnouncement.toString())
+
+                binding.themeTv.visibility = View.VISIBLE
+                binding.mystudyCategorySpinner.visibility = View.VISIBLE
 
             } else {
                 binding.checkIc.setColorFilter(
@@ -93,25 +103,18 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
                     PorterDuff.Mode.SRC_IN
                 )
                 isAnnouncement = true
-                Log.d("MyStudyWriteContentFragment", isAnnouncement.toString())
+//                Log.d("MyStudyWriteContentFragment", isAnnouncement.toString())
+
+                binding.themeTv.visibility = View.GONE
+                binding.mystudyCategorySpinner.visibility = View.GONE
             }
         }
 
-        // 이미지 선택을 위한 Launcher 설정
-        getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val selectedImageURI : Uri? = result.data?.data
-                if(selectedImageURI != null) {
-                    binding.addImageIv.setImageURI(selectedImageURI)
-                    profileImageURI = selectedImageURI
-                    Log.d("imageFormat", "$profileImageURI")
-                }
-            }
-        }
+        initImageButtonAction()
 
         binding.addImageIv.setOnClickListener{
             getImageFromAlbum()
-            Log.d("imageFormat", "$profileImageURI")
+//            Log.d("imageFormat", "$profileImageURI")
         }
 
         binding.writeContentPrevIv.setOnClickListener{
@@ -121,40 +124,97 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
         return binding.root
     }
 
-    // 갤러리 열기
+    private fun initTextWatchers() {
+        val textWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                checkFieldsForEmptyValues()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        }
+
+        binding.writeContentTitleEt.addTextChangedListener(textWatcher)
+        binding.writeContentContentEt.addTextChangedListener(textWatcher)
+    }
+
+    private fun checkFieldsForEmptyValues() {
+        val title = binding.writeContentTitleEt.text.toString().trim()
+        val content = binding.writeContentContentEt.text.toString().trim()
+
+        binding.writeContentFinishBtn.isEnabled = title.isNotEmpty() && content.isNotEmpty()
+
+    }
+
+
+    private fun initImageButtonAction() {
+        // RecyclerView 초기화
+        imageAdapter = WriteContentImageRVadapter(imageList)
+        binding.addedImagesRv.apply {
+            adapter = imageAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        // 이미지 선택을 위한 Launcher 설정
+        getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+
+                if (data?.clipData != null) {
+                    // 🔥 여러 개의 이미지 선택
+                    val clipData = data.clipData
+                    for (i in 0 until clipData!!.itemCount) {
+                        val uri = clipData.getItemAt(i).uri
+                        if (!imageList.contains(uri)) { // 중복 방지
+                            imageList.add(uri)
+                        }
+                    }
+                } else if (data?.data != null) {
+                    // 🔥 단일 이미지 선택
+                    val uri = data.data!!
+                    if (!imageList.contains(uri)) {
+                        imageList.add(uri)
+                    }
+                }
+
+                imageAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+
+    // 갤러리 열기 (여러 개 선택 가능)
     private fun getImageFromAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
+//            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // 🔥 여러 개 선택 가능하도록 설정
         }
         getImageLauncher.launch(intent)
     }
+
 
     private fun submitContent(studyId: Int) {
         val title = binding.writeContentTitleEt.text.toString().trim()
         val content = binding.writeContentContentEt.text.toString().trim()
 
-        if (title.isEmpty() || content.isEmpty()) {
-            Toast.makeText(requireContext(), "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
         // 여러 이미지 파일을 담을 리스트 생성
         val imageParts = mutableListOf<MultipartBody.Part>()
-        if (profileImageURI != null) {
-            val uris = listOf(profileImageURI!!) // 여기에 여러 URI를 추가할 수 있음
-            uris.forEach { uri ->
+
+        if (imageList.isNotEmpty()) {
+            imageList.forEach { uri ->
                 val file = getFileFromUri(uri)
                 if (file != null) {
-                    val requestFile = file.asRequestBody("image/png".toMediaTypeOrNull())
-                    val imagePart =
-                        MultipartBody.Part.createFormData("images", file.name, requestFile)
+                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull()) // 🔥 이미지 타입 자동 감지
+                    val imagePart = MultipartBody.Part.createFormData("images", file.name, requestFile) // 🔥 Key를 "images"로만 설정
                     imageParts.add(imagePart)
                 }
             }
         }
 
+
         // 나머지 데이터를 RequestBody로 변환
-        val isAnnouncementPart = (if (isAnnouncement) "true" else "false").toRequestBody("text/plain".toMediaTypeOrNull())
+        val isAnnouncementPart = isAnnouncement.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val themePart = selectedTheme.toRequestBody("text/plain".toMediaTypeOrNull())
         val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
         val contentPart = content.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -163,18 +223,21 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
         sendContentToServer(studyId, isAnnouncementPart, themePart, titlePart, contentPart, imageParts)
     }
 
-
-    private fun getFileFromUri(uri: Uri): File? {
+    private fun getFileFromUri(uri: Uri): File {
         val inputStream = requireContext().contentResolver.openInputStream(uri)
-        val file = File(requireContext().cacheDir, "selected_image.png")
+        val fileName = "image_${UUID.randomUUID()}.png" // 🔥 파일명을 고유하게 생성
+        val file = File(requireContext().cacheDir, fileName)
         val outputStream = FileOutputStream(file)
+
         inputStream?.use { input ->
             outputStream.use { output ->
                 input.copyTo(output)
             }
         }
+
         return file
     }
+
 
     private fun sendContentToServer(
         studyId: Int,
@@ -210,6 +273,7 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
             }
 
             override fun onFailure(call: Call<StudyPostResponse>, t: Throwable) {
+                Log.e("API ERROR", "네트워크 오류 : ${t.message}", t)
                 Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
         })
