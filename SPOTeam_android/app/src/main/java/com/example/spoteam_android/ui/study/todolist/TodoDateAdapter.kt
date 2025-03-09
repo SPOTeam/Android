@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
-import android.content.Context
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.R
@@ -29,8 +27,19 @@ class TodoDateAdapter(
 
     override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
         val (date, isCurrentMonth, isClickable) = dates[position]
+
+        // ✅ 정확한 날짜를 직접 `date` 값을 활용해서 계산하도록 수정
+        val localDate = if (date != null) {
+            LocalDate.of(LocalDate.now().year, LocalDate.now().month, date)
+        } else {
+            null
+        }
+
+        val dayOfWeek = localDate?.dayOfWeek?.getDisplayName(TextStyle.SHORT, Locale.KOREAN) ?: ""
+
         holder.bind(date, isCurrentMonth, isClickable, selectedDate, onDateSelected)
     }
+
 
     override fun getItemCount(): Int = dates.size
 
@@ -38,6 +47,10 @@ class TodoDateAdapter(
         dates = newDates
         selectedDate = newSelectedDate
         notifyDataSetChanged()
+    }
+
+    fun getPositionForDate(day: Int): Int {
+        return dates.indexOfFirst { it.first == day }
     }
 
     class CalendarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -64,6 +77,7 @@ class TodoDateAdapter(
             val localDate = LocalDate.of(currentYear, currentMonth, 1).plusDays(adapterPosition.toLong())
             val dayOfWeek = localDate.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN)
 
+
             tvDayNumber.text = date.toString()
             tvDayOfWeek.text = dayOfWeek
 
@@ -83,7 +97,7 @@ class TodoDateAdapter(
             } else {
                 // 이전/다음 달이면 회색 처리 및 클릭 비활성화
                 tvDayNumber.setTextColor(ContextCompat.getColor(context, R.color.gray))
-                tvDayOfWeek.setTextColor(ContextCompat.getColor(context, R.color.gray))
+                tvDayOfWeek.setTextColor(ContextCompat.getColor(context, R.color.black))
                 itemView.isClickable = false
                 itemView.isEnabled = false
                 tvDayNumber.setBackgroundColor(Color.TRANSPARENT) // 배경 없애기
@@ -100,7 +114,7 @@ class TodoDateAdapter(
                     tvDayOfWeek.setTextColor(ContextCompat.getColor(context, R.color.b400))
                     tvDayNumber.setTextColor(ContextCompat.getColor(context, R.color.b400))
                 } else {
-                    tvDayOfWeek.setTextColor(ContextCompat.getColor(context, R.color.gray))
+                    tvDayOfWeek.setTextColor(ContextCompat.getColor(context, R.color.black))
                     tvDayNumber.setTextColor(ContextCompat.getColor(context, R.color.gray))
                 }
             }
@@ -108,9 +122,10 @@ class TodoDateAdapter(
             // 클릭 이벤트 설정 (이전/다음 달 클릭 불가능)
             itemView.setOnClickListener {
                 if (isCurrentMonth) {
-                    onDateSelected(date)
+                    onDateSelected(date) // ✅ 선택한 날짜를 콜백으로 전달
                 }
             }
+
         }
     }
 }

@@ -11,16 +11,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_calendar"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:paddingHorizontal="30dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:paddingHorizontal="50dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tx_my_todo_list"
+            app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/item_calendar_day" />
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/btnPrevWeek"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:background="@null"-->
+<!--            android:scaleType="centerInside"-->
+<!--            android:src="@drawable/left_arrow"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/rv_calendar" />-->
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/btnNextWeek"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:background="@null"-->
+<!--            android:layout_marginRight="10dp"-->
+<!--            android:scaleType="centerInside"-->
+<!--            android:src="@drawable/right_arrow"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/rv_calendar"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/rv_calendar" />-->
 
         <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_dates"
@@ -35,18 +59,17 @@
         android:visibility="gone"
         tools:listitem="@layout/item_date_todolist" />
 
-    <TextView
-        android:id="@+id/tx_scheduled_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/suit_bold"
-        android:text="예정된 일정"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_dates" />
+        <TextView
+            android:id="@+id/tx_scheduled_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/suit_bold"
+            android:text="예정된 일정"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_calendar" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/eventrecyclerviewto"
@@ -100,7 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="210dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/suit_bold"
             android:text="Other's Todo-List"
             android:textColor="@color/black"

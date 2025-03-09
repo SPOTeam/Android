@@ -2,7 +2,6 @@ package com.example.spoteam_android.ui.study.todolist
 
 import android.content.Context
 import android.graphics.Paint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -90,13 +89,11 @@ class TodoAdapter(
                             date = item.date
                         ) { response ->
                             if (response != null) {
-                                Log.d("TodoAdapter", "Update Response: $response")
                                 Toast.makeText(context, "수정 성공!", Toast.LENGTH_SHORT).show()
                                 item.content = newContent
                                 item.isEditing = false
                                 notifyItemChanged(position)
                             } else {
-                                Log.d("TodoAdapter", "Update Failed")
                                 Toast.makeText(context, "수정 실패. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                             }
                         }

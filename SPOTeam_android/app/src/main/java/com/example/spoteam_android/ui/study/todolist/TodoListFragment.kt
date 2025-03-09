@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.MemberResponse
 import com.example.spoteam_android.ProfileItem
 import com.example.spoteam_android.RetrofitInstance
@@ -39,7 +41,6 @@ class TodoListFragment : Fragment() {
     private lateinit var binding: FragmentTodoListBinding
     private lateinit var todoViewModel: TodoViewModel
     private val studyViewModel: StudyViewModel by activityViewModels()
-    private lateinit var dateAdapter: DateAdapter
     private lateinit var myTodoAdapter: TodoAdapter
     private lateinit var otherTodoAdapter: OtherTodoAdapter
     private lateinit var layoutManager: LinearLayoutManager
@@ -51,6 +52,9 @@ class TodoListFragment : Fragment() {
     private lateinit var memberIdMap: Map<ProfileItem, Int>
     private var selectedMemberId: Int? = null
     private lateinit var repository: TodoRepository // repository 선언
+    private lateinit var rvCalendar: RecyclerView
+    private lateinit var btnNextWeek: ImageButton
+    private lateinit var btnPrevWeek: ImageButton
 
 
 
@@ -77,6 +81,10 @@ class TodoListFragment : Fragment() {
         val currentYear = LocalDate.now().year // 현재 연도
         val currentMonth = LocalDate.now().monthValue // 현재 월
 
+        Log.d("Todo","$currentYear,$currentMonth")
+
+        Log.d("Todo","${getTotalWeeksInMonth(currentYear,currentMonth)}")
+
         // 현재 월의 날짜 리스트 가져오기
         val daysOfCurrentMonth = getDaysOfMonthWithPadding(currentYear, currentMonth)
 
@@ -84,7 +92,7 @@ class TodoListFragment : Fragment() {
         var selectedDate2 = 1
 
 // Adapter 설정
-        todoDateAdapter = TodoDateAdapter(daysOfCurrentMonth, selectedDate2) { newSelectedDate ->
+         todoDateAdapter = TodoDateAdapter(daysOfCurrentMonth, selectedDate2) { newSelectedDate ->
             selectedDate2 = newSelectedDate
             todoDateAdapter.updateDates(daysOfCurrentMonth, selectedDate2)
         }
@@ -151,6 +159,7 @@ class TodoListFragment : Fragment() {
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvDates.layoutManager = layoutManager
 
+
         // 최초 투두리스트, 스케쥴 조회
         todoViewModel.onDateChanged(selectedDate)
         fetchTodoList(studyId, today.toString().padStart(2, '0'))
@@ -166,55 +175,35 @@ class TodoListFragment : Fragment() {
             todoEventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
         }
 
+        var selectedDateInt = today // 현재 날짜로 초기화
 
-        //날짜가 바뀔 때마다 새로 API 요청
-        val dates = (1..31).map {
-            DateItem(
-                it.toString(),
-                it.toString() == calendar.get(Calendar.DAY_OF_MONTH).toString()
-            )
-        }
-        dateAdapter = DateAdapter(dates) { date ->
-            selectedDate = formatToDate("${calendar.get(Calendar.YEAR)}-" +
-                    "${(calendar.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-" +
-                    date)
+        // ✅ 기존 selectedDate 변수를 그대로 사용
+        todoDateAdapter = TodoDateAdapter(daysOfCurrentMonth, today) { newSelectedDate ->
+            selectedDate = formatToDate("$currentYear-${currentMonth.toString().padStart(2, '0')}-${newSelectedDate.toString().padStart(2, '0')}")
 
+            // ✅ 날짜 선택 시 UI 반영
+            todoDateAdapter.updateDates(daysOfCurrentMonth, newSelectedDate)
+
+            // ✅ 선택된 날짜에 대한 API 요청 실행
             todoViewModel.onDateChanged(selectedDate)
-            val formattedDate = formatToDate("${calendar.get(Calendar.YEAR)}-" +
-                    "${(calendar.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-" +
-                    date)
+            fetchTodoList(studyId, newSelectedDate.toString().padStart(2, '0'))
 
-            fetchGetSchedule(studyId, year, month) {
-                eventViewModel.loadEvents(year, month, date.toInt())
-
-                // 어댑터와 데코레이터 갱신 추가
-                todoEventAdapter.updateSelectedDate(formattedDate)
-
-                // 어댑터 데이터 갱신
+            fetchGetSchedule(studyId, currentYear, currentMonth) {
+                eventViewModel.loadEvents(currentYear, currentMonth, newSelectedDate)
+                todoEventAdapter.updateSelectedDate(selectedDate)
                 todoEventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
             }
 
+            // ✅ 기존의 otherTodoList 초기화
             profileAdapter.resetBorder()
-
-            //날짜 이동 시 Other Todo List 초기화
             todoViewModel.clearOtherTodoList()
             otherTodoAdapter.clearData()
-
-            fetchTodoList(studyId, date)
-
-            eventViewModel.events.observe(viewLifecycleOwner, Observer { events ->
-                todoEventAdapter.updateEvents(events)
-            })
         }
-        binding.rvDates.adapter = dateAdapter
 
-        // ViewTreeObserver를 사용하여 날짜 목록 가운데로 스크롤
-        binding.rvDates.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                binding.rvDates.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                scrollToTodayPosition()
-            }
-        })
+
+        binding.rvCalendar.adapter = todoDateAdapter
+
+        scrollToTodayPosition()
 
 
 
@@ -267,7 +256,6 @@ class TodoListFragment : Fragment() {
         val formattedDate = formatToDate("${calendar.get(Calendar.YEAR)}-" +
                 "${(calendar.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-" +
                 date)
-        Log.d("ToDoListFragment",date)
         todoViewModel.fetchTodoList(studyId, page = 0, size = 10, date = formattedDate)
 
         todoViewModel.myTodoListResponse.observe(viewLifecycleOwner) { response ->
@@ -287,7 +275,6 @@ class TodoListFragment : Fragment() {
 
         todoViewModel.fetchOtherToDoList(studyId, memberId, page = 0, size = 10, date = date)
         todoViewModel.otherTodoListResponse.observe(viewLifecycleOwner) { response ->
-            Log.d("OtherTodo","${response}")
             response?.result?.content?.let { todos ->
                 // 데이터를 역순으로 정렬
                 val reversedTodos = todos.reversed()
@@ -311,18 +298,6 @@ class TodoListFragment : Fragment() {
     }
 
 
-    //오늘 날짜가 가운데로 오도록 이동시킴
-    private fun scrollToTodayPosition() {
-        val today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString()
-        val todayPosition = dateAdapter.dates.indexOfFirst { it.date == today }
-
-        if (todayPosition != -1) {
-            val childView = binding.rvDates.getChildAt(0)
-            val offset = binding.rvDates.width / 2 - (childView?.width ?: 0) / 2
-            layoutManager.scrollToPositionWithOffset(todayPosition, offset)
-        }
-    }
-
     // 캘린더 일정 조회
     private fun fetchGetSchedule(studyId: Int, year: Int, month: Int, onComplete: () -> Unit) {
 
@@ -340,7 +315,6 @@ class TodoListFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
-                    Log.d("CalendarFragment", "$apiResponse")
 
                     if (apiResponse?.isSuccess == true) {
                         // EventItems 데이터 로드
@@ -363,17 +337,12 @@ class TodoListFragment : Fragment() {
                             )
                             EventItems.add(eventItem)
                         }
-
-                        Log.d("fetchGetSchedule", "Loaded Events: $EventItems")
-
                         // ViewModel 및 Adapter에 데이터 업데이트
                         eventViewModel.updateEvents(EventItems)
                         todoEventAdapter.updateEvents(EventItems)
 
                         // 콜백 호출
                         onComplete()
-                    } else {
-                        Log.d("fetchGetSchedule", "No matching events found")
                     }
                 }
             }
@@ -397,7 +366,6 @@ class TodoListFragment : Fragment() {
                 if (response.isSuccessful) {
                     response.body()?.let { memberResponse ->
 
-                        Log.d("TodoFragment","$memberResponse")
                         val members = memberResponse.result.members
 
                         // ProfileItem 생성
@@ -424,7 +392,6 @@ class TodoListFragment : Fragment() {
                         // maxPeople과 memberCount 값을 가져오기 위해 ViewModel을 옵저빙
                         val maxPeople = studyViewModel.maxPeople.value
                         val memberCount = studyViewModel.memberCount.value
-                        Log.d("max","${maxPeople},${memberCount}")
 
                         // 닉네임이 리스트에 있거나, memberCount와 maxPeople이 일치하면 버튼을 숨김
                         val shouldHideButton = isNicknameFound || (maxPeople != null && memberCount != null && memberCount >= maxPeople)
@@ -450,38 +417,51 @@ class TodoListFragment : Fragment() {
         val yearMonth = YearMonth.of(year, month)
         val daysInMonth = yearMonth.lengthOfMonth()
 
-        val firstDayOfMonth = LocalDate.of(year, month, 1).dayOfWeek
-        val lastDayOfMonth = LocalDate.of(year, month, daysInMonth).dayOfWeek
+        // 🔹 이번 달 1일의 요일 가져오기 (월요일=1, 일요일=7)
+        val firstDayOfMonth = LocalDate.of(year, month, 1).dayOfWeek.value
 
-        // 월요일부터 시작하도록 인덱스 계산 (DayOfWeek.MONDAY = 1)
-        val startPadding = (if (firstDayOfMonth == DayOfWeek.MONDAY) 0 else firstDayOfMonth.value - 1)
-        val endPadding = 7 - lastDayOfMonth.value
+        // 🔹 월요일을 기준으로 정렬하기 위해 필요한 빈 칸 개수 계산
+        val startPadding = if (firstDayOfMonth == 1) 0 else firstDayOfMonth - 1
 
+        // 🔹 이전 달 정보 가져오기
         val previousMonth = if (month == 1) 12 else month - 1
         val previousYear = if (month == 1) year - 1 else year
         val previousMonthDays = YearMonth.of(previousYear, previousMonth).lengthOfMonth()
 
-        val nextMonth = if (month == 12) 1 else month + 1
-        val nextYear = if (month == 12) year + 1 else year
-
         val daysList = mutableListOf<Triple<Int?, Boolean, Boolean>>() // (날짜, 현재 달 여부, 클릭 가능 여부)
 
-        // 이전 달의 날짜 추가 (회색 처리, 클릭 비활성화)
-        for (i in startPadding downTo 1) {
-            daysList.add(Triple(previousMonthDays - i + 1, false, false)) // 이전 달, 클릭 불가
-        }
 
-        // 현재 월의 날짜 추가 (정상 처리)
+        // ✅ 현재 월의 날짜 추가 (정상 처리)
         for (i in 1..daysInMonth) {
             daysList.add(Triple(i, true, true)) // 현재 달, 클릭 가능
         }
 
-        // 다음 달의 날짜 추가 (회색 처리, 클릭 비활성화)
-        for (i in 1..endPadding) {
-            daysList.add(Triple(i, false, false)) // 다음 달, 클릭 불가
-        }
-
         return daysList
+    }
+
+
+
+    fun getTotalWeeksInMonth(year: Int, month: Int): Int {
+        val daysList = getDaysOfMonthWithPadding(year, month)
+        return (daysList.size + 6) / 7 // 7일씩 나누고 올림 처리
+    }
+
+    // ✅ 오늘 날짜를 RecyclerView 중앙에 정렬하는 함수
+    private fun scrollToTodayPosition() {
+        val today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) // 오늘 날짜 가져오기
+        val todayPosition = todoDateAdapter.getPositionForDate(today) // 오늘 날짜의 위치 찾기
+
+        if (todayPosition != -1) {
+            binding.rvCalendar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    binding.rvCalendar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                    val childView = binding.rvCalendar.getChildAt(0)
+                    val offset = binding.rvCalendar.width / 2 - (childView?.width ?: 0) / 2
+                    (binding.rvCalendar.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(todayPosition, offset)
+                }
+            })
+        }
     }
 
 
