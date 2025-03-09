@@ -46,18 +46,6 @@
 <!--            app:layout_constraintEnd_toEndOf="@+id/rv_calendar"-->
 <!--            app:layout_constraintTop_toTopOf="@+id/rv_calendar" />-->
 
-        <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_dates"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
-        tools:listitem="@layout/item_date_todolist" />
 
         <TextView
             android:id="@+id/tx_scheduled_event"
