@@ -34,6 +34,7 @@ androidx-recyclerview = "1.2.1"
 material3Android = "1.2.1"
 media3Common = "1.4.0"
 filamentAndroid = "1.17.1"
+places = "4.1.0"
 
 [libraries]
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidx-security" }
@@ -72,6 +73,7 @@ filament-android = { group = "com.google.ar.sceneform", name = "filament-android
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
 
 
 [plugins]

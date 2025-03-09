@@ -46,6 +46,8 @@ class OtherTodoAdapter(
         todoList.clear()
         todoList.addAll(newTodoList)
         notifyDataSetChanged()
+        Log.d("TodoFramgment_other","updateData complete")
+
     }
 
     fun clearData(){
