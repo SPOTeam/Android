@@ -143,10 +143,6 @@ class TodoListFragment : Fragment() {
             adapter = myTodoAdapter
         }
 
-        // 날짜 선택 RecyclerView 설정
-        layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rvDates.layoutManager = layoutManager
-
         //다른 스터디원 투두리스트
         otherTodoAdapter = OtherTodoAdapter(requireContext(), mutableListOf())
 
@@ -154,10 +150,6 @@ class TodoListFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = otherTodoAdapter
         }
-
-        // 날짜 선택 RecyclerView 설정
-        layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rvDates.layoutManager = layoutManager
 
 
         // 최초 투두리스트, 스케쥴 조회
