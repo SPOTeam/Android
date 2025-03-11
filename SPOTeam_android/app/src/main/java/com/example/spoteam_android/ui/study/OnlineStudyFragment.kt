@@ -236,20 +236,20 @@ class OnlineStudyFragment : Fragment() {
         transaction.commit()
     }
 
-    private fun extractAddressUntilDong(address: String): String {
-        val index = address.indexOf("동")
-        return if (index != -1) {
-            address.substring(0, index + 1)
-        } else {
-            address
-        }
-    }
+//    private fun extractAddressUntilDong(address: String): String {
+//        val index = address.indexOf("동")
+//        return if (index != -1) {
+//            address.substring(0, index + 1)
+//        } else {
+//            address
+//        }
+//    }
 
     fun updateChip(address: String) {
-        val truncatedAddress = extractAddressUntilDong(address)
+//        val truncatedAddress = extractAddressUntilDong(address)
         binding.locationChip.apply {
             visibility = View.VISIBLE
-            text = truncatedAddress
+            text = address
         }
         binding.locationChip.post {
             updateNextButtonState()
