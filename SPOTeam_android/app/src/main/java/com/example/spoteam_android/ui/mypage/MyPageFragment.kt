@@ -1,6 +1,7 @@
 package com.example.spoteam_android.ui.mypage
 
 import StudyApiService
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
@@ -66,21 +67,23 @@ class MyPageFragment : Fragment() {
             tvRecruitingNum.setOnClickListener { navigateToFragment(ConsiderAttendanceFragment()) }
             tvApplied.setOnClickListener { navigateToFragment(PermissionWaitFragment()) }
             tvAppliedNum.setOnClickListener { navigateToFragment(PermissionWaitFragment()) }
-            framelayout8.setOnClickListener { performNaverLogout() }
-            framelayout10.setOnClickListener { showConfirmationDialog("회원 탈퇴", "정말로 회원 탈퇴를 진행하시겠습니까? 탈퇴 시 모든 데이터가 삭제됩니다.") { performAccountDeletion() } }
-            framelayout11.setOnClickListener { performLogout() }
+            framelayoutVersionApp.setOnClickListener { performNaverLogout() }
+            framelayoutDeleteAccount.setOnClickListener { showConfirmationDialog("회원 탈퇴", "정말로 회원 탈퇴를 진행하시겠습니까? 탈퇴 시 모든 데이터가 삭제됩니다.") { performAccountDeletion() } }
+            framelayoutLogout.setOnClickListener { performLogout() }
             framelayout1.setOnClickListener { navigateToFragment(ThemePreferenceFragment()) }
             framelayout2.setOnClickListener { navigateToFragment(RegionPreferenceFragment()) }
             framelayout3.setOnClickListener { navigateToFragment(PurposePreferenceFragment()) }
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupRecyclerView() {
         myStudyAdapter = MyStudyAdapter(studyList)
         binding.recyclerViewMyStudies.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = myStudyAdapter
         }
+        binding.recyclerViewMyStudies.setOnTouchListener { _, _ -> true }
     }
 
 
