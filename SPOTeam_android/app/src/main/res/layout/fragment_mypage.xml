@@ -33,8 +33,9 @@
                 android:id="@+id/fragment_study_tv"
                 android:text="마이페이지"
                 android:textColor="@color/black"
-                android:textSize="16dp"
-                android:fontFamily="@font/pretendard"
+                android:textSize="18dp"
+                android:textFontWeight="700"
+                android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="20dp"/>
@@ -44,18 +45,17 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_profile"
             android:layout_width="match_parent"
-            android:layout_height="199dp"
+            android:layout_height="wrap_content"
             android:layout_margin="0dp"
             android:layout_marginTop="120dp"
-            android:background="#D6E5FF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_my_page">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_profile"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/ic_preview_profile"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
@@ -67,43 +67,63 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
 
-
-
             <TextView
                 android:id="@+id/tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/suit_bold"
                 android:text="닉네임"
                 android:textColor="@color/black"
-                android:textSize="16dp"
-                android:fontFamily="@font/pretendard"
-                android:textStyle="bold"
-                android:layout_marginTop="18dp"
-                app:layout_constraintStart_toEndOf="@id/iv_profile"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="22dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_profile"
+                app:layout_constraintStart_toEndOf="@id/iv_profile" />
+
 
             <TextView
-                android:id="@+id/tv_temperature"
+                android:id="@+id/tv_nickname2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="37.5°C"
-                android:fontFamily="@font/pretendard"
-                android:textColor="#186AFF"
-                android:textSize="16dp"
-                app:layout_constraintStart_toEndOf="@id/iv_profile"
-                app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/suit_bold"
+                android:text="님"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_nickname"
+                app:layout_constraintStart_toEndOf="@+id/tv_nickname" />
 
             <ImageView
                 android:id="@+id/iv_bookmark"
-                android:layout_width="24dp"
-                android:layout_height="25dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="23dp"
-                android:src="@drawable/fragment_mypage_ic_bookmark"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_new_scrab"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/tv_nickname2"
+                app:layout_constraintTop_toTopOf="@+id/tv_nickname2" />
+
+
+            <TextView
+                android:id="@+id/tv_scrab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="스크랩"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:layout_marginLeft="5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_bookmark"
+                app:layout_constraintStart_toEndOf="@+id/iv_bookmark" />
+
+            <TextView
+                android:id="@+id/tv_count_scrab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:layout_marginLeft="5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_scrab"
+                app:layout_constraintStart_toEndOf="@+id/tv_scrab" />
 
             <FrameLayout
                 android:id="@+id/frameLayout1"
@@ -129,10 +149,10 @@
                     android:layout_marginTop="6dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:text="진행 중"
-                    android:fontFamily="@font/pretendard"
+                    android:text="참여 중"
+                    android:textFontWeight="700"
+                    android:textColor="@color/b500"
                     android:textAlignment="center"
-                    android:textColor="#7DABFC"
                     android:textSize="16dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -146,8 +166,8 @@
                     android:layout_marginTop="36dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:text="2"
-                    android:fontFamily="@font/pretendard"
+                    android:text="00"
+                    android:textFontWeight="700"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="16dp"
@@ -163,7 +183,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="65dp"
                     android:layout_marginBottom="16dp"
-                    android:background="#D6E5FF" />
+                    android:background="@color/b200" />
 
                 <TextView
                     android:id="@+id/tv_recruiting"
@@ -175,9 +195,9 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:text="모집 중"
-                    android:fontFamily="@font/pretendard"
                     android:textAlignment="center"
-                    android:textColor="#7DABFC"
+                    android:textFontWeight="700"
+                    android:textColor="@color/b500"
                     android:textSize="16dp"
                     app:layout_constraintStart_toEndOf="@+id/tv_in_progress"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -191,8 +211,8 @@
                     android:layout_marginTop="36dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:text="1"
-                    android:fontFamily="@font/pretendard"
+                    android:text="00"
+                    android:textFontWeight="700"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="16dp"
@@ -208,7 +228,7 @@
                     android:layout_marginStart="65dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="16dp"
-                    android:background="#D6E5FF" />
+                    android:background="@color/b200" />
 
                 <TextView
                     android:id="@+id/tv_applied"
@@ -220,9 +240,9 @@
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="16dp"
                     android:text="신청한"
-                    android:fontFamily="@font/pretendard"
                     android:textAlignment="center"
-                    android:textColor="#7DABFC"
+                    android:textFontWeight="700"
+                    android:textColor="@color/b500"
                     android:textSize="16dp"
                     app:layout_constraintStart_toEndOf="@+id/tv_recruiting"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -236,16 +256,62 @@
                     android:layout_marginTop="36dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="16dp"
-                    android:text="5"
-                    android:fontFamily="@font/pretendard"
+                    android:text="00"
                     android:textAlignment="center"
                     android:textColor="@color/black"
+                    android:textFontWeight="700"
                     android:textSize="16dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/tv_recruiting"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frameLayout_my_study"
+            android:layout_width="match_parent"
+            android:layout_height="330dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_profile"
+            app:layout_constraintVertical_bias="0.466">
+
+            <TextView
+                android:id="@+id/tv_study_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="사용자"
+                android:textColor="@color/black"
+                android:textFontWeight="700"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_back_nickname2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="님의 노력들"
+                android:textColor="@color/black"
+                android:textFontWeight="600"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_study_nickname"
+                app:layout_constraintStart_toEndOf="@+id/tv_study_nickname" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewMyStudies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_study_nickname" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
@@ -262,7 +328,7 @@
                 android:layout_marginStart="50dp"
                 android:text="관심 분야"
                 android:textFontWeight="700"
-                android:textColor="#7DABFC"
+                android:textColor="@color/black"
                 android:textSize="16dp" />
 
             <ImageView
@@ -272,15 +338,6 @@
                 android:layout_marginStart="15dp"
                 android:src="@drawable/fragment_mypage_ic_interest_field"
                 android:layout_gravity="start|center"/>
-
-            <ImageView
-                android:id="@+id/go_interest_field_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_gravity="end|center"
-                android:layout_marginEnd="10dp"
-                android:padding="4dp"
-                android:src="@drawable/fragment_mypage_ic_arrow" />
 
         </FrameLayout>
 
@@ -297,10 +354,9 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="50dp"
                 android:text="관심 지역"
-                android:textStyle="bold"
                 android:textSize="16dp"
-                android:fontFamily="@font/pretendard"
-                android:textColor="#7DABFC"/>
+                android:fontFamily="700"
+                android:textColor="@color/black"/>
 
             <ImageView
                 android:id="@+id/iv_interest_region"
@@ -309,15 +365,6 @@
                 android:layout_marginStart="15dp"
                 android:src="@drawable/fragment_mypage_ic_interest_area"
                 android:layout_gravity="start|center"/>
-
-            <ImageView
-                android:id="@+id/go_interest_area_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_gravity="end|center"
-                android:layout_marginEnd="10dp"
-                android:padding="4dp"
-                android:src="@drawable/fragment_mypage_ic_arrow" />
 
         </FrameLayout>
 
@@ -333,30 +380,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center"
                 android:layout_marginStart="50dp"
-                android:text="Why SPOT"
-                android:textStyle="bold"
-                android:textColor="#7DABFC"
-                android:fontFamily="@font/pretendard"
+                android:text="내 목표"
+                android:textColor="@color/black"
+                android:textFontWeight="700"
                 android:textSize="16dp" />
 
             <ImageView
                 android:id="@+id/iv_why_spot"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="start|center"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
                 android:src="@drawable/fragment_mypage_ic_spot_logo" />
-
-            <ImageView
-                android:id="@+id/go_why_spot_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_gravity="end|center"
-                android:layout_marginEnd="10dp"
-                android:padding="4dp"
-                android:src="@drawable/fragment_mypage_ic_arrow" />
-
 
         </FrameLayout>
 
@@ -374,7 +409,6 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="15dp"
                 android:text="커뮤니티"
-                android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -392,7 +426,6 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="15dp"
                 android:text="이용 제한 내역"
-                android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
         </FrameLayout>
@@ -409,7 +442,6 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="15dp"
                 android:text="커뮤니티 이용 규칙"
-                android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
         </FrameLayout>
@@ -428,7 +460,6 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="15dp"
                 android:text="이용 안내"
-                android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -446,7 +477,6 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="15dp"
                 android:text="앱 버전"
-                android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
@@ -457,7 +487,6 @@
                 android:layout_gravity="end|center"
                 android:layout_marginEnd="10dp"
                 android:text="v2.1234"
-                android:fontFamily="@font/pretendard"
                 android:textColor="#7DABFC"
                 android:textSize="16dp" />
         </FrameLayout>
@@ -474,7 +503,6 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="15dp"
                 android:text="개인정보 처리 방침"
-                android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
         </FrameLayout>
@@ -491,7 +519,6 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="15dp"
                 android:text="스팟 이용 약관"
-                android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
         </FrameLayout>
@@ -508,7 +535,6 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="15dp"
                 android:text="배타 버전"
-                android:fontFamily="@font/pretendard"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
@@ -519,7 +545,6 @@
                 android:layout_gravity="end|center"
                 android:layout_marginEnd="10dp"
                 android:text="Beta10+"
-                android:fontFamily="@font/pretendard"
                 android:textColor="#7DABFC"
                 android:textSize="16dp" />
         </FrameLayout>

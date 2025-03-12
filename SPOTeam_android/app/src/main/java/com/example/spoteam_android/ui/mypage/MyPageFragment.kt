@@ -1,6 +1,8 @@
 package com.example.spoteam_android.ui.mypage
 
+import StudyApiService
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -11,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -18,6 +21,8 @@ import com.bumptech.glide.request.target.Target
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
+import com.example.spoteam_android.StudyItem
+import com.example.spoteam_android.StudyResponse
 import com.example.spoteam_android.databinding.FragmentMypageBinding
 import com.example.spoteam_android.login.StartLoginActivity
 import com.example.spoteam_android.ui.community.CommunityAPIService
@@ -33,6 +38,9 @@ class MyPageFragment : Fragment() {
 
     private lateinit var binding: FragmentMypageBinding
     private var memberId: Int = -1
+    private lateinit var myStudyAdapter: MyStudyAdapter
+    private val studyList = mutableListOf<StudyItem>()
+    private val studyApiService: StudyApiService by lazy { RetrofitInstance.retrofit.create(StudyApiService::class.java) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +52,8 @@ class MyPageFragment : Fragment() {
         setupUI()
         setNickname()
         fetchMyPageInfo()
+        setupRecyclerView()
+        fetchStudyData()
 
         return binding.root
     }
@@ -64,6 +74,15 @@ class MyPageFragment : Fragment() {
             framelayout3.setOnClickListener { navigateToFragment(PurposePreferenceFragment()) }
         }
     }
+
+    private fun setupRecyclerView() {
+        myStudyAdapter = MyStudyAdapter(studyList)
+        binding.recyclerViewMyStudies.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = myStudyAdapter
+        }
+    }
+
 
     private fun navigateToFragment(fragment: Fragment) {
         (activity as MainActivity).supportFragmentManager.beginTransaction()
@@ -162,6 +181,70 @@ class MyPageFragment : Fragment() {
             }
         }
     }
+
+    private fun fetchStudyData() {
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+
+        if (email != null) {
+            val memberId = sharedPreferences.getInt("${email}_memberId", -1)
+
+            if (memberId != -1) {
+                studyApiService.getStudies(0, 5)
+                    .enqueue(object : Callback<StudyResponse> {
+                        override fun onResponse(
+                            call: Call<StudyResponse>,
+                            response: Response<StudyResponse>
+                        ) {
+                            if (response.isSuccessful) {
+                                response.body()?.result?.let { result ->
+
+                                    val content = result.content
+                                    Log.d("fetchStudyData", "Received data: $content") // 추가된 로그
+                                    if (!content.isNullOrEmpty()) {
+                                        requireActivity().runOnUiThread {
+                                            myStudyAdapter.updateList(content.map {
+                                                StudyItem(
+                                                    studyId = it.studyId,
+                                                    title = it.title,
+                                                    goal = it.goal,
+                                                    introduction = it.introduction,
+                                                    memberCount = it.memberCount,
+                                                    heartCount = it.heartCount,
+                                                    hitNum = it.hitNum,
+                                                    maxPeople = it.maxPeople,
+                                                    studyState = it.studyState,
+                                                    themeTypes = it.themeTypes,
+                                                    regions = it.regions,
+                                                    imageUrl = it.imageUrl,
+                                                    liked = it.liked
+                                                )
+                                            })
+                                        }
+                                        binding.recyclerViewMyStudies.visibility = View.VISIBLE
+
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(requireContext(), "마지막 페이지입니다", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<StudyResponse>, t: Throwable) {
+                            Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+            } else {
+                Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(requireContext(), "Email not provided", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
+
 
     private fun performNaverLogout() {
         NaverIdLoginSDK.logout()
