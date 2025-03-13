@@ -37,4 +37,7 @@
     <string name="hit_num_format">%d</string>
     <string name="max_people_format">%d</string>
 
+    <string name="delete_account_text"><u>회원 탈퇴</u></string>
+
+
 </resources>
