@@ -133,6 +133,7 @@ class MyPageFragment : Fragment() {
             // SharedPreferences에서 닉네임 가져오기
             val nickname = sharedPreferences.getString("${email}_nickname", null)
             binding.tvNickname.text = nickname ?: "닉네임 없음" // 닉네임이 없는 경우의 기본 값
+            binding.tvStudyNickname.text = nickname ?: "닉네임 없음"
 
             // 로그인 플랫폼 확인
             val loginPlatform = sharedPreferences.getString("loginPlatform", null)
