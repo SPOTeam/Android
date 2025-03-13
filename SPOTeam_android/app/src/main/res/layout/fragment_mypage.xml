@@ -93,6 +93,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/tv_nickname"
                 app:layout_constraintStart_toEndOf="@+id/tv_nickname" />
 
+
             <ImageView
                 android:id="@+id/iv_bookmark"
                 android:layout_width="18dp"
@@ -299,18 +300,31 @@
                 android:id="@+id/tv_back_nickname2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="2dp"
                 android:text="님의 노력들"
+                android:textSize="16dp"
                 android:textColor="@color/black"
                 android:textFontWeight="600"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_study_nickname"
                 app:layout_constraintStart_toEndOf="@+id/tv_study_nickname" />
+
+            <TextView
+                android:id="@+id/tv_explain_study"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내가 진행해온 스터디들이에요. 앞으로도 화이팅!"
+                android:textColor="@color/g400"
+                android:textFontWeight="500"
+                android:textSize="14dp"
+                app:layout_constraintStart_toStartOf="@+id/tv_study_nickname"
+                app:layout_constraintTop_toBottomOf="@+id/tv_study_nickname" />
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewMyStudies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 app:layout_constraintTop_toBottomOf="@+id/tv_study_nickname" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
