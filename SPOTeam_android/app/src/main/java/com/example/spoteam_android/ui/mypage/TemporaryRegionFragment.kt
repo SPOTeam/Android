@@ -3,12 +3,14 @@ package com.example.spoteam_android.ui.mypage
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RegionsPreferences
 import com.example.spoteam_android.RetrofitInstance
@@ -40,6 +42,7 @@ class TemporaryRegionFragment : Fragment() {
 
         // Regions 로그 출력
         if (receivedRegions != null) {
+            selectedRegions.clear()
             selectedRegions.addAll(receivedRegions)
             Log.d("TemporaryRegionFragment", "Received Regions: $receivedRegions")
             displaySelectedRegions()
@@ -47,6 +50,7 @@ class TemporaryRegionFragment : Fragment() {
 
         // Regions Code 로그 출력
         if (receivedRegionsCode != null) {
+            selectedRegionsCode.clear()
             selectedRegionsCode.addAll(receivedRegionsCode)
             Log.d("TemporaryRegionFragment", "Received RegionsCode: $receivedRegionsCode")
         }
@@ -109,25 +113,39 @@ class TemporaryRegionFragment : Fragment() {
 
     private fun displaySelectedRegions() {
         val chipContainer = binding.chipContainer
-        chipContainer.removeAllViews() // 기존 Chips를 모두 제거
+        chipContainer.removeAllViews()
+
+        val uniqueRegions = mutableSetOf<String>()
 
         for (regionText in selectedRegions) {
-            val chip = createLocationChip(regionText)
-            val chipGroup = ChipGroup(requireContext()).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                addView(chip)
+            if (!uniqueRegions.contains(regionText)) {
+                uniqueRegions.add(regionText)
+
+                val chip = createStyledChip(regionText)
+                chipContainer.addView(chip)
             }
-            chipContainer.addView(chipGroup)
         }
     }
 
-    private fun createLocationChip(address: String): Chip {
+
+    private fun createStyledChip(address: String): Chip {
         return Chip(requireContext()).apply {
             text = address
-            setTextColor(resources.getColor(R.color.active_blue, null))
+            setTextColor(resources.getColor(R.color.custom_chip_text, null))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f) // sp 단위 사용
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.suit_semi_bold)
+
+            // Chip 기본 크기 조정 (TextView와 비슷하게 설정)
+            minHeight = 36 // TextView의 기본 높이에 맞춰 조정
+
+            // Chip의 기본 패딩을 제거
+            chipStartPadding = 0f
+            chipEndPadding = 0f
+            textStartPadding = 0f
+            textEndPadding = 0f
+            chipMinHeight = 36f // 기본 높이 조정
+
+            // Custom Chip 스타일 적용
             setChipDrawable(
                 ChipDrawable.createFromAttributes(
                     requireContext(),
@@ -136,26 +154,35 @@ class TemporaryRegionFragment : Fragment() {
                     R.style.CustomChipCloseStyle
                 )
             )
+
+            // Chip의 marginTop을 조정
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = 50 // TextView와 동일한 marginTop 적용
+                marginStart = 15
+                marginEnd = 15
+            }
+            layoutParams = params
+
             isCloseIconVisible = true
             setOnCloseIconClickListener {
                 val chipContainer = binding.chipContainer
-                chipContainer.removeView(this.parent as View)
+                chipContainer.removeView(this)
 
-                // 삭제할 주소의 인덱스를 찾음
                 val index = selectedRegions.indexOf(address)
                 if (index != -1) {
-                    // 주소와 코드 리스트에서 각각 해당 항목을 삭제
                     selectedRegions.removeAt(index)
                     selectedRegionsCode.removeAt(index)
                 }
 
-                updateFinishButtonState() // 버튼 상태 업데이트
-                if (selectedRegions.isEmpty()) {
-                    binding.activityChecklistLocationCl.visibility = View.VISIBLE
-                }
+                updateFinishButtonState()
             }
         }
     }
+
+
 
     private fun showCompletionDialog() {
         val dialog = RegionUploadCompleteDialog(requireContext())

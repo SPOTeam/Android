@@ -125,6 +125,7 @@ class MyPageFragment : Fragment() {
         Toast.makeText(context, "Error: $message", Toast.LENGTH_SHORT).show()
     }
 
+
     private fun setNickname() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
@@ -134,6 +135,7 @@ class MyPageFragment : Fragment() {
             val nickname = sharedPreferences.getString("${email}_nickname", null)
             binding.tvNickname.text = nickname ?: "닉네임 없음" // 닉네임이 없는 경우의 기본 값
             binding.tvStudyNickname.text = nickname ?: "닉네임 없음"
+            binding.tvEmail.text = email ?: "이메일 없음"
 
             // 로그인 플랫폼 확인
             val loginPlatform = sharedPreferences.getString("loginPlatform", null)
@@ -142,6 +144,7 @@ class MyPageFragment : Fragment() {
                 "naver" -> sharedPreferences.getString("${email}_naverProfileImageUrl", null)
                 else -> null
             }
+            binding.tvPhone.text = loginPlatform?.replaceFirstChar { it.uppercaseChar() } ?: "플랫폼 없음"
 
             // Glide를 사용하여 이미지 로드
             Glide.with(binding.root.context)

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import com.example.spoteam_android.R
 import com.example.spoteam_android.Region
 import com.example.spoteam_android.RegionApiResponse
@@ -48,7 +49,7 @@ class RegionPreferenceFragment : Fragment() {
         }
 
 //         이유 수정 버튼 클릭 시
-        binding.regionEditIv.setOnClickListener {
+        binding.checklistspotLocationEditBt.setOnClickListener {
             val fragment = TemporaryRegionFragment()
             val bundle = Bundle().apply {
                 putStringArrayList("SELECTED_REGIONS", ArrayList(selectedRegions))
@@ -129,16 +130,19 @@ class RegionPreferenceFragment : Fragment() {
 
             val textView = TextView(requireContext()).apply {
                 text = regionText // 서버에서 받은 지역 데이터를 그대로 사용
-                textSize = 16f // 16sp
-                setPadding(50, 15, 50, 15) // 패딩 설정
+                textSize = 12f // 16sp
+                setPadding(30, 35, 50, 35) // 패딩 설정
                 setTextColor(resources.getColor(R.color.custom_chip_text, null))
-                setBackgroundResource(R.drawable.theme_selected_corner) // 커스텀 배경 적용
+                setBackgroundResource(R.drawable.button_background) // 커스텀 배경 적용
+                typeface = ResourcesCompat.getFont(requireContext(), R.font.suit_semi_bold)
+
 
                 val params = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
                     marginStart = 15
+                    marginEnd = 15
                     topMargin = 30
                 }
                 layoutParams = params
