@@ -10,11 +10,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentParticipatingStudyBinding
+import com.example.spoteam_android.ui.alert.CheckAppliedStudyFragment
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MemberOnStudiesResponse
 import com.example.spoteam_android.ui.community.MyRecruitingStudyDetail
+import com.example.spoteam_android.ui.study.StudyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,7 +45,9 @@ class ParticipatingStudyFragment : Fragment() {
 
         fetchInProgressStudy()
 
-        binding.mypagePrevIv.setOnClickListener{
+        binding.fragmentConsiderAttendanceTitleTv.text = "참여 중인 스터디"
+        
+        binding.prevIv.setOnClickListener{
             parentFragmentManager.popBackStack()
         }
 
@@ -64,8 +70,17 @@ class ParticipatingStudyFragment : Fragment() {
                         if (inProgressResponse?.isSuccess == "true") {
                             val studyInfo = inProgressResponse.result.content
 
-                            initRecyclerView(studyInfo)
+                            if(studyInfo.isNotEmpty()) {
+                                binding.emptyWaiting.visibility = View.GONE
+                                binding.participatingStudyReyclerview.visibility = View.VISIBLE
+                                initRecyclerView(studyInfo)
+                            } else {
+                                binding.emptyWaiting.visibility = View.VISIBLE
+                                binding.participatingStudyReyclerview.visibility = View.GONE
+                            }
                         } else {
+                            binding.emptyWaiting.visibility = View.VISIBLE
+                            binding.participatingStudyReyclerview.visibility = View.GONE
                             showError(inProgressResponse?.message)
                         }
                     } else {
