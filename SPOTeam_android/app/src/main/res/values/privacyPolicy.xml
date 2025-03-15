@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="privacy_title" >SPOT 개인정보 처리 방침에 대한 안내</string>
+
+    <string name="privacy_first_title" > 제1조 (총칙) </string>
+
+    <string name="privacy_first_content" >
+        &#160;SPOT(이하 "스팟")는 이용자의 개인정보를 보호하고, 관련\n
+        법령을 준수하기 위해 다음과 같이 개인정보 처리방침을\n
+        수립합니다. 본 방침은 서비스 이용과 관련하여 적용되며, 변경될\n
+        경우 공지사항을 통해 안내해 드립니다.
+    </string>
+
+    <string name="privacy_second_title" > 제2조 (수집하는 개인정보 항목 및 수집 방법) </string>
+
+    <string name="privacy_second_content" >
+        &#160;1. 수집하는 개인정보 항목\n
+        &#160;&#160;&#160;&#160;• 필수항목: 이름, 이메일, 생년월일, 성별\n
+        &#160;&#160;&#160;&#160;• 서비스 이용 과정에서 자동으로 생성 및 수집될 수 있는\n
+        &#160;&#160;&#160;&#160;&#160;&#160;&#160;정보: 서비스 이용 기록, 접속 로그, 기기 정보\n
+        2. 수집 방법\n
+        &#160;&#160;&#160;&#160;• 회원 가입 및 서비스 이용 과정에서 이용자가 직접 입력\n
+        &#160;&#160;&#160;&#160;• 서비스 이용 과정에서 자동 수집
+    </string>
+
+    <string name="privacy_third_title" > 제3조 (개인정보의 수집 및 이용 목적) </string>
+
+    <string name="privacy_third_content" >
+        &#160;SPOT은 다음과 같은 목적을 위해 개인정보를 수집 및\n
+        이용합니다.\n
+        1. 회원 가입 및 관리: 본인 확인, 서비스 이용을 위한 인증\n
+        2. 회원 가입 및 관리: 본인 확인, 서비스 이용을 위한 인증\n
+        3. 고객지원 및 문의 응대: 이용자의 문의사항 처리\n
+        4. 서비스 개선 및 분석: 이용 통계 분석을 통한 서비스 개선
+    </string>
+
+    <string name="privacy_fourth_title" > 제4조 (개인정보의 보유 및 이용 기간) </string>
+
+    <string name="privacy_fourth_content" >
+        &#160;1. 이용자가 서비스 탈퇴 시 즉시 개인정보를 삭제합니다.\n
+        2. 단, 관련 법령에 따라 일정 기간 보관이 필요한 경우 해당 기간\n
+        &#160;&#160;&#160;&#160;동안 보관 후 파기합니다.
+    </string>
+
+    <string name="privacy_fifth_title" > 제5조 (총칙개인정보의 제3자 제공 및 위탁) </string>
+
+    <string name="privacy_fifth_content" >
+        &#160;SPOT은 이용자의 동의 없이 개인정보를 외부에 제공하지\n
+        않습니다. 다만, 법령에 따른 요청이 있는 경우 예외적으로\n
+        제공될 수 있습니다.
+    </string>
+
+    <string name="privacy_sixth_title" > 제6조 (개인정보 보호를 위한 조치) </string>
+
+    <string name="privacy_sixth_content" >
+        &#160;SPOT은 이용자의 개인정보 보호를 위해 다음과 같은 조치를\n
+        시행합니다.\n
+        1. 기술적 보호조치: 개인정보 암호화, 보안 소프트웨어 적용\n
+        2. 관리적 보호조치: 개인정보 접근 제한, 내부 교육 실시
+    </string>
+
+    <string name="privacy_seventh_title" > 제7조 (이용자의 권리 및 행사 방법) </string>
+
+    <string name="privacy_seventh_content" >
+         &#160;이용자는 언제든지 개인정보 조회, 수정, 삭제를 요청할 수\n
+        있습니다. 관련 문의는 고객지원 이메일을 통해 접수할 수\n
+        있습니다.
+    </string>
+
+    <string name="privacy_eighth_title" > 제8조 (개인정보 자동 수집 장치의 설치·운영 및 거부) </string>
+
+    <string name="privacy_eighth_content" >
+         &#160;SPOT은 서비스 개선을 위해 쿠키 및 유사 기술을 사용할 수\n
+        있으며, 이용자는 브라우저 설정을 통해 이를 거부할 수\n
+        있습니다.
+    </string>
+
+    <string name="privacy_ninth_title" > 제9조 (개인정보 보호책임자 및 문의처) </string>
+
+    <string name="privacy_ninth_content" >
+         &#160;개인정보 보호 관련 문의는 아래 담당자에게 연락해 주시기\n
+        바랍니다.\n
+        • 개인정보 보호책임자: [조예진]\n
+        • 이메일: [spoteam_official@naver.com]
+    </string>
+
+    <string name="privacy_tenth_title" > 제10조 (개인정보 처리 방침 변경 안내) </string>
+
+    <string name="privacy_tenth_content" >
+         &#160;본 방침은 변경될 수 있으며, 개정 시 공지사항을 통해\n
+        안내합니다.
+    </string>
+
+    <string name="start_date" >
+         • 시행일 : [2025.03.00]
+    </string>
+</resources>
+
