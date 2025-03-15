@@ -21,13 +21,11 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.ActivityMystudyCommunityContentBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
-import com.example.spoteam_android.ui.community.DeleteContentDialog
-import com.example.spoteam_android.ui.community.DeletePostContentResponse
 import com.example.spoteam_android.ui.community.DeleteStudyPostContentResponse
 import com.example.spoteam_android.ui.community.DisLikeCommentResponse
-import com.example.spoteam_android.ui.community.FailedDeleteContentDialog
 import com.example.spoteam_android.ui.community.LikeCommentResponse
 import com.example.spoteam_android.ui.community.PostImages
+import com.example.spoteam_android.ui.community.ReportContentDialog
 import com.example.spoteam_android.ui.community.ReportStudyPostResponse
 import com.example.spoteam_android.ui.community.StudyContentLikeResponse
 import com.example.spoteam_android.ui.community.StudyContentUnLikeResponse
@@ -39,6 +37,7 @@ import com.example.spoteam_android.ui.community.UnDisLikeCommentResponse
 import com.example.spoteam_android.ui.community.UnLikeCommentResponse
 import com.example.spoteam_android.ui.community.WriteStudyCommentRequest
 import com.example.spoteam_android.ui.community.WriteStudyCommentResponse
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,6 +53,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     var postId : Int = -1
     var parentCommentId : Int? = 0
     var canComment : Boolean = false
+    var currentWriter : Boolean = false
 
 //    var initialIsliked : Boolean = false
 //    var initialIsLikedNum : Int = 0
@@ -100,6 +100,11 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         fetchContentInfo()
 
         initTextWatcher()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchContentInfo()
     }
 
     private fun initTextWatcher() {
@@ -285,18 +290,44 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     private fun showPopupMenu(view: View) {
         val popupMenu = PopupMenu(view.context, view)
         val inflater: MenuInflater = popupMenu.menuInflater
-        val report = ReportStudyContentDialog(view.context)
         val fragmentManager = (view.context as AppCompatActivity).supportFragmentManager
+
         inflater.inflate(R.menu.menu_community_home_options, popupMenu.menu)
+
+        // ✅ "신고하기" 버튼을 동적으로 숨기거나 보이게 설정
+        val reportContentItem = popupMenu.menu.findItem(R.id.edit_report)
+        reportContentItem.isVisible = !currentWriter
+
+        // ✅ "수정하기" 버튼을 동적으로 숨기거나 보이게 설정
+        val editMenuItem = popupMenu.menu.findItem(R.id.edit_content)
+        editMenuItem.isVisible = currentWriter
+
+        // ✅ "삭제하기" 버튼을 동적으로 숨기거나 보이게 설정
+        val deleteMenuItem = popupMenu.menu.findItem(R.id.delete_content)
+        deleteMenuItem.isVisible = currentWriter
+
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_report -> {
-                    reportStudyPost()
-                    report.start()
+                    // ✅ 신고 다이얼로그 생성 및 표시
+                    reportStudyPost(view, fragmentManager)
                     true
                 }
+
                 R.id.edit_content -> {
-//                    exit.start() // 편집하기로 수정
+                    if (currentWriter) {
+                        val editContext = MyStudyEditContentFragment().apply {
+                            arguments = Bundle().apply {
+                                putInt("MyStudyId", currentStudyId)
+                                putInt("MyStudyPostId", postId)
+                            }
+                            setStyle(
+                                BottomSheetDialogFragment.STYLE_NORMAL,
+                                R.style.AppBottomSheetDialogBorder20WhiteTheme
+                            )
+                        }
+                        editContext.show(fragmentManager, "EditContent")
+                    }
                     true
                 }
 
@@ -304,6 +335,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                     deleteStudyPostContent(view, fragmentManager)
                     true
                 }
+
                 else -> false
             }
         }
@@ -347,7 +379,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         completeDeletePost.start(fragmentManager)
     }
 
-    private fun reportStudyPost() {
+    private fun reportStudyPost(view: View, fragmentManager: FragmentManager) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.reportStudyPost(currentStudyId, postId)
             .enqueue(object : Callback<ReportStudyPostResponse> {
@@ -361,6 +393,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         if (postContentResponse?.isSuccess == "true") {
                             val postContent = postContentResponse.result
                             Log.d("ReportedStudyPost", "response: ${postContent.title}")
+                            val reportContentDialog = ReportContentDialog(view.context)
+                            reportContentDialog.start(fragmentManager) // start() 메서드가 있는 경우 사용
                         } else {
                             showError(postContentResponse?.message)
                         }
@@ -375,7 +409,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
             })
     }
 
-    private fun fetchContentInfo() {
+    fun fetchContentInfo() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.getStudyPostContent(currentStudyId, postId)
             .enqueue(object : Callback<StudyPostContentResponse> {
@@ -587,6 +621,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
             initContentImage(contentInfo.studyPostImages)
         }
 
+        currentWriter = contentInfo.isWriter
 
         if(contentInfo.isLiked) {
             binding.communityContentLikeNumCheckedIv.visibility = View.VISIBLE

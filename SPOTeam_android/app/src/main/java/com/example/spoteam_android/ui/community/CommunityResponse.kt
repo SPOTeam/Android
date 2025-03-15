@@ -335,6 +335,7 @@ data class StudyPostContentInfo (
     val hitNum : Int,
     val commentNum : Int,
     val isLiked : Boolean,
+    val isWriter : Boolean,
     val studyPostImages : List<PostImages>
 )
 

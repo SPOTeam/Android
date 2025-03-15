@@ -1,6 +1,5 @@
 package com.example.spoteam_android.ui.study
 
-import StudyViewModel
 import android.app.Activity
 import android.content.Intent
 import android.graphics.PorterDuff
@@ -18,12 +17,14 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMystudyWriteContentBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
+import com.example.spoteam_android.ui.community.PostImages
+import com.example.spoteam_android.ui.community.StudyPostContentInfo
+import com.example.spoteam_android.ui.community.StudyPostContentResponse
 import com.example.spoteam_android.ui.community.StudyPostResponse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -38,16 +39,17 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 
-class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
+class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
 
     lateinit var binding: FragmentMystudyWriteContentBinding
-    private val studyViewModel: StudyViewModel by activityViewModels()
-    private var currentStudyId : Int = -1
-    private var selectedTheme: String = ""
-    private var isAnnouncement: Boolean = false
+    private var postId : Int = -1
+    private var studyId : Int = -1
+    private lateinit var imageAdapter: WriteContentImageRVadapter
+    private var currentAnnouncement : Boolean = false
     private lateinit var getImageLauncher: ActivityResultLauncher<Intent>
     private val imageList = mutableListOf<Any>()
-    private lateinit var imageAdapter: WriteContentImageRVadapter
+
+    private var selectedTheme: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,24 +58,26 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
     ): View {
         binding = FragmentMystudyWriteContentBinding.inflate(inflater, container, false)
 
+        arguments?.let {
+            val postId = it.getInt("MyStudyPostId",-1)
+            val studyId = it.getInt("MyStudyId",-1)
+
+            this.postId = postId
+            this.studyId = studyId
+        }
+
+        getStudyPostContent()
+
+        binding.writeContentTitleTv.text = "글수정"
+
         isCancelable = false // 외부 클릭으로 닫히지 않도록 설정
 
         initTextWatchers()
 
-        // ViewModel에서 studyId를 관찰하고 변경될 때마다 fetchStudyMembers 호출
-        studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
-            Log.d("DetailStudyHomeFragment", "Received studyId from ViewModel: $studyId")
-            if (studyId != null) {
-                currentStudyId = studyId
-            } else {
-                Toast.makeText(requireContext(), "Study ID is missing", Toast.LENGTH_SHORT).show()
-            }
-        }
-
         binding.mystudyCategorySpinner.onItemSelectedListener = this
 
         binding.writeContentFinishBtn.setOnClickListener{
-            submitContent(currentStudyId)
+            submitContent()
         }
 
         ArrayAdapter.createFromResource(
@@ -86,12 +90,12 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
         }
 
         binding.checkIc.setOnClickListener{
-            if(isAnnouncement) {
+            if(currentAnnouncement) {
                 binding.checkIc.setColorFilter(
                     ContextCompat.getColor(requireContext(), R.color.gray),
                     PorterDuff.Mode.SRC_IN
                 )
-                isAnnouncement = false
+                currentAnnouncement = false
 //                Log.d("MyStudyWriteContentFragment", isAnnouncement.toString())
 
                 binding.themeTv.visibility = View.VISIBLE
@@ -102,15 +106,13 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
                     ContextCompat.getColor(requireContext(), R.color.selector_blue),
                     PorterDuff.Mode.SRC_IN
                 )
-                isAnnouncement = true
+                currentAnnouncement = true
 //                Log.d("MyStudyWriteContentFragment", isAnnouncement.toString())
 
                 binding.themeTv.visibility = View.GONE
                 binding.mystudyCategorySpinner.visibility = View.GONE
             }
         }
-
-        initImageButtonAction()
 
         binding.addImageIv.setOnClickListener{
             getImageFromAlbum()
@@ -121,7 +123,142 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
             dismiss()
         }
 
+        // 갤러리에서 새로운 이미지 선택 처리
+        getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+
+                if (data?.clipData != null) {
+                    // 🔥 여러 개의 이미지 선택
+                    val clipData = data.clipData
+                    for (i in 0 until clipData!!.itemCount) {
+                        val uri = clipData.getItemAt(i).uri
+                        if (!imageList.contains(uri)) { // 중복 방지
+                            imageList.add(uri)
+                        }
+                    }
+                } else if (data?.data != null) {
+                    // 🔥 단일 이미지 선택
+                    val uri = data.data!!
+                    if (!imageList.contains(uri)) {
+                        imageList.add(uri)
+                    }
+                }
+
+                imageAdapter.notifyDataSetChanged() // RecyclerView 갱신
+            }
+        }
+
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as? MyStudyPostContentActivity)?.fetchContentInfo() // Fragment 닫히면 새로고침
+    }
+
+    private fun getStudyPostContent() {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getStudyPostContent(studyId, postId)
+            .enqueue(object : Callback<StudyPostContentResponse> {
+                override fun onResponse(
+                    call: Call<StudyPostContentResponse>,
+                    response: Response<StudyPostContentResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val contentResponse = response.body()
+                        if (contentResponse?.isSuccess == "true") {
+                            val contentInfo = contentResponse.result
+                            currentAnnouncement = contentInfo.isAnnouncement
+                            if(currentAnnouncement) {
+                                binding.themeTv.visibility = View.GONE
+                                binding.mystudyCategorySpinner.visibility = View.GONE
+                            } else {
+                                binding.themeTv.visibility = View.VISIBLE
+                                binding.mystudyCategorySpinner.visibility = View.VISIBLE
+                            }
+
+                            initContentInfo(contentInfo)
+
+                        } else {
+                            showError(contentResponse?.message)
+                        }
+                    } else {
+//                        showError(response.code().toString())
+                        val errorBody = response.errorBody()?.string()
+                        Log.e("API_ERROR", "Error 400: ${response.code()}, Message: $errorBody")
+
+                        showError("서버 오류 발생: $errorBody")
+                    }
+
+                }
+
+                override fun onFailure(call: Call<StudyPostContentResponse>, t: Throwable) {
+                    Log.e("CommunityContentActivity", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun showError(message: String?) {
+        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun initContentInfo(contentInfo: StudyPostContentInfo) {
+        binding.writeContentTitleEt.setText(contentInfo.title)
+        binding.writeContentContentEt.setText(contentInfo.content)
+
+        // 서버에서 가져온 이미지 리스트를 Uri 리스트로 변환
+        val serverImageUrls = contentInfo.studyPostImages.map { it.imageUrl }
+
+        // 서버 이미지 리스트와 기존의 갤러리에서 선택한 이미지 리스트 통합
+        imageList.clear()
+        imageList.addAll(serverImageUrls)
+
+        // RecyclerView 어댑터 설정
+        imageAdapter = WriteContentImageRVadapter(imageList)
+        binding.addedImagesRv.apply {
+            adapter = imageAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        imageAdapter.notifyDataSetChanged() // RecyclerView 갱신
+
+        if (!currentAnnouncement) {
+            // Spinner 어댑터 설정
+            ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.thema_list,
+                android.R.layout.simple_spinner_item
+            ).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.mystudyCategorySpinner.adapter = adapter
+
+                // Spinner의 초기값 설정
+                val position = getCategoryPosition(contentInfo.theme)
+                if (position != -1) {
+                    binding.mystudyCategorySpinner.setSelection(position)
+                }
+            }
+        }
+    }
+
+
+    // 카테고리의 위치를 반환하는 함수
+    private fun getCategoryPosition(theme: String): Int {
+        val categories = resources.getStringArray(R.array.thema_list)
+        return categories.indexOfFirst { it == getCategoryDisplayName(theme) }
+    }
+
+    // 서버에서 사용하는 카테고리 값을 사용자에게 보여줄 텍스트로 변환하는 함수
+    private fun getCategoryDisplayName(category: String): String {
+        return when (category) {
+            "WELCOME" -> "가입인사"
+            "INFO_SHARING" -> "정보공유"
+            "STUDY_REVIEW" -> "스터디후기"
+            "FREE_TALK" -> "자유"
+            "QNA" -> "Q&A"
+            else -> "WELCOME"
+        }
     }
 
     private fun initTextWatchers() {
@@ -147,43 +284,6 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
 
     }
 
-
-    private fun initImageButtonAction() {
-        // RecyclerView 초기화
-        imageAdapter = WriteContentImageRVadapter(imageList)
-        binding.addedImagesRv.apply {
-            adapter = imageAdapter
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        }
-
-        // 이미지 선택을 위한 Launcher 설정
-        getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data
-
-                if (data?.clipData != null) {
-                    // 🔥 여러 개의 이미지 선택
-                    val clipData = data.clipData
-                    for (i in 0 until clipData!!.itemCount) {
-                        val uri = clipData.getItemAt(i).uri
-                        if (!imageList.contains(uri)) { // 중복 방지
-                            imageList.add(uri)
-                        }
-                    }
-                } else if (data?.data != null) {
-                    // 🔥 단일 이미지 선택
-                    val uri = data.data!!
-                    if (!imageList.contains(uri)) {
-                        imageList.add(uri)
-                    }
-                }
-
-                imageAdapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-
     // 갤러리 열기 (여러 개 선택 가능)
     private fun getImageFromAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
@@ -194,7 +294,7 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
     }
 
 
-    private fun submitContent(studyId: Int) {
+    private fun submitContent() {
         val title = binding.writeContentTitleEt.text.toString().trim()
         val content = binding.writeContentContentEt.text.toString().trim()
 
@@ -208,10 +308,14 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
                         val file = getFileFromUri(item)
                         if (file != null) {
                             val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                            val imagePart =
-                                MultipartBody.Part.createFormData("images", file.name, requestFile)
+                            val imagePart = MultipartBody.Part.createFormData("images", file.name, requestFile)
                             imageParts.add(imagePart)
                         }
+                    }
+                    is String -> { // ✅ 서버에서 받은 기존 이미지 URL
+                        val requestBody = item.toRequestBody("text/plain".toMediaTypeOrNull()) // URL을 RequestBody로 변환
+                        val imagePart = MultipartBody.Part.createFormData("existingImages", item, requestBody) // 기존 이미지 포함
+                        imageParts.add(imagePart)
                     }
                 }
             }
@@ -219,13 +323,13 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
 
 
         // 나머지 데이터를 RequestBody로 변환
-        val isAnnouncementPart = isAnnouncement.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        val isAnnouncementPart = currentAnnouncement.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val themePart = selectedTheme.toRequestBody("text/plain".toMediaTypeOrNull())
         val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
         val contentPart = content.toRequestBody("text/plain".toMediaTypeOrNull())
 
         // 서버로 데이터 전송
-        sendContentToServer(studyId, isAnnouncementPart, themePart, titlePart, contentPart, imageParts)
+        sendContentToServer(isAnnouncementPart, themePart, titlePart, contentPart, imageParts)
     }
 
     private fun getFileFromUri(uri: Uri): File {
@@ -245,7 +349,6 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
 
 
     private fun sendContentToServer(
-        studyId: Int,
         isAnnouncementPart: RequestBody,
         themePart: RequestBody,
         titlePart: RequestBody,
@@ -253,8 +356,9 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
         imageParts: List<MultipartBody.Part>
     ) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postStudyPost(
+        service.patchStudyPost(
             studyId,
+            postId,
             isAnnouncementPart,
             themePart,
             titlePart,
@@ -264,13 +368,8 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
             override fun onResponse(call: Call<StudyPostResponse>, response: Response<StudyPostResponse>) {
                 if (response.isSuccessful && response.body()?.isSuccess == "true") {
                     val writeContentResponseBody = response.body()!!.result
-                    showLog(writeContentResponseBody.toString())
+//                    showLog(writeContentResponseBody.toString())
                     dismiss()
-                    val intent = Intent(requireContext(), MyStudyPostContentActivity::class.java)
-                    intent.putExtra("myStudyId", currentStudyId.toString())
-                    intent.putExtra("myStudyPostId", writeContentResponseBody.postId.toString())
-                    startActivity(intent)
-
                 } else {
                     Log.e("API_ERROR", "Error code: ${response.code()}, Message: ${response.errorBody()?.string()}")
                     Toast.makeText(requireContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
