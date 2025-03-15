@@ -324,4 +324,10 @@ interface CommunityAPIService {
         @Path("postId") postId: Int
     ) : Call<DeleteStudyPostContentResponse>
 
+    @GET("/spot/posts/scraps")
+    fun getScrapInfo(
+        @Query("type") type: String,
+        @Query("pageNumber") pageNumber: Int,
+        @Query("pageSize") pageSize : Int
+    ) : Call<GetScrapResponse>
 }

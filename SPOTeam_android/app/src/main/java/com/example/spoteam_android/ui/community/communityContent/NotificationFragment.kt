@@ -41,7 +41,7 @@ class NotificationFragment : Fragment() {
         memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
 //        Log.d("SharedPreferences", "MemberId: $memberId")
 
-        fetchPages("SPOT_ANNOUNCEMENT ", 0)
+        fetchPages("SPOT_ANNOUNCEMENT", 0)
 
         // WriteContentFragment에서 결과 수신
         parentFragmentManager.setFragmentResultListener("requestKey", this) { _, bundle ->
