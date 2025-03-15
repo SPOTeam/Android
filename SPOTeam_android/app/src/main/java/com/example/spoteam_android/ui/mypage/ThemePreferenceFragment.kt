@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.spoteam_android.R
@@ -16,10 +15,7 @@ import com.example.spoteam_android.ThemeApiResponse
 import com.example.spoteam_android.ThemePreferences
 import com.example.spoteam_android.databinding.FragmentThemePreferenceBinding
 import com.example.spoteam_android.login.LoginApiService
-import com.example.spoteam_android.ui.study.StudyRegisterCompleteDialog
-import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response as RetrofitResponse
@@ -27,190 +23,170 @@ import retrofit2.Response as RetrofitResponse
 class ThemePreferenceFragment : Fragment() {
 
     private lateinit var binding: FragmentThemePreferenceBinding
-    private val selectedThemes = mutableListOf<String>() // 선택된 테마를 저장할 리스트
+    private val selectedThemes = mutableListOf<String>() // 현재 선택된 테마 리스트
+    private val previousSelectedThemes = mutableListOf<String>() // 취소 시 복원할 원래 테마 리스트
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         binding = FragmentThemePreferenceBinding.inflate(inflater, container, false)
 
-        val sharedPreferences =
-            requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
 
         if (email != null) {
             val memberId = sharedPreferences.getInt("${email}_memberId", -1)
-
             if (memberId != -1) {
-                fetchThemes() // GET 요청으로 테마 가져오기
+                fetchThemes()
             } else {
-                Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "멤버를 찾을 수 없습니다", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(requireContext(), "Email not provided", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "이메일이 없습니다.", Toast.LENGTH_SHORT).show()
         }
 
-        // 테마 수정 버튼 클릭 시
-        binding.themeEditIv.setOnClickListener {
-            binding.buttonLayout.visibility = View.VISIBLE
-            binding.fragmentThemePreferenceFlexboxLayout.visibility = View.GONE
-            binding.activityChecklistChipGroup.visibility = View.VISIBLE
-            setChipGroup() // Chip 그룹 설정
-        }
+        binding.fragmentThemePreferenceEditBt.setOnClickListener { enterEditMode() }
+        binding.editThemeFinishBt.setOnClickListener { saveSelectedThemes() }
+        binding.editThemeCancelBt.setOnClickListener { cancelEditMode() }
+        binding.fragmentThemePreferenceBackBt.setOnClickListener { parentFragmentManager.popBackStack() }
 
-        // POST 요청을 보내는 버튼 클릭 시
-        binding.editThemeFinishBt.setOnClickListener {
-            if (email != null) {
-                val memberId = sharedPreferences.getInt("${email}_memberId", -1)
-                if (memberId != -1) {
-                    postThemesToServer(memberId, selectedThemes) // POST 요청으로 테마 전송
-
-                } else {
-                    Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        }
-        binding.editThemeCancelBt.setOnClickListener {
-            binding.buttonLayout.visibility = View.GONE
-            binding.fragmentThemePreferenceFlexboxLayout.visibility = View.VISIBLE
-            binding.activityChecklistChipGroup.visibility = View.GONE
-        }
-
-        binding.fragmentThemePreferenceBackBt.setOnClickListener {
-            goToPreviusFragment()
-        }
+        //맨 처음 기본 화면에서는 칩이 비활성화 상태
+        setChipEnabled(false)
 
         return binding.root
     }
 
-        private fun fetchThemes() {
-            val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
+    // 테마 가져오기
+    private fun fetchThemes() {
+        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
 
-            service.getThemes().enqueue(object : Callback<ThemeApiResponse> {
-                override fun onResponse(
-                    call: Call<ThemeApiResponse>,
-                    response: RetrofitResponse<ThemeApiResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val apiResponse = response.body()
-                        if (apiResponse != null && apiResponse.isSuccess) {
-                            val themes = apiResponse.result.themes // 서버에서 받아오는 테마 리스트
-                            if (themes.isNotEmpty()) {
-                                displayThemes(themes)
-                            }
-                        } else {
-                            val errorMessage = apiResponse?.message ?: "알 수 없는 오류 발생"
-                            Log.e("ThemePreferenceFragment", "테마 가져오기 실패: $errorMessage")
-                            Toast.makeText(
-                                requireContext(),
-                                "테마 가져오기 실패: $errorMessage",
-                                Toast.LENGTH_LONG
-                            ).show()
+        service.getThemes().enqueue(object : Callback<ThemeApiResponse> {
+            override fun onResponse(call: Call<ThemeApiResponse>, response: RetrofitResponse<ThemeApiResponse>) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse != null && apiResponse.isSuccess) {
+                        val themes = apiResponse.result.themes
+                        if (themes.isNotEmpty()) {
+                            setChipCheckedState(themes) //테마와 UI 비교 매칭
                         }
-                    } else {
-                        val errorMessage = response.errorBody()?.string() ?: "응답 실패"
-                        Log.e("ThemePreferenceFragment", "테마 가져오기 실패: $errorMessage")
-                        Toast.makeText(requireContext(), "테마 가져오기 실패: $errorMessage", Toast.LENGTH_LONG)
-                            .show()
                     }
+                } else {
+                    Log.e("ThemePreferenceFragment", "테마 가져오기 실패: ${response.errorBody()?.string()}")
                 }
-
-                override fun onFailure(call: Call<ThemeApiResponse>, t: Throwable) {
-                    Log.e("ThemePreferenceFragment", "테마 가져오기 오류", t)
-                    Toast.makeText(requireContext(), "테마 가져오기 오류: ${t.message}", Toast.LENGTH_LONG)
-                        .show()
-                }
-            })
-        }
-
-    private fun displayThemes(themes: List<String>) {
-        val flexboxLayout = binding.fragmentThemePreferenceFlexboxLayout
-        flexboxLayout.removeAllViews() // 기존 TextView를 모두 제거
-
-        for (theme in themes) {
-            // 텍스트 변환 처리
-            val processedText = when {
-                theme.contains("시사") && theme.contains("뉴스") -> theme.replace("뉴스", "/뉴스")
-                theme.contains("전공") && theme.contains("진로") -> theme.replace("및", "/")
-                theme.contains("자율") && theme.contains("학습") -> theme.replace("자율학습", "자율 학습")
-                else -> theme
             }
 
-            // TextView 객체를 동적으로 생성하고 스타일 적용
-            val textView = TextView(requireContext()).apply {
-                text = processedText
-                textSize = 16f // 16sp
-                setPadding(50, 15, 50, 15) // padding: left, top, right, bottom
-                setTextColor(resources.getColor(R.color.custom_chip_text, null))
-                setBackgroundResource(R.drawable.theme_selected_corner) // 커스텀 배경 적용 (선택적)
-
-                // Optional: Margin 설정
-                val params = FlexboxLayout.LayoutParams(
-                    FlexboxLayout.LayoutParams.WRAP_CONTENT,
-                    FlexboxLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    marginStart = 30
-                    topMargin = 30
-                }
-                layoutParams = params
+            override fun onFailure(call: Call<ThemeApiResponse>, t: Throwable) {
+                Log.e("ThemePreferenceFragment", "테마 가져오기 오류", t)
             }
+        })
+    }
 
-            flexboxLayout.addView(textView)
+    private fun setChipCheckedState(themes: List<String>) {
+        selectedThemes.clear()
+        previousSelectedThemes.clear()
+
+        val chipGroup = binding.fragmentRegisterStudyChipgroup
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip
+            chip?.let {
+                val normalizedChipText = normalizeText(it.text.toString()) //ui칩 텍스트 변환
+                val normalizedServerTextList = themes.map { theme -> normalizeServerText(theme) }//서버 변환
+
+                if (normalizedServerTextList.contains(normalizedChipText)) { //비교
+                    it.isChecked = true
+                    selectedThemes.add(it.text.toString())
+                    previousSelectedThemes.add(it.text.toString()) // 선택한 값 저장
+                }
+            }
         }
     }
 
-    private fun setChipGroup() {
-        // 초기 버튼 비활성화
-        binding.editThemeFinishBt.isEnabled = false
 
-        // Chip 선택 상태 리스너
-        val chipCheckedChangeListener =
-            CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-                val chip = buttonView as Chip
-                val chipText = chip.text.toString()
 
-                // Text 처리 로직
-                val processedText = when {
-                    chipText.contains("전공") -> chipText.replace("/", "및")
-                    else -> chipText.replace("/", "").replace(" ", "") // 공백 및 슬래시를 제거
-                }
+    // 칩 활성화 및 비활성화
+    private fun setChipEnabled(enabled: Boolean) {
+        val chipGroup = binding.fragmentRegisterStudyChipgroup
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip
+            chip?.isEnabled = enabled
+        }
+    }
+    // 칩 선택 이벤트
+    private val chipCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+        val chip = buttonView as Chip
+        if (isChecked) selectedThemes.add(chip.text.toString()) else selectedThemes.remove(chip.text.toString())
+        binding.editThemeFinishBt.isEnabled = selectedThemes.isNotEmpty()
+    }
 
-                if (isChecked) {
-                    if (processedText !in selectedThemes) { // processedText가 리스트에 없을 때만 추가
-                        selectedThemes.add(processedText)
-                    }
-                } else {
-                    selectedThemes.remove(processedText) // 선택 해제 시 리스트에서 제거
-                }
+    // 수정 버튼 클릭시 발생 이벤트
+    private fun enterEditMode() {
+        binding.buttonLayout.visibility = View.VISIBLE // 취소 & 완료 버튼 보이기
+        binding.fragmentThemePreferenceEditBt.visibility = View.GONE // 수정 버튼 숨기기
 
-                // 선택된 칩이 하나라도 있으면 버튼 활성화
-                binding.editThemeFinishBt.isEnabled = selectedThemes.isNotEmpty()
+        setChipEnabled(true) // 수정 버튼 클릭시에는 칩 선택 활성화
 
-                Log.d("ThemePreferenceFragment", "Selected Themes: $selectedThemes")
-            }
-
-        // Chip 그룹의 모든 칩에 리스너 설정
-        for (i in 0 until binding.activityChecklistChipGroup.childCount) {
-            val chip = binding.activityChecklistChipGroup.getChildAt(i) as? Chip
+        val chipGroup = binding.fragmentRegisterStudyChipgroup
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip
             chip?.setOnCheckedChangeListener(chipCheckedChangeListener)
         }
     }
 
+    // 취소 버튼 클릭하면 이미 선택했던 것들 clear 및 기존상태 복구
+    private fun cancelEditMode() {
+        binding.buttonLayout.visibility = View.GONE // 취소 & 완료 버튼 숨기기
+        binding.fragmentThemePreferenceEditBt.visibility = View.VISIBLE // 수정 버튼 보이기
 
+        selectedThemes.clear()
+        selectedThemes.addAll(previousSelectedThemes) //기존 상태 복구
 
-    private fun postThemesToServer(memberId: Int, themes: List<String>) {
+        setChipEnabled(false) //수정 취소 시 Chip 비활성화
+
+        val chipGroup = binding.fragmentRegisterStudyChipgroup
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip
+            chip?.isChecked = previousSelectedThemes.contains(chip?.text.toString())
+
+        }
+    }
+
+    // 완료 버튼을 클릭하면 서버로 테마 전송
+    private fun saveSelectedThemes() {
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+
+        if (email != null) {
+            val memberId = sharedPreferences.getInt("${email}_memberId", -1)
+            if (memberId != -1) {
+                postThemesToServer(selectedThemes)
+            } else {
+                Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun postThemesToServer(themes: List<String>) {
         val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
-        val themePreferences = ThemePreferences(themes) // 서버에 보낼 테마 리스트
+
+        // 서버가 요구하는 대로 정규식 변경
+        val processedThemes = themes.map { theme ->
+            when {
+                theme.contains("전공") -> theme.replace("/", "및")  // ✅ "전공/진로학습" → "전공 및 진로학습"
+                else -> theme.replace("/", "").replace(" ", "") // ✅ "/" 제거, 공백 제거
+            }
+        }
+
+        val themePreferences = ThemePreferences(processedThemes)
 
         service.postThemes(themePreferences).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: RetrofitResponse<Void>) {
                 if (response.isSuccessful) {
                     Log.d("ThemePreferenceFragment", "Themes POST request success")
-                    showCompletionDialog()
+                    showCompletionDialog() // ✅ Dialog 표시
+                    exitEditMode()
                 } else {
-                    Log.e("ThemePreferenceFragment", "Themes POST request failed with code: ${response.code()}")
+                    Log.e("ThemePreferenceFragment", "Themes POST request failed: ${response.code()}")
                 }
             }
 
@@ -220,16 +196,37 @@ class ThemePreferenceFragment : Fragment() {
         })
     }
 
+
+    private fun exitEditMode() {
+        binding.buttonLayout.visibility = View.GONE
+        binding.fragmentThemePreferenceEditBt.visibility = View.VISIBLE
+        setChipEnabled(false)
+    }
+
     private fun showCompletionDialog() {
         val dialog = ThemeUploadCompleteDialog(requireContext())
         dialog.start(parentFragmentManager)
     }
 
-    private fun goToPreviusFragment() {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, MyPageFragment()) // 변경할 Fragment로 교체
-        transaction.addToBackStack(null) // 백스택에 추가
-        transaction.commit()
+
+    //ui에서 선택하는 칩
+    private fun normalizeText(text: String): String {
+        return text
+            .replace(" ", "")
+            .replace("및", "/")
     }
 
+    //서버에서 전송받은 정규식을 ui에 다시 적용하기
+    private fun normalizeServerText(text: String): String {
+        return text
+            .replace("전공및진로학습", "전공/진로학습")
+            .replace("시사뉴스", "시사/뉴스")
+            .replace("자율학습", "자율 학습")
+            .replace(" ", "")
+    }
+
+
+
 }
+
+
