@@ -115,6 +115,18 @@ interface CommunityAPIService {
         @Part images: List<MultipartBody.Part> // 여기에 `images`라는 이름을 사용해야 합니다.
     ): Call<StudyPostResponse>
 
+    @Multipart
+    @PATCH("/spot/studies/{studyId}/posts/{postId}")
+    fun patchStudyPost(
+        @Path("studyId") studyId: Int,
+        @Path("postId") postId: Int,
+        @Part("isAnnouncement") isAnnouncementPart: RequestBody,
+        @Part("theme") themePart: RequestBody,
+        @Part("title") titlePart: RequestBody,
+        @Part("content") contentPart: RequestBody,
+        @Part images: List<MultipartBody.Part> // 여기에 `images`라는 이름을 사용해야 합니다.
+    ): Call<StudyPostResponse>
+
     @GET("/spot/studies/{studyId}/posts")
     fun getStudyPost(
         @Path("studyId") studyId: Int,
@@ -123,11 +135,13 @@ interface CommunityAPIService {
         @Query("limit") limit : Int
     ): Call<StudyPostListResponse>
 
+
     @GET("/spot/studies/{studyId}/posts/{postId}")
     fun getStudyPostContent(
         @Path("studyId") studyId: Int,
         @Path("postId") postId: Int,
     ): Call<StudyPostContentResponse>
+
 
     @GET("/spot/studies/{studyId}/posts/{postId}/comments")
     fun getStudyPostContentComment(

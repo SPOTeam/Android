@@ -292,18 +292,26 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
     private fun showPopupMenu(view: View) {
         val popupMenu = PopupMenu(view.context, view)
         val inflater: MenuInflater = popupMenu.menuInflater
-        val reportContentDialog = ReportContentDialog(view.context) // 임시
         val fragmentManager = (view.context as AppCompatActivity).supportFragmentManager
         inflater.inflate(R.menu.menu_community_home_options, popupMenu.menu)
+
+        // ✅ "신고하기" 버튼을 동적으로 숨기거나 보이게 설정
+        val reportContentItem = popupMenu.menu.findItem(R.id.edit_report)
+        reportContentItem.isVisible = !createdByThisMember
 
         // ✅ "수정하기" 버튼을 동적으로 숨기거나 보이게 설정
         val editMenuItem = popupMenu.menu.findItem(R.id.edit_content)
         editMenuItem.isVisible = createdByThisMember // createdByThisMember가 true일 때만 보이도록 설정
 
+        // ✅ "삭제하기" 버튼을 동적으로 숨기거나 보이게 설정
+        val deleteMenuItem = popupMenu.menu.findItem(R.id.delete_content)
+        deleteMenuItem.isVisible = createdByThisMember
+
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_report -> {
 //                    reportContent(view, fragmentManager)
+                    val reportContentDialog = ReportContentDialog(view.context)
                     reportContentDialog.start(fragmentManager)
                     true
                 }
