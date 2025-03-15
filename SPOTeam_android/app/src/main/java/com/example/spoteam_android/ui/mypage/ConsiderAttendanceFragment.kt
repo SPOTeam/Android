@@ -16,6 +16,7 @@ import com.example.spoteam_android.databinding.FragmentConsiderAttendanceBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MyRecruitingStudiesResponse
 import com.example.spoteam_android.ui.community.MyRecruitingStudyDetail
+import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,6 +44,13 @@ class ConsiderAttendanceFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
+        binding.makeStudyTv.setOnClickListener{
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, RegisterStudyFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+
         fetchMyRecruitingStudies()
 
         return binding.root
@@ -62,7 +70,16 @@ class ConsiderAttendanceFragment : Fragment() {
                         Log.d("MyRecruitingStudy", "responseBody: ${recruitingStudyResponse?.isSuccess}")
                         if (recruitingStudyResponse?.isSuccess == "true") {
                             val result = recruitingStudyResponse.result
-                            initRecyclerView(result.content)
+
+                            if(result.content.isNotEmpty()) {
+                                binding.emptyRecruiting.visibility = View.GONE
+                                binding.fragmentConsiderAttendanceRv.visibility = View.VISIBLE
+
+                                initRecyclerView(result.content)
+                            } else {
+                                binding.emptyRecruiting.visibility = View.VISIBLE
+                                binding.fragmentConsiderAttendanceRv.visibility = View.GONE
+                            }
                         } else {
                             showError(recruitingStudyResponse?.message)
                         }

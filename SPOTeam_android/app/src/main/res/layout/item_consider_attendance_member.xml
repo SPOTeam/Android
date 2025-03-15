@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="170dp"
-    android:layout_height="63dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/border_interest_recyclerv_item"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:padding="10dp"
-    android:layout_marginStart="15dp"
-    android:layout_marginEnd="10dp"
-    android:layout_marginTop="20dp"
+    android:layout_marginHorizontal="10dp"
     android:elevation="4dp">
+<!--    android:background="@drawable/border_interest_recyclerv_item"     -->
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/fragment_consider_attendance_member_profile_iv"
-        android:layout_width="41dp"
-        android:layout_height="41dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:src="@drawable/ic_host_profile"
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut"
@@ -40,17 +38,47 @@
         android:id="@+id/fragment_cosider_attendance_member_temperature_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="37.5°C"
-        android:fontFamily="@font/pretendard"
+        android:text="지원 동기 입력란"
         android:textSize="14sp"
-        android:textStyle="bold"
-        android:textColor="#7DABFC"
-        android:layout_marginStart="15dp"
-        app:layout_constraintStart_toEndOf="@id/fragment_consider_attendance_member_profile_iv"
+        android:textColor="@color/g500"
+        app:layout_constraintStart_toStartOf="@id/fragment_cosider_attendance_member_profile_tv"
         app:layout_constraintTop_toBottomOf="@id/fragment_cosider_attendance_member_profile_tv"/>
 
 
+    <TextView
+        android:id="@+id/reject_attendance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="거절"
+        android:textColor="@color/red"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/report_crew_enable"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="57dp"
+        app:layout_constraintStart_toStartOf="@id/fragment_cosider_attendance_member_temperature_tv"
+        app:layout_constraintTop_toBottomOf="@id/fragment_cosider_attendance_member_temperature_tv"/>
+
+    <TextView
+        android:id="@+id/accept_attendance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="수락"
+        android:textColor="@color/selector_blue"
+        android:background="@drawable/button_enabled_accpect"
+        android:layout_marginEnd="20dp"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="57dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/reject_attendance"/>
 
 
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:src="@drawable/gray_line"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/reject_attendance"
+        app:layout_constraintStart_toStartOf="@id/fragment_consider_attendance_member_profile_iv"
+        app:layout_constraintEnd_toEndOf="@id/accept_attendance"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,19 +1,18 @@
 package com.example.spoteam_android.ui.mypage
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
+import com.example.spoteam_android.attendanceMemberData
 import com.example.spoteam_android.databinding.ItemConsiderAttendanceMemberBinding
-import com.example.spoteam_android.ui.community.AttendanceMemberInfo
-import com.example.spoteam_android.ui.community.MyRecruitingStudyDetail
 
-class ConsiderAttendanceMembersRVAdapter(private var dataList: List<AttendanceMemberInfo>) : RecyclerView.Adapter<ConsiderAttendanceMembersRVAdapter.ViewHolder>() {
+class ConsiderAttendanceMembersRVAdapter(private var dataList: ArrayList<attendanceMemberData>) : RecyclerView.Adapter<ConsiderAttendanceMembersRVAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(data: AttendanceMemberInfo)
+        fun onRejectClick(data: attendanceMemberData)
+        fun onAcceptClick(data: attendanceMemberData)
     }
 
     private lateinit var itemClickListener: OnItemClickListener
@@ -32,15 +31,19 @@ class ConsiderAttendanceMembersRVAdapter(private var dataList: List<AttendanceMe
             holder.bind(dataList[position])
         }
 
-        holder.itemView.setOnClickListener {
-            itemClickListener.onItemClick(dataList[position])
+        holder.binding.acceptAttendance.setOnClickListener {
+            itemClickListener.onAcceptClick((dataList[position]))
+        }
+
+        holder.binding.rejectAttendance.setOnClickListener {
+            itemClickListener.onRejectClick((dataList[position]))
         }
     }
 
     override fun getItemCount() = dataList.size
 
     inner class ViewHolder(val binding: ItemConsiderAttendanceMemberBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: AttendanceMemberInfo) {
+        fun bind(data: attendanceMemberData) {
 //            binding.fragmentConsiderAttendanceMemberProfileIv.setImageResource(data.profileImage.)
             binding.fragmentCosiderAttendanceMemberProfileTv.text = data.nickname
             Glide.with(binding.root.context)
@@ -48,8 +51,6 @@ class ConsiderAttendanceMembersRVAdapter(private var dataList: List<AttendanceMe
                 .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용
                 .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지 사용
                 .into(binding.fragmentConsiderAttendanceMemberProfileIv)
-
-
         }
     }
 }
