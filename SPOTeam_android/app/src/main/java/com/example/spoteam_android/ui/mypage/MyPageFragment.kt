@@ -26,6 +26,7 @@ import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MyPageStudyNumInfo
 import com.example.spoteam_android.ui.community.MyPageStudyNumResponse
 import com.example.spoteam_android.ui.community.ScrapFragment
+import com.example.spoteam_android.ui.mypage.cancel.CancelSPOTFragment
 import com.example.spoteam_android.ui.mypage.rule.CommunityPrivacyPolicyFragment
 import com.example.spoteam_android.ui.mypage.rule.CommunityRestrictionsFragment
 import com.example.spoteam_android.ui.mypage.rule.CommunityRuleFragment
@@ -82,6 +83,8 @@ class MyPageFragment : Fragment() {
             framelayout5.setOnClickListener{navigateToFragment(CommunityRestrictionsFragment())}
             framelayout9.setOnClickListener{navigateToFragment(CommunityPrivacyPolicyFragment())}
             framelayout10.setOnClickListener{navigateToFragment(CommunityTermsOfUseFragment())}
+
+            tvDeleteAccount.setOnClickListener{navigateToFragment(CancelSPOTFragment())}
         }
     }
 

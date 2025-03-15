@@ -33,12 +33,113 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:fontFamily="@font/pretendard"
-                android:text= "개인정보 처리 방침에 대한 안내"
+                android:text= "회원 탈퇴"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/cancel_noti_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SPOT 탈퇴 전에 확인하세요"
+            android:textColor="@color/black"
+            android:fontFamily="@font/pretendard"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="50dp"
+            app:layout_constraintStart_toStartOf="@id/fragment_waiting_attendance_ll"
+            app:layout_constraintTop_toBottomOf="@id/fragment_waiting_attendance_ll"/>
 
+        <TextView
+            android:id="@+id/noti_text_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/pretendard"
+            android:text="@string/delete_noti_text"
+            app:layout_constraintStart_toStartOf="@id/cancel_noti_tv"
+            app:layout_constraintTop_toBottomOf="@id/cancel_noti_tv"
+            android:lineSpacingExtra="4dp"/>
+
+        <ImageView
+            android:id="@+id/sp_iv"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:src="@drawable/gray_line"
+            android:layout_marginTop="50dp"
+            android:layout_marginHorizontal="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/noti_text_tv"/>
+
+        <TextView
+            android:id="@+id/user_info_text_sec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/pretendard"
+            android:textStyle="bold"
+            android:text="회원 정보"
+            app:layout_constraintStart_toStartOf="@id/cancel_noti_tv"
+            app:layout_constraintTop_toBottomOf="@id/sp_iv"/>
+
+        <TextView
+            android:id="@+id/user_info_text_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/pretendard"
+            android:text="로그인 이메일, 성명, 생년월일 정보가 모두 삭제됩니다."
+            app:layout_constraintStart_toStartOf="@id/user_info_text_sec"
+            app:layout_constraintTop_toBottomOf="@id/user_info_text_sec"/>
+
+        <TextView
+            android:id="@+id/study_info_text_sec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/pretendard"
+            android:textStyle="bold"
+            android:text="스터디 정보"
+            app:layout_constraintStart_toStartOf="@id/user_info_text_content"
+            app:layout_constraintTop_toBottomOf="@id/user_info_text_content"/>
+
+        <TextView
+            android:id="@+id/study_info_text_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/pretendard"
+            android:textSize="13sp"
+            android:text="진행 중 스터디, 모집 중 스터디, 스터디 찜 정보, 모든 게시글, 댓글, 사진,\n개인 관심사/관심지역 정보 등이 모두 삭제됩니다."
+            app:layout_constraintStart_toStartOf="@id/study_info_text_sec"
+            app:layout_constraintTop_toBottomOf="@id/study_info_text_sec"
+            android:lineSpacingExtra="4dp"/>
+
+        <TextView
+            android:id="@+id/real_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="탈퇴하기"
+            android:gravity="center"
+            android:background="@drawable/button_enabled"
+            android:textColor="@color/selector_blue"
+            android:fontFamily="@font/pretendard"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:paddingVertical="10dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginHorizontal="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:elevation="2dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

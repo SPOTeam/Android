@@ -39,5 +39,6 @@
 
     <string name="delete_account_text"><u>회원 탈퇴</u></string>
 
+    <string name="delete_noti_text">탈퇴하시면 아래 정보들은 모두 파기되며 모든 데이터들은\n복구가 <font color="#FF0000">불가능</font>합니다.</string>
 
 </resources>
