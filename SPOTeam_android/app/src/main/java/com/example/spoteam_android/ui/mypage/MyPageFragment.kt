@@ -26,6 +26,10 @@ import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MyPageStudyNumInfo
 import com.example.spoteam_android.ui.community.MyPageStudyNumResponse
 import com.example.spoteam_android.ui.community.ScrapFragment
+import com.example.spoteam_android.ui.mypage.rule.CommunityPrivacyPolicyFragment
+import com.example.spoteam_android.ui.mypage.rule.CommunityRestrictionsFragment
+import com.example.spoteam_android.ui.mypage.rule.CommunityRuleFragment
+import com.example.spoteam_android.ui.mypage.rule.CommunityTermsOfUseFragment
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import retrofit2.Call
@@ -73,6 +77,11 @@ class MyPageFragment : Fragment() {
 
             tvScrab.setOnClickListener { navigateToFragment(ScrapFragment()) }
             tvCountScrab.setOnClickListener { navigateToFragment(ScrapFragment()) }
+
+            tvCommunity02.setOnClickListener{navigateToFragment(CommunityRuleFragment())}
+            framelayout5.setOnClickListener{navigateToFragment(CommunityRestrictionsFragment())}
+            framelayout9.setOnClickListener{navigateToFragment(CommunityPrivacyPolicyFragment())}
+            framelayout10.setOnClickListener{navigateToFragment(CommunityTermsOfUseFragment())}
         }
     }
 
