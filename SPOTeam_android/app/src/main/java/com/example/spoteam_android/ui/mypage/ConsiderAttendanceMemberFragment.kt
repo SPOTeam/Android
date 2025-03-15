@@ -86,6 +86,8 @@ class ConsiderAttendanceMemberFragment : Fragment() {
                                 binding.fragmentConsiderAttendanceMemberRv.visibility = View.GONE
                             }
                         } else {
+                            binding.emptyRecruitingMember.visibility = View.VISIBLE
+                            binding.fragmentConsiderAttendanceMemberRv.visibility = View.GONE
                             showError(memberAttendanceResponse?.message)
                         }
                     } else {

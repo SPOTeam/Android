@@ -4,54 +4,78 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:id="@+id/container"
 android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:paddingTop="?attr/actionBarSize">
+android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/mypage_title"
+    <LinearLayout
+        android:id="@+id/fragment_waiting_attendance_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="마이페이지"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <ImageView
-        android:id="@+id/mypage_prev_iv"
-        android:layout_width="40dp"
-        android:layout_height="45dp"
-        android:src="@drawable/navigate_before_3x"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/mypage_title" />
+        <ImageView
+            android:id="@+id/prev_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow"/>
 
-    <ImageView
-        android:id="@+id/mypage_sp_iv"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:src="@drawable/line_img"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="@id/mypage_prev_iv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mypage_title"/>
+        <TextView
+            android:id="@+id/fragment_consider_attendance_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:fontFamily="@font/pretendard"
+            android:text="대기 중인 스터디"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/participating_study_bold"
+    <LinearLayout
+        android:id="@+id/empty_waiting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:text="내가 참여하고 있는 스터디"
-        android:fontFamily="@font/pretendard"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mypage_sp_iv" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_pencil_new"
+            app:tint="@color/g400"
+            android:layout_marginBottom="30dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="신청한 스터디가 없습니다."
+            android:textColor="@color/selector_blue"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SPOT에서 새로운 스터디와 함께 해보세요."
+            android:textColor="@color/g400" />
+
+        <TextView
+            android:id="@+id/recruit_study_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/selector_category_background"
+            android:paddingHorizontal="40dp"
+            android:paddingVertical="10dp"
+            android:textSize="15sp"
+            android:text="스터디 둘러보기"
+            android:textColor="@color/selector_blue" />
+    </LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -64,8 +88,8 @@ android:paddingTop="?attr/actionBarSize">
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/participating_study_bold"
-        tools:listitem="@layout/item_recycler_view_plus_toggle" />
+        app:layout_constraintTop_toBottomOf="@+id/fragment_waiting_attendance_ll"
+        tools:listitem="@layout/item_waiting_study" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

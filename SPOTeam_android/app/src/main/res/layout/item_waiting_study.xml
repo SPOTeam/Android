@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="10dp"
+    android:paddingTop="15dp"
+    android:layout_marginHorizontal="8dp"
+    android:elevation="4dp">
+<!--    android:background="@drawable/border_interest_recyclerv_item"   -->
+
+    <LinearLayout
+        android:id="@+id/view_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ImageView4"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@color/white"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            app:strokeWidth="0.3dp"
+            app:strokeColor="@color/g300"
+            android:src="@drawable/ic_new_scrab"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/consider_attendance_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="스터디 이름"
+                android:fontFamily="@font/pretendard"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="스터디 목표"
+                android:fontFamily="@font/pretendard"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+
+                <ImageView
+                    android:id="@+id/ImageView5"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_study_people_new" />
+
+                <TextView
+                    android:id="@+id/tv_name2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="po"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/pretendard"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_name5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/pretendard"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="to"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/pretendard"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/ic_heart_red"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="4dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_heart_red" />
+
+                <ImageView
+                    android:id="@+id/ImageView6"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_heart_unfilled_new" />
+
+                <TextView
+                    android:id="@+id/tv_name3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="like"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/pretendard"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/ImageView7"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_new_view"
+                    android:layout_marginStart="20dp"/>
+
+                <TextView
+                    android:id="@+id/tv_name4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="view"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/pretendard"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:src="@drawable/gray_line"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="@id/view_ll"
+        app:layout_constraintTop_toBottomOf="@id/view_ll"
+        app:layout_constraintEnd_toEndOf="@id/view_ll"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
