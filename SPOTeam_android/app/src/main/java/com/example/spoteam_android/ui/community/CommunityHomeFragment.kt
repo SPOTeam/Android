@@ -50,6 +50,7 @@ class CommunityHomeFragment : Fragment() {
 
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, fragment)
+                .addToBackStack(null)
                 .commitAllowingStateLoss()
         }
 

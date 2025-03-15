@@ -753,3 +753,21 @@ data class ReportStudyPostContent (
     val title : String
 )
 
+/************ 스크랩 게시글 가져오기 완료 ***********/
+data class GetScrapResponse (
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: ScrapContent
+)
+
+data class ScrapContent (
+    val postType : String,
+    val postResponses : List<CategoryPagesDetail>,
+    val totalPages: Int,
+    val totalElements: Int,
+    val isFirst: Boolean,
+    val isLast: Boolean
+)
+
+
