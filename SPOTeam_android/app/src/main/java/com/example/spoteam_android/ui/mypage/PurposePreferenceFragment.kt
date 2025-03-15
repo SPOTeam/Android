@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.spoteam_android.R
@@ -17,7 +15,6 @@ import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.StudyReasons
 import com.example.spoteam_android.databinding.FragmentPurposePreferenceBinding
 import com.example.spoteam_android.login.LoginApiService
-import com.example.spoteam_android.ui.study.IntroduceStudyFragment
 import com.google.android.material.chip.Chip
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,22 +23,32 @@ import retrofit2.Response
 class PurposePreferenceFragment : Fragment() {
 
     private lateinit var binding: FragmentPurposePreferenceBinding
-    private val selectedPurpose = mutableListOf<Int>()
+    private val selectedPurpose = mutableListOf<Int>() // 현재 선택된 목적 ID 리스트
+    private val previousSelectedPurpose = mutableListOf<Int>() // 취소 시 복원할 원래 선택된 값
+
+    // 서버의 ID와 칩 ID 매핑
+    private val chipMap = mapOf(
+        R.id.activity_checklist_studypurpose_chip_habit to 1,
+        R.id.activity_checklist_studypurpose_chip_feedback to 2,
+        R.id.activity_checklist_studypurpose_chip_network to 3,
+        R.id.activity_checklist_studypurpose_chip_license to 4,
+        R.id.activity_checklist_studypurpose_chip_contest to 5,
+        R.id.activity_checklist_studypurpose_chip_opinion to 6
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         binding = FragmentPurposePreferenceBinding.inflate(inflater, container, false)
 
-        val sharedPreferences =
-            requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
 
         if (email != null) {
             val memberId = sharedPreferences.getInt("${email}_memberId", -1)
             if (memberId != -1) {
-                fetchReasons() // GET 요청으로 이유 리스트 가져오기
+                fetchReasons() // 서버에서 선택된 이유 가져오기
             } else {
                 Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT).show()
             }
@@ -49,37 +56,13 @@ class PurposePreferenceFragment : Fragment() {
             Toast.makeText(requireContext(), "Email not provided", Toast.LENGTH_SHORT).show()
         }
 
-        binding.fragmentReasonPreferenceBackBt.setOnClickListener {
-            goToPreviusFragment()
-        }
+        binding.fragmentReasonPreferenceBackBt.setOnClickListener { parentFragmentManager.popBackStack() }
+        binding.fragmentPurposePreferenceEditBt.setOnClickListener { enterEditMode() }
+        binding.editPurposeCancelBt.setOnClickListener { cancelEditMode() }
+        binding.editPurposeFinishBt.setOnClickListener { saveSelectedPurposes() }
 
-        // 이유 수정 버튼 클릭 시
-        binding.reasonEditIv.setOnClickListener {
-            binding.buttonLayout.visibility = View.VISIBLE
-            binding.fragmentReasonPreferenceLinearLayout.visibility = View.GONE
-            binding.flexboxLayout.visibility = View.VISIBLE
-            setChipGroup() // Chip 그룹 설정
-        }
-
-        binding.editReasonCancelBt.setOnClickListener {
-            binding.buttonLayout.visibility = View.GONE
-            binding.fragmentReasonPreferenceLinearLayout.visibility = View.VISIBLE
-            binding.flexboxLayout.visibility = View.GONE
-        }
-
-
-        // POST 요청을 보내는 버튼 클릭 시
-        binding.editReasonFinishBt.setOnClickListener {
-            if (email != null) {
-                val memberId = sharedPreferences.getInt("${email}_memberId", -1)
-                if (memberId != -1) {
-                    postReasonsToServer(selectedPurpose) // POST 요청으로 이유 전송
-                } else {
-                    Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        }
+        // 초기 상태에서는 칩 비활성화
+        setChipEnabled(false)
 
         return binding.root
     }
@@ -88,113 +71,109 @@ class PurposePreferenceFragment : Fragment() {
         val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
 
         service.getReasons().enqueue(object : Callback<ReasonApiResponse> {
-            override fun onResponse(
-                call: Call<ReasonApiResponse>,
-                response: Response<ReasonApiResponse>
-            ) {
+            override fun onResponse(call: Call<ReasonApiResponse>, response: Response<ReasonApiResponse>) {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse != null && apiResponse.isSuccess) {
-                        val reasons = apiResponse.result.reasons // 서버에서 받아오는 이유 리스트
+                        val reasons = apiResponse.result.reasons.mapNotNull { it.toIntOrNull() } // 🔥 String → Int 변환
                         if (reasons.isNotEmpty()) {
-                            displayReasons(reasons) // UI에 이유 리스트 표시
+                            setChipCheckedState(reasons) // ✅ 가져온 데이터로 칩 체크
                         }
                     } else {
-                        val errorMessage = apiResponse?.message ?: "알 수 없는 오류 발생"
-                        Log.e("PurposePreferenceFragment", "이유 가져오기 실패: $errorMessage")
-                        Toast.makeText(
-                            requireContext(),
-                            "이유 가져오기 실패: $errorMessage",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        Log.e("PurposePreferenceFragment", "이유 가져오기 실패: ${apiResponse?.message}")
                     }
                 } else {
-                    val errorMessage = response.errorBody()?.string() ?: "응답 실패"
-                    Log.e("PurposePreferenceFragment", "이유 가져오기 실패: $errorMessage")
-                    Toast.makeText(requireContext(), "이유 가져오기 실패: $errorMessage", Toast.LENGTH_LONG)
-                        .show()
+                    Log.e("PurposePreferenceFragment", "이유 가져오기 실패: ${response.errorBody()?.string()}")
                 }
             }
 
             override fun onFailure(call: Call<ReasonApiResponse>, t: Throwable) {
                 Log.e("PurposePreferenceFragment", "이유 가져오기 오류", t)
-                Toast.makeText(requireContext(), "이유 가져오기 오류: ${t.message}", Toast.LENGTH_LONG)
-                    .show()
             }
         })
     }
 
-    private fun displayReasons(reasons: List<String>) {
-        val linearLayout = binding.fragmentReasonPreferenceLinearLayout
-        linearLayout.removeAllViews() // 기존 TextView를 모두 제거
 
-        for (reason in reasons) {
-            // 텍스트 변환 처리
-            val processedText = if (reason.contains("_")) {
-                reason.replace("_", " ")
-            } else {
-                reason
-            }
+    /** ✅ 서버에서 받은 이유와 UI의 칩 매칭 */
+    private fun setChipCheckedState(reasons: List<Int>) {
+        selectedPurpose.clear()
+        previousSelectedPurpose.clear()
 
-            val textView = TextView(requireContext()).apply {
-                text = processedText // 서버에서 받은 String 데이터를 그대로 사용
-                textSize = 16f // 16sp
-                setPadding(50, 15, 50, 15) // padding: left, top, right, bottom
-                setTextColor(resources.getColor(R.color.custom_chip_text, null))
-                setBackgroundResource(R.drawable.theme_selected_corner) // 커스텀 배경 적용
+        val chipGroup = binding.flexboxLayout
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip
+            chip?.let {
+                val chipId = it.id
+                val reasonId = chipMap[chipId]
 
-                // 여기서 layout_width를 wrap_content로 설정
-                val params = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    marginStart = 15
-                    topMargin = 30
+                if (reasonId != null && reasons.contains(reasonId)) {
+                    it.isChecked = true
+                    selectedPurpose.add(reasonId)
+                    previousSelectedPurpose.add(reasonId)
                 }
-                layoutParams = params
             }
-
-            linearLayout.addView(textView)
         }
     }
 
-
-    private fun setChipGroup() {
-        // 초기 버튼 비활성화
-        binding.editReasonFinishBt.isEnabled = false
-
-        val chipMap = mapOf(
-            R.id.activity_checklist_studypurpose_chip_language to 1,
-            R.id.activity_checklist_studypurpose_chip_license to 2,
-            R.id.activity_checklist_studypurpose_chip_job to 3,
-            R.id.activity_checklist_studypurpose_chip_discussion to 4,
-            R.id.activity_checklist_studypurpose_chip_news to 5
-        )
-
-        // chip 선택 상태 리스너
-        val chipCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-            val chip = buttonView as Chip
-            val chipId = chip.id
-            val associatedNumber = chipMap[chipId]
-
-            if (isChecked) {
-                associatedNumber?.let { selectedPurpose.add(it) }
-            } else {
-                associatedNumber?.let { selectedPurpose.remove(it) }
-            }
-
-            // 버튼 활성화 상태 업데이트
-            val isAnyChipChecked = selectedPurpose.isNotEmpty()
-            binding.editReasonFinishBt.isEnabled = isAnyChipChecked
+    /** ✅ 칩 활성화/비활성화 설정 */
+    private fun setChipEnabled(enabled: Boolean) {
+        val chipGroup = binding.flexboxLayout
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip
+            chip?.isEnabled = enabled
         }
+    }
 
-        // FlexboxLayout의 각 칩에 리스너 설정
-        for (i in 0 until binding.flexboxLayout.childCount) {
-            val chip = binding.flexboxLayout.getChildAt(i) as? Chip
+    /** ✅ 수정 버튼 클릭 시 */
+    private fun enterEditMode() {
+        binding.buttonLayout.visibility = View.VISIBLE
+        binding.fragmentPurposePreferenceEditBt.visibility = View.GONE
+        setChipEnabled(true)
+
+        val chipGroup = binding.flexboxLayout
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip
             chip?.setOnCheckedChangeListener(chipCheckedChangeListener)
         }
     }
 
+    /** ✅ 취소 버튼 클릭 시 (이전 상태로 복원) */
+    private fun cancelEditMode() {
+        binding.buttonLayout.visibility = View.GONE
+        binding.fragmentPurposePreferenceEditBt.visibility = View.VISIBLE
+        selectedPurpose.clear()
+        selectedPurpose.addAll(previousSelectedPurpose)
+
+        setChipEnabled(false)
+
+        val chipGroup = binding.flexboxLayout
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip
+            val chipId = chip?.id
+            val reasonId = chipMap[chipId]
+
+            if (reasonId != null) {
+                chip?.isChecked = previousSelectedPurpose.contains(reasonId)
+            }
+        }
+    }
+
+    /** ✅ 완료 버튼 클릭 시 (서버로 전송) */
+    private fun saveSelectedPurposes() {
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+
+        if (email != null) {
+            val memberId = sharedPreferences.getInt("${email}_memberId", -1)
+            if (memberId != -1) {
+                postReasonsToServer(selectedPurpose)
+            } else {
+                Toast.makeText(requireContext(), "Member ID not found", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /** ✅ 선택한 목표 서버로 전송 */
     private fun postReasonsToServer(selectedPurpose: List<Int>) {
         val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
         val purposePreferences = StudyReasons(selectedPurpose)
@@ -202,28 +181,46 @@ class PurposePreferenceFragment : Fragment() {
         service.postPurposes(purposePreferences).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    Log.d("PurposePreferenceFragment", "Reasons POST request success")
+                    Log.d("PurposePreferenceFragment", "POST 성공")
                     showCompletionDialog()
+                    exitEditMode()
                 } else {
-                    Log.e("PurposePreferenceFragment", "Reasons POST request failed with code: ${response.code()}")
+                    Log.e("PurposePreferenceFragment", "POST 실패: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("PurposePreferenceFragment", "Reasons POST request failure", t)
+                Log.e("PurposePreferenceFragment", "POST 요청 실패", t)
             }
         })
     }
 
+    /** ✅ 수정 완료 후 모드 종료 */
+    private fun exitEditMode() {
+        binding.buttonLayout.visibility = View.GONE
+        binding.fragmentPurposePreferenceEditBt.visibility = View.VISIBLE
+        setChipEnabled(false)
+    }
+
+    /** ✅ POST 성공 시 Dialog 표시 */
     private fun showCompletionDialog() {
         val dialog = PurposeUploadComplteDialog(requireContext())
         dialog.start(parentFragmentManager)
     }
 
-    private fun goToPreviusFragment() {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, MyPageFragment()) // 변경할 Fragment로 교체
-        transaction.addToBackStack(null) // 백스택에 추가
-        transaction.commit()
+    /** ✅ 칩 선택 리스너 */
+    private val chipCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+        val chip = buttonView as Chip
+        val chipId = chip.id
+        val associatedNumber = chipMap[chipId]
+
+        if (isChecked) {
+            associatedNumber?.let { selectedPurpose.add(it) }
+        } else {
+            associatedNumber?.let { selectedPurpose.remove(it) }
+        }
+
+        binding.editPurposeFinishBt.isEnabled = selectedPurpose.isNotEmpty()
     }
+
 }

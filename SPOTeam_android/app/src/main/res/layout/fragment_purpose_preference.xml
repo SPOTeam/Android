@@ -11,149 +11,133 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="30dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="15dp">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/fragment_reason_preference_back_bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back_resize"
-            android:background="@color/white"/>
-
+            android:src="@drawable/ic_arrow"/>
 
         <TextView
             android:id="@+id/fragment_reason_preference_mypage_tv"
-            android:text="마이페이지"
+            android:text="내 목표"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            android:fontFamily="@font/pretendard"
+            android:textSize="16dp"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/suit_semi_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp" />
+            android:drawablePadding="20dp"/>
+
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/fragment_reason_preference_pb"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="#D8D8D8"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/fragment_reason_preference_ll"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/fragment_reason_preference_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Why SPOT?"
+        android:text="내가 스터디를 하는 목표는"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        android:layout_marginTop="30dp"
+        android:textSize="18dp"
+        android:fontFamily="@font/suit_bold"
+        android:layout_marginTop="40dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_reason_preference_pb"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_reason_preference_ll"/>
 
-    <ImageView
-        android:id="@+id/reason_edit_iv"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:src="@drawable/mypageedit"
-        android:layout_marginTop="35dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintStart_toEndOf="@id/fragment_reason_preference_tv"
-        app:layout_constraintTop_toBottomOf="@id/fragment_reason_preference_pb"/>
-
-
-    <LinearLayout
-        android:id="@+id/fragment_reason_preference_linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_reason_preference_tv"
-        android:visibility="visible">
-    </LinearLayout>
 
 
 
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/flexbox_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_reason_preference_tv"
         app:flexDirection="column"
         app:justifyContent="flex_start"
-        app:flexWrap="nowrap"
-        android:visibility="gone">
+        app:flexWrap="nowrap">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/activity_checklist_studypurpose_chip_language"
+            android:id="@+id/activity_checklist_studypurpose_chip_habit"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="동기부여가 필요해요."
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:text="꾸준한 학습, 습관이 필요해요."
+            android:textSize="14sp"
+            android:textAlignment="center"
+            app:chipMinHeight="43dp"
+            android:layout_marginBottom="7dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_studypurpose_chip_feedback"
+            style="@style/CustomChipStyle"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:text="상호 피드백이 필요해요."
+            android:textSize="14sp"
+            android:textAlignment="center"
+            app:chipMinHeight="43dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/activity_checklist_studypurpose_chip_network"
+            style="@style/CustomChipStyle"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:text="네트워킹을 하고 싶어요."
+            android:textSize="14sp"
+            android:textAlignment="center"
+            app:chipMinHeight="43dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_studypurpose_chip_license"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="스터디원이 필요해요."
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:text="자격증을 취득하고 싶어요."
+            android:textSize="14sp"
+            android:textAlignment="center"
+            app:chipMinHeight="43dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/activity_checklist_studypurpose_chip_job"
+            android:id="@+id/activity_checklist_studypurpose_chip_contest"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="혼자서 하기엔 의지가 부족해요."
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:text="대회에 참가하여 수상하고 싶어요."
+            android:textSize="14sp"
+            android:textAlignment="center"
+            app:chipMinHeight="43dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
+
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/activity_checklist_studypurpose_chip_discussion"
+            android:id="@+id/activity_checklist_studypurpose_chip_opinion"
             style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="목표를 가진 사람들과 친해지고 싶어요."
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/activity_checklist_studypurpose_chip_news"
-            style="@style/CustomChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="다양한 정보를 공유하고, 받고 싶어요."
-            android:textSize="16sp"
-            app:chipStartPadding="15dp"
-            app:chipEndPadding="15dp"
-            app:chipMinHeight="40dp"/>
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:text="다양한 의견을 나누고 싶어요."
+            android:textSize="14sp"
+            android:textAlignment="center"
+            app:chipMinHeight="43dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"/>
     </com.google.android.flexbox.FlexboxLayout>
 
     <LinearLayout
@@ -170,30 +154,49 @@
         android:visibility="gone">
 
         <android.widget.Button
-            android:id="@+id/editReason_cancel_bt"
+            android:id="@+id/editPurpose_cancel_bt"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/button_background"
+            android:background="@drawable/cancel_bg"
             android:enabled="true"
             android:text="취소"
-            android:textColor="@drawable/button_textcolor"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textColor="@color/g500"
+            android:textSize="17dp"
+            android:fontFamily="@font/suit_bold" />
 
         <android.widget.Button
-            android:id="@+id/editReason_finish_bt"
+            android:id="@+id/editPurpose_finish_bt"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_background"
+            android:background="@drawable/finish_bg"
             android:enabled="false"
             android:text="완료"
-            android:textColor="@drawable/button_textcolor"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textColor="@color/b500"
+            android:textSize="17dp"
+            android:fontFamily="@font/suit_bold"/>
     </LinearLayout>
+
+    <android.widget.Button
+        android:id="@+id/fragment_purpose_preference_edit_bt"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:enabled="true"
+        android:text="수정"
+        android:fontFamily="@font/suit_bold"
+        android:textColor="@color/b500"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 
