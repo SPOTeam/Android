@@ -575,3 +575,12 @@ data class RegionData(
     val latitudeSecond100: Double,     // 위도(초/100)
     val locationUpdate: String?        // 위치업데이트
 )
+
+
+data class attendanceMemberData(
+    val memberId : Int,
+    val name : String,
+    var nickname: String,
+    val profileImage: String,
+    var introduction : String
+)

@@ -20,10 +20,15 @@ import retrofit2.Response
 class AttendanceDenyDialog(private val context: Context) {
 
     private val dlg = android.app.Dialog(context)
-    private var info : MemberIntroInfo? = null
+    private var memberId : Int? = null
+    private var studyId : Int? = null
 
-    fun setInfo(result: MemberIntroInfo) {
-        this.info = result
+    fun setStudyId(studyId : Int) {
+        this.studyId = studyId
+    }
+
+    fun setMemberId(memberId: Int) {
+        this.memberId = memberId
     }
 
     fun start() {
@@ -34,6 +39,7 @@ class AttendanceDenyDialog(private val context: Context) {
 
         // 다이얼로그 레이아웃 설정
         dlg.setContentView(R.layout.dialog_consider_reject)
+
 
         val btnMove1 = dlg.findViewById<TextView>(R.id.reject_tv)
         btnMove1.setOnClickListener {
@@ -46,12 +52,17 @@ class AttendanceDenyDialog(private val context: Context) {
             dlg.dismiss()
         }
 
+        val btnMove3 = dlg.findViewById<TextView>(R.id.close_button)
+        btnMove3.setOnClickListener {
+            dlg.dismiss()
+        }
+
         dlg.show()
     }
 
     private fun denyMemberAttendance() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postAttendanceMember(info!!.studyId, info!!.memberId,false)
+        service.postAttendanceMember(studyId!!, memberId!!,false)
             .enqueue(object : Callback<MemberAcceptResponse> {
                 override fun onResponse(
                     call: Call<MemberAcceptResponse>,

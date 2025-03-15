@@ -440,8 +440,10 @@ data class MyStudyAttendanceMemberInfo(
 
 data class AttendanceMemberInfo(
     val memberId: Int,
-    val nickname: String,
-    val profileImage: String
+    val name : String,
+    val profileImage: String,
+    val isOwned: Boolean,
+    val isAttending: Boolean
 )
 
 /************신청자 소개 결과***********/
