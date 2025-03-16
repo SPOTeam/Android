@@ -130,9 +130,9 @@ class RegionPreferenceFragment : Fragment() {
 
             val textView = TextView(requireContext()).apply {
                 text = regionText // 서버에서 받은 지역 데이터를 그대로 사용
-                textSize = 12f // 16sp
+                textSize = 12f
                 setPadding(30, 35, 50, 35) // 패딩 설정
-                setTextColor(resources.getColor(R.color.custom_chip_text, null))
+                setTextColor(resources.getColor(R.color.b500, null))
                 setBackgroundResource(R.drawable.button_background) // 커스텀 배경 적용
                 typeface = ResourcesCompat.getFont(requireContext(), R.font.suit_semi_bold)
 
@@ -143,7 +143,7 @@ class RegionPreferenceFragment : Fragment() {
                 ).apply {
                     marginStart = 15
                     marginEnd = 15
-                    topMargin = 30
+                    topMargin = 25
                 }
                 layoutParams = params
             }

@@ -11,7 +11,7 @@ object RetrofitInstance {
 
     private const val BASE_URL = "https://www.teamspot.site/"
     private var authToken: String? = null
-    private var isInitialized = false // ✅ 초기화 여부 확인
+    private var isInitialized = false
     private lateinit var appContext: Context
 
     /**
@@ -24,12 +24,23 @@ object RetrofitInstance {
     }
 
     /**
-     * ✅ Auth Token 설정. SharedPreferences에도 저장.
+     * ✅ Auth Token 설정 (Setter).
      */
-    fun setAuthToken(token: String) {
+    fun setAuthToken(token: String?) {
         authToken = token
-        saveAuthTokenToPreferences(token)
+        if (token != null) {
+            saveAuthTokenToPreferences(token)
+        } else {
+            clearAuthTokenFromPreferences()
+        }
         Log.d("RetrofitInstance", "Updated authToken: $authToken")
+    }
+
+    /**
+     * ✅ Auth Token 조회 (Getter).
+     */
+    fun getAuthToken(): String? {
+        return authToken
     }
 
     /**
@@ -64,20 +75,38 @@ object RetrofitInstance {
     }
 
     /**
-     * ✅ OkHttpClient 생성. AuthInterceptor 등록 및 타임아웃 설정.
+     * ✅ SharedPreferences에서 Auth Token 삭제.
+     */
+    private fun clearAuthTokenFromPreferences() {
+        if (!::appContext.isInitialized) {
+            Log.e("RetrofitInstance", "initialize() 호출 필요!")
+            return
+        }
+        val sharedPreferences = appContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+        email?.let {
+            with(sharedPreferences.edit()) {
+                remove("${it}_accessToken")
+                apply()
+            }
+        }
+    }
+
+    /**
+     * ✅ OkHttpClient 생성.
      */
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(AuthInterceptor(appContext)) // 🔒 AuthInterceptor 추가
-            .connectTimeout(60, TimeUnit.SECONDS) // ⏳ 연결 타임아웃 (기본 10초 → 60초)
-            .readTimeout(60, TimeUnit.SECONDS) // ⏳ 데이터 읽기 타임아웃 (기본 10초 → 60초)
-            .writeTimeout(60, TimeUnit.SECONDS) // ⏳ 데이터 쓰기 타임아웃 (기본 10초 → 60초)
-            .retryOnConnectionFailure(true) // 🔄 자동 재시도 활성화
+            .addInterceptor(AuthInterceptor(appContext))
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
             .build()
     }
 
     /**
-     * ✅ Retrofit 객체 생성 (initialize() 이후에만 사용 가능).
+     * ✅ Retrofit 객체 생성.
      */
     val retrofit: Retrofit by lazy {
         if (!isInitialized) {
