@@ -47,34 +47,42 @@
         android:textColor="@color/black"
         android:textSize="18dp"
         android:fontFamily="@font/suit_bold"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="35dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_region_preference_ll"/>
 
 
 
-    <LinearLayout
-        android:id="@+id/chip_container"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="410dp"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_region_preference_tv">
+        app:layout_constraintTop_toBottomOf="@id/fragment_region_preference_tv"
+        android:fillViewport="true">
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chip_group"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/chip_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            app:singleLine="false"
-            app:layout_constraintTop_toBottomOf="@id/fragment_region_preference_tv"/>
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                app:singleLine="false"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

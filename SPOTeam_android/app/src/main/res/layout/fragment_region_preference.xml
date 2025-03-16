@@ -46,25 +46,32 @@
         android:textColor="@color/black"
         android:textSize="18dp"
         android:fontFamily="@font/suit_bold"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="35dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_region_preference_ll"/>
 
 
-    <LinearLayout
-        android:id="@+id/fragment_region_preference_linear_layout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="410dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_region_preference_tv"
-        android:visibility="visible">
-    </LinearLayout>
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/fragment_region_preference_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+        </LinearLayout>
+
+    </ScrollView>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/activity_checklist_location_cl"

@@ -125,25 +125,18 @@ class TemporaryRegionFragment : Fragment() {
                 chipContainer.addView(chip)
             }
         }
+        updateAddButtonState()
     }
 
 
     private fun createStyledChip(address: String): Chip {
         return Chip(requireContext()).apply {
             text = address
-            setTextColor(resources.getColor(R.color.custom_chip_text, null))
+            setTextColor(resources.getColor(R.color.b500, null))
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f) // sp 단위 사용
             typeface = ResourcesCompat.getFont(requireContext(), R.font.suit_semi_bold)
 
-            // Chip 기본 크기 조정 (TextView와 비슷하게 설정)
-            minHeight = 36 // TextView의 기본 높이에 맞춰 조정
 
-            // Chip의 기본 패딩을 제거
-            chipStartPadding = 0f
-            chipEndPadding = 0f
-            textStartPadding = 0f
-            textEndPadding = 0f
-            chipMinHeight = 36f // 기본 높이 조정
 
             // Custom Chip 스타일 적용
             setChipDrawable(
@@ -160,9 +153,7 @@ class TemporaryRegionFragment : Fragment() {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                topMargin = 50 // TextView와 동일한 marginTop 적용
-                marginStart = 15
-                marginEnd = 15
+                topMargin = 10
             }
             layoutParams = params
 
@@ -177,10 +168,16 @@ class TemporaryRegionFragment : Fragment() {
                     selectedRegionsCode.removeAt(index)
                 }
 
+                updateAddButtonState()
                 updateFinishButtonState()
             }
         }
     }
+
+    private fun updateAddButtonState() {
+        binding.editReasonCancelBt.isEnabled = selectedRegions.size < 10 // ✅ 10개 이상이면 비활성화
+    }
+
 
 
 

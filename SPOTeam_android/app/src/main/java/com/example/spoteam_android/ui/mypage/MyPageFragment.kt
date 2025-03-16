@@ -67,9 +67,13 @@ class MyPageFragment : Fragment() {
             tvRecruitingNum.setOnClickListener { navigateToFragment(ConsiderAttendanceFragment()) }
             tvApplied.setOnClickListener { navigateToFragment(PermissionWaitFragment()) }
             tvAppliedNum.setOnClickListener { navigateToFragment(PermissionWaitFragment()) }
-            framelayoutVersionApp.setOnClickListener { performNaverLogout() }
             framelayoutDeleteAccount.setOnClickListener { showConfirmationDialog("회원 탈퇴", "정말로 회원 탈퇴를 진행하시겠습니까? 탈퇴 시 모든 데이터가 삭제됩니다.") { performAccountDeletion() } }
-            framelayoutLogout.setOnClickListener { performLogout() }
+            framelayoutLogout.setOnClickListener {
+                val  dialog = LogOutDialog(requireContext()){
+                    performLogout()
+                }
+                dialog.start()
+            }
             framelayout1.setOnClickListener { navigateToFragment(ThemePreferenceFragment()) }
             framelayout2.setOnClickListener { navigateToFragment(RegionPreferenceFragment()) }
             framelayout3.setOnClickListener { navigateToFragment(PurposePreferenceFragment()) }
@@ -177,17 +181,51 @@ class MyPageFragment : Fragment() {
     }
 
     private fun performLogout() {
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val loginPlatform = sharedPreferences.getString("loginPlatform", null)
+
+        when (loginPlatform) { //플랫폼별 로그인 구현. 일반로그인은 아직 구현중
+            "kakao" -> logoutFromKakao()
+            "naver" -> logoutFromNaver()
+            else -> {
+                Toast.makeText(requireContext(), "로그인 플랫폼 정보 없음", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun logoutFromKakao() {
         UserApiClient.instance.logout { error ->
             if (error != null) {
-                Toast.makeText(requireContext(), "로그아웃 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-                Log.e("MyPageFragment", "Logout Failed: ${error.message}")
+                Toast.makeText(requireContext(), "카카오 로그아웃 실패: ${error.message}", Toast.LENGTH_SHORT).show()
+                Log.e("MyPageFragment", "Kakao Logout Failed: ${error.message}")
             } else {
+                Log.i("MyPageFragment", "카카오 로그아웃 성공. SDK 내부 토큰 캐시 초기화")
+
+                com.kakao.sdk.auth.TokenManagerProvider.instance.manager.clear()
+
                 clearSharedPreferences()
-                Toast.makeText(requireContext(), "로그아웃 성공", Toast.LENGTH_SHORT).show()
+
+                RetrofitInstance.setAuthToken(null)
+
+                Toast.makeText(requireContext(), "카카오 로그아웃 성공", Toast.LENGTH_SHORT).show()
                 navigateToLoginScreen()
             }
         }
     }
+
+    private fun logoutFromNaver() {
+        NaverIdLoginSDK.logout()
+
+        clearSharedPreferences()
+
+        RetrofitInstance.setAuthToken(null)
+
+        Toast.makeText(requireContext(), "네이버 로그아웃 성공", Toast.LENGTH_SHORT).show()
+        navigateToLoginScreen()
+    }
+
+
+
 
     private fun fetchStudyData() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
@@ -252,13 +290,6 @@ class MyPageFragment : Fragment() {
 
 
 
-
-    private fun performNaverLogout() {
-        NaverIdLoginSDK.logout()
-        clearSharedPreferences()
-        Toast.makeText(requireContext(), "네이버 로그아웃 성공", Toast.LENGTH_SHORT).show()
-        navigateToLoginScreen()
-    }
 
     private fun clearSharedPreferences() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
