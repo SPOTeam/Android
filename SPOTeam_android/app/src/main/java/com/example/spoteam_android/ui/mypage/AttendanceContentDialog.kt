@@ -3,8 +3,10 @@ package com.example.spoteam_android.ui.mypage
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.Image
 import android.util.Log
 import android.view.Window
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.spoteam_android.R
@@ -29,7 +31,7 @@ class AttendanceContentDialog(private val context: Context) {
         // 다이얼로그 레이아웃 설정
         dlg.setContentView(R.layout.dialog_accept_attendance)
 
-        val btnMove1 = dlg.findViewById<TextView>(R.id.accept_close)
+        val btnMove1 = dlg.findViewById<ImageView>(R.id.accept_close)
         btnMove1.setOnClickListener {
             dlg.dismiss()
         }

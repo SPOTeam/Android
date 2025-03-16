@@ -579,7 +579,6 @@ data class RegionData(
 
 data class attendanceMemberData(
     val memberId : Int,
-    val name : String,
     var nickname: String,
     val profileImage: String,
     var introduction : String
