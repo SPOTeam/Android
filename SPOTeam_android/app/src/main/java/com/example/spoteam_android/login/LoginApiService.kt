@@ -15,6 +15,7 @@ import com.example.spoteam_android.ThemePreferences
 import com.example.spoteam_android.ValidateEmailResponse
 import com.example.spoteam_android.YourResponse
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -43,11 +44,11 @@ interface LoginApiService {
 
     //카카오 로그인 api 서비스
     @GET("/spot/members/sign-in/kakao")
-    fun getUserInfo(@Query("accessToken") accessToken: String): Call<YourResponse>
+    suspend fun getUserInfo(@Query("accessToken") accessToken: String): Response<YourResponse>
 
     //네이버 로그인 api 서비스
     @POST("/spot/members/sign-in/naver")
-    suspend fun signInWithNaver(@Body request: NaverLoginRequest): NaverResponse
+    suspend fun signInWithNaver(@Body request: NaverLoginRequest): Response<NaverResponse>
 
     //일반 로그인 아이디 사용 가능 여부 확인
     @GET("/spot/check/login-id")

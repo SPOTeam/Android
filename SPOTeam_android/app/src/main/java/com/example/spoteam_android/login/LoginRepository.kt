@@ -5,39 +5,62 @@ import com.example.spoteam_android.YourResponse
 import com.example.spoteam_android.KaKaoResult
 import com.example.spoteam_android.NaverLoginRequest
 import com.example.spoteam_android.NaverResult
+import com.example.spoteam_android.RetrofitInstance
+import com.kakao.sdk.friend.d.e
 import com.kakao.sdk.user.UserApiClient
+import com.navercorp.nid.oauth.NidOAuthLogin
+import com.navercorp.nid.profile.NidProfileCallback
+import com.navercorp.nid.profile.data.NidProfileResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.internal.userAgent
 import retrofit2.create
 
-// 서버와의 데이터 통신 처리, 서버에서 받은 결과를 정리해 뷰모델로 보내는 레포지토리
-class LoginRepository {
+class LoginRepository(private val tokenManager: TokenManager) {
     private val api: LoginApiService =
         SocialLoginRetrofitInstance.retrofit.create(LoginApiService::class.java)
 
-    // 토큰을 서버에 보내고 사용자 정보를 가져오는 함수
-    suspend fun sendTokenToServer(accessToken: String): Result<KaKaoResult> =
+    suspend fun sendKakaoTokenToServer(accessToken: String): Result<KaKaoResult> =
         withContext(Dispatchers.IO) {
             return@withContext try {
-                val response = api.getUserInfo(accessToken).execute()
+                val response = api.getUserInfo(accessToken) // suspend 함수이므로 execute() 불필요
+
                 if (response.isSuccessful) {
                     val userInfo = response.body()?.result
                     if (userInfo != null) {
-                        Result.success(userInfo) // 성공적인 결과를 담아 반환
+                        val newAccessToken = userInfo.signInDTO.tokens.accessToken
+                        val newRefreshToken = userInfo.signInDTO.tokens.refreshToken
+                        val memberId = userInfo.signInDTO.memberId
+
+                        UserApiClient.instance.me { user, error ->
+                            if (error == null && user != null) {
+                                val nickname = user.kakaoAccount?.profile?.nickname ?: "Unknown"
+                                val profileImageUrl = user.kakaoAccount?.profile?.profileImageUrl ?: ""
+
+                                tokenManager.saveUserInfo(
+                                    platform = "kakao",
+                                    email = userInfo.signInDTO.email,
+                                    nickname = nickname,
+                                    profileImageUrl = profileImageUrl,
+                                    accessToken = newAccessToken,
+                                    refreshToken = newRefreshToken,
+                                    memberId = memberId
+                                )
+                            }
+                        }
+                        RetrofitInstance.setAuthToken(newAccessToken)
+                        Result.success(userInfo)
                     } else {
-                        Result.failure(Exception("사용자 정보를 가져올 수 없습니다")) // 사용자 정보 없음
+                        val errorBody = response.errorBody()?.string()
+                        Log.e("LoginRepository", "API 응답 실패: $errorBody")
+                        Result.failure(Exception("API 응답 실패: $errorBody"))
                     }
                 } else {
-                    Result.failure(
-                        Exception(
-                            "API 응답 실패: ${
-                                response.errorBody()?.string()
-                            }"
-                        )
-                    ) // API 응답 실패
+                    Result.failure(Exception("API 응답 실패: ${response.errorBody()?.string()}"))
                 }
             } catch (e: Exception) {
-                Result.failure(e) // 예외 발생 시 실패 반환
+                Log.e("LoginRepository", "예외 발생: ${e.message}")
+                Result.failure(e)
             }
         }
 
@@ -48,31 +71,57 @@ class LoginRepository {
         expiresIn: Long
     ): Result<NaverResult> = withContext(Dispatchers.IO) {
         try {
-            // 요청 데이터 생성
-            val request = NaverLoginRequest(
-                access_token = accessToken,
-                refresh_token = refreshToken,
-                token_type = tokenType,
-                expires_in = expiresIn
-            )
-
-            // Retrofit API 호출 (suspend function 활용)
+            val request = NaverLoginRequest(accessToken, refreshToken, tokenType, expiresIn)
             val response = api.signInWithNaver(request)
 
-            // 성공 응답 처리
-            val result = response.result
-            if (result != null) {
-                Log.d("NaverAPI", "성공 응답: $response")
-                Result.success(result)
+            if (response.isSuccessful) {
+                val userInfo = response.body()?.result
+                if (userInfo != null) {
+                    NidOAuthLogin().callProfileApi(object : NidProfileCallback<NidProfileResponse> {
+                        override fun onSuccess(response: NidProfileResponse) {
+                            val profile = response.profile
+                            if (profile != null) {
+                                val nickname = profile.nickname ?: "Unknown"
+                                val profileImageUrl = profile.profileImage ?: ""
+
+                                // ✅ 사용자 정보 저장
+                                tokenManager.saveUserInfo(
+                                    platform = "naver",
+                                    email = userInfo.signInDTO.email,
+                                    nickname = nickname,
+                                    profileImageUrl = profileImageUrl,
+                                    accessToken = userInfo.signInDTO.tokens.accessToken,
+                                    refreshToken = userInfo.signInDTO.tokens.refreshToken,
+                                    memberId = userInfo.signInDTO.memberId
+                                )
+                                RetrofitInstance.setAuthToken(userInfo.signInDTO.tokens.accessToken)
+                            } else {
+                                Log.e("Naver", "네이버 프로필 정보를 가져올 수 없습니다.")
+                            }
+                        }
+
+                        override fun onError(errorCode: Int, message: String) {
+                            Log.e("Naver", "네이버 프로필 API 오류: $message")
+                        }
+
+                        override fun onFailure(httpStatus: Int, message: String) {
+                            Log.e("Naver", "네이버 프로필 요청 실패: $message")
+                        }
+                    })
+
+                    return@withContext Result.success(userInfo)
+                } else {
+                    return@withContext Result.failure(Exception("네이버 로그인 응답 실패"))
+                }
             } else {
-                Log.e("NaverAPI", "응답이 성공적이지만 result가 null입니다. 응답 데이터: $response")
-                Result.failure(Exception("사용자 정보를 가져올 수 없습니다."))
+                return@withContext Result.failure(Exception("네이버 로그인 API 오류: ${response.errorBody()?.string()}"))
             }
         } catch (e: Exception) {
-            // 네트워크 또는 기타 예외 처리
             Log.e("NaverAPI", "API 호출 중 예외 발생", e)
-            Result.failure(e)
+            return@withContext Result.failure(e)
         }
     }
+
+
 
 }
