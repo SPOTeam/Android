@@ -1,62 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="86dp"
-    android:layout_margin="8dp"
-    android:background="@drawable/border_interest_recyclerv_item"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="10dp">
+android:layout_width="match_parent"
+android:layout_height="85dp"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:background="@drawable/border_interest_recyclerv_item"
+android:gravity="center_vertical"
+android:orientation="horizontal"
+android:layout_margin="8dp">
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="match_parent"
+        android:elevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ImageView4"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="15dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
             android:background="@color/white"
             android:scaleType="centerCrop"
-            android:src="@drawable/activity_main_ic_recyclervw_groups"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut" />
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut1"
+            app:strokeColor="@color/g300"
+            app:strokeWidth="0.3dp" />
+
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/suit_semi_bold"
+                android:maxLines="1"
                 android:text="스터디 이름"
                 android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textSize="15dp" />
+
 
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/suit_semi_bold"
+                android:maxLines="1"
                 android:text="스터디 목표"
-                android:textSize="12sp" />
+                android:textSize="13dp" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="3dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -71,31 +77,32 @@
                     android:id="@+id/tv_name2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:text="po"
-                    android:textSize="14sp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/tv_name5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:text="/"
-                    android:textSize="14sp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:fontFamily="@font/pretendard"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:text="to"
-                    android:textSize="14sp" />
+                    android:textSize="12dp" />
+
 
                 <ImageView
                     android:id="@+id/heart_count_iv"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
                     android:layout_marginEnd="4dp"
                     android:src="@drawable/study_like" />
 
@@ -104,14 +111,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:fontFamily="@font/pretendard"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:text="like"
-                    android:textSize="14sp" />
+                    android:textSize="12dp" />
 
                 <ImageView
                     android:id="@+id/ImageView7"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
                     android:layout_marginEnd="4dp"
                     android:src="@drawable/study_view" />
 
@@ -119,8 +126,9 @@
                     android:id="@+id/tv_name4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:text="view"
-                    android:textSize="14sp" />
+                    android:textSize="12dp" />
 
             </LinearLayout>
 
@@ -128,14 +136,26 @@
 
     </LinearLayout>
 
+<View
+    android:layout_width="match_parent"
+    android:layout_height="0.3dp"
+    android:background="@color/g300"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginBottom="0dp"/>
+
     <ImageView
         android:id="@+id/toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="15dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="end|top"
+        android:padding="5dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/fragment_participating_study_ic_toggle"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
-<!--    android:visibility="gone"-->
+        android:layout_marginTop="5dp"
+        android:src="@drawable/ic_toggle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
