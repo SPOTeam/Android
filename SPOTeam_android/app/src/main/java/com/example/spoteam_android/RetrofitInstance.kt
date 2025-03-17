@@ -2,6 +2,7 @@ package com.example.spoteam_android
 
 import android.content.Context
 import android.util.Log
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -108,14 +109,17 @@ object RetrofitInstance {
     /**
      * ✅ Retrofit 객체 생성.
      */
+    var gson = GsonBuilder().setLenient().create()
     val retrofit: Retrofit by lazy {
+
+
         if (!isInitialized) {
             throw IllegalStateException("RetrofitInstance.initialize()를 먼저 호출하세요!")
         }
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 }
