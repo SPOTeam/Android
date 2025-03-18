@@ -146,7 +146,8 @@ class SearchResultFragment : Fragment() {
                                 themeTypes = study.themeTypes,
                                 regions = study.regions,
                                 imageUrl = study.imageUrl,
-                                liked = study.liked
+                                liked = study.liked,
+                                isHost = false
                             )
                         } ?: emptyList()
                         updateRecyclerView(boardItems)

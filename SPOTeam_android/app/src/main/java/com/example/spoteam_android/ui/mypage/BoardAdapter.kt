@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.mypage
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuInflater
@@ -21,6 +22,7 @@ class BoardAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
         val binding = ItemRecyclerViewPlusToggleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
         return BoardViewHolder(binding)
     }
 
@@ -77,6 +79,10 @@ class BoardAdapter(
             val exit = ExitStudyPopupFragment(view.context, this@BoardAdapter, adapterPosition)
             val report = ReportStudyCrewDialog(view.context, studyId)
             inflater.inflate(R.menu.menu_item_options, popupMenu.menu)
+
+            val endStudyItem = popupMenu.menu.findItem(R.id.end_study)
+            endStudyItem.isVisible = true
+
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.exit_study -> {
@@ -85,6 +91,10 @@ class BoardAdapter(
                     }
                     R.id.report_study -> {
                         report.start()
+                        true
+                    }
+                    R.id.end_study -> {
+
                         true
                     }
                     else -> false

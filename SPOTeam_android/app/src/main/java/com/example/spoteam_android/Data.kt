@@ -170,7 +170,8 @@ data class BoardItem (
     val themeTypes: List<String>,
     val regions: List<String>,
     val imageUrl: String,
-    var liked: Boolean
+    var liked: Boolean,
+    val isHost : Boolean
 )
 
 

@@ -770,4 +770,20 @@ data class ScrapContent (
     val isLast: Boolean
 )
 
+/************ 스크랩 게시글 가져오기 완료 ***********/
+data class ReportCommunityContentResponse (
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: ReportInfo
+)
+
+data class ReportInfo (
+    val reportPostId : Int,
+    val reporterId : Int,
+    val reportedAt : String
+)
+
+
+
 
