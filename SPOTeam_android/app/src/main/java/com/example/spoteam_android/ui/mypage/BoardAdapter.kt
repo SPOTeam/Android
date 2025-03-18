@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.BoardItem
@@ -69,19 +70,19 @@ class BoardAdapter(
             binding.heartCountIv.setImageResource(heartIcon)
 
             binding.toggle.setOnClickListener {
-                showPopupMenu(it, item.studyId)
+                showPopupMenu(it, item)
             }
         }
 
-        private fun showPopupMenu(view: View, studyId : Int) {
+        private fun showPopupMenu(view: View, item : BoardItem) {
             val popupMenu = PopupMenu(view.context, view)
             val inflater: MenuInflater = popupMenu.menuInflater
             val exit = ExitStudyPopupFragment(view.context, this@BoardAdapter, adapterPosition)
-            val report = ReportStudyCrewDialog(view.context, studyId)
+            val report = ReportStudyCrewDialog(view.context, item.studyId)
             inflater.inflate(R.menu.menu_item_options, popupMenu.menu)
 
             val endStudyItem = popupMenu.menu.findItem(R.id.end_study)
-            endStudyItem.isVisible = true
+            endStudyItem.isVisible = item.isHost
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
@@ -94,7 +95,7 @@ class BoardAdapter(
                         true
                     }
                     R.id.end_study -> {
-
+                        val endStudyDialog = EndStudyDialog(view.context, item.studyId)
                         true
                     }
                     else -> false
