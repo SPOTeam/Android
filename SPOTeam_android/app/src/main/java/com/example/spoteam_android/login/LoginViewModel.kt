@@ -25,14 +25,7 @@ class LoginViewModel(private val loginRepository: LoginRepository): ViewModel() 
     private val _naverLoginResult = MutableLiveData<Result<NaverResult>>()
     val naverLoginResult: LiveData<Result<NaverResult>> get() = _naverLoginResult
 
-    private val _userInfoSaved = MutableLiveData<Boolean>()
-    val userInfoSaved: LiveData<Boolean> get() = _userInfoSaved
 
-
-
-    fun checkIfAlreadyLoggedIn(){
-
-    }
 
     fun startKakaoLogin(activity: Activity) {
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
