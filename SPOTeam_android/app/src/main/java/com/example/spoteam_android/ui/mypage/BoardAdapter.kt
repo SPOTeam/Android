@@ -116,15 +116,8 @@ class BoardAdapter(
 
             leaveStudy.setOnClickListener {
                 // 스터디 탈퇴 다이얼로그 띄우기
-                AlertDialog.Builder(view.context)
-                    .setTitle("스터디 탈퇴")
-                    .setMessage("정말로 스터디에서 탈퇴하시겠습니까?")
-                    .setPositiveButton("탈퇴") { _, _ ->
-                        Toast.makeText(view.context, "스터디에서 탈퇴되었습니다.", Toast.LENGTH_SHORT).show()
-                        // 탈퇴 로직 추가 가능
-                    }
-                    .setNegativeButton("취소", null)
-                    .show()
+                val reportDialog = HostLeaveStudyDialog(view.context, studyId)
+                reportDialog.start()
                 popupWindow.dismiss()
             }
 

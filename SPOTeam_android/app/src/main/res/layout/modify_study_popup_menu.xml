@@ -14,6 +14,7 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
+        android:textColor="@color/black"
         android:padding="6dp"
         android:text="정보 수정하기"
         android:textSize="14dp" />
@@ -26,6 +27,7 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
+        android:textColor="@color/black"
         android:padding="6dp"
         android:text="스터디 끝내기"
         android:textSize="14dp" />
@@ -38,6 +40,7 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
+        android:textColor="@color/black"
         android:padding="6dp"
         android:text="스터디원 신고"
         android:textSize="14dp" />
