@@ -54,4 +54,13 @@ class TokenManager(context: Context) {
     fun clearTokens(){
         sharedPreferences.edit().clear().apply()
     }
+
+    fun isUserLoggedIn(): Boolean {
+        val accessToken = getAccessToken()
+        val refreshToken = getRefreshToken()
+        return !accessToken.isNullOrEmpty() || !refreshToken.isNullOrEmpty()
+    }
+
+
+
 }

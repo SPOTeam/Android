@@ -45,8 +45,8 @@ class StartLoginActivity : AppCompatActivity() {
         val viewModelFactory = LoginViewModelFactory(loginRepository)
         loginViewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
 
-        checkIfAlreadyLoggedIn()
         setupObservers()
+        checkIfAlreadyLoggedIn()
 
         binding.itemLogoKakaoIb.setOnClickListener { loginViewModel.startKakaoLogin(this) }
         binding.itemLogoNaverIb.setOnClickListener { loginViewModel.startNaverLogin(this) }
@@ -84,7 +84,12 @@ class StartLoginActivity : AppCompatActivity() {
 
 
     private fun checkIfAlreadyLoggedIn() {
-        loginViewModel.checkIfAlreadyLoggedIn() // 뷰모델에서 로그인 여부 확인
+        if (tokenManager.isUserLoggedIn()) {
+            Log.d("AutoLogin", "자동 로그인")
+            navigateToNextScreen() // 메인 화면으로 이동
+        } else {
+            Log.d("AutoLogin", "로그인 필요")
+        }
     }
 
     private fun setupObservers() {
