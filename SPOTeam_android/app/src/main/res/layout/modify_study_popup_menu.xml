@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="100dp"
     android:layout_height="wrap_content"
     android:background="@drawable/custom_popup_background"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/edit_info"
@@ -18,6 +17,10 @@
         android:padding="6dp"
         android:text="정보 수정하기"
         android:textSize="14dp" />
+    <View
+        android:layout_width="100dp"
+        android:layout_height="1dp"
+        android:background="@color/g300"/>
 
     <TextView
         android:id="@+id/end_study"
@@ -31,6 +34,10 @@
         android:padding="6dp"
         android:text="스터디 끝내기"
         android:textSize="14dp" />
+    <View
+        android:layout_width="100dp"
+        android:layout_height="1dp"
+        android:background="@color/g300"/>
 
     <TextView
         android:id="@+id/report_member"
@@ -44,6 +51,10 @@
         android:padding="6dp"
         android:text="스터디원 신고"
         android:textSize="14dp" />
+    <View
+        android:layout_width="100dp"
+        android:layout_height="1dp"
+        android:background="@color/g300"/>
 
     <TextView
         android:id="@+id/leave_study"
