@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="50dp"
             android:layout_weight="1"
-            android:background="@drawable/button_background1"
+            android:background="@drawable/button_background"
             android:enabled="true"
             android:text="확인"
             android:textColor="@drawable/button_textcolor"

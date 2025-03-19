@@ -7,9 +7,13 @@ import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.example.spoteam_android.R
 
-class HostLeaveStudyDialog(private val context: Context, private val studyID: Int) {
+
+class HostLeaveStudyDialog(private val context: Context,
+                           private val studyID: Int, ){
 
     private val dlg = Dialog(context)
 
@@ -30,10 +34,28 @@ class HostLeaveStudyDialog(private val context: Context, private val studyID: In
             dlg.dismiss() // 다이얼로그 닫기
         }
 
+        val btnTakeCharge: Button = dlg.findViewById(R.id.btn_take_charge)
+        btnTakeCharge.setOnClickListener {
+            showMandateFragment(studyID)
+            dlg.dismiss() // 다이얼로그 닫기
+        }
+
+
         // 취소 버튼 클릭 시 다이얼로그 닫기
         val btnCancel: Button = dlg.findViewById(R.id.btn_cancel)
         btnCancel.setOnClickListener {
             dlg.dismiss() // 다이얼로그 닫기
+        }
+
+    }
+
+    private fun showMandateFragment(studyId: Int) {
+        val fragmentManager: FragmentManager? = (context as? FragmentActivity)?.supportFragmentManager
+        if (fragmentManager != null) {
+            val mandateFragment = MandateStudyOwnerFragment(studyId)
+            mandateFragment.show(fragmentManager, "DelegateHostFragment")
+        } else {
+            throw IllegalStateException("FragmentManager를 가져올 수 없습니다.")
         }
     }
 }
