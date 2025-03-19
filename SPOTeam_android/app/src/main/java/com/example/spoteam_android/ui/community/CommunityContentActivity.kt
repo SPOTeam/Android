@@ -310,9 +310,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_report -> {
-//                    reportContent(view, fragmentManager)
-                    val reportContentDialog = ReportContentDialog(view.context)
-                    reportContentDialog.start(fragmentManager)
+                    reportContent(view, fragmentManager)
                     true
                 }
                 R.id.edit_content -> {
@@ -345,6 +343,33 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
             }
         }
         popupMenu.show()
+    }
+
+    private fun reportContent(view: View, fragmentManager: FragmentManager) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.reportCommunityContent(postId)
+            .enqueue(object : Callback<ReportCommunityContentResponse> {
+                override fun onResponse(
+                    call: Call<ReportCommunityContentResponse>,
+                    response: Response<ReportCommunityContentResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val contentResponse = response.body()
+                        if (contentResponse?.isSuccess == "true") {
+                            val reportContentDialog = ReportContentDialog(view.context)
+                            reportContentDialog.start(fragmentManager)
+                        } else {
+                            showError(contentResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ReportCommunityContentResponse>, t: Throwable) {
+                    Log.e("ReportCommunityContent", "Failure: ${t.message}", t)
+                }
+            })
     }
 
 

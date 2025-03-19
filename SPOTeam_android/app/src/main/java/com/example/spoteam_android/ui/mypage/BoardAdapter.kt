@@ -1,21 +1,20 @@
 package com.example.spoteam_android.ui.mypage
 
-import android.app.AlertDialog
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.R
+import com.example.spoteam_android.ReportStudyMemberFragment
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 
 class BoardAdapter(
@@ -26,6 +25,7 @@ class BoardAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
         val binding = ItemRecyclerViewPlusToggleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
         return BoardViewHolder(binding)
     }
 
@@ -76,6 +76,37 @@ class BoardAdapter(
             }
         }
 
+//        private fun showPopupMenu(view: View, item : BoardItem) {
+//            val popupMenu = PopupMenu(view.context, view)
+//            val inflater: MenuInflater = popupMenu.menuInflater
+//            val exit = ExitStudyPopupFragment(view.context, this@BoardAdapter, adapterPosition)
+//            val report = ReportStudyCrewDialog(view.context, item.studyId)
+//            inflater.inflate(R.menu.menu_item_options, popupMenu.menu)
+//
+//            val endStudyItem = popupMenu.menu.findItem(R.id.end_study)
+//            endStudyItem.isVisible = true //호스트인지 아닌지에 따라 변경 필요
+//
+//            popupMenu.setOnMenuItemClickListener { menuItem ->
+//                when (menuItem.itemId) {
+//                    R.id.exit_study -> {
+//                        exit.start()
+//                        true
+//                    }
+//                    R.id.report_study -> {
+//                        report.start()
+//                        true
+//                    }
+//                    R.id.end_study -> {
+
+//                        true
+//                    }
+//                    else -> false
+//                }
+//            }
+//            popupMenu.show()
+//        }
+//    }
+
         private fun showPopupMenu(view: View, studyId: Int) {
             // 팝업 레이아웃 가져오기
             val popupView = LayoutInflater.from(view.context).inflate(R.layout.modify_study_popup_menu, null)
@@ -90,7 +121,10 @@ class BoardAdapter(
 
             // 팝업 내부 요소 가져오기
             val editInfo = popupView.findViewById<TextView>(R.id.edit_info)
+
             val endStudy = popupView.findViewById<TextView>(R.id.end_study)
+            endStudy.isVisible = true // 호스트인지아닌지에 대해서 변경 필요
+
             val reportMember = popupView.findViewById<TextView>(R.id.report_member)
             val leaveStudy = popupView.findViewById<TextView>(R.id.leave_study)
 
@@ -102,14 +136,14 @@ class BoardAdapter(
 
             endStudy.setOnClickListener {
                 // 스터디 종료 다이얼로그 띄우기
-                val exitDialog = ExitStudyPopupFragment(view.context, this@BoardAdapter, adapterPosition)
+                val exitDialog = EndStudyDialog(view.context, studyId)
                 exitDialog.start()
                 popupWindow.dismiss()
             }
 
             reportMember.setOnClickListener {
                 // 스터디원 신고 다이얼로그 띄우기
-                val reportDialog = ReportStudyCrewDialog(view.context, studyId)
+                val reportDialog = ReportStudyMemberFragment(view.context, studyId)
                 reportDialog.start()
                 popupWindow.dismiss()
             }
@@ -133,6 +167,8 @@ class BoardAdapter(
             popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y + 100)
         }
     }
+
+
 
     fun updateList(newList: List<BoardItem>) {
         itemList.clear()

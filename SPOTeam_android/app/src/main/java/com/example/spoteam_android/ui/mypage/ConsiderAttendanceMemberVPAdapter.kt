@@ -23,7 +23,7 @@ class ConsiderAttendanceMemberVPAdapter(
         val item = profileList[position]
         holder.binding.fragmentConsiderAttendanceMemberProfileIv.setImageResource(item.profileImage)
         holder.binding.fragmentCosiderAttendanceMemberProfileTv.text = item.nickname
-        holder.binding.fragmentCosiderAttendanceMemberTemperatureTv.text = item.temperature
+//        holder.binding.fragmentCosiderAttendanceMemberTemperatureTv.text = item.temperature
     }
 
     override fun getItemCount(): Int = profileList.size

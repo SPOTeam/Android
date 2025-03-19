@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.Window
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -52,7 +53,7 @@ class AttendanceDenyDialog(private val context: Context) {
             dlg.dismiss()
         }
 
-        val btnMove3 = dlg.findViewById<TextView>(R.id.close_button)
+        val btnMove3 = dlg.findViewById<ImageView>(R.id.close_button)
         btnMove3.setOnClickListener {
             dlg.dismiss()
         }

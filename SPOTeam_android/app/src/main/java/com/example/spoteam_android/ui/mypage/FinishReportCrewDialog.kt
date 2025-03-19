@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.media.Image
 import android.util.Log
 import android.view.Window
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -18,7 +19,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AttendanceContentDialog(private val context: Context) {
+class FinishReportCrewDialog(private val context: Context) {
 
     private val dlg = android.app.Dialog(context)
 
@@ -29,14 +30,14 @@ class AttendanceContentDialog(private val context: Context) {
         dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         // 다이얼로그 레이아웃 설정
-        dlg.setContentView(R.layout.dialog_accept_attendance)
+        dlg.setContentView(R.layout.dialog_crew_report_finish)
 
-        val btnMove1 = dlg.findViewById<ImageView>(R.id.accept_close)
+        val btnMove1 = dlg.findViewById<ImageView>(R.id.report_crew_finish_prev_iv)
         btnMove1.setOnClickListener {
             dlg.dismiss()
         }
 
-        val btnMove2 = dlg.findViewById<TextView>(R.id.accept_tv)
+        val btnMove2 = dlg.findViewById<Button>(R.id.dialog_report_crew_complete_bt)
         btnMove2.setOnClickListener {
             dlg.dismiss()
         }

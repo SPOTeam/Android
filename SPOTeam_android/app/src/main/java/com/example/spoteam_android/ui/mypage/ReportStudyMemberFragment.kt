@@ -3,34 +3,26 @@ package com.example.spoteam_android
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
-import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.spoteam_android.databinding.FragmentReportStudymeberBinding
+import com.example.spoteam_android.databinding.FragmentReportStudymemberBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
-import com.example.spoteam_android.ui.community.CrewAnswerRequest
 import com.example.spoteam_android.ui.community.MembersDetail
-import com.example.spoteam_android.ui.community.ReportCrewRequest
-import com.example.spoteam_android.ui.community.ReportCrewResponse
 import com.example.spoteam_android.ui.community.StudyMemberResponse
 import com.example.spoteam_android.ui.mypage.ReportStudyCrewMemberRVAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.Instant
 
-class ReportStudyMemberFragment(private val context: Context, private val studyId: Int) {
+class ReportStudyMemberFragment(private val context: Context, private val studyId: Int) : ReportCompleteListener {
     private val dlg = BottomSheetDialog(context, R.style.CustomBottomSheetDialogTheme)
-    private var binding: FragmentReportStudymeberBinding? = null // ✅ nullable 변경
-    private var selectedCrewMember: MembersDetail? = null
+    private var binding: FragmentReportStudymemberBinding? = null // ✅ nullable 변경
+    private var selectedCrewMember: Int = -1
 
     fun start() {
         Log.d("ReportStudyCrewDialog", "StudyId : $studyId")
@@ -39,7 +31,7 @@ class ReportStudyMemberFragment(private val context: Context, private val studyI
         dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         // ✅ 바인딩 초기화
-        binding = FragmentReportStudymeberBinding.inflate(dlg.layoutInflater)
+        binding = FragmentReportStudymemberBinding.inflate(dlg.layoutInflater)
         dlg.setContentView(binding!!.root) // ✅ null 체크 후 사용
 
         val heightInPx = TypedValue.applyDimension(
@@ -53,28 +45,23 @@ class ReportStudyMemberFragment(private val context: Context, private val studyI
             heightInPx
         )
 
-        val btnExit = binding?.writeContentPrevIv
+        val btnExit = binding?.reportCrewPrevIv
         btnExit?.setOnClickListener {
             dlg.dismiss()
         }
 
         fetchStudyMember() // ✅ 멤버 리스트 가져오기
 
-        binding?.popupEditText?.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                checkEditText()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-
-        binding?.reportTv?.setOnClickListener{
-            reportStudyMember()
+        binding?.reportCrewTv?.setOnClickListener{
+            startReportContentDialog(studyId)
         }
 
         dlg.show()
+    }
+
+    private fun startReportContentDialog(studyId: Int) {
+        val reportContentDialog = ReportStudyMemberContentFragment(context, studyId, selectedCrewMember, this)
+        reportContentDialog.start()
     }
 
     private fun fetchStudyMember() {
@@ -108,62 +95,27 @@ class ReportStudyMemberFragment(private val context: Context, private val studyI
         val dataRVAdapter = ReportStudyCrewMemberRVAdapter(studyMembers, object :
             ReportStudyCrewMemberRVAdapter.OnMemberClickListener {
             override fun onProfileClick(member: MembersDetail) {
-                selectedCrewMember = member
-                Log.d("ReportCrew", "ReportCrewMember : ${selectedCrewMember!!.memberId}")
+                selectedCrewMember = member.memberId
+                Log.d("ReportCrew", "ReportCrewMember : $selectedCrewMember")
+                checkMemberId()
             }
         })
 
         binding?.reportMemberRv?.adapter = dataRVAdapter
     }
 
-
-    private fun checkEditText() {
-        val check = binding?.popupEditText?.text?.toString() ?: ""
-        binding?.reportTv?.isEnabled = check.isNotEmpty()
+    private fun checkMemberId() {
+        if(selectedCrewMember != -1) {
+            binding?.reportCrewTv?.isEnabled = true
+        }
     }
+
 
     private fun showError(message: String?) {
         Toast.makeText(context, "Error: $message", Toast.LENGTH_SHORT).show()
     }
 
-
-
-    private fun reportStudyMember() {
-        val requestBody = ReportCrewRequest(
-            content = binding?.popupEditText.toString()
-        )
-
-        var memberId = 0
-        if(selectedCrewMember != null) {
-            memberId = selectedCrewMember!!.memberId
-        }
-
-        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.reportStudyMember(studyId, memberId, requestBody)
-            .enqueue(object : Callback<ReportCrewResponse> {
-                override fun onResponse(
-                    call: Call<ReportCrewResponse>,
-                    response: Response<ReportCrewResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val reportResponse = response.body()
-                        if (reportResponse?.isSuccess == "true") {
-                            binding?.popupEditText?.visibility = View.GONE
-                            binding?.reportTv?.visibility = View.GONE
-                            binding?.txReasonReport?.visibility = View.GONE
-
-                            binding?.reportSuccessIv?.visibility = View.VISIBLE
-                            binding?.finishReportTv?.visibility = View.VISIBLE
-                            Log.d("ReportCrew", "SUCCESS REPORT CREW")
-                        }
-                    } else {
-                        showError(response.code().toString())
-                    }
-                }
-
-                override fun onFailure(call: Call<ReportCrewResponse>, t: Throwable) {
-                    Log.e("ReportStudyCrewDialog", "Failure: ${t.message}", t)
-                }
-            })
+    override fun onReportCompleted() {
+        dlg.dismiss()
     }
 }

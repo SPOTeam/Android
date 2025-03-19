@@ -71,9 +71,8 @@ class ConsiderAttendanceMemberFragment : Fragment() {
                                     // ✅ memberId, name, profileImage만 저장
                                     val newMember = attendanceMemberData(
                                         memberId = member.memberId,
-                                        name = member.name, // ✅ name 받아오기
                                         profileImage = member.profileImage,
-                                        nickname = "", // ✅ 이후에 추가
+                                        nickname = member.nickname, // ✅ 이후에 추가
                                         introduction = "" // ✅ 이후에 추가
                                     )
 
@@ -116,7 +115,6 @@ class ConsiderAttendanceMemberFragment : Fragment() {
 
                             // ✅ 기존 리스트에서 해당 memberId를 찾아 nickname, introduction 추가
                             attendanceMemberList.find { it.memberId == memberIntro.memberId }?.let {
-                                it.nickname = memberIntro.nickname
                                 it.introduction = memberIntro.introduction
                             }
 

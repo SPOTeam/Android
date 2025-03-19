@@ -102,8 +102,8 @@
 
         <ImageView
             android:id="@+id/content_likeNum_checked_iv"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@drawable/like_off"
             android:visibility="gone"
             app:tint="@color/selector_blue"
