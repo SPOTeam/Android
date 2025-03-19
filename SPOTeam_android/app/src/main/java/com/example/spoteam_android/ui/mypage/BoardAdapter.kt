@@ -82,7 +82,7 @@ class BoardAdapter(
             inflater.inflate(R.menu.menu_item_options, popupMenu.menu)
 
             val endStudyItem = popupMenu.menu.findItem(R.id.end_study)
-            endStudyItem.isVisible = item.isHost
+            endStudyItem.isVisible = true //호스트인지 아닌지에 따라 변경 필요
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
@@ -96,6 +96,7 @@ class BoardAdapter(
                     }
                     R.id.end_study -> {
                         val endStudyDialog = EndStudyDialog(view.context, item.studyId)
+                        endStudyDialog.start()
                         true
                     }
                     else -> false

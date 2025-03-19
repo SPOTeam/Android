@@ -16,6 +16,8 @@ import android.widget.Toast
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.ui.community.CommunityAPIService
+import com.example.spoteam_android.ui.community.ContentResponse
+import com.example.spoteam_android.ui.community.EndStudyResponse
 import com.example.spoteam_android.ui.community.MemberAcceptResponse
 import com.example.spoteam_android.ui.community.MemberIntroInfo
 import retrofit2.Call
@@ -35,7 +37,7 @@ class EndStudyDialog(val context: Context, val studyId : Int) {
         dlg.setContentView(R.layout.dialog_end_study)
 
         val closeButton = dlg.findViewById<ImageView>(R.id.end_study_close)
-        val applyButton = dlg.findViewById<Button>(R.id.dialog_apply_end_study_bt)
+        applyButton = dlg.findViewById(R.id.dialog_apply_end_study_bt)
         val cancelButton = dlg.findViewById<Button>(R.id.dialog_cancel_end_study_bt)
         editText = dlg.findViewById(R.id.dialog_study_result_et)
         charCountTextView = dlg.findViewById(R.id.et_count_tv)
@@ -53,13 +55,46 @@ class EndStudyDialog(val context: Context, val studyId : Int) {
         }
 
         applyButton.setOnClickListener {
-            val result = editText.text
-            sendStudyEndResult(studyId, result)
+            val result = editText.text.toString()
+//            sendStudyEndResult(result)
+            val lastDlg =  EndStudyFinishDialog(context)
+            lastDlg.setContext(result)
+            lastDlg.start()
+            dlg.dismiss()
         }
 
         dlg.show()
     }
 
+    private fun sendStudyEndResult(result : String) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.endStudy(studyId)
+            .enqueue(object : Callback<EndStudyResponse> {
+                override fun onResponse(
+                    call: Call<EndStudyResponse>,
+                    response: Response<EndStudyResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val contentResponse = response.body()
+                        if (contentResponse?.isSuccess == "true") {
+//                            val dlg =  EndStudyFinishDialog(context)
+//                            dlg.start()
+                        } else {
+                            showError(contentResponse?.message)
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<EndStudyResponse>, t: Throwable) {
+                    Log.e("EndStudyResponse", "Failure: ${t.message}", t)
+                }
+            })
+    }
+    private fun showError(message: String?) {
+        Toast.makeText(context, "Error: $message", Toast.LENGTH_SHORT).show()
+    }
     private fun initTextWatcher() {
         editText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

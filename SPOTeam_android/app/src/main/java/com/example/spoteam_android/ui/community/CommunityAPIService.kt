@@ -335,4 +335,9 @@ interface CommunityAPIService {
     fun reportCommunityContent(
         @Path("postId") postId : Int
     ) : Call<ReportCommunityContentResponse>
+
+    @PATCH("/spot/studies/{studyId}/temination")
+    fun endStudy(
+        @Path("studyId") studyId : Int
+    ) : Call<EndStudyResponse>
 }

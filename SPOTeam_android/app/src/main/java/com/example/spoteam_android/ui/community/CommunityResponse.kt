@@ -784,6 +784,16 @@ data class ReportInfo (
     val reportedAt : String
 )
 
+/************ 스크랩 게시글 가져오기 완료 ***********/
+data class EndStudyResponse (
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: EndStudyInfo
+)
 
-
-
+data class EndStudyInfo (
+    val studyId : Int,
+    val studyName : String,
+    val status : String
+)
