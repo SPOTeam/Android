@@ -46,21 +46,35 @@ class ActivityFeeStudyFragment : Fragment() {
     }
 
     private fun setupChipGroupListener() {
-        binding.fragmentOnlineStudyChipgroup.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.fragment_activity_fee_study_chip_false -> {
-                    binding.fragmentActivityFeeStudyNumFl.visibility = View.GONE
-                    saveStudyData(fee = 0) // 활동비 없음
-                    binding.fragmentActivityFeeStudyPreviewBt.isEnabled = true
-                }
-                R.id.fragment_activity_fee_study_chip_true -> {
-                    binding.fragmentActivityFeeStudyNumFl.visibility = View.VISIBLE
-                    updateFee()
-                    checkFeeInput()  // 추가된 메서드
-                }
+        binding.fragmentActivityFeeStudyChipTrue.setOnClickListener {
+            selectChip(it.id) // 선택된 Chip ID 전달
+        }
+
+        binding.fragmentActivityFeeStudyChipFalse.setOnClickListener {
+            selectChip(it.id) // 선택된 Chip ID 전달
+        }
+    }
+
+    private fun selectChip(selectedChipId: Int) {
+        // 모든 칩의 상태 초기화 (선택되지 않은 배경)
+        binding.fragmentActivityFeeStudyChipTrue.isChecked = false
+        binding.fragmentActivityFeeStudyChipFalse.isChecked = false
+
+        // 선택된 칩만 활성화
+        when (selectedChipId) {
+            R.id.fragment_activity_fee_study_chip_true -> {
+                binding.fragmentActivityFeeStudyChipTrue.isChecked = true
+                binding.fragmentActivityFeeStudyNumFl.visibility = View.VISIBLE
+                checkFeeInput() // 입력값 검사
+            }
+            R.id.fragment_activity_fee_study_chip_false -> {
+                binding.fragmentActivityFeeStudyChipFalse.isChecked = true
+                binding.fragmentActivityFeeStudyNumFl.visibility = View.GONE
+                binding.fragmentActivityFeeStudyPreviewBt.isEnabled = true
             }
         }
     }
+
 
     private fun setupFeeEditTextListener() {
         binding.fragmentActivityFeeStudyEt.addTextChangedListener(object : TextWatcher {
