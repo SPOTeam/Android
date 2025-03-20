@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.Image
+import android.provider.CalendarContract.Colors
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -13,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.ui.community.CommunityAPIService
@@ -30,6 +32,7 @@ class EndStudyDialog(val context: Context, val studyId : Int) {
     private lateinit var editText: EditText
     private lateinit var applyButton: Button
     private lateinit var charCountTextView: TextView
+    private lateinit var description: TextView
 
     fun start() {
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -41,6 +44,8 @@ class EndStudyDialog(val context: Context, val studyId : Int) {
         val cancelButton = dlg.findViewById<Button>(R.id.dialog_cancel_end_study_bt)
         editText = dlg.findViewById(R.id.dialog_study_result_et)
         charCountTextView = dlg.findViewById(R.id.et_count_tv)
+
+        description = dlg.findViewById(R.id.dialog_end_study_additional_comment_tv)
 
         applyButton.isEnabled = false
 
@@ -105,6 +110,12 @@ class EndStudyDialog(val context: Context, val studyId : Int) {
 
                 // 버튼 활성화/비활성화
                 applyButton.isEnabled = textLength > 0
+
+                if(textLength > 0 ) {
+                    description.setTextColor(ContextCompat.getColorStateList(context, R.color.selector_blue))
+                } else {
+                    description.setTextColor(ContextCompat.getColorStateList(context, R.color.button_disabled_text))
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {

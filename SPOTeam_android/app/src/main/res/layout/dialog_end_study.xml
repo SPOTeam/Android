@@ -145,6 +145,7 @@
         android:text="작성한 우리 스터디의 성과는 모든 팀원들의 히스토리로\n공통적으로 저장됩니다."
         android:fontFamily="@font/pretendard"
         android:textSize="12sp"
+        android:textColor="@color/button_disabled_text"
         app:layout_constraintStart_toStartOf="@id/dialog_study_result_et"
         app:layout_constraintTop_toBottomOf="@id/dialog_study_result_et" />
 
