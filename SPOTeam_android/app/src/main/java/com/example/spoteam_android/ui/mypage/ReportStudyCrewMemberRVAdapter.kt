@@ -60,13 +60,16 @@ class ReportStudyCrewMemberRVAdapter(
                 imageView.strokeWidth = 0f  // 테두리 제거
                 textView.setTextColor(Color.BLACK)
             }
-            // ✅ 클릭 이벤트 처리
-            binding.fragmentDetailStudyHomeHostuserIv.setOnClickListener {
-                val previousPosition = selectedPosition
-                selectedPosition = position
-                notifyItemChanged(previousPosition) // 이전 선택 해제
-                notifyItemChanged(selectedPosition) // 새로운 선택 반영
-                listener.onProfileClick(data)
+
+            if(position != 0) { // 방장 신고 X
+                // ✅ 클릭 이벤트 처리
+                binding.fragmentDetailStudyHomeHostuserIv.setOnClickListener {
+                    val previousPosition = selectedPosition
+                    selectedPosition = position
+                    notifyItemChanged(previousPosition) // 이전 선택 해제
+                    notifyItemChanged(selectedPosition) // 새로운 선택 반영
+                    listener.onProfileClick(data)
+                }
             }
         }
     }

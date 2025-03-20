@@ -50,6 +50,11 @@ class ReportStudyMemberFragment(private val context: Context, private val studyI
             dlg.dismiss()
         }
 
+        val btnClose = binding?.cancelReportCrewTv
+        btnClose?.setOnClickListener {
+            dlg.dismiss()
+        }
+
         fetchStudyMember() // ✅ 멤버 리스트 가져오기
 
         binding?.reportCrewTv?.setOnClickListener{
