@@ -31,6 +31,7 @@ class MandateStudyOwnerReasonFragment(private val studyId: Int, private val memb
 
         binding.btnTakeCharge.setOnClickListener{
             dismiss()
+            showMemberLeaveSuccessDialog()
         }
 
         return binding.root
@@ -39,5 +40,10 @@ class MandateStudyOwnerReasonFragment(private val studyId: Int, private val memb
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null // 메모리 누수 방지
+    }
+
+    private fun showMemberLeaveSuccessDialog() {
+        val successDialog = HostLeaveStudySuccessDialog(requireContext(),studyId)  // ✅ 다이얼로그 객체 생성
+        successDialog.start()  // ✅ 다이얼로그 표시
     }
 }

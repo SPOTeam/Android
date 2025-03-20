@@ -170,7 +170,8 @@ data class BoardItem (
     val themeTypes: List<String>,
     val regions: List<String>,
     val imageUrl: String,
-    var liked: Boolean
+    var liked: Boolean,
+    val isOwned: Boolean = false
 )
 
 
@@ -583,4 +584,21 @@ data class attendanceMemberData(
     var nickname: String,
     val profileImage: String,
     var introduction : String
+)
+
+data class HostApiResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: HostResult
+)
+
+data class HostResult(
+    val isOwned: Boolean,
+    val host: HostData
+)
+
+data class HostData(
+    val memberId: Int,
+    val nickname: String
 )

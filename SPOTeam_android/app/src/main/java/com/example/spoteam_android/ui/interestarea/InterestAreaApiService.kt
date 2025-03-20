@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.interestarea
 
+import com.example.spoteam_android.HostApiResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -101,9 +102,18 @@ interface MyInterestStudySpecificApiService {
         @Query("isOnline") isOnline: Boolean?,
         @Query("hasFee") hasFee: Boolean?,
         @Query("fee") fee: Int?,
-        @Query("theme") theme : String?
+        @Query("theme") theme: String?
     ): Call<ApiResponse>
 }
+
+
+interface GetHostInterface {
+    @GET("/spot/studies/{studyId}/host")
+    fun getHost(
+        @Path("studyId") studyId: Int
+    ): Call<HostApiResponse>
+}
+
 
 
 

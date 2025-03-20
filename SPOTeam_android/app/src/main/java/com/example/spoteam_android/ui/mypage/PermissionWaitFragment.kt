@@ -1,23 +1,31 @@
 package com.example.spoteam_android.ui.mypage
 
+import StudyApiService
+import StudyViewModel
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.LikeResponse
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentParticipatingStudyBinding
+import com.example.spoteam_android.databinding.FragmentPermissionWaitBinding
 import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MemberOnStudiesResponse
 import com.example.spoteam_android.ui.community.MyRecruitingStudyDetail
+import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
+import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.StudyFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,16 +34,19 @@ import retrofit2.Response
 
 class PermissionWaitFragment : Fragment() {
 
-    lateinit var binding: FragmentParticipatingStudyBinding
+    lateinit var binding: FragmentPermissionWaitBinding
     var memberId : Int = -1
     var page : Int = 0
     var size : Int = 10
+    private val studyViewModel: StudyViewModel by activityViewModels()
+    private lateinit var interestBoardAdapter: InterestVPAdapter
+    private lateinit var studyApiService: StudyApiService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentParticipatingStudyBinding.inflate(inflater, container, false)
+        binding = FragmentPermissionWaitBinding.inflate(inflater, container, false)
 
         // SharedPreferences 사용
         val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -57,6 +68,7 @@ class PermissionWaitFragment : Fragment() {
                 .commitAllowingStateLoss()
         }
 
+
         return binding.root
     }
 
@@ -75,14 +87,17 @@ class PermissionWaitFragment : Fragment() {
                         Log.d("InProgress", "responseBody: ${inProgressResponse?.isSuccess}")
                         if (inProgressResponse?.isSuccess == "true") {
                             val studyInfo = inProgressResponse.result.content
+                            Log.d("StudyInfo","${inProgressResponse.result.content}")
 
                             if(studyInfo.isNotEmpty()) {
                                 binding.emptyWaiting.visibility = View.GONE
                                 binding.participatingStudyReyclerview.visibility = View.VISIBLE
                                 initRecyclerView(studyInfo)
+                                interestBoardAdapter.notifyDataSetChanged()
                             } else {
                                 binding.emptyWaiting.visibility = View.VISIBLE
                                 binding.participatingStudyReyclerview.visibility = View.GONE
+                                interestBoardAdapter.notifyDataSetChanged()
                             }
 
                         } else {
@@ -129,22 +144,83 @@ class PermissionWaitFragment : Fragment() {
         })
 
         // 어댑터 초기화
-        val boardAdapter = BoardAdapter(itemList, onItemClick = { selectedItem -> }, onLikeClick = { _, _ -> })
+        interestBoardAdapter = InterestVPAdapter(itemList, onLikeClick = { selectedItem, likeButton ->
+            toggleLikeStatus(selectedItem, likeButton)
+        }, studyViewModel = studyViewModel)
 
-//        participatingboard.post {
-//            for (i in 0 until boardAdapter.itemCount) {
-//                val holder = participatingboard.findViewHolderForAdapterPosition(i) as? BoardAdapter.BoardViewHolder
-//                holder?.binding?.toggle?.visibility = View.VISIBLE
-//            }
-//        }
-
-        // RecyclerView에 어댑터 및 레이아웃 매니저 설정
-        participatingboard.adapter = boardAdapter
+                    // RecyclerView에 어댑터 및 레이아웃 매니저 설정
+        participatingboard.adapter = interestBoardAdapter
         participatingboard.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        boardAdapter.notifyDataSetChanged()
+
+        interestBoardAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
+            override fun onItemClick(data: BoardItem) {
+                studyViewModel.setStudyData(
+                    data.studyId,
+                    data.imageUrl,
+                    data.introduction
+                )
+
+                val fragment = DetailStudyFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        })
+
+        interestBoardAdapter.notifyDataSetChanged()
     }
+
+    private fun toggleLikeStatus(studyItem: BoardItem, likeButton: ImageView) {
+        val memberId = getMemberId(requireContext())
+
+        if (memberId != -1) {
+            studyApiService.toggleStudyLike(studyItem.studyId).enqueue(object : Callback<LikeResponse> {
+                override fun onResponse(call: Call<LikeResponse>, response: Response<LikeResponse>) {
+                    if (response.isSuccessful) {
+                        val newStatus = response.body()?.result?.status
+                        studyItem.liked = newStatus == "LIKE"
+                        val newIcon = if (studyItem.liked) R.drawable.ic_heart_filled else R.drawable.study_like
+                        likeButton.setImageResource(newIcon)
+
+                        // heartCount 즉시 증가 또는 감소
+                        studyItem.heartCount = if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
+
+                        // 최신 데이터 동기화를 위해 fetchDataAnyWhere와 fetchRecommendStudy를 다시 호출
+                    } else {
+                        Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
+                    Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun getMemberId(context: Context): Int {
+
+        var memberId: Int = -1
+
+        val sharedPreferences =
+            context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val currentEmail = sharedPreferences.getString("currentEmail", null)
+
+        // 현재 로그인된 사용자 정보를 로그
+        memberId = if (currentEmail != null) sharedPreferences.getInt(
+            "${currentEmail}_memberId",
+            -1
+        ) else -1
+
+        return memberId // 저장된 memberId 없을 시 기본값 -1 반환
+    }
+
+
 
 }
 
