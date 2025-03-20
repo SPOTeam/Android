@@ -797,3 +797,22 @@ data class EndStudyInfo (
     val studyName : String,
     val status : String
 )
+
+/************ 스터디 호스트 정보 가져오기 완료 ***********/
+data class GetHostResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: HostInfo
+)
+
+data class HostInfo (
+    val isOwned: Boolean,
+    val host : HostDetail
+)
+
+data class HostDetail (
+    val memberId : Int,
+    val nickname : String
+)
+

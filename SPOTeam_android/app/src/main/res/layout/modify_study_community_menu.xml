@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/edit_info"
+        android:id="@+id/study_content_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
@@ -15,52 +15,15 @@
         android:gravity="center"
         android:textColor="@color/black"
         android:padding="6dp"
-        android:text="정보 수정하기"
+        android:text="편집하기"
         android:textSize="14dp" />
     <View
-        android:id="@+id/view_1"
         android:layout_width="100dp"
         android:layout_height="1dp"
         android:background="@color/g300"/>
 
     <TextView
-        android:id="@+id/end_study"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:padding="6dp"
-        android:text="스터디 끝내기"
-        android:textSize="14dp" />
-    <View
-        android:id="@+id/view_2"
-        android:layout_width="100dp"
-        android:layout_height="1dp"
-        android:background="@color/g300"/>
-
-    <TextView
-        android:id="@+id/report_member"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:padding="6dp"
-        android:text="스터디원 신고"
-        android:textSize="14dp" />
-    <View
-        android:id="@+id/view_3"
-        android:layout_width="100dp"
-        android:layout_height="1dp"
-        android:background="@color/g300"/>
-
-    <TextView
-        android:id="@+id/leave_study"
+        android:id="@+id/study_content_report"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
@@ -68,7 +31,24 @@
         android:focusable="true"
         android:gravity="center"
         android:padding="6dp"
-        android:text="스터디 탈퇴"
+        android:textColor="@color/r500"
+        android:text="신고하기"
+        android:textSize="14dp" />
+    <View
+        android:layout_width="100dp"
+        android:layout_height="1dp"
+        android:background="@color/g300"/>
+
+    <TextView
+        android:id="@+id/study_content_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="삭제하기"
         android:textColor="@color/r500"
         android:textSize="14dp" />
 </LinearLayout>

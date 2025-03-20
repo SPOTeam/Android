@@ -61,10 +61,8 @@ class EndStudyDialog(val context: Context, val studyId : Int) {
 
         applyButton.setOnClickListener {
             val result = editText.text.toString()
-//            sendStudyEndResult(result)
-            val lastDlg =  EndStudyFinishDialog(context)
-            lastDlg.setContext(result)
-            lastDlg.start()
+            sendStudyEndResult(result)
+
             dlg.dismiss()
         }
 
@@ -73,7 +71,7 @@ class EndStudyDialog(val context: Context, val studyId : Int) {
 
     private fun sendStudyEndResult(result : String) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.endStudy(studyId)
+        service.endStudy(studyId, result)
             .enqueue(object : Callback<EndStudyResponse> {
                 override fun onResponse(
                     call: Call<EndStudyResponse>,
@@ -82,8 +80,9 @@ class EndStudyDialog(val context: Context, val studyId : Int) {
                     if (response.isSuccessful) {
                         val contentResponse = response.body()
                         if (contentResponse?.isSuccess == "true") {
-//                            val dlg =  EndStudyFinishDialog(context)
-//                            dlg.start()
+                            val lastDlg =  EndStudyFinishDialog(context)
+//                            lastDlg.setContext(result)
+                            lastDlg.start()
                         } else {
                             showError(contentResponse?.message)
                         }

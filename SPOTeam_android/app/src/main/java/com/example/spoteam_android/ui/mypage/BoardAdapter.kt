@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.mypage
 
+import android.content.Context
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -9,13 +10,18 @@ import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.R
 import com.example.spoteam_android.ReportStudyMemberFragment
+import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
+import com.example.spoteam_android.ui.community.CommunityAPIService
+import com.example.spoteam_android.ui.community.GetHostResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class BoardAdapter(
     private val itemList: ArrayList<BoardItem>,
@@ -23,9 +29,11 @@ class BoardAdapter(
     private val onLikeClick: (BoardItem, ImageView) -> Unit // onLikeClick 추가
 ) : RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {
 
+    private lateinit var context : Context
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
         val binding = ItemRecyclerViewPlusToggleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
+        context = parent.context
         return BoardViewHolder(binding)
     }
 
@@ -76,37 +84,6 @@ class BoardAdapter(
             }
         }
 
-//        private fun showPopupMenu(view: View, item : BoardItem) {
-//            val popupMenu = PopupMenu(view.context, view)
-//            val inflater: MenuInflater = popupMenu.menuInflater
-//            val exit = ExitStudyPopupFragment(view.context, this@BoardAdapter, adapterPosition)
-//            val report = ReportStudyCrewDialog(view.context, item.studyId)
-//            inflater.inflate(R.menu.menu_item_options, popupMenu.menu)
-//
-//            val endStudyItem = popupMenu.menu.findItem(R.id.end_study)
-//            endStudyItem.isVisible = true //호스트인지 아닌지에 따라 변경 필요
-//
-//            popupMenu.setOnMenuItemClickListener { menuItem ->
-//                when (menuItem.itemId) {
-//                    R.id.exit_study -> {
-//                        exit.start()
-//                        true
-//                    }
-//                    R.id.report_study -> {
-//                        report.start()
-//                        true
-//                    }
-//                    R.id.end_study -> {
-
-//                        true
-//                    }
-//                    else -> false
-//                }
-//            }
-//            popupMenu.show()
-//        }
-//    }
-
         private fun showPopupMenu(view: View, studyId: Int) {
             // 팝업 레이아웃 가져오기
             val popupView = LayoutInflater.from(view.context).inflate(R.layout.modify_study_popup_menu, null)
@@ -121,12 +98,15 @@ class BoardAdapter(
 
             // 팝업 내부 요소 가져오기
             val editInfo = popupView.findViewById<TextView>(R.id.edit_info)
-
+            val view1 = popupView.findViewById<View>(R.id.view_1)
             val endStudy = popupView.findViewById<TextView>(R.id.end_study)
-            endStudy.isVisible = true // 호스트인지아닌지에 대해서 변경 필요
-
+            val view2 = popupView.findViewById<View>(R.id.view_2)
             val reportMember = popupView.findViewById<TextView>(R.id.report_member)
+            val view3 = popupView.findViewById<View>(R.id.view_3)
             val leaveStudy = popupView.findViewById<TextView>(R.id.leave_study)
+
+            getIsHost(studyId, endStudy, view1, reportMember, view2)
+
 
             // 클릭 리스너 설정
             editInfo.setOnClickListener {
@@ -168,7 +148,60 @@ class BoardAdapter(
         }
     }
 
+    fun getIsHost(
+        studyId: Int,
+        endStudy: TextView,
+        view1: View,
+        reportMember: TextView,
+        view2: View
+    ) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getStudyHost(studyId)
+            .enqueue(object : Callback<GetHostResponse> {
+                override fun onResponse(
+                    call: Call<GetHostResponse>,
+                    response: Response<GetHostResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val hostResponse = response.body()
+                        if (hostResponse?.isSuccess == true) {
+                            Log.d("isOwned", hostResponse.code)
+                            if(hostResponse.result.isOwned) {
+                                endStudy.visibility = View.VISIBLE
+                                view1.visibility = View.VISIBLE
+                                reportMember.visibility = View.VISIBLE
+                                view2.visibility = View.VISIBLE
+                            } else {
+                                endStudy.visibility = View.GONE
+                                view1.visibility = View.GONE
+                                reportMember.visibility = View.GONE
+                                view2.visibility = View.GONE
+                            }
+                        } else {
+                            showError(hostResponse?.message)
+                            endStudy.visibility = View.GONE
+                            view1.visibility = View.GONE
+                            reportMember.visibility = View.GONE
+                            view2.visibility = View.GONE
+                        }
+                    } else {
+                        showError(response.code().toString())
+                        endStudy.visibility = View.GONE
+                        view1.visibility = View.GONE
+                        reportMember.visibility = View.GONE
+                        view2.visibility = View.GONE
+                    }
+                }
 
+                override fun onFailure(call: Call<GetHostResponse>, t: Throwable) {
+                    Log.e("MyStudyAttendance", "Failure: ${t.message}", t)
+                }
+            })
+    }
+
+    private fun showError(message: String?) {
+        Toast.makeText(context, "Error: $message", Toast.LENGTH_SHORT).show()
+    }
 
     fun updateList(newList: List<BoardItem>) {
         itemList.clear()
