@@ -7,13 +7,19 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
+import android.widget.PopupWindow
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -49,16 +55,11 @@ import java.util.Locale
 class MyStudyPostContentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMystudyCommunityContentBinding
-    var currentStudyId : Int = -1
+    private var currentStudyId : Int = -1
     var postId : Int = -1
     var parentCommentId : Int? = 0
-    var canComment : Boolean = false
-    var currentWriter : Boolean = false
-
-//    var initialIsliked : Boolean = false
-//    var initialIsLikedNum : Int = 0
-//    var compareIsliked : Boolean = false
-//    var compareIslikedNum : Int = 0
+    private var canComment : Boolean = false
+    private var currentWriter : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -288,58 +289,65 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun showPopupMenu(view: View) {
-        val popupMenu = PopupMenu(view.context, view)
-        val inflater: MenuInflater = popupMenu.menuInflater
-        val fragmentManager = (view.context as AppCompatActivity).supportFragmentManager
 
-        inflater.inflate(R.menu.menu_community_home_options, popupMenu.menu)
+        val popupView = LayoutInflater.from(view.context).inflate(R.layout.modify_study_community_menu, null)
+
+        // PopupWindow 생성
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
 
         // ✅ "신고하기" 버튼을 동적으로 숨기거나 보이게 설정
-        val reportContentItem = popupMenu.menu.findItem(R.id.edit_report)
+        val reportContentItem = popupView.findViewById<TextView>(R.id.study_content_report)
         reportContentItem.isVisible = !currentWriter
 
         // ✅ "수정하기" 버튼을 동적으로 숨기거나 보이게 설정
-        val editMenuItem = popupMenu.menu.findItem(R.id.edit_content)
+        val editMenuItem = popupView.findViewById<TextView>(R.id.study_content_edit)
         editMenuItem.isVisible = currentWriter
 
         // ✅ "삭제하기" 버튼을 동적으로 숨기거나 보이게 설정
-        val deleteMenuItem = popupMenu.menu.findItem(R.id.delete_content)
+        val deleteMenuItem = popupView.findViewById<TextView>(R.id.study_content_delete)
         deleteMenuItem.isVisible = currentWriter
 
-        popupMenu.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.edit_report -> {
-                    // ✅ 신고 다이얼로그 생성 및 표시
-                    reportStudyPost(view, fragmentManager)
-                    true
-                }
+        reportContentItem.setOnClickListener{
+            // ✅ 신고 다이얼로그 생성 및 표시
+            reportStudyPost(view, supportFragmentManager)
+        }
 
-                R.id.edit_content -> {
-                    if (currentWriter) {
-                        val editContext = MyStudyEditContentFragment().apply {
-                            arguments = Bundle().apply {
-                                putInt("MyStudyId", currentStudyId)
-                                putInt("MyStudyPostId", postId)
-                            }
-                            setStyle(
-                                BottomSheetDialogFragment.STYLE_NORMAL,
-                                R.style.AppBottomSheetDialogBorder20WhiteTheme
-                            )
-                        }
-                        editContext.show(fragmentManager, "EditContent")
+        editMenuItem.setOnClickListener {
+            if (currentWriter) {
+                val editContext = MyStudyEditContentFragment().apply {
+                    arguments = Bundle().apply {
+                        putInt("MyStudyId", currentStudyId)
+                        putInt("MyStudyPostId", postId)
                     }
-                    true
+                    setStyle(
+                        BottomSheetDialogFragment.STYLE_NORMAL,
+                        R.style.AppBottomSheetDialogBorder20WhiteTheme
+                    )
                 }
 
-                R.id.delete_content -> {
-                    deleteStudyPostContent(view, fragmentManager)
-                    true
-                }
-
-                else -> false
+                editContext.show(supportFragmentManager, "EditContent")
             }
         }
-        popupMenu.show()
+
+        deleteMenuItem.setOnClickListener {
+            deleteStudyPostContent(view, supportFragmentManager)
+        }
+
+        // 외부 클릭 시 닫힘 설정
+        popupWindow.isOutsideTouchable = true
+        popupWindow.isFocusable = true
+        popupWindow.setBackgroundDrawable(view.context.getDrawable(R.drawable.custom_popup_background))
+
+        val location = IntArray(2)
+        view.getLocationOnScreen(location) // 화면 전체 기준 좌표 가져오기
+        val x = location[0]
+        val y = location[1]
+        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y + 100)
     }
 
     private fun deleteStudyPostContent(view: View, fragmentManager: FragmentManager) {
@@ -393,8 +401,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         if (postContentResponse?.isSuccess == "true") {
                             val postContent = postContentResponse.result
                             Log.d("ReportedStudyPost", "response: ${postContent.title}")
-                            val reportContentDialog = ReportContentDialog(view.context)
-                            reportContentDialog.start(fragmentManager) // start() 메서드가 있는 경우 사용
+                            val reportContentDialog = ReportContentDialog(view.context, fragmentManager)
+                            reportContentDialog.start() // start() 메서드가 있는 경우 사용
                         } else {
                             showError(postContentResponse?.message)
                         }
@@ -593,11 +601,6 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun initContentInfo(contentInfo: StudyPostContentInfo) {
-//        compareIsliked = contentInfo.isLiked
-//        compareIslikedNum = contentInfo.likeNum
-//        initialIsliked = contentInfo.isLiked
-//        initialIsLikedNum = contentInfo.likeNum
-
         binding.communityContentWriterTv.text = contentInfo.member.name
         binding.communityContentDateTv.text = formatWrittenTime(contentInfo.createdAt)
         binding.communityContentTitleTv.text = contentInfo.title

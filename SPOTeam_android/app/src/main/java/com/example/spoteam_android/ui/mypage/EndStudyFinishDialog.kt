@@ -41,13 +41,13 @@ class EndStudyFinishDialog(val context: Context) {
 
         val okButton = dlg.findViewById<Button>(R.id.dialog_complete_study_finish_bt)
         okButton.setOnClickListener {
-            Toast.makeText(context, resultContext,Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, resultContext,Toast.LENGTH_SHORT).show()
             dlg.dismiss()
         }
 
         val closeButton = dlg.findViewById<ImageView>(R.id.cancel_x_finish_study_iv)
         closeButton.setOnClickListener {
-            Toast.makeText(context, resultContext,Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, resultContext,Toast.LENGTH_SHORT).show()
             dlg.dismiss()
         }
 

@@ -9,10 +9,10 @@ import androidx.fragment.app.FragmentManager
 import com.example.spoteam_android.R
 
 
-class ReportContentDialog(val context: Context)  {
+class ReportContentDialog(val context: Context, val fragmentManager: FragmentManager)  {
     private val dlg = android.app.Dialog(context)
 
-    fun start(fragmentManager: FragmentManager) {
+    fun start() {
         // 타이틀바 제거
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
         // 커스텀 다이얼로그 radius 적용

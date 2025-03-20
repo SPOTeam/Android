@@ -336,8 +336,14 @@ interface CommunityAPIService {
         @Path("postId") postId : Int
     ) : Call<ReportCommunityContentResponse>
 
-    @PATCH("/spot/studies/{studyId}/temination")
+    @PATCH("/spot/studies/{studyId}/termination")
     fun endStudy(
-        @Path("studyId") studyId : Int
+        @Path("studyId") studyId : Int,
+        @Query("performance") performance : String
     ) : Call<EndStudyResponse>
+
+    @GET("/spot/studies/{studyId}/host")
+    fun getStudyHost(
+        @Path("studyId") studyId : Int
+    ) : Call<GetHostResponse>
 }

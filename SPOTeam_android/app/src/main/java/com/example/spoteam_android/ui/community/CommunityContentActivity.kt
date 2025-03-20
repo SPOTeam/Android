@@ -275,8 +275,8 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
     /**************************/
 
     private fun showSuccessReportDialog(view: View, fragmentManager: FragmentManager) {
-        val reportContentDialog = ReportContentDialog(view.context)
-        reportContentDialog.start(fragmentManager)
+        val reportContentDialog = ReportContentDialog(view.context, fragmentManager)
+        reportContentDialog.start()
     }
 
     private fun showFailedDeleteDialog(view: View, fragmentManager: FragmentManager) {
@@ -356,8 +356,8 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
                     if (response.isSuccessful) {
                         val contentResponse = response.body()
                         if (contentResponse?.isSuccess == "true") {
-                            val reportContentDialog = ReportContentDialog(view.context)
-                            reportContentDialog.start(fragmentManager)
+                            val reportContentDialog = ReportContentDialog(view.context, fragmentManager)
+                            reportContentDialog.start()
                         } else {
                             showError(contentResponse?.message)
                         }
