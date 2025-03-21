@@ -56,6 +56,14 @@ class ParticipatingStudyFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
+        parentFragmentManager.setFragmentResultListener(
+            "host_withdraw_success",
+            viewLifecycleOwner
+        ) { _, _ ->
+            Log.d("ParticipatingStudy", "✅ 위임 성공 이벤트 수신 → 목록 새로고침")
+            fetchInProgressStudy()
+        }
+
 
 
         return binding.root

@@ -602,3 +602,23 @@ data class HostData(
     val memberId: Int,
     val nickname: String
 )
+
+data class HostWithDrawl(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: WithDrawlData
+)
+
+data class WithDrawlData(
+    val studyId: Int,
+    val studyName: String,
+    val memberId: Int,
+    val memberName: String
+)
+
+data class WithdrawHostRequest(
+    val newHostId: Int,
+    val reason: String
+)
+

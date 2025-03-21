@@ -12,8 +12,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.spoteam_android.R
 
 
-class HostLeaveStudySuccessDialog(private val context: Context,
-                               private val studyID: Int, ){
+class HostLeaveStudySuccessDialog(private val context: Context){
 
     private val dlg = Dialog(context)
 
