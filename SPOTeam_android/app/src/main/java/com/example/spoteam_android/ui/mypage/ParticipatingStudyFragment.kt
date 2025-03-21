@@ -64,6 +64,15 @@ class ParticipatingStudyFragment : Fragment() {
             fetchInProgressStudy()
         }
 
+        parentFragmentManager.setFragmentResultListener(
+            "study_withdraw_success",
+            viewLifecycleOwner
+        ) { _, _ ->
+            Log.d("ParticipatingStudy", "✅ 탈퇴 이벤트 수신 → 목록 새로고침")
+            fetchInProgressStudy()
+        }
+
+
 
 
         return binding.root

@@ -1,6 +1,7 @@
 package com.example.spoteam_android.ui.mypage
 
 import android.app.AlertDialog
+import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.BoardItem
@@ -161,10 +163,23 @@ class BoardAdapter(
 
                         leaveStudy.setOnClickListener {
                             // 스터디 탈퇴 다이얼로그 띄우기
-                            val reportDialog = MemberLeaveStudyDialog(view.context, studyId)
+                            val reportDialog = MemberLeaveStudyDialog(
+                                context = view.context,
+                                studyID = studyId,
+                                listener = object : MemberLeaveStudyDialog.OnWithdrawSuccessListener {
+                                    override fun onWithdrawSuccess() {
+                                        // ✅ 여기서 원하는 동작 수행
+                                        // 예: 로그, 토스트, FragmentResult 등
+                                        (view.context as? FragmentActivity)?.supportFragmentManager?.setFragmentResult(
+                                            "study_withdraw_success", Bundle()
+                                        )
+                                    }
+                                }
+                            )
                             reportDialog.start()
                             popupWindow.dismiss()
                         }
+
 
                         // 외부 클릭 시 닫힘 설정
                         popupWindow.isOutsideTouchable = true

@@ -73,7 +73,7 @@ class MandateStudyOwnerReasonFragment(private val studyId: Int, private val memb
         val service = RetrofitInstance.retrofit.create(GetHostInterface::class.java)
 
         val request = WithdrawHostRequest(newHostId, reason)
-        val call = service.withDrwalHost(studyId, request)
+        val call = service.withDrawlHost(studyId, request)
 
 
         call.enqueue(object : Callback<HostWithDrawl> {

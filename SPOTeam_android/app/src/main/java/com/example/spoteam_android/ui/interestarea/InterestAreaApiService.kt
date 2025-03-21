@@ -120,9 +120,14 @@ interface GetHostInterface {
 
 
     @HTTP(method = "DELETE", path = "/spot/studies/{studyId}/hosts/withdrawal", hasBody = true)
-    fun withDrwalHost(
+    fun withDrawlHost(
         @Path("studyId") studyId: Int,
         @Body body: WithdrawHostRequest
+    ): Call<HostWithDrawl>
+
+    @HTTP(method = "DELETE", path = "/spot/studies/{studyId}/withdrawal", hasBody = false)
+    fun withDrawlMember(
+        @Path("studyId") studyId: Int
     ): Call<HostWithDrawl>
 }
 
