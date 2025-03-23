@@ -440,10 +440,8 @@ data class MyStudyAttendanceMemberInfo(
 
 data class AttendanceMemberInfo(
     val memberId: Int,
-    val name : String,
+    val nickname : String,
     val profileImage: String,
-    val isOwned: Boolean,
-    val isAttending: Boolean
 )
 
 /************신청자 소개 결과***********/
@@ -772,4 +770,49 @@ data class ScrapContent (
     val isLast: Boolean
 )
 
+/************ 스크랩 게시글 가져오기 완료 ***********/
+data class ReportCommunityContentResponse (
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: ReportInfo
+)
+
+data class ReportInfo (
+    val reportPostId : Int,
+    val reporterId : Int,
+    val reportedAt : String
+)
+
+/************ 스크랩 게시글 가져오기 완료 ***********/
+data class EndStudyResponse (
+    val isSuccess: String,
+    val code: String,
+    val message: String,
+    val result: EndStudyInfo
+)
+
+data class EndStudyInfo (
+    val studyId : Int,
+    val studyName : String,
+    val status : String
+)
+
+/************ 스터디 호스트 정보 가져오기 완료 ***********/
+data class GetHostResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: HostInfo
+)
+
+data class HostInfo (
+    val isOwned: Boolean,
+    val host : HostDetail
+)
+
+data class HostDetail (
+    val memberId : Int,
+    val nickname : String
+)
 

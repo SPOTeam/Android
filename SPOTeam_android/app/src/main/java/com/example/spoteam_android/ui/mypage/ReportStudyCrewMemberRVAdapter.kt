@@ -1,23 +1,26 @@
 package com.example.spoteam_android.ui.mypage
 
+import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemDetailStudyHomeMemberBinding
 import com.example.spoteam_android.ui.community.MembersDetail
+import com.google.android.material.imageview.ShapeableImageView
 
 class ReportStudyCrewMemberRVAdapter(
     private var dataList: List<MembersDetail>,
     private val listener: OnMemberClickListener
 ) : RecyclerView.Adapter<ReportStudyCrewMemberRVAdapter.ViewHolder>() {
 
+    private var selectedPosition = -1
+
     interface OnMemberClickListener {
         fun onProfileClick(member: MembersDetail)
     }
-
-    private var selectedPosition = RecyclerView.NO_POSITION // ✅ 선택된 프로필 위치 저장
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemDetailStudyHomeMemberBinding =
@@ -41,25 +44,32 @@ class ReportStudyCrewMemberRVAdapter(
 
             binding.profileNickname.text = data.nickname
 
-            // ✅ 선택된 프로필이면 테두리 추가, 그렇지 않으면 초기화
-            if (position == selectedPosition) {
-                binding.fragmentDetailStudyHomeHostuserIv.setBackgroundResource(R.drawable.selected_border)
+            // 방장 아이콘 표시
+            binding.fragmentConsiderAttendanceMemberHostIv.visibility = if (position == 0) View.VISIBLE else View.GONE
+
+            val imageView = binding.fragmentDetailStudyHomeHostuserIv
+            val textView = binding.profileNickname
+
+
+            // ✅ 선택된 상태에서 테두리 적용
+            if (selectedPosition == position) {
+                imageView.strokeWidth = 6f  // 두께 설정
+                imageView.strokeColor = binding.root.context.getColorStateList(R.color.red)  // 빨간색 테두리
+                textView.setTextColor(Color.RED)
             } else {
-                binding.fragmentDetailStudyHomeHostuserIv.setBackgroundResource(0) // 기본 배경
+                imageView.strokeWidth = 0f  // 테두리 제거
+                textView.setTextColor(Color.BLACK)
             }
 
-            // ✅ 클릭 이벤트 처리
-            binding.fragmentDetailStudyHomeHostuserIv.setOnClickListener {
-                val previousPosition = selectedPosition
-                selectedPosition = position
-
-                // ✅ 이전 선택된 항목 갱신 (테두리 제거)
-                notifyItemChanged(previousPosition)
-                // ✅ 새로 선택된 항목 갱신 (테두리 추가)
-                notifyItemChanged(selectedPosition)
-
-                // ✅ 클릭 리스너 호출
-                listener.onProfileClick(data)
+            if(position != 0) { // 방장 신고 X
+                // ✅ 클릭 이벤트 처리
+                binding.fragmentDetailStudyHomeHostuserIv.setOnClickListener {
+                    val previousPosition = selectedPosition
+                    selectedPosition = position
+                    notifyItemChanged(previousPosition) // 이전 선택 해제
+                    notifyItemChanged(selectedPosition) // 새로운 선택 반영
+                    listener.onProfileClick(data)
+                }
             }
         }
     }

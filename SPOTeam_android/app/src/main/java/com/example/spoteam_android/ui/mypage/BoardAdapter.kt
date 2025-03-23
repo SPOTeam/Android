@@ -2,14 +2,13 @@ package com.example.spoteam_android.ui.mypage
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.content.Context
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
@@ -34,8 +33,11 @@ class BoardAdapter(
     private val onLikeClick: (BoardItem, ImageView) -> Unit // onLikeClick 추가
 ) : RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {
 
+    private lateinit var context : Context
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
         val binding = ItemRecyclerViewPlusToggleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        context = parent.context
         return BoardViewHolder(binding)
     }
 
@@ -235,6 +237,8 @@ class BoardAdapter(
                     callback(null)
                 }
             })
+
+
         }
 
     }

@@ -330,4 +330,20 @@ interface CommunityAPIService {
         @Query("pageNumber") pageNumber: Int,
         @Query("pageSize") pageSize : Int
     ) : Call<GetScrapResponse>
+
+    @POST("/spot/posts/{postId}/report")
+    fun reportCommunityContent(
+        @Path("postId") postId : Int
+    ) : Call<ReportCommunityContentResponse>
+
+    @PATCH("/spot/studies/{studyId}/termination")
+    fun endStudy(
+        @Path("studyId") studyId : Int,
+        @Query("performance") performance : String
+    ) : Call<EndStudyResponse>
+
+    @GET("/spot/studies/{studyId}/host")
+    fun getStudyHost(
+        @Path("studyId") studyId : Int
+    ) : Call<GetHostResponse>
 }

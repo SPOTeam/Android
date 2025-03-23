@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="390dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
@@ -35,7 +35,7 @@
         app:layout_constraintStart_toEndOf="@id/fragment_consider_attendance_member_profile_iv"/>
 
     <TextView
-        android:id="@+id/fragment_cosider_attendance_member_temperature_tv"
+        android:id="@+id/fragment_cosider_attendance_member_introduction_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="지원 동기 입력란"
@@ -55,8 +55,8 @@
         android:background="@drawable/report_crew_enable"
         android:paddingVertical="5dp"
         android:paddingHorizontal="57dp"
-        app:layout_constraintStart_toStartOf="@id/fragment_cosider_attendance_member_temperature_tv"
-        app:layout_constraintTop_toBottomOf="@id/fragment_cosider_attendance_member_temperature_tv"/>
+        app:layout_constraintStart_toStartOf="@id/fragment_cosider_attendance_member_introduction_tv"
+        app:layout_constraintTop_toBottomOf="@id/fragment_cosider_attendance_member_introduction_tv"/>
 
     <TextView
         android:id="@+id/accept_attendance"

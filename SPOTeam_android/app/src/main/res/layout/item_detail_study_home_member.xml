@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="50dp"
+    android:layout_width="55dp"
     android:layout_height="73dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginEnd="10dp"
@@ -8,7 +8,7 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/fragment_detail_study_home_hostuser_iv"
-        android:layout_width="match_parent"
+        android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/ic_host_profile"
         android:scaleType="centerCrop"

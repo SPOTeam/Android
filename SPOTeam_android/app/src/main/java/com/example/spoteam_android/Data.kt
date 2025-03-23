@@ -172,6 +172,7 @@ data class BoardItem (
     val imageUrl: String,
     var liked: Boolean,
     val isOwned: Boolean = false
+    val isHost : Boolean
 )
 
 
@@ -580,7 +581,6 @@ data class RegionData(
 
 data class attendanceMemberData(
     val memberId : Int,
-    val name : String,
     var nickname: String,
     val profileImage: String,
     var introduction : String

@@ -46,6 +46,8 @@ class ConsiderAttendanceMembersRVAdapter(private var dataList: ArrayList<attenda
         fun bind(data: attendanceMemberData) {
 //            binding.fragmentConsiderAttendanceMemberProfileIv.setImageResource(data.profileImage.)
             binding.fragmentCosiderAttendanceMemberProfileTv.text = data.nickname
+            binding.fragmentCosiderAttendanceMemberIntroductionTv.text = data.introduction
+
             Glide.with(binding.root.context)
                 .load(data.profileImage)
                 .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지 사용

@@ -258,7 +258,8 @@ class SearchFragment : Fragment() {
                             themeTypes = study.themeTypes,
                             regions = study.regions,
                             imageUrl = study.imageUrl,
-                            liked = study.liked
+                            liked = study.liked,
+                            isHost = false
                         )
                     } ?: emptyList()
 
@@ -352,7 +353,8 @@ class SearchFragment : Fragment() {
                             themeTypes = result.themes,
                             regions = listOf(), // 지역 정보가 없다면 빈 리스트 사용
                             imageUrl = "",
-                            liked = false // Like 정보가 없으면 기본값 사용
+                            liked = false, // Like 정보가 없으면 기본값 사용
+                            isHost = false
                         )
                         boardItems.add(boardItem)
                         updateRecyclerView(boardItems)

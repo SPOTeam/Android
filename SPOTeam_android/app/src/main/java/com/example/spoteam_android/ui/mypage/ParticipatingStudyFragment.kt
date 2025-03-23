@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.mypage
 
+import StudyViewModel
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.HostApiResponse
@@ -30,6 +32,8 @@ import retrofit2.Response
 class ParticipatingStudyFragment : Fragment() {
 
     lateinit var binding: FragmentParticipatingStudyBinding
+    val studyViewModel: StudyViewModel by activityViewModels()
+
     var memberId : Int = -1
     var page : Int = 0
     var size : Int = 10
@@ -143,7 +147,8 @@ class ParticipatingStudyFragment : Fragment() {
                 themeTypes = detail.themeTypes,
                 regions = detail.regions,
                 imageUrl = detail.imageUrl,
-                liked = detail.liked
+                liked = detail.liked,
+                isHost = false
             )
         })
 

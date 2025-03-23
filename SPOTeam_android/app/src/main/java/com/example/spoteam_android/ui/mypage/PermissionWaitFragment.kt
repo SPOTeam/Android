@@ -139,7 +139,8 @@ class PermissionWaitFragment : Fragment() {
                 themeTypes = detail.themeTypes,
                 regions = detail.regions,
                 imageUrl = detail.imageUrl,
-                liked = detail.liked
+                liked = detail.liked,
+                isHost = false
             )
         })
 

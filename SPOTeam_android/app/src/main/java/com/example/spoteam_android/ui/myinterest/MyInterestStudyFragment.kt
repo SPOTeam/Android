@@ -370,7 +370,8 @@ class MyInterestStudyFragment : Fragment() {
                                 themeTypes = study.themeTypes,
                                 regions = study.regions,
                                 imageUrl = study.imageUrl,
-                                liked = study.liked
+                                liked = study.liked,
+                                isHost = false
                             )
                             boardItems.add(boardItem)
                         }
@@ -444,7 +445,8 @@ class MyInterestStudyFragment : Fragment() {
                                 themeTypes = study.themeTypes,
                                 regions = study.regions,
                                 imageUrl = study.imageUrl,
-                                liked = study.liked
+                                liked = study.liked,
+                                isHost = false
                             )
                             boardItems.add(boardItem)
                         }
