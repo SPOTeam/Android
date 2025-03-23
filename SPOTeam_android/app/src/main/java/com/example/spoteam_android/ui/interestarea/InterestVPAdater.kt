@@ -58,11 +58,8 @@ class InterestVPAdapter(
         holder.likeButton.setOnClickListener {
             onLikeClick(currentItem, holder.likeButton)
             Log.d("InterestVPAdapter", "Like button clicked for item: ${currentItem.studyId}")
-
         }
     }
-
-    override fun getItemCount() = dataList.size
 
     inner class BoardViewHolder(val binding: ItemRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val likeButton: ImageView = binding.heartCountIv
@@ -75,11 +72,11 @@ class InterestVPAdapter(
             binding.tvName3.text = item.heartCount.toString()
             binding.tvName4.text = item.hitNum.toString()
 
-            // 이미지 로드
+            // Glide를 활용한 이미지 로드
             Glide.with(binding.root.context)
                 .load(item.imageUrl)
-                .error(R.drawable.fragment_calendar_spot_logo)
-                .fallback(R.drawable.fragment_calendar_spot_logo)
+                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지
+                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지
                 .into(binding.ImageView4)
 
             // 하트 아이콘 상태 설정
@@ -87,6 +84,10 @@ class InterestVPAdapter(
             binding.heartCountIv.setImageResource(heartIcon)
         }
     }
+
+
+    override fun getItemCount() = dataList.size
+
 
     fun updateList(newList: List<BoardItem>) {
         dataList.clear()

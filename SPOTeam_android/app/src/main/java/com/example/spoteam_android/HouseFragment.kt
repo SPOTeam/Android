@@ -37,6 +37,7 @@ import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
 import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
 import com.example.spoteam_android.ui.recruiting.RecruitingStudyFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.example.spoteam_android.ui.study.DetailStudyHomeFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.example.spoteam_android.weather.WeatherViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -152,6 +153,7 @@ class HouseFragment : Fragment() {
                 )
 
                 val fragment = DetailStudyFragment()
+                fetchStudyMembers(data.studyId)
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.main_frm, fragment)
                     .addToBackStack(null)
@@ -522,6 +524,34 @@ class HouseFragment : Fragment() {
         ) else -1
 
         return memberId // 저장된 memberId 없을 시 기본값 -1 반환
+    }
+
+    private fun fetchStudyMembers(studyId: Int) {
+        val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val currentMemberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
+
+        api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
+            override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { memberResponse ->
+                        val members = memberResponse.result?.members ?: emptyList()
+                        members.forEach { member ->
+                            Log.d("StudyMembers", "Member ID: ${member.memberId}, Nickname: ${member.nickname}, Profile Image: ${member.profileImage ?: "NULL"}")
+                        }
+
+
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
 

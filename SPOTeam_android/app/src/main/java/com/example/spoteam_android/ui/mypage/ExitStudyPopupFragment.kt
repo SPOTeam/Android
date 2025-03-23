@@ -27,7 +27,6 @@ class ExitStudyPopupFragment(private val context: Context, private val adapter: 
         btnExit.setOnClickListener {
             Toast.makeText(context, "스터디에서 탈퇴했습니다.", Toast.LENGTH_SHORT).show()
             dlg.dismiss()
-            adapter.removeItem(position)
         }
 
 

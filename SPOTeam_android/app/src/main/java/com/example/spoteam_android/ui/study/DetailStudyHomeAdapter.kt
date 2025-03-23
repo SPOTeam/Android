@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.ItemDetailFragmentSceduleRvBinding
 
-class DetailStudyHomeAdapter(private val itemList: ArrayList<SceduleItem>) :
-    RecyclerView.Adapter<DetailStudyHomeAdapter.SceduleViewHolder>() {
+        class DetailStudyHomeAdapter(private val itemList: ArrayList<SceduleItem>) :
+            RecyclerView.Adapter<DetailStudyHomeAdapter.SceduleViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SceduleViewHolder {
-        val binding = ItemDetailFragmentSceduleRvBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SceduleViewHolder {
+                val binding = ItemDetailFragmentSceduleRvBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SceduleViewHolder(binding)
     }
 
