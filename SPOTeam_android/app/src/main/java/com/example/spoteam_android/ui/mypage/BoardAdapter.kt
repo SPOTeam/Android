@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,6 +20,7 @@ import com.example.spoteam_android.BoardItem
 import com.example.spoteam_android.HostApiResponse
 import com.example.spoteam_android.HostResult
 import com.example.spoteam_android.R
+import com.example.spoteam_android.ReportStudyMemberFragment
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 import com.example.spoteam_android.ui.community.MyRecruitingStudyDetail
@@ -92,13 +94,9 @@ class BoardAdapter(
             getHost(studyId) { hostResult ->
                 if (hostResult != null) {
                     val isHost = hostResult.isOwned  // ✅ 호스트 여부 확인
-                    val popupView = if (isHost) {
-                        LayoutInflater.from(view.context)
-                            .inflate(R.layout.modify_study_popup_menu, null)
-                    } else {
-                        LayoutInflater.from(view.context)
-                            .inflate(R.layout.modify_study_popup_studyone_menu, null)
-                    }
+
+                    val popupView = LayoutInflater.from(view.context)
+                        .inflate(R.layout.modify_study_popup_menu, null)
 
                     // PopupWindow 생성
                     val popupWindow = PopupWindow(
@@ -108,67 +106,66 @@ class BoardAdapter(
                         true
                     )
 
-                    if (isHost){
-                        val editInfo = popupView.findViewById<TextView>(R.id.edit_info)
-                        val endStudy = popupView.findViewById<TextView>(R.id.end_study)
-                        val reportMember = popupView.findViewById<TextView>(R.id.report_member)
-                        val leaveStudy = popupView.findViewById<TextView>(R.id.leave_study)
+                    val editInfo = popupView.findViewById<TextView>(R.id.edit_info)
+                    val view1 = popupView.findViewById<View>(R.id.view_1)
+                    val endStudy = popupView.findViewById<TextView>(R.id.end_study)
+                    val view2 = popupView.findViewById<View>(R.id.view_2)
+                    val reportMember = popupView.findViewById<TextView>(R.id.report_member)
+                    val view3 = popupView.findViewById<View>(R.id.view_3)
+                    val leaveStudy = popupView.findViewById<TextView>(R.id.leave_study)
 
-                        // 클릭 리스너 설정
-                        editInfo.setOnClickListener {
-                            Toast.makeText(view.context, "정보 수정하기 클릭됨", Toast.LENGTH_SHORT).show()
+                    if (isHost) {
+                        editInfo.visibility = View.VISIBLE
+                        view1.visibility = View.VISIBLE
+                        endStudy.visibility = View.VISIBLE
+                        view2.visibility = View.VISIBLE
+                        reportMember.visibility = View.VISIBLE
+                        view3.visibility = View.VISIBLE
+                        leaveStudy.visibility = View.VISIBLE
+                    } else {
+                        editInfo.visibility = View.GONE
+                        view1.visibility = View.GONE
+                        endStudy.visibility = View.GONE
+                        view2.visibility = View.GONE
+                        reportMember.visibility = View.GONE
+                        view3.visibility = View.VISIBLE
+                        leaveStudy.visibility = View.VISIBLE
+                    }
+
+                    // 클릭 리스너 설정
+                    editInfo.setOnClickListener {
+                        Toast.makeText(view.context, "정보 수정하기 클릭됨", Toast.LENGTH_SHORT).show()
+                        popupWindow.dismiss()
+                    }
+
+                    endStudy.setOnClickListener {
+                        // 스터디 종료 다이얼로그 띄우기
+                        val exitDialog =
+                            ExitStudyPopupFragment(view.context, this@BoardAdapter, adapterPosition)
+                        exitDialog.start()
+                        popupWindow.dismiss()
+                    }
+
+                    reportMember.setOnClickListener {
+                        // 스터디원 신고 다이얼로그 띄우기
+                        val reportDialog = ReportStudyMemberFragment(view.context, studyId)
+                        reportDialog.start()
+                        popupWindow.dismiss()
+                    }
+
+                    leaveStudy.setOnClickListener {
+                        // 스터디 탈퇴 다이얼로그 띄우기
+                        if (isHost) { // 호스트 탈퇴
+                            val hostLeaveDialog = HostLeaveStudyDialog(view.context, studyId)
+                            hostLeaveDialog.start()
                             popupWindow.dismiss()
-                        }
-
-                        endStudy.setOnClickListener {
-                            // 스터디 종료 다이얼로그 띄우기
-                            val exitDialog =
-                                ExitStudyPopupFragment(view.context, this@BoardAdapter, adapterPosition)
-                            exitDialog.start()
-                            popupWindow.dismiss()
-                        }
-
-                        reportMember.setOnClickListener {
-                            // 스터디원 신고 다이얼로그 띄우기
-//                            val reportDialog = ReportStudyCrewDialog(view.context, studyId)
-//                            reportDialog.start()
-//                            popupWindow.dismiss()
-                        }
-
-                        leaveStudy.setOnClickListener {
+                        } else { //
                             // 스터디 탈퇴 다이얼로그 띄우기
-                            val reportDialog = HostLeaveStudyDialog(view.context, studyId)
-                            reportDialog.start()
-                            popupWindow.dismiss()
-                        }
-
-                        // 외부 클릭 시 닫힘 설정
-                        popupWindow.isOutsideTouchable = true
-                        popupWindow.isFocusable = true
-                        popupWindow.setBackgroundDrawable(view.context.getDrawable(R.drawable.custom_popup_background))
-
-                        val location = IntArray(2)
-                        view.getLocationOnScreen(location) // 화면 전체 기준 좌표 가져오기
-                        val x = location[0]
-                        val y = location[1]
-                        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y + 100)
-                    } else{
-                        val reportMember = popupView.findViewById<TextView>(R.id.report_member)
-                        val leaveStudy = popupView.findViewById<TextView>(R.id.leave_study)
-
-                        reportMember.setOnClickListener {
-                            // 스터디원 신고 다이얼로그 띄우기
-//                            val reportDialog = ReportStudyCrewDialog(view.context, studyId)
-//                            reportDialog.start()
-//                            popupWindow.dismiss()
-                        }
-
-                        leaveStudy.setOnClickListener {
-                            // 스터디 탈퇴 다이얼로그 띄우기
-                            val reportDialog = MemberLeaveStudyDialog(
+                            val hostLeaveDialog = MemberLeaveStudyDialog(
                                 context = view.context,
                                 studyID = studyId,
-                                listener = object : MemberLeaveStudyDialog.OnWithdrawSuccessListener {
+                                listener = object :
+                                    MemberLeaveStudyDialog.OnWithdrawSuccessListener {
                                     override fun onWithdrawSuccess() {
                                         // ✅ 여기서 원하는 동작 수행
                                         // 예: 로그, 토스트, FragmentResult 등
@@ -178,25 +175,21 @@ class BoardAdapter(
                                     }
                                 }
                             )
-                            reportDialog.start()
+                            hostLeaveDialog.start()
                             popupWindow.dismiss()
                         }
-
-
-                        // 외부 클릭 시 닫힘 설정
-                        popupWindow.isOutsideTouchable = true
-                        popupWindow.isFocusable = true
-                        popupWindow.setBackgroundDrawable(view.context.getDrawable(R.drawable.custom_popup_background))
-
-                        val location = IntArray(2)
-                        view.getLocationOnScreen(location) // 화면 전체 기준 좌표 가져오기
-                        val x = location[0]
-                        val y = location[1]
-                        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y + 100)
                     }
 
-                    // 팝업 내부 요소 가져오기
+                    // 외부 클릭 시 닫힘 설정
+                    popupWindow.isOutsideTouchable = true
+                    popupWindow.isFocusable = true
+                    popupWindow.setBackgroundDrawable(view.context.getDrawable(R.drawable.custom_popup_background))
 
+                    val location = IntArray(2)
+                    view.getLocationOnScreen(location) // 화면 전체 기준 좌표 가져오기
+                    val x = location[0]
+                    val y = location[1]
+                    popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y + 100)
                 }
             }
         }
