@@ -36,6 +36,17 @@ class IntroduceStudyFragment : Fragment() {
     ): View? {
         binding = FragmentIntroduceStudyBinding.inflate(inflater, container, false)
 
+        viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
+            if (viewModel.mode.value == StudyFormMode.EDIT && request != null) {
+                binding.fragmentIntroduceStudynameEt.setText(request.title)
+                binding.fragmentIntroduceStudypurposeEt.setText(request.goal)
+                binding.fragmentIntroduceStudyEt.setText(request.introduction)
+            }
+        }
+
+
+
+
         // 초기화 함수 호출
         initActivityResultLaunchers()
         initAddImageButton()
@@ -186,9 +197,17 @@ class IntroduceStudyFragment : Fragment() {
     }
 
     private fun goToNextFragment() {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, OnlineStudyFragment()) // 변경할 Fragment로 교체
-        transaction.commit()
+        val nextFragment = OnlineStudyFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable("mode", viewModel.mode.value)
+                viewModel.studyId.value?.let { putInt("studyId", it) }
+            }
+        }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, nextFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun goToPreviusFragment() {
