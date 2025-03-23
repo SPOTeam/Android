@@ -171,7 +171,7 @@ data class BoardItem (
     val regions: List<String>,
     val imageUrl: String,
     var liked: Boolean,
-    val isOwned: Boolean = false
+    val isOwned: Boolean = false,
     val isHost : Boolean
 )
 

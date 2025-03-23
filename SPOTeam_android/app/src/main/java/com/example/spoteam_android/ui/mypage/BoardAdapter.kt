@@ -130,9 +130,9 @@ class BoardAdapter(
 
                         reportMember.setOnClickListener {
                             // 스터디원 신고 다이얼로그 띄우기
-                            val reportDialog = ReportStudyCrewDialog(view.context, studyId)
-                            reportDialog.start()
-                            popupWindow.dismiss()
+//                            val reportDialog = ReportStudyCrewDialog(view.context, studyId)
+//                            reportDialog.start()
+//                            popupWindow.dismiss()
                         }
 
                         leaveStudy.setOnClickListener {
@@ -158,9 +158,9 @@ class BoardAdapter(
 
                         reportMember.setOnClickListener {
                             // 스터디원 신고 다이얼로그 띄우기
-                            val reportDialog = ReportStudyCrewDialog(view.context, studyId)
-                            reportDialog.start()
-                            popupWindow.dismiss()
+//                            val reportDialog = ReportStudyCrewDialog(view.context, studyId)
+//                            reportDialog.start()
+//                            popupWindow.dismiss()
                         }
 
                         leaveStudy.setOnClickListener {
