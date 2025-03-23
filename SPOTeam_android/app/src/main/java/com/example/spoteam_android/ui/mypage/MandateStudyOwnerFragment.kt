@@ -30,6 +30,7 @@ class MandateStudyOwnerFragment(private val studyId: Int) : BottomSheetDialogFra
 
     private var _binding: FragmentMandateStudyOwnerBinding? = null
     private val binding get() = _binding!!
+    private var selectedMember: MembersDetail? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +38,7 @@ class MandateStudyOwnerFragment(private val studyId: Int) : BottomSheetDialogFra
     ): View {
         _binding = FragmentMandateStudyOwnerBinding.inflate(inflater, container, false)
 
-
+        binding.btnTakeCharge.isEnabled = false
         // 닫기 버튼 클릭 시 프래그먼트 종료
         binding.ivClose.setOnClickListener {
             dismiss()
@@ -56,6 +57,12 @@ class MandateStudyOwnerFragment(private val studyId: Int) : BottomSheetDialogFra
 //            binding.tvComplete.isEnabled = false // 완료 후 비활성화
 //        }
         fetchStudyMember() // ✅ 멤버 리스트 가져오기
+        binding.btnTakeCharge.setOnClickListener{
+            selectedMember?.let { member ->
+                openMandateStudyOwnerReasonFragment(studyId, member.memberId)
+                dismiss()
+            }
+        }
 
         return binding.root
     }
@@ -89,8 +96,10 @@ class MandateStudyOwnerFragment(private val studyId: Int) : BottomSheetDialogFra
         val dataRVAdapter = ReportStudyCrewMemberRVAdapter(studyMembers, object :
             ReportStudyCrewMemberRVAdapter.OnMemberClickListener {
             override fun onProfileClick(member: MembersDetail) {
-                openMandateStudyOwnerReasonFragment(studyId,1) // ✅ 클릭 시 프래그먼트 이동
-                dismiss()
+                Log.d("MandateStudyOwner", "Clicked memberId: ${member.memberId}")
+                selectedMember = member  // 선택된 멤버 저장
+                binding.btnTakeCharge.isEnabled = true  // 버튼 활성화
+
             }
         })
 

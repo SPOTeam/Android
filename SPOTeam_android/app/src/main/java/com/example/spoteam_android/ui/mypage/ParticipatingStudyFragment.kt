@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.HostApiResponse
+import com.example.spoteam_android.HostResult
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
@@ -20,6 +22,8 @@ import com.example.spoteam_android.ui.alert.CheckAppliedStudyFragment
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MemberOnStudiesResponse
 import com.example.spoteam_android.ui.community.MyRecruitingStudyDetail
+import com.example.spoteam_android.ui.interestarea.ApiResponse
+import com.example.spoteam_android.ui.interestarea.GetHostInterface
 import com.example.spoteam_android.ui.study.StudyFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,6 +51,7 @@ class ParticipatingStudyFragment : Fragment() {
         // 현재 로그인된 사용자 정보를 로그
         memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
 
+
         fetchInProgressStudy()
 
         binding.fragmentConsiderAttendanceTitleTv.text = "참여 중인 스터디"
@@ -54,6 +59,25 @@ class ParticipatingStudyFragment : Fragment() {
         binding.prevIv.setOnClickListener{
             parentFragmentManager.popBackStack()
         }
+
+        parentFragmentManager.setFragmentResultListener(
+            "host_withdraw_success",
+            viewLifecycleOwner
+        ) { _, _ ->
+            Log.d("ParticipatingStudy", "✅ 위임 성공 이벤트 수신 → 목록 새로고침")
+            fetchInProgressStudy()
+        }
+
+        parentFragmentManager.setFragmentResultListener(
+            "study_withdraw_success",
+            viewLifecycleOwner
+        ) { _, _ ->
+            Log.d("ParticipatingStudy", "✅ 탈퇴 이벤트 수신 → 목록 새로고침")
+            fetchInProgressStudy()
+        }
+
+
+
 
         return binding.root
     }
@@ -74,10 +98,11 @@ class ParticipatingStudyFragment : Fragment() {
                         if (inProgressResponse?.isSuccess == "true") {
                             val studyInfo = inProgressResponse.result.content
 
-                            if(studyInfo.isNotEmpty()) {
+                            if (studyInfo.isNotEmpty()) {
                                 binding.emptyWaiting.visibility = View.GONE
                                 binding.participatingStudyReyclerview.visibility = View.VISIBLE
                                 initRecyclerView(studyInfo)
+
                             } else {
                                 binding.emptyWaiting.visibility = View.VISIBLE
                                 binding.participatingStudyReyclerview.visibility = View.GONE
@@ -97,6 +122,7 @@ class ParticipatingStudyFragment : Fragment() {
                 }
             })
     }
+
 
     private fun showError(message: String?) {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
@@ -143,6 +169,9 @@ class ParticipatingStudyFragment : Fragment() {
 
         boardAdapter.notifyDataSetChanged()
     }
+
+
+
 }
 
 

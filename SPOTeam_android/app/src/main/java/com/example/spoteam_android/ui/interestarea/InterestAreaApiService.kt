@@ -1,7 +1,13 @@
 package com.example.spoteam_android.ui.interestarea
 
+import com.example.spoteam_android.HostApiResponse
+import com.example.spoteam_android.HostWithDrawl
+import com.example.spoteam_android.WithdrawHostRequest
 import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -101,9 +107,30 @@ interface MyInterestStudySpecificApiService {
         @Query("isOnline") isOnline: Boolean?,
         @Query("hasFee") hasFee: Boolean?,
         @Query("fee") fee: Int?,
-        @Query("theme") theme : String?
+        @Query("theme") theme: String?
     ): Call<ApiResponse>
 }
+
+
+interface GetHostInterface {
+    @GET("/spot/studies/{studyId}/host")
+    fun getHost(
+        @Path("studyId") studyId: Int
+    ): Call<HostApiResponse>
+
+
+    @HTTP(method = "DELETE", path = "/spot/studies/{studyId}/hosts/withdrawal", hasBody = true)
+    fun withDrawlHost(
+        @Path("studyId") studyId: Int,
+        @Body body: WithdrawHostRequest
+    ): Call<HostWithDrawl>
+
+    @HTTP(method = "DELETE", path = "/spot/studies/{studyId}/withdrawal", hasBody = false)
+    fun withDrawlMember(
+        @Path("studyId") studyId: Int
+    ): Call<HostWithDrawl>
+}
+
 
 
 

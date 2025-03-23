@@ -171,6 +171,7 @@ data class BoardItem (
     val regions: List<String>,
     val imageUrl: String,
     var liked: Boolean,
+    val isOwned: Boolean = false
     val isHost : Boolean
 )
 
@@ -584,3 +585,40 @@ data class attendanceMemberData(
     val profileImage: String,
     var introduction : String
 )
+
+data class HostApiResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: HostResult
+)
+
+data class HostResult(
+    val isOwned: Boolean,
+    val host: HostData
+)
+
+data class HostData(
+    val memberId: Int,
+    val nickname: String
+)
+
+data class HostWithDrawl(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: WithDrawlData
+)
+
+data class WithDrawlData(
+    val studyId: Int,
+    val studyName: String,
+    val memberId: Int,
+    val memberName: String
+)
+
+data class WithdrawHostRequest(
+    val newHostId: Int,
+    val reason: String
+)
+
