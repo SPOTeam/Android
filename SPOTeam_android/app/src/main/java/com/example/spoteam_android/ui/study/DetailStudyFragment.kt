@@ -252,7 +252,8 @@ class DetailStudyFragment : Fragment() {
         val themes = studyDetails.themes
         val displayedThemes = themes.take(3).joinToString("/") // 최대 2개 항목
         val remainingCount = (themes.size - 2).coerceAtLeast(0) // 2개를 초과한 항목 수
-        studyViewModel.studyOwner.value = studyDetails.studyOwner.ownerName
+        studyViewModel.setStudyOwner(studyDetails.studyOwner.ownerName)
+
 
 
         binding.fragmentDetailStudyChipTv.text = "${displayedThemes}"

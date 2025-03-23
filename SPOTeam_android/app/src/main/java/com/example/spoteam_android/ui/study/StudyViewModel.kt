@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.spoteam_android.RetrofitInstance
+import com.example.spoteam_android.StudyDetailsResponse
+import com.example.spoteam_android.StudyDetailsResult
+import com.example.spoteam_android.login.LocationItem
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -16,6 +19,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class StudyViewModel : ViewModel() {
+    private val _mode = MutableLiveData<StudyFormMode>(StudyFormMode.CREATE)
+    val mode: LiveData<StudyFormMode> get() = _mode
+    fun setMode(newMode: StudyFormMode) {
+        _mode.value = newMode
+    }
 
     private val _studyRequest = MutableLiveData<StudyRequest>()
     val studyRequest: LiveData<StudyRequest> = _studyRequest
@@ -31,6 +39,21 @@ class StudyViewModel : ViewModel() {
 
     private val _memberCount = MutableLiveData<Int>()
     val memberCount: LiveData<Int> = _memberCount
+
+    // 내부용 (private)
+    private val _studyOwner = MutableLiveData<String>()
+
+    private val _locationList = mutableListOf<LocationItem>()
+
+
+    // 외부 노출용 (읽기 전용)
+    val studyOwner: LiveData<String> get() = _studyOwner
+    fun setStudyOwner(name: String) {
+        _studyOwner.value = name
+    }
+
+
+
 
     private val _recentStudyId = MutableLiveData<Int?>()
     val recentStudyId: LiveData<Int?> get() = _recentStudyId
@@ -52,7 +75,6 @@ class StudyViewModel : ViewModel() {
     private val _studyImageUrl = MutableLiveData<String>()
     val studyImageUrl: LiveData<String> get() = _studyImageUrl
     private val _studyIntroduction = MutableLiveData<String>()
-    val studyOwner = MutableLiveData<String>()
     val studyIntroduction: LiveData<String> get() = _studyIntroduction
 
     fun setStudyData(id: Int, imageUrl: String, studyIntroduction: String) {
@@ -61,6 +83,46 @@ class StudyViewModel : ViewModel() {
         _studyImageUrl.value = imageUrl
         _studyIntroduction.value = studyIntroduction
     }
+
+    fun fetchStudyDetail(studyId: Int) {
+        val service = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
+        service.getStudyDetails(studyId).enqueue(object : Callback<StudyDetailsResponse> {
+            override fun onResponse(
+                call: Call<StudyDetailsResponse>,
+                response: Response<StudyDetailsResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null && body.isSuccess) {
+                        val result = body.result
+
+                        _themes.value = result.themes
+                        _studyIntroduction.value = result.introduction
+                        _studyId.value = result.studyId
+                        _maxPeople.value = result.maxPeople
+                        _memberCount.value = result.memberCount
+                        _studyOwner.value = result.studyOwner.ownerName
+
+                        // ✅ 여기 추가
+                        _studyRequest.value = result.toStudyRequest()
+
+                    } else {
+                        Log.e("StudyViewModel", "서버 응답 실패: ${body?.message}")
+                    }
+                } else {
+                    Log.e("StudyViewModel", "HTTP 실패: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<StudyDetailsResponse>, t: Throwable) {
+                Log.e("StudyViewModel", "통신 오류: ${t.message}")
+            }
+        })
+    }
+
+
+
 
 
 
@@ -133,6 +195,27 @@ class StudyViewModel : ViewModel() {
         }
     }
 
+    fun StudyDetailsResult.toStudyRequest(): StudyRequest {
+        return StudyRequest(
+            themes = this.themes,
+            title = this.studyName,
+            goal = this.goal,
+            introduction = this.introduction,
+            isOnline = this.isOnline,
+            profileImage = null,
+            regions = null,
+            maxPeople = this.maxPeople,
+            gender = this.gender,
+            minAge = this.minAge,
+            maxAge = this.maxAge,
+            fee = this.fee,
+            hasFee = this.fee > 0
+        )
+    }
+
+
+
+
     fun clearRegions() {
         _studyRequest.value = _studyRequest.value?.copy(regions = null)
     }
@@ -147,6 +230,30 @@ class StudyViewModel : ViewModel() {
         _recentStudyId.value = id
         Log.d("StudyViewModel", "최근 조회한 스터디 ID 설정: $id")
     }
+
+    fun setLocationList(list: List<LocationItem>) {
+        _locationList.clear()
+        _locationList.addAll(list)
+    }
+
+    fun findAddressFromCode(code: String): String? {
+        return _locationList.find { it.code == code }?.address
+    }
+
+    fun reset() {
+        _mode.value = StudyFormMode.CREATE
+        _studyRequest.value = null
+        _themes.value = listOf()
+        _profileImageUri.value = null
+        _maxPeople.value = 0
+        _memberCount.value = 0
+        _studyOwner.value = ""
+        _recentStudyId.value = null
+        _studyId.value = 0
+        _studyImageUrl.value = ""
+        _studyIntroduction.value = ""
+    }
+
 
 
 }

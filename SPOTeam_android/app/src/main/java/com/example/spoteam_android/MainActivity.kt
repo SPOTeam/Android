@@ -1,5 +1,6 @@
 package com.example.spoteam_android
 
+import StudyViewModel
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
@@ -16,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
@@ -58,6 +60,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var fab: FloatingActionButton
     private val weatherViewModel: WeatherViewModel by viewModels() // Hilt 사용
+    private val viewModel: StudyViewModel by viewModels()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -228,9 +231,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.activity_main_registerstudy_ib).setOnClickListener {
-            showFragment(RegisterStudyFragment())
-            showStudyFrameLayout(false) // RegisterFragment를 보이도록 하되 FrameLayout은 숨김
+            viewModel.reset()
+            val fragment = RegisterStudyFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable("mode", StudyFormMode.CREATE)
+                }
+            }
+            showFragment(fragment)
+            showStudyFrameLayout(false)
         }
+
     }
 
     fun switchFragment(fragment: Fragment) {

@@ -1,6 +1,7 @@
 package com.example.spoteam_android.ui.mypage
 
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.BoardItem
@@ -19,6 +21,7 @@ import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.GetHostResponse
+import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -108,11 +111,25 @@ class BoardAdapter(
             getIsHost(studyId, endStudy, view1, reportMember, view2)
 
 
-            // 클릭 리스너 설정
             editInfo.setOnClickListener {
-                Toast.makeText(view.context, "정보 수정하기 클릭됨", Toast.LENGTH_SHORT).show()
                 popupWindow.dismiss()
+
+                val fragment = RegisterStudyFragment().apply {
+                    arguments = Bundle().apply {
+                        putSerializable("mode", StudyFormMode.EDIT)
+                        putInt("studyId", studyId)
+                    }
+                }
+
+                // Fragment 이동
+                (view.context as? AppCompatActivity)?.supportFragmentManager
+                    ?.beginTransaction()
+                    ?.replace(R.id.main_frm, fragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
             }
+
+
 
             endStudy.setOnClickListener {
                 // 스터디 종료 다이얼로그 띄우기
