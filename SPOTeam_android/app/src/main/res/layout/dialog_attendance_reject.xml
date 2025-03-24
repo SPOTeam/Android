@@ -9,13 +9,23 @@
     android:background="@drawable/alert_background">
 
     <ImageView
+        android:id="@+id/attend_reject_close"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_x_button"
+        app:tint="@color/black"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
         android:id="@+id/ic_x_iv"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:src="@drawable/ic_wrong"
+        android:src="@drawable/ic_new_sad"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/attend_reject_close" />
 
     <TextView
         android:id="@+id/alert_tv"
@@ -36,10 +46,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:text="신청한 스터디를 불참하게되면\n활동 온도에 영향이 있을 수 있습니다."
+        android:text="신청한 스터디 불참을 선택하시면\n결정을 번복할 수 없습니다."
         android:fontFamily="@font/pretendard"
         android:layout_marginTop="20dp"
         android:gravity="center"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/alert_tv"/>
@@ -66,7 +77,8 @@
             android:textColor="@color/red"
             android:layout_marginEnd="8dp"
             android:paddingHorizontal="60dp"
-            android:paddingVertical="12dp" />
+            android:paddingVertical="12dp"
+            android:elevation="4dp"/>
 
         <TextView
             android:id="@+id/attendance_cancel_tv"
@@ -79,7 +91,8 @@
             android:background="@drawable/button_disabled"
             android:textColor="#555555"
             android:paddingHorizontal="60dp"
-            android:paddingVertical="12dp" />
+            android:paddingVertical="12dp"
+            android:elevation="4dp"/>
 
     </LinearLayout>
 

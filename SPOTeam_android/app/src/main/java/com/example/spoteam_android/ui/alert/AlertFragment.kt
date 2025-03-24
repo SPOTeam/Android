@@ -95,17 +95,19 @@ class AlertFragment : Fragment() {
                     if (response.isSuccessful) {
                         val studyAlertResponse = response.body()
                         if (studyAlertResponse?.isSuccess == "true") {
-                            binding.studyAlertCl.visibility = View.VISIBLE
+                            binding.studyAlertCl.isEnabled = true
                         } else {
-                            binding.studyAlertCl.visibility = View.GONE
+                            binding.studyAlertCl.isEnabled = false
                             showError(studyAlertResponse?.message)
                         }
                     } else {
+                        binding.studyAlertCl.isEnabled = false
                         showError(response.code().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<AlertStudyResponse>, t: Throwable) {
+                    binding.studyAlertCl.isEnabled = false
                     Log.e("MyStudyAttendance", "Failure: ${t.message}", t)
                 }
             })
@@ -119,9 +121,7 @@ class AlertFragment : Fragment() {
         binding.alertContentRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         val reversedAlertInfo = alertInfo.reversed()
-
         val dataRVAdapter = AlertMultiViewRVAdapter(reversedAlertInfo)
-
         binding.alertContentRv.adapter = dataRVAdapter
 
         dataRVAdapter.itemClick = object : AlertMultiViewRVAdapter.ItemClick {
@@ -133,7 +133,13 @@ class AlertFragment : Fragment() {
 
     private fun updateState(data: AlertDetail) {
         val layoutManager = binding.alertContentRv.layoutManager as LinearLayoutManager
-        val currentScrollPosition = layoutManager.findFirstVisibleItemPosition()+6 // ✅ 현재 스크롤 위치 저장
+
+        // ✅ 스크롤 위치와 offset 저장
+        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+        val firstVisibleItemView = layoutManager.findViewByPosition(firstVisibleItemPosition)
+        val offset = firstVisibleItemView?.top ?: 0
+
+        val scrollInfo = Pair(firstVisibleItemPosition, offset)
 
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.postNotificationState(data.notificationId)
@@ -145,8 +151,8 @@ class AlertFragment : Fragment() {
                     if (response.isSuccessful) {
                         val studyAlertResponse = response.body()
                         if (studyAlertResponse?.isSuccess == "true") {
-                            Log.d("CurrentScrollPosition", currentScrollPosition.toString())
-                            fetchAlertWithoutScroll(currentScrollPosition) // ✅ 스크롤 유지한 채로 데이터 갱신
+                            Log.d("CurrentScrollPosition", "pos: $firstVisibleItemPosition, offset: $offset")
+                            fetchAlertWithoutScroll(scrollInfo) // ✅ 스크롤 복원 포함
                         }
                     } else {
                         showError(response.code().toString())
@@ -159,7 +165,9 @@ class AlertFragment : Fragment() {
             })
     }
 
-    private fun fetchAlertWithoutScroll(scrollPosition: Int) {
+    private fun fetchAlertWithoutScroll(scrollInfo: Pair<Int, Int>) {
+        val (scrollPosition, offset) = scrollInfo
+
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.getAlert(page, size)
             .enqueue(object : Callback<AlertResponse> {
@@ -173,10 +181,10 @@ class AlertFragment : Fragment() {
                             val alertInfo = alertResponse.result.notifications
                             initMultiViewRecyclerView(alertInfo)
 
-                            // ✅ 스크롤 위치 복원
+                            // ✅ RecyclerView가 데이터 바인딩 완료 후 실행
                             binding.alertContentRv.post {
                                 (binding.alertContentRv.layoutManager as LinearLayoutManager)
-                                    .scrollToPosition(scrollPosition)
+                                    .scrollToPositionWithOffset(scrollPosition, offset)
                             }
                         } else {
                             showError(alertResponse?.message)

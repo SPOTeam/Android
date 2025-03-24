@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.spoteam_android.R
@@ -16,7 +17,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RefuseDialog(private val context: Context) {
+interface AttendStudyRejectListener {
+    fun onAttendRejected()
+}
+
+class RefuseDialog(private val context: Context, private val listener : AttendStudyRejectListener) {
 
     private val dlg = android.app.Dialog(context)
     private var studyId : Int = -1
@@ -45,6 +50,11 @@ class RefuseDialog(private val context: Context) {
             dlg.dismiss()
         }
 
+        val btnPrev = dlg.findViewById<ImageView>(R.id.attend_reject_close)
+        btnPrev.setOnClickListener{
+            dlg.dismiss()
+        }
+
         // 다이얼로그 표시
         dlg.show()
     }
@@ -62,7 +72,8 @@ class RefuseDialog(private val context: Context) {
                         val studyAlertResponse = response.body()
 //                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
                         if (studyAlertResponse?.isSuccess == "true") {
-                            //add method
+                            dlg.dismiss()
+                            listener.onAttendRejected()
                         }
                     } else {
                         showError(response.code().toString())

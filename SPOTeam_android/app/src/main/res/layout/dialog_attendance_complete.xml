@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="368dp"
-    android:layout_height="248dp"
+    android:layout_height="280dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="20dp"
     android:paddingTop="18dp"
@@ -9,13 +9,24 @@
     android:background="@drawable/alert_background">
 
     <ImageView
+        android:id="@+id/attend_close"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_x_button"
+        app:tint="@color/black"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
         android:id="@+id/ic_check_iv"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_check_alert"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/aftercheck"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/attend_close" />
 
     <TextView
         android:id="@+id/alert_tv"
@@ -40,9 +51,11 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:fontFamily="@font/pretendard"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/alert_tv"/>
+        app:layout_constraintTop_toBottomOf="@id/alert_tv"
+        android:lineSpacingExtra="4dp"/>
 
     <TextView
         android:id="@+id/move_to_study_tv"
@@ -56,8 +69,9 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textColor="@drawable/button_textcolor"
         android:paddingHorizontal="62dp"
-        android:paddingVertical="5dp"
+        android:paddingVertical="15dp"
         android:layout_marginTop="20dp"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/description_tv"/>
 
