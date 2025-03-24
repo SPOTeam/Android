@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentIntroduceStudyBinding
 
@@ -35,6 +36,26 @@ class IntroduceStudyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentIntroduceStudyBinding.inflate(inflater, container, false)
+
+        viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
+            if (viewModel.mode.value == StudyFormMode.EDIT && request != null) {
+                binding.fragmentIntroduceStudynameEt.setText(request.title)
+                binding.fragmentIntroduceStudypurposeEt.setText(request.goal)
+                binding.fragmentIntroduceStudyEt.setText(request.introduction)
+
+                request.profileImage?.let { imageUrl ->
+                    Glide.with(this)
+                        .load(imageUrl)
+                        .into(binding.fragmentIntroduceStudyIv)
+
+                    profileImage = imageUrl
+                }
+                checkButtonState()
+
+            }
+        }
+
+
 
         // 초기화 함수 호출
         initActivityResultLaunchers()
@@ -156,25 +177,25 @@ class IntroduceStudyFragment : Fragment() {
     }
 
     private fun saveStudyData() {
-        // 입력 데이터 추출
         val title = binding.fragmentIntroduceStudynameEt.text.toString()
         val goal = binding.fragmentIntroduceStudypurposeEt.text.toString()
         val introduction = binding.fragmentIntroduceStudyEt.text.toString()
-        val isOnline = true // 예시로 true로 설정, 실제로는 사용자가 선택한 값을 사용해야 합니다
-        val regions: List<String>? = null
-        val maxPeople = 0 // 사용자가 입력한 값
-        val gender = Gender.MALE // 예시로 MALE, 실제로는 사용자가 선택한 값을 사용해야 합니다
-        val minAge = 0 // 사용자가 입력한 값
-        val maxAge = 0 // 사용자가 입력한 값
-        val fee = 0 // 사용자가 입력한 값
 
-        // ViewModel에 데이터 저장
+        // ✅ ViewModel에서 기존 값을 가져옴
+        val isOnline = viewModel.studyRequest.value?.isOnline ?: true
+        val regions = viewModel.studyRequest.value?.regions
+        val maxPeople = viewModel.studyRequest.value?.maxPeople ?: 0
+        val gender = viewModel.studyRequest.value?.gender ?: Gender.UNKNOWN
+        val minAge = viewModel.studyRequest.value?.minAge ?: 0
+        val maxAge = viewModel.studyRequest.value?.maxAge ?: 0
+        val fee = viewModel.studyRequest.value?.fee ?: 0
+
         viewModel.setStudyData(
             title = title,
             goal = goal,
             introduction = introduction,
-            isOnline = isOnline,
-            profileImage = profileImage, // 정의된 profileImage 사용
+            isOnline = isOnline, // ✅ 수정 모드에서도 덮어쓰지 않음
+            profileImage = profileImage,
             regions = regions,
             maxPeople = maxPeople,
             gender = gender,
@@ -182,13 +203,21 @@ class IntroduceStudyFragment : Fragment() {
             maxAge = maxAge,
             fee = fee
         )
-
     }
 
+
     private fun goToNextFragment() {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, OnlineStudyFragment()) // 변경할 Fragment로 교체
-        transaction.commit()
+        val nextFragment = OnlineStudyFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable("mode", viewModel.mode.value)
+                viewModel.studyId.value?.let { putInt("studyId", it) }
+            }
+        }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, nextFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun goToPreviusFragment() {

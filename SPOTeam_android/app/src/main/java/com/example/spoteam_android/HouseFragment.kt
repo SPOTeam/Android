@@ -302,15 +302,15 @@ class HouseFragment : Fragment() {
 
                         if (tmpItem != null || pcpItem != null || snoItem != null || wsdItem != null || tmnItem != null) {
                             val temperature = tmpItem?.fcstValue?.toDoubleOrNull() ?: 0.0
-                            val minTemperature = tmnItem?.fcstValue?.toDoubleOrNull() ?: 0.0
                             val precipitation = parseDouble(pcpItem?.fcstValue ?: "-")
                             val snowfall = parseDouble(snoItem?.fcstValue ?: "-")
                             val windSpeed = wsdItem?.fcstValue?.toDoubleOrNull() ?: 0.0
 
                             presentTemperature.text = String.format("%.1f °C", temperature)
+                            Log.d("HouseFragment","$temperature,$precipitation,$snowfall,$windSpeed")
 
                             // 날씨에 맞는 메시지 & 이미지 가져오기
-                            val (weatherMessage, weatherImage) = getWeatherInfo(precipitation, snowfall, temperature, minTemperature, windSpeed)
+                            val (weatherMessage, weatherImage) = getWeatherInfo(temperature,precipitation,snowfall, windSpeed)
 
                             // UI 업데이트
                             binding.txExplainWeather.text = weatherMessage
@@ -334,12 +334,12 @@ class HouseFragment : Fragment() {
     }
 
     // 날씨 상태에 따른 메시지와 이미지 설정 함수
-    fun getWeatherInfo(pcp: Double, sno: Double, tmp: Double, tmn: Double, wsd: Double): Pair<String, Int> {
+    fun getWeatherInfo(tmp:Double, pcp: Double, sno: Double, wsd: Double): Pair<String, Int> {
         return when {
             pcp >= 10 -> "실내에서 집중! 목표는 선명히!" to R.drawable.ic_rainy // 강한 비
             sno >= 5 -> "눈길 조심! 한 걸음씩 나아가요!" to R.drawable.ic_snow // 폭설
             wsd >= 9 -> "바람 조심! 흔들려도 전진!" to R.drawable.ic_gale // 강풍
-            tmn <= 0 || (tmp in 0.0..10.0) -> "따뜻하게! 오늘도 열정 가득!" to R.drawable.ic_cold // 추운 날씨
+            tmp >= 0 && tmp <= 10 -> "따뜻하게! 오늘도 열정 가득!" to R.drawable.ic_cold // 추운 날씨
             tmp >= 25 -> "수분 보충! 더위도 이겨내요!" to R.drawable.ic_hot // 더운 날씨
             pcp in 1.0..4.0 -> "우산 챙기고 오늘도 파이팅!" to R.drawable.ic_light_rainy // 약한 비
             pcp == 0.0 && tmp in 10.0..25.0 -> "좋은 날! 목표 향해 달려요!" to R.drawable.ic_sun // 맑고 쾌적한 날씨
