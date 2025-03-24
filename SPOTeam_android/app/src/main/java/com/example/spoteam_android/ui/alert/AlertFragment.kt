@@ -95,17 +95,19 @@ class AlertFragment : Fragment() {
                     if (response.isSuccessful) {
                         val studyAlertResponse = response.body()
                         if (studyAlertResponse?.isSuccess == "true") {
-                            binding.studyAlertCl.visibility = View.VISIBLE
+                            binding.studyAlertCl.isEnabled = true
                         } else {
-                            binding.studyAlertCl.visibility = View.GONE
+                            binding.studyAlertCl.isEnabled = false
                             showError(studyAlertResponse?.message)
                         }
                     } else {
+                        binding.studyAlertCl.isEnabled = false
                         showError(response.code().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<AlertStudyResponse>, t: Throwable) {
+                    binding.studyAlertCl.isEnabled = false
                     Log.e("MyStudyAttendance", "Failure: ${t.message}", t)
                 }
             })

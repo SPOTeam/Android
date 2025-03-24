@@ -19,7 +19,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CheckAppliedStudyFragment : Fragment() {
+class CheckAppliedStudyFragment : Fragment(), AttendStudyCompleteListener, AttendStudyRejectListener{
 
     lateinit var binding: FragmentCheckAppliedStudyBinding
     private var page : Int = 0
@@ -35,9 +35,7 @@ class CheckAppliedStudyFragment : Fragment() {
         (context as MainActivity).isOnAlertFragment(CheckAppliedStudyFragment())
 
         binding.communityPrevIv.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().remove(this).commitAllowingStateLoss()
-            requireActivity().supportFragmentManager.popBackStack()
-            (context as MainActivity).isOnAlertFragment(AlertFragment())
+            parentFragmentManager.popBackStack()
         }
 
         fetchStudyAlert()
@@ -53,10 +51,8 @@ class CheckAppliedStudyFragment : Fragment() {
                     call: Call<AlertStudyResponse>,
                     response: Response<AlertStudyResponse>
                 ) {
-//                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val studyAlertResponse = response.body()
-//                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
                         if (studyAlertResponse?.isSuccess == "true") {
                             val studyAlertInfo = studyAlertResponse.result.notifications
                             initRecyclerview(studyAlertInfo)
@@ -85,15 +81,12 @@ class CheckAppliedStudyFragment : Fragment() {
 
         dataRVAdapter.setItemClickListener(object :CheckAppliedStudyFragmentRVAdapter.OnItemClickListener{
             override fun onOKClick(data : AlertStudyDetail) {
-
                 postStudyAccept(data.studyId)
-                val dlgOK = OkDialog(requireContext())
-                dlgOK.setStudyId(data.studyId)
-                dlgOK.start()
+
             }
 
             override fun onRefuseClick(data: AlertStudyDetail) {
-                val dlgRefuse = RefuseDialog(requireContext())
+                val dlgRefuse = RefuseDialog(requireContext(), this@CheckAppliedStudyFragment)
                 dlgRefuse.setStudyId(data.studyId)
                 dlgRefuse.start()
             }
@@ -110,12 +103,12 @@ class CheckAppliedStudyFragment : Fragment() {
                     call: Call<AcceptedAlertStudyResponse>,
                     response: Response<AcceptedAlertStudyResponse>
                 ) {
-//                    Log.d("MyStudyAttendance", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val studyAlertResponse = response.body()
-//                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
                         if (studyAlertResponse?.isSuccess == "true") {
-                            //add method
+                            val dlgOK = OkDialog(requireContext(), this@CheckAppliedStudyFragment)
+                            dlgOK.setStudyId(studyId)
+                            dlgOK.start()
                         }
                     } else {
                         showError(response.code().toString())
@@ -126,5 +119,13 @@ class CheckAppliedStudyFragment : Fragment() {
                     Log.e("MyStudyAttendance", "Failure: ${t.message}", t)
                 }
             })
+    }
+
+    override fun onAttendComplete() {
+        fetchStudyAlert()
+    }
+
+    override fun onAttendRejected() {
+        fetchStudyAlert()
     }
 }

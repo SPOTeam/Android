@@ -6,12 +6,17 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 
-class OkDialog(private val context: Context) {
+interface AttendStudyCompleteListener {
+    fun onAttendComplete()
+}
+
+class OkDialog(private val context: Context, private val listener : AttendStudyCompleteListener) {
 
     private val dlg = android.app.Dialog(context)
     private var studyId : Int = -1
@@ -42,6 +47,12 @@ class OkDialog(private val context: Context) {
                 .replace(R.id.main_frm, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
+            dlg.dismiss()
+            listener.onAttendComplete()
+        }
+
+        val btnClose = dlg.findViewById<ImageView>(R.id.attend_close)
+        btnClose.setOnClickListener{
             dlg.dismiss()
         }
 
