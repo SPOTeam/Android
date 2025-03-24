@@ -96,6 +96,7 @@ class StudyViewModel : ViewModel() {
                     val body = response.body()
                     if (body != null && body.isSuccess) {
                         val result = body.result
+                        Log.d("StudyViewModel", "서버 응답 isOnline: ${result?.isOnline}, regions: ${result?.regions}")
 
                         _themes.value = result.themes
                         _studyIntroduction.value = result.introduction
@@ -103,8 +104,6 @@ class StudyViewModel : ViewModel() {
                         _maxPeople.value = result.maxPeople
                         _memberCount.value = result.memberCount
                         _studyOwner.value = result.studyOwner.ownerName
-
-                        // ✅ 여기 추가
                         _studyRequest.value = result.toStudyRequest()
 
                     } else {
@@ -202,8 +201,8 @@ class StudyViewModel : ViewModel() {
             goal = this.goal,
             introduction = this.introduction,
             isOnline = this.isOnline,
-            profileImage = null,
-            regions = null,
+            profileImage = this.profileImage,
+            regions = this.regions,
             maxPeople = this.maxPeople,
             gender = this.gender,
             minAge = this.minAge,

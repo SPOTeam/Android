@@ -213,7 +213,9 @@ data class StudyDetailsResult( //StudyFragment에서 detail하게 들어갔을�
     val maxAge: Int,
     val fee: Int,
     val isOnline: Boolean,
+    val profileImage: String,
     val themes: List<String>,
+    val regions: List<String>,
     val goal: String,
     val introduction: String
 )
