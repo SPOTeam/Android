@@ -6,4 +6,5 @@
     android:padding="8dp"
     android:textSize="14dp"
     android:textColor="#123456"
+    android:drawableEnd="@drawable/ic_down_arrow"
     android:gravity="center_vertical" />

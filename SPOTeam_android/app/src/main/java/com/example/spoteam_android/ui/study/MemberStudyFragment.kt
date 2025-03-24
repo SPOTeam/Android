@@ -6,13 +6,18 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentMemberStudyBinding
+import com.example.spoteam_android.ui.study.MemberNumberRVAdapter
 import com.example.spoteam_android.ui.study.OnlineStudyFragment
 
 class MemberStudyFragment : Fragment() {
     private lateinit var binding: FragmentMemberStudyBinding
     private val viewModel: StudyViewModel by activityViewModels()
+    private lateinit var memberAdapter: MemberNumberRVAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,20 +35,29 @@ class MemberStudyFragment : Fragment() {
             goToPreviusFragment()
         }
 
+        val numbers = (0..9).toList()
+        memberAdapter = MemberNumberRVAdapter(numbers)
+
+
+        binding.rvMemberStudyNum.adapter = memberAdapter
+        binding.rvMemberStudyNum.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+
+        memberAdapter.onItemClick = { position ->
+            binding.rvMemberStudyNum.smoothScrollToPosition(position)
+
+            val selectedNumber = numbers[position]
+            memberAdapter.setSelectedPosition(position)
+            binding.selectedNumberText.text = "${String.format("%02d", selectedNumber)}명"
+        }
+
+
+
         return binding.root
     }
 
     private fun setupSpinners() {
         // 참여 인원 Spinner 설정
-        val numSpinner: Spinner = binding.fragmentMemberStudyNumSpinner
-        val numAdapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.fragment_study_num_spinner_array,
-            R.layout.spinner_item
-        )
-        numAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-        numSpinner.adapter = numAdapter
-
         // 성별 Spinner 설정
         val genderSpinner: Spinner = binding.fragmentMemberStudyGenderSpinner
         val genderAdapter = ArrayAdapter.createFromResource(
@@ -54,6 +68,23 @@ class MemberStudyFragment : Fragment() {
         genderAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         genderSpinner.adapter = genderAdapter
     }
+
+//    private fun setupSpinners() {
+//        val context = requireContext()
+//
+//        // 참여 인원 Spinner 설정
+//        val numSpinner: Spinner = binding.fragmentMemberStudyNumSpinner
+//        val numItems = resources.getStringArray(R.array.fragment_study_num_spinner_array).toList()
+//        val numAdapter = CustomSpinnerAdapter(context, numItems)
+//        numSpinner.adapter = numAdapter
+//
+//        // 성별 Spinner 설정
+//        val genderSpinner: Spinner = binding.fragmentMemberStudyGenderSpinner
+//        val genderItems = resources.getStringArray(R.array.gender_array).toList()
+//        val genderAdapter = CustomSpinnerAdapter(context, genderItems)
+//        genderSpinner.adapter = genderAdapter
+//    }
+
 
     private fun setupRangeSlider() {
         val ageRangeSlider = binding.fragmentMemberStudyAgeAgeRangeSlider
@@ -73,9 +104,7 @@ class MemberStudyFragment : Fragment() {
     }
 
     private fun saveData() {
-        val selectedNumPosition = binding.fragmentMemberStudyNumSpinner.selectedItemPosition
-        val numOptions = resources.getStringArray(R.array.fragment_study_num_spinner_array)
-        val maxPeople = numOptions[selectedNumPosition].replace("명", "").toIntOrNull() ?: 0
+        val maxPeople = memberAdapter.getSelectedNumber()  // 👈 새로 만든 함수로 가져오기
 
         val selectedGender = binding.fragmentMemberStudyGenderSpinner.selectedItem.toString()
         val gender = when (selectedGender) {
