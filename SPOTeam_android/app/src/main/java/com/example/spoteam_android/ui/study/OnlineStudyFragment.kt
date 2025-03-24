@@ -11,8 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentOnlineStudyBinding
+import com.example.spoteam_android.util.parseLocationTsv
 import com.google.android.material.chip.Chip
 
 class OnlineStudyFragment : Fragment() {
@@ -28,23 +30,50 @@ class OnlineStudyFragment : Fragment() {
     ): View? {
         binding = FragmentOnlineStudyBinding.inflate(inflater, container, false)
 
-        // 새로 추가된 코드: regions 리스트 초기화
         selectedLocationCode = null
-        viewModel.clearRegions()
+        val locationList = parseLocationTsv(requireContext())
+        viewModel.setLocationList(locationList)
 
-        arguments?.let {
-            val address = it.getString("ADDRESS")
-            val isOffline = it.getBoolean("IS_OFFLINE", false)
-            selectedLocationCode = it.getString("CODE")
+        if (viewModel.mode.value == StudyFormMode.CREATE) {
+            viewModel.clearRegions()
+            arguments?.let {
+                val address = it.getString("ADDRESS")
+                val isOffline = it.getBoolean("IS_OFFLINE", false)
+                selectedLocationCode = it.getString("CODE")
 
-            address?.let { addr ->
-                updateChip(addr)
+                if (isOffline) {
+                    address?.let { addr -> updateChip(addr) }
+                    setChipState(false) // 오프라인일 경우 offline 체크
+                    isLocationPlusVisible = true
+                    updateLocationPlusLayoutVisibility(true)
+                } else {
+                    clearChipSelection()
+                    updateLocationPlusLayoutVisibility(false)
+                    binding.fragmentOnlineStudyBt.isEnabled = false
+                }
+            } ?: run {
+                clearChipSelection()
+                updateLocationPlusLayoutVisibility(false)
+                binding.fragmentOnlineStudyBt.isEnabled = false
             }
-
-            setChipState(isOffline)
-            isLocationPlusVisible = isOffline
-            updateLocationPlusLayoutVisibility(isLocationPlusVisible)
         }
+
+        viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
+            if (viewModel.mode.value == StudyFormMode.EDIT) {
+                Log.d("OnlineStudyFragment", "observe - isOnline: ${request.isOnline}, regions: ${request.regions}")
+                setChipState(request.isOnline)
+                isLocationPlusVisible = !request.isOnline
+                updateLocationPlusLayoutVisibility(isLocationPlusVisible)
+
+                request.regions?.firstOrNull()?.let { code ->
+                    selectedLocationCode = code
+                    val address = viewModel.findAddressFromCode(code)
+                    address?.let { updateChip(it) }
+                }
+            }
+        }
+
+
 
         setupChipGroupListener()
         setupChipCloseListener()
@@ -64,6 +93,10 @@ class OnlineStudyFragment : Fragment() {
 
         return binding.root
     }
+    private fun clearChipSelection() {
+        binding.fragmentOnlineStudyChipOnline.isChecked = false
+        binding.fragmentOnlineStudyChipOffline.isChecked = false
+    }
 
 
     private fun setupChipGroupListener() {
@@ -77,50 +110,47 @@ class OnlineStudyFragment : Fragment() {
     }
 
     private fun selectChip(selectedChip: Chip) {
-        // 모든 Chip 선택 해제
+        // Chip UI 업데이트
         binding.fragmentOnlineStudyChipOnline.isChecked = false
         binding.fragmentOnlineStudyChipOffline.isChecked = false
-
-        // 선택한 Chip만 체크
         selectedChip.isChecked = true
 
-        // 현재 상태 가져오기
-        val currentStudyRequest = viewModel.studyRequest.value ?: StudyRequest(
-            themes = listOf("어학"),
-            title = "",
-            goal = "",
-            introduction = "",
-            isOnline = true,
-            profileImage = null,
-            regions = null,
-            maxPeople = 0,
-            gender = Gender.UNKNOWN,
-            minAge = 0,
-            maxAge = 0,
-            fee = 0,
-            hasFee = false
-        )
-
-        // 선택된 Chip에 따라 `isOnline` 값 변경
         val isOnline = selectedChip.id == R.id.fragment_online_study_chip_online
-        isLocationPlusVisible = !isOnline // 오프라인 선택 시 지역 추가 버튼 활성화
+        isLocationPlusVisible = !isOnline
 
-        // ViewModel 업데이트
-        viewModel.setStudyData(
-            title = currentStudyRequest.title,
-            goal = currentStudyRequest.goal,
-            introduction = currentStudyRequest.introduction,
-            isOnline = isOnline,
-            profileImage = currentStudyRequest.profileImage,
-            regions = if (isOnline) null else currentStudyRequest.regions ?: mutableListOf(),
-            maxPeople = currentStudyRequest.maxPeople,
-            gender = currentStudyRequest.gender,
-            minAge = currentStudyRequest.minAge,
-            maxAge = currentStudyRequest.maxAge,
-            fee = currentStudyRequest.fee
-        )
+        // ✅ 등록 모드에서만 ViewModel 값 업데이트
+        if (viewModel.mode.value == StudyFormMode.CREATE) {
+            val currentStudyRequest = viewModel.studyRequest.value ?: StudyRequest(
+                themes = listOf("어학"),
+                title = "",
+                goal = "",
+                introduction = "",
+                isOnline = true,
+                profileImage = null,
+                regions = null,
+                maxPeople = 0,
+                gender = Gender.UNKNOWN,
+                minAge = 0,
+                maxAge = 0,
+                fee = 0,
+                hasFee = false
+            )
 
-        // UI 업데이트
+            viewModel.setStudyData(
+                title = currentStudyRequest.title,
+                goal = currentStudyRequest.goal,
+                introduction = currentStudyRequest.introduction,
+                isOnline = isOnline,
+                profileImage = currentStudyRequest.profileImage,
+                regions = if (isOnline) null else currentStudyRequest.regions ?: mutableListOf(),
+                maxPeople = currentStudyRequest.maxPeople,
+                gender = currentStudyRequest.gender,
+                minAge = currentStudyRequest.minAge,
+                maxAge = currentStudyRequest.maxAge,
+                fee = currentStudyRequest.fee
+            )
+        }
+
         updateLocationPlusLayoutVisibility(isLocationPlusVisible)
         updateNextButtonState()
     }
@@ -136,14 +166,9 @@ class OnlineStudyFragment : Fragment() {
         }
     }
 
-    private fun setChipState(isOffline: Boolean) {
-        if (isOffline) {
-            binding.fragmentOnlineStudyChipOnline.isChecked = false
-            binding.fragmentOnlineStudyChipOffline.isChecked = true
-        } else {
-            binding.fragmentOnlineStudyChipOnline.isChecked = true
-            binding.fragmentOnlineStudyChipOffline.isChecked = false
-        }
+    private fun setChipState(isOnline: Boolean) {
+        binding.fragmentOnlineStudyChipOnline.isChecked = isOnline
+        binding.fragmentOnlineStudyChipOffline.isChecked = !isOnline
     }
 
 

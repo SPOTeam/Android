@@ -1,5 +1,6 @@
 package com.example.spoteam_android
 
+import Gender
 import android.os.Parcel
 import android.os.Parcelable
 import com.example.spoteam_android.data.ApiModels
@@ -207,12 +208,14 @@ data class StudyDetailsResult( //StudyFragment에서 detail하게 들어갔을�
     val heartCount: Int,
     val memberCount: Int,
     val maxPeople: Int,
-    val gender: String,
+    val gender: Gender,
     val minAge: Int,
     val maxAge: Int,
     val fee: Int,
     val isOnline: Boolean,
+    val profileImage: String,
     val themes: List<String>,
+    val regions: List<String>,
     val goal: String,
     val introduction: String
 )
@@ -222,6 +225,21 @@ data class Owner(
     val ownerName: String
 )
 
+data class StudyRequest(
+    val themes: List<String>,
+    val title: String,
+    val goal: String,
+    val introduction: String,
+    val isOnline: Boolean,
+    val profileImage: String?,
+    val regions: List<String>?,
+    val maxPeople: Int,
+    val gender: Gender,
+    val minAge: Int,
+    val maxAge: Int,
+    val fee: Int,
+    val hasFee: Boolean
+)
 
 data class MemberResponse(
     val isSuccess: Boolean,

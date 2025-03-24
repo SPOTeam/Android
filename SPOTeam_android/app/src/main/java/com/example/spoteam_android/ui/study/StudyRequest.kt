@@ -51,7 +51,10 @@ enum class Gender {
     @SerializedName("FEMALE")
     FEMALE
 }
-
+enum class StudyFormMode {
+    CREATE,
+    EDIT
+}
 
 data class ApiResponsed(
     @SerializedName("isSuccess") val isSuccess: Boolean,

@@ -10,9 +10,6 @@
                     <corners android:radius="8dp"/>
                 </shape>
             </item>
-            <item
-                android:drawable="@drawable/ic_arrow_down"
-                android:gravity="end"/>
         </layer-list>
     </item>
 
