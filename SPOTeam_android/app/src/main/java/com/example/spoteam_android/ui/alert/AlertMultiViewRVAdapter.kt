@@ -14,7 +14,6 @@ import com.example.spoteam_android.ui.community.AlertDetail
 class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface ItemClick {
-//        fun onItemClick(data : AlertDetail)
         fun onStateUpdateClick(data : AlertDetail)
     }
 
@@ -23,10 +22,6 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when(viewType) {
-//            1 -> {
-//                val binding = ItemAlertEnrollStudyBinding.inflate(inflater, parent, false)
-//                EnrolledViewHolder(binding)
-//            }
             1 -> {
                 val binding = ItemAlertLiveBinding.inflate(inflater, parent, false)
                 LiveViewHolder(binding)
@@ -54,12 +49,6 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = dataList[position]
         when (holder) {
-//            is EnrolledViewHolder -> {
-//                holder.bind(item)
-//                holder.itemView.setOnClickListener {
-//                    itemClick?.onItemClick(item)
-//                }
-//            }
             is LiveViewHolder -> {
                 holder.bind(item)
                 holder.itemView.setOnClickListener {
@@ -77,11 +66,6 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
 
     }
 
-//    inner class EnrolledViewHolder(private val binding : ItemAlertEnrollStudyBinding) : RecyclerView.ViewHolder(binding.root) {
-//        fun bind(item: AlertDetail) {
-//            // 필요시 데이터를 설정
-//        }
-//    }
 
     inner class LiveViewHolder(private val binding : ItemAlertLiveBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AlertDetail) {

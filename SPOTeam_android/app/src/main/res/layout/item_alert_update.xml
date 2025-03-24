@@ -6,17 +6,44 @@
     android:paddingTop="25dp"
     android:paddingStart="25dp"
     android:paddingBottom="25dp"
-    android:background="@drawable/selector_background_alert">
+    android:background="@drawable/selector_background_alert"
+    android:enabled="false">
 
-   <ImageView
+
+   <com.google.android.material.imageview.ShapeableImageView
        android:id="@+id/alert_bell_iv"
        android:layout_width="50dp"
        android:layout_height="50dp"
-       android:src="@drawable/ic_update"
-       android:paddingTop="8dp"
-       android:paddingBottom="8dp"
+       android:layout_gravity="center"
+       android:layout_marginStart="5dp"
+       android:scaleType="centerInside"
        app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toTopOf="parent" />
+       app:layout_constraintTop_toTopOf="parent"
+       app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut1"
+       app:strokeColor="@color/g300"
+       app:strokeWidth="1dp" />
+
+   <ImageView
+       android:id="@+id/alert_sound_ic"
+       android:layout_width="23dp"
+       android:layout_height="23dp"
+       android:src="@drawable/ic_alert_sound"
+       android:layout_marginBottom="-3dp"
+       android:layout_marginEnd="-3dp"
+       app:layout_constraintEnd_toEndOf="@id/alert_bell_iv"
+       app:layout_constraintBottom_toBottomOf="@id/alert_bell_iv"
+       android:visibility="gone"/>
+
+   <ImageView
+       android:id="@+id/alert_check_ic"
+       android:layout_width="23dp"
+       android:layout_height="23dp"
+       android:src="@drawable/ic_alert_check"
+       android:layout_marginBottom="-3dp"
+       android:layout_marginEnd="-3dp"
+       app:layout_constraintEnd_toEndOf="@id/alert_bell_iv"
+       app:layout_constraintBottom_toBottomOf="@id/alert_bell_iv"
+       android:visibility="gone"/>
 
    <LinearLayout
        android:id="@+id/summary_ll"
@@ -64,7 +91,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        app:layout_constraintStart_toStartOf="@id/summary_ll"
-       app:layout_constraintTop_toBottomOf="@id/summary_ll">
+       app:layout_constraintBottom_toBottomOf="@id/alert_bell_iv">
 
       <TextView
           android:id="@+id/alert_content_1_tv"
@@ -91,4 +118,16 @@
           android:text= "789" />
 
    </LinearLayout>
+
+   <ImageView
+       android:id="@+id/ic_new_alert_update"
+       android:layout_width="45dp"
+       android:layout_height="45dp"
+       android:src="@drawable/ic_new_alert"
+       android:layout_marginEnd="30dp"
+       android:scaleType="centerCrop"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
