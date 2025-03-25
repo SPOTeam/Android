@@ -9,8 +9,8 @@
             <solid android:color="@color/transparent"/>
             <stroke
                 android:width="0.5dp"
-
                 android:color="@color/g300"/>
+            <corners android:radius="12dp" />
         </shape>
     </item>
 </layer-list>

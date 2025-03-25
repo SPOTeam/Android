@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentMemberStudyBinding
+import com.example.spoteam_android.ui.study.FixedRoundedSpinnerAdapter
 import com.example.spoteam_android.ui.study.MemberNumberRVAdapter
 import com.example.spoteam_android.ui.study.OnlineStudyFragment
 
@@ -35,8 +36,12 @@ class MemberStudyFragment : Fragment() {
             goToPreviusFragment()
         }
 
-        val numbers = (0..9).toList()
+        val numbers = (1..9).toList()
         memberAdapter = MemberNumberRVAdapter(numbers)
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(binding.rvMemberStudyNum)
+
+
 
 
         binding.rvMemberStudyNum.adapter = memberAdapter
@@ -44,46 +49,30 @@ class MemberStudyFragment : Fragment() {
 
 
         memberAdapter.onItemClick = { position ->
-            binding.rvMemberStudyNum.smoothScrollToPosition(position)
-
-            val selectedNumber = numbers[position]
+            smoothScrollToCenter(position)
             memberAdapter.setSelectedPosition(position)
-            binding.selectedNumberText.text = "${String.format("%02d", selectedNumber)}명"
+            binding.selectedNumberText.text = "${String.format("%02d", numbers[position])}명"
+            binding.fragmentMemberStudyBt.isEnabled = true
         }
+
+
+
+
+
+
 
 
 
         return binding.root
     }
 
+
     private fun setupSpinners() {
-        // 참여 인원 Spinner 설정
-        // 성별 Spinner 설정
-        val genderSpinner: Spinner = binding.fragmentMemberStudyGenderSpinner
-        val genderAdapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.gender_array,
-            R.layout.spinner_item
-        )
-        genderAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-        genderSpinner.adapter = genderAdapter
+        val genderList = listOf("누구나", "남성", "여성")
+        val genderAdapter = FixedRoundedSpinnerAdapter(requireContext(), genderList)
+        binding.fragmentMemberStudyGenderSpinner.adapter = genderAdapter
     }
 
-//    private fun setupSpinners() {
-//        val context = requireContext()
-//
-//        // 참여 인원 Spinner 설정
-//        val numSpinner: Spinner = binding.fragmentMemberStudyNumSpinner
-//        val numItems = resources.getStringArray(R.array.fragment_study_num_spinner_array).toList()
-//        val numAdapter = CustomSpinnerAdapter(context, numItems)
-//        numSpinner.adapter = numAdapter
-//
-//        // 성별 Spinner 설정
-//        val genderSpinner: Spinner = binding.fragmentMemberStudyGenderSpinner
-//        val genderItems = resources.getStringArray(R.array.gender_array).toList()
-//        val genderAdapter = CustomSpinnerAdapter(context, genderItems)
-//        genderSpinner.adapter = genderAdapter
-//    }
 
 
     private fun setupRangeSlider() {
@@ -117,7 +106,6 @@ class MemberStudyFragment : Fragment() {
         val minAge = ageRangeSlider.values[0].toInt()
         val maxAge = ageRangeSlider.values[1].toInt()
 
-        // profileImage를 ViewModel에서 가져오는 예시
         val profileImage = viewModel.studyRequest.value?.profileImage
 
         viewModel.setStudyData(
@@ -136,6 +124,26 @@ class MemberStudyFragment : Fragment() {
 
     }
 
+//    private fun updateNextButtonState() {
+//        val isChecked = binding.
+//
+//        if (isOnline) {
+//            binding.fragmentOnlineStudyBt.isEnabled = true
+//            binding.fragmentOnlineStudyBt.visibility = View.VISIBLE
+//            binding.fragmentOnlineStudyLocationPlusBt.visibility = View.GONE
+//        } else {
+//            if (hasChip) {
+//                binding.fragmentOnlineStudyBt.isEnabled = true
+//                binding.fragmentOnlineStudyBt.visibility = View.VISIBLE
+//                binding.fragmentOnlineStudyLocationPlusBt.visibility = View.GONE
+//            } else {
+//                binding.fragmentOnlineStudyBt.isEnabled = false
+//                binding.fragmentOnlineStudyBt.visibility = View.GONE
+//                binding.fragmentOnlineStudyLocationPlusBt.visibility = View.VISIBLE
+//            }
+//        }
+//    }
+
     private fun goToNextFragment() {
         val transaction = parentFragmentManager.beginTransaction()
         transaction.replace(R.id.main_frm, ActivityFeeStudyFragment())
@@ -148,4 +156,26 @@ class MemberStudyFragment : Fragment() {
         transaction.addToBackStack(null) // 백스택에 추가
         transaction.commit()
     }
+    private fun smoothScrollToCenter(position: Int) {
+        val layoutManager = binding.rvMemberStudyNum.layoutManager as LinearLayoutManager
+        val view = layoutManager.findViewByPosition(position)
+        if (view != null) {
+            val rvCenterX = binding.rvMemberStudyNum.width / 2
+            val viewCenterX = view.left + view.width / 2
+            val scrollBy = viewCenterX - rvCenterX
+            binding.rvMemberStudyNum.smoothScrollBy(scrollBy, 0)
+        } else {
+            binding.rvMemberStudyNum.scrollToPosition(position)
+            binding.rvMemberStudyNum.post {
+                val v = layoutManager.findViewByPosition(position)
+                v?.let {
+                    val rvCenterX = binding.rvMemberStudyNum.width / 2
+                    val viewCenterX = it.left + it.width / 2
+                    val scrollBy = viewCenterX - rvCenterX
+                    binding.rvMemberStudyNum.smoothScrollBy(scrollBy, 0)
+                }
+            }
+        }
+    }
+
 }

@@ -129,9 +129,9 @@ class StudyViewModel : ViewModel() {
         title: String, goal: String, introduction: String, isOnline: Boolean, profileImage: String?,
         regions: List<String>?, maxPeople: Int, gender: Gender, minAge: Int, maxAge: Int, fee: Int
     ) {
-
         val hasFee = fee > 0
-        _studyRequest.value = StudyRequest(
+
+        val newRequest = StudyRequest(
             themes = _themes.value ?: listOf(),
             title = title,
             goal = goal,
@@ -146,7 +146,17 @@ class StudyViewModel : ViewModel() {
             fee = fee,
             hasFee = hasFee
         )
+
+        if (_studyRequest.value != newRequest) {
+            Log.d("StudyViewModel", "✅ studyRequest 값 변경됨. 옵저버 갱신")
+            _studyRequest.value = newRequest
+        } else {
+            Log.d("StudyViewModel", "⚠️ studyRequest 값이 같아서 옵저버 미호출됨")
+        }
+        _studyRequest.value = newRequest
     }
+
+
 
     private fun updateStudyRequest() {
         _studyRequest.value = _studyRequest.value?.copy(
@@ -238,6 +248,10 @@ class StudyViewModel : ViewModel() {
     fun findAddressFromCode(code: String): String? {
         return _locationList.find { it.code == code }?.address
     }
+    fun findCodeFromAddress(address: String): String? {
+        return _locationList.firstOrNull { it.address == address }?.code
+    }
+
 
     fun reset() {
         _mode.value = StudyFormMode.CREATE

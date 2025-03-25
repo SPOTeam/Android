@@ -16,7 +16,9 @@ class MemberNumberRVAdapter(
     private var selectedPosition: Int = 0
     var onItemClick: ((position: Int) -> Unit)? = null
 
-    inner class ViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView) {
+    inner class ViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
+        val textView: TextView = view.findViewById(R.id.tv_member_number)
+
         init {
             textView.setOnClickListener {
                 onItemClick?.invoke(bindingAdapterPosition)
@@ -24,35 +26,40 @@ class MemberNumberRVAdapter(
         }
     }
 
+
     fun getSelectedNumber(): Int {
         return items.getOrNull(selectedPosition) ?: 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_member_number, parent, false) as TextView
-        return ViewHolder(view)
+            .inflate(R.layout.item_member_number, parent, false)
+
+        val itemWidth = parent.context.resources.displayMetrics.widthPixels / 5
+        view.layoutParams = RecyclerView.LayoutParams(itemWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        return ViewHolder(view as ViewGroup)
     }
+
+
+
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val number = items[position]
         val context = holder.itemView.context
         val typefaceBold = ResourcesCompat.getFont(context, R.font.suit_bold)
-        val typefaceRegular = ResourcesCompat.getFont(context, R.font.suit_variable)
-
 
         holder.textView.text = number.toString()
 
         if (position == selectedPosition) {
-            holder.textView.setTextColor(Color.BLACK)
-            holder.textView.textSize = 24f
-            holder.textView.typeface = typefaceBold
+            holder.textView.setBackgroundResource(R.drawable.page_bg)
         } else {
-            holder.textView.setTextColor(Color.GRAY)
-            holder.textView.textSize = 24f
-            holder.textView.typeface = typefaceRegular
+            holder.textView.setBackgroundColor(Color.TRANSPARENT)
         }
     }
+
+
 
     override fun getItemCount(): Int = items.size
 
