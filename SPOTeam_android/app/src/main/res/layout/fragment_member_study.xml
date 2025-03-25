@@ -4,47 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
-
     <LinearLayout
         android:id="@+id/fragment_member_study_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="30dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/fragment_member_study_back_bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back_resize"
-            android:background="@color/white"/>
-
+            android:src="@drawable/ic_arrow"/>
 
         <TextView
             android:id="@+id/fragment_member_study_tv"
-            android:text="스터디 등록"
+            android:text="스터디 정보 수정"
             android:textColor="@color/black"
-            android:fontFamily="@font/pretendard"
-            android:textSize="16sp"
+            android:textSize="16dp"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/suit_semi_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp" />
-
+            android:drawablePadding="20dp"/>
 
     </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/fragment_online_study_pb"
+        android:id="@+id/fragment_member_study_pb"
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:background="#D8D8D8"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/fragment_member_study_ll"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
 
     <TextView
         android:id="@+id/fragment_member_study_activity_tv"
@@ -52,13 +53,12 @@
         android:layout_height="wrap_content"
         android:text="우리 스터디의 구성원은?"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
+        android:textSize="18dp"
+        android:fontFamily="@font/suit_bold"
         android:layout_marginTop="30dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_online_study_pb"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_member_study_pb"/>
 
 
 
@@ -66,7 +66,7 @@
         android:id="@+id/fragment_member_study_num_frameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_member_study_activity_tv">
@@ -77,13 +77,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:fontFamily="@font/pretendard"
+            android:fontFamily="@font/suit_bold"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:text="참여인원(스터디장 포함)"
+            android:text="참여인원"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -92,8 +91,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00명"
+            android:fontFamily="@font/suit_semi_bold"
             android:textColor="@color/b500"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:layout_marginEnd="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/fragment_member_study_num_tv" />
@@ -102,10 +102,11 @@
             android:id="@+id/rv_member_study_num"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:layout_marginTop="30dp"
             android:layout_gravity="center"
-            android:paddingHorizontal="80dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:orientation="horizontal"
-            android:layout_marginTop="50dp"
             app:layout_constraintTop_toBottomOf="@+id/fragment_member_study_num_tv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -113,7 +114,7 @@
     <FrameLayout
         android:id="@+id/fragment_member_study_gender_frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_member_study_num_frameLayout">
@@ -127,10 +128,9 @@
             android:layout_gravity="start|center"
             android:layout_marginStart="15dp"
             android:text="성별"
-            android:textStyle="bold"
-            android:fontFamily="@font/pretendard"
+            android:fontFamily="@font/suit_bold"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
 
         <Spinner
@@ -140,7 +140,8 @@
             android:layout_gravity="end|center"
             android:layout_marginEnd="15dp"
             android:background="@drawable/gender_spinner_background"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            android:popupBackground="@drawable/spinner_popup_bg"/>
 
     </FrameLayout>
 
@@ -148,6 +149,7 @@
         android:id="@+id/fragment_member_study_age_fl"
         android:layout_width="match_parent"
         android:layout_height="120dp"
+        android:layout_marginTop="70dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_member_study_gender_frameLayout">
@@ -160,10 +162,9 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
             android:text="연령대"
-            android:textStyle="bold"
-            android:fontFamily="@font/pretendard"
+            android:fontFamily="@font/suit_bold"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/fragment_member_study_age_ageRangeSlider"
@@ -171,9 +172,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_marginBottom="20dp"
+            android:layout_marginStart="10dp"
             app:haloColor="@android:color/transparent"
-            app:thumbColor="@color/active_blue"
+            app:thumbColor="@color/white"
             app:thumbRadius="8dp"
+            app:thumbStrokeColor="@color/b500"
+            app:thumbStrokeWidth="1dp"
             app:tickVisible="false"
             app:trackColorActive="@color/active_blue"
             app:trackColorInactive="#D6E5FF" />
@@ -186,8 +190,9 @@
             android:layout_marginEnd="60dp"
             android:layout_marginTop="20dp"
             android:text="18"
-            android:textColor="@color/gray_03"
-            android:textSize="14sp" />
+            android:fontFamily="@font/suit_semi_bold"
+            android:textColor="@color/b500"
+            android:textSize="14dp" />
 
         <TextView
             android:id="@+id/fragment_member_study_age_wave_tv"
@@ -196,9 +201,10 @@
             android:layout_gravity="end|top"
             android:layout_marginEnd="49dp"
             android:layout_marginTop="20dp"
-            android:text="~"
-            android:textColor="@color/gray_03"
-            android:textSize="14sp" />
+            android:text="-"
+            android:textColor="@color/b500"
+            android:fontFamily="@font/suit_semi_bold"
+            android:textSize="14dp" />
 
         <TextView
             android:id="@+id/fragment_member_study_age_maxValue_tv"
@@ -208,8 +214,9 @@
             android:layout_marginEnd="30dp"
             android:layout_marginTop="20dp"
             android:text="60"
-            android:textColor="@color/gray_03"
-            android:textSize="14sp" />
+            android:textColor="@color/b500"
+            android:fontFamily="@font/suit_semi_bold"
+            android:textSize="14dp" />
 
         <TextView
             android:id="@+id/fragment_member_study_age_bird_tv"
@@ -219,10 +226,12 @@
             android:layout_marginEnd="15dp"
             android:layout_marginTop="20dp"
             android:text="세"
-            android:textColor="@color/gray_03"
-            android:textSize="14sp" />
+            android:textColor="@color/b500"
+            android:fontFamily="@font/suit_semi_bold"
+            android:textSize="14dp" />
 
     </FrameLayout>
+
 
     <android.widget.Button
         android:id="@+id/fragment_member_study_bt"
@@ -230,13 +239,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/button_enabled"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/button_background"
+        android:enabled="false"
         android:text="다음"
-        android:textColor="#186AFF"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
+        android:fontFamily="@font/suit_bold"
+        android:textColor="@drawable/button_textcolor"
+        android:textSize="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
