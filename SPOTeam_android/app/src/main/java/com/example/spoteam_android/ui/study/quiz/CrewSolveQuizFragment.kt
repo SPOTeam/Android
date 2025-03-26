@@ -44,7 +44,7 @@ class CrewSolveQuizFragment : Fragment() {
     private lateinit var answerEt : EditText
     private lateinit var answerCount : TextView
     private lateinit var sendButton : TextView
-
+    private lateinit var des : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -150,6 +150,7 @@ class CrewSolveQuizFragment : Fragment() {
         answerEt = binding.answerFromCrewEt
         answerCount = binding.etCount1Tv
         sendButton = binding.sendCrewAnswer
+        des = binding.quizDesTv
 
         answerEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -160,8 +161,10 @@ class CrewSolveQuizFragment : Fragment() {
 
                 if(textLength > 0) {
                     sendButton.isEnabled = true
+                    des.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.selector_blue))
                 } else {
                     sendButton.isEnabled = false
+                    des.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.button_disabled_text))
                 }
             }
 
