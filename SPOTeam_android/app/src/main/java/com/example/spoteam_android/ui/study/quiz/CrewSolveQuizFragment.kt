@@ -3,13 +3,17 @@ package com.example.spoteam_android.ui.study.quiz
 import StudyViewModel
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
@@ -37,6 +41,10 @@ class CrewSolveQuizFragment : Fragment() {
     private var studyId = -1;
     private var scheduleId = -1;
     private var question = "";
+    private lateinit var answerEt : EditText
+    private lateinit var answerCount : TextView
+    private lateinit var sendButton : TextView
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,6 +69,7 @@ class CrewSolveQuizFragment : Fragment() {
             Log.d("CheckAttendanceFragment", "Received scheduleId: $scheduleId")
         }
         initContent()
+        initTextWatcher()
 
         binding.sendCrewAnswer.setOnClickListener {
             val answer = binding.answerFromCrewEt.text.toString()
@@ -134,6 +143,34 @@ class CrewSolveQuizFragment : Fragment() {
     }
 
     private fun initContent() {
-        binding.questionFromHostTv.text = question
+//        binding.questionFromHostTv.text = question
+    }
+
+    private fun initTextWatcher() {
+        answerEt = binding.answerFromCrewEt
+        answerCount = binding.etCount1Tv
+        sendButton = binding.sendCrewAnswer
+
+        answerEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val textLength = s?.length ?: 0
+                answerCount.text = textLength.toString()
+
+                if(textLength > 0) {
+                    sendButton.isEnabled = true
+                } else {
+                    sendButton.isEnabled = false
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s?.length ?: 0 > 10) {
+                    answerEt.setText(s?.subSequence(0, 10)) // 10자 초과 방지
+                    answerEt.setSelection(10) // 커서를 맨 끝으로 이동
+                }
+            }
+        })
     }
 }

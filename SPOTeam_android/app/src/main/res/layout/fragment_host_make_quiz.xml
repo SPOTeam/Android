@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/make_quiz_tv"
@@ -11,11 +11,168 @@
         android:text="퀴즈 만들기"
         android:textSize="17sp"
         android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
         android:textColor="@color/black"
         android:layout_marginTop="15dp"
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/make_question_et"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:hint="질문"
+        android:paddingVertical="5dp"
+        android:paddingStart="12dp"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:maxLength="20"
+        android:background="@drawable/button_disabled"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintStart_toStartOf="@id/make_quiz_tv"
+        app:layout_constraintTop_toBottomOf="@id/make_quiz_tv"
+        app:layout_constraintEnd_toEndOf="@id/start_attendance_tv"
+        android:elevation="2dp"/>
+
+    <ImageView
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:src="@drawable/ic_red_dot"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toStartOf="@id/char_count_quiz"
+        app:layout_constraintTop_toTopOf="@id/char_count_quiz"
+        app:layout_constraintBottom_toBottomOf="@id/char_count_quiz"
+        android:elevation="2dp"/>
+    
+    <LinearLayout
+        android:id="@+id/char_count_quiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="@id/make_question_et"
+        app:layout_constraintTop_toTopOf="@id/make_question_et"
+        app:layout_constraintBottom_toBottomOf="@id/make_question_et"
+        android:elevation="2dp">
+
+        <TextView
+            android:id="@+id/bracket_left_1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="("
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+
+
+        <TextView
+            android:id="@+id/et_count_1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/max_char_1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / 20"
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+
+
+        <TextView
+            android:id="@+id/bracket_right_1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=")"
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/make_answer_et"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:hint="정답"
+        android:paddingVertical="5dp"
+        android:paddingStart="12dp"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:maxLength="10"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:background="@drawable/button_disabled"
+        app:layout_constraintStart_toStartOf="@id/make_question_et"
+        app:layout_constraintTop_toBottomOf="@id/make_question_et"
+        app:layout_constraintEnd_toEndOf="@id/start_attendance_tv"
+        android:elevation="2dp"/>
+
+    <ImageView
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:src="@drawable/ic_red_dot"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toStartOf="@id/char_count_answer"
+        app:layout_constraintTop_toTopOf="@id/char_count_answer"
+        app:layout_constraintBottom_toBottomOf="@id/char_count_answer"
+        android:elevation="2dp"/>
+
+    <LinearLayout
+        android:id="@+id/char_count_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="@id/make_answer_et"
+        app:layout_constraintTop_toTopOf="@id/make_answer_et"
+        app:layout_constraintBottom_toBottomOf="@id/make_answer_et"
+        android:elevation="2dp">
+        
+
+        <TextView
+            android:id="@+id/bracket_left_2_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="("
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+
+
+        <TextView
+            android:id="@+id/et_count_2_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/max_char_2_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / 10"
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+
+
+        <TextView
+            android:id="@+id/bracket_right_2_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=")"
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/quiz_des_tv"
@@ -24,58 +181,29 @@
         android:text="퀴즈는 5분간 유효합니다."
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="@id/make_quiz_tv"
-        app:layout_constraintTop_toBottomOf="@id/make_quiz_tv"/>
-
-    <EditText
-        android:id="@+id/make_question_et"
-        android:layout_width="0dp"
-        android:layout_height="36dp"
-        android:hint="질문 (20자 이내)"
-        android:paddingVertical="5dp"
-        android:paddingStart="12dp"
-        android:layout_marginTop="10dp"
-        android:textSize="15sp"
-        android:maxLength="20"
-        android:background="@drawable/button_disabled"
-        app:layout_constraintStart_toStartOf="@id/quiz_des_tv"
-        app:layout_constraintTop_toBottomOf="@id/quiz_des_tv"
-        app:layout_constraintEnd_toEndOf="@id/start_attendance_tv"
-        android:elevation="4dp"/>
-
-    <EditText
-        android:id="@+id/make_answer_et"
-        android:layout_width="0dp"
-        android:layout_height="36dp"
-        android:hint="정답 (10자 이내)"
-        android:paddingVertical="5dp"
-        android:paddingStart="12dp"
-        android:layout_marginTop="10dp"
-        android:textSize="15sp"
-        android:maxLength="10"
-        android:background="@drawable/button_disabled"
-        app:layout_constraintStart_toStartOf="@id/make_question_et"
-        app:layout_constraintTop_toBottomOf="@id/make_question_et"
-        app:layout_constraintEnd_toEndOf="@id/start_attendance_tv"
-        android:elevation="4dp"/>
+        app:layout_constraintTop_toBottomOf="@id/make_answer_et"/>
 
 
     <TextView
         android:id="@+id/start_attendance_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="출석 체크 시작"
-        android:textSize="25sp"
-        android:background="@drawable/button_background"
-        android:textColor="@drawable/button_textcolor"
-        android:gravity="center"
-        android:paddingVertical="3dp"
-        android:layout_marginTop="30dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/button_background"
+        android:fontFamily="@font/pretendard"
+        android:gravity="center"
+        android:paddingVertical="12dp"
+        android:text="출석 체크 시작"
+        android:textColor="@drawable/button_textcolor"
+        android:textSize="25sp"
         android:textStyle="bold"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="53dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/make_answer_et" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/quiz_des_tv"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

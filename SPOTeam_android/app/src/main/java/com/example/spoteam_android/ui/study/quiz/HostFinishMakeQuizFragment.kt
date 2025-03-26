@@ -72,11 +72,11 @@ class HostFinishMakeQuizFragment : Fragment() {
             override fun onTick(millisUntilFinished: Long) {
                 val minutes = (millisUntilFinished / 1000) / 60
                 val seconds = (millisUntilFinished / 1000) % 60
-                binding.timerTv.text = String.format("%02d:%02d", minutes, seconds)
+                binding.timerTv.text = String.format("%02d : %02d", minutes, seconds)
             }
 
             override fun onFinish() {
-                binding.timerTv.text = "00:00"
+                binding.timerTv.text = "00 : 00"
             }
         }.start()
     }

@@ -11,10 +11,11 @@
         android:id="@+id/question_from_host_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="질문"
-        android:textColor="@color/active_blue"
+        android:text="정답"
+        android:textColor="@color/black"
         android:textSize="17sp"
         android:textStyle="bold"
+        android:fontFamily="@font/pretendard"
         android:layout_marginStart="16dp"
         android:layout_marginTop="22dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +25,6 @@
         android:id="@+id/answer_from_crew_et"
         android:layout_width="0dp"
         android:layout_height="36dp"
-        android:hint="정답을 입력하세요"
         android:paddingVertical="5dp"
         android:paddingStart="10dp"
         android:textSize="15sp"
@@ -34,6 +34,64 @@
         app:layout_constraintStart_toStartOf="@id/question_from_host_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/question_from_host_tv"/>
+
+    <LinearLayout
+        android:id="@+id/char_count_solve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="@id/answer_from_crew_et"
+        app:layout_constraintTop_toTopOf="@id/answer_from_crew_et"
+        app:layout_constraintBottom_toBottomOf="@id/answer_from_crew_et"
+        android:elevation="2dp">
+
+        <TextView
+            android:id="@+id/bracket_left_1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="("
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+
+
+        <TextView
+            android:id="@+id/et_count_1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/max_char_1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / 10"
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+
+
+        <TextView
+            android:id="@+id/bracket_right_1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=")"
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/quiz_des_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="퀴즈는 5분간 유효합니다."
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/answer_from_crew_et"
+        app:layout_constraintTop_toBottomOf="@id/answer_from_crew_et"/>
 
     <TextView
         android:id="@+id/send_crew_answer"
@@ -45,11 +103,12 @@
         android:textColor="@drawable/button_textcolor"
         android:gravity="center"
         android:textStyle="bold"
-        android:paddingVertical="3dp"
-        android:layout_marginTop="110dp"
+        android:paddingVertical="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="16dp"
-        app:layout_constraintTop_toBottomOf="@id/answer_from_crew_et"/>
+        android:layout_marginBottom="53dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:enabled="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
