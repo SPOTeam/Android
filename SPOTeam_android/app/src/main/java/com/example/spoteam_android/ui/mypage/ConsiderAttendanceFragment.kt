@@ -25,8 +25,10 @@ class ConsiderAttendanceFragment : Fragment() {
     private lateinit var binding: FragmentConsiderAttendanceBinding
 
     private var memberId : Int = -1
-    private var page : Int = 0
-    private var size : Int = 10
+    private var currentPage = 0
+    private val size = 5
+    private var totalPages = 0
+    private var startPage = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,10 +57,46 @@ class ConsiderAttendanceFragment : Fragment() {
 
         return binding.root
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            textView.setOnClickListener {
+                val selectedPage = startPage + index
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    fetchMyRecruitingStudies()
+                }
+            }
+        }
+
+        binding.previousPage.setOnClickListener {
+            if (currentPage > 0) {
+                currentPage--
+                fetchMyRecruitingStudies()
+            }
+        }
+
+        binding.nextPage.setOnClickListener {
+            if (currentPage < totalPages - 1) {
+                currentPage++
+                fetchMyRecruitingStudies()
+            }
+        }
+        fetchMyRecruitingStudies()
+    }
 
     private fun fetchMyRecruitingStudies() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getMyPageRecruitingStudy(page, size)
+        service.getMyPageRecruitingStudy(currentPage, size)
             .enqueue(object : Callback<MyRecruitingStudiesResponse> {
                 override fun onResponse(
                     call: Call<MyRecruitingStudiesResponse>,
@@ -70,6 +108,7 @@ class ConsiderAttendanceFragment : Fragment() {
                         Log.d("MyRecruitingStudy", "responseBody: ${recruitingStudyResponse?.isSuccess}")
                         if (recruitingStudyResponse?.isSuccess == "true") {
                             val result = recruitingStudyResponse.result
+                            totalPages = recruitingStudyResponse.result.totalPages
 
                             if(result.content.isNotEmpty()) {
                                 binding.emptyRecruiting.visibility = View.GONE
@@ -80,6 +119,7 @@ class ConsiderAttendanceFragment : Fragment() {
                                 binding.emptyRecruiting.visibility = View.VISIBLE
                                 binding.fragmentConsiderAttendanceRv.visibility = View.GONE
                             }
+                            updatePageUI()
                         } else {
                             showError(recruitingStudyResponse?.message)
                         }
@@ -121,5 +161,43 @@ class ConsiderAttendanceFragment : Fragment() {
 
     private fun showError(message: String?) {
         Toast.makeText(context, "Error: $message", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updatePageUI() {
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            minOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            val pageNum = startPage + index
+            if (pageNum < totalPages) {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(
+                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                )
+                textView.isEnabled = true
+                textView.alpha = 1.0f
+                textView.visibility = View.VISIBLE
+            } else {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(0)
+                textView.isEnabled = false // 클릭 안 되게
+                textView.alpha = 0.3f
+                textView.visibility = View.VISIBLE
+            }
+        }
+
+        binding.previousPage.isEnabled = currentPage > 0
+        binding.nextPage.isEnabled = currentPage < totalPages - 1
     }
 }

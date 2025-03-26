@@ -7,11 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.BoardItem
+import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentParticipatingStudyBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
@@ -27,8 +29,12 @@ class ParticipatingStudyFragment : Fragment() {
     val studyViewModel: StudyViewModel by activityViewModels()
 
     var memberId : Int = -1
-    var page : Int = 0
-    var size : Int = 10
+
+    private var currentPage = 0
+    private val size = 5
+    private var totalPages = 0
+    private var startPage = 0
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,7 +62,6 @@ class ParticipatingStudyFragment : Fragment() {
             "host_withdraw_success",
             viewLifecycleOwner
         ) { _, _ ->
-            Log.d("ParticipatingStudy", "✅ 위임 성공 이벤트 수신 → 목록 새로고침")
             fetchInProgressStudy()
         }
 
@@ -64,7 +69,6 @@ class ParticipatingStudyFragment : Fragment() {
             "study_withdraw_success",
             viewLifecycleOwner
         ) { _, _ ->
-            Log.d("ParticipatingStudy", "✅ 탈퇴 이벤트 수신 → 목록 새로고침")
             fetchInProgressStudy()
         }
 
@@ -73,39 +77,74 @@ class ParticipatingStudyFragment : Fragment() {
 
         return binding.root
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            textView.setOnClickListener {
+                val selectedPage = startPage + index
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    fetchInProgressStudy()
+                }
+            }
+        }
+
+        binding.previousPage.setOnClickListener {
+            if (currentPage > 0) {
+                currentPage--
+                fetchInProgressStudy()
+            }
+        }
+
+        binding.nextPage.setOnClickListener {
+            if (currentPage < totalPages - 1) {
+                currentPage++
+                fetchInProgressStudy()
+            }
+        }
+        fetchInProgressStudy()
+    }
+
 
 
     private fun fetchInProgressStudy() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getMemberOnStudies(page, size)
+        service.getMemberOnStudies(currentPage, size)
             .enqueue(object : Callback<MemberOnStudiesResponse> {
                 override fun onResponse(
                     call: Call<MemberOnStudiesResponse>,
                     response: Response<MemberOnStudiesResponse>
                 ) {
-                    Log.d("InProgress", "response: ${response.isSuccessful}")
                     if (response.isSuccessful) {
                         val inProgressResponse = response.body()
-                        Log.d("InProgress", "responseBody: ${inProgressResponse?.isSuccess}")
                         if (inProgressResponse?.isSuccess == "true") {
                             val studyInfo = inProgressResponse.result.content
+                            totalPages = inProgressResponse.result.totalPages
 
                             if (studyInfo.isNotEmpty()) {
                                 binding.emptyWaiting.visibility = View.GONE
                                 binding.participatingStudyReyclerview.visibility = View.VISIBLE
                                 initRecyclerView(studyInfo)
-
                             } else {
                                 binding.emptyWaiting.visibility = View.VISIBLE
                                 binding.participatingStudyReyclerview.visibility = View.GONE
                             }
+
+                            updatePageUI() // 페이지 번호 UI 갱신
                         } else {
-                            binding.emptyWaiting.visibility = View.VISIBLE
-                            binding.participatingStudyReyclerview.visibility = View.GONE
                             showError(inProgressResponse?.message)
                         }
                     } else {
-                        showError(response.code().toString())
+                        showError("서버 응답 실패: ${response.code()}")
                     }
                 }
 
@@ -114,6 +153,7 @@ class ParticipatingStudyFragment : Fragment() {
                 }
             })
     }
+
 
 
     private fun showError(message: String?) {
@@ -161,6 +201,46 @@ class ParticipatingStudyFragment : Fragment() {
 
         boardAdapter.notifyDataSetChanged()
     }
+
+    private fun updatePageUI() {
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            minOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            val pageNum = startPage + index
+            if (pageNum < totalPages) {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(
+                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                )
+                textView.isEnabled = true
+                textView.alpha = 1.0f
+                textView.visibility = View.VISIBLE
+            } else {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(0)
+                textView.isEnabled = false // 클릭 안 되게
+                textView.alpha = 0.3f
+                textView.visibility = View.VISIBLE
+            }
+        }
+
+        binding.previousPage.isEnabled = currentPage > 0
+        binding.nextPage.isEnabled = currentPage < totalPages - 1
+    }
+
+
 
 
 

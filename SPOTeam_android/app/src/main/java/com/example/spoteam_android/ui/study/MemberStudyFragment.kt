@@ -55,6 +55,35 @@ class MemberStudyFragment : Fragment() {
             binding.fragmentMemberStudyBt.isEnabled = true
         }
 
+        viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
+            if (viewModel.mode.value == StudyFormMode.EDIT) {
+                binding.fragmentMemberStudyTv.text = "스터디 정보 수정"
+                // 참여 인원 반영
+                val index = (1..9).indexOf(request.maxPeople)
+                if (index != -1) {
+                    memberAdapter.setSelectedPosition(index)
+                    smoothScrollToCenter(index)
+                    binding.selectedNumberText.text = "${String.format("%02d", request.maxPeople)}명"
+                    binding.fragmentMemberStudyBt.isEnabled = true
+                }
+
+                // 성별 반영
+                val genderIndex = when (request.gender) {
+                    Gender.MALE -> 1
+                    Gender.FEMALE -> 2
+                    else -> 0
+                }
+                binding.fragmentMemberStudyGenderSpinner.setSelection(genderIndex)
+
+                // 연령대 반영
+                val slider = binding.fragmentMemberStudyAgeAgeRangeSlider
+                slider.setValues(request.minAge.toFloat(), request.maxAge.toFloat())
+                binding.fragmentMemberStudyAgeMinValueTv.text = request.minAge.toString()
+                binding.fragmentMemberStudyAgeMaxValueTv.text = request.maxAge.toString()
+            }
+        }
+
+
 
 
 
@@ -97,8 +126,8 @@ class MemberStudyFragment : Fragment() {
 
         val selectedGender = binding.fragmentMemberStudyGenderSpinner.selectedItem.toString()
         val gender = when (selectedGender) {
-            "남자" -> Gender.MALE
-            "여자" -> Gender.FEMALE
+            "남성" -> Gender.MALE
+            "여성" -> Gender.FEMALE
             else -> Gender.UNKNOWN
         }
 
@@ -145,10 +174,17 @@ class MemberStudyFragment : Fragment() {
 //    }
 
     private fun goToNextFragment() {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, ActivityFeeStudyFragment())
-        transaction.addToBackStack(null) // 뒤로 가기 스택에 추가
-        transaction.commit()
+        val nextFragment = ActivityFeeStudyFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable("mode", viewModel.mode.value)
+                viewModel.studyId.value?.let { putInt("studyId", it) }
+            }
+        }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, nextFragment)
+            .addToBackStack(null)
+            .commit()
     }
     private fun goToPreviusFragment() {
         val transaction = parentFragmentManager.beginTransaction()

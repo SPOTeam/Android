@@ -39,6 +39,7 @@ class IntroduceStudyFragment : Fragment() {
 
         viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
             if (viewModel.mode.value == StudyFormMode.EDIT && request != null) {
+                binding.fragmentIntroduceStudyTv.text = "스터디 정보 수정"
                 binding.fragmentIntroduceStudynameEt.setText(request.title)
                 binding.fragmentIntroduceStudypurposeEt.setText(request.goal)
                 binding.fragmentIntroduceStudyEt.setText(request.introduction)
