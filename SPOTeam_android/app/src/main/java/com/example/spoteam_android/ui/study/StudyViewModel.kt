@@ -104,6 +104,7 @@ class StudyViewModel : ViewModel() {
                         _maxPeople.value = result.maxPeople
                         _memberCount.value = result.memberCount
                         _studyOwner.value = result.studyOwner.ownerName
+                        _profileImageUri.value = result.profileImage
                         _studyRequest.value = result.toStudyRequest()
 
                     } else {
@@ -169,6 +170,30 @@ class StudyViewModel : ViewModel() {
         _themes.value = newThemes
         updateStudyRequest()
     }
+    //스터디 수정하기
+    fun patchStudyData() {
+        val studyId = _studyId.value ?: return
+        val studyData = _studyRequest.value ?: return
+        val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+        val requestBody = createStudyRequestBody(studyData)
+
+        apiService.patchStudyData(studyId, requestBody)
+            .enqueue(object : Callback<ApiResponsed> {
+                override fun onResponse(call: Call<ApiResponsed>, response: Response<ApiResponsed>) {
+                    if (response.isSuccessful) {
+                        Log.d("StudyViewModel", "스터디 수정 성공")
+                    } else {
+                        Log.e("StudyViewModel", "스터디 수정 실패: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<ApiResponsed>, t: Throwable) {
+                    Log.e("StudyViewModel", "스터디 수정 오류: ${t.message}")
+                }
+            })
+    }
+
+
 
     fun submitStudyData(memberId: Int) {
         val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)

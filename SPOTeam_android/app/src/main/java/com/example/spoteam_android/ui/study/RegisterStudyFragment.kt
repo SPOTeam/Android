@@ -41,6 +41,10 @@ class RegisterStudyFragment : Fragment() {
     ): View? {
         binding = FragmentRegisterStudyBinding.inflate(inflater, container, false)
 
+        if (viewModel.mode.value == StudyFormMode.EDIT) {
+            binding.fragmentRegisterStudyTv.text = "스터디 정보 수정"
+        }
+
         // ChipGroup 설정 메소드 호출
         setChipGroup()
         observeThemes()

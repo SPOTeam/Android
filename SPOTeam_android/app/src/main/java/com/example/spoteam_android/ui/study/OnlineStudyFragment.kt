@@ -60,6 +60,7 @@
 
             viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
                 if (viewModel.mode.value == StudyFormMode.EDIT) {
+                    binding.fragmentOnlineStudyTv.text = "스터디 정보 수정"
                     setChipState(request.isOnline)
                     isLocationPlusVisible = !request.isOnline
                     updateLocationPlusLayoutVisibility(isLocationPlusVisible)
@@ -99,7 +100,6 @@
 
         override fun onResume() {
             super.onResume()
-            // ✅ LOCATION 화면에서 넘어왔을 때 처리
             arguments?.let {
                 val address = it.getString("ADDRESS")
                 val code = it.getString("CODE")
@@ -109,8 +109,14 @@
                     selectedLocationCode = code
 
                     val current = viewModel.studyRequest.value
+                    val isOnlineSelected = binding.fragmentOnlineStudyChipOnline.isChecked.not() // 오프라인 칩이 선택되어야 true
+
                     if (viewModel.mode.value == StudyFormMode.EDIT && current != null) {
-                        val updated = current.copy(regions = listOf(code))
+                        val updated = current.copy(
+                            isOnline = isOnlineSelected.not(), // 온라인이면 true, 오프라인이면 false
+                            regions = listOf(code)
+                        )
+
                         viewModel.setStudyData(
                             title = updated.title,
                             goal = updated.goal,
@@ -127,10 +133,10 @@
                     }
                 }
 
-                // ✅ 재처리 방지를 위해 초기화
                 it.clear()
             }
         }
+
 
         private fun updateChip(address: String) {
             binding.locationChip.apply {
@@ -160,41 +166,40 @@
             val isOnline = selectedChip.id == R.id.fragment_online_study_chip_online
             isLocationPlusVisible = !isOnline
 
-            if (viewModel.mode.value == StudyFormMode.CREATE) {
-                val current = viewModel.studyRequest.value ?: StudyRequest(
-                    themes = listOf("어학"),
-                    title = "",
-                    goal = "",
-                    introduction = "",
-                    isOnline = true,
-                    profileImage = null,
-                    regions = null,
-                    maxPeople = 0,
-                    gender = Gender.UNKNOWN,
-                    minAge = 0,
-                    maxAge = 0,
-                    fee = 0,
-                    hasFee = false
-                )
+            val current = viewModel.studyRequest.value ?: StudyRequest(
+                themes = listOf("어학"),
+                title = "",
+                goal = "",
+                introduction = "",
+                isOnline = true,
+                profileImage = null,
+                regions = null,
+                maxPeople = 0,
+                gender = Gender.UNKNOWN,
+                minAge = 0,
+                maxAge = 0,
+                fee = 0,
+                hasFee = false
+            )
 
-                viewModel.setStudyData(
-                    title = current.title,
-                    goal = current.goal,
-                    introduction = current.introduction,
-                    isOnline = isOnline,
-                    profileImage = current.profileImage,
-                    regions = if (isOnline) null else current.regions ?: mutableListOf(),
-                    maxPeople = current.maxPeople,
-                    gender = current.gender,
-                    minAge = current.minAge,
-                    maxAge = current.maxAge,
-                    fee = current.fee
-                )
-            }
+            viewModel.setStudyData(
+                title = current.title,
+                goal = current.goal,
+                introduction = current.introduction,
+                isOnline = isOnline,
+                profileImage = current.profileImage,
+                regions = if (isOnline) null else current.regions ?: mutableListOf(),
+                maxPeople = current.maxPeople,
+                gender = current.gender,
+                minAge = current.minAge,
+                maxAge = current.maxAge,
+                fee = current.fee
+            )
 
             updateLocationPlusLayoutVisibility(isLocationPlusVisible)
             updateNextButtonState()
         }
+
 
         private fun setupChipCloseListener() {
             binding.locationChip.setOnCloseIconClickListener {
@@ -227,6 +232,7 @@
 
         private fun setChipState(isOnline: Boolean) {
             binding.fragmentOnlineStudyChipOnline.isChecked = isOnline
+            binding.fragmentOnlineStudyBt.isEnabled = isOnline
             binding.fragmentOnlineStudyChipOffline.isChecked = !isOnline
         }
 
@@ -269,8 +275,16 @@
         }
 
         private fun goToNextFragment() {
+            val nextFragment = MemberStudyFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable("mode", viewModel.mode.value)
+                    viewModel.studyId.value?.let { putInt("studyId", it) }
+                }
+            }
+
             parentFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, MemberStudyFragment())
+                .replace(R.id.main_frm, nextFragment)
+                .addToBackStack(null)
                 .commit()
         }
 

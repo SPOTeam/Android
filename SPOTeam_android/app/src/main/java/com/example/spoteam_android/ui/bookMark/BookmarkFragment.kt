@@ -213,15 +213,11 @@ class BookmarkFragment : Fragment() {
     }
 
     private fun updatePageUI() {
-
         startPage = if (currentPage <= 2) {
             0
         } else {
             minOf(totalPages - 5, maxOf(0, currentPage - 2))
         }
-
-        val endPage = minOf(totalPages, startPage + 5)
-        val pages = (startPage until endPage).toList()
 
         val pageButtons = listOf(
             binding.page1,
@@ -231,23 +227,24 @@ class BookmarkFragment : Fragment() {
             binding.page5
         )
 
-
-        pageButtons.forEach { it.text = "" }
-
-
         pageButtons.forEachIndexed { index, textView ->
-            if (index < pages.size) {
-                textView.text = (pages[index] + 1).toString()
+            val pageNum = startPage + index
+            if (pageNum < totalPages) {
+                textView.text = (pageNum + 1).toString()
                 textView.setBackgroundResource(
-                    if (pages[index] == currentPage) R.drawable.btn_page_bg
-                    else 0
+                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
                 )
+                textView.isEnabled = true
+                textView.alpha = 1.0f
                 textView.visibility = View.VISIBLE
             } else {
-                textView.visibility = View.INVISIBLE
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(0)
+                textView.isEnabled = false // 클릭 안 되게
+                textView.alpha = 0.3f      // 흐리게 보이게
+                textView.visibility = View.VISIBLE
             }
         }
-
 
         binding.previousPage.isEnabled = currentPage > 0
         binding.nextPage.isEnabled = currentPage < totalPages - 1
