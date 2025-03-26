@@ -13,15 +13,15 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/button_background"
         android:gravity="center"
-        android:paddingVertical="3dp"
+        android:paddingVertical="15dp"
         android:textStyle="bold"
         android:text="출석 체크"
         android:textColor="@drawable/button_textcolor"
         android:textSize="25sp"
-        android:layout_marginTop="153dp"
+        android:layout_marginBottom="53dp"
         android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

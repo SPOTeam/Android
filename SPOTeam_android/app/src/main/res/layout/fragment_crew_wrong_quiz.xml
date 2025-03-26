@@ -11,7 +11,7 @@
         android:id="@+id/wrong_iv"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:src="@drawable/ic_wrong"
+        android:src="@drawable/ic_new_wrong"
         android:layout_marginTop="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,9 +23,10 @@
         android:layout_height="wrap_content"
         android:text="퀴즈 오답"
         android:textSize="24sp"
+        android:fontFamily="@font/pretendard"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/wrong_iv"/>
@@ -44,16 +45,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/red"
+            android:fontFamily="@font/pretendard"
             android:textStyle="bold"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="/3"
-            android:textSize="24sp"
+            android:text="/ 3"
+            android:textSize="20sp"
+            android:fontFamily="@font/pretendard"
             android:textColor="@color/red"
             android:textStyle="bold"
             android:layout_marginTop="10dp"/>
@@ -64,19 +68,21 @@
     <TextView
         android:id="@+id/retry_tv"
         android:layout_width="0dp"
-        android:layout_height="46dp"
+        android:layout_height="wrap_content"
         android:text="다시 풀기"
         android:textSize="25sp"
-        android:background="@drawable/button_wrong_backgground"
-        android:textColor="@color/red"
+        android:background="@drawable/selector_category_background"
+        android:textColor="@color/selector_blue"
         android:gravity="center"
-        android:paddingVertical="5dp"
+        android:paddingVertical="10dp"
+        android:fontFamily="@font/pretendard"
         android:textStyle="bold"
-        android:layout_marginTop="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="53dp"
+        android:elevation="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/count_ll" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.R
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class EventAdapter(
     private var events: List<Event>,
@@ -99,17 +102,23 @@ class EventAdapter(
             } else {
                 eventTimeTextView.text = eventTimeText
             }
-            // 체크 아이콘 visibility 당일에 활성화
-            icCheck.visibility = if(selectedDate==LocalDate.now().toString()) View.VISIBLE else View.GONE
+
+
+//            Log.d("Date", "${LocalDate.now.} :: ${event.startMonth} :: ${event.endDay}")
+
+            val startDate = LocalDate.of(event.startYear, event.startMonth, event.startDay)
+            val endDate = LocalDate.of(event.endYear, event.endMonth, event.endDay)
+            val today = LocalDate.now()
+
+            icCheck.visibility = if (!today.isBefore(startDate) && !today.isAfter(endDate)) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
 
             if (isTodoList){
                 icCheck.visibility = View.GONE
             }
-
-
-
-            // 체크 아이콘 visibility 설정
-//            icCheck.visibility = if (isTodoList) View.GONE else View.VISIBLE
 
             // 클릭 이벤트 설정
             icCheck.setOnClickListener {

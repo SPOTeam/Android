@@ -2,11 +2,16 @@ package com.example.spoteam_android.ui.study.quiz
 
 import StudyViewModel
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
@@ -27,6 +32,12 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
     val studyViewModel: StudyViewModel by activityViewModels()
     var studyId : Int = -1
     private var scheduleId : Int = -1
+    private lateinit var quizEditText: EditText
+    private lateinit var answerEditText: EditText
+    private lateinit var charCountTextQuizView: TextView
+    private lateinit var charCountTextAnswerView: TextView
+    private lateinit var startButton : TextView
+    private lateinit var description : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +58,7 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
                 Toast.makeText(requireContext(), "Study ID is missing", Toast.LENGTH_SHORT).show()
             }
         }
+        initTextWatcher()
 
         binding.startAttendanceTv.setOnClickListener{
             val input1 = binding.makeQuestionEt.text.toString()
@@ -65,7 +77,8 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
 
     private fun postAttendanceQuiz(requestBody : QuizContentRequest) {
         Log.d("CreatedAt", requestBody.createdAt)
-        RetrofitInstance.retrofit.create(CommunityAPIService::class.java).makeQuiz(studyId, scheduleId, requestBody)
+        RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+            .makeQuiz(studyId, scheduleId, requestBody)
             .enqueue(object : Callback<QuizContentResponse> {
                 override fun onResponse(
                     call: Call<QuizContentResponse>,
@@ -99,5 +112,71 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
     }
     private fun showError(message: String?) {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun initTextWatcher() {
+        quizEditText = binding.makeQuestionEt
+        answerEditText = binding.makeAnswerEt
+        charCountTextQuizView = binding.etCount1Tv
+        charCountTextAnswerView = binding.etCount2Tv
+        startButton = binding.startAttendanceTv
+        description = binding.quizDesTv
+
+        var quiz = false
+        var answer = false
+
+        quizEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val textLength = s?.length ?: 0
+                charCountTextQuizView.text = textLength.toString()
+
+                quiz = textLength > 0
+
+                if(quiz && answer) {
+                    startButton.isEnabled = true
+                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.selector_blue))
+                } else {
+                    startButton.isEnabled = false
+                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.button_disabled_text))
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s?.length ?: 0 > 20) {
+                    quizEditText.setText(s?.subSequence(0, 20)) // 30자 초과 방지
+                    quizEditText.setSelection(20) // 커서를 맨 끝으로 이동
+                }
+            }
+        })
+
+        answerEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val textLength = s?.length ?: 0
+                charCountTextAnswerView.text = textLength.toString()
+
+                // 버튼 활성화/비활성화
+                answer = textLength > 0
+
+                if(quiz && answer) {
+                    startButton.isEnabled = true
+                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.selector_blue))
+                } else {
+                    startButton.isEnabled = false
+                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.button_disabled_text))
+
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s?.length ?: 0 > 10) {
+                    answerEditText.setText(s?.subSequence(0, 10)) // 20자 초과 방지
+                    answerEditText.setSelection(10) // 커서를 맨 끝으로 이동
+                }
+            }
+        })
     }
 }
