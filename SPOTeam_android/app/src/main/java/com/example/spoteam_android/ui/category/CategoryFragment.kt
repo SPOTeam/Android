@@ -33,13 +33,24 @@ class CategoryFragment : Fragment() {
         TabLayoutMediator(binding.categoryTl, binding.categoryContentVp) {
                 tab, position -> tab.text = tabList[position]
         }.attach()
+        val tabLayout = binding.categoryTl
+        val tabStrip = tabLayout.getChildAt(0) as ViewGroup
 
-        binding.categorySearchIv.setOnClickListener{
+        for (i in 0 until tabStrip.childCount) {
+            val tabView = tabStrip.getChildAt(i)
+            val layoutParams = tabView.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.marginEnd = 15   // 원하는 간격 (예: 20dp)
+            layoutParams.marginStart = 15
+            tabView.layoutParams = layoutParams
+            tabView.requestLayout()
+        }
+
+        binding.icFind.setOnClickListener{
             // MainActivity의 switchFragment 메서드를 호출하여 SearchFragment로 전환
             (activity as MainActivity).switchFragment(SearchFragment())
         }
 
-        binding.categoryAlertIv.setOnClickListener {
+        binding.icAlarm.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, AlertFragment())
                 .addToBackStack(null)

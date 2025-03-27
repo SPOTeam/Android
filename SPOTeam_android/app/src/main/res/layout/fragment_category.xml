@@ -4,77 +4,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/category_spot_logo_iv"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="20dp"
-            android:src="@drawable/spot_logo_3x"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageView
-            android:id="@+id/category_alert_iv"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/alert_icon_3x"
-            android:padding="6dp"
-            android:elevation="4dp"
-            android:background="@drawable/icon_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/category_spot_logo_iv"/>
-
-        <ImageView
-            android:id="@+id/category_search_iv"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
-            android:padding="6dp"
-            android:background="@drawable/icon_background"
-            android:src="@drawable/search_icon_3x"
-            android:scaleType="centerCrop"
-            android:elevation="4dp"
-            app:layout_constraintEnd_toStartOf="@id/category_alert_iv"
-            app:layout_constraintTop_toTopOf="@id/category_spot_logo_iv"/>
-
-        <TextView
-            android:id="@+id/category_title"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/fragment_house_logo_ll"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="스팟의 스터디"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:fontFamily="@font/pretendard"
-            android:textSize="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
 
-            android:layout_marginTop="30dp"
-            app:layout_constraintStart_toStartOf="@id/category_spot_logo_iv"
-            app:layout_constraintTop_toBottomOf="@id/category_spot_logo_iv" />
+                <ImageView
+                    android:id="@+id/ic_spot_logo"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/new_logo" />
+
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:id="@+id/ic_find"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/activity_main_ic_find" />
+
+                <ImageView
+                    android:id="@+id/ic_alarm"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/activity_main_ic_alaram" />
+
+
+        </LinearLayout>
 
         <HorizontalScrollView
             android:id="@+id/category_tl_sv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:scrollbars="none"
-
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/category_title">
+            app:layout_constraintTop_toBottomOf="@id/fragment_house_logo_ll">
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/category_tl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:tabTextAppearance="@style/CustomTabTextAppearance"
                     android:scrollbars="none"
                     app:tabGravity="start"
                     app:tabIndicatorColor="#186AFF"
                     app:tabIndicatorFullWidth="false"
                     app:tabRippleColor="#FFFFFFFF"
-                    app:tabSelectedTextColor="#186AFF">
+                    app:tabSelectedTextColor="@color/black">
                 </com.google.android.material.tabs.TabLayout>
 
         </HorizontalScrollView>
