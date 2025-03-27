@@ -35,8 +35,9 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var studyApiService: StudyApiService
 
     private var currentPage = 0
-    private val size = 4 // 페이지당 항목 수
+    private val size = 5
     private var totalPages = 0
+    private var startPage = 0
     private var isLoading = false
     private var selectedSortBy: String = "ALL"
 
@@ -80,15 +81,32 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(requireContext())
 
 
-        setupPageNavigationButtons()
 
         fetchBestCommunityContent("자격증", currentPage, size, selectedSortBy)
 
         return binding.root
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
 
-    private fun setupPageNavigationButtons() {
+        pageButtons.forEachIndexed { index, textView ->
+            textView.setOnClickListener {
+                val selectedPage = startPage + index
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    fetchBestCommunityContent("자격증", currentPage, size, selectedSortBy)
+                }
+            }
+        }
+
         binding.previousPage.setOnClickListener {
             if (currentPage > 0) {
                 currentPage--
@@ -102,7 +120,11 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 fetchBestCommunityContent("자격증", currentPage, size, selectedSortBy)
             }
         }
+        fetchBestCommunityContent("자격증", currentPage, size, selectedSortBy)
     }
+
+
+
 
     private fun fetchBestCommunityContent(theme: String, page: Int, size: Int, sortBy: String) {
         isLoading = true
@@ -129,7 +151,7 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
                                     binding.emptyTv.visibility = View.VISIBLE
                                 }
 
-                                updatePageNumberUI()
+                                updatePageUI()
                             }
                         }
                     } else {
@@ -161,22 +183,43 @@ class LicenseFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
 
-    private fun updatePageNumberUI() {
-        binding.currentPage.text = (currentPage + 1).toString()
+    private fun updatePageUI() {
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            minOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            val pageNum = startPage + index
+            if (pageNum < totalPages) {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(
+                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                )
+                textView.isEnabled = true
+                textView.alpha = 1.0f
+                textView.visibility = View.VISIBLE
+            } else {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(0)
+                textView.isEnabled = false // 클릭 안 되게
+                textView.alpha = 0.3f
+                textView.visibility = View.VISIBLE
+            }
+        }
 
         binding.previousPage.isEnabled = currentPage > 0
-        binding.previousPage.setTextColor(resources.getColor(
-            if (currentPage > 0) R.color.active_color else R.color.disabled_color,
-            null
-        ))
-
         binding.nextPage.isEnabled = currentPage < totalPages - 1
-        binding.nextPage.setTextColor(resources.getColor(
-            if (currentPage < totalPages - 1) R.color.active_color else R.color.disabled_color,
-            null
-        ))
     }
-
     private fun showLog(message: String?) {
         Toast.makeText(requireContext(), "DiscussionFragment: $message", Toast.LENGTH_SHORT).show()
     }
