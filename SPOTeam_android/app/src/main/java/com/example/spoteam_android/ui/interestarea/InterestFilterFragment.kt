@@ -35,7 +35,6 @@ class InterestFilterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-        val spinner: Spinner = binding.genderSpinner
 
         val toolbar = binding.toolbar
 
@@ -45,31 +44,13 @@ class InterestFilterFragment : Fragment() {
             (activity as MainActivity).switchFragment(InterestFragment())
         }
 
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.gender_array,
-            R.layout.spinner_item
-        )
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-        spinner.adapter = adapter
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                when (position) {
-                    0 -> bundle.putString("gender", "MALE")
-                    1 -> bundle.putString("gender", "MALE")
-                    2 -> bundle.putString("gender", "FEMALE")
-                }
+        binding.chipGroupGender.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.chip1_gender -> bundle.putString("gender", "UNKNOWN")
+                R.id.chip2_gender -> bundle.putString("gender", "MALE")
+                R.id.chip3_gender -> bundle.putString("gender", "FEMALE")
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                Log.d("InterestFilterFragment", "아무것도 선택되지 않았습니다.")
-            }
+            updateNextButtonState()
         }
 
         val ageRangeSlider = binding.ageRangeSlider
