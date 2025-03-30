@@ -23,7 +23,8 @@ interface CommunityAPIService {
     @GET("/spot/posts")
     fun getCategoryPagesContent(
         @Query("type") type: String,
-        @Query("pageNumber") pageNum: Int
+        @Query("pageNumber") pageNum: Int,
+        @Query("pageSize") pageSize: Int,
     ): Call<CategoryPagesResponse>
 
     @GET("/spot/posts/{postId}")

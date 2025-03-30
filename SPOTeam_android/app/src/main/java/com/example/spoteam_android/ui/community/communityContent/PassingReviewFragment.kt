@@ -26,6 +26,7 @@ class PassingReviewFragment : Fragment() {
 
     lateinit var binding: FragmentCommunityCategoryContentBinding
     var memberId : Int = -1
+    val pageSize = 20
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -169,7 +170,7 @@ class PassingReviewFragment : Fragment() {
 
     private fun fetchPages(type: String, pageNum: Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getCategoryPagesContent(type, pageNum)
+        service.getCategoryPagesContent(type, pageNum, pageSize)
             .enqueue(object : Callback<CategoryPagesResponse> {
                 override fun onResponse(
                     call: Call<CategoryPagesResponse>,
@@ -178,10 +179,13 @@ class PassingReviewFragment : Fragment() {
                     if (response.isSuccessful) {
                         val pagesResponse = response.body()
                         if (pagesResponse?.isSuccess == "true") {
-                            val pagesResponseList = pagesResponse.result?.postResponses
-//                            Log.d("PASS_EXPERIENCE", "items: $pagesResponseList")
-                            if (pagesResponseList != null) {
+                            val count = pagesResponse.result.totalElements
+                            val pagesResponseList = pagesResponse.result.postResponses
+                            if (count > 0) {
+                                binding.emptyWaiting.visibility = View.GONE
                                 initRecyclerview(pagesResponseList)
+                            } else {
+                                binding.emptyWaiting.visibility = View.VISIBLE
                             }
                         } else {
                             showError(pagesResponse?.message)

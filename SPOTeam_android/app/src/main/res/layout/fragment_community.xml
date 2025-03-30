@@ -3,47 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/community_prev_iv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/navigate_before_3x"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/community_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
         android:text="게시판"
-        android:textStyle="bold"
         android:fontFamily="@font/pretendard"
         android:textColor="@color/black"
-        android:textSize="25dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/community_prev_iv"
-        android:layout_width="40dp"
-        android:layout_height="45dp"
-        android:src="@drawable/navigate_before_3x"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/community_title" />
-
-    <ImageView
-        android:id="@+id/community_sp_iv"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:src="@drawable/line_img"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="@id/community_prev_iv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/community_title"/>
+        android:textSize="16sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/community_prev_iv"
+        app:layout_constraintTop_toTopOf="@id/community_prev_iv" />
 
     <HorizontalScrollView
         android:id="@+id/category_tl_sv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollbars="none"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/community_sp_iv">
+        app:layout_constraintTop_toBottomOf="@id/community_title">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/category_tl"

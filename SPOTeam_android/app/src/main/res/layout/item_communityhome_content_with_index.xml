@@ -12,7 +12,6 @@
         android:text="01"
         android:fontFamily="@font/pretendard"
         android:textSize="14sp"
-        android:textStyle="bold"
         android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

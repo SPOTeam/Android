@@ -2,6 +2,7 @@ package com.example.spoteam_android.ui.study.quiz
 
 import StudyViewModel
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -30,8 +31,11 @@ import com.example.spoteam_android.ui.community.StudyMemberResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
+import java.util.Locale
+import java.util.TimeZone
 
 
 class CrewSolveQuizFragment : Fragment() {
@@ -45,6 +49,10 @@ class CrewSolveQuizFragment : Fragment() {
     private lateinit var answerCount : TextView
     private lateinit var sendButton : TextView
     private lateinit var des : TextView
+    private var timeInMillis: Long = 0L
+    private lateinit var countDownTimer: CountDownTimer
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,10 +74,13 @@ class CrewSolveQuizFragment : Fragment() {
         arguments?.let {
             scheduleId = it.getInt("scheduleId")
             question = it.getString("question").toString()
+            timeInMillis = it.getLong("remainingTime",0L)
+
             Log.d("CheckAttendanceFragment", "Received scheduleId: $scheduleId")
         }
         initContent()
         initTextWatcher()
+        initTimer()
 
         binding.sendCrewAnswer.setOnClickListener {
             val answer = binding.answerFromCrewEt.text.toString()
@@ -143,12 +154,11 @@ class CrewSolveQuizFragment : Fragment() {
     }
 
     private fun initContent() {
-//        binding.questionFromHostTv.text = question
+        binding.quizTv.text = question
     }
 
     private fun initTextWatcher() {
         answerEt = binding.answerFromCrewEt
-        answerCount = binding.etCount1Tv
         sendButton = binding.sendCrewAnswer
         des = binding.quizDesTv
 
@@ -175,5 +185,25 @@ class CrewSolveQuizFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun initTimer() {
+        binding.timerTv.visibility = View.VISIBLE
+        startTimer()
+    }
+
+
+    private fun startTimer() {
+        countDownTimer = object : CountDownTimer(timeInMillis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val minutes = (millisUntilFinished / 1000) / 60
+                val seconds = (millisUntilFinished / 1000) % 60
+                binding.timerTv.text = String.format("%02d : %02d", minutes, seconds)
+            }
+
+            override fun onFinish() {
+                binding.timerTv.text = "00 : 00"
+            }
+        }.start()
     }
 }

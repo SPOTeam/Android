@@ -1,14 +1,20 @@
 package com.example.spoteam_android.ui.community
 
 import android.content.Context
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuInflater
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.PopupMenu
+import android.widget.PopupWindow
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -31,8 +37,9 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
     var memberId : Int = -1
     var postId : Int = -1
     var parentCommentId : Int = 0
-    var ischecked : Boolean = false;
-    var createdByThisMember : Boolean = false;
+    var ischecked : Boolean = false
+    var createdByThisMember : Boolean = false
+    var scrapByThisMember : Boolean = false
 
     // 추가: 게시물 정보 저장을 위한 변수들
     private var currentTitle: String = ""
@@ -54,9 +61,8 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
         binding = ActivityCommunityContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        buttonActions()
-
         fetchContentInfo()
+        buttonActions()
     }
 
     private fun buttonActions() {
@@ -72,26 +78,24 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
             submitComment()
         }
 
-        binding.communityContentLikeNumCheckedIv.setOnClickListener{
-            ischecked = true;
+        binding.communityContentLikeNumCheckedIv.setOnClickListener {
+            ischecked = true
             deleteContentLike()
         }
 
         binding.communityContentLikeNumUncheckedIv.setOnClickListener{
-            ischecked = true;
+            ischecked = true
             postContentLike()
         }
 
-        binding.communityContentBookMarkUncheckedIv.setOnClickListener{
+        binding.scrapIv.setOnClickListener{
             ischecked = true;
-            postContentScrap()
+            if(scrapByThisMember) {
+                deleteContentScrap()
+            } else {
+                postContentScrap()
+            }
         }
-
-        binding.communityContentBookMarkCheckedIv.setOnClickListener{
-            ischecked = true;
-            deleteContentScrap()
-        }
-
     }
 
     private fun postContentScrap() {
@@ -199,7 +203,6 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
     }
 
     private fun submitComment() {
-        val isAnonymous = binding.writeCommentAnonymous.isChecked
         val commentContent = binding.writeCommentContentEt.text.toString().trim()
 
         if (commentContent.isEmpty()) {
@@ -209,7 +212,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
         val requestBody = WriteCommentRequest(
             content = commentContent,
             parentCommentId = parentCommentId,
-            anonymous = isAnonymous
+            anonymous = false
         )
 
         // 서버에 댓글 전송
@@ -269,11 +272,6 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
             })
     }
 
-    /**게시글 신고 알고리즘 구현**/
-
-
-    /**************************/
-
     private fun showSuccessReportDialog(view: View, fragmentManager: FragmentManager) {
         val reportContentDialog = ReportContentDialog(view.context, fragmentManager)
         reportContentDialog.start()
@@ -290,59 +288,67 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
     }
 
     private fun showPopupMenu(view: View) {
-        val popupMenu = PopupMenu(view.context, view)
-        val inflater: MenuInflater = popupMenu.menuInflater
-        val fragmentManager = (view.context as AppCompatActivity).supportFragmentManager
-        inflater.inflate(R.menu.menu_community_home_options, popupMenu.menu)
+
+        val popupView = LayoutInflater.from(view.context).inflate(R.layout.modify_study_community_menu, null)
+
+        // PopupWindow 생성
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
+
 
         // ✅ "신고하기" 버튼을 동적으로 숨기거나 보이게 설정
-        val reportContentItem = popupMenu.menu.findItem(R.id.edit_report)
+        val reportContentItem = popupView.findViewById<TextView>(R.id.study_content_report)
         reportContentItem.isVisible = !createdByThisMember
 
         // ✅ "수정하기" 버튼을 동적으로 숨기거나 보이게 설정
-        val editMenuItem = popupMenu.menu.findItem(R.id.edit_content)
+        val editMenuItem = popupView.findViewById<TextView>(R.id.study_content_edit)
         editMenuItem.isVisible = createdByThisMember // createdByThisMember가 true일 때만 보이도록 설정
 
         // ✅ "삭제하기" 버튼을 동적으로 숨기거나 보이게 설정
-        val deleteMenuItem = popupMenu.menu.findItem(R.id.delete_content)
+        val deleteMenuItem = popupView.findViewById<TextView>(R.id.study_content_delete)
         deleteMenuItem.isVisible = createdByThisMember
 
-        popupMenu.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.edit_report -> {
-                    reportContent(view, fragmentManager)
-                    true
-                }
-                R.id.edit_content -> {
+        reportContentItem.setOnClickListener{
+            reportContent(view, supportFragmentManager)
+        }
 
-                    if(createdByThisMember) {
+        editMenuItem.setOnClickListener{
+            if(createdByThisMember) {
 
-                        // WriteContentFragment 생성 및 데이터 전달
-                        val editContext = EditContentFragment().apply {
-                            arguments = Bundle().apply {
-                                putString("title", currentTitle)  // 수정할 게시물의 제목 전달
-                                putString("content", currentContent)  // 수정할 게시물의 내용 전달
-                                putString("type", currentType)
-                                putString("postId", postId.toString())
-                            }
-                            setStyle(
-                                BottomSheetDialogFragment.STYLE_NORMAL,
-                                R.style.AppBottomSheetDialogBorder20WhiteTheme
-                            )
-                        }
-                        editContext.show(fragmentManager, "EditContent")
+                // WriteContentFragment 생성 및 데이터 전달
+                val editContext = EditContentFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("title", currentTitle)  // 수정할 게시물의 제목 전달
+                        putString("content", currentContent)  // 수정할 게시물의 내용 전달
+                        putString("type", currentType)
+                        putString("postId", postId.toString())
                     }
-                    true
+                    setStyle(
+                        BottomSheetDialogFragment.STYLE_NORMAL,
+                        R.style.AppBottomSheetDialogBorder20WhiteTheme
+                    )
                 }
-                R.id.delete_content -> {
-                    deleteContent(view, fragmentManager)
-                    true
-                }
-
-                else -> false
+                editContext.show(supportFragmentManager, "EditContent")
             }
         }
-        popupMenu.show()
+
+        deleteMenuItem.setOnClickListener{
+            deleteContent(view, supportFragmentManager)
+        }
+        // 외부 클릭 시 닫힘 설정
+        popupWindow.isOutsideTouchable = true
+        popupWindow.isFocusable = true
+        popupWindow.setBackgroundDrawable(view.context.getDrawable(R.drawable.custom_popup_background))
+
+        val location = IntArray(2)
+        view.getLocationOnScreen(location) // 화면 전체 기준 좌표 가져오기
+        val x = location[0]
+        val y = location[1]
+        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y + 100)
     }
 
     private fun reportContent(view: View, fragmentManager: FragmentManager) {
@@ -389,6 +395,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
                             initContentInfo(contentInfo)
                             createdByThisMember = contentInfo.createdByCurrentUser
                             ischecked = false;
+                            scrapByThisMember = contentInfo.scrapedByCurrentUser
                             val sortedComments = sortComments(commentInfo)
                             initMultiViewRecyclerView(sortedComments)
                         } else {
@@ -523,12 +530,21 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
 
     private fun initContentInfo(contentInfo: ContentInfo) {
         binding.communityContentDateTv.text = formatWrittenTime(contentInfo.writtenTime)
-        binding.communityContentSaveNumTv.text = contentInfo.scrapCount.toString()
+        binding.scrapCountTv.text = contentInfo.scrapCount.toString()
         binding.communityContentTitleTv.text = contentInfo.title
         binding.communityContentContentTv.text = contentInfo.content
         binding.communityContentLikeNumTv.text = contentInfo.likeCount.toString()
         binding.communityContentContentNumTv.text = contentInfo.commentCount.toString()
         binding.communityContentViewNumTv.text = contentInfo.viewCount.toString()
+
+
+        if(contentInfo.type == "PASS_EXPERIENCE") binding.communityContentThemeTv.text = "#합격후기"
+        else if(contentInfo.type == "INFORMATION_SHARING") binding.communityContentThemeTv.text = "#정보공유"
+        else if(contentInfo.type == "COUNSELING") binding.communityContentThemeTv.text = "#고민상담"
+        else if(contentInfo.type == "JOB_TALK") binding.communityContentThemeTv.text = "#취준토크"
+        else if(contentInfo.type == "FREE_TALK") binding.communityContentThemeTv.text = "#자유토크"
+        else if(contentInfo.type == "SPOT_ANNOUNCEMENT ") binding.communityContentThemeTv.text = "#SPOT공지"
+
 
         currentTitle = contentInfo.title
         currentContent = contentInfo.content
@@ -554,12 +570,21 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
             binding.communityContentLikeNumUncheckedIv.visibility = View.VISIBLE
         }
 
-        if(contentInfo.scrapedByCurrentUser) {
-            binding.communityContentBookMarkCheckedIv.visibility = View.VISIBLE
-            binding.communityContentBookMarkUncheckedIv.visibility = View.GONE
+        isScrap(contentInfo.scrapedByCurrentUser)
+    }
+
+    private fun isScrap(scraped : Boolean) {
+        scrapByThisMember = scraped
+        if(scraped) {
+            binding.scrapIv.setColorFilter(
+                ContextCompat.getColor(this, R.color.selector_blue),  // 🔥 빨간색 적용
+                PorterDuff.Mode.SRC_IN
+            )
         } else {
-            binding.communityContentBookMarkCheckedIv.visibility = View.GONE
-            binding.communityContentBookMarkUncheckedIv.visibility = View.VISIBLE
+            binding.scrapIv.setColorFilter(
+                ContextCompat.getColor(this, R.color.black),  // 🔥 빨간색 적용
+                PorterDuff.Mode.SRC_IN
+            )
         }
     }
 

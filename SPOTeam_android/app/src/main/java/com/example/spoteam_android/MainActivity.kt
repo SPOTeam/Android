@@ -119,6 +119,9 @@ class MainActivity : AppCompatActivity() {
                 if(it is CommunityHomeFragment) {
                     writeCommunityFragment.show(supportFragmentManager, "Write Content")
                 }
+                if(it is CommunityFragment) {
+                    writeCommunityFragment.show(supportFragmentManager, "Write Content")
+                }
                 if(it is DetailStudyFragment) {
                     myStudyWriteCommunityFragment.show(supportFragmentManager, "My Study Write Content")
                 }

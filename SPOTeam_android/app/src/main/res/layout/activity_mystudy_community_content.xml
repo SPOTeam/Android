@@ -34,7 +34,7 @@
         android:layout_height="2dp"
         android:src="@drawable/line_img"
         android:layout_marginTop="74dp"
-        android:tint="@color/white"
+        app:tint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -154,7 +154,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/community_content_images_rv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="10dp"
                 android:layout_marginBottom="10dp"
                 android:nestedScrollingEnabled="false"
                 android:orientation="horizontal"

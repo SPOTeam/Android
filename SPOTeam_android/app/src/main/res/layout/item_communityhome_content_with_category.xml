@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:text="합격후기"
         android:textSize="14sp"
-        android:textStyle="bold"
         android:fontFamily="@font/pretendard"
         android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"

@@ -159,9 +159,12 @@
             android:textSize="12sp"
             android:fontFamily="@font/pretendard"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="82dp"
             android:textColor="@color/active_blue" />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/content_writer_tv"
@@ -169,6 +172,7 @@
             android:layout_height="wrap_content"
             android:text="익명"
             android:textSize="12sp"
+            android:textColor="@color/g400"
             android:fontFamily="@font/pretendard"
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"/>
@@ -179,6 +183,7 @@
             android:layout_height="wrap_content"
             android:text="|"
             android:textSize="12sp"
+            android:textColor="@color/g400"
             android:fontFamily="@font/pretendard"
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"/>
@@ -188,8 +193,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2024.05.31 17:31"
+            android:textColor="@color/g400"
             android:fontFamily="@font/pretendard"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 
