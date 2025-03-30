@@ -45,6 +45,17 @@ class StudyViewModel : ViewModel() {
 
     private val _locationList = mutableListOf<LocationItem>()
 
+    private val _studyId = MutableLiveData<Int>()
+    val studyId: LiveData<Int> get() = _studyId
+
+    private val _studyImageUrl = MutableLiveData<String>()
+    val studyImageUrl: LiveData<String> get() = _studyImageUrl
+
+    private val _studyIntroduction = MutableLiveData<String>()
+    val studyIntroduction: LiveData<String> get() = _studyIntroduction
+
+    private val _patchSuccess = MutableLiveData<Boolean>()
+    val patchSuccess: LiveData<Boolean> get() = _patchSuccess
 
     // 외부 노출용 (읽기 전용)
     val studyOwner: LiveData<String> get() = _studyOwner
@@ -70,12 +81,7 @@ class StudyViewModel : ViewModel() {
         _profileImageUri.value = uri
         updateStudyRequest()
     }
-    private val _studyId = MutableLiveData<Int>()
-    val studyId: LiveData<Int> get() = _studyId
-    private val _studyImageUrl = MutableLiveData<String>()
-    val studyImageUrl: LiveData<String> get() = _studyImageUrl
-    private val _studyIntroduction = MutableLiveData<String>()
-    val studyIntroduction: LiveData<String> get() = _studyIntroduction
+
 
     fun setStudyData(id: Int, imageUrl: String, studyIntroduction: String) {
         Log.d("StudyViewModel", "setStudyData 호출: studyId = $studyId, imageUrl = $imageUrl, introduction = $studyIntroduction")
@@ -182,16 +188,20 @@ class StudyViewModel : ViewModel() {
                 override fun onResponse(call: Call<ApiResponsed>, response: Response<ApiResponsed>) {
                     if (response.isSuccessful) {
                         Log.d("StudyViewModel", "스터디 수정 성공")
+                        _patchSuccess.value = true
                     } else {
                         Log.e("StudyViewModel", "스터디 수정 실패: ${response.code()}")
+                        _patchSuccess.value = false
                     }
                 }
 
                 override fun onFailure(call: Call<ApiResponsed>, t: Throwable) {
                     Log.e("StudyViewModel", "스터디 수정 오류: ${t.message}")
+                    _patchSuccess.value = false
                 }
             })
     }
+
 
 
 
