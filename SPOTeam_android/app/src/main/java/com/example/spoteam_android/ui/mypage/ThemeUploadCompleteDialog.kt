@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
 import androidx.fragment.app.FragmentManager
 import com.example.spoteam_android.R
 import com.example.spoteam_android.ui.study.DetailStudyFragment
@@ -23,10 +24,14 @@ class ThemeUploadCompleteDialog (private val context: Context) {
         dlg.setContentView(R.layout.dialog_theme_upload_complete)
 
         val btnMove = dlg.findViewById<Button>(R.id.dialog_complete_bt)
+        val closeIv: ImageView = dlg.findViewById(R.id.close_iv)
         btnMove.setOnClickListener {
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.main_frm, ThemePreferenceFragment())
             transaction.commit()
+            dlg.dismiss()
+        }
+        closeIv.setOnClickListener {
             dlg.dismiss()
         }
 

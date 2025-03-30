@@ -14,6 +14,8 @@ import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentActivityFeeStudyBinding
+import com.example.spoteam_android.ui.mypage.PurposeUploadComplteDialog
+import com.example.spoteam_android.ui.study.CorrectStudyCompleteDialog
 import com.example.spoteam_android.ui.study.MyStudyRegisterPreviewFragment
 class ActivityFeeStudyFragment : Fragment() {
     private lateinit var binding: FragmentActivityFeeStudyBinding
@@ -57,6 +59,14 @@ class ActivityFeeStudyFragment : Fragment() {
                 }
             }
         }
+        viewModel.patchSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                showCompletionDialog()
+            } else {
+                Toast.makeText(requireContext(), "수정에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
 
         return binding.root
@@ -177,6 +187,11 @@ class ActivityFeeStudyFragment : Fragment() {
         transaction.replace(R.id.main_frm,MemberStudyFragment()) // 이전 프래그먼트로 전환
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    private fun showCompletionDialog() {
+        val dialog = CorrectStudyCompleteDialog(requireContext())
+        dialog.start(parentFragmentManager)
     }
 
 

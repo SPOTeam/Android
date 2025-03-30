@@ -241,7 +241,7 @@ class BookmarkFragment : Fragment() {
                 textView.text = (pageNum + 1).toString()
                 textView.setBackgroundResource(0)
                 textView.isEnabled = false // 클릭 안 되게
-                textView.alpha = 0.3f      // 흐리게 보이게
+                textView.alpha = 0.3f
                 textView.visibility = View.VISIBLE
             }
         }
