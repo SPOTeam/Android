@@ -20,23 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/timer_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_timer"
-        android:text="05 : 00"
-        android:paddingVertical="7dp"
-        android:fontFamily="@font/pretendard"
-        android:paddingHorizontal="15dp"
-        android:textColor="@color/white"
-        android:layout_marginTop="10dp"
-        android:elevation="3dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/take_attendance_title_tv"
-        android:visibility="gone"/>
-
     <!--    X 이미지 변경    -->
     <ImageView
         android:id="@+id/write_content_prev_iv"
