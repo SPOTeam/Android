@@ -256,6 +256,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/suit_semi_bold"
                     android:text="내 관심사"
+                    android:textSize="12dp"
                     android:textColor="@color/black"
                     android:textFontWeight="700"
                     app:layout_constraintEnd_toEndOf="parent"
