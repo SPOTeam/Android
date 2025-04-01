@@ -141,7 +141,7 @@ class MyStudyRegisterPreviewFragment : Fragment() {
         binding.fragmentMyStudyRegisterPreviewAgeTv.text = "${viewModel.studyRequest.value?.minAge}-${viewModel.studyRequest.value?.maxAge}세"
 
         // 스터디 멤버 수 설정
-        binding.fragmentMyStudyRegisterPreviewMemberTv.text = "1/${viewModel.studyRequest.value?.maxPeople}"
+        binding.fragmentDetailStudyMemberMaxTv.text = "1/${viewModel.studyRequest.value?.maxPeople}"
 
         // 스터디 테마 설정 (chip으로 나열)
         val themes = viewModel.studyRequest.value?.themes?.take(3)?.joinToString("/") ?:"테마 없음" // 예: "취업/프로젝트"

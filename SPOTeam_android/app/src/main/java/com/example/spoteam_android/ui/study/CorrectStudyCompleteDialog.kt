@@ -1,18 +1,19 @@
 package com.example.spoteam_android.ui.study
 
+
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import com.example.spoteam_android.R
-import com.example.spoteam_android.ui.mypage.ThemePreferenceFragment
+import com.example.spoteam_android.ui.mypage.ParticipatingStudyFragment
+import com.example.spoteam_android.ui.mypage.PurposePreferenceFragment
 
-class StudyRegisterCompleteDialog(private val context: Context) {
-
+class CorrectStudyCompleteDialog(private val context: Context) {
     private val dlg = android.app.Dialog(context)
 
     fun start(fragmentManager: FragmentManager) {
@@ -22,13 +23,13 @@ class StudyRegisterCompleteDialog(private val context: Context) {
         dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         // 다이얼로그 레이아웃 설정
-        dlg.setContentView(R.layout.dialog_complete)
+        dlg.setContentView(R.layout.dialog_purpose_upload_complete)
 
         val btnMove = dlg.findViewById<Button>(R.id.dialog_complete_bt)
         val closeIv: ImageView = dlg.findViewById(R.id.close_iv)
         btnMove.setOnClickListener {
             val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.main_frm, StudyFragment())
+            transaction.replace(R.id.main_frm, ParticipatingStudyFragment())
             transaction.commit()
             dlg.dismiss()
         }
