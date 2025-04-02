@@ -137,6 +137,28 @@
             }
         }
 
+        private fun observeViewModel() {
+            viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
+                if (viewModel.mode.value == StudyFormMode.EDIT) {
+                    binding.fragmentOnlineStudyTv.text = "스터디 정보 수정"
+                    setChipState(request.isOnline)
+                    isLocationPlusVisible = !request.isOnline
+                    updateLocationPlusLayoutVisibility(isLocationPlusVisible)
+
+                    val newCode = request.regions?.firstOrNull()
+                    if (!request.isOnline && newCode != null && newCode != selectedLocationCode) {
+                        viewModel.findAddressFromCode(newCode)?.let {
+                            updateChip(it)
+                            selectedLocationCode = newCode
+                        }
+                    } else if (!request.isOnline && newCode == null) {
+                        binding.locationChip.visibility = View.GONE
+                    }
+                }
+            }
+        }
+
+
 
         private fun updateChip(address: String) {
             binding.locationChip.apply {
@@ -289,10 +311,7 @@
         }
 
         private fun goToPreviusFragment() {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, IntroduceStudyFragment())
-                .addToBackStack(null)
-                .commit()
+            parentFragmentManager.popBackStack()
         }
 
         private fun goToLocationFragment() {

@@ -43,6 +43,12 @@ class DetailStudyHomeFragment : Fragment() {
     private lateinit var scheduleAdapter: DetailStudyHomeAdapter
     private val page = 0
     private val size = 4
+
+
+    private var isMemberLoaded = false
+    private var isScheduleLoaded = false
+    private var isAnnounceLoaded = false
+
     val studyViewModel: StudyViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -51,27 +57,33 @@ class DetailStudyHomeFragment : Fragment() {
     ): View {
         binding = FragmentDetailStudyHomeBinding.inflate(inflater, container, false)
 
-        setupViews()
+        return binding.root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        setupViews() // 뷰 바인딩 초기화 및 Adapter 연결
 
-        // ViewModel에서 studyId를 관찰하고 변경될 때마다 fetchStudyMembers 호출
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
-            Log.d("DetailStudyHomeFragment", "Received studyId from ViewModel: $studyId")
             if (studyId != null) {
                 fetchStudySchedules(studyId)
                 fetchStudyMembers(studyId)
                 fetchRecentAnnounce(studyId)
-            } else {
-                Toast.makeText(requireContext(), "Study ID is missing", Toast.LENGTH_SHORT).show()
             }
         }
-
-
-        return binding.root
+    }
+    override fun onResume() {
+        super.onResume()
+        if (isVisible) {
+            studyViewModel.studyId.value?.let { studyId ->
+                fetchStudyMembers(studyId)
+            }
+        }
     }
 
     private fun setupViews() {
         //프로필 업데이트
+        binding.fragmentDetailStudyHomeProfileRv.visibility = View.INVISIBLE
         profileAdapter = DetailStudyHomeProfileAdapter(ArrayList())
         binding.fragmentDetailStudyHomeProfileRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.fragmentDetailStudyHomeProfileRv.adapter = profileAdapter
@@ -84,6 +96,7 @@ class DetailStudyHomeFragment : Fragment() {
         studyViewModel.studyIntroduction.observe(viewLifecycleOwner) { introduction ->
             binding.fragmentDetailStudyHomeIntroduceTv.text = introduction
         }
+
     }
 
     private fun fetchStudyMembers(studyId: Int) {
@@ -106,15 +119,20 @@ class DetailStudyHomeFragment : Fragment() {
                         profileAdapter.updateList(members.map {
                             ProfileItem(profileImage = it.profileImage, nickname = it.nickname)
                         })
+                        isMemberLoaded = true
+                        checkAndShowContent()
 
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Failed to fetch study members", Toast.LENGTH_SHORT).show()
+                    isMemberLoaded = true
+                    checkAndShowContent()
                 }
             }
 
             override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                isMemberLoaded = true
+                checkAndShowContent()
+
             }
         })
     }
@@ -168,13 +186,17 @@ class DetailStudyHomeFragment : Fragment() {
                             scheduleAdapter.updateList(ArrayList(scheduleItems))
                         }
                     }
+                    isScheduleLoaded = true
+                    checkAndShowContent()
                 } else {
-                    Toast.makeText(requireContext(), "Failed to fetch study schedules", Toast.LENGTH_SHORT).show()
+                    isScheduleLoaded = true
+                    checkAndShowContent()
                 }
             }
 
             override fun onFailure(call: Call<ScheduleListResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                isScheduleLoaded = true
+                checkAndShowContent()
             }
         })
     }
@@ -194,13 +216,16 @@ class DetailStudyHomeFragment : Fragment() {
                     } else {
                         binding.fragmentDetailStudyHomeTitleTv.text = recentAnnounce?.title ?: "최근 공지가 없습니다"
                     }
+                    isAnnounceLoaded = true
+                    checkAndShowContent()
                 } else {
-                    Toast.makeText(requireContext(), "Failed to load announcement: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    isAnnounceLoaded = true
+                    checkAndShowContent()
                 }
             }
-
             override fun onFailure(call: Call<RecentAnnounceResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                isAnnounceLoaded = true
+                checkAndShowContent()
             }
         })
     }
@@ -266,6 +291,14 @@ class DetailStudyHomeFragment : Fragment() {
 
         val date = inputFormatter.parse(staredAt)
         return outputFormatter.format(date)
+    }
+
+    private fun checkAndShowContent() {
+        if (isMemberLoaded && isScheduleLoaded && isAnnounceLoaded) {
+            binding.root.visibility = View.VISIBLE
+            binding.fragmentDetailStudyHomeProfileRv.visibility = View.VISIBLE
+            binding.fragmentDetailStudyHomeScheduleRv.visibility = View.VISIBLE
+        }
     }
 
 }

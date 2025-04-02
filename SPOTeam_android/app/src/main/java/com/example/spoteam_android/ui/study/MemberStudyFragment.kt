@@ -82,16 +82,6 @@ class MemberStudyFragment : Fragment() {
                 binding.fragmentMemberStudyAgeMaxValueTv.text = request.maxAge.toString()
             }
         }
-
-
-
-
-
-
-
-
-
-
         return binding.root
     }
 
@@ -180,17 +170,13 @@ class MemberStudyFragment : Fragment() {
                 viewModel.studyId.value?.let { putInt("studyId", it) }
             }
         }
-
         parentFragmentManager.beginTransaction()
             .replace(R.id.main_frm, nextFragment)
             .addToBackStack(null)
             .commit()
     }
     private fun goToPreviusFragment() {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, OnlineStudyFragment()) // 변경할 Fragment로 교체
-        transaction.addToBackStack(null) // 백스택에 추가
-        transaction.commit()
+        parentFragmentManager.popBackStack()
     }
     private fun smoothScrollToCenter(position: Int) {
         val layoutManager = binding.rvMemberStudyNum.layoutManager as LinearLayoutManager

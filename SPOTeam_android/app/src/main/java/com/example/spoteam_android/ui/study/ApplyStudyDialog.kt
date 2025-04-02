@@ -2,12 +2,14 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.Image
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
@@ -26,17 +28,17 @@ class ApplyStudyDialog(private val context: Context, private val fragment: Detai
     fun start(onMoveToHouseFragment: () -> Unit) {
         // 타이틀바 제거 및 커스텀 다이얼로그 설정
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
         dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
         dlg.setContentView(R.layout.dialog_apply_study)
 
-        // EditText와 Button 참조
-        val editText = dlg.findViewById<EditText>(R.id.dialog_apply_study_et)
-        val btnMove = dlg.findViewById<Button>(R.id.dialog_apply_study_bt)
+        val editText = dlg.findViewById<EditText>(R.id.fragment_introduce_studyname_et)
+        val btnMove = dlg.findViewById<Button>(R.id.dialog_complete_bt)
+        val closeIv: ImageView = dlg.findViewById(R.id.close_iv)
 
-        // 처음에는 버튼을 비활성화
         btnMove.isEnabled = false
 
-        // EditText의 내용이 변경될 때 버튼 활성화/비활성화
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 btnMove.isEnabled = s?.isNotEmpty() == true
@@ -47,7 +49,6 @@ class ApplyStudyDialog(private val context: Context, private val fragment: Detai
         })
 
         btnMove.setOnClickListener {
-            // 서버에 데이터 전송
             val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
             val email = sharedPreferences.getString("currentEmail", null)
             val memberId = sharedPreferences.getInt("${email}_memberId", -1)
@@ -56,7 +57,6 @@ class ApplyStudyDialog(private val context: Context, private val fragment: Detai
             val introduction = editText.text.toString()
 
             if (memberId != -1 && studyId != null) {
-                // 스터디 신청 전에 스터디 정보를 다시 가져와서 확인
                 fetchStudyDetails(studyId) { success, memberCount, maxPeople ->
                     if (success) {
                         if (memberCount >= maxPeople) {
@@ -66,16 +66,19 @@ class ApplyStudyDialog(private val context: Context, private val fragment: Detai
                                 if (applySuccess) {
                                     dlg.dismiss()
 
-                                    // 두 번째 다이얼로그 생성 및 표시
                                     val secondDialog = Dialog(context)
                                     secondDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                                     secondDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                                     secondDialog.setContentView(R.layout.dialog_apply_complete_study)
 
                                     val secondDialogButton = secondDialog.findViewById<Button>(R.id.dialog_complete_bt)
+                                    val secondCloseIV : ImageView = secondDialog.findViewById(R.id.close_iv)
                                     secondDialogButton.setOnClickListener {
                                         secondDialog.dismiss()
                                         onMoveToHouseFragment()
+                                    }
+                                    secondCloseIV.setOnClickListener {
+                                        dlg.dismiss()
                                     }
 
                                     secondDialog.show()
@@ -92,8 +95,12 @@ class ApplyStudyDialog(private val context: Context, private val fragment: Detai
                 Toast.makeText(context, "멤버 ID 또는 스터디 ID를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+        closeIv.setOnClickListener {
+            dlg.dismiss()
+        }
 
         dlg.show()
+
     }
 
     private fun fetchStudyDetails(studyId: Int, callback: (Boolean, Int, Int) -> Unit) {
@@ -140,7 +147,6 @@ class ApplyStudyDialog(private val context: Context, private val fragment: Detai
                     callback(false)
                 }
             }
-
             override fun onFailure(call: Call<StudyApplyResponse>, t: Throwable) {
                 // 네트워크 오류 등으로 인한 실패
                 callback(false)
