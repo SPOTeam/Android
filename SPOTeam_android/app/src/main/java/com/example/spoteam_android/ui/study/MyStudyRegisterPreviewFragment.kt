@@ -224,9 +224,6 @@ class MyStudyRegisterPreviewFragment : Fragment() {
     }
 
     private fun goToPreviusFragment() {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm,ActivityFeeStudyFragment()) // 이전 프래그먼트로 전환
-        transaction.addToBackStack(null)
-        transaction.commit()
+        parentFragmentManager.popBackStack()
     }
 }

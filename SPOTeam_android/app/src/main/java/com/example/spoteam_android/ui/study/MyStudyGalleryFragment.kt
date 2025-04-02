@@ -26,7 +26,9 @@ class MyStudyGalleryFragment : Fragment() {
 
     private lateinit var binding: FragmentMystudyGalleryBinding
     private var currentPage = 0
-    private val limit = 15 // 한 페이지에 15개의 항목을 보여줌
+    private val limit = 9 // 한 페이지에 9개의 항목을 보여줌
+    private var totalPages = 0
+    private var startPage = 0
     private val studyViewModel: StudyViewModel by activityViewModels()
 
     // Retrofit API Service
@@ -105,7 +107,7 @@ class MyStudyGalleryFragment : Fragment() {
                             showNoImagesText()
                         }
 
-                        updatePagination(images.size)
+                        updatePageUI()
                     } ?: run {
                         Log.e("MyStudyGalleryFragment", "GalleryResponse is null")
                         showNoImagesText()
@@ -141,9 +143,41 @@ class MyStudyGalleryFragment : Fragment() {
         Log.d("MyStudyGalleryFragment", "No images found, showing no images text")
     }
 
-    private fun updatePagination(imageCount: Int) {
-        binding.currentPage.text = (currentPage + 1).toString()
+    private fun updatePageUI() {
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            minOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            val pageNum = startPage + index
+            if (pageNum < totalPages) {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(
+                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                )
+                textView.isEnabled = true
+                textView.alpha = 1.0f
+                textView.visibility = View.VISIBLE
+            } else {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(0)
+                textView.isEnabled = false // 클릭 안 되게
+                textView.alpha = 0.3f
+                textView.visibility = View.VISIBLE
+            }
+        }
+
         binding.previousPage.isEnabled = currentPage > 0
-        binding.nextPage.isEnabled = imageCount == limit
+        binding.nextPage.isEnabled = currentPage < totalPages - 1
     }
 }

@@ -59,15 +59,15 @@ class StudyViewModel : ViewModel() {
 
     // 외부 노출용 (읽기 전용)
     val studyOwner: LiveData<String> get() = _studyOwner
-    fun setStudyOwner(name: String) {
-        _studyOwner.value = name
-    }
-
-
-
 
     private val _recentStudyId = MutableLiveData<Int?>()
     val recentStudyId: LiveData<Int?> get() = _recentStudyId
+
+
+
+    fun setStudyOwner(name: String) {
+        _studyOwner.value = name
+    }
 
     fun setMaxPeople(value: Int) {
         _maxPeople.value = value
@@ -283,10 +283,6 @@ class StudyViewModel : ViewModel() {
     fun findAddressFromCode(code: String): String? {
         return _locationList.find { it.code == code }?.address
     }
-    fun findCodeFromAddress(address: String): String? {
-        return _locationList.firstOrNull { it.address == address }?.code
-    }
-
 
     fun reset() {
         _mode.value = StudyFormMode.CREATE
@@ -301,7 +297,6 @@ class StudyViewModel : ViewModel() {
         _studyImageUrl.value = ""
         _studyIntroduction.value = ""
     }
-
 
 
 }

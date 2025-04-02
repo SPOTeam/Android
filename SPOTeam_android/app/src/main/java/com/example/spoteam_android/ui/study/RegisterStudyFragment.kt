@@ -21,51 +21,39 @@ class RegisterStudyFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val mode = arguments?.getSerializable("mode", StudyFormMode::class.java) ?: StudyFormMode.CREATE
-        val studyId = arguments?.getInt("studyId", -1) ?: -1
-
-        viewModel.setMode(mode)
-
-        if (mode == StudyFormMode.CREATE) {
-            viewModel.reset()
-        }
-        if (mode == StudyFormMode.EDIT && studyId != -1) {
-            viewModel.fetchStudyDetail(studyId)
-        }
+        initArguments()
     }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentRegisterStudyBinding.inflate(inflater, container, false)
-
-        if (viewModel.mode.value == StudyFormMode.EDIT) {
-            binding.fragmentRegisterStudyTv.text = "스터디 정보 수정"
-        }
-
-        // ChipGroup 설정 메소드 호출
-        setChipGroup()
-        observeThemes()
-
-        // '다음' 버튼 클릭 리스너 설정
-        binding.fragmentRegisterStudyBt.setOnClickListener {
-            updateProgressBar()
-            goToNextFragment()
-        }
-
-        binding.fragmentRegisterStudyBackBt.setOnClickListener{
-            parentFragmentManager.popBackStack()
-        }
-
         return binding.root
     }
 
-    private fun setChipGroup() {
-        // 초기 버튼 비활성화
-        binding.fragmentRegisterStudyBt.isEnabled = false
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initUI()
+        setChipGroup()
+        observeThemes()
+        setupListeners()
+    }
+    private fun initArguments() {
+        val mode = arguments?.getSerializable("mode", StudyFormMode::class.java) ?: StudyFormMode.CREATE
+        val studyId = arguments?.getInt("studyId", -1) ?: -1
+        viewModel.setMode(mode)
 
+        if (mode == StudyFormMode.CREATE) viewModel.reset()
+        else if (mode == StudyFormMode.EDIT && studyId != -1) viewModel.fetchStudyDetail(studyId)
+    }
+    private fun initUI() {
+        if (viewModel.mode.value == StudyFormMode.EDIT) {
+            binding.fragmentRegisterStudyTv.text = "스터디 정보 수정"
+        }
+        binding.fragmentRegisterStudyBt.isEnabled = false
+    }
+
+    private fun setChipGroup() {
         // Chip 선택 상태 리스너
         val chipCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, _ ->
             updateSelectedThemes()
@@ -77,6 +65,19 @@ class RegisterStudyFragment : Fragment() {
             chip?.setOnCheckedChangeListener(chipCheckedChangeListener)
         }
     }
+
+    private fun setupListeners() {
+        binding.fragmentRegisterStudyBt.setOnClickListener {
+            updateProgressBar()
+            goToNextFragment()
+        }
+        binding.fragmentRegisterStudyBackBt.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+    }
+
+
+
 
     private fun updateSelectedThemes() {
         val selectedThemes = mutableListOf<String>()
@@ -132,13 +133,11 @@ class RegisterStudyFragment : Fragment() {
                 viewModel.studyId.value?.let { putInt("studyId", it) }
             }
         }
-
         parentFragmentManager.beginTransaction()
             .replace(R.id.main_frm, nextFragment)
             .addToBackStack(null)
             .commit()
     }
-
 
     private fun normalizeText(text: String): String {
         return text.replace(" ", "").replace("및", "/")
@@ -151,5 +150,4 @@ class RegisterStudyFragment : Fragment() {
             .replace("자율학습", "자율 학습")
             .replace(" ", "")
     }
-
 }
