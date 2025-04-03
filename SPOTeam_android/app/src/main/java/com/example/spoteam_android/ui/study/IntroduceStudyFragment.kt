@@ -37,6 +37,20 @@ class IntroduceStudyFragment : Fragment() {
     ): View? {
         binding = FragmentIntroduceStudyBinding.inflate(inflater, container, false)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initActivityResultLaunchers()
+        initAddImageButton()
+        setupTextWatchers()
+        setupListeners()
+        observeViewModel()
+        checkButtonState()
+    }
+
+    private fun observeViewModel() {
         viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
             if (viewModel.mode.value == StudyFormMode.EDIT && request != null) {
                 binding.fragmentIntroduceStudyTv.text = "스터디 정보 수정"
@@ -48,65 +62,42 @@ class IntroduceStudyFragment : Fragment() {
                     Glide.with(this)
                         .load(imageUrl)
                         .into(binding.fragmentIntroduceStudyIv)
-
                     profileImage = imageUrl
                 }
                 checkButtonState()
-
             }
         }
-
-
-
-        // 초기화 함수 호출
-        initActivityResultLaunchers()
-        initAddImageButton()
-        setupTextWatchers()
-        checkButtonState() // 초기 상태 체크
-
-        binding.fragmentIntroduceStudyBt.setOnClickListener {
-            if (profileImage == null) { // profileImage가 null인지 확인
-                Toast.makeText(context, "프로필 이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener // 이미지가 선택되지 않으면 함수 종료
-            }
-
-            saveStudyData()
-            goToNextFragment()
-        }
-
-        binding.fragmentIntroduceStudyBackBt.setOnClickListener {
-            goToPreviusFragment()
-        }
-
-        return binding.root
     }
+
 
     private fun initActivityResultLaunchers() {
         // 이미지 선택을 위한 ActivityResultLauncher 초기화
-        getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val selectedImageURI: Uri? = result.data?.data
-                if (selectedImageURI != null) {
-                    binding.fragmentIntroduceStudyIv.setImageURI(selectedImageURI)
-                    profileImage = selectedImageURI.toString() // 이미지 URI를 변수에 저장
-                    viewModel.setProfileImageUri(profileImage) // URI를 ViewModel에 저장
-                    checkButtonState() // 이미지 선택 후 버튼 상태 체크
+        getImageLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val selectedImageURI: Uri? = result.data?.data
+                    if (selectedImageURI != null) {
+                        binding.fragmentIntroduceStudyIv.setImageURI(selectedImageURI)
+                        profileImage = selectedImageURI.toString() // 이미지 URI를 변수에 저장
+                        viewModel.setProfileImageUri(profileImage) // URI를 ViewModel에 저장
+                        checkButtonState() // 이미지 선택 후 버튼 상태 체크
+                    } else {
+                        Toast.makeText(context, "이미지를 가져오지 못했습니다", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(context, "이미지를 가져오지 못했습니다", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(context, "이미지를 가져오지 못했습니다", Toast.LENGTH_SHORT).show()
             }
-        }
 
         // 권한 요청을 위한 ActivityResultLauncher 초기화
-        requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                getImageFromAlbum()
-            } else {
-                Toast.makeText(context, "권한이 필요합니다", Toast.LENGTH_SHORT).show()
+        requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    getImageFromAlbum()
+                } else {
+                    Toast.makeText(context, "권한이 필요합니다", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
     }
 
     private fun initAddImageButton() {
@@ -115,10 +106,14 @@ class IntroduceStudyFragment : Fragment() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 // Android 13 이상에서는 새로운 권한을 요청
                 when {
-                    ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED -> {
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        android.Manifest.permission.READ_MEDIA_IMAGES
+                    ) == PackageManager.PERMISSION_GRANTED -> {
                         // 권한이 존재하는 경우
                         getImageFromAlbum()
                     }
+
                     else -> {
                         // 권한 요청
                         requestPermissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
@@ -127,10 +122,14 @@ class IntroduceStudyFragment : Fragment() {
             } else {
                 // Android 12 이하에서는 기존 권한 사용
                 when {
-                    ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED -> {
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED -> {
                         // 권한이 존재하는 경우
                         getImageFromAlbum()
                     }
+
                     else -> {
                         // 권한 요청
                         requestPermissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -156,10 +155,18 @@ class IntroduceStudyFragment : Fragment() {
 
         for (editText in editTextList) {
             editText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     checkButtonState()
                 }
+
                 override fun afterTextChanged(s: Editable?) {}
             })
         }
@@ -181,8 +188,6 @@ class IntroduceStudyFragment : Fragment() {
         val title = binding.fragmentIntroduceStudynameEt.text.toString()
         val goal = binding.fragmentIntroduceStudypurposeEt.text.toString()
         val introduction = binding.fragmentIntroduceStudyEt.text.toString()
-
-        // ✅ ViewModel에서 기존 값을 가져옴
         val isOnline = viewModel.studyRequest.value?.isOnline ?: true
         val regions = viewModel.studyRequest.value?.regions
         val maxPeople = viewModel.studyRequest.value?.maxPeople ?: 0
@@ -195,7 +200,7 @@ class IntroduceStudyFragment : Fragment() {
             title = title,
             goal = goal,
             introduction = introduction,
-            isOnline = isOnline, // ✅ 수정 모드에서도 덮어쓰지 않음
+            isOnline = isOnline,
             profileImage = profileImage,
             regions = regions,
             maxPeople = maxPeople,
@@ -204,6 +209,23 @@ class IntroduceStudyFragment : Fragment() {
             maxAge = maxAge,
             fee = fee
         )
+    }
+
+    private fun setupListeners() {
+        binding.fragmentIntroduceStudyBt.setOnClickListener {
+            goToNextFragment()
+        }
+        binding.fragmentIntroduceStudyBackBt.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+        binding.fragmentIntroduceStudyBt.setOnClickListener {
+            if (profileImage == null) { // profileImage가 null인지 확인
+                Toast.makeText(context, "프로필 이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener // 이미지가 선택되지 않으면 함수 종료
+            }
+            saveStudyData()
+            goToNextFragment()
+        }
     }
 
 
@@ -220,11 +242,5 @@ class IntroduceStudyFragment : Fragment() {
             .addToBackStack(null)
             .commit()
     }
-
-    private fun goToPreviusFragment() {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, RegisterStudyFragment()) // 변경할 Fragment로 교체
-        transaction.addToBackStack(null) // 백스택에 추가
-        transaction.commit()
-    }
 }
+
