@@ -113,6 +113,7 @@
             android:src="@drawable/announce_check"/>
 
         <TextView
+            android:id="@+id/isAnnount_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="공지"

@@ -106,6 +106,7 @@ data class ContentInfo(
     var likeCount : Int,
     val commentCount : Int,
     val viewCount : Int,
+    val imageUrl : String,
     var likedByCurrentUser : Boolean,
     var scrapedByCurrentUser : Boolean,
     val createdByCurrentUser : Boolean,

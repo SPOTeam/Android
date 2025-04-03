@@ -128,21 +128,12 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
 
-                if (data?.clipData != null) {
-                    // 🔥 여러 개의 이미지 선택
-                    val clipData = data.clipData
-                    for (i in 0 until clipData!!.itemCount) {
-                        val uri = clipData.getItemAt(i).uri
-                        if (!imageList.contains(uri)) { // 중복 방지
-                            imageList.add(uri)
-                        }
-                    }
-                } else if (data?.data != null) {
-                    // 🔥 단일 이미지 선택
+                // 🔁 이전 이미지 모두 제거
+                imageList.clear()
+                if (data?.data != null) {
+                    // ✅ 한 장 선택된 경우
                     val uri = data.data!!
-                    if (!imageList.contains(uri)) {
-                        imageList.add(uri)
-                    }
+                    imageList.add(uri)
                 }
 
                 imageAdapter.notifyDataSetChanged() // RecyclerView 갱신
@@ -382,12 +373,6 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
             }
         })
     }
-
-
-    private fun showLog(message: String?) {
-        Toast.makeText(requireContext(), "WriteContentFragment: $message", Toast.LENGTH_SHORT).show()
-    }
-
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val selectedCategory = parent?.getItemAtPosition(position).toString()

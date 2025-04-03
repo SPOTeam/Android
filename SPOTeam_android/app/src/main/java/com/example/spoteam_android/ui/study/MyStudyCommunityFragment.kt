@@ -44,12 +44,11 @@ class MyStudyCommunityFragment : Fragment() {
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
             if (studyId != null) {
                 currentStudyId = studyId
+                fetchPages()
             } else {
                 Toast.makeText(requireContext(), "Study ID is missing", Toast.LENGTH_SHORT).show()
             }
         }
-        initBTN()
-
 
         binding.writeContentIv.setOnClickListener{
             val fragment = MyStudyWriteContentFragment().apply {
@@ -58,10 +57,10 @@ class MyStudyCommunityFragment : Fragment() {
                     R.style.AppBottomSheetDialogBorder20WhiteTheme
                 )
             }
-
             fragment.show(parentFragmentManager,"MyStudyWriteContent")
         }
 
+        initBTN()
         return binding.root
     }
 
@@ -98,6 +97,7 @@ class MyStudyCommunityFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
         fetchPages()
     }
 
@@ -116,10 +116,12 @@ class MyStudyCommunityFragment : Fragment() {
                             if (pagesResponseList.isNotEmpty()) {
                                 binding.fileNoneIv.visibility = View.GONE
                                 binding.noneMemberAlertTv.visibility = View.GONE
+                                binding.communityCategoryContentRv.visibility = View.VISIBLE
                                 initRecyclerview(pagesResponseList)
                             } else {
                                 binding.fileNoneIv.visibility = View.VISIBLE
                                 binding.noneMemberAlertTv.visibility = View.VISIBLE
+                                binding.communityCategoryContentRv.visibility = View.GONE
                             }
                         } else {
                             binding.fileNoneIv.visibility = View.VISIBLE

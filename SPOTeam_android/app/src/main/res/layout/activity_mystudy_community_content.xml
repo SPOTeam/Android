@@ -151,17 +151,19 @@
                 app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
                 app:layout_constraintTop_toBottomOf="@id/community_content_theme_tv" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/community_content_images_rv"
-                android:layout_width="wrap_content"
-                android:layout_height="10dp"
-                android:layout_marginBottom="10dp"
-                android:nestedScrollingEnabled="false"
-                android:orientation="horizontal"
-                android:overScrollMode="never"
-                app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
-                app:layout_constraintTop_toBottomOf="@id/community_content_title_tv"
-                tools:listitem="@layout/item_image_recycler" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image_content_iv"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:background="@color/white"
+                android:src="@drawable/sample_img"
+                android:scaleType="centerCrop"
+                app:strokeWidth="0.3dp"
+                android:layout_marginTop="10dp"
+                app:strokeColor="@color/g300"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut1"
+                app:layout_constraintStart_toStartOf="@id/community_content_title_tv"
+                app:layout_constraintTop_toBottomOf="@id/community_content_title_tv"/>
 
             <TextView
                 android:id="@+id/community_content_content_tv"
@@ -173,9 +175,9 @@
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 android:lineSpacingMultiplier="1.5"
-                app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
+                app:layout_constraintStart_toStartOf="@id/image_content_iv"
                 app:layout_constraintEnd_toEndOf="@id/more_ll"
-                app:layout_constraintTop_toBottomOf="@id/community_content_images_rv" />
+                app:layout_constraintTop_toBottomOf="@id/image_content_iv" />
 
             <LinearLayout
                 android:id="@+id/community_content_content_info_ll"

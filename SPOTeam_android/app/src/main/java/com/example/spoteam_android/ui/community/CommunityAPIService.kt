@@ -33,14 +33,19 @@ interface CommunityAPIService {
         @Query("likeOrScrap") isChecked : Boolean
     ): Call<ContentResponse>
 
+    @Multipart
     @POST("/spot/posts")
     fun postContent(
-        @Body requestBody : WriteContentRequest
+        @Part("title") titlePart: RequestBody,
+        @Part("content") contentPart: RequestBody,
+        @Part("type") themePart: RequestBody,
+        @Part("anonymous") isAnonymousPart: RequestBody,
+        @Part image: MultipartBody.Part
     ): Call<WriteContentResponse>
 
     @PATCH("/spot/posts/{postId}")
     fun editContent(
-        @Path("postId") postId: String,
+        @Path("postId") postId: Int,
         @Body requestBody : WriteContentRequest
     ): Call<WriteContentResponse>
 

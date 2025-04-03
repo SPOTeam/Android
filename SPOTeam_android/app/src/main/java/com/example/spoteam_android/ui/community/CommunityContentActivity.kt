@@ -314,18 +314,16 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
 
         reportContentItem.setOnClickListener{
             reportContent(view, supportFragmentManager)
+            popupWindow.dismiss()
         }
 
         editMenuItem.setOnClickListener{
             if(createdByThisMember) {
 
                 // WriteContentFragment 생성 및 데이터 전달
-                val editContext = EditContentFragment().apply {
+                val editContext = EditContentFragment(this).apply {
                     arguments = Bundle().apply {
-                        putString("title", currentTitle)  // 수정할 게시물의 제목 전달
-                        putString("content", currentContent)  // 수정할 게시물의 내용 전달
-                        putString("type", currentType)
-                        putString("postId", postId.toString())
+                        putInt("postId", postId)
                     }
                     setStyle(
                         BottomSheetDialogFragment.STYLE_NORMAL,
@@ -334,10 +332,12 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
                 }
                 editContext.show(supportFragmentManager, "EditContent")
             }
+            popupWindow.dismiss()
         }
 
         deleteMenuItem.setOnClickListener{
             deleteContent(view, supportFragmentManager)
+            popupWindow.dismiss()
         }
         // 외부 클릭 시 닫힘 설정
         popupWindow.isOutsideTouchable = true
@@ -393,9 +393,6 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
                             val contentInfo = contentResponse.result
                             val commentInfo = contentInfo.commentResponses.comments
                             initContentInfo(contentInfo)
-                            createdByThisMember = contentInfo.createdByCurrentUser
-                            ischecked = false;
-                            scrapByThisMember = contentInfo.scrapedByCurrentUser
                             val sortedComments = sortComments(commentInfo)
                             initMultiViewRecyclerView(sortedComments)
                         } else {
@@ -529,6 +526,10 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
     }
 
     private fun initContentInfo(contentInfo: ContentInfo) {
+        createdByThisMember = contentInfo.createdByCurrentUser
+        ischecked = false;
+        scrapByThisMember = contentInfo.scrapedByCurrentUser
+
         binding.communityContentDateTv.text = formatWrittenTime(contentInfo.writtenTime)
         binding.scrapCountTv.text = contentInfo.scrapCount.toString()
         binding.communityContentTitleTv.text = contentInfo.title
@@ -537,14 +538,12 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
         binding.communityContentContentNumTv.text = contentInfo.commentCount.toString()
         binding.communityContentViewNumTv.text = contentInfo.viewCount.toString()
 
-
         if(contentInfo.type == "PASS_EXPERIENCE") binding.communityContentThemeTv.text = "#합격후기"
         else if(contentInfo.type == "INFORMATION_SHARING") binding.communityContentThemeTv.text = "#정보공유"
         else if(contentInfo.type == "COUNSELING") binding.communityContentThemeTv.text = "#고민상담"
         else if(contentInfo.type == "JOB_TALK") binding.communityContentThemeTv.text = "#취준토크"
         else if(contentInfo.type == "FREE_TALK") binding.communityContentThemeTv.text = "#자유토크"
         else if(contentInfo.type == "SPOT_ANNOUNCEMENT ") binding.communityContentThemeTv.text = "#SPOT공지"
-
 
         currentTitle = contentInfo.title
         currentContent = contentInfo.content
@@ -560,6 +559,15 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
             Glide.with(binding.root.context)
                 .load(contentInfo.profileImage)
                 .into(binding.communityContentProfileIv)
+        }
+
+        if(contentInfo.imageUrl != null) {
+            binding.imageContentIv.visibility = View.VISIBLE
+            Glide.with(binding.root.context)
+                .load(contentInfo.imageUrl)
+                .into(binding.imageContentIv)
+        } else {
+            binding.imageContentIv.visibility = View.GONE
         }
 
         if(contentInfo.likedByCurrentUser) {
@@ -668,8 +676,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
     }
 
     override fun onBottomSheetDismissed() {
-        Log.d("ActionListener", "IsIn")
-        fetchContentInfo()
+        supportFragmentManager.popBackStack()
     }
 }
 
