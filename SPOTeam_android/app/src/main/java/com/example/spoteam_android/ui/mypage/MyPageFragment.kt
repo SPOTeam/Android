@@ -208,22 +208,22 @@ class MyPageFragment : Fragment() {
     private fun logoutFromKakao() {
         UserApiClient.instance.logout { error ->
             if (error != null) {
-                Toast.makeText(requireContext(), "카카오 로그아웃 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-                Log.e("MyPageFragment", "Kakao Logout Failed: ${error.message}")
+                // 🔸 이미 로그아웃된 상태라면 에러가 나올 수 있음
+                Log.w("MyPageFragment", "카카오 로그아웃 실패 또는 이미 로그아웃됨: ${error.message}")
             } else {
-                Log.i("MyPageFragment", "카카오 로그아웃 성공. SDK 내부 토큰 캐시 초기화")
-
-                com.kakao.sdk.auth.TokenManagerProvider.instance.manager.clear()
-
-                clearSharedPreferences()
-
-                RetrofitInstance.setAuthToken(null)
-
-                Toast.makeText(requireContext(), "카카오 로그아웃 성공", Toast.LENGTH_SHORT).show()
-                navigateToLoginScreen()
+                Log.i("MyPageFragment", "카카오 로그아웃 성공")
             }
+
+            com.kakao.sdk.auth.TokenManagerProvider.instance.manager.clear()
+            clearSharedPreferences()
+            RetrofitInstance.setAuthToken(null)
+
+            Toast.makeText(requireContext(), "로그아웃되었습니다", Toast.LENGTH_SHORT).show()
+            navigateToLoginScreen()
         }
     }
+
+
 
     private fun logoutFromNaver() {
         NaverIdLoginSDK.logout()
@@ -315,7 +315,6 @@ class MyPageFragment : Fragment() {
         val intent = Intent(requireActivity(), StartLoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-        requireActivity().finish()
     }
 
     private fun showConfirmationDialog(title: String, message: String, onConfirm: () -> Unit) {

@@ -50,18 +50,11 @@ class StartLoginActivity : AppCompatActivity() {
 
         binding.itemLogoKakaoIb.setOnClickListener { loginViewModel.startKakaoLogin(this) }
         binding.itemLogoNaverIb.setOnClickListener { loginViewModel.startNaverLogin(this) }
-        binding.itemLogoGoogleIb.setOnClickListener {
-            val loginIntent = Intent(this, NormalLoginActivity::class.java)
-            startActivity(loginIntent)
-        }
 
-        binding.activityStartLoginNextBt.setOnClickListener {
-            val loginIntent = Intent(this, EmailVerificationActivity::class.java)
-            startActivity(loginIntent)
-        }
-        binding.activityStartLoginAlreadyLoginTv.setOnClickListener {
-            val loginIntent = Intent(this, NicNameActivity::class.java)
-            startActivity(loginIntent)
+        //테스트
+        binding.activityStartLoginLogoIv.setOnClickListener {
+            val intent = Intent(this, NicNameActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -118,50 +111,4 @@ class StartLoginActivity : AppCompatActivity() {
 
 }
 
-
-
-
-
-//    private fun fetchThemesAndNavigate() {
-//        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
-//
-//        service.getThemes().enqueue(object : Callback<ThemeApiResponse> {
-//            override fun onResponse(
-//                call: Call<ThemeApiResponse>,
-//                response: Response<ThemeApiResponse>
-//            ) {
-//                if (response.isSuccessful) {
-//                    val apiResponse = response.body()
-//                    if (apiResponse != null && apiResponse.isSuccess) {
-//                        val themes = apiResponse.result.themes
-//                        if (themes.isNotEmpty()) {
-//                            navigateToActivity(MainActivity::class.java)
-//                        } else {
-//                            navigateToActivity(CheckListCategoryActivity::class.java)
-//                        }
-//                    } else {
-//                        val errorMessage = apiResponse?.message ?: "알 수 없는 오류 발생"
-//                        Log.e("NavigateToNextScreen", "테마 가져오기 실패: $errorMessage")
-//
-//                        // 관심 테마를 찾을 수 없는 경우 CheckListCategoryActivity로 이동
-//                        if (errorMessage.contains("해당하는 회원의 관심 테마를 찾을 수 없습니다.")) {
-//                            navigateToActivity(CheckListCategoryActivity::class.java)
-//                        }
-//                    }
-//                } else {
-//                    val errorMessage = response.errorBody()?.string() ?: "응답 실패"
-//                    Log.e("NavigateToNextScreen", "테마 가져오기 실패: $errorMessage")
-//
-//                    //  서버 오류 응답에서도 처리
-//                    if (errorMessage.contains("해당하는 회원의 관심 테마를 찾을 수 없습니다.")) {
-//                        navigateToActivity(CheckListCategoryActivity::class.java)
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ThemeApiResponse>, t: Throwable) {
-//                Log.e("NavigateToNextScreen", "테마 가져오기 오류", t)
-//            }
-//        })
-//    }
 

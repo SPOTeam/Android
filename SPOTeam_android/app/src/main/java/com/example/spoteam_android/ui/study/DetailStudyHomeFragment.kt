@@ -74,12 +74,18 @@ class DetailStudyHomeFragment : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        if (isVisible) {
-            studyViewModel.studyId.value?.let { studyId ->
-                fetchStudyMembers(studyId)
-            }
+
+        binding.fragmentDetailStudyHomeProfileRv.viewTreeObserver.addOnGlobalLayoutListener {
+            binding.fragmentDetailStudyHomeProfileRv.requestLayout()
+            binding.fragmentDetailStudyHomeProfileRv.invalidate()
+        }
+
+        studyViewModel.studyId.value?.let { studyId ->
+            fetchStudyMembers(studyId)
         }
     }
+
+
 
     private fun setupViews() {
         //프로필 업데이트

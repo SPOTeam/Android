@@ -14,7 +14,7 @@
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:src="@drawable/spot_homelogo"
-        android:layout_marginTop="201dp"
+        android:layout_marginTop="170dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,167 +27,54 @@
         android:text="@string/studystart"
         android:textSize="19.8dp"
         android:textColor="@color/b500"
-        android:fontFamily="@font/suit_variable"
-        android:textFontWeight="700"
+        android:fontFamily="@font/suit_bold"
         android:layout_marginTop="64dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activity_start_login_logo_iv"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SNS로 간편 가입하기"
-        android:textSize="13.7dp"
-        android:textColor="@color/g500"
-        android:fontFamily="@font/suit_variable"
-        android:textFontWeight="700"
-        android:layout_marginBottom="7dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/activity_start_login_logo_ll"/>
-
-
-
-
-    <LinearLayout
-        android:id="@+id/activity_start_login_logo_ll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/activity_start_login_or_ll">
-
-
-        <ImageButton
-            android:id="@+id/item_logo_kakao_ib"
-            android:layout_width="41dp"
-            android:layout_height="41dp"
-            android:background="@drawable/shape"
-            android:src="@drawable/ic_kakao_logo"
-            android:scaleType="centerCrop" />
-
-        <ImageButton
-            android:id="@+id/item_logo_google_ib"
-            android:layout_width="41dp"
-            android:layout_height="41dp"
-            android:layout_marginStart="61dp"
-            android:background="@drawable/shape"
-            android:src="@drawable/ic_google_logo"
-            android:scaleType="centerCrop" />
-
-        <ImageButton
-            android:id="@+id/item_logo_naver_ib"
-            android:layout_width="41dp"
-            android:layout_height="41dp"
-            android:layout_marginStart="61dp"
-            android:background="@drawable/shape"
-            android:src="@drawable/naver_logo"
-            android:scaleType="centerCrop" />
-        
-    </LinearLayout>
-    
-    <LinearLayout
-        android:id="@+id/activity_start_login_or_ll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toTopOf="@id/activity_start_login_next_bt">
-
-        <View
-            android:layout_width="123.6dp"
-            android:layout_height="1dp"
-            android:background="@color/g300"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/activity_start_login_or_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="또는"
-            android:textSize="12dp"
-            android:fontFamily="@font/suit_variable"
-            android:textFontWeight="500"
-            android:textColor="@color/g500"
-            android:layout_marginStart="12dp"/>
-
-        <View
-            android:layout_width="123.6dp"
-            android:layout_height="1dp"
-            android:background="@color/g300"
-            android:layout_gravity="center"
-            android:layout_marginStart="12dp"/>
-
-
-
-
-
-
-    </LinearLayout>
 
     <android.widget.Button
-        android:id="@+id/activity_start_login_next_bt"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/button_login_enabled"
-        android:text="이메일로 가입하기"
-        android:textColor="@color/b500"
-        android:textSize="16.8dp"
-        android:fontFamily="@font/suit_variable"
-        android:textFontWeight="700"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintEnd_toEndOf="@id/activity_start_login_or_ll"
-        app:layout_constraintStart_toStartOf="@id/activity_start_login_or_ll"
-        app:layout_constraintBottom_toTopOf="@id/activity_start_login_already_ll"/>
+        android:id="@+id/item_logo_kakao_ib"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:drawableStart="@drawable/kakao_logo"
+        android:paddingStart="10dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="카카오톡으로 3초 시작하기"
+        android:textColor="#3C1E1E"
+        android:textSize="14dp"
+        android:textFontWeight="600"
+        android:background="@drawable/kakao_bt"
+        android:layout_marginStart="65dp"
+        android:layout_marginEnd="65dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@id/item_logo_naver_ib"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-
-    <LinearLayout
-        android:id="@+id/activity_start_login_already_ll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="114dp"
+    <android.widget.Button
+        android:id="@+id/item_logo_naver_ib"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:drawableStart="@drawable/naver_logo"
+        android:paddingStart="10dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="네이버로 시작하기"
+        android:textFontWeight="600"
+        android:textColor="#FFFFFF"
+        android:textSize="14dp"
+        android:background="@drawable/naver_bt"
+        android:layout_marginStart="65dp"
+        android:layout_marginEnd="65dp"
+        android:layout_marginBottom="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-
-
-        <TextView
-            android:id="@+id/activity_start_login_already_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="이미 계정이 있으신가요?"
-            android:textSize="13.7dp"
-            android:textColor="@color/b500"
-            android:textFontWeight="700"
-            android:fontFamily="@font/suit_variable" />
-
-        <TextView
-            android:id="@+id/activity_start_login_already_login_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/start_login"
-            android:textSize="13.7dp"
-            android:textStyle="bold"
-            android:textColor="@color/b500"
-            android:textFontWeight="700"
-            android:fontFamily="@font/suit_variable"
-            android:layout_marginStart="82dp"/>
-
-
-
-    </LinearLayout>
-
-
-
-
-
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 

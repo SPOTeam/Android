@@ -443,11 +443,18 @@ class HouseFragment : Fragment() {
                     if (response.isSuccessful) {
                         val popularResponse = response.body()
                         if (popularResponse?.isSuccess == "true") {
-                            binding.popularContentTv.text = popularResponse.result.postBest5Responses[0].postTitle
-                            popularContentId = popularResponse.result.postBest5Responses[0].postId
+                            val postList = popularResponse.result.postBest5Responses
+                            if (!postList.isNullOrEmpty()) {
+                                binding.popularContentTv.text = postList[0].postTitle
+                                popularContentId = postList[0].postId
+                            } else {
+                                binding.popularContentTv.text = "인기 게시글이 없습니다"
+                                popularContentId = -1 // 또는 클릭 불가하게 처리
+                            }
                         } else {
                             showError(popularResponse?.message)
                         }
+
                     } else {
                         showError(response.code().toString())
                     }
