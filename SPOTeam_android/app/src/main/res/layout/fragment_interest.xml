@@ -79,6 +79,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/interest_study_bold"
             app:tabMode="scrollable"
+            android:textFontWeight="800"
             app:tabIndicatorColor="#186AFF"
             app:tabIndicatorFullWidth="false"
             app:tabIndicatorHeight="2dp"

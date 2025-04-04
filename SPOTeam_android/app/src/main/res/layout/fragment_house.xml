@@ -238,6 +238,7 @@
                 android:id="@+id/house_interest_cl"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1">
 
                 <ImageView
@@ -257,7 +258,7 @@
                     android:fontFamily="@font/suit_semi_bold"
                     android:text="내 관심사"
                     android:textColor="@color/black"
-                    android:textFontWeight="700"
+                    android:textSize="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/house_interest_iv" />

@@ -34,11 +34,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+
+
+    <android.widget.Button
+        android:id="@+id/dialog_agreement_accept_btn"
+        android:layout_width="170dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button_background"
+        android:text="동의"
+        android:textColor="@color/b500"
+        android:textSize="13dp"
+        android:textFontWeight="600"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ScrollView
         android:id="@+id/agreement_content_sv"
         android:layout_width="0dp"
-        android:layout_height="230dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="280dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/normal_login_edittext_corner_rectangle"
@@ -48,13 +65,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dialog_agreement_title_tv">
 
+
+
         <LinearLayout
             android:id="@+id/dialog_agreement_body_tv"
             android:layout_width="wrap_content"
             android:layout_height="280dp"
             android:orientation="vertical"
+            android:padding="10dp"
             android:textColor="@color/black"
-            android:padding="10dp">
+            app:layout_constraintTop_toTopOf="@+id/agreement_content_sv">
 
             <!-- 제1조 -->
             <TextView
@@ -93,11 +113,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:lineSpacingExtra="3dp"
+                android:paddingLeft="30dp"
+                android:paddingTop="8dp"
                 android:text="@string/agreement_body02_text"
                 android:textColor="@color/black"
                 android:textFontWeight="600"
-                android:paddingLeft="30dp"
-                android:paddingTop="8dp"
                 android:textSize="12dp" />
 
             <!-- 제3조 -->
@@ -115,11 +135,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:lineSpacingExtra="3dp"
+                android:paddingLeft="30dp"
+                android:paddingTop="8dp"
                 android:text="@string/agreement_body03_text"
                 android:textColor="@color/black"
                 android:textFontWeight="600"
-                android:paddingLeft="30dp"
-                android:paddingTop="8dp"
                 android:textSize="12dp" />
 
             <!-- 제4조 -->
@@ -137,11 +157,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:lineSpacingExtra="3dp"
+                android:paddingLeft="30dp"
+                android:paddingTop="8dp"
                 android:text="@string/agreement_body04_text"
                 android:textColor="@color/black"
                 android:textFontWeight="600"
-                android:paddingLeft="30dp"
-                android:paddingTop="8dp"
                 android:textSize="12dp" />
 
             <!-- 제5조 -->
@@ -158,30 +178,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="3dp"
+                android:paddingLeft="30dp"
+                android:paddingTop="8dp"
                 android:text="@string/agreement_body05_text"
                 android:textColor="@color/black"
                 android:textFontWeight="600"
-                android:paddingLeft="30dp"
-                android:paddingTop="8dp"
                 android:textSize="12dp" />
         </LinearLayout>
     </ScrollView>
-
-    <android.widget.Button
-        android:id="@+id/dialog_agreement_accept_btn"
-        android:layout_width="170dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/button_background"
-        android:text="동의"
-        android:textColor="@color/b500"
-        android:textSize="13dp"
-        android:textFontWeight="600"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,6 +31,7 @@ import com.example.spoteam_android.ui.community.CommunityResponse
 import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.interestarea.ApiResponse
 import com.example.spoteam_android.ui.interestarea.InterestAreaApiService
+import com.example.spoteam_android.ui.interestarea.InterestFilterViewModel
 import com.example.spoteam_android.ui.interestarea.InterestFragment
 import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
 import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
@@ -57,6 +58,7 @@ class HouseFragment : Fragment() {
     private lateinit var studyApiService: StudyApiService
     private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var presentTemperature: TextView
+    private val viewModel: InterestFilterViewModel by activityViewModels()
 
 
     override fun onResume() {
@@ -104,6 +106,9 @@ class HouseFragment : Fragment() {
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
         presentTemperature = binding.txTemperature
 //        fetchLivePopularContent()
+
+        //InterestFilterFragment 요소 초기화
+        viewModel.reset()
 
         binding.goPopularContentIv.setOnClickListener{
             val intent = Intent(requireContext(), CommunityContentActivity::class.java)
