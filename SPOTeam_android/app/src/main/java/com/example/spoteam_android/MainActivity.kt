@@ -22,6 +22,7 @@ import androidx.fragment.app.viewModels
 import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.login.LoginApiService
+import com.example.spoteam_android.login.TokenUtil
 import com.example.spoteam_android.ui.study.todolist.TodoViewModel
 import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.bookMark.BookmarkFragment
@@ -128,6 +129,26 @@ class MainActivity : AppCompatActivity() {
         init()
         isOnCommunityHome(HouseFragment())
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        val (accessToken, refreshToken) = TokenUtil.getStoredTokens(this)
+
+        if (TokenUtil.isExpired(accessToken)) {
+            val newToken = TokenUtil.refreshTokenSync(this, refreshToken ?: "")
+
+            if (newToken == null) {
+                Log.e("MainActivity", "토큰 갱신 실패. 로그인 화면으로 이동.")
+                return // 이미 이동 처리됨
+            } else {
+                Log.d("MainActivity", "토큰 갱신 성공. 최신 토큰으로 유지됨.")
+            }
+        } else {
+            Log.d("MainActivity", "토큰 유효함.")
+        }
+    }
+
 
     private fun getCurrentFragment(): Fragment? {
         return supportFragmentManager.findFragmentById(R.id.main_frm)
