@@ -57,8 +57,6 @@ class InterestFilterFragment : Fragment() {
         val minValueText = binding.minValueText
         val maxValueText = binding.maxValueText
 
-        ageRangeSlider.valueFrom = 18f
-        ageRangeSlider.valueTo = 60f
         ageRangeSlider.stepSize = 1f
         ageRangeSlider.values = listOf(18f, 60f)
 
@@ -141,15 +139,12 @@ class InterestFilterFragment : Fragment() {
 
         // EditText의 값이 비어있지 않고, 숫자만 포함하는지 확인
         val activityFeeText = binding.edittext1.text.toString()
+
+        // 각 컴포넌트가 클릭된 시점에 조건을 충족하는 지 확인
         val isActivityFeeEntered = binding.chipGroup1.checkedChipId == R.id.chip1 && activityFeeText.isNotEmpty() && activityFeeText.toIntOrNull() != null
-
-        // 첫 번째 조건: 온라인이 선택되었거나, 오프라인이 선택되고 위치가 설정된 경우
-        // 두 번째 조건: 활동비 없음이 선택되었거나, 활동비 있음이 선택되고 숫자가 입력된 경우
         val isSecondConditionMet = isActivityFeeNoneSelected || isActivityFeeEntered
-
         val isThirdConditionMet = binding.chipGroup2.checkedChipId != ChipGroup.NO_ID
 
-        // 두 조건 모두 만족해야 버튼이 활성화됨
         binding.fragmentIntroduceStudyBt.isEnabled = isSecondConditionMet && isThirdConditionMet
     }
 }

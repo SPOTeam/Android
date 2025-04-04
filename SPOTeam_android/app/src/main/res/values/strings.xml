@@ -42,4 +42,36 @@
     <string name="delete_noti_text">탈퇴하시면 아래 정보들은 모두 파기되며 모든 데이터들은\n복구가 <font color="#FF0000">불가능</font>합니다.</string>
     <string name="end_study_warn">팀원들의 사전 동의 없이 스터디를 끝낼 경우,\n스터디 만들기 권한이 일시 정지 될 수 있습니다</string>
 
+    <string name="agreement_title01_text">제1조 (개인정보 수집 및 이용 목적)</string>
+    <string name="agreement_body01_text">SPOT은 이용자의 개인정보를 다음 목적을 위해\n 수집 및 이용합니다.\n1. 회원 가입 및 관리: 본인 확인, 회원 서비스 제공\n2. 서비스 제공 및 운영: 커뮤니티 기능 제공, 맞춤형 콘텐츠 추천\n3. 고객지원: 문의사항 응대 및 서비스 개선\n4. 서비스 개선 및 분석: 이용 통계 분석, 부정 이용 방지</string>
+
+    <string name="agreement_title02_text">제2조 (수집하는 개인정보 항목)</string>
+    <string name="agreement_body02_text">1. 필수항목: 이름, 이메일, 생년월일, 성별\n2. 자동 수집 항목: 접속 로그, 서비스 이용 기록, 기기 정보</string>
+
+    <string name="agreement_title03_text">제3조 (개인정보의 보유 및 이용 기간)</string>
+    <string name="agreement_body03_text">1. 원칙적으로 이용자가 서비스 탈퇴 시 즉시 개인정보를 파기합니다.\n2. 단, 관련 법령에 따라 일정 기간 보관이 필요한 경우 해당 기간 동안 보관 후 파기합니다.</string>
+
+    <string name="agreement_title04_text">제4조 (개인정보의 제3자 제공 및 위탁)</string>
+    <string name="agreement_body04_text">1. SPOT은 이용자의 동의 없이 개인정보를 제3자에게 제공하지 않습니다.\n2. 단, 법령에 따른 요청이 있을 경우 예외적으로 제공될 수 있습니다.</string>
+
+    <string name="agreement_title05_text">제5조 (동의 거부 권리 및 불이익 안내)</string>
+    <string name="agreement_body05_text">이용자는 개인정보 수집·이용에 대한 동의를 거부할 권리가 있으며, 다만 필수 항목에 대한 동의를 거부할 경우 서비스 이용이 제한될 수 있습니다.</string>
+
+
+
+    <string name="identification_agreement_title01_text">제1조 (고유식별정보의 수집 및 이용 목적)</string>
+    <string name="identification_agreement_body01_text">SPOT은 아래의 목적을 위해 이용자의 고유식별정보를 수집·이용할 수 있습니다.\n1. 본인 확인 및 인증\n2. 법적 의무 이행 (예: 연령 검증)</string>
+
+    <string name="identification_agreement_title02_text">제2조 (수집하는 고유식별정보 항목)</string>
+    <string name="identification_agreement_body02_text">SPOT은 다음과 같은 고유식별정보를 수집할 수 있습니다.\n• 주민등록번호, 외국인등록번호 등 (필요 시)</string>
+
+    <string name="identification_agreement_title03_text">제3조 (고유식별정보의 보유 및 이용 기간)</string>
+    <string name="identification_agreement_body03_text">1. 원칙적으로 목적 달성 후 즉시 파기합니다.\n2. 단, 관련 법령에 따라 일정 기간 보관이 필요한 경우 해당 기간 동안 보관 후 삭제됩니다.</string>
+
+    <string name="identification_agreement_title04_text">제4조 (고유식별정보의 제3자 제공 및 위탁)</string>
+    <string name="identification_agreement_body04_text">1. SPOT은 이용자의 동의 없이 고유식별정보를 제3자에게 제공하지 않습니다.\n2. 단, 법령에 따른 요청이 있을 경우 예외적으로 제공될 수 있습니다.</string>
+
+    <string name="identification_agreement_title05_text">제5조 (동의 거부 권리 및 불이익 안내)</string>
+    <string name="identification_agreement_body05_text">이용자는 고유식별정보 제공에 대한 동의를 거부할 권리가 있으며, 다만 동의를 거부할 경우 특정 서비스 이용이 제한될 수 있습니다.</string>
+
 </resources>

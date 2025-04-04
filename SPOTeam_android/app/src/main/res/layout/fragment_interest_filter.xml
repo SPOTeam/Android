@@ -151,14 +151,6 @@
 
             </com.google.android.material.chip.ChipGroup>
 
-            <Spinner
-                android:id="@+id/gender_spinner"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end|center"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/gender_spinner_background"
-                android:spinnerMode="dropdown" />
         </FrameLayout>
 
         <FrameLayout

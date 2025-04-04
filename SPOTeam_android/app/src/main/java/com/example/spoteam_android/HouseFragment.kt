@@ -103,7 +103,7 @@ class HouseFragment : Fragment() {
 
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
         presentTemperature = binding.txTemperature
-        fetchLivePopularContent()
+//        fetchLivePopularContent()
 
         binding.goPopularContentIv.setOnClickListener{
             val intent = Intent(requireContext(), CommunityContentActivity::class.java)
@@ -171,7 +171,7 @@ class HouseFragment : Fragment() {
             adapter = recommendBoardAdapter
         }
 
-        fetchDataAnyWhere() //관심 지역 스터디
+        fetchDataMostPopular() //관심 지역 스터디
         fetchRecommendStudy() //추천 스터디
 
         binding.icFind.setOnClickListener {
@@ -356,30 +356,15 @@ class HouseFragment : Fragment() {
     }
 
 
-    private fun fetchDataAnyWhere() {
+    private fun fetchDataMostPopular() {
         val service = RetrofitInstance.retrofit.create(InterestAreaApiService::class.java)
         service.getInterestedBestStudies().enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     val boardItems = response.body()?.result?.content?.map { study ->
-                        BoardItem(
-                            studyId = study.studyId,
-                            title = study.title,
-                            goal = study.goal,
-                            introduction = study.introduction,
-                            memberCount = study.memberCount,
-                            heartCount = study.heartCount,
-                            hitNum = study.hitNum,
-                            maxPeople = study.maxPeople,
-                            studyState = study.studyState,
-                            themeTypes = study.themeTypes,
-                            regions = study.regions,
-                            imageUrl = study.imageUrl,
-                            liked = study.liked,
-                            isHost = false
+                        BoardItem(studyId = study.studyId, title = study.title, goal = study.goal, introduction = study.introduction, memberCount = study.memberCount, heartCount = study.heartCount, hitNum = study.hitNum, maxPeople = study.maxPeople, studyState = study.studyState, themeTypes = study.themeTypes, regions = study.regions, imageUrl = study.imageUrl, liked = study.liked, isHost = false
                         )
                     } ?: emptyList()
-
                     if (boardItems.isNotEmpty()) {
                         interestBoardAdapter.updateList(boardItems)
                         binding.rvBoard.visibility = View.VISIBLE
@@ -388,13 +373,10 @@ class HouseFragment : Fragment() {
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT)
                             .show()
                     }
-                } else {
-                    Log.d("HouseFragment", "연결 실패: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                Log.d("HouseFragment", "API 호출 실패: ${t.message}")
             }
         })
     }
@@ -416,7 +398,7 @@ class HouseFragment : Fragment() {
                         studyItem.heartCount = if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
 
                         // 최신 데이터 동기화를 위해 fetchDataAnyWhere와 fetchRecommendStudy를 다시 호출
-                        fetchDataAnyWhere()
+                        fetchDataMostPopular()
                         fetchRecommendStudy()
                     } else {
                         Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()

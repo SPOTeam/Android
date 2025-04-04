@@ -282,7 +282,6 @@ class InterestFragment : Fragment() {
         val genderList = listOf("최신 순", "조회수 높은 순", "관심 많은 순")
         val genderAdapter = FixedRoundedSpinnerAdapter(requireContext(), genderList)
         binding.filterToggle.adapter = genderAdapter
-
         binding.filterToggle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,

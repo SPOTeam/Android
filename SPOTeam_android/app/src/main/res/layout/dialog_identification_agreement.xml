@@ -33,21 +33,139 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:layout_width="match_parent"
+    <ScrollView
+        android:id="@+id/agreement_content_sv"
+        android:layout_width="0dp"
         android:layout_height="230dp"
         android:layout_marginTop="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:text="약관 내용 삽입 예정"
-        android:textSize="10.3dp"
-        android:textColor="@color/black"
-        android:textFontWeight="600"
-        android:gravity="center"
         android:background="@drawable/normal_login_edittext_corner_rectangle"
+        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/dialog_agreement_title_tv"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/dialog_agreement_body_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:textColor="@color/black">
+
+            <!-- 제1조 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/identification_agreement_title01_text"
+                android:textColor="@color/black"
+                android:textFontWeight="600"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:lineSpacingExtra="3dp"
+                android:paddingLeft="30dp"
+                android:paddingTop="8dp"
+                android:text="@string/identification_agreement_body01_text"
+                android:textColor="@color/black"
+                android:textFontWeight="600"
+                android:textSize="12dp" />
+
+            <!-- 제2조 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/identification_agreement_title02_text"
+                android:textColor="@color/black"
+                android:textFontWeight="600"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/identification_agreement_body02_text"
+                android:textColor="@color/black"
+                android:textFontWeight="600"
+                android:paddingLeft="30dp"
+                android:paddingTop="8dp"
+                android:textSize="12dp" />
+
+            <!-- 제3조 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/identification_agreement_title03_text"
+                android:textColor="@color/black"
+                android:textFontWeight="600"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/identification_agreement_body03_text"
+                android:textColor="@color/black"
+                android:textFontWeight="600"
+                android:paddingLeft="30dp"
+                android:paddingTop="8dp"
+                android:textSize="12dp" />
+
+            <!-- 제4조 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/identification_agreement_title04_text"
+                android:textColor="@color/black"
+                android:textFontWeight="600"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/identification_agreement_body04_text"
+                android:textColor="@color/black"
+                android:textFontWeight="600"
+                android:paddingLeft="30dp"
+                android:paddingTop="8dp"
+                android:textSize="12dp" />
+
+            <!-- 제5조 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/identification_agreement_title05_text"
+                android:textColor="@color/black"
+                android:textFontWeight="600"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/identification_agreement_body05_text"
+                android:textColor="@color/black"
+                android:textFontWeight="600"
+                android:paddingLeft="30dp"
+                android:paddingTop="8dp"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
 
     <android.widget.Button
         android:id="@+id/dialog_agreement_accept_btn"
