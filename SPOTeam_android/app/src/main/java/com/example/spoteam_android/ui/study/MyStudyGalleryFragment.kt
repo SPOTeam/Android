@@ -25,9 +25,10 @@ import retrofit2.Response
 class MyStudyGalleryFragment : Fragment() {
 
     private lateinit var binding: FragmentMystudyGalleryBinding
+    private var currentStudyId = -1
     private var currentPage = 0
+    private var nextPage = 1
     private val limit = 9 // 한 페이지에 9개의 항목을 보여줌
-    private var totalPages = 0
     private var startPage = 0
     private val studyViewModel: StudyViewModel by activityViewModels()
 
@@ -49,7 +50,8 @@ class MyStudyGalleryFragment : Fragment() {
         // StudyViewModel을 통해 studyId 가져오기
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
             if (studyId != null && studyId != 0) {
-                loadPage(studyId, currentPage)
+                currentStudyId = studyId
+                fetchGalleryImages()
             } else {
                 Log.e("MyStudyGalleryFragment", "Invalid studyId: $studyId")
                 showNoImagesText()
@@ -60,62 +62,58 @@ class MyStudyGalleryFragment : Fragment() {
         binding.previousPage.setOnClickListener {
             if (currentPage > 0) {
                 currentPage--
-                studyViewModel.studyId.value?.let { loadPage(it, currentPage) }
+                nextPage--
+                fetchGalleryImages()
             }
         }
 
         binding.nextPage.setOnClickListener {
             currentPage++
-            studyViewModel.studyId.value?.let { loadPage(it, currentPage) }
+            nextPage++
+            fetchGalleryImages()
         }
 
         return binding.root
     }
 
-    private fun loadPage(studyId: Int, page: Int) {
-        val offset = page // 페이지 번호를 그대로 offset으로 사용
-        Log.d("MyStudyGalleryFragment", "loadPage() called with: studyId = $studyId, page = $page, offset = $offset")
-        fetchGalleryImages(studyId, offset, limit)
-    }
-
-    private fun fetchGalleryImages(studyId: Int, offset: Int, limit: Int) {
-        val call = studyApiService.getStudyImages(studyId, offset, limit)
+    private fun fetchGalleryImages() {
+        val call = studyApiService.getStudyImages(currentStudyId, currentPage, limit)
         call.enqueue(object : Callback<GalleryResponse> {
             override fun onResponse(call: Call<GalleryResponse>, response: Response<GalleryResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let { galleryResponse ->
                         val result = galleryResponse.result
-                        val images = result?.images ?: emptyList()
+                        val images = result.images ?: emptyList()
 
                         if (images.isNotEmpty()) {
                             val adapter = MyStudyGalleryFragmentRVAdapter(images)
                             binding.communityCategoryContentRv.adapter = adapter
 
-                            adapter.itemClick = object : MyStudyGalleryFragmentRVAdapter.ItemClick{
+                            adapter.itemClick = object : MyStudyGalleryFragmentRVAdapter.ItemClick {
                                 override fun onItemClick(data: GalleryItems) {
                                     val intent = Intent(requireContext(), MyStudyPostContentActivity::class.java)
-                                    intent.putExtra("myStudyId", studyId.toString())
+                                    intent.putExtra("myStudyId", currentStudyId.toString())
                                     intent.putExtra("myStudyPostId", data.postId.toString())
                                     startActivity(intent)
                                 }
                             }
 
-                            // 이미지가 있을 때
                             showGallery()
+                            checkNextPageAvailable() // ✅ 추가
                         } else {
-                            // 이미지가 없을 때
                             showNoImagesText()
+                            updatePageUI(false) // ✅ 변경
                         }
-
-                        updatePageUI()
                     } ?: run {
                         Log.e("MyStudyGalleryFragment", "GalleryResponse is null")
                         showNoImagesText()
+                        updatePageUI(false)
                     }
                 } else {
                     Log.e("MyStudyGalleryFragment", "Failed to load images: ${response.code()}")
                     Toast.makeText(context, "Failed to load images", Toast.LENGTH_SHORT).show()
                     showNoImagesText()
+                    updatePageUI(false)
                 }
             }
 
@@ -123,9 +121,32 @@ class MyStudyGalleryFragment : Fragment() {
                 Log.e("MyStudyGalleryFragment", "Failed to load images: ${t.message}")
                 Toast.makeText(context, "Failed to load images: ${t.message}", Toast.LENGTH_SHORT).show()
                 showNoImagesText()
+                updatePageUI(false)
             }
         })
     }
+
+    override fun onResume() {
+        super.onResume()
+        fetchGalleryImages()
+    }
+
+    private fun checkNextPageAvailable() {
+        val call = studyApiService.getStudyImages(currentStudyId, nextPage, limit)
+        call.enqueue(object : Callback<GalleryResponse> {
+            override fun onResponse(call: Call<GalleryResponse>, response: Response<GalleryResponse>) {
+                val hasNext = response.body()?.result?.images?.isNotEmpty() == true
+                binding.nextPage.isEnabled = hasNext
+                updatePageUI(hasNext)
+            }
+
+            override fun onFailure(call: Call<GalleryResponse>, t: Throwable) {
+                binding.nextPage.isEnabled = false
+                updatePageUI(false)
+            }
+        })
+    }
+
 
     private fun showGallery() {
         binding.communityCategoryContentRv.visibility = View.VISIBLE
@@ -143,24 +164,17 @@ class MyStudyGalleryFragment : Fragment() {
         Log.d("MyStudyGalleryFragment", "No images found, showing no images text")
     }
 
-    private fun updatePageUI() {
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            minOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
-
+    private fun updatePageUI(hasNext: Boolean) {
         val pageButtons = listOf(
-            binding.page1,
-            binding.page2,
-            binding.page3,
-            binding.page4,
-            binding.page5
+            binding.page1, binding.page2, binding.page3, binding.page4, binding.page5
         )
+
+        startPage = maxOf(0, currentPage - 2)
+        val maxAvailablePage = if (hasNext) currentPage + 1 else currentPage
 
         pageButtons.forEachIndexed { index, textView ->
             val pageNum = startPage + index
-            if (pageNum < totalPages) {
+            if (pageNum <= maxAvailablePage) {
                 textView.text = (pageNum + 1).toString()
                 textView.setBackgroundResource(
                     if (pageNum == currentPage) R.drawable.btn_page_bg else 0
@@ -171,13 +185,12 @@ class MyStudyGalleryFragment : Fragment() {
             } else {
                 textView.text = (pageNum + 1).toString()
                 textView.setBackgroundResource(0)
-                textView.isEnabled = false // 클릭 안 되게
+                textView.isEnabled = false
                 textView.alpha = 0.3f
                 textView.visibility = View.VISIBLE
             }
         }
 
         binding.previousPage.isEnabled = currentPage > 0
-        binding.nextPage.isEnabled = currentPage < totalPages - 1
     }
 }
