@@ -83,7 +83,7 @@ class MyStudyGalleryFragment : Fragment() {
                 if (response.isSuccessful) {
                     response.body()?.let { galleryResponse ->
                         val result = galleryResponse.result
-                        val images = result.images ?: emptyList()
+                        val images = result?.images ?: emptyList()
 
                         if (images.isNotEmpty()) {
                             val adapter = MyStudyGalleryFragmentRVAdapter(images)
