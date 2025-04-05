@@ -80,9 +80,13 @@ class AllScrapFragment : Fragment() {
         })
 
         // SharedPreferences 사용
-        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val currentEmail = sharedPreferences.getString("currentEmail", null)
-        memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
+        memberId = if (currentEmail != null) sharedPreferences.getInt(
+            "${currentEmail}_memberId",
+            -1
+        ) else -1
 
         parentFragmentManager.setFragmentResultListener("requestKey", this) { _, bundle ->
             val result = bundle.getString("resultKey")
@@ -127,7 +131,7 @@ class AllScrapFragment : Fragment() {
             })
     }
 
-    private fun postContentScrap(postId : Int) {
+    private fun postContentScrap(postId: Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.postContentScrap(postId)
             .enqueue(object : Callback<ContentLikeResponse> {
@@ -153,7 +157,7 @@ class AllScrapFragment : Fragment() {
             })
     }
 
-    private fun postLike(postId : Int) {
+    private fun postLike(postId: Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.postContentLike(postId)
             .enqueue(object : Callback<ContentLikeResponse> {
@@ -181,7 +185,7 @@ class AllScrapFragment : Fragment() {
             })
     }
 
-    private fun deleteLike(postId : Int) {
+    private fun deleteLike(postId: Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.deleteContentLike(postId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
@@ -239,7 +243,10 @@ class AllScrapFragment : Fragment() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.getScrapInfo(type, currentPage, size)
             .enqueue(object : Callback<GetScrapResponse> {
-                override fun onResponse(call: Call<GetScrapResponse>, response: Response<GetScrapResponse>) {
+                override fun onResponse(
+                    call: Call<GetScrapResponse>,
+                    response: Response<GetScrapResponse>
+                ) {
                     if (response.isSuccessful) {
                         val pagesResponse = response.body()
                         if (pagesResponse?.isSuccess == "true") {
@@ -247,7 +254,7 @@ class AllScrapFragment : Fragment() {
                             scrapItemList.clear()
                             scrapItemList.addAll(pagesResponseList)
 
-                            totalPages = pagesResponse.result.totalPages
+                            totalPages = pagesResponse.result.totalPage
 
                             if (scrapItemList.isNotEmpty()) {
                                 scrapRVAdapter.updateList(scrapItemList)
@@ -262,6 +269,9 @@ class AllScrapFragment : Fragment() {
                             }
                         } else {
                             showError(pagesResponse?.message)
+                            binding.emptyScrap.visibility = View.VISIBLE
+                            binding.pageNumberLayout.visibility = View.GONE
+                            binding.communityCategoryContentRv.visibility = View.GONE
                         }
                     } else {
                         showError(response.code().toString())
@@ -291,25 +301,37 @@ class AllScrapFragment : Fragment() {
     }
 
     private fun updatePageUI() {
-        startPage = if (currentPage <= 2) 0 else minOf(totalPages - 5, maxOf(0, currentPage - 2))
-        val endPage = minOf(totalPages, startPage + 5)
-        val pages = (startPage until endPage).toList()
-
+        // ✅ 추가된 부분
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            minOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+        Log.d("AllFragment", "totalPages : ${totalPages}, currentPage : ${currentPage}")
         val pageButtons = listOf(
-            binding.page1, binding.page2, binding.page3, binding.page4, binding.page5
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
         )
 
-        pageButtons.forEach { it.text = "" }
-
         pageButtons.forEachIndexed { index, textView ->
-            if (index < pages.size) {
-                textView.text = (pages[index] + 1).toString()
+            val pageNum = startPage + index
+            if (pageNum < totalPages) {
+                textView.text = (pageNum + 1).toString()
                 textView.setBackgroundResource(
-                    if (pages[index] == currentPage) R.drawable.btn_page_bg else 0
+                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
                 )
+                textView.isEnabled = true
+                textView.alpha = 1.0f
                 textView.visibility = View.VISIBLE
             } else {
-                textView.visibility = View.GONE
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(0)
+                textView.isEnabled = false // 클릭 안 되게
+                textView.alpha = 0.3f
+                textView.visibility = View.VISIBLE
             }
         }
 
@@ -319,10 +341,5 @@ class AllScrapFragment : Fragment() {
 
     private fun showError(message: String?) {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

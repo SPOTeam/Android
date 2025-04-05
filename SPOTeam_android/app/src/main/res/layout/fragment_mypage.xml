@@ -144,6 +144,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/rounded_dialog"
                 android:paddingBottom="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -151,7 +152,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_profile"
-                app:layout_constraintVertical_bias="0.466">
+                app:layout_constraintVertical_bias="0.466"
+                android:elevation="4dp">
 
                 <TextView
                     android:id="@+id/tv_in_progress"
