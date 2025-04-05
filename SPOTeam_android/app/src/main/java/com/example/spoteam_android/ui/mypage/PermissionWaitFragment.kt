@@ -35,12 +35,16 @@ import retrofit2.Response
 class PermissionWaitFragment : Fragment() {
 
     lateinit var binding: FragmentPermissionWaitBinding
-    var memberId : Int = -1
-    var page : Int = 0
-    var size : Int = 10
+    private var memberId : Int = -1
+    private var currentPage : Int = 0
+    private var size : Int = 5
+    private var totalPage : Int = 0
+    private var startPage : Int = 0
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var interestBoardAdapter: InterestVPAdapter
     private lateinit var studyApiService: StudyApiService
+    private var itemList = ArrayList<MyRecruitingStudyDetail>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +58,8 @@ class PermissionWaitFragment : Fragment() {
 
         // 현재 로그인된 사용자 정보를 로그
         memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
+        studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
 
         fetchInProgressStudy()
 
@@ -69,13 +75,27 @@ class PermissionWaitFragment : Fragment() {
         }
 
 
+        binding.previousPage.setOnClickListener {
+            if (currentPage > 0) {
+                currentPage--
+                fetchInProgressStudy()
+            }
+        }
+
+        binding.nextPage.setOnClickListener {
+            if (currentPage < totalPage - 1) {
+                currentPage++
+                fetchInProgressStudy()
+            }
+        }
+
         return binding.root
     }
 
 
     private fun fetchInProgressStudy() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getMemberAppliedStudies(page, size)
+        service.getMemberAppliedStudies(currentPage, size)
             .enqueue(object : Callback<MemberOnStudiesResponse> {
                 override fun onResponse(
                     call: Call<MemberOnStudiesResponse>,
@@ -92,7 +112,14 @@ class PermissionWaitFragment : Fragment() {
                             if(studyInfo.isNotEmpty()) {
                                 binding.emptyWaiting.visibility = View.GONE
                                 binding.participatingStudyReyclerview.visibility = View.VISIBLE
-                                initRecyclerView(studyInfo)
+
+                                totalPage = inProgressResponse.result.totalPages
+
+                                itemList.clear()
+                                itemList.addAll(studyInfo)
+
+                                initRecyclerView()
+                                updatePageUI()
                                 interestBoardAdapter.notifyDataSetChanged()
                             } else {
                                 binding.emptyWaiting.visibility = View.VISIBLE
@@ -121,11 +148,11 @@ class PermissionWaitFragment : Fragment() {
     }
 
 
-    fun initRecyclerView(studyInfo: List<MyRecruitingStudyDetail>) {
+    fun initRecyclerView() {
         val participatingboard = binding.participatingStudyReyclerview
 
         // MyRecruitingStudyDetail을 BoardItem으로 변환
-        val itemList = ArrayList(studyInfo.map { detail ->
+        val itemList = ArrayList(itemList.map { detail ->
             BoardItem(
                 studyId = detail.studyId,
                 title = detail.title,
@@ -187,7 +214,7 @@ class PermissionWaitFragment : Fragment() {
                         likeButton.setImageResource(newIcon)
 
                         // heartCount 즉시 증가 또는 감소
-                        studyItem.heartCount = if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
+                        fetchInProgressStudy()
 
                         // 최신 데이터 동기화를 위해 fetchDataAnyWhere와 fetchRecommendStudy를 다시 호출
                     } else {
@@ -221,8 +248,44 @@ class PermissionWaitFragment : Fragment() {
         return memberId // 저장된 memberId 없을 시 기본값 -1 반환
     }
 
+    private fun updatePageUI() {
+        // ✅ 추가된 부분
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            minOf(totalPage - 5, maxOf(0, currentPage - 2))
+        }
+        Log.d("AllFragment", "totalPages : ${totalPage}, currentPage : ${currentPage}")
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
 
+        pageButtons.forEachIndexed { index, textView ->
+            val pageNum = startPage + index
+            if (pageNum < totalPage) {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(
+                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                )
+                textView.isEnabled = true
+                textView.alpha = 1.0f
+                textView.visibility = View.VISIBLE
+            } else {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(0)
+                textView.isEnabled = false // 클릭 안 되게
+                textView.alpha = 0.3f
+                textView.visibility = View.VISIBLE
+            }
+        }
 
+        binding.previousPage.isEnabled = currentPage > 0
+        binding.nextPage.isEnabled = currentPage < totalPage - 1
+    }
 }
 
 
