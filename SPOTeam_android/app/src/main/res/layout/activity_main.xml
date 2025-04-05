@@ -26,11 +26,12 @@
             android:id="@+id/main_floatingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/icon_write"
+            android:backgroundTint="@color/selector_blue"
+            android:src="@drawable/ic_new_write"
+            app:tint="@null"
+            android:scaleType="centerCrop"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
-            app:borderWidth="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/main_bnv"/>
 

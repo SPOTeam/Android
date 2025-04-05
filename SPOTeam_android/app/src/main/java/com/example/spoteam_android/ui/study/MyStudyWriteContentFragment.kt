@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.databinding.adapters.AutoCompleteTextViewBindingAdapter
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.R
@@ -161,16 +162,9 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
 
-                if (data?.clipData != null) {
-                    // 🔥 여러 개의 이미지 선택
-                    val clipData = data.clipData
-                    for (i in 0 until clipData!!.itemCount) {
-                        val uri = clipData.getItemAt(i).uri
-                        if (!imageList.contains(uri)) { // 중복 방지
-                            imageList.add(uri)
-                        }
-                    }
-                } else if (data?.data != null) {
+                imageList.clear()
+
+                if (data?.data != null) {
                     // 🔥 단일 이미지 선택
                     val uri = data.data!!
                     if (!imageList.contains(uri)) {
@@ -188,7 +182,6 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
     private fun getImageFromAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
-//            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // 🔥 여러 개 선택 가능하도록 설정
         }
         getImageLauncher.launch(intent)
     }

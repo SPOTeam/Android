@@ -9,11 +9,9 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
@@ -101,11 +99,6 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         fetchContentInfo()
 
         initTextWatcher()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        fetchContentInfo()
     }
 
     private fun initTextWatcher() {
@@ -260,7 +253,6 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun sendReplyCommentToServer(requestBody: WriteStudyCommentRequest) {
-
         Log.d("MyStudyWriteComment", "Reply : $parentCommentId")
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.postStudyContentReplyComment(currentStudyId, postId, parentCommentId!!, requestBody)
@@ -315,6 +307,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         reportContentItem.setOnClickListener{
             // ✅ 신고 다이얼로그 생성 및 표시
             reportStudyPost(view, supportFragmentManager)
+            popupWindow.dismiss()
         }
 
         editMenuItem.setOnClickListener {
@@ -329,13 +322,14 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         R.style.AppBottomSheetDialogBorder20WhiteTheme
                     )
                 }
-
                 editContext.show(supportFragmentManager, "EditContent")
             }
+            popupWindow.dismiss()
         }
 
         deleteMenuItem.setOnClickListener {
             deleteStudyPostContent(view, supportFragmentManager)
+            popupWindow.dismiss()
         }
 
         // 외부 클릭 시 닫힘 설정
@@ -432,9 +426,9 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                             val postContent = postContentResponse.result
                             Log.d("MyStudyContent", "response: ${postContent}")
                             if(postContent.studyPostImages.isEmpty()) {
-                                binding.communityContentImagesRv.visibility = View.GONE
+                                binding.imageContentIv.visibility = View.GONE
                             } else {
-                                binding.communityContentImagesRv.visibility = View.VISIBLE
+                                binding.imageContentIv.visibility = View.VISIBLE
                             }
                             initContentInfo(postContent)
                             fetchContentCommentInfo()
@@ -636,11 +630,9 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     }
 
     private fun initContentImage(studyPostImages: List<PostImages>) {
-        binding.communityContentImagesRv.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-        val adapter = StudyContentImageRVAdapter(studyPostImages)
-        binding.communityContentImagesRv.adapter = adapter
+        Glide.with(binding.imageContentIv.context)
+            .load(studyPostImages[0].imageUrl)
+            .into(binding.imageContentIv)
     }
 
     private fun resetAdapterState() {

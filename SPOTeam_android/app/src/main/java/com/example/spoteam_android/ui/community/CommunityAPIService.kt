@@ -23,7 +23,8 @@ interface CommunityAPIService {
     @GET("/spot/posts")
     fun getCategoryPagesContent(
         @Query("type") type: String,
-        @Query("pageNumber") pageNum: Int
+        @Query("pageNumber") pageNum: Int,
+        @Query("pageSize") pageSize: Int,
     ): Call<CategoryPagesResponse>
 
     @GET("/spot/posts/{postId}")
@@ -32,15 +33,25 @@ interface CommunityAPIService {
         @Query("likeOrScrap") isChecked : Boolean
     ): Call<ContentResponse>
 
+    @Multipart
     @POST("/spot/posts")
     fun postContent(
-        @Body requestBody : WriteContentRequest
+        @Part("title") titlePart: RequestBody,
+        @Part("content") contentPart: RequestBody,
+        @Part("type") themePart: RequestBody,
+        @Part("anonymous") isAnonymousPart: RequestBody,
+        @Part image: MultipartBody.Part
     ): Call<WriteContentResponse>
 
+    @Multipart
     @PATCH("/spot/posts/{postId}")
     fun editContent(
-        @Path("postId") postId: String,
-        @Body requestBody : WriteContentRequest
+        @Path("postId") postId: Int,
+        @Part("title") titlePart: RequestBody,
+        @Part("content") contentPart: RequestBody,
+        @Part("type") themePart: RequestBody,
+        @Part image: MultipartBody.Part?,
+        @Part("anonymous") isAnonymousPart: RequestBody
     ): Call<WriteContentResponse>
 
     @POST("/spot/posts/{postId}/like")

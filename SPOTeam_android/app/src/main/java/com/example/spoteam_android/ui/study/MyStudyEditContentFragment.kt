@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
@@ -27,6 +28,9 @@ import com.example.spoteam_android.ui.community.StudyPostContentInfo
 import com.example.spoteam_android.ui.community.StudyPostContentResponse
 import com.example.spoteam_android.ui.community.StudyPostResponse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -128,21 +132,12 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
 
-                if (data?.clipData != null) {
-                    // 🔥 여러 개의 이미지 선택
-                    val clipData = data.clipData
-                    for (i in 0 until clipData!!.itemCount) {
-                        val uri = clipData.getItemAt(i).uri
-                        if (!imageList.contains(uri)) { // 중복 방지
-                            imageList.add(uri)
-                        }
-                    }
-                } else if (data?.data != null) {
-                    // 🔥 단일 이미지 선택
+                // 🔁 이전 이미지 모두 제거
+                imageList.clear()
+                if (data?.data != null) {
+                    // ✅ 한 장 선택된 경우
                     val uri = data.data!!
-                    if (!imageList.contains(uri)) {
-                        imageList.add(uri)
-                    }
+                    imageList.add(uri)
                 }
 
                 imageAdapter.notifyDataSetChanged() // RecyclerView 갱신
@@ -298,38 +293,55 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
         val title = binding.writeContentTitleEt.text.toString().trim()
         val content = binding.writeContentContentEt.text.toString().trim()
 
-        // 여러 이미지 파일을 담을 리스트 생성
-        val imageParts = mutableListOf<MultipartBody.Part>()
+        lifecycleScope.launch {
+            val imageParts = mutableListOf<MultipartBody.Part>()
 
-        if (imageList.isNotEmpty()) {
-            imageList.forEach { item ->
-                when (item) {
-                    is Uri -> { // ✅ 갤러리에서 추가한 이미지
-                        val file = getFileFromUri(item)
-                        if (file != null) {
-                            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                            val imagePart = MultipartBody.Part.createFormData("images", file.name, requestFile)
-                            imageParts.add(imagePart)
+            if (imageList.isNotEmpty()) {
+                for (item in imageList) {
+                    val file = when (item) {
+                        is Uri -> getFileFromUri(item)
+                        is String -> withContext(Dispatchers.IO) {
+                            downloadImageFromUrl(item)
                         }
+                        else -> null
                     }
-                    is String -> { // ✅ 서버에서 받은 기존 이미지 URL
-                        val requestBody = item.toRequestBody("text/plain".toMediaTypeOrNull()) // URL을 RequestBody로 변환
-                        val imagePart = MultipartBody.Part.createFormData("existingImages", item, requestBody) // 기존 이미지 포함
+
+                    file?.let {
+                        val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
+                        val imagePart = MultipartBody.Part.createFormData("images", it.name, requestFile)
                         imageParts.add(imagePart)
                     }
                 }
             }
+
+            val isAnnouncementPart = currentAnnouncement.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            val themePart = selectedTheme.toRequestBody("text/plain".toMediaTypeOrNull())
+            val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
+            val contentPart = content.toRequestBody("text/plain".toMediaTypeOrNull())
+
+            sendContentToServer(isAnnouncementPart, themePart, titlePart, contentPart, imageParts)
         }
+    }
 
+    private fun downloadImageFromUrl(imageUrl: String): File? {
+        return try {
+            val url = java.net.URL(imageUrl)
+            val connection = url.openConnection()
+            connection.connect()
 
-        // 나머지 데이터를 RequestBody로 변환
-        val isAnnouncementPart = currentAnnouncement.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        val themePart = selectedTheme.toRequestBody("text/plain".toMediaTypeOrNull())
-        val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
-        val contentPart = content.toRequestBody("text/plain".toMediaTypeOrNull())
+            val inputStream = connection.getInputStream()
+            val file = File(requireContext().cacheDir, "image_${UUID.randomUUID()}.jpg")
+            val outputStream = FileOutputStream(file)
 
-        // 서버로 데이터 전송
-        sendContentToServer(isAnnouncementPart, themePart, titlePart, contentPart, imageParts)
+            inputStream.use { input ->
+                outputStream.use { output ->
+                    input.copyTo(output)
+                }
+            }
+            file
+        } catch (e: Exception) {
+            null
+        }
     }
 
     private fun getFileFromUri(uri: Uri): File {
@@ -382,12 +394,6 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
             }
         })
     }
-
-
-    private fun showLog(message: String?) {
-        Toast.makeText(requireContext(), "WriteContentFragment: $message", Toast.LENGTH_SHORT).show()
-    }
-
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val selectedCategory = parent?.getItemAtPosition(position).toString()

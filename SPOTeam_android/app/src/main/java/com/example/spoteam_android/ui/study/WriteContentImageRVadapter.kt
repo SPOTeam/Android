@@ -51,13 +51,6 @@ class WriteContentImageRVadapter(private val images: MutableList<Any>) :
 
     override fun getItemCount(): Int = images.size
 
-    fun addImage(image: Any) {
-        if (!images.contains(image)) {
-            images.add(image)
-            notifyItemInserted(images.size - 1)
-        }
-    }
-
     fun removeImage(position: Int) {
         images.removeAt(position)
         notifyItemRemoved(position)

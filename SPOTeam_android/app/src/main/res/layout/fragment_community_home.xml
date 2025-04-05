@@ -1,125 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".ui.home.HomeFragment">
 
-        <ImageView
-            android:id="@+id/community_home_spot_name_logo_iv"
-            android:layout_width="74dp"
-            android:layout_height="21dp"
-            android:layout_marginTop="37dp"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/spot_name_logo"
+        <LinearLayout
+            android:id="@+id/fragment_community_logo_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageView
-            android:id="@+id/community_home_spot_logo_iv"
-            android:layout_width="23dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="5dp"
-            android:src="@drawable/spot_logo_3x"
-            app:layout_constraintStart_toEndOf="@id/community_home_spot_name_logo_iv"
-            app:layout_constraintBottom_toBottomOf="@id/community_home_spot_name_logo_iv"/>
-
-        <ImageView
-            android:id="@+id/community_home_alert_iv"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/alert_icon_3x"
-            android:padding="8dp"
-            android:background="@drawable/icon_background"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/community_home_spot_logo_iv"/>
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
 
-        <ImageView
-            android:id="@+id/community_home_search_iv"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
-            android:padding="8dp"
-            android:background="@drawable/icon_background"
-            android:src="@drawable/search_icon_3x"
-            app:layout_constraintEnd_toStartOf="@id/community_home_alert_iv"
-            app:layout_constraintTop_toTopOf="@id/community_home_spot_logo_iv"/>
+            <ImageView
+                android:id="@+id/ic_spot_logo"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/new_logo" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/ic_find"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/activity_main_ic_find" />
+
+            <ImageView
+                android:id="@+id/ic_alarm"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/activity_main_ic_alaram" />
+
+
+        </LinearLayout>
 
         <!--    Best 인기글    -->
         <TextView
             android:id="@+id/communityHome_BestPopularity_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="46dp"
+            android:layout_marginTop="30dp"
             android:text="Best 인기글 🔥"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:fontFamily="@font/pretendard"
             android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/community_home_spot_logo_iv"
-            app:layout_constraintStart_toStartOf="@id/community_home_spot_name_logo_iv"/>
+            app:layout_constraintTop_toBottomOf="@id/fragment_community_logo_ll"
+            app:layout_constraintStart_toStartOf="@id/fragment_community_logo_ll"/>
 
         <RadioGroup
             android:id="@+id/radioGroup"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="@id/fragment_community_logo_ll"
+            app:layout_constraintBottom_toBottomOf="@id/communityHome_BestPopularity_tv"
             app:layout_constraintTop_toTopOf="@id/communityHome_BestPopularity_tv"
             android:orientation="horizontal">
 
             <RadioButton
-                android:checked="true"
                 android:id="@+id/communityHome_realTime_tv"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/selector_button_background"
-                android:textColor="@drawable/selector_button_text"
-                android:textSize="12sp"
+                android:background="@drawable/selector_community_type_background"
+                android:textColor="@drawable/selector_community_type_text_color"
+                android:textSize="14sp"
                 android:text="실시간"
                 android:button="@null"
+                android:fontFamily="@font/pretendard"
                 android:layout_marginEnd="8dp"
                 android:textAlignment="center"
-                android:paddingHorizontal="15dp"/>
+                android:checked="true"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/gray_line"
+                android:layout_marginVertical="3dp"/>
 
             <RadioButton
                 android:id="@+id/communityHome_recommend_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/selector_button_background"
-                android:textColor="@drawable/selector_button_text"
-                android:textSize="12sp"
+                android:background="@drawable/selector_community_type_background"
+                android:textColor="@drawable/selector_community_type_text_color"
+                android:fontFamily="@font/pretendard"
+                android:textSize="14sp"
                 android:text="추천순"
                 android:button="@null"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:textAlignment="center"
-                android:paddingHorizontal="15dp"/>
+                android:textAlignment="center" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/gray_line"
+                android:layout_marginVertical="3dp" />
 
             <RadioButton
                 android:id="@+id/communityHome_comment_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/selector_button_background"
-                android:textColor="@drawable/selector_button_text"
-                android:textSize="12sp"
+                android:background="@drawable/selector_community_type_background"
+                android:textColor="@drawable/selector_community_type_text_color"
+                android:fontFamily="@font/pretendard"
+                android:textSize="14sp"
+                android:layout_marginStart="8dp"
                 android:text="댓글순"
                 android:button="@null"
-                android:textAlignment="center"
-                android:paddingHorizontal="15dp"/>
+                android:textAlignment="center" />
         </RadioGroup>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/communityHome_BestPopularity_content_rv"
             android:layout_width="0dp"
-            android:layout_height="180dp"
+            android:layout_height="170dp"
             android:background="@drawable/content_tmpl"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="18dp"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="15dp"
             android:overScrollMode="never"
             android:nestedScrollingEnabled="false"
             android:layout_marginTop="18dp"
@@ -146,32 +158,33 @@
         <!--    이동 화살표 추가-->
         <ImageView
             android:id="@+id/community_move_community_iv"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/icon_more"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_new_right"
             android:padding="5dp"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:layout_marginTop="4dp"
             app:layout_constraintTop_toTopOf="@id/communityHome_Community_tv"
             app:layout_constraintEnd_toEndOf="@id/communityHome_Community_content_rv"/>
 
+        <!--    SPOT 공지  -->
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/communityHome_Community_content_rv"
             android:layout_width="0dp"
-            android:layout_height="180dp"
-            android:background="@drawable/content_tmpl"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="18dp"
-            android:overScrollMode="never"
+            android:layout_height="170dp"
             android:layout_marginTop="18dp"
-            android:nestedScrollingEnabled="false"
+            android:background="@drawable/content_tmpl"
             android:elevation="6dp"
-            app:layout_constraintStart_toStartOf="@id/communityHome_Community_tv"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="15dp"
             app:layout_constraintEnd_toEndOf="@id/communityHome_BestPopularity_content_rv"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@id/communityHome_Community_tv"
             app:layout_constraintTop_toBottomOf="@id/communityHome_Community_tv"
-            tools:listitem="@layout/item_communityhome_content_with_category"/>
-
-        <!--    SPOT 공지  -->
+            tools:listitem="@layout/item_communityhome_content_with_category" />
 
         <TextView
             android:id="@+id/communityHome_Notification_tv"
@@ -189,11 +202,11 @@
         <!--    이동 화살표 추가-->
         <ImageView
             android:id="@+id/community_move_notification_iv"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/icon_more"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_new_right"
             android:padding="5dp"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:layout_marginTop="4dp"
             app:layout_constraintEnd_toEndOf="@id/communityHome_Notification_content_rv"
             app:layout_constraintTop_toTopOf="@id/communityHome_Notification_tv" />
@@ -201,10 +214,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/communityHome_Notification_content_rv"
             android:layout_width="0dp"
-            android:layout_height="180dp"
+            android:layout_height="170dp"
             android:background="@drawable/content_tmpl"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="18dp"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="15dp"
             android:overScrollMode="never"
             android:layout_marginTop="18dp"
             android:nestedScrollingEnabled="false"

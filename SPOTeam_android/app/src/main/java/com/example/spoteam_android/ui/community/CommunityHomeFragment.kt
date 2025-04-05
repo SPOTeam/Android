@@ -37,6 +37,7 @@ class CommunityHomeFragment : Fragment() {
         binding.communityMoveCommunityIv.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, CommunityFragment())
+                .addToBackStack(null)
                 .commitAllowingStateLoss()
         }
 
@@ -54,7 +55,7 @@ class CommunityHomeFragment : Fragment() {
                 .commitAllowingStateLoss()
         }
 
-        binding.communityHomeAlertIv.setOnClickListener {
+        binding.icAlarm.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, AlertFragment())
                 .addToBackStack(null)
@@ -62,7 +63,7 @@ class CommunityHomeFragment : Fragment() {
             (context as MainActivity).isOnCommunityHome(HomeFragment())
         }
     //수정완
-        binding.communityHomeSearchIv.setOnClickListener {
+        binding.icFind.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, SearchFragment())
                 .addToBackStack(null)
@@ -82,10 +83,9 @@ class CommunityHomeFragment : Fragment() {
             fetchBestCommunityContent(sortType = "COMMENT")
         }
 
-        binding.communityHomeSpotNameLogoIv.setOnClickListener{
+        binding.icSpotLogo.setOnClickListener{
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, HouseFragment())
-                .addToBackStack(null)
                 .commitAllowingStateLoss()
             (context as MainActivity).isOnCommunityHome(HomeFragment())
         }

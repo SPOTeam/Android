@@ -11,13 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="게시판"
-        android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginStart="40dp"
+        android:fontFamily="@font/pretendard"
+        app:layout_constraintStart_toStartOf="@id/community_prev_iv"
+        app:layout_constraintTop_toTopOf="@id/community_prev_iv"
+        app:layout_constraintBottom_toBottomOf="@id/community_prev_iv"/>
 
 
     <ImageView
@@ -26,8 +26,9 @@
         android:layout_height="24dp"
         android:src="@drawable/navigate_before_3x"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/community_title" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/community_sp_iv"
@@ -51,7 +52,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <!--    프로필 이미지 변경    -->
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/community_content_profile_iv"
@@ -74,6 +74,7 @@
                 android:text="익명"
                 android:fontFamily="@font/pretendard"
                 android:textSize="14sp"
+                android:textColor="#1E1E1E"
                 android:layout_marginStart="5dp"
                 app:layout_constraintStart_toEndOf="@id/community_content_profile_iv"
                 app:layout_constraintTop_toTopOf="@id/community_content_profile_iv" />
@@ -84,55 +85,58 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:text="2024.05.31 17:31"
+                android:fontFamily="@font/pretendard"
                 android:textSize="14sp"
+                android:textColor="#1E1E1E"
                 app:layout_constraintStart_toStartOf="@id/community_content_writer_tv"
                 app:layout_constraintTop_toBottomOf="@id/community_content_writer_tv" />
 
-            <!--    점3개 이미지 변경    -->
-            <ImageView
-                android:id="@+id/community_content_more_iv"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_more"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/community_content_profile_iv" />
-
             <LinearLayout
-                android:id="@+id/subscribe_ll"
+                android:id="@+id/more_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginEnd="12dp"
-                app:layout_constraintEnd_toStartOf="@id/community_content_more_iv"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/community_content_profile_iv">
 
-                <!--    저장 이미지 변경    -->
                 <ImageView
-                    android:id="@+id/community_content_bookMark_unchecked_iv"
-                    android:layout_width="11dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/ic_bookmark_unchecked" />
-
-                <ImageView
-                    android:id="@+id/community_content_bookMark_checked_iv"
-                    android:layout_width="11dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/ic_bookmark_checked"
-                    android:visibility="gone" />
+                    android:id="@+id/scrap_iv"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_new_scrab"
+                    android:layout_marginEnd="5dp"/>
 
                 <TextView
-                    android:id="@+id/community_content_saveNum_tv"
+                    android:id="@+id/scrap_count_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:text="20"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/selector_blue" />
+                    android:text="100"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="#005BFF"/>
+
+                <!--    점3개 이미지 변경    -->
+                <ImageView
+                    android:id="@+id/community_content_more_iv"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_new_more"/>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/community_content_theme_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="#THEME"
+                android:fontFamily="@font/pretendard"
+                android:textSize="12sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/selector_blue"
+                app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
+                app:layout_constraintTop_toBottomOf="@id/community_content_profile_iv" />
 
             <TextView
                 android:id="@+id/community_content_title_tv"
@@ -143,10 +147,25 @@
                 android:textSize="18sp"
                 android:fontFamily="@font/pretendard"
                 android:textStyle="bold"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
-                app:layout_constraintTop_toBottomOf="@id/community_content_profile_iv" />
+                app:layout_constraintTop_toBottomOf="@id/community_content_theme_tv" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image_content_iv"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:background="@color/white"
+                android:src="@drawable/sample_img"
+                android:scaleType="centerCrop"
+                app:strokeWidth="0.3dp"
+                android:layout_marginTop="10dp"
+                app:strokeColor="@color/g300"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut1"
+                app:layout_constraintStart_toStartOf="@id/community_content_title_tv"
+                app:layout_constraintTop_toBottomOf="@id/community_content_title_tv"/>
+
 
             <TextView
                 android:id="@+id/community_content_content_tv"
@@ -159,8 +178,8 @@
                 android:textColor="@color/black"
                 android:lineSpacingMultiplier="1.5"
                 app:layout_constraintStart_toStartOf="@id/community_content_title_tv"
-                app:layout_constraintTop_toBottomOf="@id/community_content_title_tv"
-                app:layout_constraintEnd_toEndOf="@id/community_content_more_iv"/>
+                app:layout_constraintTop_toBottomOf="@id/image_content_iv"
+                app:layout_constraintEnd_toEndOf="@id/more_ll"/>
 
             <LinearLayout
                 android:id="@+id/community_content_content_info_ll"
@@ -177,7 +196,7 @@
                     android:id="@+id/community_content_likeNum_unchecked_iv"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@drawable/ic_like_unchecked"
+                    android:src="@drawable/ic_new_like"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
 
@@ -185,10 +204,11 @@
                     android:id="@+id/community_content_likeNum_checked_iv"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@drawable/ic_like_checked"
+                    android:src="@drawable/ic_new_like"
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
+                    app:layout_constraintTop_toBottomOf="@id/content_summary_tv"
+                    app:tint="#005BFF" />
 
                 <TextView
                     android:id="@+id/community_content_likeNum_tv"
@@ -203,9 +223,9 @@
                 <!--    댓글 아이콘 추가   -->
                 <ImageView
                     android:id="@+id/community_content_commentNum_iv"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:src="@drawable/ic_comment"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/ic_new_comment"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
 
@@ -223,8 +243,8 @@
                 <ImageView
                     android:id="@+id/community_content_viewNum_iv"
                     android:layout_width="18dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_view"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_new_view"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
 
@@ -258,65 +278,50 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/community_sp2_iv"
-        app:layout_constraintBottom_toTopOf="@id/community_comment_content_tv"/>
-
-    <LinearLayout
-        android:id="@+id/content_write_ll"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/comment_reply"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/community_sp2_iv"
+        app:layout_constraintBottom_toTopOf="@id/content_write_ll"
+        tools:listitem="@layout/item_content_comment"/>
 
-        <CheckBox
-            android:id="@+id/write_comment_anonymous"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="익명"
-            android:fontFamily="@font/pretendard"
-            android:layout_marginStart="5dp"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content_write_ll"
+        android:layout_width="366dp"
+        android:layout_height="45dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/comment_reply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content_comment_rv">
 
         <EditText
             android:id="@+id/write_comment_content_et"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:background="@null"
-            android:hint="댓글을 입력해주세요"
-            android:fontFamily="@font/pretendard"
-            android:inputType="text" />
-
-        <View
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@null"
+            android:ellipsize="end"
+            android:fontFamily="@font/pretendard"
+            android:hint="댓글을 입력해주세요"
+            android:inputType="text"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/apply_comment_iv"/>
 
         <!--    전송 이미지 변경    -->
         <ImageView
             android:id="@+id/apply_comment_iv"
-            android:layout_width="20dp"
+            android:layout_width="30dp"
             android:layout_height="20dp"
-            android:src="@drawable/ic_send"
-            android:layout_marginEnd="20dp"/>
-    </LinearLayout>
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_new_send"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <TextView
-        android:id="@+id/community_comment_content_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="댓글 내용"
-        android:fontFamily="@font/pretendard"
-        android:textSize="15sp"
-        android:textColor="@color/black"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintStart_toStartOf="@id/content_write_ll"
-        app:layout_constraintBottom_toTopOf="@id/content_write_ll"/>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
