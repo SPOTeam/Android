@@ -80,8 +80,7 @@ class MyPageFragment : Fragment() {
             framelayout2.setOnClickListener { navigateToFragment(RegionPreferenceFragment()) }
             framelayout3.setOnClickListener { navigateToFragment(PurposePreferenceFragment()) }
 
-            tvScrab.setOnClickListener { navigateToFragment(ScrapFragment()) }
-            tvCountScrab.setOnClickListener { navigateToFragment(ScrapFragment()) }
+            detailScrapIv.setOnClickListener { navigateToFragment(ScrapFragment()) }
 
             tvCommunity02.setOnClickListener{navigateToFragment(CommunityRuleFragment())}
             framelayout5.setOnClickListener{navigateToFragment(CommunityRestrictionsFragment())}
