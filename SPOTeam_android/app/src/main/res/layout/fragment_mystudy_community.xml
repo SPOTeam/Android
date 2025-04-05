@@ -1,199 +1,292 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="none">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/file_none_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/file_none"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalScroll_fl"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
 
-        <ImageView
-            android:id="@+id/file_none_iv"
+    <TextView
+        android:id="@+id/none_member_alert_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="아직 올라온 글이 없어요!"
+        android:textSize="20sp"
+        android:textColor="#8F8F99"
+        app:layout_constraintTop_toBottomOf="@id/file_none_iv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/write_content_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:src="@drawable/write"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <FrameLayout
+        android:id="@+id/horizontalScroll_fl"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toEndOf="@id/write_content_iv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 왼쪽 그라디언트 -->
+        <View
+            android:id="@+id/left_shadow"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_left"
+            android:layout_gravity="start"/>
+
+        <HorizontalScrollView
+            android:id="@+id/category_hsv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/file_none"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/horizontalScroll_fl"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="gone"/>
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp"
+            android:scrollbars="none"
+            app:layout_constraintStart_toEndOf="@id/write_content_iv"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:checked="true"
+                    android:id="@+id/all_rb"
+                    android:layout_width="45dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="전체"
+                    android:fontFamily="@font/pretendard"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/noti_rb"
+                    android:layout_width="45dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="공지"
+                    android:fontFamily="@font/pretendard"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/intro_hello_rb"
+                    android:layout_width="69dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="가입인사"
+                    android:fontFamily="@font/pretendard"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/share_info_rb"
+                    android:layout_width="69dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="정보공유"
+                    android:fontFamily="@font/pretendard"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/after_study_rb"
+                    android:layout_width="84dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="스터디후기"
+                    android:fontFamily="@font/pretendard"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/free_talk_rb"
+                    android:layout_width="45dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="자유"
+                    android:fontFamily="@font/pretendard"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+                <RadioButton
+                    android:id="@+id/qna_rb"
+                    android:layout_width="45dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_button_background"
+                    android:textColor="@drawable/selector_button_text"
+                    android:textSize="14sp"
+                    android:text="Q&amp;A"
+                    android:fontFamily="@font/pretendard"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+
+            </RadioGroup>
+        </HorizontalScrollView>
+
+        <View
+            android:id="@+id/right_shadow"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_right"
+            android:layout_gravity="end"/>
+
+    </FrameLayout>
+
+
+    <!-- height 조절필요 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/community_category_content_rv"
+        android:layout_width="0dp"
+        android:layout_height="620dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalScroll_fl"
+        app:layout_constraintBottom_toTopOf="@id/page_number_layout"
+        tools:listitem="@layout/item_mystudy_community_content"/>
+
+    <LinearLayout
+        android:id="@+id/page_number_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center">
 
         <TextView
-            android:id="@+id/none_member_alert_tv"
+            android:id="@+id/previous_page"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="아직 올라온 글이 없어요!"
-            android:textSize="20sp"
-            android:textColor="#8F8F99"
-            app:layout_constraintTop_toBottomOf="@id/file_none_iv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"/>
+            android:text="〈"
+            android:textSize="16dp"
+            android:fontFamily="@font/suit_bold"
+            android:textColor="@color/b500"
+            android:layout_marginEnd="10dp"
+            android:padding="10dp"
+            android:visibility="visible"/>
 
-        <ImageView
-            android:id="@+id/write_content_iv"
+        <TextView
+            android:id="@+id/page_1"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:src="@drawable/write"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <FrameLayout
-            android:id="@+id/horizontalScroll_fl"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/write_content_iv"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:text="1"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/suit_semi_bold"
+            android:padding="10dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="visible"/>
 
-            <!-- 왼쪽 그라디언트 -->
-            <View
-                android:id="@+id/left_shadow"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/gradient_left"
-                android:layout_gravity="start"/>
-
-            <HorizontalScrollView
-                android:id="@+id/category_hsv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp"
-                android:scrollbars="none"
-                app:layout_constraintStart_toEndOf="@id/write_content_iv"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <RadioGroup
-                    android:id="@+id/radioGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:checked="true"
-                        android:id="@+id/all_rb"
-                        android:layout_width="45dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/selector_button_background"
-                        android:textColor="@drawable/selector_button_text"
-                        android:textSize="14sp"
-                        android:text="전체"
-                        android:fontFamily="@font/pretendard"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:textAlignment="center"/>
-
-                    <RadioButton
-                        android:id="@+id/noti_rb"
-                        android:layout_width="45dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:background="@drawable/selector_button_background"
-                        android:textColor="@drawable/selector_button_text"
-                        android:textSize="14sp"
-                        android:text="공지"
-                        android:fontFamily="@font/pretendard"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:textAlignment="center"/>
-
-                    <RadioButton
-                        android:id="@+id/intro_hello_rb"
-                        android:layout_width="69dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:background="@drawable/selector_button_background"
-                        android:textColor="@drawable/selector_button_text"
-                        android:textSize="14sp"
-                        android:text="가입인사"
-                        android:fontFamily="@font/pretendard"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:textAlignment="center"/>
-
-                    <RadioButton
-                        android:id="@+id/share_info_rb"
-                        android:layout_width="69dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:background="@drawable/selector_button_background"
-                        android:textColor="@drawable/selector_button_text"
-                        android:textSize="14sp"
-                        android:text="정보공유"
-                        android:fontFamily="@font/pretendard"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:textAlignment="center"/>
-
-                    <RadioButton
-                        android:id="@+id/after_study_rb"
-                        android:layout_width="84dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:background="@drawable/selector_button_background"
-                        android:textColor="@drawable/selector_button_text"
-                        android:textSize="14sp"
-                        android:text="스터디후기"
-                        android:fontFamily="@font/pretendard"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:textAlignment="center"/>
-
-                    <RadioButton
-                        android:id="@+id/free_talk_rb"
-                        android:layout_width="45dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:background="@drawable/selector_button_background"
-                        android:textColor="@drawable/selector_button_text"
-                        android:textSize="14sp"
-                        android:text="자유"
-                        android:fontFamily="@font/pretendard"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:textAlignment="center"/>
-
-                    <RadioButton
-                        android:id="@+id/qna_rb"
-                        android:layout_width="45dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:background="@drawable/selector_button_background"
-                        android:textColor="@drawable/selector_button_text"
-                        android:textSize="14sp"
-                        android:text="Q&amp;A"
-                        android:fontFamily="@font/pretendard"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:textAlignment="center"/>
-
-                </RadioGroup>
-            </HorizontalScrollView>
-
-            <View
-                android:id="@+id/right_shadow"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/gradient_right"
-                android:layout_gravity="end"/>
-
-        </FrameLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/community_category_content_rv"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/page_2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/horizontalScroll_fl"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/item_mystudy_community_content"/>
+            android:text="2"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/suit_semi_bold"
+            android:padding="10dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="visible"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+        <TextView
+            android:id="@+id/page_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/suit_semi_bold"
+            android:padding="10dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/page_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/suit_semi_bold"
+            android:padding="10dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/page_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/suit_semi_bold"
+            android:padding="10dp"
+            android:layout_marginEnd="10dp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/next_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="〉"
+            android:textSize="16dp"
+            android:fontFamily="@font/suit_bold"
+            android:textColor="@color/b500"
+            android:padding="10dp"
+            android:visibility="visible"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
