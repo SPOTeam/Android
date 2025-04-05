@@ -19,13 +19,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.R
 import com.example.spoteam_android.ReportCompleteListener
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMystudyWriteContentBinding
+import com.example.spoteam_android.ui.study.MyStudyPostContentActivity
 import com.example.spoteam_android.ui.study.WriteContentImageRVadapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -38,14 +43,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 
-// 인터페이스 정의
-interface BottomSheetDismissListener {
-    fun onBottomSheetDismissed()
-}
-
-class EditContentFragment(
-    private val listener: BottomSheetDismissListener // ✅ 콜백 추가
-) : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
+class EditContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
 
     lateinit var binding: FragmentMystudyWriteContentBinding
     private var selectedCategory: String = ""
@@ -70,8 +68,7 @@ class EditContentFragment(
 
             this.postId = postId
         }
-        getPostContent()
-        initTextWatchers()
+
 
 
         binding.writeContentTitleTv.text = "글수정"
@@ -94,12 +91,6 @@ class EditContentFragment(
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.mystudyCategorySpinner.adapter = adapter
-
-            // Spinner의 초기값 설정
-            val position = getCategoryPosition(selectedCategory)
-            if (position != -1) {
-                binding.mystudyCategorySpinner.setSelection(position)
-            }
         }
 
         binding.writeContentPrevIv.setOnClickListener{
@@ -121,6 +112,9 @@ class EditContentFragment(
                 imageAdapter.notifyDataSetChanged() // RecyclerView 갱신
             }
         }
+
+        getPostContent()
+        initTextWatchers()
 
         return binding.root
     }
@@ -161,6 +155,7 @@ class EditContentFragment(
                         if (contentResponse?.isSuccess == "true") {
                             val contentInfo = contentResponse.result
                             isAnonymous = contentInfo.anonymous
+                            selectedCategory = contentInfo.type
                             initContentInfo(contentInfo)
                         } else {
                             showError(contentResponse?.message)
@@ -219,7 +214,9 @@ class EditContentFragment(
 
         // 서버 이미지 리스트와 기존의 갤러리에서 선택한 이미지 리스트 통합
         imageList.clear()
-        imageList.addAll(listOf(serverImageUrls))
+
+        if(contentInfo.imageUrl != null ) imageList.add(serverImageUrls)
+
         binding.addedImagesRv.apply {
             adapter = imageAdapter
             layoutManager =
@@ -241,28 +238,11 @@ class EditContentFragment(
 
         changeContent()
 
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.thema_list,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.mystudyCategorySpinner.adapter = adapter
-
-            // Spinner의 초기값 설정
-            val position = getCategoryPosition(contentInfo.type)
-            if (position != -1) {
-                binding.mystudyCategorySpinner.setSelection(position)
-            }
+        val displayName = getCategoryDisplayName(selectedCategory)
+        val position = resources.getStringArray(R.array.category_list).indexOf(displayName)
+        if (position != -1) {
+            binding.mystudyCategorySpinner.setSelection(position)
         }
-    }
-
-
-
-    // 카테고리의 위치를 반환하는 함수
-    private fun getCategoryPosition(category: String): Int {
-        val categories = resources.getStringArray(R.array.category_list)
-        return categories.indexOfFirst { it == getCategoryDisplayName(category) }
     }
 
     // 서버에서 사용하는 카테고리 값을 사용자에게 보여줄 텍스트로 변환하는 함수
@@ -296,21 +276,55 @@ class EditContentFragment(
         val title = binding.writeContentTitleEt.text.toString().trim()
         val content = binding.writeContentContentEt.text.toString().trim()
 
-        val imagePart: MultipartBody.Part? =
-            if (imageList.isNotEmpty() && imageList[0] is Uri) {
-                val file = getFileFromUri(imageList[0] as Uri)
-                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                MultipartBody.Part.createFormData("image", file.name, requestFile)
-            } else null
+        lifecycleScope.launch {
+            var imagePart: MultipartBody.Part? = null
 
-        // 나머지 데이터를 RequestBody로 변환
-        val isAnnoymous = isAnonymous.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        val themePart = selectedCategory.toRequestBody("text/plain".toMediaTypeOrNull())
-        val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
-        val contentPart = content.toRequestBody("text/plain".toMediaTypeOrNull())
+            if (imageList.isNotEmpty()) {
+                val firstImage = imageList[0]
 
-        // 서버로 데이터 전송
-        sendContentToServer(isAnnoymous, themePart, titlePart, contentPart, imagePart)
+                val file = when (firstImage) {
+                    is Uri -> getFileFromUri(firstImage)
+                    is String -> withContext(Dispatchers.IO) {
+                        downloadImageFromUrl(firstImage)
+                    }
+                    else -> null
+                }
+
+                file?.let {
+                    val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
+                    imagePart = MultipartBody.Part.createFormData("image", it.name, requestFile)
+                }
+            }
+
+            val isAnonymousPart = isAnonymous.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            val themePart = selectedCategory.toRequestBody("text/plain".toMediaTypeOrNull())
+            val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
+            val contentPart = content.toRequestBody("text/plain".toMediaTypeOrNull())
+
+            sendContentToServer(isAnonymousPart, themePart, titlePart, contentPart, imagePart)
+        }
+    }
+
+
+    private fun downloadImageFromUrl(imageUrl: String): File? {
+        return try {
+            val url = java.net.URL(imageUrl)
+            val connection = url.openConnection()
+            connection.connect()
+
+            val inputStream = connection.getInputStream()
+            val file = File(requireContext().cacheDir, "image_${UUID.randomUUID()}.jpg")
+            val outputStream = FileOutputStream(file)
+
+            inputStream.use { input ->
+                outputStream.use { output ->
+                    input.copyTo(output)
+                }
+            }
+            file
+        } catch (e: Exception) {
+            null
+        }
     }
 
     private fun sendContentToServer(
@@ -320,28 +334,16 @@ class EditContentFragment(
         contentPart: RequestBody,
         imageParts: MultipartBody.Part?
     ) {
-        val requestBody = WriteContentRequest(
-            title = titlePart.toString(),
-            content = contentPart.toString(),
-            type = "ALL",
-            anonymous = false // 임시
-        )
-
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-//        service.editContent(titlePart, contentPart, themePart, isAnonymous, imageParts!!)
-            service.editContent(postId, requestBody)
+        service.editContent(postId, titlePart, contentPart, themePart, imageParts, isAnonymous)
             .enqueue(object : Callback<WriteContentResponse> {
                 override fun onResponse(call: Call<WriteContentResponse>, response: Response<WriteContentResponse>) {
                     if (response.isSuccessful && response.body()?.isSuccess == "true") {
                         val writeContentResponseBody = response.body()!!.result
-                        setFragmentResult("requestKey", bundleOf("resultKey" to "SUCCESS"))
+                        Log.d("isExitEdit", "1234567890")
                         dismiss()
-                        listener.onBottomSheetDismissed()
-                        val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-                        intent.putExtra("postInfo", writeContentResponseBody.id)
-                        startActivity(intent)
                     } else {
-                        Toast.makeText(requireContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "게시글 편집에 실패했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
                 override fun onFailure(call: Call<WriteContentResponse>, t: Throwable) {
@@ -360,12 +362,17 @@ class EditContentFragment(
             "정보공유" -> "INFORMATION_SHARING"
             "고민상담" -> "COUNSELING"
             "취준토크" -> "JOB_TALK"
-            "자유토크" -> "FREE_TALK" // 기본값
-            else -> "PASS_EXPERIENCE"
+            "자유토크" -> "FREE_TALK"
+            else -> "PASS_EXPERIENCE" // 기본값
         }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         selectedCategory = "PASS_EXPERIENCE"
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as? CommunityContentActivity)?.fetchContentInfo() // Fragment 닫히면 새로고침
     }
 }

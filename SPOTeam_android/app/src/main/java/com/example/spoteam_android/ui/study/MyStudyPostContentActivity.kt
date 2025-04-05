@@ -101,11 +101,6 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         initTextWatcher()
     }
 
-    override fun onResume() {
-        super.onResume()
-        fetchContentInfo()
-    }
-
     private fun initTextWatcher() {
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

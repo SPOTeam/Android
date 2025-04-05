@@ -43,10 +43,15 @@ interface CommunityAPIService {
         @Part image: MultipartBody.Part
     ): Call<WriteContentResponse>
 
+    @Multipart
     @PATCH("/spot/posts/{postId}")
     fun editContent(
         @Path("postId") postId: Int,
-        @Body requestBody : WriteContentRequest
+        @Part("title") titlePart: RequestBody,
+        @Part("content") contentPart: RequestBody,
+        @Part("type") themePart: RequestBody,
+        @Part image: MultipartBody.Part?,
+        @Part("anonymous") isAnonymousPart: RequestBody
     ): Call<WriteContentResponse>
 
     @POST("/spot/posts/{postId}/like")

@@ -31,7 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener  {
+class CommunityContentActivity : AppCompatActivity()  {
 
     private lateinit var binding: ActivityCommunityContentBinding
     var memberId : Int = -1
@@ -271,12 +271,6 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
                 }
             })
     }
-
-    private fun showSuccessReportDialog(view: View, fragmentManager: FragmentManager) {
-        val reportContentDialog = ReportContentDialog(view.context, fragmentManager)
-        reportContentDialog.start()
-    }
-
     private fun showFailedDeleteDialog(view: View, fragmentManager: FragmentManager) {
         val failedDeletePost = FailedDeleteContentDialog(view.context)
         failedDeletePost.start(fragmentManager)
@@ -321,7 +315,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
             if(createdByThisMember) {
 
                 // WriteContentFragment 생성 및 데이터 전달
-                val editContext = EditContentFragment(this).apply {
+                val editContext = EditContentFragment().apply {
                     arguments = Bundle().apply {
                         putInt("postId", postId)
                     }
@@ -378,8 +372,7 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
             })
     }
 
-
-    private fun fetchContentInfo() {
+    fun fetchContentInfo() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.getContentInfo(postId, ischecked)
             .enqueue(object : Callback<ContentResponse> {
@@ -673,10 +666,6 @@ class CommunityContentActivity : AppCompatActivity(), BottomSheetDismissListener
         } else {
             writtenTime // 원본 문자열 반환
         }
-    }
-
-    override fun onBottomSheetDismissed() {
-        supportFragmentManager.popBackStack()
     }
 }
 
