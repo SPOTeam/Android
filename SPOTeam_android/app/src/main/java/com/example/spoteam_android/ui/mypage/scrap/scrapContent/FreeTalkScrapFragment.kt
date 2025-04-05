@@ -27,8 +27,9 @@ import retrofit2.Response
 
 class FreeTalkScrapFragment : Fragment() {
 
-    lateinit var binding: FragmentScrapContentBinding
-    var memberId : Int = -1
+    private var _binding: FragmentScrapContentBinding? = null
+    private val binding get() = _binding!!
+    private var memberId: Int = -1
     private val type = "FREE_TALK"
     private var startPage = 0
     private var currentPage = 0
@@ -42,32 +43,59 @@ class FreeTalkScrapFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentScrapContentBinding.inflate(inflater, container, false)
+        _binding = FragmentScrapContentBinding.inflate(inflater, container, false)
 
+        // RecyclerView 초기화
+        scrapRVAdapter = ScrapContentRVAdapter(scrapItemList)
         binding.communityCategoryContentRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            setHasFixedSize(true)  // 🔥 크기를 고정해서 내부적으로 불필요한 계산 제거
-            isNestedScrollingEnabled = false  // 🔥 내부적으로 스크롤 방지
+            setHasFixedSize(true)
+            isNestedScrollingEnabled = false
+            adapter = scrapRVAdapter
         }
 
+        // 클릭 리스너 설정
+        scrapRVAdapter.setItemClickListener(object : ScrapContentRVAdapter.OnItemClickListener {
+            override fun onItemClick(data: CategoryPagesDetail) {
+                val intent = Intent(requireContext(), CommunityContentActivity::class.java)
+                intent.putExtra("postInfo", data.postId.toString())
+                startActivity(intent)
+            }
+
+            override fun onLikeClick(data: CategoryPagesDetail) {
+                postLike(data.postId)
+            }
+
+            override fun onUnLikeClick(data: CategoryPagesDetail) {
+                deleteLike(data.postId)
+            }
+
+            override fun onBookMarkClick(data: CategoryPagesDetail) {
+                deleteContentScrap(data.postId)
+            }
+
+            override fun onUnBookMarkClick(data: CategoryPagesDetail) {
+                postContentScrap(data.postId)
+            }
+        })
+
         // SharedPreferences 사용
-        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val currentEmail = sharedPreferences.getString("currentEmail", null)
+        memberId = if (currentEmail != null) sharedPreferences.getInt(
+            "${currentEmail}_memberId",
+            -1
+        ) else -1
 
-        // 현재 로그인된 사용자 정보를 로그
-        memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
-//        Log.d("SharedPreferences", "MemberId: $memberId")
-
-        // WriteContentFragment에서 결과 수신
         parentFragmentManager.setFragmentResultListener("requestKey", this) { _, bundle ->
             val result = bundle.getString("resultKey")
             if (result == "SUCCESS") {
-//                currentPage = startPage
-                fetchPages() // 게시글 등록 성공 시 갱신
+                fetchPages()
             }
         }
 
-        binding.lookAroundTv.setOnClickListener{
+        binding.lookAroundTv.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, CommunityFragment())
                 .addToBackStack(null)
@@ -76,90 +104,6 @@ class FreeTalkScrapFragment : Fragment() {
 
         return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        scrapRVAdapter = ScrapContentRVAdapter(scrapItemList) // ✅ Adapter 초기화
-        binding.communityCategoryContentRv.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = scrapRVAdapter
-        }
-
-        val pageButtons = listOf(
-            binding.page1,
-            binding.page2,
-            binding.page3,
-            binding.page4,
-            binding.page5
-        )
-
-        pageButtons.forEachIndexed { index, textView ->
-            textView.setOnClickListener {
-                val selectedPage = startPage + index
-                if (currentPage != selectedPage) {
-                    currentPage = selectedPage
-                    fetchPages()
-                }
-            }
-        }
-
-        setupPageNavigationButtons()
-
-        fetchPages()
-    }
-
-    override fun onResume() {
-        super.onResume()
-//      currentPage = startPage
-        fetchPages()
-    }
-
-    private fun fetchPages() {
-        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getScrapInfo(type, currentPage, size)
-            .enqueue(object : Callback<GetScrapResponse> {
-                override fun onResponse(
-                    call: Call<GetScrapResponse>,
-                    response: Response<GetScrapResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val pagesResponse = response.body()
-                        if (pagesResponse?.isSuccess == "true") {
-                            val pagesResponseList = pagesResponse.result.postResponses ?: listOf()
-                            scrapItemList.clear()
-                            scrapItemList.addAll(pagesResponseList.toMutableList()) // ✅ SingletonList 해결
-
-                            totalPages = pagesResponse.result.totalPages
-
-                            if(scrapItemList.isNotEmpty()) {
-                                // ✅ RecyclerView 초기화 호출
-                                initRecyclerview()
-
-                                updatePageUI() // ✅ 페이지 UI 업데이트
-
-                                binding.emptyScrap.visibility = View.GONE
-                                binding.pageNumberLayout.visibility = View.VISIBLE
-                                binding.communityCategoryContentRv.visibility = View.VISIBLE
-                            } else {
-                                binding.emptyScrap.visibility = View.VISIBLE
-                                binding.pageNumberLayout.visibility = View.GONE
-                                binding.communityCategoryContentRv.visibility = View.GONE
-                            }
-                        } else {
-                            showError(pagesResponse?.message)
-                        }
-                    } else {
-                        showError(response.code().toString())
-                    }
-                }
-
-                override fun onFailure(call: Call<GetScrapResponse>, t: Throwable) {
-                    Log.e("ALL", "Failure: ${t.message}", t)
-                }
-            })
-    }
-
 
     private fun deleteContentScrap(postId: Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
@@ -187,7 +131,7 @@ class FreeTalkScrapFragment : Fragment() {
             })
     }
 
-    private fun postContentScrap(postId : Int) {
+    private fun postContentScrap(postId: Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.postContentScrap(postId)
             .enqueue(object : Callback<ContentLikeResponse> {
@@ -213,7 +157,7 @@ class FreeTalkScrapFragment : Fragment() {
             })
     }
 
-    private fun postLike(postId : Int) {
+    private fun postLike(postId: Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.postContentLike(postId)
             .enqueue(object : Callback<ContentLikeResponse> {
@@ -241,7 +185,7 @@ class FreeTalkScrapFragment : Fragment() {
             })
     }
 
-    private fun deleteLike(postId : Int) {
+    private fun deleteLike(postId: Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.deleteContentLike(postId)
             .enqueue(object : Callback<ContentUnLikeResponse> {
@@ -269,70 +213,101 @@ class FreeTalkScrapFragment : Fragment() {
             })
     }
 
-    private fun showError(message: String?) {
-        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val pageButtons = listOf(
+            binding.page1, binding.page2, binding.page3, binding.page4, binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            textView.setOnClickListener {
+                val selectedPage = startPage + index
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    fetchPages()
+                }
+            }
+        }
+
+        setupPageNavigationButtons()
+        fetchPages()
     }
 
-    private fun initRecyclerview() {
-        binding.communityCategoryContentRv.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    override fun onResume() {
+        super.onResume()
+        fetchPages()
+    }
 
-        val reversedPageContent = scrapItemList.reversed().toMutableList() // ✅ 안전하게 변환
-        val dataRVAdapter = ScrapContentRVAdapter(ArrayList(reversedPageContent)) // ✅ ArrayList 변환 후 전달
+    private fun fetchPages() {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.getScrapInfo(type, currentPage, size)
+            .enqueue(object : Callback<GetScrapResponse> {
+                override fun onResponse(
+                    call: Call<GetScrapResponse>,
+                    response: Response<GetScrapResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val pagesResponse = response.body()
+                        if (pagesResponse?.isSuccess == "true") {
+                            val pagesResponseList = pagesResponse.result.postResponses ?: listOf()
+                            scrapItemList.clear()
+                            scrapItemList.addAll(pagesResponseList)
 
-        binding.communityCategoryContentRv.adapter = dataRVAdapter
+                            totalPages = pagesResponse.result.totalPage
 
-        dataRVAdapter.setItemClickListener(object : ScrapContentRVAdapter.OnItemClickListener {
-            override fun onItemClick(data: CategoryPagesDetail) {
-                val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-                intent.putExtra("postInfo", data.postId.toString())
-                startActivity(intent)
-            }
+                            if (scrapItemList.isNotEmpty()) {
+                                scrapRVAdapter.updateList(scrapItemList)
+                                updatePageUI()
+                                binding.emptyScrap.visibility = View.GONE
+                                binding.pageNumberLayout.visibility = View.VISIBLE
+                                binding.communityCategoryContentRv.visibility = View.VISIBLE
+                            } else {
+                                binding.emptyScrap.visibility = View.VISIBLE
+                                binding.pageNumberLayout.visibility = View.GONE
+                                binding.communityCategoryContentRv.visibility = View.GONE
+                            }
+                        } else {
+                            showError(pagesResponse?.message)
+                            binding.emptyScrap.visibility = View.VISIBLE
+                            binding.pageNumberLayout.visibility = View.GONE
+                            binding.communityCategoryContentRv.visibility = View.GONE
+                        }
+                    } else {
+                        showError(response.code().toString())
+                    }
+                }
 
-            override fun onLikeClick(data: CategoryPagesDetail) {
-                postLike(data.postId)
-            }
-
-            override fun onUnLikeClick(data: CategoryPagesDetail) {
-                deleteLike(data.postId)
-            }
-
-            override fun onBookMarkClick(data: CategoryPagesDetail) {
-                deleteContentScrap(data.postId)
-            }
-
-            override fun onUnBookMarkClick(data: CategoryPagesDetail) {
-                postContentScrap(data.postId)
-            }
-        })
+                override fun onFailure(call: Call<GetScrapResponse>, t: Throwable) {
+                    Log.e("ALL", "Failure: ${t.message}", t)
+                }
+            })
     }
 
     private fun setupPageNavigationButtons() {
         binding.previousPage.setOnClickListener {
             if (currentPage > 0) {
                 currentPage--
-                fetchPages() // 이전 페이지 데이터를 가져옴
+                fetchPages()
             }
         }
 
         binding.nextPage.setOnClickListener {
             if (currentPage < totalPages - 1) {
                 currentPage++
-                fetchPages() // 다음 페이지 데이터를 가져옴
+                fetchPages()
             }
         }
     }
 
     private fun updatePageUI() {
-        if (totalPages <= 5) {
-            startPage = 0
+        // ✅ 추가된 부분
+        startPage = if (currentPage <= 2) {
+            0
         } else {
-            startPage = maxOf(0, minOf(currentPage - 2, totalPages - 5))
+            minOf(totalPages - 5, maxOf(0, currentPage - 2))
         }
-
-        val endPage = minOf(totalPages, startPage + 5)
-        val pages = (startPage until endPage).toList()
-
+        Log.d("AllFragment", "totalPages : ${totalPages}, currentPage : ${currentPage}")
         val pageButtons = listOf(
             binding.page1,
             binding.page2,
@@ -341,24 +316,30 @@ class FreeTalkScrapFragment : Fragment() {
             binding.page5
         )
 
-        pageButtons.forEach { it.text = "" }
-
         pageButtons.forEachIndexed { index, textView ->
-            if (index < pages.size) {
-                textView.text = (pages[index] + 1).toString()
+            val pageNum = startPage + index
+            if (pageNum < totalPages) {
+                textView.text = (pageNum + 1).toString()
                 textView.setBackgroundResource(
-                    if (pages[index] == currentPage) R.drawable.btn_page_bg
-                    else 0
+                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
                 )
+                textView.isEnabled = true
+                textView.alpha = 1.0f
                 textView.visibility = View.VISIBLE
             } else {
-                textView.visibility = View.GONE
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(0)
+                textView.isEnabled = false // 클릭 안 되게
+                textView.alpha = 0.3f
+                textView.visibility = View.VISIBLE
             }
         }
 
-        // ✅ 이전, 다음 버튼 활성화 여부 설정
         binding.previousPage.isEnabled = currentPage > 0
         binding.nextPage.isEnabled = currentPage < totalPages - 1
     }
 
+    private fun showError(message: String?) {
+        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+    }
 }

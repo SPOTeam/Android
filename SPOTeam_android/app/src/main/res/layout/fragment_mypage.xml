@@ -99,9 +99,10 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/ic_new_scrab"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_nickname2"
-                app:layout_constraintTop_toTopOf="@+id/tv_nickname2" />
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toStartOf="@id/tv_scrab"
+                app:layout_constraintTop_toTopOf="@+id/detail_scrap_iv"
+                app:layout_constraintBottom_toBottomOf="@id/detail_scrap_iv"/>
 
 
             <TextView
@@ -111,20 +112,30 @@
                 android:text="스크랩"
                 android:textColor="@color/black"
                 android:textSize="14dp"
-                android:layout_marginLeft="5dp"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_bookmark"
-                app:layout_constraintStart_toEndOf="@+id/iv_bookmark" />
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toStartOf="@id/detail_scrap_iv"
+                app:layout_constraintTop_toTopOf="@id/detail_scrap_iv"
+                app:layout_constraintBottom_toBottomOf="@+id/detail_scrap_iv" />
 
-            <TextView
-                android:id="@+id/tv_count_scrab"
+            <ImageView
+                android:id="@+id/detail_scrap_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00"
-                android:textColor="@color/black"
-                android:textSize="14dp"
-                android:layout_marginLeft="5dp"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_scrab"
-                app:layout_constraintStart_toEndOf="@+id/tv_scrab" />
+                android:src="@drawable/right_arrow"
+                app:layout_constraintEnd_toEndOf="@id/frameLayout1"
+                app:layout_constraintTop_toTopOf="@id/tv_nickname2"
+                app:tint="@color/black"/>
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_count_scrab"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="00"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="14dp"-->
+<!--                android:layout_marginLeft="5dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/tv_scrab"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/tv_scrab" />-->
 
             <FrameLayout
                 android:id="@+id/frameLayout1"
@@ -133,6 +144,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/rounded_dialog"
                 android:paddingBottom="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -140,7 +152,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_profile"
-                app:layout_constraintVertical_bias="0.466">
+                app:layout_constraintVertical_bias="0.466"
+                android:elevation="4dp">
 
                 <TextView
                     android:id="@+id/tv_in_progress"
