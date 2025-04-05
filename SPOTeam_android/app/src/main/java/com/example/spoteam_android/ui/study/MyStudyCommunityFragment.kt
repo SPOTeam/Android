@@ -106,6 +106,8 @@ class MyStudyCommunityFragment : Fragment() {
         return binding.root
     }
 
+
+
     private fun initBTN() {
         binding.allRb.setOnClickListener{
             themeQuery = ""
@@ -139,7 +141,6 @@ class MyStudyCommunityFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         fetchPages()
     }
 
