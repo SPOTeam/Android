@@ -130,9 +130,7 @@
                 android:background="@color/white"
                 android:paddingTop="10dp"
                 android:paddingBottom="16dp"
-                android:paddingStart="12dp"
-                android:paddingEnd="9dp">
-
+                android:paddingStart="12dp">
 
                 <TextView
                     android:id="@+id/live_popular_tv"
@@ -159,7 +157,7 @@
 
                 <TextView
                     android:id="@+id/popular_content_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:ellipsize="end"
@@ -177,7 +175,7 @@
                     android:id="@+id/go_popular_content_iv"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="20dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/fragment_mypage_ic_arrow"
                     app:layout_constraintBottom_toBottomOf="@+id/popular_content_tv"
