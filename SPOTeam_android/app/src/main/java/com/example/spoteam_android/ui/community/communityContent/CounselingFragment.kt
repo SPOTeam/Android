@@ -10,8 +10,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spoteam_android.CommunityData
+import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
+import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.databinding.FragmentCommunityCategoryContentBinding
 import com.example.spoteam_android.ui.community.CategoryPagesDetail
 import com.example.spoteam_android.ui.community.CategoryPagesResponse
@@ -27,7 +28,13 @@ class CounselingFragment : Fragment() {
 
     lateinit var binding: FragmentCommunityCategoryContentBinding
     var memberId : Int = -1
-    val pageSize = 20
+    private var itemList = ArrayList<CategoryPagesDetail>()
+    private var currentPage = 0
+    private val size = 5 // 페이지당 항목 수
+    private var totalPages = 0
+    private var startPage = 0
+
+    private val type = "COUNSELING"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,34 +43,75 @@ class CounselingFragment : Fragment() {
     ): View {
         binding = FragmentCommunityCategoryContentBinding.inflate(inflater, container, false)
 
+        // SharedPreferences 사용
         val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val currentEmail = sharedPreferences.getString("currentEmail", null)
 
         // 현재 로그인된 사용자 정보를 로그
         memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
-//        Log.d("SharedPreferences", "MemberId: $memberId")
 
-        fetchPages("COUNSELING", 0)
 
         // WriteContentFragment에서 결과 수신
         parentFragmentManager.setFragmentResultListener("requestKey", this) { _, bundle ->
             val result = bundle.getString("resultKey")
             if (result == "SUCCESS") {
-                fetchPages("COUNSELING", 0) // 게시글 등록 성공 시 갱신
+                fetchPages() // 게시글 등록 성공 시 갱신
             }
         }
+
+        binding.communityCategoryContentRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            textView.setOnClickListener {
+                val selectedPage = startPage + index
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    fetchPages()
+                }
+            }
+        }
+
+        // 페이지 전환 버튼 설정
+        binding.previousPage.setOnClickListener {
+            if (currentPage > 0) {
+                currentPage--
+                fetchPages() // 이전 페이지 데이터를 가져옴
+            }
+        }
+
+        binding.nextPage.setOnClickListener {
+            if (currentPage < getTotalPages() - 1) {
+                currentPage++
+                fetchPages() // 다음 페이지 데이터를 가져옴
+            }
+        }
+
+        fetchPages()
 
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        fetchPages("COUNSELING", 0)
+    private fun getTotalPages(): Int {
+        return totalPages // 올바른 페이지 수 계산
     }
 
-    private fun fetchPages(type : String, pageNum : Int) {
+    override fun onResume() {
+        super.onResume()
+        fetchPages()
+    }
+
+    private fun fetchPages() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getCategoryPagesContent(type, pageNum, pageSize)
+        service.getCategoryPagesContent(type, currentPage, size)
             .enqueue(object : Callback<CategoryPagesResponse> {
                 override fun onResponse(
                     call: Call<CategoryPagesResponse>,
@@ -76,9 +124,18 @@ class CounselingFragment : Fragment() {
                             val pagesResponseList = pagesResponse.result.postResponses
                             if (count > 0) {
                                 binding.emptyWaiting.visibility = View.GONE
-                                initRecyclerview(pagesResponseList)
+                                binding.pageNumberLayout.visibility = View.VISIBLE
+
+                                itemList.clear()
+                                itemList.addAll(pagesResponseList)
+
+                                totalPages = pagesResponse.result.totalPage
+
+                                initRecyclerview()
+                                updatePageUI()
                             } else {
                                 binding.emptyWaiting.visibility = View.VISIBLE
+                                binding.pageNumberLayout.visibility = View.GONE
                             }
                         } else {
                             showError(pagesResponse?.message)
@@ -89,7 +146,7 @@ class CounselingFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<CategoryPagesResponse>, t: Throwable) {
-                    Log.e("COUNSELING", "Failure: ${t.message}", t)
+                    Log.e("ALL", "Failure: ${t.message}", t)
                 }
             })
     }
@@ -206,16 +263,13 @@ class CounselingFragment : Fragment() {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
     }
 
-    private fun initRecyclerview(pageContent : List<CategoryPagesDetail>){
-        binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    private fun initRecyclerview() {
 
-        val reversedPageContent = pageContent.reversed()
-
-        val dataRVAdapter = CommunityCategoryContentRVAdapter(reversedPageContent)
+        val dataRVAdapter = CommunityCategoryContentRVAdapter(itemList)
         //리스너 객체 생성 및 전달
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
-      
+
         dataRVAdapter.setItemClickListener(object : CommunityCategoryContentRVAdapter.OnItemClickListener {
             override fun onItemClick(data: CategoryPagesDetail) {
                 val intent = Intent(requireContext(), CommunityContentActivity::class.java)
@@ -238,7 +292,46 @@ class CounselingFragment : Fragment() {
             override fun onUnBookMarkClick(data: CategoryPagesDetail) {
                 postContentScrap(data.postId)
             }
-
         })
+
+    }
+
+    private fun updatePageUI() {
+        // ✅ 추가된 부분
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            minOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+        Log.d("CounselingFragment", "totalPages : ${totalPages}, currentPage : ${currentPage}")
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            val pageNum = startPage + index
+            if (pageNum < totalPages) {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(
+                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                )
+                textView.isEnabled = true
+                textView.alpha = 1.0f
+                textView.visibility = View.VISIBLE
+            } else {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(0)
+                textView.isEnabled = false // 클릭 안 되게
+                textView.alpha = 0.3f
+                textView.visibility = View.VISIBLE
+            }
+        }
+
+        binding.previousPage.isEnabled = currentPage > 0
+        binding.nextPage.isEnabled = currentPage < totalPages - 1
     }
 }

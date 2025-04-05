@@ -67,7 +67,7 @@ data class CategoryPagesResponse(
 data class CategoryPagesInfo(
     val postType : String,
     val postResponses: List<CategoryPagesDetail>,
-    val totalPages : Int,
+    val totalPage : Int,
     val totalElements : Int,
     val isFirst : Boolean,
     val isLast : Boolean
