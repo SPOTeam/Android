@@ -56,7 +56,7 @@ class MemberStudyFragment : Fragment() {
         }
 
         viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
-            if (viewModel.mode.value == StudyFormMode.EDIT) {
+            if (viewModel.mode.value == StudyFormMode.EDIT && request != null) {
                 binding.fragmentMemberStudyTv.text = "스터디 정보 수정"
                 // 참여 인원 반영
                 val index = (1..9).indexOf(request.maxPeople)
