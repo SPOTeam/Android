@@ -74,7 +74,6 @@ class MainActivity : AppCompatActivity() {
         val baseDate = getUpdatedDate()
         val baseTime = getUpdatedTime()
 
-
         fetchRegions(baseDate.toInt(), baseTime)
 
 
@@ -401,9 +400,7 @@ class MainActivity : AppCompatActivity() {
         // 현재 시간에 맞는 TIME 계산 (API 제공 시간이 지난 경우, 현재 시간보다 작은 가장 가까운 값 선택)
         val previousTime = updateTimes.lastOrNull { hour >= it } ?: updateTimes.last()
 
-        // 두 자리 문자열로 변환하여 반환 (API 제공 시간 + 5분 고려)
         val formattedTime = String.format("%02d00", previousTime)
-        Log.d("WeatherViewModel", "getUpdatedTime() 호출됨 - 반환 값: $formattedTime")
         return formattedTime
     }
 

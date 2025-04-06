@@ -43,9 +43,6 @@ import retrofit2.Response
 class SearchFragment : Fragment() {
 
     lateinit var binding: FragmentSearchBinding
-    private val gson = Gson()
-    private val preferencesName = "RecentSearches"
-    private val recentSearchKey = "recent_search_list"
     private val maxRecentSearches = 10
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var recommendBoardAdapter: InterestVPAdapter

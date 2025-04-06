@@ -17,15 +17,11 @@ class WeatherViewModel @Inject constructor(
     private val _weatherResponse : MutableLiveData<Response<Weather>> = MutableLiveData()
     val weatherResponse get() = _weatherResponse
 
+    //인자 값을 기준으로 repository의 getWeather 메소드를 실행
     fun getWeather(
         dataType: String, numOfRows: Int, pageNo: Int,
         baseDate: Int, baseTime: String, nx: String, ny: String
     ) {
-        Log.d(
-            "WeatherRequest",
-            "Requesting weather data with params: dataType=$dataType, numOfRows=$numOfRows, pageNo=$pageNo, baseDate=$baseDate, baseTime=$baseTime, nx=$nx, ny=$ny"
-        )
-
         viewModelScope.launch {
             try {
                 val response =

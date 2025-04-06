@@ -237,4 +237,12 @@
         <item name="android:background">@drawable/gender_spinner_background</item>
     </style>
 
+    <style name="SquareChipStyle" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="shapeAppearance">@style/ShapeAppearance.SquareChip</item>
+    </style>
+
+    <style name="ShapeAppearance.SquareChip" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">8dp</item> <!-- 네 모서리 모두 0dp로 설정 -->
+    </style>
+
 </resources>

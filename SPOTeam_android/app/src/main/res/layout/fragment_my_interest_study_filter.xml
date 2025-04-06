@@ -12,7 +12,7 @@
 
         <include
             android:id="@+id/toolbar"
-            layout="@layout/recruiting_study_toolbar" />
+            layout="@layout/my_interest_study_toolbar" />
 
         <TextView
             android:id="@+id/tx_alarm"
@@ -20,52 +20,173 @@
             android:layout_height="35dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:background="#F8F8F8"
+            android:background="@color/g100"
             android:text="검색 결과는 모든 지역에 공통 반영됩니다."
             android:fontFamily="@font/pretendard"
             android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="13dp"
             android:gravity="center"
-            android:textColor="@color/gray_03"
-            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-
         <FrameLayout
-            android:id="@+id/frameLayout"
+            android:id="@+id/frameLayout_recruiting"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:background="@drawable/interest_filter_frame_layout_bottom_border"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tx_alarm">
 
             <TextView
-                android:id="@+id/tx_gender"
+                android:id="@+id/tv_recruiting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="start|center"
-                android:layout_marginStart="15dp"
-                android:text="성별"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/pretendard"
-                android:textColor="@color/black"
+                android:text="모집 상태"
+                android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/gender_spinner"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end|center"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/my_spinner_background"
-                android:spinnerMode="dropdown" />
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup_recruiting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|bottom"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                app:singleSelection="true">
 
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip1_recruiting"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:text="있음"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    app:checkedIconVisible="false"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip2_recruiting"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:text="없음"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    app:checkedIconVisible="false"
+                    app:chipStrokeWidth="1dp" />
+            </com.google.android.material.chip.ChipGroup>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayout_gender"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:background="@drawable/interest_filter_frame_layout_bottom_border"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout_recruiting">
+
+            <TextView
+                android:id="@+id/tv_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/pretendard"
+                android:text="모집 상태"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="start|bottom"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip1_gender"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:text="누구나"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    app:checkedIconVisible="false"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip2_gender"
+                    android:text="남성"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    app:checkedIconVisible="false"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip3_gender"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:text="여성"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    app:checkedIconVisible="false"
+                    app:chipStrokeWidth="1dp" />
+
+
+
+            </com.google.android.material.chip.ChipGroup>
 
         </FrameLayout>
+
+
+<!--        <FrameLayout-->
+<!--            android:id="@+id/frameLayout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="100dp"-->
+<!--            android:background="@drawable/interest_filter_frame_layout_bottom_border"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tx_alarm">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tx_gender"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentStart="true"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:layout_gravity="start|center"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:text="성별"-->
+<!--                android:fontFamily="@font/pretendard"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <Spinner-->
+<!--                android:id="@+id/gender_spinner"-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_gravity="end|center"-->
+<!--                android:layout_marginEnd="15dp"-->
+<!--                android:background="@drawable/my_spinner_background"-->
+<!--                android:spinnerMode="dropdown" />-->
+
+
+<!--        </FrameLayout>-->
 
         <FrameLayout
             android:id="@+id/frameLayout2"
@@ -73,7 +194,7 @@
             android:layout_height="120dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout_gender"
             android:background="@drawable/interest_filter_frame_layout_bottom_border">
 
             <TextView
@@ -178,28 +299,24 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip01"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
                     android:text="온라인"
-                    android:textColor="@drawable/chip_text_selector"
-                    android:textSize="15sp"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
                     app:checkedIconVisible="false"
-                    app:chipBackgroundColor="@drawable/chip_background_selector"
-                    app:chipStrokeColor="@color/active_blue"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip02"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
                     android:text="오프라인"
-                    android:textColor="@drawable/chip_text_selector"
-                    android:textSize="15sp"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
                     app:checkedIconVisible="false"
-                    app:chipBackgroundColor="@drawable/chip_background_selector"
-                    app:chipStrokeColor="@color/active_blue"
                     app:chipStrokeWidth="1dp" />
 
             </com.google.android.material.chip.ChipGroup>
@@ -224,9 +341,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="30dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginBottom="30dp"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/fragment_online_study_location_caution_tv">
 
@@ -236,8 +352,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="100dp"
-                    android:textSize="15sp"
                     android:text="경기 안산시 상록구 사동"
+                    android:textSize="15sp"
                     android:visibility="gone"
                     app:closeIconVisible="true" />
 
@@ -277,29 +393,25 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip1"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:textSize="15sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="있음"
-                    android:textColor="@drawable/chip_text_selector"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
                     app:checkedIconVisible="false"
-                    app:chipBackgroundColor="@drawable/chip_background_selector"
-                    app:chipStrokeColor="@color/active_blue"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip2"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
                     android:text="없음"
-                    android:textColor="@drawable/chip_text_selector"
+                    style="@style/CustomChipStyle"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
                     app:checkedIconVisible="false"
-                    app:chipBackgroundColor="@drawable/chip_background_selector"
-                    app:chipStrokeColor="@color/active_blue"
-                    app:chipStrokeWidth="1dp" />
+                    app:chipStrokeWidth="1dp"/>
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -344,11 +456,12 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_background"
             android:text="검색 결과 보기"
+            android:fontFamily="@font/pretendard"
             android:textColor="@drawable/button_textcolor"
             android:textSize="17sp"
             android:textStyle="bold"
-            android:enabled="false"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout3"
+            android:enabled="false"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

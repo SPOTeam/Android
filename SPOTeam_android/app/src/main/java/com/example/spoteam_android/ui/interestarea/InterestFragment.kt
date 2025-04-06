@@ -30,10 +30,8 @@ import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentInterestBinding
 import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
-import com.example.spoteam_android.ui.community.CategoryStudyResponse
-import com.example.spoteam_android.ui.community.CommunityAPIService
-import com.example.spoteam_android.ui.home.HomeFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.example.spoteam_android.ui.study.FixedRoundedSpinnerAdapter
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -57,7 +55,8 @@ class InterestFragment : Fragment() {
     private var source: String? = null
     private var selectedItem: String = "ALL"
     private var selectedRegion: String? = "0000000000"
-
+    private val viewModel: InterestFilterViewModel by activityViewModels()
+    private var isFirstSpinnerCall = true
 
 
     override fun onCreateView(
@@ -69,73 +68,43 @@ class InterestFragment : Fragment() {
         binding = FragmentInterestBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
-        interestBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
-            toggleLikeStatus(selectedItem, likeButton)
-        },studyViewModel = studyViewModel)
+        selectedItem = when (viewModel.isRecruiting) {
+            "있음" -> "RECRUITING"
+            "없음" -> "COMPLETED"
+            else -> "ALL"
+        }
 
-        interestBoardAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
-            override fun onItemClick(data: BoardItem) {
-                studyViewModel.setStudyData(
-                    data.studyId,
-                    data.imageUrl,
-                    data.introduction
-                )
-
-                val detailStudyFragment = DetailStudyFragment()
-                (activity as? MainActivity)?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.main_frm, detailStudyFragment)
-                    ?.addToBackStack(null)
-                    ?.commit()
-            }
-        })
+        setupRecyclerView()
 
         binding.spotLogo.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, HouseFragment())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
+            replaceFragment(HouseFragment())
         }
 
         binding.icFindInterest.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, SearchFragment())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
+            replaceFragment(SearchFragment())
         }
 
         binding.icAlarmInterest.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, AlertFragment())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
+            replaceFragment(AlertFragment())
         }
 
-        binding.interestAreaStudyReyclerview.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = interestBoardAdapter
-        }
+        gender = viewModel.gender
+        minAge = viewModel.minAge.toString()
+        maxAge = viewModel.maxAge.toString()
+        activityFee = viewModel.activityFee
+        selectedStudyTheme = viewModel.selectedStudyTheme
+        activityFeeAmount = viewModel.activityFeeAmount
+        source = arguments?.getString("source") // source만 그대로 Bundle에서 받음
 
-        return binding.root
-    }
+        setupSpinner()
 
-    @SuppressLint("ResourceType")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        gender = arguments?.getString("gender")
-        minAge = arguments?.getString("minAge")
-        maxAge = arguments?.getString("maxAge")
-        activityFee = arguments?.getString("activityFee")
-        selectedStudyTheme = arguments?.getString("selectedStudyTheme")
-        activityFeeAmount = arguments?.getString("activityFeeAmount")
-        source = arguments?.getString("source")
-
-        Log.d("InterestFragment","$gender, $minAge, $maxAge,$activityFee,$selectedStudyTheme,$activityFeeAmount")
+        Log.d("InterestFragment","$gender, $minAge, $maxAge,$activityFee,$selectedStudyTheme,$activityFeeAmount,$source")
 
         tabLayout = binding.tabs
 
         when (source) {
             "HouseFragment" -> {
+                binding.icFilter.visibility = View.VISIBLE
                 binding.icFilterActive.visibility = View.GONE
                 fetchData(
                     selectedItem,
@@ -153,6 +122,7 @@ class InterestFragment : Fragment() {
             }
             "InterestFilterFragment" -> {
                 binding.icFilterActive.visibility = View.VISIBLE
+                binding.icFilter.visibility = View.GONE
                 fetchData(
                     selectedItem,
                     gender = gender,
@@ -169,9 +139,42 @@ class InterestFragment : Fragment() {
             }
         }
 
-        setupSpinner()
+
         binding.icFilter.setOnClickListener {
             (activity as MainActivity).switchFragment(InterestFilterFragment())
+        }
+
+        binding.icFilterActive.setOnClickListener {
+            (activity as MainActivity).switchFragment(InterestFilterFragment())
+        }
+
+        return binding.root
+    }
+
+    private fun setupRecyclerView() {
+        interestBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
+            toggleLikeStatus(selectedItem, likeButton)
+        }, studyViewModel = studyViewModel)
+
+        interestBoardAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
+            override fun onItemClick(data: BoardItem) {
+                studyViewModel.setStudyData(
+                    data.studyId,
+                    data.imageUrl,
+                    data.introduction
+                )
+
+                val detailStudyFragment = DetailStudyFragment()
+                (activity as? MainActivity)?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_frm, detailStudyFragment)
+                    ?.addToBackStack(null)
+                    ?.commit()
+            }
+        })
+
+        binding.interestAreaStudyReyclerview.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = interestBoardAdapter
         }
     }
 
@@ -203,6 +206,8 @@ class InterestFragment : Fragment() {
                 tag = "0000000000"
                 selectedRegion = "0000000000"
             }
+
+
             tabLayout.addTab(allTab)
 
             // 지역별 탭 로그
@@ -271,25 +276,34 @@ class InterestFragment : Fragment() {
         }
     }
 
+    private fun replaceFragment(fragment: Fragment) {
+        (requireActivity() as MainActivity).supportFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, fragment)
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
+    }
+
 
     private fun setupSpinner() {
-        val spinner: Spinner = binding.filterToggle
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.category_study,
-            R.layout.spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-            spinner.adapter = adapter
-        }
+        val genderList = listOf("최신 순", "조회수 높은 순", "관심 많은 순")
+        val genderAdapter = FixedRoundedSpinnerAdapter(requireContext(), genderList)
+        binding.filterToggle.adapter = genderAdapter
+        binding.filterToggle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (isFirstSpinnerCall) {
+                    isFirstSpinnerCall = false
+                    return
+                }
 
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 selectedItem = when (position) {
-                    1 -> "RECRUITING"
-                    2 -> "COMPLETED"
-                    3 -> "HIT"
-                    4 -> "LIKED"
+                    0 -> "ALL"   // 최신 순
+                    1 -> "HIT"      // 조회수 높은 순
+                    2 -> "LIKED"    // 관심 많은 순
                     else -> "ALL"
                 }
                 fetchData(
@@ -304,9 +318,12 @@ class InterestFragment : Fragment() {
                 )
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
         }
     }
+
 
     private fun fetchData(
         selectedItem: String,
@@ -324,6 +341,12 @@ class InterestFragment : Fragment() {
         val interestAreaBoard = binding.interestAreaStudyReyclerview
         val checkcount: TextView = binding.checkAmount
 
+        val hasFee = when (activityFee) {
+            "있음" -> true
+            "없음" -> false
+            else -> false
+        }
+
         val call: Call<ApiResponse> = if (regionCode != null) {
             val service = RetrofitInstance.retrofit.create(InterestSpecificAreaApiService::class.java)
             service.InterestSpecificArea(
@@ -332,7 +355,7 @@ class InterestFragment : Fragment() {
                 minAge = minAge?.toIntOrNull() ?: 18,
                 maxAge = maxAge?.toIntOrNull() ?: 60,
                 isOnline = false,
-                hasFee = activityFee?.toBoolean() ?: false,
+                hasFee = hasFee,
                 fee = activityFeeAmountInt,
                 page = currentPage ?: 0,
                 size = 5,
@@ -344,7 +367,7 @@ class InterestFragment : Fragment() {
                 minAge = minAge?.toIntOrNull() ?: 18,
                 maxAge = maxAge?.toIntOrNull() ?: 60,
                 isOnline = false,
-                hasFee = activityFee?.toBoolean() ?: false,
+                hasFee = hasFee,
                 fee = activityFeeAmountInt,
                 page = currentPage ?: 0,
                 size = 5,

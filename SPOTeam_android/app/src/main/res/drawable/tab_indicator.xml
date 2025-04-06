@@ -2,7 +2,7 @@
     <item>
         <shape android:shape="rectangle">
             <!-- FrameLayout 배경색 -->
-            <solid android:color="#FFFFFF" />
+            <solid android:color="@android:color/transparent" />
         </shape>
     </item>
     <item android:top="48dp">

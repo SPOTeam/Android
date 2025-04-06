@@ -257,7 +257,7 @@
         android:layout_height="40dp"
         android:layout_gravity="end|center"
         android:layout_marginEnd="25dp"
-        android:background="@drawable/my_spinner_background"
+        android:background="@drawable/gender_spinner_background"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tx_routine" />
