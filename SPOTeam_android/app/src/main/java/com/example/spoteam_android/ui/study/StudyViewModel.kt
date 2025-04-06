@@ -25,8 +25,8 @@ class StudyViewModel : ViewModel() {
         _mode.value = newMode
     }
 
-    private val _studyRequest = MutableLiveData<StudyRequest>()
-    val studyRequest: LiveData<StudyRequest> = _studyRequest
+    private val _studyRequest = MutableLiveData<StudyRequest?>()
+    val studyRequest: LiveData<StudyRequest?> = _studyRequest
 
     private val _profileImageUri = MutableLiveData<String?>()
     val profileImageUri: LiveData<String?> = _profileImageUri

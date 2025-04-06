@@ -59,7 +59,7 @@
             }
 
             viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
-                if (viewModel.mode.value == StudyFormMode.EDIT) {
+                if (viewModel.mode.value == StudyFormMode.EDIT && request != null) {
                     binding.fragmentOnlineStudyTv.text = "스터디 정보 수정"
                     setChipState(request.isOnline)
                     isLocationPlusVisible = !request.isOnline
@@ -139,7 +139,7 @@
 
         private fun observeViewModel() {
             viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
-                if (viewModel.mode.value == StudyFormMode.EDIT) {
+                if (viewModel.mode.value == StudyFormMode.EDIT && request != null) {
                     binding.fragmentOnlineStudyTv.text = "스터디 정보 수정"
                     setChipState(request.isOnline)
                     isLocationPlusVisible = !request.isOnline

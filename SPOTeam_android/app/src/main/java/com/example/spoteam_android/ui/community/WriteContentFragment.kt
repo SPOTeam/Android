@@ -221,7 +221,7 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
         imageParts: MultipartBody.Part?
     ) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postContent(titlePart, contentPart, themePart, isAnonymous, imageParts!!)
+        service.postContent(titlePart, contentPart, themePart, isAnonymous, imageParts)
             .enqueue(object : Callback<WriteContentResponse> {
                 override fun onResponse(call: Call<WriteContentResponse>, response: Response<WriteContentResponse>) {
                     if (response.isSuccessful && response.body()?.isSuccess == "true") {

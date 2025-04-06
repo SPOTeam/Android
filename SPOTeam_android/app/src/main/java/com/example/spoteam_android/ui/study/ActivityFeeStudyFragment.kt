@@ -44,7 +44,7 @@ class ActivityFeeStudyFragment : Fragment() {
         })
 
         viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
-            if (viewModel.mode.value == StudyFormMode.EDIT) {
+            if (viewModel.mode.value == StudyFormMode.EDIT && request != null) {
                 binding.fragmentActivityFeeStudyTv.text = "스터디 정보 수정"
                 binding.fragmentActivityFeeStudyPreviewBt.text = "수정완료"
                 setChipState(request.hasFee)

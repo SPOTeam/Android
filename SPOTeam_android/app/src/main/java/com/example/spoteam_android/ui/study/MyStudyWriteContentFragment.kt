@@ -257,7 +257,6 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
             override fun onResponse(call: Call<StudyPostResponse>, response: Response<StudyPostResponse>) {
                 if (response.isSuccessful && response.body()?.isSuccess == "true") {
                     val writeContentResponseBody = response.body()!!.result
-                    showLog(writeContentResponseBody.toString())
                     dismiss()
                     val intent = Intent(requireContext(), MyStudyPostContentActivity::class.java)
                     intent.putExtra("myStudyId", currentStudyId.toString())

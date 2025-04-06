@@ -253,8 +253,9 @@ class PermissionWaitFragment : Fragment() {
         startPage = if (currentPage <= 2) {
             0
         } else {
-            minOf(totalPage - 5, maxOf(0, currentPage - 2))
+            maxOf(totalPage - 5, maxOf(0, currentPage - 2))
         }
+
         Log.d("AllFragment", "totalPages : ${totalPage}, currentPage : ${currentPage}")
         val pageButtons = listOf(
             binding.page1,
