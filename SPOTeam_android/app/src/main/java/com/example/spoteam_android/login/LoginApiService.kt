@@ -6,6 +6,7 @@ import com.example.spoteam_android.IdResponse
 import com.example.spoteam_android.NaverLoginRequest
 import com.example.spoteam_android.NaverResponse
 import com.example.spoteam_android.NaverResult
+import com.example.spoteam_android.NickNameResponse
 import com.example.spoteam_android.ReasonApiResponse
 import com.example.spoteam_android.RegionApiResponse
 import com.example.spoteam_android.RegionsPreferences
@@ -67,14 +68,14 @@ interface LoginApiService {
         @Query("verificationCode") verificationCode: String, @Query("email") email: String)
     :Call<ValidateEmailResponse>
 
-    //닉네임 생성 및 약관 동의
-//    @GET("/spot/sign-up/update")
-//    fun getNicName(
-//        @Query("nickname") nickname: String,
-//        @Query("personalInfo") personalInfo: Boolean,
-//        @Query("idInfo") idInfo: Boolean
-//    ): Call<NickNameResponse>
-//    }
+    @POST("/spot/sign-up/update")
+    fun updateNickName(
+        @Query("nickname") nickname: String,
+        @Query("personalInfo") personalInfo: Boolean,
+        @Query("idInfo") idInfo: Boolean
+    ): Call<NickNameResponse>
+
+
 
 
 

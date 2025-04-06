@@ -62,7 +62,7 @@ class StartLoginActivity : AppCompatActivity() {
         lifecycleScope.launch {
             var token: String?
             repeat(10) { //토큰 체크 후 화면 이동이 필요함.
-                token = tokenManager.getAccessToken() //토큰 매니저를 통해 직접 토큰 가져옴
+                token = tokenManager.getAccessToken()
                 if (!token.isNullOrEmpty()) {
                     navigateToNextScreen()
                     return@launch
@@ -75,27 +75,50 @@ class StartLoginActivity : AppCompatActivity() {
         }
     }
 
-
+    //로그인 회원가입 로직 api 추가 예정
     private fun checkIfAlreadyLoggedIn() {
         if (tokenManager.isUserLoggedIn()) {
-            Log.d("AutoLogin", "자동 로그인")
             navigateToNextScreen() // 메인 화면으로 이동
         } else {
-            Log.d("AutoLogin", "로그인 필요")
+
         }
     }
 
     private fun setupObservers() {
         loginViewModel.loginResult.observe(this) { result ->
-            result.onSuccess { waitForTokenAndNavigate() }
-                .onFailure { showErrorToast("카카오 로그인 실패: ${it.message}") }
+            result.onSuccess { kakaoResult ->
+                if (kakaoResult.isSpotMember) {
+                    waitForTokenAndNavigate()
+                } else {
+                    goToNicknameActivity()
+                }
+            }.onFailure {
+                showErrorToast("카카오 로그인 실패: ${it.message}")
+            }
         }
 
         loginViewModel.naverLoginResult.observe(this) { result ->
-            result.onSuccess { waitForTokenAndNavigate() }
-                .onFailure { showErrorToast("네이버 로그인 실패: ${it.message}") }
+            result.onSuccess { naverResult ->
+                if (naverResult.isSpotMember) {
+                    waitForTokenAndNavigate()
+                } else {
+                    goToNicknameActivity()
+                }
+            }.onFailure {
+                showErrorToast("네이버 로그인 실패: ${it.message}")
+            }
         }
     }
+
+    private fun goToNicknameActivity() {
+        val intent = Intent(this, NicNameActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
+
+
 
     private fun navigateToNextScreen() {
         val intent = Intent(this, MainActivity::class.java)
