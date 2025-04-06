@@ -15,18 +15,14 @@ object RetrofitInstance {
     private var isInitialized = false
     private lateinit var appContext: Context
 
-    /**
-     * ✅ RetrofitInstance 초기화. Application의 onCreate에서 호출 필요.
-     */
+
     fun initialize(context: Context) {
         appContext = context.applicationContext
         loadAuthTokenFromPreferences()
         isInitialized = true
     }
 
-    /**
-     * ✅ Auth Token 설정 (Setter).
-     */
+
     fun setAuthToken(token: String?) {
         authToken = token
         if (token != null) {
@@ -37,16 +33,12 @@ object RetrofitInstance {
         Log.d("RetrofitInstance", "Updated authToken: $authToken")
     }
 
-    /**
-     * ✅ Auth Token 조회 (Getter).
-     */
+
     fun getAuthToken(): String? {
         return authToken
     }
 
-    /**
-     * ✅ SharedPreferences에서 Auth Token 로드.
-     */
+
     private fun loadAuthTokenFromPreferences() {
         if (!::appContext.isInitialized) {
             Log.e("RetrofitInstance", "initialize() 호출 필요!")
@@ -57,9 +49,7 @@ object RetrofitInstance {
         authToken = email?.let { sharedPreferences.getString("${it}_accessToken", null) }
     }
 
-    /**
-     * ✅ SharedPreferences에 Auth Token 저장.
-     */
+
     private fun saveAuthTokenToPreferences(token: String) {
         if (!::appContext.isInitialized) {
             Log.e("RetrofitInstance", "initialize() 호출 필요!")
@@ -75,9 +65,7 @@ object RetrofitInstance {
         }
     }
 
-    /**
-     * ✅ SharedPreferences에서 Auth Token 삭제.
-     */
+
     private fun clearAuthTokenFromPreferences() {
         if (!::appContext.isInitialized) {
             Log.e("RetrofitInstance", "initialize() 호출 필요!")
@@ -93,10 +81,8 @@ object RetrofitInstance {
         }
     }
 
-    /**
-     * ✅ OkHttpClient 생성.
-     */
-    private val okHttpClient: OkHttpClient by lazy {
+
+    val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(AuthInterceptor(appContext))
             .connectTimeout(60, TimeUnit.SECONDS)
