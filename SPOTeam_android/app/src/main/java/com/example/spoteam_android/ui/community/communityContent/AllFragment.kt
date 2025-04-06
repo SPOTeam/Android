@@ -132,6 +132,7 @@ class AllFragment : Fragment() {
                                 totalPages = pagesResponse.result.totalPage
 
                                 initRecyclerview()
+
                                 updatePageUI()
                             } else {
                                 binding.emptyWaiting.visibility = View.VISIBLE
@@ -296,13 +297,6 @@ class AllFragment : Fragment() {
     }
 
     private fun updatePageUI() {
-        // ✅ 추가된 부분
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            minOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
-        Log.d("AllFragment", "totalPages : ${totalPages}, currentPage : ${currentPage}")
         val pageButtons = listOf(
             binding.page1,
             binding.page2,
@@ -310,6 +304,14 @@ class AllFragment : Fragment() {
             binding.page4,
             binding.page5
         )
+
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+
+        Log.d("AllFragment", "StartPage : ${startPage} // CurrentPage : ${currentPage} // TotalPage : ${totalPages}" )
 
         pageButtons.forEachIndexed { index, textView ->
             val pageNum = startPage + index
@@ -324,7 +326,7 @@ class AllFragment : Fragment() {
             } else {
                 textView.text = (pageNum + 1).toString()
                 textView.setBackgroundResource(0)
-                textView.isEnabled = false // 클릭 안 되게
+                textView.isEnabled = false
                 textView.alpha = 0.3f
                 textView.visibility = View.VISIBLE
             }

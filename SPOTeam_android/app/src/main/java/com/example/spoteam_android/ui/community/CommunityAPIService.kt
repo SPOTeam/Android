@@ -40,7 +40,7 @@ interface CommunityAPIService {
         @Part("content") contentPart: RequestBody,
         @Part("type") themePart: RequestBody,
         @Part("anonymous") isAnonymousPart: RequestBody,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part?
     ): Call<WriteContentResponse>
 
     @Multipart

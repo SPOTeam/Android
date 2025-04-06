@@ -206,7 +206,7 @@ class ParticipatingStudyFragment : Fragment() {
         startPage = if (currentPage <= 2) {
             0
         } else {
-            minOf(totalPages - 5, maxOf(0, currentPage - 2))
+            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
         }
 
         val pageButtons = listOf(
