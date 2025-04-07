@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
@@ -88,9 +89,7 @@ class InterestFragment : Fragment() {
         binding.icAlarmInterest.setOnClickListener {
             replaceFragment(AlertFragment())
         }
-        binding.filterToggle.setOnClickListener {
-            setupSpinner()
-        }
+
 
         gender = viewModel.gender
         minAge = viewModel.minAge.toString()
@@ -100,7 +99,7 @@ class InterestFragment : Fragment() {
         activityFeeAmount = viewModel.activityFeeAmount
         source = arguments?.getString("source") // source만 그대로 Bundle에서 받음
 
-        setupSpinner()
+        setupBottomSheet()
 
         Log.d("InterestFragment","$gender, $minAge, $maxAge,$activityFee,$selectedStudyTheme,$activityFeeAmount,$source")
 
@@ -287,13 +286,52 @@ class InterestFragment : Fragment() {
             .commitAllowingStateLoss()
     }
 
-    private fun setupSpinner(){
-        val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_interest_spinner,null)
-        val bottomSheetDialog = BottomSheetDialog(requireContext(),R.style.InterestBottomSheetDialogTheme)
+    private fun setupBottomSheet() {
+        val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_interest_spinner, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.InterestBottomSheetDialogTheme)
         bottomSheetDialog.setContentView(dialogView)
 
-        bottomSheetDialog.show()
+        val recentlyLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_recently)
+        val viewLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_view)
+        val hotLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_hot)
+
+        recentlyLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "최신 순"
+            fetchFilteredStudy("ALL")  // 최신 순
+        }
+
+        viewLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "조회 수 높은 순"
+            fetchFilteredStudy("HIT")
+        }
+
+        hotLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "관심 많은 순"
+            fetchFilteredStudy("LIKED")  // 관심 많은 순
+        }
+
+        binding.filterToggleContainer.setOnClickListener {
+            bottomSheetDialog.show()
+        }
     }
+
+    private fun fetchFilteredStudy(selectedItem: String) {
+        this.selectedItem = selectedItem
+        fetchData(
+            selectedItem = selectedItem,
+            gender = gender,
+            minAge = minAge,
+            maxAge = maxAge,
+            activityFee = activityFee,
+            activityFeeAmount = activityFeeAmount,
+            selectedStudyTheme = selectedStudyTheme,
+            currentPage = currentPage
+        )
+    }
+
 
 
 //    private fun setupSpinner() {
