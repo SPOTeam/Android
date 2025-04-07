@@ -245,4 +245,14 @@
         <item name="cornerSize">8dp</item> <!-- 네 모서리 모두 0dp로 설정 -->
     </style>
 
+    <style name="InterestBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.5</item> <!-- 여기가 투명도 -->
+    </style>
+
+    <style name="InterestBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_bottomdialog</item>
+    </style>
+
 </resources>

@@ -32,6 +32,7 @@ import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.FixedRoundedSpinnerAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -86,6 +87,9 @@ class InterestFragment : Fragment() {
 
         binding.icAlarmInterest.setOnClickListener {
             replaceFragment(AlertFragment())
+        }
+        binding.filterToggle.setOnClickListener {
+            setupSpinner()
         }
 
         gender = viewModel.gender
@@ -283,46 +287,54 @@ class InterestFragment : Fragment() {
             .commitAllowingStateLoss()
     }
 
+    private fun setupSpinner(){
+        val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_interest_spinner,null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(),R.style.InterestBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(dialogView)
 
-    private fun setupSpinner() {
-        val genderList = listOf("최신 순", "조회수 높은 순", "관심 많은 순")
-        val genderAdapter = FixedRoundedSpinnerAdapter(requireContext(), genderList)
-        binding.filterToggle.adapter = genderAdapter
-        binding.filterToggle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if (isFirstSpinnerCall) {
-                    isFirstSpinnerCall = false
-                    return
-                }
-
-                selectedItem = when (position) {
-                    0 -> "ALL"   // 최신 순
-                    1 -> "HIT"      // 조회수 높은 순
-                    2 -> "LIKED"    // 관심 많은 순
-                    else -> "ALL"
-                }
-                fetchData(
-                    selectedItem,
-                    gender = gender,
-                    minAge = minAge,
-                    maxAge = maxAge,
-                    activityFee = activityFee,
-                    activityFeeAmount = activityFeeAmount,
-                    selectedStudyTheme = selectedStudyTheme,
-                    currentPage = currentPage
-                )
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-        }
+        bottomSheetDialog.show()
     }
+
+
+//    private fun setupSpinner() {
+//        val genderList = listOf("최신 순", "조회수 높은 순", "관심 많은 순")
+//        val genderAdapter = FixedRoundedSpinnerAdapter(requireContext(), genderList)
+//        binding.filterToggle.adapter = genderAdapter
+//        binding.filterToggle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(
+//                parent: AdapterView<*>,
+//                view: View?,
+//                position: Int,
+//                id: Long
+//            ) {
+//                if (isFirstSpinnerCall) {
+//                    isFirstSpinnerCall = false
+//                    return
+//                }
+//
+//                selectedItem = when (position) {
+//                    0 -> "ALL"   // 최신 순
+//                    1 -> "HIT"      // 조회수 높은 순
+//                    2 -> "LIKED"    // 관심 많은 순
+//                    else -> "ALL"
+//                }
+//                fetchData(
+//                    selectedItem,
+//                    gender = gender,
+//                    minAge = minAge,
+//                    maxAge = maxAge,
+//                    activityFee = activityFee,
+//                    activityFeeAmount = activityFeeAmount,
+//                    selectedStudyTheme = selectedStudyTheme,
+//                    currentPage = currentPage
+//                )
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                TODO("Not yet implemented")
+//            }
+//        }
+//    }
 
 
     private fun fetchData(

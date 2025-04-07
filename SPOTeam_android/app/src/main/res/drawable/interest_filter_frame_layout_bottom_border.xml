@@ -1,8 +1,11 @@
 <!-- res/drawable/frame_layout_bottom_border.xml -->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:top="-4dp" android:left="-4dp" android:right="-4dp">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:top="-4dp"
+        android:left="-4dp"
+        android:right="-4dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/white" />
+            <stroke android:width="1dp" android:color="@color/g300" />
         </shape>
     </item>
 </layer-list>
