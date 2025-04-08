@@ -112,7 +112,7 @@ data class ValidateEmailResult(
     val tempTokenExpiresIn: Int
 )
 
-data class NickNameResponse(
+data class  NickNameResponse(
     val isSuccess: Boolean,
     val code: String,
     val message: String,
