@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Window
 import android.widget.Toast
@@ -120,6 +121,7 @@ class NicNameActivity : AppCompatActivity() {
 
     private fun sendNicknameToServer(nickname: String, personalInfo: Boolean, idInfo: Boolean) {
         val token = TokenManager(this).getAccessToken()
+        Log.d("토큰 체크", "token=$token")
         if (token.isNullOrEmpty()) {
             Toast.makeText(this, "로그인이 만료되었습니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
             return
@@ -140,6 +142,7 @@ class NicNameActivity : AppCompatActivity() {
 
         api.updateNickName(nickname, personalInfo, idInfo).enqueue(object : Callback<NickNameResponse> {
             override fun onResponse(call: Call<NickNameResponse>, response: Response<NickNameResponse>) {
+                Log.d("닉네임 API", "nickname=$nickname, personalInfo=$personalInfo, idInfo=$idInfo")
                 if (response.isSuccessful && response.body()?.isSuccess == true) {
                     val intent = Intent(this@NicNameActivity, RegisterInformation::class.java)
                     intent.putExtra("mode", "PREFERENCE")
@@ -147,6 +150,9 @@ class NicNameActivity : AppCompatActivity() {
                     finish()
                 } else {
                     Toast.makeText(this@NicNameActivity, "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    val errorMsg = response.errorBody()?.string()
+                    Log.e("서버 응답", "code=${response.code()}, error=$errorMsg")
+
                 }
             }
 

@@ -41,12 +41,24 @@ class StartLoginActivity : AppCompatActivity() {
         binding = ActivityStartLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         tokenManager = TokenManager(this)
+        //자동로그인 임시구현 api추가시 추가 구현 예정
+//        val token = tokenManager.getAccessToken()
+//        val isMember = tokenManager.getIsSpotMember()
+//
+//        if (!token.isNullOrEmpty()) {
+//            if (isMember) {
+//                startActivity(Intent(this, MainActivity::class.java))
+//            } else {
+//                startActivity(Intent(this, NicNameActivity::class.java))
+//            }
+//            finish()
+//            return
+//        }
         val loginRepository = LoginRepository(tokenManager)
         val viewModelFactory = LoginViewModelFactory(loginRepository)
         loginViewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
 
         setupObservers()
-        checkIfAlreadyLoggedIn()
 
         binding.itemLogoKakaoIb.setOnClickListener { loginViewModel.startKakaoLogin(this) }
         binding.itemLogoNaverIb.setOnClickListener { loginViewModel.startNaverLogin(this) }
@@ -75,14 +87,6 @@ class StartLoginActivity : AppCompatActivity() {
         }
     }
 
-    //로그인 회원가입 로직 api 추가 예정
-    private fun checkIfAlreadyLoggedIn() {
-        if (tokenManager.isUserLoggedIn()) {
-            navigateToNextScreen() // 메인 화면으로 이동
-        } else {
-
-        }
-    }
 
     private fun setupObservers() {
         loginViewModel.loginResult.observe(this) { result ->

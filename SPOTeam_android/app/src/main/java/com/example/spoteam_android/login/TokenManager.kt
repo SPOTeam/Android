@@ -2,18 +2,20 @@ package com.example.spoteam_android.login
 
 import android.content.Context
 import android.content.SharedPreferences
-    //토큰 관리
+
 class TokenManager(context: Context) {
-    private val sharedPreferences : SharedPreferences =
+    private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
-    fun saveUserInfo(platform: String,
-                     email: String,
-                     nickname: String,
-                     profileImageUrl: String,
-                     accessToken: String,
-                     refreshToken: String,
-                     memberId: Int){
+    fun saveUserInfo(
+        platform: String,
+        email: String,
+        nickname: String,
+        profileImageUrl: String,
+        accessToken: String,
+        refreshToken: String,
+        memberId: Int
+    ) {
         with(sharedPreferences.edit()) {
             putBoolean("${email}_isLoggedIn", true)
             putString("${email}_accessToken", accessToken)
@@ -27,8 +29,8 @@ class TokenManager(context: Context) {
         }
     }
 
-
-    fun getCurrentEmail(): String? = sharedPreferences.getString("currentEmail", null)
+    fun getCurrentEmail(): String? =
+        sharedPreferences.getString("currentEmail", null)
 
     fun getAccessToken(): String? {
         val email = getCurrentEmail()
@@ -51,7 +53,15 @@ class TokenManager(context: Context) {
         }
     }
 
-    fun clearTokens(){
+    fun saveIsSpotMember(isMember: Boolean) {
+        sharedPreferences.edit().putBoolean("is_spot_member", isMember).apply()
+    }
+
+    fun getIsSpotMember(): Boolean {
+        return sharedPreferences.getBoolean("is_spot_member", false)
+    }
+
+    fun clearTokens() {
         sharedPreferences.edit().clear().apply()
     }
 
@@ -60,7 +70,4 @@ class TokenManager(context: Context) {
         val refreshToken = getRefreshToken()
         return !accessToken.isNullOrEmpty() || !refreshToken.isNullOrEmpty()
     }
-
-
-
 }
