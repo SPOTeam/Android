@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentCommunityBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -23,8 +25,11 @@ class CommunityFragment : Fragment() {
         val communityCategoryAdapter = CommunityCategoryVPAdapter(this)
         binding.categoryContentVp.adapter = communityCategoryAdapter
 
-        TabLayoutMediator(binding.categoryTl, binding.categoryContentVp) {
-                tab, position -> tab.text = tabList[position]
+        TabLayoutMediator(binding.categoryTl, binding.categoryContentVp) { tab, position ->
+            val tabView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_tab_text, null)
+            val textView = tabView.findViewById<TextView>(R.id.tabText)
+            textView.text = tabList[position]
+            tab.customView = tabView
         }.attach()
 
         // Bundle로부터 특정 조건을 체크

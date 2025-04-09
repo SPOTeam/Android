@@ -142,7 +142,7 @@ data class WriteContentResponse(
 )
 
 data class WriteContentInfo (
-    val id : String,
+    val id : Int,
     val type : String,
     val createAt : String
 )

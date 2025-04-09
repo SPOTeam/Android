@@ -45,8 +45,7 @@
         app:tabIndicatorHeight="2dp"
         app:tabMinWidth="0dp"
         app:tabGravity="fill"
-        android:textFontWeight="800"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:fontFamily="@font/suit_semi_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/community_title"/>

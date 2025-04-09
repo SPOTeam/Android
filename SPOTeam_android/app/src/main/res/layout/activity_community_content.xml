@@ -101,9 +101,9 @@
 
                 <TextView
                     android:id="@+id/scrap_count_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="100"
+                    android:text="1.0K"
                     android:textFontWeight="700"
                     android:layout_marginEnd="10dp"
                     android:textColor="#005BFF"/>
@@ -134,7 +134,7 @@
                 android:id="@+id/community_content_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:text="카카오 최종합격"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -293,7 +293,7 @@
             android:id="@+id/write_comment_content_et"
             android:layout_width="0dp"
             android:layout_height="35dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="15dp"
             android:layout_marginEnd="10dp"
             android:background="@null"
             android:ellipsize="end"
@@ -301,6 +301,7 @@
             android:hint="댓글을 입력해주세요"
             android:inputType="text"
             android:maxLines="1"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

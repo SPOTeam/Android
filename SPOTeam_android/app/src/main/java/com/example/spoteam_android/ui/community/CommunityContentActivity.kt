@@ -36,7 +36,6 @@ import java.util.Locale
 class CommunityContentActivity : AppCompatActivity()  {
 
     private lateinit var binding: ActivityCommunityContentBinding
-    var memberId : Int = -1
     var postId : Int = -1
     var parentCommentId : Int = 0
     var ischecked : Boolean = false
@@ -53,13 +52,7 @@ class CommunityContentActivity : AppCompatActivity()  {
         super.onCreate(savedInstanceState)
 
         postId = intent.extras?.getInt("postInfo") ?: -1
-//        Log.d("CommunityContentActivity", postId.toString())
-        // SharedPreferences 사용
-        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-        val currentEmail = sharedPreferences.getString("currentEmail", null)
-
-        // 현재 로그인된 사용자 정보를 로그
-        memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
+        Log.d("CommunityContentActivity", postId.toString())
 
         binding = ActivityCommunityContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -663,6 +656,10 @@ class CommunityContentActivity : AppCompatActivity()  {
                 binding.writeCommentContentEt.requestFocus()
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(binding.writeCommentContentEt, InputMethodManager.SHOW_IMPLICIT)
+
+                if(parentId != null) {
+                    binding
+                }
             }
 
             override fun onLikeClick(view: View, position: Int, commentId: Int) {

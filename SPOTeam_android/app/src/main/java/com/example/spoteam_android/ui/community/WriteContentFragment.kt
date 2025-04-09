@@ -58,14 +58,6 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
 
         isCancelable = false // 외부 클릭으로 닫히지 않도록 설정
 
-        // SharedPreferences 사용
-        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val currentEmail = sharedPreferences.getString("currentEmail", null)
-
-        // 현재 로그인된 사용자 정보를 로그
-        val memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
-//        Log.d("SharedPreferences", "MemberId: $memberId")
-
         changeContent()
         initTextWatchers()
         initImageButtonAction()
@@ -226,11 +218,12 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
                 override fun onResponse(call: Call<WriteContentResponse>, response: Response<WriteContentResponse>) {
                     if (response.isSuccessful && response.body()?.isSuccess == "true") {
                         val writeContentResponseBody = response.body()!!.result
-                        setFragmentResult("requestKey", bundleOf("resultKey" to "SUCCESS"))
-                        dismiss()
+                        Log.d("WriteContent", "created postId = ${writeContentResponseBody.id}")
+
                         val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-                        intent.putExtra("postInfo", writeContentResponseBody.id)
+                        intent.putExtra("postInfo", writeContentResponseBody.id) // postId 등 필요한 데이터 전달
                         startActivity(intent)
+                        dismiss()
                     } else {
                         Toast.makeText(requireContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
                     }

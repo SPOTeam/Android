@@ -38,8 +38,9 @@ class CommunityHomeRVAdapterAnnouncement(private val dataList: List<Announcement
             binding.contentTitleTv.text = data.postTitle
 
             if (data.commentCount > 999) {
-                val formatted = String.format("%.1fK", data.commentCount / 1000.0)
-                binding.contentCommentNumTv.text = formatted
+                binding.contentCommentNumTv.text = "${data.commentCount}+"
+//                val formatted = String.format("%.1fK", data.commentCount / 1000.0)
+//                binding.contentCommentNumTv.text = formatted
             } else {
                 binding.contentCommentNumTv.text = data.commentCount.toString()
             }
