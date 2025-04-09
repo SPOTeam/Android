@@ -272,8 +272,10 @@ class NotificationFragment : Fragment() {
 
         dataRVAdapter.setItemClickListener(object : CommunityCategoryContentRVAdapter.OnItemClickListener {
             override fun onItemClick(data: CategoryPagesDetail) {
+                val bundle = Bundle()
+                bundle.putInt("postInfo", data.postId)
                 val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-                intent.putExtra("postInfo", data.postId.toString())
+                intent.putExtras(bundle)
                 startActivity(intent)
             }
 

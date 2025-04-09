@@ -35,6 +35,7 @@ data class RepresentativeContentInfo(
 )
 
 data class RepresentativeDetailInfo (
+    val postId : Int,
     val postType : String,
     val postTitle : String,
     val commentCount : Int
@@ -52,6 +53,7 @@ data class AnnouncementContentInfo(
 )
 
 data class AnnouncementDetailInfo(
+    val postId : Int,
     val rank: Int,
     val postTitle: String,
     val commentCount: Int
@@ -140,7 +142,7 @@ data class WriteContentResponse(
 )
 
 data class WriteContentInfo (
-    val id : String,
+    val id : Int,
     val type : String,
     val createAt : String
 )
