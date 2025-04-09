@@ -4,37 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/spotgradient"
+    android:background="@color/white"
     tools:context=".login.StartLoginActivity">
 
+
     <ImageView
-        android:id="@+id/activity_register_startlogin_iv"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
-        android:src="@drawable/spot_logo"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/activity_register_startstudy_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/studystart"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
-        android:textColor="#FFFFFF"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="20dp"
+        android:id="@+id/activity_start_login_logo_iv"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:src="@drawable/spot_homelogo"
+        android:layout_marginTop="170dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_register_startlogin_iv"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/startstudy_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:lineSpacingExtra="7dp"
+        android:text="@string/studystart"
+        android:textSize="19.8dp"
+        android:textColor="@color/b500"
+        android:fontFamily="@font/suit_bold"
+        android:layout_marginTop="64dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_start_login_logo_iv"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="체크리스트 등록 중.."
-        android:fontFamily="@font/pretendard"
-        android:textSize="15sp"
-        android:textColor="#FFFFFF"
+        android:text="안전하게 정보 등록 중.."
+        android:fontFamily="@font/suit_bold"
+        android:textSize="15dp"
+        android:textColor="@color/b500"
         android:textStyle="bold"
         android:layout_marginBottom="20dp"
         app:layout_constraintStart_toStartOf="parent"

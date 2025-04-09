@@ -10,18 +10,14 @@ import com.example.spoteam_android.RegionsPreferences
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.StudyReasons
 import com.example.spoteam_android.ThemePreferences
+import com.example.spoteam_android.checklist.CheckListCategoryActivity
 import com.example.spoteam_android.databinding.ActivityRegisterInformationBinding
-import com.example.spoteam_android.login.LoginApiService
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.Random
 
 class RegisterInformation : ComponentActivity() {
     private lateinit var binding: ActivityRegisterInformationBinding
@@ -31,39 +27,42 @@ class RegisterInformation : ComponentActivity() {
         binding = ActivityRegisterInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val selectedThemes = intent.getStringArrayListExtra("selectedThemes")
-        val selectedPurpose = intent.getIntegerArrayListExtra("selectedPurpose")
-        val selectedLocations = intent.getStringArrayListExtra("selectedLocations")
+        val mode = intent.getStringExtra("mode") ?: "START"
 
-        // SharedPreferences에서 현재 이메일을 가져오기
-        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-        val email = sharedPreferences.getString("currentEmail", null)
-
-        if (email == null) {
-            Log.e("RegisterInformation", "Current email not found in SharedPreferences")
+        if (mode == "START") {
+            navigateToCheckList()
             return
         }
 
-        val memberId = sharedPreferences.getInt("${email}_memberId", -1)
+        if (mode == "FINAL") {
+            val selectedThemes = intent.getStringArrayListExtra("selectedThemes") ?: listOf()
+            val selectedPurpose = intent.getIntegerArrayListExtra("selectedPurpose") ?: listOf()
+            val selectedLocations = intent.getStringArrayListExtra("selectedLocations") ?: listOf()
 
-        if (memberId == -1) {
-            Log.e("RegisterInformation", "Member ID not found in SharedPreferences")
-            return
+            val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+            val email = sharedPreferences.getString("currentEmail", null)
+            val memberId = sharedPreferences.getInt("${email}_memberId", -1)
+
+            if (email == null || memberId == -1) {
+                Log.e("RegisterInformation", "SharedPreferences에 사용자 정보 없음")
+                return
+            }
+
+            postPreferencesToServer(
+                memberId = memberId,
+                themes = selectedThemes,
+                purposes = selectedPurpose,
+                regions = selectedLocations
+            )
+
+            setupProgressBar()
         }
+    }
 
-        // 닉네임 생성 및 저장
-        val randomNickname = generateRandomNickname()
-        saveNicknameToPreferences(email, randomNickname)
-
-        // 서버에 POST 요청 보내기
-        postPreferencesToServer(
-            memberId = memberId,
-            themes = selectedThemes ?: listOf(),
-            purposes = selectedPurpose ?: listOf(),
-            regions = selectedLocations ?: listOf()
-        )
-
-        setupProgressBar()
+    private fun navigateToCheckList() {
+        val intent = Intent(this, CheckListCategoryActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun setupProgressBar() {
@@ -92,75 +91,45 @@ class RegisterInformation : ComponentActivity() {
         purposes: List<Int>,
         regions: List<String>
     ) {
-
         val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
 
         val themePreferences = ThemePreferences(themes)
         val purposePreferences = StudyReasons(purposes)
         val regionsPreferences = RegionsPreferences(regions)
 
-        // Gson 인스턴스 생성
         val gson = Gson()
+        Log.d("RegisterInformation", "Theme: ${gson.toJson(themePreferences)}")
+        Log.d("RegisterInformation", "Purpose: ${gson.toJson(purposePreferences)}")
+        Log.d("RegisterInformation", "Regions: ${gson.toJson(regionsPreferences)}")
 
-        // 데이터 JSON으로 변환하여 로그에 출력
-        val themePreferencesJson = gson.toJson(themePreferences)
-        val purposePreferencesJson = gson.toJson(purposePreferences)
-        val regionsPreferencesJson = gson.toJson(regionsPreferences)
-
-        Log.d("RegisterInformation", "Theme Preferences JSON: $themePreferencesJson")
-        Log.d("RegisterInformation", "Reasons Preferences JSON: $purposePreferencesJson")
-        Log.d("RegisterInformation", "Regions Preferences JSON: $regionsPreferencesJson")
-
-        // POST 요청 보내기 성공 실패 로그
         service.postThemes(themePreferences).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                Log.d("RegisterInformation", "Themes POST request success")
+                Log.d("RegisterInformation", "Themes POST success")
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("RegisterInformation", "Themes POST request failure", t)
+                Log.e("RegisterInformation", "Themes POST failed", t)
             }
         })
 
         service.postPurposes(purposePreferences).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                Log.d("RegisterInformation", "Purposes POST request success")
+                Log.d("RegisterInformation", "Purposes POST success")
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("RegisterInformation", "Purposes POST request failure", t)
+                Log.e("RegisterInformation", "Purposes POST failed", t)
             }
         })
 
         service.postRegions(regionsPreferences).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                Log.d("RegisterInformation", "Regions POST request success")
+                Log.d("RegisterInformation", "Regions POST success")
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("RegisterInformation", "Regions POST request failure", t)
+                Log.e("RegisterInformation", "Regions POST failed", t)
             }
         })
     }
-
-
-    private fun generateRandomNickname(): String {
-        val letters = "abcdefghijklmnopqrstuvwxyz"
-        val numbers = "0123456789"
-        val random = Random()
-
-        val letterPart = (1..4).map { letters[random.nextInt(letters.length)] }.joinToString("")
-        val numberPart = (1..2).map { numbers[random.nextInt(numbers.length)] }.joinToString("")
-
-        return "$letterPart$numberPart"
-    }
-
-    private fun saveNicknameToPreferences(email: String, randomNickname: String) {
-        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-        with(sharedPreferences.edit()) {
-            putString("${email}_randomNickname", randomNickname)
-            apply()  // 비동기 저장
-        }
-    }
-
 }
