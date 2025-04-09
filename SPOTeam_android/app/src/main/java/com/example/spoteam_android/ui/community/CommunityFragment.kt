@@ -1,18 +1,12 @@
 package com.example.spoteam_android.ui.community
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.spoteam_android.MainActivity
-import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentCommunityBinding
 import com.google.android.material.tabs.TabLayoutMediator
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class CommunityFragment : Fragment() {
 

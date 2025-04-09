@@ -257,7 +257,6 @@
                     android:text="내 관심사"
                     android:textSize="12dp"
                     android:textColor="@color/black"
-                    android:textSize="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/house_interest_iv" />

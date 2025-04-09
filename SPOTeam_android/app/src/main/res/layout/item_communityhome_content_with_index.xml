@@ -7,11 +7,11 @@
 
     <TextView
         android:id="@+id/content_index_tv"
-        android:layout_width="16dp"
+        android:layout_width="wrap_content"
         android:layout_height="16dp"
         android:text="01"
-        android:fontFamily="@font/pretendard"
         android:textSize="14sp"
+        android:textFontWeight="800"
         android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -21,10 +21,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="4학년 취준생들은 요즘 뭐하고 사니"
-        android:fontFamily="@font/pretendard"
         android:textSize="14sp"
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
+        android:textFontWeight="800"
         android:maxLines="1"
         android:ellipsize="end"
         android:layout_marginEnd="20dp"
@@ -37,9 +37,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="("
-        android:fontFamily="@font/pretendard"
         android:textSize="14sp"
         android:textColor="@color/active_blue"
+        android:textFontWeight="800"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/content_commentNum_tv"/>
     <TextView
@@ -47,8 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="4"
-        android:fontFamily="@font/pretendard"
         android:textSize="14sp"
+        android:textFontWeight="800"
         android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/content_bracket_R"/>
@@ -57,8 +57,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=")"
-        android:fontFamily="@font/pretendard"
         android:textSize="14sp"
+        android:textFontWeight="800"
         android:textColor="@color/active_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
