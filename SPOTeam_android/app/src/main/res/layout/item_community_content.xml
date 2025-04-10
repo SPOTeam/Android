@@ -21,13 +21,13 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="카카오 최종합격 카카오 최종합격 카카오 최종합격 카카오 최종합격"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textAlignment="textStart"
             android:maxLines="1"
             android:maxLength="30"
+            android:fontFamily="@font/suit_semi_bold"
             android:ellipsize="end"
-            android:textFontWeight="800"
             android:textColor="@color/black"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -54,12 +54,12 @@
 
         <TextView
             android:id="@+id/content_saveNum_tv"
-            android:layout_width="40dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:text="999.9K"
+            android:text="999+"
             android:textFontWeight="800"
-            android:textAlignment="textEnd"
+            android:textAlignment="textStart"
             android:textSize="13sp"
             android:textColor="@color/selector_blue" />
 
@@ -116,7 +116,7 @@
 
         <TextView
             android:id="@+id/content_likeNum_tv"
-            android:layout_width="40dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:text="1"
             android:textSize="13sp"
@@ -137,9 +137,9 @@
 
         <TextView
             android:id="@+id/content_commentNum_tv"
-            android:layout_width="40dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content"
-            android:text="1"
+            android:text="999+"
             android:textSize="13sp"
             android:textFontWeight="700"
             android:layout_marginStart="5dp"
@@ -158,7 +158,7 @@
 
         <TextView
             android:id="@+id/content_viewNum_tv"
-            android:layout_width="40dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:text="1"
             android:textSize="12sp"
@@ -179,8 +179,7 @@
             android:textSize="12sp"
             android:textColor="@color/g400"
             android:textFontWeight="800"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginEnd="5dp"/>
 
         <TextView
             android:id="@+id/content_sp_tv"

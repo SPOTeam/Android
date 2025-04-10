@@ -3,6 +3,7 @@ package com.example.spoteam_android.ui.alert
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.AlertInfo
@@ -18,16 +19,30 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
         fun onStateUpdateClick(data : AlertDetail)
     }
 
+    companion object {
+        private const val VIEW_TYPE_HEADER = 0
+        private const val VIEW_TYPE_LIVE = 1
+        private const val VIEW_TYPE_UPDATE = 2
+    }
+
+    var headerClickListener: (() -> Unit)? = null
+
+    var studyAlertEnabled: Boolean = false
+
     var itemClick: ItemClick? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return when(viewType) {
-            1 -> {
+        return when (viewType) {
+            VIEW_TYPE_HEADER -> {
+                val view = inflater.inflate(R.layout.alert_item_header, parent, false)
+                HeaderViewHolder(view)
+            }
+            VIEW_TYPE_LIVE -> {
                 val binding = ItemAlertLiveBinding.inflate(inflater, parent, false)
                 LiveViewHolder(binding)
             }
-            2 -> {
+            VIEW_TYPE_UPDATE -> {
                 val binding = ItemAlertUpdateBinding.inflate(inflater, parent, false)
                 UpdatedViewHolder(binding)
             }
@@ -35,20 +50,26 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
         }
     }
 
-    override fun getItemCount(): Int = dataList.size
+
+    override fun getItemCount(): Int = dataList.size+1
 
     override fun getItemViewType(position: Int): Int {
-        return when (dataList[position].type) {
-            "POPULAR_POST" -> 1
-            "ANNOUNCEMENT" -> 2
-            "SCHEDULE_UPDATE" -> 2
-            "TO_DO_UPDATE" -> 2
-            else -> -1  // 예외 처리, 정의되지 않은 타입에 대해 기본 값을 반환
+        return when {
+            position == 0 -> VIEW_TYPE_HEADER
+            dataList[position - 1].type == "POPULAR_POST" -> VIEW_TYPE_LIVE
+            else -> VIEW_TYPE_UPDATE
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = dataList[position]
+        if (holder is HeaderViewHolder) {
+            holder.bind()
+            return
+        }
+
+        val actualPosition = position - 1
+        val item = dataList[actualPosition]
+
         when (holder) {
             is LiveViewHolder -> {
                 holder.bind(item)
@@ -63,8 +84,24 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
                 }
             }
         }
+    }
 
+    inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val container = view
 
+        init {
+            container.setOnClickListener {
+                if (studyAlertEnabled) {
+                    headerClickListener?.invoke()
+                }
+            }
+        }
+
+        fun bind() {
+            // 클릭 가능 여부에 따라 뷰 상태 변경
+            container.isEnabled = studyAlertEnabled
+            container.alpha = if (studyAlertEnabled) 1.0f else 0.5f // 비활성화 시 투명도 적용 등
+        }
     }
 
 

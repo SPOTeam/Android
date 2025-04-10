@@ -97,8 +97,18 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
     }
 
     private fun initTextWatchers() {
+        val maxLength = 25
+
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+                s ?: return
+
+                // 길이 초과 시 강제 자르고 커서 이동
+                if (s.length > maxLength) {
+                    val trimmed = s.substring(0, maxLength)
+                    binding.writeContentTitleEt.setText(trimmed)
+                    binding.writeContentTitleEt.setSelection(trimmed.length)
+                }
                 checkFieldsForEmptyValues()
             }
 

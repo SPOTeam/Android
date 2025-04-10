@@ -29,63 +29,63 @@
         app:layout_constraintStart_toEndOf="@id/community_prev_iv"
         app:layout_constraintTop_toTopOf="@id/community_prev_iv" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/study_alert_cl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="10dp"
-        android:background="@drawable/selector_background_alert"
-        android:paddingHorizontal="13dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="20dp"
-        android:elevation="8dp"
-        app:layout_constraintTop_toBottomOf="@id/community_prev_iv"
-        andriod:isEnabled="true">
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/study_alert_cl"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:background="@drawable/selector_background_alert"-->
+<!--        android:paddingHorizontal="13dp"-->
+<!--        android:paddingTop="15dp"-->
+<!--        android:paddingBottom="20dp"-->
+<!--        android:elevation="8dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/community_prev_iv"-->
+<!--        andriod:isEnabled="true">-->
 
 
-        <ImageView
-            android:id="@+id/alert_check_iv"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/aftercheck"
-            android:layout_marginStart="10dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+<!--        <ImageView-->
+<!--            android:id="@+id/alert_check_iv"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:src="@drawable/aftercheck"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
 
-        <TextView
-            android:id="@+id/alert_study_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="신청 스터디"
-            android:fontFamily="@font/pretendard"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="23dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintStart_toEndOf="@id/alert_check_iv"
-            app:layout_constraintTop_toTopOf="parent"/>
+<!--        <TextView-->
+<!--            android:id="@+id/alert_study_tv"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="신청 스터디"-->
+<!--            android:fontFamily="@font/pretendard"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="23dp"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            app:layout_constraintStart_toEndOf="@id/alert_check_iv"-->
+<!--            app:layout_constraintTop_toTopOf="parent"/>-->
 
-        <TextView
-            android:id="@+id/alert_study_content_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/pretendard"
-            android:text= "신청 스터디의 수락 알람입니다.\n 클릭하여 스터디 참여를 확인해주세요"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="@id/alert_study_tv"
-            app:layout_constraintTop_toBottomOf="@id/alert_study_tv"/>
+<!--        <TextView-->
+<!--            android:id="@+id/alert_study_content_tv"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:fontFamily="@font/pretendard"-->
+<!--            android:text= "신청 스터디의 수락 알람입니다.\n 클릭하여 스터디 참여를 확인해주세요"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            app:layout_constraintStart_toStartOf="@id/alert_study_tv"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/alert_study_tv"/>-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alert_content_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/study_alert_cl"
+        app:layout_constraintTop_toBottomOf="@id/community_prev_iv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 

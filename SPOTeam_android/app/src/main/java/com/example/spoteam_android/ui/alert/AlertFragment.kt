@@ -40,15 +40,14 @@ class AlertFragment : Fragment() {
             (context as MainActivity).isOnAlertFragment(HouseFragment())
         }
 
-        binding.studyAlertCl.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, CheckAppliedStudyFragment())
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-        }
+//        binding.studyAlertCl.setOnClickListener {
+//            (context as MainActivity).supportFragmentManager.beginTransaction()
+//                .replace(R.id.main_frm, CheckAppliedStudyFragment())
+//                .addToBackStack(null)
+//                .commitAllowingStateLoss()
+//        }
 
         fetchAlert()
-        fetchStudyAlert()
 
         return binding.root
     }
@@ -84,7 +83,7 @@ class AlertFragment : Fragment() {
             })
     }
 
-    private fun fetchStudyAlert() {
+    private fun fetchStudyAlert(adapter: AlertMultiViewRVAdapter) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.getStudyAlert(page, size)
             .enqueue(object : Callback<AlertStudyResponse> {
@@ -92,23 +91,14 @@ class AlertFragment : Fragment() {
                     call: Call<AlertStudyResponse>,
                     response: Response<AlertStudyResponse>
                 ) {
-                    if (response.isSuccessful) {
-                        val studyAlertResponse = response.body()
-                        if (studyAlertResponse?.isSuccess == "true") {
-                            binding.studyAlertCl.isEnabled = true
-                        } else {
-                            binding.studyAlertCl.isEnabled = false
-                            showError(studyAlertResponse?.message)
-                        }
-                    } else {
-                        binding.studyAlertCl.isEnabled = false
-                        showError(response.code().toString())
-                    }
+                    val enabled = response.body()?.isSuccess == "true"
+                    adapter.studyAlertEnabled = enabled
+                    adapter.notifyItemChanged(0) // 헤더만 갱신
                 }
 
                 override fun onFailure(call: Call<AlertStudyResponse>, t: Throwable) {
-                    binding.studyAlertCl.isEnabled = false
-                    Log.e("MyStudyAttendance", "Failure: ${t.message}", t)
+                    adapter.studyAlertEnabled = false
+                    adapter.notifyItemChanged(0)
                 }
             })
     }
@@ -118,17 +108,27 @@ class AlertFragment : Fragment() {
     }
 
     private fun initMultiViewRecyclerView(alertInfo: List<AlertDetail>) {
-        binding.alertContentRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
         val reversedAlertInfo = alertInfo.reversed()
-        val dataRVAdapter = AlertMultiViewRVAdapter(reversedAlertInfo)
-        binding.alertContentRv.adapter = dataRVAdapter
+        val adapter = AlertMultiViewRVAdapter(reversedAlertInfo)
 
-        dataRVAdapter.itemClick = object : AlertMultiViewRVAdapter.ItemClick {
+        binding.alertContentRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.alertContentRv.adapter = adapter
+
+        adapter.itemClick = object : AlertMultiViewRVAdapter.ItemClick {
             override fun onStateUpdateClick(data: AlertDetail) {
                 updateState(data)
             }
         }
+
+        adapter.headerClickListener = {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, CheckAppliedStudyFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+
+        // ✅ 서버에서 활성화 여부 가져와서 반영
+        fetchStudyAlert(adapter)
     }
 
     private fun updateState(data: AlertDetail) {
@@ -151,7 +151,7 @@ class AlertFragment : Fragment() {
                     if (response.isSuccessful) {
                         val studyAlertResponse = response.body()
                         if (studyAlertResponse?.isSuccess == "true") {
-                            Log.d("CurrentScrollPosition", "pos: $firstVisibleItemPosition, offset: $offset")
+//                            Log.d("CurrentScrollPosition", "pos: $firstVisibleItemPosition, offset: $offset")
                             fetchAlertWithoutScroll(scrollInfo) // ✅ 스크롤 복원 포함
                         }
                     } else {
