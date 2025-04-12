@@ -96,6 +96,10 @@ class CommunityHomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (context as MainActivity).isOnCommunityHome(CommunityHomeFragment())
+        fetchBestCommunityContent(sortType = "")
+        binding.communityHomeRealTimeTv.isChecked = true
+        fetchAnnouncementContent()
+        fetchRepresentativeContent()
     }
 
     private fun fetchBestCommunityContent(sortType: String) {

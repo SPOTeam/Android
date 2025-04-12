@@ -28,6 +28,7 @@ class LoginRepository(private val tokenManager: TokenManager) {
                 if (response.isSuccessful) {
                     val userInfo = response.body()?.result
                     if (userInfo != null) {
+                        tokenManager.saveIsSpotMember(userInfo.isSpotMember)
                         val newAccessToken = userInfo.signInDTO.tokens.accessToken
                         val newRefreshToken = userInfo.signInDTO.tokens.refreshToken
                         val memberId = userInfo.signInDTO.memberId
@@ -77,6 +78,7 @@ class LoginRepository(private val tokenManager: TokenManager) {
             if (response.isSuccessful) {
                 val userInfo = response.body()?.result
                 if (userInfo != null) {
+                    tokenManager.saveIsSpotMember(userInfo.isSpotMember)
                     NidOAuthLogin().callProfileApi(object : NidProfileCallback<NidProfileResponse> {
                         override fun onSuccess(response: NidProfileResponse) {
                             val profile = response.profile

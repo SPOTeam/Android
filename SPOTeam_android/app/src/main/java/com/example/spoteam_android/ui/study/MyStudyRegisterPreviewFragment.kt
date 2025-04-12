@@ -191,22 +191,28 @@ class MyStudyRegisterPreviewFragment : Fragment() {
 
     private fun saveUriAsPng(uri: Uri): File? {
         return try {
+            // openInputStream이 null이면 오류 발생 → 예외 처리 필요
             val inputStream = requireContext().contentResolver.openInputStream(uri)
-            val bitmap = BitmapFactory.decodeStream(inputStream)
+                ?: return null
 
-            // PNG 파일로 저장할 임시 파일 생성
-            val tempFile = File(requireContext().cacheDir, "temp_image.png")
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            inputStream.close() // 스트림 닫기
+
+            // 임시 캐시 파일 생성 (확장자는 png지만 실제 포맷은 content에 따라 다름)
+            val tempFile = File.createTempFile("temp_image", ".png", requireContext().cacheDir)
+
             val outputStream = FileOutputStream(tempFile)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
             outputStream.flush()
             outputStream.close()
 
-            tempFile // 생성된 파일 반환
+            tempFile
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
     }
+
 
     private fun prepareImagePart(uri: Uri): MultipartBody.Part? {
         val file = saveUriAsPng(uri)

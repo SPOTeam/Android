@@ -94,6 +94,7 @@
             binding.fragmentOnlineStudyBackBt.setOnClickListener {
                 goToPreviusFragment()
             }
+            observeViewModel()
 
             return binding.root
         }
@@ -103,6 +104,7 @@
             arguments?.let {
                 val address = it.getString("ADDRESS")
                 val code = it.getString("CODE")
+                Log.d("OnlineStudyFragment", "onResume profileImage = ${viewModel.studyRequest.value?.profileImage}")
 
                 if (!address.isNullOrBlank() && !code.isNullOrBlank()) {
                     updateChip(address)
@@ -276,13 +278,14 @@
         private fun saveData() {
             val current = viewModel.studyRequest.value ?: return
             val regions = selectedLocationCode?.let { listOf(it) } ?: listOf()
+            val preservedProfileImage = current.profileImage ?: viewModel.profileImageUri.value
 
             viewModel.setStudyData(
                 title = current.title,
                 goal = current.goal,
                 introduction = current.introduction,
                 isOnline = current.isOnline,
-                profileImage = current.profileImage,
+                profileImage = preservedProfileImage,
                 regions = if (current.isOnline) null else regions,
                 maxPeople = current.maxPeople,
                 gender = current.gender,

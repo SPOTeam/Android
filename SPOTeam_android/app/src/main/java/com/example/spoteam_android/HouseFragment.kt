@@ -74,6 +74,10 @@ class HouseFragment : Fragment() {
                     .commit()
             }
         }
+
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.isOnCommunityHome(this@HouseFragment)
+        mainActivity.isOnAlertFragment(this@HouseFragment)
     }
 
     override fun onPause() {
@@ -82,6 +86,7 @@ class HouseFragment : Fragment() {
             it.findViewById<FloatingActionButton>(R.id.add_study_btn)?.visibility = View.GONE
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,7 +105,7 @@ class HouseFragment : Fragment() {
             binding.icWeatherBackground.setImageResource(backgroundRes)
         }
 
-
+        fetchLivePopularContent()
 
 
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)

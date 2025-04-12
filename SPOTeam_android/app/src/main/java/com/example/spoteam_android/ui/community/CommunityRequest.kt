@@ -13,8 +13,8 @@ data class WriteContentRequest(
 /*********게시글 댓글 작성 Request********/
 data class WriteCommentRequest(
     val content: String,
-    val parentCommentId : Int,
-    val anonymous : Boolean
+    val anonymous : Boolean,
+    val parentCommentId : Int?
 )
 
 /*********내 스터디 게시글 작성 Request********/

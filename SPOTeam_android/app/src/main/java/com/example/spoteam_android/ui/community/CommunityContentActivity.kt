@@ -3,6 +3,8 @@ package com.example.spoteam_android.ui.community
 import android.content.Context
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -34,12 +36,12 @@ import java.util.Locale
 class CommunityContentActivity : AppCompatActivity()  {
 
     private lateinit var binding: ActivityCommunityContentBinding
-    var memberId : Int = -1
     var postId : Int = -1
     var parentCommentId : Int = 0
     var ischecked : Boolean = false
     var createdByThisMember : Boolean = false
     var scrapByThisMember : Boolean = false
+    private var canComment : Boolean = false
 
     // 추가: 게시물 정보 저장을 위한 변수들
     private var currentTitle: String = ""
@@ -49,20 +51,51 @@ class CommunityContentActivity : AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        postId = intent.getStringExtra("postInfo")!!.toInt()
+        postId = intent.extras?.getInt("postInfo") ?: -1
         Log.d("CommunityContentActivity", postId.toString())
-        // SharedPreferences 사용
-        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-        val currentEmail = sharedPreferences.getString("currentEmail", null)
-
-        // 현재 로그인된 사용자 정보를 로그
-        memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
 
         binding = ActivityCommunityContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initTextWatcher()
+
         fetchContentInfo()
         buttonActions()
+    }
+
+    private fun initTextWatcher() {
+        val textWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                checkFieldsForEmptyValues()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        }
+
+        binding.writeCommentContentEt.addTextChangedListener(textWatcher)
+    }
+
+    private fun checkFieldsForEmptyValues() {
+        val comment = binding.writeCommentContentEt.text.toString().trim()
+
+        if (comment.isEmpty()) {
+            // 입력이 있으면 비활성화
+            binding.applyCommentIv.setColorFilter(
+                ContextCompat.getColor(this, R.color.g300),  // 🔥 빨간색 적용
+                PorterDuff.Mode.SRC_IN
+            )
+            canComment = false
+
+        } else {
+            // 입력이 있으면 활성화
+            binding.applyCommentIv.setColorFilter(
+                ContextCompat.getColor(this, R.color.selector_blue),  // 🔥 원래 색상 적용
+                PorterDuff.Mode.SRC_IN
+            )
+            canComment = true
+        }
     }
 
     private fun buttonActions() {
@@ -205,16 +238,12 @@ class CommunityContentActivity : AppCompatActivity()  {
     private fun submitComment() {
         val commentContent = binding.writeCommentContentEt.text.toString().trim()
 
-        if (commentContent.isEmpty()) {
-            Toast.makeText(this, "댓글 내용을 입력해주세요.", Toast.LENGTH_SHORT).show()
-            return
-        }
         val requestBody = WriteCommentRequest(
             content = commentContent,
-            parentCommentId = parentCommentId,
-            anonymous = false
+            anonymous = false,
+            parentCommentId = if (parentCommentId == 0) null else parentCommentId
         )
-
+        Log.d("WriteComment", commentContent)
         // 서버에 댓글 전송
         sendCommentToServer(requestBody)
     }
@@ -227,7 +256,7 @@ class CommunityContentActivity : AppCompatActivity()  {
                     call: Call<WriteCommentResponse>,
                     response: Response<WriteCommentResponse>) {
                     if (response.isSuccessful && response.body()?.isSuccess == "true") {
-//                        Log.d("WriteComment", "${response.body()!!.result}")
+                        Log.d("WriteComment", "${response.body()!!.result}")
                         parentCommentId = 0 // postCommentID 초기화
                         binding.writeCommentContentEt.text.clear()
                         binding.writeCommentContentEt.clearFocus()
@@ -385,6 +414,7 @@ class CommunityContentActivity : AppCompatActivity()  {
                         if (contentResponse?.isSuccess == "true") {
                             val contentInfo = contentResponse.result
                             val commentInfo = contentInfo.commentResponses.comments
+                            Log.d("CommunityHomeTest", contentInfo.title)
                             initContentInfo(contentInfo)
                             val sortedComments = sortComments(commentInfo)
                             initMultiViewRecyclerView(sortedComments)
@@ -524,12 +554,37 @@ class CommunityContentActivity : AppCompatActivity()  {
         scrapByThisMember = contentInfo.scrapedByCurrentUser
 
         binding.communityContentDateTv.text = formatWrittenTime(contentInfo.writtenTime)
-        binding.scrapCountTv.text = contentInfo.scrapCount.toString()
+
+        if (contentInfo.scrapCount > 999) {
+            val formatted = String.format("%.1fK", contentInfo.scrapCount / 1000.0)
+            binding.scrapCountTv.text = formatted
+        } else {
+            binding.scrapCountTv.text = contentInfo.scrapCount.toString()
+        }
+
         binding.communityContentTitleTv.text = contentInfo.title
         binding.communityContentContentTv.text = contentInfo.content
-        binding.communityContentLikeNumTv.text = contentInfo.likeCount.toString()
-        binding.communityContentContentNumTv.text = contentInfo.commentCount.toString()
-        binding.communityContentViewNumTv.text = contentInfo.viewCount.toString()
+
+        if (contentInfo.likeCount > 999) {
+            val formatted = String.format("%.1fK", contentInfo.likeCount / 1000.0)
+            binding.communityContentLikeNumTv.text = formatted
+        } else {
+            binding.communityContentLikeNumTv.text = contentInfo.likeCount.toString()
+        }
+
+        if (contentInfo.commentCount > 999) {
+            val formatted = String.format("%.1fK", contentInfo.commentCount / 1000.0)
+            binding.communityContentContentNumTv.text = formatted
+        } else {
+            binding.communityContentContentNumTv.text = contentInfo.commentCount.toString()
+        }
+
+        if (contentInfo.viewCount > 999) {
+            val formatted = String.format("%.1fK", contentInfo.viewCount / 1000.0)
+            binding.communityContentViewNumTv.text = formatted
+        } else {
+            binding.communityContentViewNumTv.text = contentInfo.viewCount.toString()
+        }
 
         if(contentInfo.type == "PASS_EXPERIENCE") binding.communityContentThemeTv.text = "#합격후기"
         else if(contentInfo.type == "INFORMATION_SHARING") binding.communityContentThemeTv.text = "#정보공유"
@@ -601,6 +656,10 @@ class CommunityContentActivity : AppCompatActivity()  {
                 binding.writeCommentContentEt.requestFocus()
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(binding.writeCommentContentEt, InputMethodManager.SHOW_IMPLICIT)
+
+                if(parentId != null) {
+                    binding
+                }
             }
 
             override fun onLikeClick(view: View, position: Int, commentId: Int) {

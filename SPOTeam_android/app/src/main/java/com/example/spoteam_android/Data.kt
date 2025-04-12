@@ -112,16 +112,21 @@ data class ValidateEmailResult(
     val tempTokenExpiresIn: Int
 )
 
-//data class NicNameResponse(
-//    val isSuccess: Boolean,
-//    val code: String,
-//    val message: String,
-//    val result: NickNameResult?,
-//)
-//
-//data class NickNameResult(
-//
-//)
+data class  NickNameResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: NickNameResult?
+)
+
+data class NickNameResult(
+    val name: String,
+    val nickname: String,
+    val email: String,
+    val idInfo: Boolean,
+    val personalInfo: Boolean
+)
+
 
 data class IndexData(
     val index : String,

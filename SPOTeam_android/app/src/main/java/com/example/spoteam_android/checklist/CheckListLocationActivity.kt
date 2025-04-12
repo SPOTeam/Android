@@ -16,7 +16,7 @@ import com.google.android.material.chip.ChipDrawable
 
 class CheckListLocationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCheckListLocationBinding
-    private val selectedLocations = mutableListOf<String>() // 여기에 저장되는 것은 코드입니다
+    private val selectedLocations = mutableListOf<String>() // 코드로 저장
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
@@ -62,6 +62,7 @@ class CheckListLocationActivity : AppCompatActivity() {
 
         binding.checklistspotLocationFinishBt.setOnClickListener {
             val intent = Intent(this, RegisterInformation::class.java).apply {
+                putExtra("mode", "FINAL")
                 putStringArrayListExtra("selectedThemes", ArrayList(selectedThemes))
                 putIntegerArrayListExtra("selectedPurpose", ArrayList(selectedPurpose))
                 putStringArrayListExtra("selectedLocations", ArrayList(selectedLocations)) // 코드 리스트 전달
@@ -105,7 +106,6 @@ class CheckListLocationActivity : AppCompatActivity() {
     }
 
     private fun updateButtonStates() {
-        // `selectedLocations`의 크기에 따라 버튼 상태 업데이트
         binding.checklistspotLocationPlusBt.isEnabled = selectedLocations.size < 5
         binding.checklistspotLocationFinishBt.isEnabled = selectedLocations.isNotEmpty()
     }

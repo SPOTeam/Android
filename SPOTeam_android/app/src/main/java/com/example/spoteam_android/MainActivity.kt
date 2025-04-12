@@ -301,6 +301,7 @@ class MainActivity : AppCompatActivity() {
             null
         }
     }
+
     private fun logAllSharedPreferences(context: Context) {
         val sharedPreferences: SharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val allEntries: Map<String, *> = sharedPreferences.all

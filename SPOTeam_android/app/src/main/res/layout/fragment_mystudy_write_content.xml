@@ -17,9 +17,10 @@
         android:textAlignment="center"
         android:text="글쓰기"
         android:textStyle="bold"
+        android:textFontWeight="800"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,8 +28,8 @@
     <!--    X 이미지 변경    -->
     <ImageView
         android:id="@+id/write_content_prev_iv"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:src="@drawable/ic_new_close"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,8 +44,9 @@
         android:layout_marginEnd="10dp"
         android:background="@android:color/transparent"
         android:textColorHint="#C5C5CD"
+        android:textFontWeight="800"
         android:inputType="none"
-        android:textSize="18sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/write_content_title_tv"/>
@@ -52,7 +54,7 @@
     <ImageView
         android:id="@+id/community_sp_iv"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:src="@drawable/line_img"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="@id/write_content_title_et"
@@ -63,16 +65,18 @@
         android:id="@+id/write_content_content_et"
         android:layout_width="0dp"
         android:layout_height="250dp"
-        android:hint="내용을 입력해주세요"
-        android:gravity="top"
-        android:background="@null"
         android:layout_marginTop="10dp"
+        android:background="@null"
+        android:gravity="top"
+        android:hint="내용을 입력해주세요"
+        android:textColorHint="#C5C5CD"
+        android:textFontWeight="800"
         android:inputType="none"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/write_content_title_et"
         app:layout_constraintEnd_toEndOf="@id/write_content_title_et"
-        app:layout_constraintTop_toBottomOf="@id/community_sp_iv"
-        />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/write_content_title_et"
+        app:layout_constraintTop_toBottomOf="@id/community_sp_iv" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/added_images_rv"
@@ -89,8 +93,8 @@
 
     <ImageView
         android:id="@+id/add_image_iv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:src="@drawable/camera_ic"
         app:layout_constraintTop_toTopOf="@id/mystudy_write_content_info_ll"
         app:layout_constraintBottom_toBottomOf="@id/mystudy_write_content_info_ll"
@@ -108,8 +112,8 @@
 
         <ImageView
             android:id="@+id/check_ic"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@drawable/announce_check"/>
 
         <TextView
@@ -119,6 +123,7 @@
             android:text="공지"
             android:textColor="@color/black"
             android:textSize="15sp"
+            android:textFontWeight="800"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="20dp"/>
 
@@ -129,17 +134,18 @@
             android:layout_marginEnd="10dp"
             android:textSize="15sp"
             android:textColor="#1E1E1E"
+            android:textFontWeight="800"
             android:text="테마" />
 
         <Spinner
             android:id="@+id/mystudy_category_spinner"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="30dp"
             android:layout_gravity="end|center"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:background="@drawable/study_write_content_spinner"
             android:dropDownVerticalOffset="-1dp"
-
+            android:textFontWeight="800"
             android:spinnerMode="dropdown" />
 
     </LinearLayout>
@@ -148,18 +154,24 @@
         android:id="@+id/write_content_finish_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/selector_category_background"
         android:enabled="false"
         android:gravity="center"
         android:padding="10dp"
         android:text="완료"
+        android:layout_marginHorizontal="1dp"
+        android:textFontWeight="800"
         android:textColor="@drawable/button_textcolor"
         android:textSize="20sp"
+        android:elevation="3dp"
         app:layout_constraintEnd_toEndOf="@id/write_content_content_et"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/write_content_content_et"
         app:layout_constraintTop_toBottomOf="@id/mystudy_write_content_info_ll" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        app:layout_constraintTop_toBottomOf="@id/write_content_finish_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

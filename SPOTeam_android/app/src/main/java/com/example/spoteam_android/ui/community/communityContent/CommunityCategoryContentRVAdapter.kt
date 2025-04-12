@@ -63,14 +63,39 @@ class CommunityCategoryContentRVAdapter(private var dataList: List<CategoryPages
     inner class ViewHolder(val binding: ItemCommunityContentBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: CategoryPagesDetail) {
             binding.contentTitleTv.text = data.title
-            binding.contentSaveNumTv.text = data.scrapCount.toString()
+
+            if (data.scrapCount > 999) {
+                val formatted = String.format("%.1fK", data.scrapCount / 1000.0)
+                binding.contentSaveNumTv.text = formatted
+            } else {
+                binding.contentSaveNumTv.text = data.scrapCount.toString()
+            }
+
             binding.contentSummaryTv.text = data.content
-            binding.contentLikeNumTv.text = data.likeCount.toString()
-            binding.contentCommentNumTv.text = data.commentCount.toString()
-            binding.contentViewNumTv.text = data.viewCount.toString()
+
+            if (data.likeCount > 999) {
+                val formatted = String.format("%.1fK", data.likeCount / 1000.0)
+                binding.contentLikeNumTv.text = formatted
+            } else {
+                binding.contentLikeNumTv.text = data.likeCount.toString()
+            }
+
+            if (data.commentCount > 999) {
+                val formatted = String.format("%.1fK", data.commentCount / 1000.0)
+                binding.contentCommentNumTv.text = formatted
+            } else {
+                binding.contentCommentNumTv.text = data.commentCount.toString()
+            }
+
+            if (data.viewCount > 999) {
+                val formatted = String.format("%.1fK", data.viewCount / 1000.0)
+                binding.contentViewNumTv.text = formatted
+            } else {
+                binding.contentViewNumTv.text = data.viewCount.toString()
+            }
+
             binding.contentWriterTv.text = data.writer
             binding.contentDateTv.text = formatWrittenTime(data.writtenTime)
-            binding.contentSaveNumTv.text = data.scrapCount.toString()
 
             if (data.likedByCurrentUser) {
                 binding.contentLikeNumCheckedIv.visibility = View.VISIBLE

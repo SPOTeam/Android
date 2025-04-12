@@ -14,7 +14,7 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:layout_marginStart="40dp"
-        android:fontFamily="@font/pretendard"
+        android:textFontWeight="800"
         app:layout_constraintStart_toStartOf="@id/community_prev_iv"
         app:layout_constraintTop_toTopOf="@id/community_prev_iv"
         app:layout_constraintBottom_toBottomOf="@id/community_prev_iv"/>
@@ -26,7 +26,7 @@
         android:layout_height="24dp"
         android:src="@drawable/navigate_before_3x"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,9 +63,9 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:text="익명"
-                android:fontFamily="@font/pretendard"
                 android:textSize="14sp"
                 android:textColor="#1E1E1E"
+                android:textFontWeight="800"
                 android:layout_marginStart="5dp"
                 app:layout_constraintStart_toEndOf="@id/community_content_profile_iv"
                 app:layout_constraintTop_toTopOf="@id/community_content_profile_iv" />
@@ -76,9 +76,9 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:text="2024.05.31 17:31"
-                android:fontFamily="@font/pretendard"
                 android:textSize="14sp"
                 android:textColor="#1E1E1E"
+                android:textFontWeight="800"
                 app:layout_constraintStart_toStartOf="@id/community_content_writer_tv"
                 app:layout_constraintTop_toBottomOf="@id/community_content_writer_tv" />
 
@@ -94,16 +94,17 @@
 
                 <ImageView
                     android:id="@+id/scrap_iv"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:src="@drawable/ic_new_scrab"
                     android:layout_marginEnd="5dp"/>
 
                 <TextView
                     android:id="@+id/scrap_count_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="100"
+                    android:text="1.0K"
+                    android:textFontWeight="700"
                     android:layout_marginEnd="10dp"
                     android:textColor="#005BFF"/>
 
@@ -133,12 +134,12 @@
                 android:id="@+id/community_content_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:text="카카오 최종합격"
                 android:textSize="18sp"
-                android:fontFamily="@font/pretendard"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
+                android:textFontWeight="800"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
                 app:layout_constraintTop_toBottomOf="@id/community_content_theme_tv" />
@@ -164,7 +165,6 @@
                 android:layout_height="wrap_content"
                 android:text="카카오 최종합격했습니다!\n 면접 후기랑 자소서 풀어볼게요\n자소서 문항 :\n 1.지원동기와 성장과정, 문제해결과정을 중심으로 작성하시오"
                 android:textSize="14sp"
-                android:fontFamily="@font/pretendard"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 android:lineSpacingMultiplier="1.5"
@@ -203,10 +203,11 @@
 
                 <TextView
                     android:id="@+id/community_content_likeNum_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="1"
+                    android:text="1.0K"
                     android:textSize="12sp"
+                    android:textFontWeight="700"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="16dp"
                     android:textColor="@color/selector_blue" />
@@ -222,10 +223,11 @@
 
                 <TextView
                     android:id="@+id/community_content_contentNum_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
                     android:text="1"
                     android:textSize="12sp"
+                    android:textFontWeight="700"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="16dp"
                     android:textColor="@color/selector_blue" />
@@ -241,10 +243,11 @@
 
                 <TextView
                     android:id="@+id/community_content_viewNum_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
                     android:text="1"
                     android:textSize="12sp"
+                    android:textFontWeight="700"
                     android:layout_marginStart="5dp"
                     android:textColor="@color/selector_blue" />
 
@@ -290,7 +293,7 @@
             android:id="@+id/write_comment_content_et"
             android:layout_width="0dp"
             android:layout_height="35dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="15dp"
             android:layout_marginEnd="10dp"
             android:background="@null"
             android:ellipsize="end"
@@ -298,6 +301,7 @@
             android:hint="댓글을 입력해주세요"
             android:inputType="text"
             android:maxLines="1"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

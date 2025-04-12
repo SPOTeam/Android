@@ -96,7 +96,7 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
             // 클릭 상태에 따른 communityWriteReplyTv 텍스트 색상 변경
             binding.communityWriteReplyTv.setTextColor(
                 if (clickedState[bindingAdapterPosition]) binding.root.context.getColor(R.color.active_blue) // 파란색으로 변경
-                else binding.root.context.getColor(R.color.gray) // 기본 색상으로 변경
+                else binding.root.context.getColor(R.color.gray_03) // 기본 색상으로 변경
             )
             binding.communityWriteReplyTv.setOnClickListener {
                 updateClickedState(bindingAdapterPosition) // 클릭 상태 갱신

@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.community
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -25,9 +26,22 @@ class CommunityHomeRVAdapterWithIndex(private val dataList: List<ContentDetailIn
 
     inner class ViewHolder(val binding : ItemCommunityhomeContentWithIndexBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: ContentDetailInfo){
-            binding.contentIndexTv.text = data.rank.toString()
+            binding.contentIndexTv.text = "0${data.rank}"
             binding.contentTitleTv.text = data.postTitle
-            binding.contentCommentNumTv.text = data.commentCount.toString()
+            if (data.commentCount > 999) {
+                binding.contentCommentNumTv.text = "${data.commentCount}+"
+//                val formatted = String.format("%.1fK", data.commentCount / 1000.0)
+//                binding.contentCommentNumTv.text = formatted
+            } else {
+                binding.contentCommentNumTv.text = data.commentCount.toString()
+            }
+
+            binding.root.setOnClickListener{
+                val context = binding.root.context
+                val intent = Intent(context, CommunityContentActivity::class.java)
+                intent.putExtra("postInfo", data.postId) // postId 등 필요한 데이터 전달
+                context.startActivity(intent)
+            }
         }
     }
 }
