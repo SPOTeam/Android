@@ -1,0 +1,11 @@
+<!-- custom_thumb.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/white" /> <!-- 안쪽 색 -->
+    <stroke
+        android:width="1dp"
+        android:color="@color/b500" />     <!-- 테두리 색 -->
+    <size
+        android:width="20dp"
+        android:height="20dp" />       <!-- thumb 크기 -->
+</shape>

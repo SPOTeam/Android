@@ -4,8 +4,11 @@ import StudyApiService
 import StudyViewModel
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -18,6 +21,7 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -38,6 +42,8 @@ import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 class InterestFragment : Fragment() {
 
@@ -285,6 +291,8 @@ class InterestFragment : Fragment() {
             .addToBackStack(null)
             .commitAllowingStateLoss()
     }
+
+
 
     private fun setupBottomSheet() {
         val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_interest_spinner, null)

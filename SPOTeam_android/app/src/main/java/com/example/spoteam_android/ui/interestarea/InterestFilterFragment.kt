@@ -1,7 +1,9 @@
 package com.example.spoteam_android.ui.interestarea
 
-
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.icu.text.NumberFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,9 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.MainActivity
@@ -42,9 +42,11 @@ class InterestFilterFragment : Fragment() {
         setupRecruitingChips()
         setupGenderChips()
         setupAgeRangeSlider()
+        setupActivityFeeSlider()
         setupActivityFeeChips()
         setupStudyThemeChips()
         setupSearchButton()
+
 
         restoreRecruitingChip()
         restoreGenderChip()
@@ -87,6 +89,11 @@ class InterestFilterFragment : Fragment() {
         ageRangeSlider.stepSize = 1f
         ageRangeSlider.values = listOf(18f, 60f)
 
+        val customThumb = ContextCompat.getDrawable(requireContext(),R.drawable.custom_thumb)
+        if (customThumb != null) {
+            ageRangeSlider.setCustomThumbDrawable(customThumb)
+        }
+
         ageRangeSlider.addOnChangeListener { slider, _, _ ->
             val values = slider.values
             val minAge = values[0].toInt()
@@ -95,6 +102,36 @@ class InterestFilterFragment : Fragment() {
             viewModel.maxAge = maxAge
             minValueText.text = minAge.toString()
             maxValueText.text = maxAge.toString()
+        }
+    }
+
+    private fun setupActivityFeeSlider() {
+        val activityfeeSlider = binding.activityfeeSlider
+        val minValueText = binding.activityfeeMinValueText
+        val maxValueText = binding.activityfeeMaxValueText
+
+        activityfeeSlider.valueFrom = 1000f
+        activityfeeSlider.valueTo = 10000f
+        activityfeeSlider.stepSize = 100f
+        activityfeeSlider.values = listOf(1000f, 10000f)
+        val customThumb = ContextCompat.getDrawable(requireContext(),R.drawable.custom_thumb)
+        if (customThumb != null) {
+            activityfeeSlider.setCustomThumbDrawable(customThumb)
+        }
+
+
+
+        activityfeeSlider.addOnChangeListener { slider, _, _ ->
+            val values = slider.values
+            val minfee = values[0].toInt()
+            val maxfee = values[1].toInt()
+            val formattedMinFee = NumberFormat.getNumberInstance().format(minfee)
+            val formattedMaxFee = NumberFormat.getNumberInstance().format(maxfee)
+            // 코드 변경 필요
+//            viewModel.minAge = minAge
+//            viewModel.maxAge = maxAge
+            minValueText.text = "₩$formattedMinFee"
+            maxValueText.text = "₩$formattedMaxFee"
         }
     }
 
@@ -149,6 +186,26 @@ class InterestFilterFragment : Fragment() {
     }
 
     private fun setupSearchButton() {
+        //필터 초기화 클릭
+        binding.txResetFilter.setOnClickListener {
+            viewModel.reset()
+
+            binding.chipGroupRecruiting.clearCheck()
+            binding.chipGroupGender.clearCheck()
+            binding.chipGroup1.clearCheck()
+            binding.chipGroup2.clearCheck()
+
+            // ✅ RangeSlider 초기화
+            binding.ageRangeSlider.values = listOf(18f, 60f)
+            binding.activityfeeSlider.values = listOf(1000f, 10000f)
+
+            // ✅ 텍스트뷰 값도 초기화 (선택사항)
+            binding.minValueText.text = "18"
+            binding.maxValueText.text = "60"
+            binding.activityfeeMinValueText.text = "₩ 1,000"
+            binding.activityfeeMaxValueText.text = "₩ 10,000"
+        }
+
         binding.fragmentIntroduceStudyBt.setOnClickListener {
             // ViewModel 값 → Bundle
             val bundle = Bundle().apply {
