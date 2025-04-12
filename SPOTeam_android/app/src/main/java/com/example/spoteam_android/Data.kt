@@ -121,6 +121,7 @@ data class  NickNameResponse(
 
 data class NickNameResult(
     val name: String,
+    val nickname: String,
     val email: String,
     val idInfo: Boolean,
     val personalInfo: Boolean
