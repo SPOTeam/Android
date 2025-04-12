@@ -134,10 +134,12 @@ class SearchFragment : Fragment() {
             adapter = recruitingStudyAdapter
         }
 
+
         val memberId = getMemberId(requireContext())
         fetchRecommendStudy()
 
         fetchPopularKeywords()
+        updateKeywordTimestamp()
 
         binding.searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -169,6 +171,8 @@ class SearchFragment : Fragment() {
                 return true
             }
         })
+
+
 
         return binding.root
     }
@@ -207,7 +211,7 @@ class SearchFragment : Fragment() {
             text = query
             isCloseIconVisible = true
 
-            setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_chip_text))
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.search_chip_text))
             setChipDrawable(
                 ChipDrawable.createFromAttributes(
                     requireContext(), null, 0, R.style.find_ChipStyle
@@ -218,11 +222,24 @@ class SearchFragment : Fragment() {
                 removeSearchQuery(query)
             }
 
+            val chipHeight = dpToPx(45) // 높이 36dp
+            val chipMinWidth = dpToPx(72) // 너비 최소 72dp
+            layoutParams = ViewGroup.MarginLayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, chipHeight
+            )
+            minWidth = chipMinWidth
+
             setOnClickListener {
                 binding.searchView.setQuery(query, true)
             }
         }
         binding.chipGroup.addView(chip, 0)
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics
+        ).toInt()
     }
 
     private fun removeSearchQuery(query: String) {
@@ -354,7 +371,7 @@ class SearchFragment : Fragment() {
                             isHost = false
                         )
                         boardItems.add(boardItem)
-                        updateRecyclerView(boardItems)
+                        updateSearchBoard(boardItems)
                     } else {
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                     }
@@ -371,8 +388,29 @@ class SearchFragment : Fragment() {
         })
     }
 
-    private fun updateRecyclerView(boardItems: List<BoardItem>) {
-        recruitingStudyAdapter.updateList(boardItems)
+    private fun updateKeywordTimestamp() {
+        val now = java.util.Calendar.getInstance()
+
+        val hour = now.get(java.util.Calendar.HOUR_OF_DAY)
+        val dateFormat = java.text.SimpleDateFormat("MM.dd", java.util.Locale.getDefault())
+        val timeFormat = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault())
+
+        val baseHour = when {
+            hour < 13 -> 13  // 오전이면 오늘 13시
+            hour < 18 -> 13  // 13시~17시59분까지는 13시 기준
+            else -> 18       // 18시 이후는 18시 기준
+        }
+
+        now.set(java.util.Calendar.HOUR_OF_DAY, baseHour)
+        now.set(java.util.Calendar.MINUTE, 0)
+        now.set(java.util.Calendar.SECOND, 0)
+
+        val dateStr = dateFormat.format(now.time)
+        val timeStr = timeFormat.format(now.time)
+
+        binding.txDate.text = dateStr
+        binding.txTime.text = timeStr
+        binding.txDescript.text = "기준"
     }
 
 
@@ -424,12 +462,19 @@ class SearchFragment : Fragment() {
                 isCloseIconVisible = false // 인기 검색어에서는 닫기 버튼 비활성화
                 isClickable = true
 
-                setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_chip_text))
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.search_chip_text))
                 setChipDrawable(
                     ChipDrawable.createFromAttributes(
                         requireContext(), null, 0, R.style.find_ChipStyle
                     )
                 )
+
+                val chipHeight = dpToPx(45) // 높이 36dp
+                val chipMinWidth = dpToPx(72) // 너비 최소 72dp
+                layoutParams = ViewGroup.MarginLayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, chipHeight
+                )
+                minWidth = chipMinWidth
 
                 // 클릭 이벤트
                 setOnClickListener {
@@ -438,6 +483,14 @@ class SearchFragment : Fragment() {
             }
             chipGroup.addView(chip)
         }
+    }
+
+    private fun updateSearchBoard(boardItems: List<BoardItem>) {
+        recruitingStudyAdapter.updateList(boardItems)
+
+        val hasData = boardItems.isNotEmpty()
+        binding.searchBoard.visibility = if (hasData) View.VISIBLE else View.GONE
+        binding.txRecentlyViewedStudy.visibility = if (hasData) View.VISIBLE else View.GONE
     }
 
 }

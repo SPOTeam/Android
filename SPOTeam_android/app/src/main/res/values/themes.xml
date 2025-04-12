@@ -94,11 +94,8 @@
     </style>
 
     <style name="find_ChipStyle" parent="Widget.MaterialComponents.Chip.Action">
-        <!-- Chip의 배경 색상 -->
         <item name="chipBackgroundColor">@color/white</item>
-        <!-- Chip의 텍스트 색상 -->
         <item name="android:textColor">@color/active_blue</item>
-        <!-- Chip의 테두리 색상 -->
         <item name="chipStrokeColor">@color/active_blue</item>
         <!-- Chip의 테두리 두께 -->
         <item name="chipStrokeWidth">1dp</item>
