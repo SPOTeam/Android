@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.MainActivity
@@ -144,11 +145,17 @@ class InterestFilterFragment : Fragment() {
                 val checkedChip = chipGroup1.findViewById<Chip>(checkedId)
                 if (checkedChip.id == R.id.chip1) {
                     viewModel.activityFee = "있음"
+                    binding.activityfeeSlider.isVisible = true
+                    binding.displayfeeFrameLayout.isVisible = true
                 } else {
                     viewModel.activityFee = "없음"
+                    binding.activityfeeSlider.isVisible = false
+                    binding.displayfeeFrameLayout.isVisible = false
                 }
             } else {
                 viewModel.activityFee = "없음"
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
             }
             updateNextButtonState()
         }
@@ -238,9 +245,13 @@ class InterestFilterFragment : Fragment() {
         when (viewModel.activityFee) {
             "있음" -> {
                 binding.chipGroup1.check(R.id.chip1)
+                binding.activityfeeSlider.isVisible = true
+                binding.displayfeeFrameLayout.isVisible = true
             }
             "없음" -> {
                 binding.chipGroup1.check(R.id.chip2)
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
             }
         }
     }
