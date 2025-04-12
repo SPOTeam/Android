@@ -51,14 +51,14 @@ class InterestFilterFragment : Fragment() {
         restoreRecruitingChip()
         restoreGenderChip()
         restoreActivityFeeChip()
-        restoreStudyThemeChip()
+        restoreStudyThemeChips()
     }
 
     private fun setupToolbar() {
         binding.toolbar.icBack.setOnClickListener {
             viewModel.reset() // 1. ViewModel 값 초기화
             val bundle = Bundle().apply {
-                putString("source", "InterestFilterFragment")
+                putString("source", "HouseFragment")
             }
             val interestFragment = InterestFragment().apply {
                 arguments = bundle
@@ -137,51 +137,44 @@ class InterestFilterFragment : Fragment() {
 
     private fun setupActivityFeeChips() {
         val chipGroup1 = binding.chipGroup1
-        val editText = binding.edittext1
-        val behindEt = binding.behindEt
+
 
         chipGroup1.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId != ChipGroup.NO_ID) {
                 val checkedChip = chipGroup1.findViewById<Chip>(checkedId)
                 if (checkedChip.id == R.id.chip1) {
                     viewModel.activityFee = "있음"
-                    editText.visibility = View.VISIBLE
-                    behindEt.visibility = View.VISIBLE
                 } else {
                     viewModel.activityFee = "없음"
-                    editText.visibility = View.GONE
-                    behindEt.visibility = View.GONE
                 }
             } else {
                 viewModel.activityFee = "없음"
-                editText.visibility = View.GONE
-                behindEt.visibility = View.GONE
             }
             updateNextButtonState()
         }
 
-        editText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                imm?.hideSoftInputFromWindow(editText.windowToken, 0)
-                editText.clearFocus()
 
-                viewModel.activityFeeAmount = editText.text.toString()
-                updateNextButtonState()
-                true
-            } else false
-        }
     }
 
     private fun setupStudyThemeChips() {
-        binding.chipGroup2.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId != ChipGroup.NO_ID) {
-                val selectedChip = group.findViewById<Chip>(checkedId)
-                val selectedText = selectedChip?.text.toString()
-                viewModel.selectedStudyTheme = selectedText
-                Log.d("InterestFilterFragment", "Selected study theme: $selectedText")
+        for (i in 0 until binding.chipGroup2.childCount) {
+            val chip = binding.chipGroup2.getChildAt(i) as? Chip ?: continue
+
+            chip.setOnClickListener {
+                val theme = chip.text.toString()
+                val themes = viewModel.selectedStudyThemes
+
+                if (chip.isChecked) {
+                    if (!themes.contains(theme)) {
+                        themes.add(theme)
+                    }
+                } else {
+                    themes.remove(theme)
+                }
+
+                Log.d("InterestFilterFragment", "Selected study themes: $themes")
+                updateNextButtonState()
             }
-            updateNextButtonState()
         }
     }
 
@@ -225,15 +218,11 @@ class InterestFilterFragment : Fragment() {
 
     private fun updateNextButtonState() {
         val activityFee = viewModel.activityFee
-        val activityFeeAmount = binding.edittext1.text.toString()
 
         val isActivityFeeNoneSelected = activityFee == "없음"
-        val isActivityFeeEntered = activityFee == "있음" &&
-                activityFeeAmount.isNotEmpty() &&
-                activityFeeAmount.toIntOrNull() != null
-
+        val isActivityFeeEntered = activityFee == "있음"
         val isSecondConditionMet = isActivityFeeNoneSelected || isActivityFeeEntered
-        val isThirdConditionMet = viewModel.selectedStudyTheme != null
+        val isThirdConditionMet = viewModel.selectedStudyThemes.isNotEmpty()
 
         binding.fragmentIntroduceStudyBt.isEnabled = isSecondConditionMet && isThirdConditionMet
     }
@@ -249,28 +238,20 @@ class InterestFilterFragment : Fragment() {
         when (viewModel.activityFee) {
             "있음" -> {
                 binding.chipGroup1.check(R.id.chip1)
-                binding.edittext1.setText(viewModel.activityFeeAmount)
-                binding.edittext1.visibility = View.VISIBLE
-                binding.behindEt.visibility = View.VISIBLE
             }
             "없음" -> {
                 binding.chipGroup1.check(R.id.chip2)
-                binding.edittext1.visibility = View.GONE
-                binding.behindEt.visibility = View.GONE
             }
         }
     }
 
-    private fun restoreStudyThemeChip() {
-        val selectedText = viewModel.selectedStudyTheme ?: return
+    private fun restoreStudyThemeChips() {
+        val selectedThemes = viewModel.selectedStudyThemes
         val chipGroup = binding.chipGroup2
 
         for (i in 0 until chipGroup.childCount) {
-            val chip = chipGroup.getChildAt(i) as? Chip
-            if (chip?.text == selectedText) {
-                chipGroup.check(chip.id)
-                break
-            }
+            val chip = chipGroup.getChildAt(i) as? Chip ?: continue
+            chip.isChecked = selectedThemes.contains(chip.text.toString())
         }
     }
 

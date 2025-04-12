@@ -6,7 +6,7 @@ class InterestFilterViewModel : ViewModel() {
     var gender: String? = null
     var activityFee: String? = null
     var activityFeeAmount: String? = null
-    var selectedStudyTheme: String? = null
+    var selectedStudyThemes: MutableList<String> = mutableListOf() // 복수 선택
     var minAge: Int = 18
     var maxAge: Int = 60
     var isRecruiting: String? = null
@@ -17,7 +17,7 @@ class InterestFilterViewModel : ViewModel() {
         maxAge = 60
         activityFee = null
         activityFeeAmount = null
-        selectedStudyTheme = null
+        selectedStudyThemes.clear()
         isRecruiting = null
     }
 }

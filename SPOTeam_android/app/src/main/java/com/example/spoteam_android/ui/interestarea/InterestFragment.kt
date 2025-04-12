@@ -101,7 +101,7 @@ class InterestFragment : Fragment() {
         minAge = viewModel.minAge.toString()
         maxAge = viewModel.maxAge.toString()
         activityFee = viewModel.activityFee
-        selectedStudyTheme = viewModel.selectedStudyTheme
+        selectedStudyTheme = null
         activityFeeAmount = viewModel.activityFeeAmount
         source = arguments?.getString("source") // source만 그대로 Bundle에서 받음
 

@@ -325,36 +325,6 @@
                 android:textSize="13dp" />
 
         </LinearLayout>
-
-
-            <EditText
-                android:id="@+id/edittext1"
-                android:layout_width="65dp"
-                android:layout_height="35dp"
-                android:layout_gravity="end|bottom"
-                android:layout_marginStart="100dp"
-                android:layout_marginEnd="70dp"
-                android:layout_marginBottom="20dp"
-                android:gravity="center"
-                android:textSize="14dp"
-                android:background="@drawable/edittext_rounded_corner_rectangle"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="number"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/behind_et"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="25dp"
-                android:text="원 이하"
-                android:textColor="#8E8E8E"
-                android:textSize="16dp"
-                android:visibility="gone" />
-
         </FrameLayout>
 
         <FrameLayout
@@ -408,8 +378,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="10dp"
                 app:layout_constraintStart_toStartOf="@+id/studyThemeLabel"
-                app:layout_constraintTop_toBottomOf="@+id/studyThemeLabel"
-                app:singleSelection="true">
+                app:layout_constraintTop_toBottomOf="@+id/studyThemeLabel">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/study_chip1"

@@ -94,9 +94,9 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="20dp"
             android:text="--건"
+            android:fontFamily="@font/suit_bold"
             android:textColor="@color/gray_03"
             android:textSize="16dp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabs" />
 
@@ -121,6 +121,7 @@
             android:paddingHorizontal="10dp"
             android:paddingVertical="10dp"
             android:src="@drawable/interest_fragment_study_setcondition_active"
+            android:background="@drawable/rounded_blue_background"
             app:layout_constraintBottom_toBottomOf="@+id/filter_toggle_container"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/filter_toggle_container"
@@ -145,8 +146,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 android:text="최신 순"
-                android:textColor="@android:color/black"
-                android:textSize="16dp" />
+                android:textFontWeight="700"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
 
             <ImageView
                 android:layout_width="25dp"
