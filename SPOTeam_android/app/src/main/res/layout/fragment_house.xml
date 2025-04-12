@@ -394,6 +394,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_board" />
 
+        <ImageView
+            android:id="@+id/ic_recommendation_refresh"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_recommendation_refresh"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tx_recommendation_study"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tx_recommendation_study" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_board2"
             android:layout_width="match_parent"
