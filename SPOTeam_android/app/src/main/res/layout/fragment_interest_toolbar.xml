@@ -19,7 +19,7 @@
             android:layout_marginBottom="20dp"
             android:background="@color/white"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_left_black_arrow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
