@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.media3.common)
     implementation(libs.filament.android)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

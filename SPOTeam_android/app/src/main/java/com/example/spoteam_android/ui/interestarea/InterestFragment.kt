@@ -4,8 +4,11 @@ import StudyApiService
 import StudyViewModel
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,10 +16,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -32,10 +37,13 @@ import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.FixedRoundedSpinnerAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 class InterestFragment : Fragment() {
 
@@ -88,15 +96,16 @@ class InterestFragment : Fragment() {
             replaceFragment(AlertFragment())
         }
 
+
         gender = viewModel.gender
         minAge = viewModel.minAge.toString()
         maxAge = viewModel.maxAge.toString()
         activityFee = viewModel.activityFee
-        selectedStudyTheme = viewModel.selectedStudyTheme
+        selectedStudyTheme = null
         activityFeeAmount = viewModel.activityFeeAmount
         source = arguments?.getString("source") // source만 그대로 Bundle에서 받음
 
-        setupSpinner()
+        setupBottomSheet()
 
         Log.d("InterestFragment","$gender, $minAge, $maxAge,$activityFee,$selectedStudyTheme,$activityFeeAmount,$source")
 
@@ -284,45 +293,94 @@ class InterestFragment : Fragment() {
     }
 
 
-    private fun setupSpinner() {
-        val genderList = listOf("최신 순", "조회수 높은 순", "관심 많은 순")
-        val genderAdapter = FixedRoundedSpinnerAdapter(requireContext(), genderList)
-        binding.filterToggle.adapter = genderAdapter
-        binding.filterToggle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if (isFirstSpinnerCall) {
-                    isFirstSpinnerCall = false
-                    return
-                }
 
-                selectedItem = when (position) {
-                    0 -> "ALL"   // 최신 순
-                    1 -> "HIT"      // 조회수 높은 순
-                    2 -> "LIKED"    // 관심 많은 순
-                    else -> "ALL"
-                }
-                fetchData(
-                    selectedItem,
-                    gender = gender,
-                    minAge = minAge,
-                    maxAge = maxAge,
-                    activityFee = activityFee,
-                    activityFeeAmount = activityFeeAmount,
-                    selectedStudyTheme = selectedStudyTheme,
-                    currentPage = currentPage
-                )
-            }
+    private fun setupBottomSheet() {
+        val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_interest_spinner, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.InterestBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(dialogView)
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
+        val recentlyLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_recently)
+        val viewLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_view)
+        val hotLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_hot)
+
+        recentlyLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "최신 순"
+            fetchFilteredStudy("ALL")  // 최신 순
+        }
+
+        viewLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "조회 수 높은 순"
+            fetchFilteredStudy("HIT")
+        }
+
+        hotLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "관심 많은 순"
+            fetchFilteredStudy("LIKED")  // 관심 많은 순
+        }
+
+        binding.filterToggleContainer.setOnClickListener {
+            bottomSheetDialog.show()
         }
     }
+
+    private fun fetchFilteredStudy(selectedItem: String) {
+        this.selectedItem = selectedItem
+        fetchData(
+            selectedItem = selectedItem,
+            gender = gender,
+            minAge = minAge,
+            maxAge = maxAge,
+            activityFee = activityFee,
+            activityFeeAmount = activityFeeAmount,
+            selectedStudyTheme = selectedStudyTheme,
+            currentPage = currentPage
+        )
+    }
+
+
+
+//    private fun setupSpinner() {
+//        val genderList = listOf("최신 순", "조회수 높은 순", "관심 많은 순")
+//        val genderAdapter = FixedRoundedSpinnerAdapter(requireContext(), genderList)
+//        binding.filterToggle.adapter = genderAdapter
+//        binding.filterToggle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(
+//                parent: AdapterView<*>,
+//                view: View?,
+//                position: Int,
+//                id: Long
+//            ) {
+//                if (isFirstSpinnerCall) {
+//                    isFirstSpinnerCall = false
+//                    return
+//                }
+//
+//                selectedItem = when (position) {
+//                    0 -> "ALL"   // 최신 순
+//                    1 -> "HIT"      // 조회수 높은 순
+//                    2 -> "LIKED"    // 관심 많은 순
+//                    else -> "ALL"
+//                }
+//                fetchData(
+//                    selectedItem,
+//                    gender = gender,
+//                    minAge = minAge,
+//                    maxAge = maxAge,
+//                    activityFee = activityFee,
+//                    activityFeeAmount = activityFeeAmount,
+//                    selectedStudyTheme = selectedStudyTheme,
+//                    currentPage = currentPage
+//                )
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                TODO("Not yet implemented")
+//            }
+//        }
+//    }
 
 
     private fun fetchData(

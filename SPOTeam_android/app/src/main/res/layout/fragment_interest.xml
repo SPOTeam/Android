@@ -57,8 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="108dp"
+            android:fontFamily="@font/suit_bold"
             android:text="@string/interest_study"
-            android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
             android:textSize="20dp"
             android:textStyle="bold"
@@ -91,13 +91,12 @@
             android:id="@+id/check_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="17dp"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/pretendard"
             android:text="--건"
+            android:fontFamily="@font/suit_bold"
             android:textColor="@color/gray_03"
             android:textSize="16dp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabs" />
 
@@ -106,49 +105,69 @@
             android:id="@+id/ic_filter"
             android:layout_width="50dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="15dp"
             android:paddingHorizontal="10dp"
             android:paddingVertical="10dp"
             android:src="@drawable/interest_fragment_study_setcondition_deactivate"
-            app:layout_constraintBottom_toBottomOf="@+id/filter_toggle"
+            app:layout_constraintBottom_toBottomOf="@+id/filter_toggle_container"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/filter_toggle" />
+            app:layout_constraintTop_toTopOf="@+id/filter_toggle_container" />
 
         <ImageView
             android:id="@+id/ic_filter_active"
             android:layout_width="50dp"
             android:layout_height="40dp"
+            android:layout_marginEnd="15dp"
             android:paddingHorizontal="10dp"
-            android:layout_marginEnd="10dp"
             android:paddingVertical="10dp"
             android:src="@drawable/interest_fragment_study_setcondition_active"
-            app:layout_constraintBottom_toBottomOf="@+id/filter_toggle"
+            android:background="@drawable/rounded_blue_background"
+            app:layout_constraintBottom_toBottomOf="@+id/filter_toggle_container"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/filter_toggle" />
+            app:layout_constraintTop_toTopOf="@+id/filter_toggle_container"
+            app:layout_constraintVertical_bias="0.666" />
 
-        <Spinner
-            android:id="@+id/filter_toggle"
-            android:layout_width="130dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="60dp"
+        <LinearLayout
+            android:id="@+id/filter_toggle_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="80dp"
             android:background="@drawable/gender_spinner_background"
-            android:clipToOutline="true"
-            android:popupBackground="@android:color/transparent"
-            android:spinnerMode="dropdown"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="@+id/check_amount"
-            app:layout_constraintEnd_toEndOf="@+id/ic_filter"
-            app:layout_constraintTop_toTopOf="@+id/check_amount" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/check_amount">
+
+            <TextView
+                android:id="@+id/filter_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:text="최신 순"
+                android:textFontWeight="700"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_down_arrow" />
+
+        </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/interest_area_study_reyclerview"
             android:layout_width="match_parent"
             android:layout_height="490dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="15dp"
-            android:overScrollMode="never"
             android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
