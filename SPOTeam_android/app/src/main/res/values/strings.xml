@@ -4,7 +4,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="studystart">스터디 모집과 관리\n똑똑한 취준 생활 시작, SPOT</string>
+    <string name="studystart">당신의 스터디 파트너\n스팟, SPOT</string>
     <string name ="emailstart">반가워요!\n회원가입하고, 스팟과 함께해요!</string>
     <string name="locationcaution">위치 노출의 위험을 방지하기 위해 구체적인 지역은\n스터디원 확정 후 협의하시기 바랍니다.</string>
     <string name= "nick_name">한글, 영문, 숫자 입력 가능, 최대 8자까지 입력해주세요.\n공백, 이모지, 특수문자(‘_’, ‘/’ 제외)는 사용할 수 없습니다.</string>
@@ -12,6 +12,7 @@
     <string name="start_login"><u>로그인하기</u></string>
     <string name="re_verify"><u>인증번호 다시 보내기</u></string>
     <string name="complete1_message">내 스터디에서 신청자들을 수락해주세요.</string>
+
 
     <string name="interest_study">관심 지역 스터디</string>
     <string-array name="signup_select_region">
@@ -73,5 +74,7 @@
 
     <string name="identification_agreement_title05_text">제5조 (동의 거부 권리 및 불이익 안내)</string>
     <string name="identification_agreement_body05_text">이용자는 고유식별정보 제공에 대한 동의를 거부할 권리가 있으며, 다만 동의를 거부할 경우 특정 서비스 이용이 제한될 수 있습니다.</string>
+
+
 
 </resources>

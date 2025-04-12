@@ -57,6 +57,19 @@ class ActivityFeeStudyFragment : Fragment() {
                     binding.fragmentActivityFeeStudyNumFl.visibility = View.GONE
                     binding.fragmentActivityFeeStudyPreviewBt.isEnabled = true
                 }
+
+
+            }
+            if (viewModel.mode.value == StudyFormMode.CREATE && request != null) {
+                setChipState(request.hasFee)
+
+                if (request.hasFee) {
+                    binding.fragmentActivityFeeStudyNumFl.visibility = View.VISIBLE
+                    binding.fragmentActivityFeeStudyEt.setText(request.fee.toString())
+                    checkFeeInput()
+                    binding.fragmentActivityFeeStudyNumFl.visibility = View.GONE
+                    binding.fragmentActivityFeeStudyPreviewBt.isEnabled = true
+                }
             }
         }
         viewModel.patchSuccess.observe(viewLifecycleOwner) { success ->
@@ -71,6 +84,7 @@ class ActivityFeeStudyFragment : Fragment() {
 
         return binding.root
     }
+
 
     private fun setupChipGroupListener() {
         binding.fragmentActivityFeeStudyChipTrue.setOnClickListener {
@@ -123,7 +137,6 @@ class ActivityFeeStudyFragment : Fragment() {
     private fun checkFeeInput() {
         val feeText = binding.fragmentActivityFeeStudyEt.text.toString()
 
-        // 입력 값이 없거나 0보다 작으면 버튼을 비활성화
         binding.fragmentActivityFeeStudyPreviewBt.isEnabled = feeText.isNotEmpty() && feeText.toIntOrNull() ?: 0 > 0
     }
 
@@ -140,7 +153,6 @@ class ActivityFeeStudyFragment : Fragment() {
         binding.fragmentActivityFeeStudyEt.error = null
         binding.fragmentActivityFeeStudyPreviewBt.isEnabled = true
 
-        // ✅ 값이 바뀐 경우에만 ViewModel에 저장
         val currentFee = viewModel.studyRequest.value?.fee ?: -1
         if (fee != currentFee) {
             saveStudyData(fee)
@@ -178,9 +190,11 @@ class ActivityFeeStudyFragment : Fragment() {
 
     private fun goToNextFragment() {
         val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, MyStudyRegisterPreviewFragment()) // MyStudyRegisterPreviewFragment로 전환
+        transaction.replace(R.id.main_frm, MyStudyRegisterPreviewFragment())
+        transaction.addToBackStack(null)
         transaction.commit()
     }
+
 
     private fun goToPreviusFragment() {
         parentFragmentManager.popBackStack()

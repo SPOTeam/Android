@@ -50,24 +50,31 @@ class IntroduceStudyFragment : Fragment() {
         checkButtonState()
     }
 
+
     private fun observeViewModel() {
         viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
-            if (viewModel.mode.value == StudyFormMode.EDIT && request != null) {
-                binding.fragmentIntroduceStudyTv.text = "스터디 정보 수정"
-                binding.fragmentIntroduceStudynameEt.setText(request.title)
-                binding.fragmentIntroduceStudypurposeEt.setText(request.goal)
-                binding.fragmentIntroduceStudyEt.setText(request.introduction)
+            if (request != null) {
+                if (viewModel.mode.value == StudyFormMode.EDIT) {
+                    binding.fragmentIntroduceStudyTv.text = "스터디 정보 수정"
+                    binding.fragmentIntroduceStudynameEt.setText(request.title)
+                    binding.fragmentIntroduceStudypurposeEt.setText(request.goal)
+                    binding.fragmentIntroduceStudyEt.setText(request.introduction)
+                }
 
-                request.profileImage?.let { imageUrl ->
+                val imageUrl = request.profileImage ?: viewModel.profileImageUri.value
+                if (!imageUrl.isNullOrBlank()) {
                     Glide.with(this)
                         .load(imageUrl)
                         .into(binding.fragmentIntroduceStudyIv)
                     profileImage = imageUrl
                 }
+
                 checkButtonState()
             }
         }
     }
+
+
 
 
     private fun initActivityResultLaunchers() {
