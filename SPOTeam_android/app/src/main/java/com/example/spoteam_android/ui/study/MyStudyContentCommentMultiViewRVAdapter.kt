@@ -128,7 +128,7 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
             // 클릭 상태에 따른 communityWriteReplyTv 텍스트 색상 변경
             binding.communityWriteReplyTv.setTextColor(
                 if (clickedState[bindingAdapterPosition]) binding.root.context.getColor(R.color.active_blue) // 파란색으로 변경
-                else binding.root.context.getColor(R.color.black) // 기본 색상으로 변경
+                else binding.root.context.getColor(R.color.gray_03) // 기본 색상으로 변경
             )
 
             binding.communityContentCommentGoodUncheckedIv.setOnClickListener {
@@ -184,8 +184,8 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
 
             // 클릭 상태에 따른 communityReplyWriteReplyTv 텍스트 색상 변경
             binding.communityReplyWriteReplyTv.setTextColor(
-                if (clickedState[bindingAdapterPosition]) binding.root.context.getColor(R.color.blue) // 파란색으로 변경
-                else binding.root.context.getColor(R.color.black) // 기본 색상으로 변경
+                if (clickedState[bindingAdapterPosition]) binding.root.context.getColor(R.color.active_blue) // 파란색으로 변경
+                else binding.root.context.getColor(R.color.gray_03) // 기본 색상으로 변경
             )
 
             binding.communityContentCommentReplyGoodUncheckedIv.setOnClickListener {
@@ -205,7 +205,6 @@ class MyStudyContentCommentMultiViewRVAdapter(private val dataList: MutableList<
             }
         }
     }
-
 
     private fun updateClickedState(position: Int) {
         if (position in clickedState.indices) {

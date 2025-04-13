@@ -17,7 +17,7 @@
 
     <item
         android:id="@+id/navigation_bookmark"
-        android:icon="@drawable/ic_jjim"
+        android:icon="@drawable/ic_jjim_new"
         android:title="찜" />
 
     <item

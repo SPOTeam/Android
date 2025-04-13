@@ -151,6 +151,7 @@ interface CommunityAPIService {
     fun getStudyPostContent(
         @Path("studyId") studyId: Int,
         @Path("postId") postId: Int,
+        @Query("likeOrScrap") likeOrScrap: Boolean,
     ): Call<StudyPostContentResponse>
 
 
