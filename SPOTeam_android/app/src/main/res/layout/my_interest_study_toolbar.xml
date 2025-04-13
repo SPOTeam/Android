@@ -9,8 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/interest_filter_frame_layout_bottom_border">
+        android:layout_height="match_parent">
 
         <ImageButton
             android:id="@+id/ic_back"
@@ -20,7 +19,7 @@
             android:layout_marginBottom="20dp"
             android:background="@color/white"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_left_black_arrow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

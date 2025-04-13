@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
@@ -37,6 +38,7 @@ import com.example.spoteam_android.ui.interestarea.MyInterestStudyAllApiService
 import com.example.spoteam_android.ui.interestarea.MyInterestStudySpecificApiService
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.FixedRoundedSpinnerAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -74,7 +76,7 @@ class MyInterestStudyFragment : Fragment() {
         initArguments()
         setupRecyclerView()
         setupTabs()
-        setupSpinner()
+        setupBottomSheet()
         setupFilterIcon()
         setupPageNavigationButtons()
         setupNavigationClickListeners()
@@ -193,34 +195,44 @@ class MyInterestStudyFragment : Fragment() {
         interestBoardAdapter.updateList(boardItems)
     }
 
-    private fun setupSpinner() {
-        val genderList = listOf("최신 순", "조회수 높은 순", "관심 많은 순")
-        val genderAdapter = FixedRoundedSpinnerAdapter(requireContext(), genderList)
-        binding.filterToggle.adapter = genderAdapter
-        binding.filterToggle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if (isFirstSpinnerCall) {
-                    isFirstSpinnerCall = false
-                    return
-                }
+    private fun setupBottomSheet() {
+        val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_interest_spinner, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.InterestBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(dialogView)
 
-                selectedItem = when (position) {
-                    0 -> "ALL"   // 최신 순
-                    1 -> "HIT"      // 조회수 높은 순
-                    2 -> "LIKED"    // 관심 많은 순
-                    else -> "ALL"
-                }
-                fetchMyInterestAll(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, activityFee01, currentPage)
-            }
+        val recentlyLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_recently)
+        val viewLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_view)
+        val hotLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_hot)
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
+        recentlyLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "최신 순"
+            fetchFilteredStudy("ALL")  // 최신 순
+        }
+
+        viewLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "조회 수 높은 순"
+            fetchFilteredStudy("HIT")
+        }
+
+        hotLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "관심 많은 순"
+            fetchFilteredStudy("LIKED")  // 관심 많은 순
+        }
+
+        binding.filterToggleContainer.setOnClickListener {
+            bottomSheetDialog.show()
+        }
+    }
+
+    private fun fetchFilteredStudy(selectedItem: String) {
+        this.selectedItem = selectedItem
+        if (selectedStudyCategory == "전체") {
+            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, activityFee01, currentPage)
+        } else {
+            fetchMyInterestSpecific(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, selectedStudyCategory, activityFee01, currentPage)
         }
     }
 

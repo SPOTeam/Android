@@ -182,6 +182,10 @@ class SearchFragment : Fragment() {
             }
         }
 
+        binding.icRecommendationRefresh.setOnClickListener {
+            fetchRecommendStudy()
+        }
+
 
 
         return binding.root
@@ -262,7 +266,7 @@ class SearchFragment : Fragment() {
             }
 
             val chipHeight = dpToPx(45) // 높이 36dp
-            val chipMinWidth = dpToPx(72) // 너비 최소 72dp
+            val chipMinWidth = dpToPx(50) // 너비 최소 72dp
             layoutParams = ViewGroup.MarginLayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, chipHeight
             )
@@ -520,7 +524,7 @@ class SearchFragment : Fragment() {
                 )
 
                 val chipHeight = dpToPx(45) // 높이 36dp
-                val chipMinWidth = dpToPx(72) // 너비 최소 72dp
+                val chipMinWidth = dpToPx(50) // 너비 최소 72dp
                 layoutParams = ViewGroup.MarginLayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, chipHeight
                 )
