@@ -110,15 +110,20 @@ class HouseFragment : Fragment() {
 
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
         presentTemperature = binding.txTemperature
-//        fetchLivePopularContent()
+        fetchLivePopularContent()
 
         //InterestFilterFragment 요소 초기화
         viewModel.reset()
 
         binding.goPopularContentIv.setOnClickListener{
-            val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-            intent.putExtra("postInfo", popularContentId.toString())
-            startActivity(intent)
+            activity?.let {
+                it.supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, CommunityHomeFragment())
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
+
+                it.isOnCommunityHome(CommunityHomeFragment())
+            }
         }
 
         binding.popularContentTv.setOnClickListener {
