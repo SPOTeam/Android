@@ -421,5 +421,4 @@ class MainActivity : AppCompatActivity() {
             R.drawable.ic_weather_background // 낮일 경우 기본값 유지
         }
     }
-
 }

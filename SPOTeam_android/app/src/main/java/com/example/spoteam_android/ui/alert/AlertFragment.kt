@@ -116,9 +116,13 @@ class AlertFragment : Fragment() {
 
         adapter.itemClick = object : AlertMultiViewRVAdapter.ItemClick {
             override fun onStateUpdateClick(data: AlertDetail) {
-                updateState(data)
+                if(!data.isChecked) {
+                    updateState(data)
+                }
             }
         }
+
+        (context as MainActivity).isOnAlertFragment(this)
 
         adapter.headerClickListener = {
             parentFragmentManager.beginTransaction()

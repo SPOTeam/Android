@@ -97,7 +97,7 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
     }
 
     private fun initTextWatchers() {
-        val maxLength = 25
+        val maxLength = 24
 
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

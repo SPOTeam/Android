@@ -10,7 +10,7 @@
         android:id="@+id/community_prev_iv"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/navigate_before_3x"
+        android:src="@drawable/ic_back"
         android:layout_marginTop="30dp"
         android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,12 +22,13 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="알림"
-        android:fontFamily="@font/pretendard"
+        android:fontFamily="@font/suit_bold"
         android:textColor="@color/black"
         android:textSize="18dp"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="10dp"
         app:layout_constraintStart_toEndOf="@id/community_prev_iv"
-        app:layout_constraintTop_toTopOf="@id/community_prev_iv" />
+        app:layout_constraintTop_toTopOf="@id/community_prev_iv"
+        app:layout_constraintBottom_toBottomOf="@id/community_prev_iv"/>
 
 <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
 <!--        android:id="@+id/study_alert_cl"-->

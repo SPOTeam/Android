@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.AlertInfo
@@ -51,23 +52,29 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
     }
 
 
-    override fun getItemCount(): Int = dataList.size+1
+    override fun getItemCount(): Int {
+        return if (studyAlertEnabled) dataList.size + 1 else dataList.size
+    }
 
     override fun getItemViewType(position: Int): Int {
-        return when {
-            position == 0 -> VIEW_TYPE_HEADER
-            dataList[position - 1].type == "POPULAR_POST" -> VIEW_TYPE_LIVE
-            else -> VIEW_TYPE_UPDATE
+        return if (studyAlertEnabled) {
+            if (position == 0) VIEW_TYPE_HEADER
+            else if (dataList[position - 1].type == "POPULAR_POST") VIEW_TYPE_LIVE
+            else VIEW_TYPE_UPDATE
+        } else {
+            if (dataList[position].type == "POPULAR_POST") VIEW_TYPE_LIVE
+            else VIEW_TYPE_UPDATE
         }
     }
 
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is HeaderViewHolder) {
-            holder.bind()
+        if (studyAlertEnabled && position == 0) {
+            (holder as HeaderViewHolder).bind()
             return
         }
 
-        val actualPosition = position - 1
+        val actualPosition = if (studyAlertEnabled) position - 1 else position
         val item = dataList[actualPosition]
 
         when (holder) {
@@ -86,6 +93,7 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
         }
     }
 
+
     inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val container = view
 
@@ -99,6 +107,8 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
 
         fun bind() {
             // 클릭 가능 여부에 따라 뷰 상태 변경
+            container.isVisible = studyAlertEnabled
+
             container.isEnabled = studyAlertEnabled
             container.alpha = if (studyAlertEnabled) 1.0f else 0.5f // 비활성화 시 투명도 적용 등
         }
@@ -115,6 +125,10 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
                 binding.icNewAlertLive.visibility = View.VISIBLE
             }
             binding.alertLiveContentTv.text = item.studyTitle
+
+            binding.root.setOnClickListener{
+
+            }
         }
     }
 

@@ -127,9 +127,11 @@ class HouseFragment : Fragment() {
         }
 
         binding.popularContentTv.setOnClickListener {
-            val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-            intent.putExtra("postInfo", popularContentId.toString())
-            startActivity(intent)
+            if(popularContentId != -1) {
+                val intent = Intent(requireContext(), CommunityContentActivity::class.java)
+                intent.putExtra("postInfo", popularContentId.toString())
+                startActivity(intent)
+            }
         }
 
 

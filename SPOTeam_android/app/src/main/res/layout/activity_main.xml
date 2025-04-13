@@ -33,17 +33,18 @@
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/main_bnv"/>
+            app:layout_constraintBottom_toTopOf="@id/main_bnv" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/main_floatingButton_toUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/arrow_up"
+            android:backgroundTint="@color/selector_blue"
+            android:src="@drawable/ic_arrow_up_new"
+            android:scaleType="centerCrop"
+            app:tint="@null"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
-            app:borderWidth="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/main_bnv"
             android:visibility="gone"/>
@@ -60,7 +61,8 @@
             app:elevation="5dp"
             app:maxImageSize="18dp"
             app:layout_constraintBottom_toTopOf="@id/main_bnv"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_bnv"
