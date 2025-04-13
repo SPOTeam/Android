@@ -17,6 +17,7 @@ import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentInterestFilterBinding
 import com.example.spoteam_android.databinding.FragmentMyInterestStudyFilterBinding
+import com.example.spoteam_android.ui.interestarea.InterestFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 
@@ -85,43 +86,15 @@ class MyInterestStudyFilterFragment : Fragment() {
         bundle.putString("activityFee01", "false")
 
         toolbar.icBack.setOnClickListener {
-            (activity as MainActivity).switchFragment(MyInterestStudyFragment())
+            val bundle = Bundle().apply {
+                putString("source", "HouseFragment")
+            }
+            val myInterestStudyFragment = MyInterestStudyFragment().apply {
+                arguments = bundle
+            }
+            (activity as MainActivity).switchFragment(myInterestStudyFragment)
         }
 
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.gender_array,
-            R.layout.spinner_item
-        )
-//        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-//        spinner.adapter = adapter
-//
-//        myviewModel.selectedSpinnerPosition?.let {
-//            binding.genderSpinner.setSelection(it)
-//        }
-//
-//
-//
-//        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//
-//            override fun onItemSelected(
-//                parent: AdapterView<*>,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//                myviewModel.selectedSpinnerPosition = position
-//                Log.d("MyInterestFilterFragment","$position")
-//                when (position) {
-//                    0 -> bundle.putString("gender3", "MALE")
-//                    1 -> bundle.putString("gender3", "MALE")
-//                    2 -> bundle.putString("gender3", "FEMALE")
-//                }
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//            }
-//        }
 
         val ageRangeSlider = binding.ageRangeSlider
         val minValueText = binding.minValueText

@@ -33,6 +33,7 @@ class InterestFilterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentInterestFilterBinding.inflate(inflater, container, false)
+        viewModel.reset()
         return binding.root
     }
 
