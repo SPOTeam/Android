@@ -21,13 +21,13 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="카카오 최종합격 카카오 최종합격 카카오 최종합격 카카오 최종합격"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textAlignment="textStart"
             android:maxLines="1"
             android:maxLength="30"
+            android:fontFamily="@font/suit_semi_bold"
             android:ellipsize="end"
-            android:textFontWeight="800"
             android:textColor="@color/black"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -46,20 +46,20 @@
 
         <ImageView
             android:id="@+id/content_bookmark_checked_iv"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:visibility="gone"
             android:src="@drawable/ic_new_scrab"
             app:tint="@color/selector_blue"/>
 
         <TextView
             android:id="@+id/content_saveNum_tv"
-            android:layout_width="40dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:text="999.9K"
+            android:text="999+"
             android:textFontWeight="800"
-            android:textAlignment="textEnd"
+            android:textAlignment="textStart"
             android:textSize="13sp"
             android:textColor="@color/selector_blue" />
 
@@ -98,16 +98,16 @@
         <!--    좋아요 아이콘 수정  -->
         <ImageView
             android:id="@+id/content_likeNum_unchecked_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
             android:src="@drawable/like_off"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content_summary_tv" />
 
         <ImageView
             android:id="@+id/content_likeNum_checked_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
             android:src="@drawable/like_off"
             android:visibility="gone"
             app:tint="@color/selector_blue"
@@ -116,9 +116,9 @@
 
         <TextView
             android:id="@+id/content_likeNum_tv"
-            android:layout_width="40dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content"
-            android:text="1"
+            android:text="999+"
             android:textSize="13sp"
             android:textFontWeight="700"
             android:layout_marginEnd="12dp"
@@ -137,9 +137,9 @@
 
         <TextView
             android:id="@+id/content_commentNum_tv"
-            android:layout_width="40dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content"
-            android:text="1"
+            android:text="999+"
             android:textSize="13sp"
             android:textFontWeight="700"
             android:layout_marginStart="5dp"
@@ -158,9 +158,9 @@
 
         <TextView
             android:id="@+id/content_viewNum_tv"
-            android:layout_width="40dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content"
-            android:text="1"
+            android:text="999+"
             android:textSize="12sp"
             android:textFontWeight="700"
             android:layout_marginStart="5dp"
@@ -179,8 +179,7 @@
             android:textSize="12sp"
             android:textColor="@color/g400"
             android:textFontWeight="800"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginEnd="5dp"/>
 
         <TextView
             android:id="@+id/content_sp_tv"
