@@ -52,8 +52,6 @@ class InterestFragment : Fragment() {
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var studyApiService: StudyApiService
     private lateinit var interestBoardAdapter: InterestVPAdapter
-    private var currentPage: Int = 0
-    private var totalPages: Int = 0
     private var gender: String? = null
     private var minAge: String? = null
     private var maxAge: String? = null
@@ -65,6 +63,10 @@ class InterestFragment : Fragment() {
     private var selectedRegion: String? = "0000000000"
     private val viewModel: InterestFilterViewModel by activityViewModels()
     private var isFirstSpinnerCall = true
+    private var currentPage = 0
+    private val size = 5 // 페이지당 항목 수
+    private var totalPages = 0
+    private var startPage = 0
 
 
     override fun onCreateView(
@@ -230,7 +232,6 @@ class InterestFragment : Fragment() {
                 }
                 tabLayout.addTab(tab)
             }
-            setupPageNavigationButtons()
 
             // 탭 선택 리스너 로그
             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -458,13 +459,18 @@ class InterestFragment : Fragment() {
                                 isHost = false
                             )
                             boardItems.add(boardItem)
+
+                            binding.pageNumberLayout.visibility = View.VISIBLE
+                            startPage = calculateStartPage()
                             updatePageNumberUI()
+                            updatePageUI()
                         }
                         val totalElements = apiResponse.result.totalElements
                         binding.checkAmount.text = totalElements.toString()+"건"
                         interestAreaBoard.visibility = View.VISIBLE
                         updateRecyclerView(boardItems)
                     } else {
+                        binding.pageNumberLayout.visibility = View.GONE
                         checkcount.text = "0 건"
                         interestAreaBoard.visibility = View.GONE
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
@@ -485,7 +491,50 @@ class InterestFragment : Fragment() {
         interestBoardAdapter.updateList(boardItems)
     }
 
-    private fun setupPageNavigationButtons() {
+
+    private fun updatePageNumberUI() {
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            textView.setOnClickListener {
+                val selectedPage = startPage + index
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    if (selectedRegion == "0000000000"){
+                        fetchData(
+                            selectedItem,
+                            currentPage = currentPage
+                        )
+                    } else{
+                        fetchData(
+                            selectedItem,
+                            regionCode = selectedRegion,
+                            gender = gender,
+                            minAge = minAge,
+                            maxAge = maxAge,
+                            activityFee = activityFee,
+                            activityFeeAmount = activityFeeAmount,
+                            selectedStudyTheme = selectedStudyTheme,
+                            currentPage = currentPage
+                        )
+                    }
+                }
+            }
+        }
+
+        // 페이지 전환 버튼 설정
         binding.previousPage.setOnClickListener {
             if (currentPage > 0) {
                 currentPage--
@@ -511,7 +560,7 @@ class InterestFragment : Fragment() {
         }
 
         binding.nextPage.setOnClickListener {
-            if (currentPage < totalPages - 1) {
+            if (currentPage < getTotalPages() - 1) {
                 currentPage++
                 if (selectedRegion == "0000000000"){
                     fetchData(
@@ -535,20 +584,54 @@ class InterestFragment : Fragment() {
         }
     }
 
-    private fun updatePageNumberUI() {
-        binding.currentPage.text = (currentPage + 1).toString()
+    private fun calculateStartPage(): Int {
+        return if (currentPage <= 2) {
+            0
+        } else {
+            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+    }
+
+    private fun getTotalPages(): Int {
+        return totalPages // 올바른 페이지 수 계산
+    }
+
+    private fun updatePageUI() {
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            val pageNum = startPage + index
+            if (pageNum < totalPages) {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(
+                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                )
+                textView.isEnabled = true
+                textView.alpha = 1.0f
+                textView.visibility = View.VISIBLE
+            } else {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(0)
+                textView.isEnabled = false // 클릭 안 되게
+                textView.alpha = 0.3f
+                textView.visibility = View.VISIBLE
+            }
+        }
 
         binding.previousPage.isEnabled = currentPage > 0
-        binding.previousPage.setTextColor(resources.getColor(
-            if (currentPage > 0) R.color.active_color else R.color.disabled_color,
-            null
-        ))
-
         binding.nextPage.isEnabled = currentPage < totalPages - 1
-        binding.nextPage.setTextColor(resources.getColor(
-            if (currentPage < totalPages - 1) R.color.active_color else R.color.disabled_color,
-            null
-        ))
     }
 
 

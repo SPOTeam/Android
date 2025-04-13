@@ -431,26 +431,35 @@ class SearchFragment : Fragment() {
 
     private fun updateKeywordTimestamp() {
         val now = java.util.Calendar.getInstance()
+        val baseTime = now.clone() as java.util.Calendar
 
         val hour = now.get(java.util.Calendar.HOUR_OF_DAY)
+
+        when {
+            hour < 13 -> {
+                // 어제 18시
+                baseTime.add(java.util.Calendar.DATE, -1)
+                baseTime.set(java.util.Calendar.HOUR_OF_DAY, 18)
+            }
+            hour < 18 -> {
+                // 오늘 13시
+                baseTime.set(java.util.Calendar.HOUR_OF_DAY, 13)
+            }
+            else -> {
+                // 오늘 18시
+                baseTime.set(java.util.Calendar.HOUR_OF_DAY, 18)
+            }
+        }
+
+        baseTime.set(java.util.Calendar.MINUTE, 0)
+        baseTime.set(java.util.Calendar.SECOND, 0)
+        baseTime.set(java.util.Calendar.MILLISECOND, 0)
+
         val dateFormat = java.text.SimpleDateFormat("MM.dd", java.util.Locale.getDefault())
         val timeFormat = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault())
 
-        val baseHour = when {
-            hour < 13 -> 13  // 오전이면 오늘 13시
-            hour < 18 -> 13  // 13시~17시59분까지는 13시 기준
-            else -> 18       // 18시 이후는 18시 기준
-        }
-
-        now.set(java.util.Calendar.HOUR_OF_DAY, baseHour)
-        now.set(java.util.Calendar.MINUTE, 0)
-        now.set(java.util.Calendar.SECOND, 0)
-
-        val dateStr = dateFormat.format(now.time)
-        val timeStr = timeFormat.format(now.time)
-
-        binding.txDate.text = dateStr
-        binding.txTime.text = timeStr
+        binding.txDate.text = dateFormat.format(baseTime.time)
+        binding.txTime.text = timeFormat.format(baseTime.time)
         binding.txDescript.text = "기준"
     }
 
