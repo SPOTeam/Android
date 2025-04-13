@@ -34,6 +34,7 @@
         <item name="android:fontFamily">@font/suit_bold</item>
     </style>
 
+
     <style name="CustomChipCloseStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/white</item>
         <item name="chipStrokeColor">#588FFE</item>
@@ -93,11 +94,8 @@
     </style>
 
     <style name="find_ChipStyle" parent="Widget.MaterialComponents.Chip.Action">
-        <!-- Chip의 배경 색상 -->
         <item name="chipBackgroundColor">@color/white</item>
-        <!-- Chip의 텍스트 색상 -->
         <item name="android:textColor">@color/active_blue</item>
-        <!-- Chip의 테두리 색상 -->
         <item name="chipStrokeColor">@color/active_blue</item>
         <!-- Chip의 테두리 두께 -->
         <item name="chipStrokeWidth">1dp</item>
@@ -128,6 +126,43 @@
         <item name="android:textColorHint">@color/gray</item>
         <item name="searchIcon">@drawable/location_search_resize</item>
         <item name="submitBackground">@color/active_blue</item>
+    </style>
+
+    <style name="CustomChipStyle2" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/custom_chip</item>
+        <item name="chipStrokeColor">@color/interest_custom_chip_stroke</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipCornerRadius">8dp</item>
+        <item name="android:textColor">@color/custom_chip_text</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:paddingVertical">0dp</item>
+        <item name="android:textAppearance">@style/CustomChipTextAppearance</item>
+    </style>
+
+    <style name="CustomChipCloseStyle2" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/white</item>
+        <item name="chipStrokeColor">#588FFE</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipCornerRadius">8dp</item>
+        <item name="android:textColor">#588FFE</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="closeIcon">@drawable/ic_close</item>
+        <item name="closeIconTint">#588FFE</item>
+        <item name="chipMinHeight">37dp</item>
+        <item name="android:paddingVertical">0dp</item>
+        <item name="android:textAppearance">@style/CustomChipTextAppearance</item>
+    </style>
+
+    <style name="CustomChipthemeStyle2" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/custom_chip</item>
+        <item name="chipStrokeColor">@color/interest_custom_chip_stroke</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="android:textColor">@color/custom_chip_text</item>
+        <item name="android:textSize">16sp</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 <!--    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">-->
@@ -243,6 +278,16 @@
 
     <style name="ShapeAppearance.SquareChip" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerSize">8dp</item> <!-- 네 모서리 모두 0dp로 설정 -->
+    </style>
+
+    <style name="InterestBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.5</item> <!-- 여기가 투명도 -->
+    </style>
+
+    <style name="InterestBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_bottomdialog</item>
     </style>
 
 </resources>

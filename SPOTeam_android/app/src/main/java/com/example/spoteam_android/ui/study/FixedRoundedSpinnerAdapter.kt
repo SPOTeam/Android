@@ -19,7 +19,7 @@ class FixedRoundedSpinnerAdapter(
 
         binding.spinnerText.text = items[position]
 
-        val background = when (position) {
+            val background = when (position) {
             0 -> R.drawable.spinner_item_top
             items.size - 1 -> R.drawable.spinner_item_bottom
             else -> R.drawable.spinner_item_middle

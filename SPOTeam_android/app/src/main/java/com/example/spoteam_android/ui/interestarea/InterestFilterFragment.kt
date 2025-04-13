@@ -1,7 +1,9 @@
 package com.example.spoteam_android.ui.interestarea
 
-
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.icu.text.NumberFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,9 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.MainActivity
@@ -42,21 +43,23 @@ class InterestFilterFragment : Fragment() {
         setupRecruitingChips()
         setupGenderChips()
         setupAgeRangeSlider()
+        setupActivityFeeSlider()
         setupActivityFeeChips()
         setupStudyThemeChips()
         setupSearchButton()
 
+
         restoreRecruitingChip()
         restoreGenderChip()
         restoreActivityFeeChip()
-        restoreStudyThemeChip()
+        restoreStudyThemeChips()
     }
 
     private fun setupToolbar() {
         binding.toolbar.icBack.setOnClickListener {
             viewModel.reset() // 1. ViewModel 값 초기화
             val bundle = Bundle().apply {
-                putString("source", "InterestFilterFragment")
+                putString("source", "HouseFragment")
             }
             val interestFragment = InterestFragment().apply {
                 arguments = bundle
@@ -87,6 +90,11 @@ class InterestFilterFragment : Fragment() {
         ageRangeSlider.stepSize = 1f
         ageRangeSlider.values = listOf(18f, 60f)
 
+        val customThumb = ContextCompat.getDrawable(requireContext(),R.drawable.custom_thumb)
+        if (customThumb != null) {
+            ageRangeSlider.setCustomThumbDrawable(customThumb)
+        }
+
         ageRangeSlider.addOnChangeListener { slider, _, _ ->
             val values = slider.values
             val minAge = values[0].toInt()
@@ -98,57 +106,106 @@ class InterestFilterFragment : Fragment() {
         }
     }
 
+    private fun setupActivityFeeSlider() {
+        val activityfeeSlider = binding.activityfeeSlider
+        val minValueText = binding.activityfeeMinValueText
+        val maxValueText = binding.activityfeeMaxValueText
+
+        activityfeeSlider.valueFrom = 1000f
+        activityfeeSlider.valueTo = 10000f
+        activityfeeSlider.stepSize = 100f
+        activityfeeSlider.values = listOf(1000f, 10000f)
+        val customThumb = ContextCompat.getDrawable(requireContext(),R.drawable.custom_thumb)
+        if (customThumb != null) {
+            activityfeeSlider.setCustomThumbDrawable(customThumb)
+        }
+
+
+
+        activityfeeSlider.addOnChangeListener { slider, _, _ ->
+            val values = slider.values
+            val minfee = values[0].toInt()
+            val maxfee = values[1].toInt()
+            val formattedMinFee = NumberFormat.getNumberInstance().format(minfee)
+            val formattedMaxFee = NumberFormat.getNumberInstance().format(maxfee)
+            // 코드 변경 필요
+//            viewModel.minAge = minAge
+//            viewModel.maxAge = maxAge
+            minValueText.text = "₩$formattedMinFee"
+            maxValueText.text = "₩$formattedMaxFee"
+        }
+    }
+
     private fun setupActivityFeeChips() {
         val chipGroup1 = binding.chipGroup1
-        val editText = binding.edittext1
-        val behindEt = binding.behindEt
+
 
         chipGroup1.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId != ChipGroup.NO_ID) {
                 val checkedChip = chipGroup1.findViewById<Chip>(checkedId)
                 if (checkedChip.id == R.id.chip1) {
                     viewModel.activityFee = "있음"
-                    editText.visibility = View.VISIBLE
-                    behindEt.visibility = View.VISIBLE
+                    binding.activityfeeSlider.isVisible = true
+                    binding.displayfeeFrameLayout.isVisible = true
                 } else {
                     viewModel.activityFee = "없음"
-                    editText.visibility = View.GONE
-                    behindEt.visibility = View.GONE
+                    binding.activityfeeSlider.isVisible = false
+                    binding.displayfeeFrameLayout.isVisible = false
                 }
             } else {
                 viewModel.activityFee = "없음"
-                editText.visibility = View.GONE
-                behindEt.visibility = View.GONE
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
             }
             updateNextButtonState()
         }
 
-        editText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                imm?.hideSoftInputFromWindow(editText.windowToken, 0)
-                editText.clearFocus()
 
-                viewModel.activityFeeAmount = editText.text.toString()
-                updateNextButtonState()
-                true
-            } else false
-        }
     }
 
     private fun setupStudyThemeChips() {
-        binding.chipGroup2.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId != ChipGroup.NO_ID) {
-                val selectedChip = group.findViewById<Chip>(checkedId)
-                val selectedText = selectedChip?.text.toString()
-                viewModel.selectedStudyTheme = selectedText
-                Log.d("InterestFilterFragment", "Selected study theme: $selectedText")
+        for (i in 0 until binding.chipGroup2.childCount) {
+            val chip = binding.chipGroup2.getChildAt(i) as? Chip ?: continue
+
+            chip.setOnClickListener {
+                val theme = chip.text.toString()
+                val themes = viewModel.selectedStudyThemes
+
+                if (chip.isChecked) {
+                    if (!themes.contains(theme)) {
+                        themes.add(theme)
+                    }
+                } else {
+                    themes.remove(theme)
+                }
+
+                Log.d("InterestFilterFragment", "Selected study themes: $themes")
+                updateNextButtonState()
             }
-            updateNextButtonState()
         }
     }
 
     private fun setupSearchButton() {
+        //필터 초기화 클릭
+        binding.txResetFilter.setOnClickListener {
+            viewModel.reset()
+
+            binding.chipGroupRecruiting.clearCheck()
+            binding.chipGroupGender.clearCheck()
+            binding.chipGroup1.clearCheck()
+            binding.chipGroup2.clearCheck()
+
+            // ✅ RangeSlider 초기화
+            binding.ageRangeSlider.values = listOf(18f, 60f)
+            binding.activityfeeSlider.values = listOf(1000f, 10000f)
+
+            // ✅ 텍스트뷰 값도 초기화 (선택사항)
+            binding.minValueText.text = "18"
+            binding.maxValueText.text = "60"
+            binding.activityfeeMinValueText.text = "₩ 1,000"
+            binding.activityfeeMaxValueText.text = "₩ 10,000"
+        }
+
         binding.fragmentIntroduceStudyBt.setOnClickListener {
             // ViewModel 값 → Bundle
             val bundle = Bundle().apply {
@@ -168,15 +225,11 @@ class InterestFilterFragment : Fragment() {
 
     private fun updateNextButtonState() {
         val activityFee = viewModel.activityFee
-        val activityFeeAmount = binding.edittext1.text.toString()
 
         val isActivityFeeNoneSelected = activityFee == "없음"
-        val isActivityFeeEntered = activityFee == "있음" &&
-                activityFeeAmount.isNotEmpty() &&
-                activityFeeAmount.toIntOrNull() != null
-
+        val isActivityFeeEntered = activityFee == "있음"
         val isSecondConditionMet = isActivityFeeNoneSelected || isActivityFeeEntered
-        val isThirdConditionMet = viewModel.selectedStudyTheme != null
+        val isThirdConditionMet = viewModel.selectedStudyThemes.isNotEmpty()
 
         binding.fragmentIntroduceStudyBt.isEnabled = isSecondConditionMet && isThirdConditionMet
     }
@@ -192,28 +245,24 @@ class InterestFilterFragment : Fragment() {
         when (viewModel.activityFee) {
             "있음" -> {
                 binding.chipGroup1.check(R.id.chip1)
-                binding.edittext1.setText(viewModel.activityFeeAmount)
-                binding.edittext1.visibility = View.VISIBLE
-                binding.behindEt.visibility = View.VISIBLE
+                binding.activityfeeSlider.isVisible = true
+                binding.displayfeeFrameLayout.isVisible = true
             }
             "없음" -> {
                 binding.chipGroup1.check(R.id.chip2)
-                binding.edittext1.visibility = View.GONE
-                binding.behindEt.visibility = View.GONE
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
             }
         }
     }
 
-    private fun restoreStudyThemeChip() {
-        val selectedText = viewModel.selectedStudyTheme ?: return
+    private fun restoreStudyThemeChips() {
+        val selectedThemes = viewModel.selectedStudyThemes
         val chipGroup = binding.chipGroup2
 
         for (i in 0 until chipGroup.childCount) {
-            val chip = chipGroup.getChildAt(i) as? Chip
-            if (chip?.text == selectedText) {
-                chipGroup.check(chip.id)
-                break
-            }
+            val chip = chipGroup.getChildAt(i) as? Chip ?: continue
+            chip.isChecked = selectedThemes.contains(chip.text.toString())
         }
     }
 

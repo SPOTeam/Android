@@ -314,6 +314,7 @@ class MainActivity : AppCompatActivity() {
 //        // 아무 동작도 하지 않도록 설정
 //        // super.onBackPressed()를 호출하지 않으면 기본 동작(뒤로 가기)이 수행되지 않습니다.
 //    }
+
     private fun logTokens(context: Context) {
         val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)

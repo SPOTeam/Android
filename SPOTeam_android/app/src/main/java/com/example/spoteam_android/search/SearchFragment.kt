@@ -9,6 +9,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -39,6 +41,10 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
 
@@ -49,6 +55,9 @@ class SearchFragment : Fragment() {
     private lateinit var studyApiService: StudyApiService
     private lateinit var recruitingStudyAdapter: InterestVPAdapter
     private lateinit var searchQueryDao: SearchQueryDao
+    private val coroutineScope = MainScope()
+    private var searchJob: Job? = null
+
 
 
     override fun onCreateView(
@@ -58,6 +67,12 @@ class SearchFragment : Fragment() {
     ): View {
         binding = FragmentSearchBinding.inflate(inflater, container,    false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
+        binding.editTextSearch.requestFocus()
+        binding.editTextSearch.post {
+            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(binding.editTextSearch, InputMethodManager.SHOW_IMPLICIT)
+        }
 
         val database = AppDatabase.getDatabase(requireContext())
         searchQueryDao = database.searchQueryDao()
@@ -134,41 +149,40 @@ class SearchFragment : Fragment() {
             adapter = recruitingStudyAdapter
         }
 
+
         val memberId = getMemberId(requireContext())
         fetchRecommendStudy()
 
         fetchPopularKeywords()
+        updateKeywordTimestamp()
 
-        binding.searchView.setOnQueryTextListener(object :
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    saveSearchQuery(it)
-                    addSearchChip(it)
+        binding.imgBack.setOnClickListener {
+            binding.editTextSearch.clearFocus()
 
-                    binding.searchView.setQuery("", false)
-                    binding.searchView.clearFocus()
+            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
+        }
 
-                    val bundle = Bundle().apply {
-                        putString("search_keyword", it)
-                    }
+        binding.imgSearch.setOnClickListener {
+            val query = binding.editTextSearch.text.toString()
+            if (query.isNotBlank()) {
+                performSearch(query)
+            }
+        }
 
-                    val fragment = SearchResultFragment().apply {
-                        arguments = bundle
-                    }
-
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.main_frm, fragment)
-                        .addToBackStack(null)
-                        .commit()
+        binding.editTextSearch.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val query = v.text.toString()
+                if (query.isNotBlank()) {
+                    debouncePerformSearch(query)
                 }
-                return true
+                true
+            } else {
+                false
             }
+        }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-        })
+
 
         return binding.root
     }
@@ -183,6 +197,35 @@ class SearchFragment : Fragment() {
                 loadRecentSearches()
             }
         }
+    }
+
+    private fun debouncePerformSearch(query: String) {
+        searchJob?.cancel() // 기존 작업 취소
+        searchJob = coroutineScope.launch {
+            delay(300) // 300ms 대기 (debounce)
+            performSearch(query)
+        }
+    }
+
+    private fun performSearch(query: String) {
+        saveSearchQuery(query)
+        addSearchChip(query)
+
+        binding.editTextSearch.setText("")
+        binding.editTextSearch.clearFocus()
+
+        val bundle = Bundle().apply {
+            putString("search_keyword", query)
+        }
+
+        val fragment = SearchResultFragment().apply {
+            arguments = bundle
+        }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun loadRecentSearches() {
@@ -207,7 +250,7 @@ class SearchFragment : Fragment() {
             text = query
             isCloseIconVisible = true
 
-            setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_chip_text))
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.search_chip_text))
             setChipDrawable(
                 ChipDrawable.createFromAttributes(
                     requireContext(), null, 0, R.style.find_ChipStyle
@@ -218,11 +261,26 @@ class SearchFragment : Fragment() {
                 removeSearchQuery(query)
             }
 
+            val chipHeight = dpToPx(45) // 높이 36dp
+            val chipMinWidth = dpToPx(72) // 너비 최소 72dp
+            layoutParams = ViewGroup.MarginLayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, chipHeight
+            )
+            minWidth = chipMinWidth
+
             setOnClickListener {
-                binding.searchView.setQuery(query, true)
+                binding.editTextSearch.setText(query)
+                binding.editTextSearch.setSelection(query.length)  // 커서를 맨 뒤로
+                performSearch(query)  // 바로 검색 실행
             }
         }
         binding.chipGroup.addView(chip, 0)
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics
+        ).toInt()
     }
 
     private fun removeSearchQuery(query: String) {
@@ -354,7 +412,7 @@ class SearchFragment : Fragment() {
                             isHost = false
                         )
                         boardItems.add(boardItem)
-                        updateRecyclerView(boardItems)
+                        updateSearchBoard(boardItems)
                     } else {
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                     }
@@ -371,8 +429,29 @@ class SearchFragment : Fragment() {
         })
     }
 
-    private fun updateRecyclerView(boardItems: List<BoardItem>) {
-        recruitingStudyAdapter.updateList(boardItems)
+    private fun updateKeywordTimestamp() {
+        val now = java.util.Calendar.getInstance()
+
+        val hour = now.get(java.util.Calendar.HOUR_OF_DAY)
+        val dateFormat = java.text.SimpleDateFormat("MM.dd", java.util.Locale.getDefault())
+        val timeFormat = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault())
+
+        val baseHour = when {
+            hour < 13 -> 13  // 오전이면 오늘 13시
+            hour < 18 -> 13  // 13시~17시59분까지는 13시 기준
+            else -> 18       // 18시 이후는 18시 기준
+        }
+
+        now.set(java.util.Calendar.HOUR_OF_DAY, baseHour)
+        now.set(java.util.Calendar.MINUTE, 0)
+        now.set(java.util.Calendar.SECOND, 0)
+
+        val dateStr = dateFormat.format(now.time)
+        val timeStr = timeFormat.format(now.time)
+
+        binding.txDate.text = dateStr
+        binding.txTime.text = timeStr
+        binding.txDescript.text = "기준"
     }
 
 
@@ -424,20 +503,37 @@ class SearchFragment : Fragment() {
                 isCloseIconVisible = false // 인기 검색어에서는 닫기 버튼 비활성화
                 isClickable = true
 
-                setTextColor(ContextCompat.getColor(requireContext(), R.color.custom_chip_text))
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.search_chip_text))
                 setChipDrawable(
                     ChipDrawable.createFromAttributes(
                         requireContext(), null, 0, R.style.find_ChipStyle
                     )
                 )
 
+                val chipHeight = dpToPx(45) // 높이 36dp
+                val chipMinWidth = dpToPx(72) // 너비 최소 72dp
+                layoutParams = ViewGroup.MarginLayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, chipHeight
+                )
+                minWidth = chipMinWidth
+
                 // 클릭 이벤트
                 setOnClickListener {
-                    binding.searchView.setQuery(keyword.keyword, true)
+                    binding.editTextSearch.setText(keyword.keyword)
+                    binding.editTextSearch.setSelection(keyword.keyword.length)
+                    performSearch(keyword.keyword)
                 }
             }
             chipGroup.addView(chip)
         }
+    }
+
+    private fun updateSearchBoard(boardItems: List<BoardItem>) {
+        recruitingStudyAdapter.updateList(boardItems)
+
+        val hasData = boardItems.isNotEmpty()
+        binding.searchBoard.visibility = if (hasData) View.VISIBLE else View.GONE
+        binding.txRecentlyViewedStudy.visibility = if (hasData) View.VISIBLE else View.GONE
     }
 
 }

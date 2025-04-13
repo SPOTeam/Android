@@ -18,6 +18,7 @@ import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.ActivityNicNameBinding
 import com.example.spoteam_android.databinding.DialogAgreementBinding
 import com.example.spoteam_android.databinding.DialogIdentificationAgreementBinding
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -126,10 +127,12 @@ class NicNameActivity : AppCompatActivity() {
             Toast.makeText(this, "로그인이 만료되었습니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
             return
         }
-
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BODY
         val api = RetrofitInstance.retrofit.newBuilder()
             .client(
                 RetrofitInstance.okHttpClient.newBuilder()
+                    .addInterceptor(logging)
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer $token")

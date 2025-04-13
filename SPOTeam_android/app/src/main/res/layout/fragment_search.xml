@@ -5,19 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
+    <ImageView
+        android:id="@+id/img_back"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginEnd="10dp"
-        android:queryHint="스터디 검색"
-        app:searchIcon="@drawable/location_search_resize"
+        android:padding="5dp"
+        android:src="@drawable/ic_left_black_arrow"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@+id/custom_search_bar"
+        app:layout_constraintEnd_toStartOf="@+id/custom_search_bar"
+        app:layout_constraintTop_toTopOf="@+id/custom_search_bar" />
+
+    <LinearLayout
+        android:id="@+id/custom_search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/searchview_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-    </androidx.appcompat.widget.SearchView>
+
+
+        <EditText
+            android:id="@+id/editTextSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="Text"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/imgSearch"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="검색"
+            android:src="@drawable/activity_main_ic_find" />
+    </LinearLayout>
+
 
 
     <TextView
@@ -27,10 +63,11 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
         android:text="최근 검색어"
+        android:fontFamily="@font/suit_bold"
         android:textColor="@color/black"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+        app:layout_constraintTop_toBottomOf="@+id/custom_search_bar" />
 
     <HorizontalScrollView
         android:id="@+id/chipLayout"
@@ -47,7 +84,6 @@
             android:paddingHorizontal="10dp"
             app:chipSpacingHorizontal="2dp">
 
-
         </com.google.android.material.chip.ChipGroup>
 
     </HorizontalScrollView>
@@ -56,11 +92,52 @@
         android:id="@+id/tx_populared_word"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/suit_bold"
         android:text="인기 검색어"
         android:textColor="@color/black"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="@+id/tx_recently_searched_word"
         app:layout_constraintTop_toBottomOf="@+id/chipLayout" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tx_populared_word"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tx_populared_word">
+
+        <TextView
+            android:id="@+id/tx_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="03.01"
+            android:textColor="@color/gray_03"
+            android:textFontWeight="700"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/tx_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:layout_marginHorizontal="5dp"
+            android:textColor="@color/gray_03"
+            android:textFontWeight="700"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/tx_descript"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기준"
+            android:textColor="@color/gray_03"
+            android:textFontWeight="700"
+            android:textSize="12dp" />
+
+    </LinearLayout>
 
     <HorizontalScrollView
         android:id="@+id/chipLayout2"
@@ -88,11 +165,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="70dp"
+        android:fontFamily="@font/suit_bold"
         android:text="최근 본 스터디"
+        android:visibility="gone"
         android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
+        android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tx_populared_word" />
 
@@ -114,12 +192,12 @@
         android:id="@+id/tx_recommendation_study"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="43dp"
+        android:fontFamily="@font/suit_bold"
         android:text="추천 스터디"
         android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tx_recently_viewed_study"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/tx_populared_word"
         app:layout_constraintTop_toBottomOf="@+id/search_board" />
 
     <androidx.recyclerview.widget.RecyclerView

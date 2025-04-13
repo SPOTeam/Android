@@ -1,10 +1,14 @@
 package com.example.spoteam_android.login
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +32,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 class StartLoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartLoginBinding
@@ -60,7 +66,10 @@ class StartLoginActivity : AppCompatActivity() {
 
         setupObservers()
 
-        binding.itemLogoKakaoIb.setOnClickListener { loginViewModel.startKakaoLogin(this) }
+        binding.itemLogoKakaoIb.setOnClickListener {
+            getKeyHash()
+            loginViewModel.startKakaoLogin(this)
+            }
         binding.itemLogoNaverIb.setOnClickListener { loginViewModel.startNaverLogin(this) }
 
         //테스트
@@ -135,6 +144,23 @@ class StartLoginActivity : AppCompatActivity() {
     private fun showErrorToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+    fun getKeyHash() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+            for (signature in packageInfo.signingInfo.apkContentsSigners) {
+                try {
+                    val md = MessageDigest.getInstance("SHA")
+                    md.update(signature.toByteArray())
+                    Log.d("getKeyHash", "key hash: ${Base64.encodeToString(md.digest(), Base64.NO_WRAP)}")
+                } catch (e: NoSuchAlgorithmException) {
+                    Log.w("getKeyHash", "Unable to get MessageDigest. signature=$signature", e)
+                }
+            }
+        }
+    }
+
+
 
 }
 
