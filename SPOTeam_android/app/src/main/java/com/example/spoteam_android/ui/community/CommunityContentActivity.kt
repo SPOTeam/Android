@@ -348,7 +348,8 @@ class CommunityContentActivity : AppCompatActivity()  {
 
     private fun showPopupMenu(view: View) {
 
-        val popupView = LayoutInflater.from(view.context).inflate(R.layout.modify_study_community_menu, null)
+        val popupView =
+            LayoutInflater.from(view.context).inflate(R.layout.modify_study_community_menu, null)
 
         // PopupWindow 생성
         val popupWindow = PopupWindow(
@@ -371,13 +372,13 @@ class CommunityContentActivity : AppCompatActivity()  {
         val deleteMenuItem = popupView.findViewById<TextView>(R.id.study_content_delete)
         deleteMenuItem.isVisible = createdByThisMember
 
-        reportContentItem.setOnClickListener{
+        reportContentItem.setOnClickListener {
             reportContent(view, supportFragmentManager)
             popupWindow.dismiss()
         }
 
-        editMenuItem.setOnClickListener{
-            if(createdByThisMember) {
+        editMenuItem.setOnClickListener {
+            if (createdByThisMember) {
 
                 // WriteContentFragment 생성 및 데이터 전달
                 val editContext = EditContentFragment().apply {
@@ -394,7 +395,7 @@ class CommunityContentActivity : AppCompatActivity()  {
             popupWindow.dismiss()
         }
 
-        deleteMenuItem.setOnClickListener{
+        deleteMenuItem.setOnClickListener {
             deleteContent(view, supportFragmentManager)
             popupWindow.dismiss()
         }
@@ -403,11 +404,8 @@ class CommunityContentActivity : AppCompatActivity()  {
         popupWindow.isFocusable = true
         popupWindow.setBackgroundDrawable(view.context.getDrawable(R.drawable.custom_popup_background))
 
-        val location = IntArray(2)
-        view.getLocationOnScreen(location) // 화면 전체 기준 좌표 가져오기
-        val x = location[0]
-        val y = location[1]
-        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y + 100)
+        popupWindow.showAsDropDown(view, 0,0)
+
     }
 
     private fun reportContent(view: View, fragmentManager: FragmentManager) {

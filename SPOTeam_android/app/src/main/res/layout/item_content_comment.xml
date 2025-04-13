@@ -8,7 +8,7 @@
     android:paddingHorizontal="10dp"
     android:paddingVertical="10dp"
     android:layout_marginHorizontal="10dp"
-    android:layout_marginVertical="5dp">
+    android:layout_marginVertical="10dp">
 
     <LinearLayout
         android:id="@+id/writerInfo_ll"
@@ -147,4 +147,5 @@
             android:textColor="@color/active_blue"/>
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

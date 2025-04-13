@@ -43,13 +43,12 @@
         android:id="@+id/community_category_content_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toTopOf="@id/page_number_layout"
+        android:nestedScrollingEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="5"
-        android:nestedScrollingEnabled="false"
         tools:listitem="@layout/item_community_content" />
 
     <LinearLayout

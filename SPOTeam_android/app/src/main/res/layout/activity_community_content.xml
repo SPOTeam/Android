@@ -42,6 +42,7 @@
         app:layout_constraintTop_toBottomOf="@id/community_title">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contnet_cl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toStartOf="@+id/community_content_profile_iv"
@@ -342,5 +343,7 @@
         android:layout_height="match_parent"
         android:clickable="true"
         android:focusable="true"
-        android:background="@android:color/transparent" />
+        android:background="@android:color/transparent"
+        android:visibility="gone" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
