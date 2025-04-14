@@ -103,11 +103,11 @@
 
         <ImageView
             android:id="@+id/ic_filter"
-            android:layout_width="50dp"
-            android:layout_height="40dp"
+            android:layout_width="33dp"
+            android:layout_height="27dp"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="7dp"
             android:layout_marginEnd="15dp"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="10dp"
             android:src="@drawable/interest_fragment_study_setcondition_deactivate"
             app:layout_constraintBottom_toBottomOf="@+id/filter_toggle_container"
             app:layout_constraintEnd_toEndOf="parent"
@@ -115,23 +115,22 @@
 
         <ImageView
             android:id="@+id/ic_filter_active"
-            android:layout_width="50dp"
-            android:layout_height="40dp"
+            android:layout_width="33dp"
+            android:layout_height="27dp"
             android:layout_marginEnd="15dp"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="10dp"
-            android:src="@drawable/interest_fragment_study_setcondition_active"
             android:background="@drawable/rounded_blue_background"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="7dp"
+            android:src="@drawable/interest_fragment_study_setcondition_active"
             app:layout_constraintBottom_toBottomOf="@+id/filter_toggle_container"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/filter_toggle_container"
-            app:layout_constraintVertical_bias="0.666" />
+            app:layout_constraintTop_toTopOf="@+id/filter_toggle_container" />
 
         <LinearLayout
             android:id="@+id/filter_toggle_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="80dp"
+            android:layout_height="27dp"
+            android:layout_marginEnd="64dp"
             android:background="@drawable/gender_spinner_background"
             android:gravity="center"
             android:orientation="horizontal"
@@ -144,16 +143,17 @@
                 android:id="@+id/filter_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:text="최신 순"
                 android:textColor="@color/black"
                 android:textFontWeight="700"
-                android:textSize="15dp" />
+                android:textSize="13dp" />
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:padding="5dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:padding="3dp"
                 android:src="@drawable/ic_down_arrow" />
 
         </LinearLayout>
