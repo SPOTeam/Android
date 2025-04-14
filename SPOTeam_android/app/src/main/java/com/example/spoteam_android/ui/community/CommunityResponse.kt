@@ -493,6 +493,8 @@ data class AlertInfo(
 
 data class AlertDetail(
     val notificationId: Int,
+    val studyId: Int,
+    val studyPostId: Int,
     val studyTitle : String,
     val studyProfileImage : String,
     val notifierName : String,
