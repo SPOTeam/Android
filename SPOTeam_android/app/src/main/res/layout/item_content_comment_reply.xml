@@ -24,7 +24,8 @@
         android:background="@drawable/comment_background"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
-        android:elevation="2dp"
+        android:elevation="1dp"
+        android:translationZ="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/community_content_comment_reply_arrow_iv"
         app:layout_constraintTop_toTopOf="@id/community_content_comment_reply_arrow_iv">
