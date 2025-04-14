@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.alert
 
+import StudyViewModel
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.HouseFragment
 import com.example.spoteam_android.MainActivity
@@ -18,15 +20,21 @@ import com.example.spoteam_android.ui.community.AlertResponse
 import com.example.spoteam_android.ui.community.AlertStudyResponse
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.NotificationStateResponse
+import com.example.spoteam_android.ui.study.DetailStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class AlertFragment : Fragment() {
 
+    private val studyViewModel: StudyViewModel by activityViewModels()
+
+
     private lateinit var binding: FragmentAlertBinding
     private var page: Int = 0
     private var size: Int = 100
+
+    private var isChanged : Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +46,17 @@ class AlertFragment : Fragment() {
         binding.communityPrevIv.setOnClickListener {
             parentFragmentManager.popBackStack()
             (context as MainActivity).isOnAlertFragment(HouseFragment())
+        }
+
+        studyViewModel.studyId.observe(viewLifecycleOwner) { id ->
+            if (id != null && id > 0 && isChanged) {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, DetailStudyFragment())
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss()
+            }
+
+            isChanged = false
         }
 
 //        binding.studyAlertCl.setOnClickListener {
@@ -92,12 +111,12 @@ class AlertFragment : Fragment() {
                     response: Response<AlertStudyResponse>
                 ) {
                     val enabled = response.body()?.isSuccess == "true"
-                    adapter.studyAlertEnabled = enabled
+                    adapter.isExistAlert = enabled
                     adapter.notifyItemChanged(0) // 헤더만 갱신
                 }
 
                 override fun onFailure(call: Call<AlertStudyResponse>, t: Throwable) {
-                    adapter.studyAlertEnabled = false
+                    adapter.isExistAlert = false
                     adapter.notifyItemChanged(0)
                 }
             })
@@ -114,10 +133,14 @@ class AlertFragment : Fragment() {
         binding.alertContentRv.layoutManager = LinearLayoutManager(requireContext())
         binding.alertContentRv.adapter = adapter
 
+
         adapter.itemClick = object : AlertMultiViewRVAdapter.ItemClick {
             override fun onStateUpdateClick(data: AlertDetail) {
                 if(!data.isChecked) {
                     updateState(data)
+                    Log.d("StudyIdInAlert", data.studyId.toString())
+                    isChanged = true
+                    studyViewModel.fetchStudyDetail(data.studyId)
                 }
             }
         }
@@ -131,7 +154,13 @@ class AlertFragment : Fragment() {
                 .commitAllowingStateLoss()
         }
 
-        // ✅ 서버에서 활성화 여부 가져와서 반영
+        adapter.onNavigateToDetail = {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, DetailStudyFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+
         fetchStudyAlert(adapter)
     }
 

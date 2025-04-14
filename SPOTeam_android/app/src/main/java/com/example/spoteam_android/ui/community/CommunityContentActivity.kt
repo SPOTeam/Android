@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -448,7 +446,7 @@ class CommunityContentActivity : AppCompatActivity()  {
                         if (contentResponse?.isSuccess == "true") {
                             val contentInfo = contentResponse.result
                             val commentInfo = contentInfo.commentResponses.comments
-                            Log.d("CommunityHomeTest", contentInfo.title)
+//                            Log.d("CommunityHomeTest", contentInfo.title)
                             initContentInfo(contentInfo)
                             val sortedComments = sortComments(commentInfo)
                             initMultiViewRecyclerView(sortedComments)

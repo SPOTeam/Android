@@ -1,10 +1,14 @@
 package com.example.spoteam_android.ui.alert
 
+import StudyViewModel
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.AlertInfo
@@ -13,8 +17,13 @@ import com.example.spoteam_android.databinding.ItemAlertEnrollStudyBinding
 import com.example.spoteam_android.databinding.ItemAlertLiveBinding
 import com.example.spoteam_android.databinding.ItemAlertUpdateBinding
 import com.example.spoteam_android.ui.community.AlertDetail
+import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.google.android.material.card.MaterialCardView
 
-class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AlertMultiViewRVAdapter(
+    private val dataList: List<AlertDetail>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
 
     interface ItemClick {
         fun onStateUpdateClick(data : AlertDetail)
@@ -26,9 +35,10 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
         private const val VIEW_TYPE_UPDATE = 2
     }
 
-    var headerClickListener: (() -> Unit)? = null
+    var isExistAlert : Boolean = false
 
-    var studyAlertEnabled: Boolean = false
+    var headerClickListener: (() -> Unit)? = null
+    var onNavigateToDetail: (() -> Unit)? = null
 
     var itemClick: ItemClick? = null
 
@@ -53,28 +63,26 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
 
 
     override fun getItemCount(): Int {
-        return if (studyAlertEnabled) dataList.size + 1 else dataList.size
+        return dataList.size + 1 // 항상 헤더 포함
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (studyAlertEnabled) {
-            if (position == 0) VIEW_TYPE_HEADER
-            else if (dataList[position - 1].type == "POPULAR_POST") VIEW_TYPE_LIVE
-            else VIEW_TYPE_UPDATE
-        } else {
-            if (dataList[position].type == "POPULAR_POST") VIEW_TYPE_LIVE
+        return if (position == 0) VIEW_TYPE_HEADER
+        else {
+            val item = dataList[position - 1]
+            if (item.type == "POPULAR_POST") VIEW_TYPE_LIVE
             else VIEW_TYPE_UPDATE
         }
     }
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (studyAlertEnabled && position == 0) {
+        if (position == 0) {
             (holder as HeaderViewHolder).bind()
             return
         }
 
-        val actualPosition = if (studyAlertEnabled) position - 1 else position
+        val actualPosition = position - 1
         val item = dataList[actualPosition]
 
         when (holder) {
@@ -95,24 +103,29 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
 
 
     inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val container = view
+        private val cardView: MaterialCardView = view.findViewById(R.id.alert_header_card)
 
         init {
-            container.setOnClickListener {
-                if (studyAlertEnabled) {
-                    headerClickListener?.invoke()
-                }
+            cardView.setOnClickListener {
+                headerClickListener?.invoke()
             }
         }
 
         fun bind() {
-            // 클릭 가능 여부에 따라 뷰 상태 변경
-            container.isVisible = studyAlertEnabled
+            cardView.isVisible = true
+            cardView.isEnabled = true
+            cardView.alpha = 1.0f
 
-            container.isEnabled = studyAlertEnabled
-            container.alpha = if (studyAlertEnabled) 1.0f else 0.5f // 비활성화 시 투명도 적용 등
+            val color = if (isExistAlert) {
+                ContextCompat.getColor(cardView.context, R.color.transparent_blue) // 파란색
+            } else {
+                ContextCompat.getColor(cardView.context, R.color.white)   // 흰색
+            }
+
+            cardView.setCardBackgroundColor(color)
         }
     }
+
 
 
     inner class LiveViewHolder(private val binding : ItemAlertLiveBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -125,10 +138,6 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
                 binding.icNewAlertLive.visibility = View.VISIBLE
             }
             binding.alertLiveContentTv.text = item.studyTitle
-
-            binding.root.setOnClickListener{
-
-            }
         }
     }
 
@@ -181,7 +190,6 @@ class AlertMultiViewRVAdapter(private val dataList: List<AlertDetail>) : Recycle
                     binding.alertCheckIc.visibility = View.VISIBLE
                 }
             }
-
         }
     }
 }

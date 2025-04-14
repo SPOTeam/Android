@@ -154,7 +154,7 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
 
     private fun getStudyPostContent() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getStudyPostContent(studyId, postId)
+        service.getStudyPostContent(studyId, postId,true)
             .enqueue(object : Callback<StudyPostContentResponse> {
                 override fun onResponse(
                     call: Call<StudyPostContentResponse>,

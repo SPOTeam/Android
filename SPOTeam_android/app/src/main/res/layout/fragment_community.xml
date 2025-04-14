@@ -32,23 +32,21 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/category_tl"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="30dp"
+        android:paddingHorizontal="10dp"
         android:clipToPadding="false"
         android:background="@drawable/tab_indicator"
-        app:tabSelectedTextColor="@color/selector_blue"
+        app:tabTextColor="@color/black"
+        app:tabSelectedTextColor="@color/black"
         app:tabMode="scrollable"
         app:tabIndicatorColor="#186AFF"
         app:tabIndicatorFullWidth="false"
-        app:tabIndicatorHeight="2dp"
         app:tabMinWidth="0dp"
         app:tabGravity="fill"
-        android:fontFamily="@font/suit_semi_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/community_title"/>
+        app:layout_constraintTop_toBottomOf="@id/community_title" />
 
 
     <androidx.viewpager2.widget.ViewPager2
