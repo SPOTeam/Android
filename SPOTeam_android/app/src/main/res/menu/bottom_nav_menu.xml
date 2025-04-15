@@ -2,7 +2,7 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/bottom_nav_home_selector"
         android:title="홈" />
 
     <item
@@ -12,17 +12,17 @@
 
     <item
         android:id="@+id/navigation_study"
-        android:icon="@drawable/ic_study"
+        android:icon="@drawable/bottom_nav_study_selector"
         android:title="스터디" />
 
     <item
         android:id="@+id/navigation_bookmark"
-        android:icon="@drawable/ic_jjim"
+        android:icon="@drawable/bottom_nav_jjim_selector"
         android:title="찜" />
 
     <item
         android:id="@+id/navigation_mypage"
-        android:icon="@drawable/ic_mypage"
+        android:icon="@drawable/bottom_nav_mypage_selector"
         android:title="마이페이지" />
 
 </menu>

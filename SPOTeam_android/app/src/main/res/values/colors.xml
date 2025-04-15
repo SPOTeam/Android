@@ -21,6 +21,7 @@
     <color name="gray_03">#8E8E8E</color>
     <color name="splash">#D2E0FF</color>
     <color name="spot_login">#186AFF</color>
+    <color name="transparent_blue">#1A588FF2</color>
 
     <color name="active_color">#588FF2</color>
     <color name="background_blue">#D6EFFF</color>

@@ -118,7 +118,14 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
             binding.communityContentCommentBadCheckedIv.setOnClickListener {
                 itemClick?.onDisLikeClick(it, bindingAdapterPosition, item.commentId)
             }
+
         }
+    }
+
+    private fun isLastReplyOfGroup(position: Int, parentId: Int): Boolean {
+        // 다음 댓글이 없거나, 다음 댓글의 부모 ID가 현재와 다르면 마지막 대댓글이다.
+        if (position + 1 >= dataList.size) return true
+        return dataList[position + 1].parentCommentId != parentId
     }
 
     inner class ReplyCommentViewHolder(private val binding : ItemContentCommentReplyBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -181,6 +188,9 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
                 itemClick?.onDisLikeClick(it, bindingAdapterPosition, item.commentId)
             }
 
+            // 마지막 대댓글 아래에만 divider 보이도록
+            val isLastReply = isLastReplyOfGroup(bindingAdapterPosition, item.parentCommentId)
+            binding.divider.visibility = if (isLastReply) View.VISIBLE else View.GONE
         }
     }
     // 클릭 상태를 업데이트하는 함수

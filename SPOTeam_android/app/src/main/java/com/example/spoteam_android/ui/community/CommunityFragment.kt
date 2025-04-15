@@ -1,5 +1,7 @@
 package com.example.spoteam_android.ui.community
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentCommunityBinding
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class CommunityFragment : Fragment() {
@@ -29,8 +32,23 @@ class CommunityFragment : Fragment() {
             val tabView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_tab_text, null)
             val textView = tabView.findViewById<TextView>(R.id.tabText)
             textView.text = tabList[position]
+            textView.setTextColor(Color.BLACK) // 초기엔 모두 검정색
             tab.customView = tabView
         }.attach()
+
+        binding.categoryTl.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val textView = tab?.customView?.findViewById<TextView>(R.id.tabText)
+                textView?.setTextColor(Color.BLACK) // 선택돼도 검정
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                val textView = tab?.customView?.findViewById<TextView>(R.id.tabText)
+                textView?.setTextColor(Color.BLACK) // 해제돼도 검정
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
 
         // Bundle로부터 특정 조건을 체크
         val showSpotNotice = arguments?.getBoolean("showSpotNotice", false) ?: false

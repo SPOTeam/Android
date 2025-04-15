@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/comment_background"
-    android:elevation="2dp"
+    android:elevation="1dp"
+    android:translationZ="2dp"
     android:paddingHorizontal="10dp"
     android:paddingVertical="10dp"
-    android:layout_marginHorizontal="10dp"
-    android:layout_marginVertical="5dp">
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginTop="10dp">
 
     <LinearLayout
         android:id="@+id/writerInfo_ll"
@@ -21,12 +22,12 @@
         <!--    프로필 이미지 변경    -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/community_content_comment_profile_iv"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/ic_profile"
-            android:layout_marginEnd="5dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="10dp"
             android:background="@color/white"
             android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut" />
@@ -36,9 +37,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="익명"
+            android:textColor="@color/black"
             android:textFontWeight="800"
-            android:textSize="14sp"
-            android:layout_marginStart="5dp"
+            android:textSize="14dp"
             app:layout_constraintStart_toEndOf="@id/community_content_comment_profile_iv"
             app:layout_constraintTop_toTopOf="@id/community_content_comment_profile_iv" />
 
@@ -50,7 +51,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="카카오 최종합격"
-        android:textSize="14sp"
+        android:textSize="14dp"
         android:layout_marginTop="10dp"
         android:textFontWeight="800"
         android:textColor="@color/black"
@@ -70,14 +71,16 @@
         android:id="@+id/community_writeReply_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
         android:text="댓글 쓰기"
+        android:layout_marginStart="10dp"
+        android:textAlignment="center"
         android:textFontWeight="800"
         android:textColor="@color/black"
-        android:textSize="14sp"
-        android:layout_marginStart="10dp"
+        android:gravity="center"
+        android:textSize="12dp"
         app:layout_constraintStart_toEndOf="@id/write_comment_iv"
-        app:layout_constraintTop_toTopOf="@id/write_comment_iv" />
+        app:layout_constraintTop_toTopOf="@id/write_comment_iv"
+        app:layout_constraintBottom_toBottomOf="@id/write_comment_iv"/>
 
     <LinearLayout
         android:id="@+id/unlike_ll"
@@ -121,7 +124,7 @@
             android:layout_height="18dp"
             android:src="@drawable/ic_new_like"
             android:foregroundGravity="center"
-            android:layout_marginEnd="2dp" />
+            android:layout_marginEnd="4dp" />
 
         <!--    추천 이미지 변경    -->
         <ImageView
@@ -130,16 +133,20 @@
             android:layout_height="18dp"
             android:src="@drawable/ic_new_like"
             android:visibility="gone"
+            android:layout_marginEnd="4dp"
             android:foregroundGravity="center"
             app:tint="#005BFF" />
 
         <TextView
             android:id="@+id/community_content_comment_goodNum_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="6"
-            android:textSize="12sp"
+            android:text="999+"
+            android:textSize="13dp"
+            android:textFontWeight="800"
+            android:textAlignment="textStart"
             android:textColor="@color/active_blue"/>
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

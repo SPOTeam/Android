@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/alert_header_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginHorizontal="20dp"
+    app:cardCornerRadius="12dp"
+    app:cardBackgroundColor="@color/white"
+    app:strokeColor="@color/gray"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="20dp">
+
+        <ImageView
+            android:id="@+id/alert_header_check_iv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/aftercheck"
+            android:layout_marginStart="10dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/alert_header_study_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="신청 스터디"
+            android:fontFamily="@font/pretendard"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="23dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@id/alert_header_check_iv"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/alert_header_study_content_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard"
+            android:text="신청 스터디의 수락 알람입니다.\n클릭하여 스터디 참여를 확인해주세요"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="@id/alert_header_study_tv"
+            app:layout_constraintTop_toBottomOf="@id/alert_header_study_tv"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
