@@ -27,6 +27,15 @@ class InterestFilterFragment : Fragment() {
     lateinit var binding: FragmentInterestFilterBinding
     private val viewModel: InterestFilterViewModel by activityViewModels()
 
+    private var navVisibilityController: BottomNavVisibilityController? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is BottomNavVisibilityController) {
+            navVisibilityController = context
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,6 +49,9 @@ class InterestFilterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d("BottomNav", "InterestFilterFragment에서 hideBottomNav() 호출")
+        navVisibilityController?.hideBottomNav()
+
         setupToolbar()
         setupRecruitingChips()
         setupGenderChips()
@@ -49,11 +61,12 @@ class InterestFilterFragment : Fragment() {
         setupStudyThemeChips()
         setupSearchButton()
 
+    }
 
-        restoreRecruitingChip()
-        restoreGenderChip()
-        restoreActivityFeeChip()
-        restoreStudyThemeChips()
+    override fun onDestroyView() {
+        Log.d("BottomNav", "InterestFilterFragment에서 showBottomNav() 호출 - onDestroyView")
+        navVisibilityController?.showBottomNav()
+        super.onDestroyView()
     }
 
     private fun setupToolbar() {
@@ -225,47 +238,28 @@ class InterestFilterFragment : Fragment() {
     }
 
     private fun updateNextButtonState() {
-        val activityFee = viewModel.activityFee
-
-        val isActivityFeeNoneSelected = activityFee == "없음"
-        val isActivityFeeEntered = activityFee == "있음"
-        val isSecondConditionMet = isActivityFeeNoneSelected || isActivityFeeEntered
-        val isThirdConditionMet = viewModel.selectedStudyThemes.isNotEmpty()
-
-        binding.fragmentIntroduceStudyBt.isEnabled = isSecondConditionMet && isThirdConditionMet
-    }
-
-    private fun restoreGenderChip() {
-        when (viewModel.gender) {
-            "UNKNOWN" -> binding.chipGroupGender.check(R.id.chip1_gender)
-            "MALE" -> binding.chipGroupGender.check(R.id.chip2_gender)
-            "FEMALE" -> binding.chipGroupGender.check(R.id.chip3_gender)
+        if (viewModel.gender == null) {
+            viewModel.gender = "UNKNOWN"
         }
-    }
-    private fun restoreActivityFeeChip() {
-        when (viewModel.activityFee) {
-            "있음" -> {
-                binding.chipGroup1.check(R.id.chip1)
-                binding.activityfeeSlider.isVisible = true
-                binding.displayfeeFrameLayout.isVisible = true
-            }
-            "없음" -> {
-                binding.chipGroup1.check(R.id.chip2)
-                binding.activityfeeSlider.isVisible = false
-                binding.displayfeeFrameLayout.isVisible = false
-            }
+
+        if (viewModel.activityFee == null) {
+            viewModel.activityFee = "없음"
         }
+
+        if (viewModel.isRecruiting == null) {
+            viewModel.isRecruiting = "없음"
+        }
+
+        // 최소 하나라도 선택되었는지 판단
+        val isSomethingSelected =
+            viewModel.gender != "UNKNOWN" ||
+                    viewModel.activityFee != "없음" ||
+                    viewModel.selectedStudyThemes.isNotEmpty() ||
+                    viewModel.isRecruiting != "없음"
+
+        binding.fragmentIntroduceStudyBt.isEnabled = isSomethingSelected
     }
 
-    private fun restoreStudyThemeChips() {
-        val selectedThemes = viewModel.selectedStudyThemes
-        val chipGroup = binding.chipGroup2
-
-        for (i in 0 until chipGroup.childCount) {
-            val chip = chipGroup.getChildAt(i) as? Chip ?: continue
-            chip.isChecked = selectedThemes.contains(chip.text.toString())
-        }
-    }
 
     private fun setupRecruitingChips() {
         binding.chipGroupRecruiting.setOnCheckedChangeListener { group, checkedId ->
@@ -274,12 +268,6 @@ class InterestFilterFragment : Fragment() {
                 R.id.chip2_recruiting -> "없음"
                 else -> null
             }
-        }
-    }
-    private fun restoreRecruitingChip() {
-        when (viewModel.isRecruiting) {
-            "있음" -> binding.chipGroupRecruiting.check(R.id.chip1_recruiting)
-            "없음" -> binding.chipGroupRecruiting.check(R.id.chip2_recruiting)
         }
     }
 
