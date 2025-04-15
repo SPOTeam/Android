@@ -143,11 +143,11 @@ class SearchFragment : Fragment() {
                     ?.commit()
             }
         })
-
         binding.searchBoard.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = recruitingStudyAdapter
         }
+
 
 
         val memberId = getMemberId(requireContext())
@@ -157,10 +157,7 @@ class SearchFragment : Fragment() {
         updateKeywordTimestamp()
 
         binding.imgBack.setOnClickListener {
-            binding.editTextSearch.clearFocus()
-
-            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
         binding.imgSearch.setOnClickListener {
@@ -185,7 +182,6 @@ class SearchFragment : Fragment() {
         binding.icRecommendationRefresh.setOnClickListener {
             fetchRecommendStudy()
         }
-
 
 
         return binding.root
@@ -236,12 +232,17 @@ class SearchFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val recentSearches = searchQueryDao.getRecentQueries(maxRecentSearches)
 
-            // UI 업데이트
             CoroutineScope(Dispatchers.Main).launch {
+                if (recentSearches.isEmpty()) {
+                    binding.txRecentlySearchedWord.visibility = View.GONE
+                } else {
+                    binding.txRecentlySearchedWord.visibility = View.VISIBLE
+                }
                 updateChips(recentSearches.map { it.query })
             }
         }
     }
+
 
 
     private fun updateChips(recentSearches: List<String>) {
@@ -265,8 +266,8 @@ class SearchFragment : Fragment() {
                 removeSearchQuery(query)
             }
 
-            val chipHeight = dpToPx(45) // 높이 36dp
-            val chipMinWidth = dpToPx(50) // 너비 최소 72dp
+            val chipHeight = dpToPx(40)
+            val chipMinWidth = dpToPx(20)
             layoutParams = ViewGroup.MarginLayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, chipHeight
             )
@@ -321,13 +322,14 @@ class SearchFragment : Fragment() {
                             isHost = false
                         )
                     } ?: emptyList()
-
                     if (boardItems.isNotEmpty()) {
                         recommendBoardAdapter.updateList(boardItems)
                         binding.recommendationBoard.visibility = View.VISIBLE
+
                     } else {
                         binding.recommendationBoard.visibility = View.GONE
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
+
                     }
                 } else {
                 }
@@ -523,8 +525,8 @@ class SearchFragment : Fragment() {
                     )
                 )
 
-                val chipHeight = dpToPx(45) // 높이 36dp
-                val chipMinWidth = dpToPx(50) // 너비 최소 72dp
+                val chipHeight = dpToPx(40)
+                val chipMinWidth = dpToPx(20)
                 layoutParams = ViewGroup.MarginLayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, chipHeight
                 )
@@ -548,5 +550,4 @@ class SearchFragment : Fragment() {
         binding.searchBoard.visibility = if (hasData) View.VISIBLE else View.GONE
         binding.txRecentlyViewedStudy.visibility = if (hasData) View.VISIBLE else View.GONE
     }
-
 }

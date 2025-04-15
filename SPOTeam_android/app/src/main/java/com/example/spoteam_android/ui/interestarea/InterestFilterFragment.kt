@@ -88,7 +88,7 @@ class InterestFilterFragment : Fragment() {
                 R.id.chip1_gender -> "UNKNOWN"
                 R.id.chip2_gender -> "MALE"
                 R.id.chip3_gender -> "FEMALE"
-                else -> null
+                else -> "MALE"
             }
             updateNextButtonState()
         }
@@ -158,16 +158,16 @@ class InterestFilterFragment : Fragment() {
             if (checkedId != ChipGroup.NO_ID) {
                 val checkedChip = chipGroup1.findViewById<Chip>(checkedId)
                 if (checkedChip.id == R.id.chip1) {
-                    viewModel.activityFee = "있음"
+                    viewModel.hasFee = true
                     binding.activityfeeSlider.isVisible = true
                     binding.displayfeeFrameLayout.isVisible = true
                 } else {
-                    viewModel.activityFee = "없음"
+                    viewModel.hasFee = false
                     binding.activityfeeSlider.isVisible = false
                     binding.displayfeeFrameLayout.isVisible = false
                 }
             } else {
-                viewModel.activityFee = "없음"
+                viewModel.hasFee = false
                 binding.activityfeeSlider.isVisible = false
                 binding.displayfeeFrameLayout.isVisible = false
             }
@@ -183,7 +183,7 @@ class InterestFilterFragment : Fragment() {
 
             chip.setOnClickListener {
                 val theme = chip.text.toString()
-                val themes = viewModel.selectedStudyThemes
+                val themes = viewModel.themeTypes
 
                 if (chip.isChecked) {
                     if (!themes.contains(theme)) {
@@ -238,37 +238,19 @@ class InterestFilterFragment : Fragment() {
     }
 
     private fun updateNextButtonState() {
-        if (viewModel.gender == null) {
-            viewModel.gender = "UNKNOWN"
-        }
-
-        if (viewModel.activityFee == null) {
-            viewModel.activityFee = "없음"
-        }
-
-        if (viewModel.isRecruiting == null) {
-            viewModel.isRecruiting = "없음"
-        }
-
-        // 최소 하나라도 선택되었는지 판단
-        val isSomethingSelected =
-            viewModel.gender != "UNKNOWN" ||
-                    viewModel.activityFee != "없음" ||
-                    viewModel.selectedStudyThemes.isNotEmpty() ||
-                    viewModel.isRecruiting != "없음"
-
-        binding.fragmentIntroduceStudyBt.isEnabled = isSomethingSelected
+        binding.fragmentIntroduceStudyBt.isEnabled = true
     }
 
 
     private fun setupRecruitingChips() {
         binding.chipGroupRecruiting.setOnCheckedChangeListener { group, checkedId ->
             viewModel.isRecruiting = when (checkedId) {
-                R.id.chip1_recruiting -> "있음"
-                R.id.chip2_recruiting -> "없음"
-                else -> null
+                R.id.chip1_recruiting -> true
+                R.id.chip2_recruiting -> false
+                else -> true
             }
         }
+        updateNextButtonState()
     }
 
 }
