@@ -466,12 +466,12 @@ class InterestFragment : Fragment() {
                             updatePageUI()
                         }
                         val totalElements = apiResponse.result.totalElements
-                        binding.checkAmount.text = totalElements.toString()+"건"
+                        binding.checkAmount.text = String.format("%02d건", totalElements)
                         interestAreaBoard.visibility = View.VISIBLE
                         updateRecyclerView(boardItems)
                     } else {
                         binding.pageNumberLayout.visibility = View.GONE
-                        checkcount.text = "0 건"
+                        checkcount.text = "00건"
                         interestAreaBoard.visibility = View.GONE
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                     }
