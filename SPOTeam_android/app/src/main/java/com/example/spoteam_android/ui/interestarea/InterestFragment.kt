@@ -52,19 +52,18 @@ class InterestFragment : Fragment() {
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var studyApiService: StudyApiService
     private lateinit var interestBoardAdapter: InterestVPAdapter
-    private var gender: String? = null
-    private var minAge: String? = null
-    private var maxAge: String? = null
-    private var activityFee: String? = null
-    private var selectedStudyTheme: String? = null
-    private var activityFeeAmount: String? = null
+    private lateinit var gender: String
+    private var minAge: Int = 18
+    private var maxAge: Int = 60
+    private var minFee: Int? = null
+    private var maxFee: Int? = null
+    private var hasFee: Boolean = false
+    private var themeTypes: List<String> = listOf("HOBBY")
     private var source: String? = null
     private var selectedItem: String = "ALL"
     private var selectedRegion: String? = "0000000000"
     private val viewModel: InterestFilterViewModel by activityViewModels()
-    private var isFirstSpinnerCall = true
     private var currentPage = 0
-    private val size = 5 // 페이지당 항목 수
     private var totalPages = 0
     private var startPage = 0
 
@@ -79,9 +78,8 @@ class InterestFragment : Fragment() {
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
         selectedItem = when (viewModel.isRecruiting) {
-            "있음" -> "RECRUITING"
-            "없음" -> "COMPLETED"
-            else -> "ALL"
+            true -> "RECRUITING"
+            false -> "COMPLETED"
         }
 
         setupRecyclerView()
@@ -100,16 +98,17 @@ class InterestFragment : Fragment() {
 
 
         gender = viewModel.gender
-        minAge = viewModel.minAge.toString()
-        maxAge = viewModel.maxAge.toString()
-        activityFee = viewModel.activityFee
-        selectedStudyTheme = null
-        activityFeeAmount = viewModel.activityFeeAmount
+        minAge = viewModel.minAge
+        maxAge = viewModel.maxAge
+        hasFee = viewModel.hasFee
+        themeTypes = viewModel.themeTypes
+        minFee = viewModel.finalMinFee
+        maxFee = viewModel.finalMaxFee
         source = arguments?.getString("source") // source만 그대로 Bundle에서 받음
 
         setupBottomSheet()
 
-        Log.d("InterestFragment","$gender, $minAge, $maxAge,$activityFee,$selectedStudyTheme,$activityFeeAmount,$source")
+        Log.d("InterestFragment","$gender, $minAge, $maxAge,$hasFee,$themeTypes,$minFee,$maxFee,$source")
 
         tabLayout = binding.tabs
 
@@ -122,9 +121,10 @@ class InterestFragment : Fragment() {
                     gender = gender,
                     minAge = minAge,
                     maxAge = maxAge,
-                    activityFee = activityFee,
-                    activityFeeAmount = activityFeeAmount,
-                    selectedStudyTheme = selectedStudyTheme,
+                    hasFee = hasFee,
+                    minFee = minFee,
+                    maxFee = maxFee,
+                    themeTypes = themeTypes,
                     currentPage = currentPage,
                 )
                 fetchDataGetInterestArea() { regions ->
@@ -139,9 +139,10 @@ class InterestFragment : Fragment() {
                     gender = gender,
                     minAge = minAge,
                     maxAge = maxAge,
-                    activityFee = activityFee,
-                    activityFeeAmount = activityFeeAmount,
-                    selectedStudyTheme = selectedStudyTheme,
+                    hasFee = hasFee,
+                    minFee = minFee,
+                    maxFee = maxFee,
+                    themeTypes = themeTypes,
                     currentPage = currentPage,
                 )
                 fetchDataGetInterestArea() { regions ->
@@ -195,15 +196,6 @@ class InterestFragment : Fragment() {
         // 로그 태그 정의
         val TAG = "SetupTabs"
 
-        tabLayout.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_MOVE) {
-                // 스크롤 동작 무시
-                true
-            } else {
-                // 다른 이벤트는 정상 처리
-                false
-            }
-        }
 
         regions?.let {
             // "전체" 탭 로그
@@ -212,7 +204,6 @@ class InterestFragment : Fragment() {
                 customView = LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null).apply {
                     val textView = findViewById<TextView>(R.id.tabText)
                     textView.text = "전체"
-                    textView.setTypeface(null, Typeface.BOLD) // 최초 "전체" Bold 처리
                 }
                 tag = "0000000000"
                 selectedRegion = "0000000000"
@@ -236,8 +227,6 @@ class InterestFragment : Fragment() {
             // 탭 선택 리스너 로그
             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
-                    val textView = tab.view?.findViewById<TextView>(R.id.tabText)
-                    textView?.setTypeface(null, Typeface.BOLD)
 
                     val selectedRegionCode = tab.tag as String
                     Log.d(TAG, "Tab selected: ${tab.tag}, region code: $selectedRegionCode")
@@ -249,9 +238,10 @@ class InterestFragment : Fragment() {
                             gender = gender,
                             minAge = minAge,
                             maxAge = maxAge,
-                            activityFee = activityFee,
-                            activityFeeAmount = activityFeeAmount,
-                            selectedStudyTheme = selectedStudyTheme,
+                            hasFee = hasFee,
+                            minFee = minFee,
+                            maxFee = maxFee,
+                            themeTypes = themeTypes,
                             currentPage = currentPage
                         )
                     } else {
@@ -263,9 +253,10 @@ class InterestFragment : Fragment() {
                             gender = gender,
                             minAge = minAge,
                             maxAge = maxAge,
-                            activityFee = activityFee,
-                            activityFeeAmount = activityFeeAmount,
-                            selectedStudyTheme = selectedStudyTheme,
+                            hasFee = hasFee,
+                            minFee = minFee,
+                            maxFee = maxFee,
+                            themeTypes = themeTypes,
                             currentPage = currentPage
                         )
                     }
@@ -273,8 +264,6 @@ class InterestFragment : Fragment() {
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
                     Log.d(TAG, "Tab unselected: ${tab?.tag}")
-                    val textView = tab?.view?.findViewById<TextView>(R.id.tabText)
-                    textView?.setTypeface(null, Typeface.NORMAL)
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -334,9 +323,10 @@ class InterestFragment : Fragment() {
             gender = gender,
             minAge = minAge,
             maxAge = maxAge,
-            activityFee = activityFee,
-            activityFeeAmount = activityFeeAmount,
-            selectedStudyTheme = selectedStudyTheme,
+            hasFee = hasFee,
+            minFee = minFee,
+            maxFee = maxFee,
+            themeTypes = themeTypes,
             currentPage = currentPage
         )
     }
@@ -387,47 +377,45 @@ class InterestFragment : Fragment() {
     private fun fetchData(
         selectedItem: String,
         regionCode: String? = null,
-        gender: String? = null,
-        minAge: String? = null,
-        maxAge: String? = null,
-        activityFee: String? = null,
-        activityFeeAmount: String? = null,
-        selectedStudyTheme: String? = null,
+        gender: String,
+        minAge: Int,
+        maxAge: Int,
+        hasFee: Boolean,
+        minFee: Int?,
+        maxFee: Int?,
+        themeTypes: List<String>,
         currentPage: Int?= null
     ) {
         val boardItems = arrayListOf<BoardItem>()
-        val activityFeeAmountInt = activityFeeAmount?.toIntOrNull()
         val interestAreaBoard = binding.interestAreaStudyReyclerview
         val checkcount: TextView = binding.checkAmount
-
-        val hasFee = when (activityFee) {
-            "있음" -> true
-            "없음" -> false
-            else -> false
-        }
 
         val call: Call<ApiResponse> = if (regionCode != null) {
             val service = RetrofitInstance.retrofit.create(InterestSpecificAreaApiService::class.java)
             service.InterestSpecificArea(
                 regionCode = regionCode,
                 gender = gender ?: "MALE",
-                minAge = minAge?.toIntOrNull() ?: 18,
-                maxAge = maxAge?.toIntOrNull() ?: 60,
+                minAge = minAge,
+                maxAge = maxAge,
                 isOnline = false,
                 hasFee = hasFee,
-                fee = activityFeeAmountInt,
+                maxFee = maxFee,
+                minFee = minFee,
                 page = currentPage ?: 0,
                 size = 5,
-                sortBy = selectedItem)
+                sortBy = selectedItem
+            )
         } else {
             val service = RetrofitInstance.retrofit.create(InterestAreaApiService::class.java)
             service.InterestArea(
-                gender = gender ?: "MALE",
-                minAge = minAge?.toIntOrNull() ?: 18,
-                maxAge = maxAge?.toIntOrNull() ?: 60,
+                gender = gender,
+                minAge = minAge,
+                maxAge = maxAge,
                 isOnline = false,
                 hasFee = hasFee,
-                fee = activityFeeAmountInt,
+                maxFee = maxFee,
+                minFee = minFee,
+                themeTypes = themeTypes,
                 page = currentPage ?: 0,
                 size = 5,
                 sortBy = selectedItem
@@ -515,6 +503,13 @@ class InterestFragment : Fragment() {
                     if (selectedRegion == "0000000000"){
                         fetchData(
                             selectedItem,
+                            gender = gender,
+                            minAge = minAge,
+                            maxAge = maxAge,
+                            hasFee = hasFee,
+                            minFee = minFee,
+                            maxFee = maxFee,
+                            themeTypes = themeTypes,
                             currentPage = currentPage
                         )
                     } else{
@@ -524,9 +519,10 @@ class InterestFragment : Fragment() {
                             gender = gender,
                             minAge = minAge,
                             maxAge = maxAge,
-                            activityFee = activityFee,
-                            activityFeeAmount = activityFeeAmount,
-                            selectedStudyTheme = selectedStudyTheme,
+                            hasFee = hasFee,
+                            minFee = minFee,
+                            maxFee = maxFee,
+                            themeTypes = themeTypes,
                             currentPage = currentPage
                         )
                     }
@@ -541,6 +537,13 @@ class InterestFragment : Fragment() {
                 if (selectedRegion == "0000000000"){
                     fetchData(
                         selectedItem,
+                        gender = gender,
+                        minAge = minAge,
+                        maxAge = maxAge,
+                        hasFee = hasFee,
+                        minFee = minFee,
+                        maxFee = maxFee,
+                        themeTypes = themeTypes,
                         currentPage = currentPage
                     )
                 } else{
@@ -550,9 +553,10 @@ class InterestFragment : Fragment() {
                         gender = gender,
                         minAge = minAge,
                         maxAge = maxAge,
-                        activityFee = activityFee,
-                        activityFeeAmount = activityFeeAmount,
-                        selectedStudyTheme = selectedStudyTheme,
+                        hasFee = hasFee,
+                        minFee = minFee,
+                        maxFee = maxFee,
+                        themeTypes = themeTypes,
                         currentPage = currentPage
                     )
                 }
@@ -565,6 +569,13 @@ class InterestFragment : Fragment() {
                 if (selectedRegion == "0000000000"){
                     fetchData(
                         selectedItem,
+                        gender = gender,
+                        minAge = minAge,
+                        maxAge = maxAge,
+                        hasFee = hasFee,
+                        minFee = minFee,
+                        maxFee = maxFee,
+                        themeTypes = themeTypes,
                         currentPage = currentPage
                     )
                 } else{
@@ -574,9 +585,10 @@ class InterestFragment : Fragment() {
                         gender = gender,
                         minAge = minAge,
                         maxAge = maxAge,
-                        activityFee = activityFee,
-                        activityFeeAmount = activityFeeAmount,
-                        selectedStudyTheme = selectedStudyTheme,
+                        hasFee = hasFee,
+                        minFee = minFee,
+                        maxFee = maxFee,
+                        themeTypes = themeTypes,
                         currentPage = currentPage
                     )
                 }

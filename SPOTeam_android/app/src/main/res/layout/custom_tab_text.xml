@@ -7,4 +7,4 @@
     android:textSize="15dp"
     android:fontFamily="@font/suit_semi_bold"
     android:gravity="center"
-    android:textColor="@drawable/tab_text_color" />
+    android:textColor="@color/black" />
