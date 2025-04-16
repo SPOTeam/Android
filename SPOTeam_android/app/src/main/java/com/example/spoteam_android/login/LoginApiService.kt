@@ -6,6 +6,7 @@ import com.example.spoteam_android.IdResponse
 import com.example.spoteam_android.NaverLoginRequest
 import com.example.spoteam_android.NaverResponse
 import com.example.spoteam_android.NaverResult
+import com.example.spoteam_android.NickNameRequest
 import com.example.spoteam_android.NickNameResponse
 import com.example.spoteam_android.ReasonApiResponse
 import com.example.spoteam_android.RegionApiResponse
@@ -71,14 +72,6 @@ interface LoginApiService {
     fun validateEmailCode(
         @Query("verificationCode") verificationCode: String, @Query("email") email: String)
     :Call<ValidateEmailResponse>
-
-    @Headers("Content-Type: application/x-www-form-urlencoded")
-    @POST("/spot/sign-up/update")
-    fun updateNickName(
-        @Query("nickname") nickname: String,
-        @Query("personalInfo") personalInfo: Boolean,
-        @Query("idInfo") idInfo: Boolean
-    ): Call<NickNameResponse>
 
 
 
