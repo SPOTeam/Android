@@ -196,6 +196,12 @@
         <item name="cornerSize">12dp</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerFamily.Cut2" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">15dp</item>
+    </style>
+
+
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
     </style>

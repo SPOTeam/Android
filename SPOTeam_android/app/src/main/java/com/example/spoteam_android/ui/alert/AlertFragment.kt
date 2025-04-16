@@ -45,7 +45,6 @@ class AlertFragment : Fragment() {
 
         binding.communityPrevIv.setOnClickListener {
             parentFragmentManager.popBackStack()
-            (context as MainActivity).isOnAlertFragment(HouseFragment())
         }
 
         studyViewModel.studyId.observe(viewLifecycleOwner) { id ->
@@ -58,13 +57,6 @@ class AlertFragment : Fragment() {
 
             isChanged = false
         }
-
-//        binding.studyAlertCl.setOnClickListener {
-//            (context as MainActivity).supportFragmentManager.beginTransaction()
-//                .replace(R.id.main_frm, CheckAppliedStudyFragment())
-//                .addToBackStack(null)
-//                .commitAllowingStateLoss()
-//        }
 
         fetchAlert()
 
@@ -87,12 +79,15 @@ class AlertFragment : Fragment() {
                         val alertResponse = response.body()
                         if (alertResponse?.isSuccess == "true") {
                             val alertInfo = alertResponse.result.notifications
+                            binding.emptyAlert.visibility = View.GONE
                             initMultiViewRecyclerView(alertInfo)
                         } else {
                             showError(alertResponse?.message)
+                            binding.emptyAlert.visibility = View.VISIBLE
                         }
                     } else {
                         showError(response.code().toString())
+                        binding.emptyAlert.visibility = View.VISIBLE
                     }
                 }
 
@@ -231,5 +226,16 @@ class AlertFragment : Fragment() {
                     Log.e("MyAlert", "Failure: ${t.message}", t)
                 }
             })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        (context as MainActivity).isOnAlertFragment(HouseFragment())
+        (context as MainActivity).isOnCommunityHome(HouseFragment())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).isOnAlertFragment(this)
     }
 }
