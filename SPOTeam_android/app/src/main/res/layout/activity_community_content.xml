@@ -184,7 +184,7 @@
                 android:id="@+id/community_content_content_info_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="25dp"
                 android:gravity="start|center"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
