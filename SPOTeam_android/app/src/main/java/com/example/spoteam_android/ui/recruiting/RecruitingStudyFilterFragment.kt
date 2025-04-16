@@ -16,7 +16,6 @@ import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentRecruitingStudyFilterBinding
-import com.example.spoteam_android.ui.myinterest.ChipViewModel
 import com.example.spoteam_android.ui.myinterest.MyInterestStudyFilterLocationFragment
 import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
 import com.google.android.material.chip.Chip
@@ -27,7 +26,6 @@ class RecruitingStudyFilterFragment : Fragment() {
 
     lateinit var binding: FragmentRecruitingStudyFilterBinding
 
-    private val myviewModel: ChipViewModel by activityViewModels()
     private val viewModel: StudyViewModel by activityViewModels()
 
     private var isLocationPlusVisible: Boolean = false
@@ -45,24 +43,24 @@ class RecruitingStudyFilterFragment : Fragment() {
 
         arguments?.let {
             // 전달된 주소와 코드가 있을 경우 ViewModel에 저장
-            myviewModel.selectedAddress = it.getString("ADDRESS")
-            myviewModel.selectedCode = it.getString("CODE")
-
-            val address = myviewModel.selectedAddress
+//            myviewModel.selectedAddress = it.getString("ADDRESS")
+//            myviewModel.selectedCode = it.getString("CODE")
+//
+//            val address = myviewModel.selectedAddress
             val isOffline = it.getBoolean("IS_OFFLINE", false)
 
-            address?.let { addr ->
-                updateChip(addr)
-            }
+//            address?.let { addr ->
+//                updateChip(addr)
+//            }
 
             setChipState(isOffline)
             setupChipCloseListener()
             isLocationPlusVisible = isOffline
         }
 
-        myviewModel.selectedChipId?.let {
-            binding.chipGroup1.check(it)
-        }
+//        myviewModel.selectedChipId?.let {
+//            binding.chipGroup1.check(it)
+//        }
 
 
         return binding.root
@@ -100,32 +98,32 @@ class RecruitingStudyFilterFragment : Fragment() {
         )
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spinner.adapter = adapter
+//
+//        myviewModel.selectedSpinnerPosition?.let {
+//            binding.genderSpinner.setSelection(it)
+//        }
 
-        myviewModel.selectedSpinnerPosition?.let {
-            binding.genderSpinner.setSelection(it)
-        }
 
 
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                myviewModel.selectedSpinnerPosition = position
-                when (position) {
-                    0 -> bundle.putString("gender2", "MALE")
-                    1 -> bundle.putString("gender2", "MALE")
-                    2 -> bundle.putString("gender2", "FEMALE")
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-        }
+//        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//
+//            override fun onItemSelected(
+//                parent: AdapterView<*>,
+//                view: View?,
+//                position: Int,
+//                id: Long
+//            ) {
+//                myviewModel.selectedSpinnerPosition = position
+//                when (position) {
+//                    0 -> bundle.putString("gender2", "MALE")
+//                    1 -> bundle.putString("gender2", "MALE")
+//                    2 -> bundle.putString("gender2", "FEMALE")
+//                }
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//            }
+//        }
 
         val ageRangeSlider = binding.ageRangeSlider
         val minValueText = binding.minValueText
@@ -135,20 +133,20 @@ class RecruitingStudyFilterFragment : Fragment() {
         ageRangeSlider.valueTo = 60f
         ageRangeSlider.stepSize = 1f
         ageRangeSlider.values = listOf(18f, 60f)
-        myviewModel.ageRangeValues ?: listOf(18f, 60f)
-
-        ageRangeSlider.addOnChangeListener { slider, _, _ ->
-            val values = slider.values
-            minValueText.text = values[0].toInt().toString()
-            maxValueText.text = values[1].toInt().toString()
-            myviewModel.ageRangeValues = values
-        }
-
-        myviewModel.ageRangeValues?.let {
-            binding.ageRangeSlider.values = it
-            binding.minValueText.text = it[0].toInt().toString()
-            binding.maxValueText.text = it[1].toInt().toString()
-        }
+//        myviewModel.ageRangeValues ?: listOf(18f, 60f)
+//
+//        ageRangeSlider.addOnChangeListener { slider, _, _ ->
+//            val values = slider.values
+//            minValueText.text = values[0].toInt().toString()
+//            maxValueText.text = values[1].toInt().toString()
+//            myviewModel.ageRangeValues = values
+//        }
+//
+//        myviewModel.ageRangeValues?.let {
+//            binding.ageRangeSlider.values = it
+//            binding.minValueText.text = it[0].toInt().toString()
+//            binding.maxValueText.text = it[1].toInt().toString()
+//        }
 
 
         val chipGroup1 = binding.chipGroup1

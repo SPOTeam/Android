@@ -1,6 +1,12 @@
 package com.example.spoteam_android.ui.myinterest
-import StudyViewModel
+
+import com.example.spoteam_android.ui.interestarea.BottomNavVisibilityController
+import com.example.spoteam_android.ui.interestarea.InterestFilterViewModel
+import com.example.spoteam_android.ui.interestarea.InterestFragment
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.icu.text.NumberFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,27 +14,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentInterestFilterBinding
 import com.example.spoteam_android.databinding.FragmentMyInterestStudyFilterBinding
-import com.example.spoteam_android.ui.interestarea.InterestFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+
 
 class MyInterestStudyFilterFragment : Fragment() {
 
     lateinit var binding: FragmentMyInterestStudyFilterBinding
-    private val myviewModel: ChipViewModel by activityViewModels()
-    private val viewModel: StudyViewModel by activityViewModels()
+    private val viewModel: MyInterestChipViewModel by activityViewModels()
 
+    private var navVisibilityController: BottomNavVisibilityController? = null
     private var isLocationPlusVisible: Boolean = false
-    private var selectedLocationCode: String? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is BottomNavVisibilityController) {
+            navVisibilityController = context
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,16 +47,39 @@ class MyInterestStudyFilterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMyInterestStudyFilterBinding.inflate(inflater, container, false)
+        viewModel.reset()
+        return binding.root
+    }
 
-        selectedLocationCode = null
-        viewModel.clearRegions()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        Log.d("BottomNav", "InterestFilterFragment에서 hideBottomNav() 호출")
+        navVisibilityController?.hideBottomNav()
+
+        setupToolbar()
+        setupRecruitingChips()
+        setupGenderChips()
+        setupAgeRangeSlider()
+        setupActivityFeeSlider()
+        setupActivityFeeChips()
+        setupSearchButton()
+        setupOnlineOfflineChips()
+        setupResetButton()
+
+        binding.lvAddArea.setOnClickListener{
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, MyInterestStudyFilterLocationFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         arguments?.let {
             // 전달된 주소와 코드가 있을 경우 ViewModel에 저장
-            myviewModel.selectedAddress = it.getString("ADDRESS")
-            myviewModel.selectedCode = it.getString("CODE")
+            viewModel.selectedAddress = it.getString("ADDRESS")
+            viewModel.selectedCode = it.getString("CODE")
 
-            val address = myviewModel.selectedAddress
+            val address = viewModel.selectedAddress
             val isOffline = it.getBoolean("IS_OFFLINE", false)
 
             address?.let { addr ->
@@ -57,45 +91,40 @@ class MyInterestStudyFilterFragment : Fragment() {
             isLocationPlusVisible = isOffline
         }
 
-        myviewModel.selectedChipId?.let {
-            binding.chipGroup1.check(it)
-        }
-
-
-        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onDestroyView() {
+        Log.d("BottomNav", "MyInterestFilterFragment에서 showBottomNav() 호출 - onDestroyView")
+        navVisibilityController?.showBottomNav()
+        super.onDestroyView()
+    }
 
-        super.onViewCreated(view, savedInstanceState)
-
-        val toolbar = binding.toolbar
-
-        val bundle = Bundle()
-
-        val source = arguments?.getString("source")
-        Log.d("MyInterestStudyFilterFragment","source = $source")
-
-        when (source){
-            "MyInterestStudyFragment" -> {
-                resetChipGroupState()
-            }
-        }
-
-
-        bundle.putString("activityFee01", "false")
-
-        toolbar.icBack.setOnClickListener {
+    private fun setupToolbar() {
+        binding.toolbar.icBack.setOnClickListener {
+            viewModel.reset() // 1. ViewModel 값 초기화
             val bundle = Bundle().apply {
                 putString("source", "HouseFragment")
             }
             val myInterestStudyFragment = MyInterestStudyFragment().apply {
                 arguments = bundle
             }
-            (activity as MainActivity).switchFragment(myInterestStudyFragment)
+            (activity as MainActivity).switchFragment(myInterestStudyFragment) // 2. 초기화된 인스턴스로 이동
         }
+    }
 
+    private fun setupGenderChips() {
+        binding.chipGroupGender.setOnCheckedChangeListener { _, checkedId ->
+            viewModel.gender = when (checkedId) {
+                R.id.chip1_gender -> "UNKNOWN"
+                R.id.chip2_gender -> "MALE"
+                R.id.chip3_gender -> "FEMALE"
+                else -> "MALE"
+            }
+            updateNextButtonState()
+        }
+    }
 
+    private fun setupAgeRangeSlider() {
         val ageRangeSlider = binding.ageRangeSlider
         val minValueText = binding.minValueText
         val maxValueText = binding.maxValueText
@@ -104,102 +133,112 @@ class MyInterestStudyFilterFragment : Fragment() {
         ageRangeSlider.valueTo = 60f
         ageRangeSlider.stepSize = 1f
         ageRangeSlider.values = listOf(18f, 60f)
-        myviewModel.ageRangeValues ?: listOf(18f, 60f)
+
+        val customThumb = ContextCompat.getDrawable(requireContext(),R.drawable.custom_thumb)
+        if (customThumb != null) {
+            ageRangeSlider.setCustomThumbDrawable(customThumb)
+        }
 
         ageRangeSlider.addOnChangeListener { slider, _, _ ->
             val values = slider.values
-            minValueText.text = values[0].toInt().toString()
-            maxValueText.text = values[1].toInt().toString()
-            myviewModel.ageRangeValues = values
+            val minAge = values[0].toInt()
+            val maxAge = values[1].toInt()
+            viewModel.minAge = minAge
+            viewModel.maxAge = maxAge
+            minValueText.text = minAge.toString()
+            maxValueText.text = maxAge.toString()
+        }
+    }
+
+    private fun setupActivityFeeSlider() {
+        val activityfeeSlider = binding.activityfeeSlider
+        val minValueText = binding.activityfeeMinValueText
+        val maxValueText = binding.activityfeeMaxValueText
+
+        activityfeeSlider.valueFrom = 1000f
+        activityfeeSlider.valueTo = 10000f
+        activityfeeSlider.stepSize = 100f
+        activityfeeSlider.values = listOf(1000f, 10000f)
+        val customThumb = ContextCompat.getDrawable(requireContext(),R.drawable.custom_thumb)
+        if (customThumb != null) {
+            activityfeeSlider.setCustomThumbDrawable(customThumb)
         }
 
-        myviewModel.ageRangeValues?.let {
-            binding.ageRangeSlider.values = it
-            binding.minValueText.text = it[0].toInt().toString()
-            binding.maxValueText.text = it[1].toInt().toString()
+        activityfeeSlider.addOnChangeListener { slider, _, _ ->
+            val values = slider.values
+            val minfee = values[0].toInt()
+            val maxfee = values[1].toInt()
+            val formattedMinFee = NumberFormat.getNumberInstance().format(minfee)
+            val formattedMaxFee = NumberFormat.getNumberInstance().format(maxfee)
+            minValueText.text = "₩$formattedMinFee"
+            maxValueText.text = "₩$formattedMaxFee"
         }
+    }
 
-
+    private fun setupActivityFeeChips() {
         val chipGroup1 = binding.chipGroup1
-        val editText = binding.edittext1
-        val behind_et = binding.behindEt
-        val chipGroup_new = binding.chipGroupNew
-        val btn_add_area = binding.btnAddArea
-
-        chipGroup_new.setOnCheckedChangeListener { group, checkedId ->
+        chipGroup1.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId != ChipGroup.NO_ID) {
-                val checkedChip = group.findViewById<Chip>(checkedId)
-                if (checkedChip.id == R.id.chip01) {
-                    binding.btnAddArea.visibility = View.GONE
-                    binding.locationChip.visibility = View.GONE
-                    bundle.putString("activityFee01", "true") // 활동비 유무
-                } else {
-                    binding.btnAddArea.visibility = View.VISIBLE
-                    bundle.putString("activityFee01", "false") // 활동비 유무
-                }
-            } else {
-                bundle.putString("activityFee01", "false") // 활동비 유무
-            }
-            updateNextButtonState()  // 상태 업데이트 호출
-        }
-
-        editText.setOnClickListener{
-            updateNextButtonState()
-        }
-
-        editText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                imm?.hideSoftInputFromWindow(view.windowToken, 0)
-                editText.clearFocus()  // 포커스 해제
-                true
-            } else {
-                false
-            }
-        }
-
-
-        btn_add_area.setOnClickListener{
-            (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, MyInterestStudyFilterLocationFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-
-
-
-        chipGroup1.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId != ChipGroup.NO_ID) {
-                val checkedChip = group.findViewById<Chip>(checkedId)
+                val checkedChip = chipGroup1.findViewById<Chip>(checkedId)
                 if (checkedChip.id == R.id.chip1) {
-                    bundle.putString("activityFee02", "true")
-                    editText.visibility = View.VISIBLE
-                    behind_et.visibility = View.VISIBLE
+                    viewModel.hasFee = true
+                    binding.activityfeeSlider.isVisible = true
+                    binding.displayfeeFrameLayout.isVisible = true
                 } else {
-                    bundle.putString("activityFee02", "false")
-                    editText.visibility = View.GONE
-                    behind_et.visibility = View.GONE
+                    viewModel.hasFee = false
+                    binding.activityfeeSlider.isVisible = false
+                    binding.displayfeeFrameLayout.isVisible = false
                 }
             } else {
-                bundle.putString("activityFee02", "false")
-                editText.visibility = View.GONE
-                behind_et.visibility = View.GONE
+                viewModel.hasFee = false
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
             }
             updateNextButtonState()
         }
+    }
 
-        val myInterestStudyFragment = MyInterestStudyFragment()
-        myInterestStudyFragment.arguments = bundle
+    private fun setupResetButton(){
+        //필터 초기화 클릭
+        binding.txResetFilter.setOnClickListener {
+            viewModel.reset()
 
-        val searchbtn = binding.fragmentIntroduceStudyBt
-        searchbtn.setOnClickListener {
-            bundle.putString("source", "MyInterestStudyFilterFragment")
+            binding.chipGroupRecruiting.clearCheck()
+            binding.chipGroupGender.clearCheck()
+            binding.chipGroup1.clearCheck()
 
-            bundle.putString("minAge3", minValueText.text.toString()) // 최소 나이
-            bundle.putString("maxAge3", maxValueText.text.toString()) // 최대 나이
+            // ✅ RangeSlider 초기화
+            binding.ageRangeSlider.values = listOf(18f, 60f)
+            binding.activityfeeSlider.values = listOf(1000f, 10000f)
 
-            val activityFeeAmount = editText.text.toString()
-            bundle.putString("activityFeeAmount3", activityFeeAmount)
+            // ✅ 텍스트뷰 값도 초기화 (선택사항)
+            binding.minValueText.text = "18"
+            binding.maxValueText.text = "60"
+            binding.activityfeeMinValueText.text = "₩ 1,000"
+            binding.activityfeeMaxValueText.text = "₩ 10,000"
+            binding.chipGroupNew.clearCheck()
+            binding.locationChip.visibility = View.GONE
+            binding.lvAddArea.visibility = View.GONE
+        }
+
+    }
+
+
+    private fun setupSearchButton() {
+        binding.fragmentIntroduceStudyBt.setOnClickListener {
+
+            val sliderValues = binding.activityfeeSlider.values
+            viewModel.minfee = sliderValues[0].toInt()
+            viewModel.maxfee = sliderValues[1].toInt()
+
+            // ViewModel 값 → Bundle
+            val bundle = Bundle().apply {
+                putString("source", "MyInterestStudyFilterFragment")
+            }
+
+            val myInterestStudyFragment = MyInterestStudyFragment().apply {
+                arguments = bundle
+            }
 
             (activity as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, myInterestStudyFragment)
@@ -208,41 +247,55 @@ class MyInterestStudyFilterFragment : Fragment() {
         }
     }
 
-    private fun setupChipCloseListener() {
-        binding.locationChip.setOnCloseIconClickListener {
-            binding.locationChip.visibility = View.GONE
-            binding.btnAddArea.visibility = View.VISIBLE
+    private fun updateNextButtonState() {
+        binding.fragmentIntroduceStudyBt.isEnabled = true
+    }
+
+
+    private fun setupRecruitingChips() {
+        binding.chipGroupRecruiting.setOnCheckedChangeListener { group, checkedId ->
+            viewModel.isRecruiting = when (checkedId) {
+                R.id.chip1_recruiting -> true
+                R.id.chip2_recruiting -> false
+                else -> true
+            }
+        }
+        updateNextButtonState()
+    }
+
+
+    private fun setupOnlineOfflineChips() {
+        binding.chipGroupNew.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.chip01 -> {
+                    viewModel.isOnline = true
+                    binding.locationChip.visibility = View.GONE
+                    binding.lvAddArea.visibility = View.GONE
+                }
+                R.id.chip02 -> {
+                    viewModel.isOnline = false
+                    binding.lvAddArea.visibility = View.VISIBLE
+
+                    // 선택된 주소가 있다면 chip도 보여줌
+                    if (!viewModel.selectedAddress.isNullOrEmpty()) {
+                        binding.locationChip.visibility = View.VISIBLE
+                    }
+                }
+            }
+            updateNextButtonState()
         }
     }
-
-    private fun updateNextButtonState() {
-        val isOnlineSelected = binding.chipGroupNew.checkedChipId == R.id.chip01
-        val isOfflineSelectedWithLocation =
-            binding.chipGroupNew.checkedChipId == R.id.chip02 && binding.locationChip.visibility == View.VISIBLE
-
-        val isActivityFeeNoneSelected = binding.chipGroup1.checkedChipId == R.id.chip2
-
-        // EditText의 값이 비어있지 않고, 숫자만 포함하는지 확인
-        val activityFeeText = binding.edittext1.text.toString()
-        val isActivityFeeEntered = binding.chipGroup1.checkedChipId == R.id.chip1 && activityFeeText.isNotEmpty() && activityFeeText.toIntOrNull() != null
-
-        // 첫 번째 조건: 온라인이 선택되었거나, 오프라인이 선택되고 위치가 설정된 경우
-        val isFirstConditionMet = isOnlineSelected || isOfflineSelectedWithLocation
-
-        // 두 번째 조건: 활동비 없음이 선택되었거나, 활동비 있음이 선택되고 숫자가 입력된 경우
-        val isSecondConditionMet = isActivityFeeNoneSelected || isActivityFeeEntered
-
-        // 두 조건 모두 만족해야 버튼이 활성화됨
-        binding.fragmentIntroduceStudyBt.isEnabled = isFirstConditionMet && isSecondConditionMet
-    }
-
 
 
     private fun setChipState(isOffline: Boolean) {
         if (isOffline) {
             binding.chipGroupNew.check(R.id.chip02)
-        } else {
-            binding.chipGroupNew.check(R.id.chip01)
+        }
+    }
+    private fun setupChipCloseListener() {
+        binding.locationChip.setOnCloseIconClickListener {
+            binding.locationChip.visibility = View.GONE
+            binding.lvAddArea.visibility = View.VISIBLE
         }
     }
 
@@ -262,16 +315,5 @@ class MyInterestStudyFilterFragment : Fragment() {
             text = truncatedAddress
         }
         updateNextButtonState()
-    }
-
-    private fun resetChipGroupState() {
-        // 모든 ChipGroup의 선택을 초기화합니다.
-        binding.chipGroup1.clearCheck()
-        binding.chipGroupNew.clearCheck()
-
-        // 필요하다면 EditText와 기타 UI 요소도 초기화합니다.
-        binding.edittext1.text.clear()
-        binding.behindEt.visibility = View.GONE
-        binding.edittext1.visibility = View.GONE
     }
 }
