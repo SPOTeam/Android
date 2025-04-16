@@ -119,7 +119,21 @@ class ContentCommentMultiViewRVAdapter(private val dataList: List<CommentsInfo>)
                 itemClick?.onDisLikeClick(it, bindingAdapterPosition, item.commentId)
             }
 
+            val isReplyExists = hasReplyComments(bindingAdapterPosition, item.commentId)
+            binding.divider.visibility = if (!isReplyExists) View.VISIBLE else View.GONE
         }
+    }
+
+    private fun hasReplyComments(position: Int, commentId: Int): Boolean {
+        // 현재 댓글 이후의 항목들 중에서 parentCommentId가 이 댓글의 commentId인 것이 있으면 대댓글이 있는 것
+        for (i in position + 1 until dataList.size) {
+            if (dataList[i].parentCommentId == commentId) {
+                return true
+            }
+            // 다른 댓글이 나오면 탐색 종료
+            if (dataList[i].parentCommentId == 0) break
+        }
+        return false
     }
 
     private fun isLastReplyOfGroup(position: Int, parentId: Int): Boolean {
