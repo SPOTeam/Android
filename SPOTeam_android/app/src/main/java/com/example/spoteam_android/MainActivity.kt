@@ -77,16 +77,6 @@ class MainActivity : AppCompatActivity() {
         fetchRegions(baseDate.toInt(), baseTime)
 
 
-        // 다른 아무 화면 클릭시 스터디 화면 사라지도록
-        binding.root.setOnTouchListener{_, _ ->
-            showStudyFrameLayout(false)
-            getCurrentFragment()?.let {
-                if(it is CommunityHomeFragment){
-                    isOnCommunityHome(it)
-                }
-            }
-            true
-        }
 
         binding.blurOverlayContainer.setOnClickListener{
             hideBlur()
@@ -168,14 +158,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home -> {
                     hideBlur()
                     showFragment(HouseFragment())
-                    showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(HouseFragment())
                     isOnAlertFragment(HouseFragment())
                     logTokens(this)
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_category -> {
-                    showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
 //                    isOnCommunityHome(CategoryFragment())
 //                    addCategoryFragmentOnTop()
 //                    showBlur()
@@ -187,7 +175,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_study -> {
                     // StudyFragment로의 전환 없이 FrameLayout의 visibility만 변경
                     hideBlur()
-                    showStudyFrameLayout(true)
+                    showFragment(StudyFragment())
                     isOnCommunityHome(StudyFragment())
                     isOnAlertFragment(StudyFragment())
                     return@setOnItemSelectedListener true
@@ -195,7 +183,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_bookmark -> {
                     hideBlur()
                     showFragment(BookmarkFragment())
-                    showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(BookmarkFragment())
                     isOnAlertFragment(BookmarkFragment())
                     return@setOnItemSelectedListener true
@@ -203,7 +190,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_mypage -> {
                     hideBlur()
                     showFragment(MyPageFragment())
-                    showStudyFrameLayout(false) // StudyFragment가 아니므로 FrameLayout 숨김
                     isOnCommunityHome(MyPageFragment())
                     isOnAlertFragment(MyPageFragment())
                     return@setOnItemSelectedListener true
@@ -212,7 +198,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        setupButtonListeners()
     }
 
     fun removeNavViewFragment() {
@@ -240,31 +225,6 @@ class MainActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
     }
 
-    // activity_main_study_fl FrameLayout의 visibility를 설정하는 메서드
-    fun showStudyFrameLayout(visible: Boolean) {
-        val visibility = if (visible) View.VISIBLE else View.GONE
-        findViewById<View>(R.id.activity_main_study_fl).visibility = visibility
-    }
-
-    private fun setupButtonListeners() {
-        // ImageButton 클릭 리스너 설정
-        findViewById<View>(R.id.activity_main_mystudy_ib).setOnClickListener {
-            showFragment(StudyFragment())
-            showStudyFrameLayout(false) // StudyFragment를 보이도록 하되 FrameLayout은 숨김
-        }
-
-        findViewById<View>(R.id.activity_main_registerstudy_ib).setOnClickListener {
-            viewModel.reset()
-            val fragment = RegisterStudyFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable("mode", StudyFormMode.CREATE)
-                }
-            }
-            showFragment(fragment)
-            showStudyFrameLayout(false)
-        }
-
-    }
 
     fun switchFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

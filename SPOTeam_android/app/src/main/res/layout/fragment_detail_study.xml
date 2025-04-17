@@ -78,7 +78,7 @@
                     android:text="반가워요, "
                     android:fontFamily="@font/suit_bold"
                     android:textColor="@color/black"
-                    android:textSize="13dp"
+                    android:textSize="16dp"
                     android:layout_marginStart="80dp"
                     android:layout_marginBottom="10dp"
                     android:layout_gravity="bottom"/>
@@ -87,27 +87,13 @@
                     android:id="@+id/fragment_detail_study_username_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="이윤정"
+                    android:text="훈님"
                     android:textColor="@color/black"
-                    android:textSize="13dp"
-                    android:textStyle="bold"
+                    android:textSize="16dp"
                     android:fontFamily="@font/suit_bold"
-                    android:layout_marginStart="131dp"
+                    android:layout_marginStart="140dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_gravity="bottom"/>
-
-                <TextView
-                    android:id="@+id/fragment_detail_study_user_nim_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="님"
-                    android:fontFamily="@font/suit_bold"
-                    android:textColor="@color/black"
-                    android:textSize="13dp"
-                    android:layout_marginStart="165dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_gravity="bottom"/>
-
+                    android:layout_gravity="bottom" />
 
             </FrameLayout>
             <LinearLayout
@@ -288,6 +274,7 @@
                 android:layout_height="wrap_content"
                 app:tabTextAppearance="@style/CustomTabText"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_group_ll"
+                app:tabTextColor="@color/black"
                 android:layout_marginTop="15dp"
                 app:tabIndicatorColor="#186AFF"
                 app:tabIndicatorFullWidth="false"

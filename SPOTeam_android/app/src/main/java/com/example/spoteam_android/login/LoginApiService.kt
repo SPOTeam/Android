@@ -11,6 +11,7 @@ import com.example.spoteam_android.NickNameResponse
 import com.example.spoteam_android.ReasonApiResponse
 import com.example.spoteam_android.RegionApiResponse
 import com.example.spoteam_android.RegionsPreferences
+import com.example.spoteam_android.SpotMemberCheckResponse
 import com.example.spoteam_android.StudyReasons
 import com.example.spoteam_android.ThemeApiResponse
 import com.example.spoteam_android.ThemePreferences
@@ -73,9 +74,15 @@ interface LoginApiService {
         @Query("verificationCode") verificationCode: String, @Query("email") email: String)
     :Call<ValidateEmailResponse>
 
+    @GET("/spot/check")
+    fun checkIsSpotMember(): Call<SpotMemberCheckResponse>
 
 
 
 
+    @POST("/spot/sign-up/update")
+    fun updateNickName(
+        @Body request: NickNameRequest
+    ): Call<NickNameResponse>
 
 }

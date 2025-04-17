@@ -12,12 +12,14 @@ import android.view.LayoutInflater
 import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.spoteam_android.NickNameRequest
 import com.example.spoteam_android.NickNameResponse
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.ActivityNicNameBinding
 import com.example.spoteam_android.databinding.DialogAgreementBinding
 import com.example.spoteam_android.databinding.DialogIdentificationAgreementBinding
+import com.navercorp.nid.oauth.NidOAuthPreferencesManager.accessToken
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
@@ -121,14 +123,21 @@ class NicNameActivity : AppCompatActivity() {
     }
 
     private fun sendNicknameToServer(nickname: String, personalInfo: Boolean, idInfo: Boolean) {
+        val nicknameRequest = NickNameRequest(
+            nickname = nickname,
+            personalInfo = personalInfo,
+            idInfo = idInfo
+        )
         val token = TokenManager(this).getAccessToken()
         Log.d("토큰 체크", "token=$token")
         if (token.isNullOrEmpty()) {
             Toast.makeText(this, "로그인이 만료되었습니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
             return
         }
+
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
+
         val api = RetrofitInstance.retrofit.newBuilder()
             .client(
                 RetrofitInstance.okHttpClient.newBuilder()
@@ -143,25 +152,28 @@ class NicNameActivity : AppCompatActivity() {
             .build()
             .create(LoginApiService::class.java)
 
-        api.updateNickName(nickname, personalInfo, idInfo).enqueue(object : Callback<NickNameResponse> {
-            override fun onResponse(call: Call<NickNameResponse>, response: Response<NickNameResponse>) {
-                Log.d("닉네임 API", "nickname=$nickname, personalInfo=$personalInfo, idInfo=$idInfo")
-                if (response.isSuccessful && response.body()?.isSuccess == true) {
-                    val intent = Intent(this@NicNameActivity, RegisterInformation::class.java)
-                    intent.putExtra("mode", "PREFERENCE")
-                    startActivity(intent)
-                    finish()
-                } else {
-                    Toast.makeText(this@NicNameActivity, "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
-                    val errorMsg = response.errorBody()?.string()
-                    Log.e("서버 응답", "code=${response.code()}, error=$errorMsg")
-
+        api.updateNickName(nicknameRequest)
+            .enqueue(object : Callback<NickNameResponse> {
+                override fun onResponse(call: Call<NickNameResponse>, response: Response<NickNameResponse>) {
+                    Log.d("닉네임 API", "nickname=$nickname, personalInfo=$personalInfo, idInfo=$idInfo")
+                    if (response.isSuccessful && response.body()?.isSuccess == true) {
+                        val intent = Intent(this@NicNameActivity, RegisterInformation::class.java)
+                        intent.putExtra("mode", "PREFERENCE")
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Toast.makeText(this@NicNameActivity, "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        val errorMsg = response.errorBody()?.string()
+                        Log.e("서버 응답", "code=${response.code()}, error=$errorMsg")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<NickNameResponse>, t: Throwable) {
-                Toast.makeText(this@NicNameActivity, "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+                override fun onFailure(call: Call<NickNameResponse>, t: Throwable) {
+                    Toast.makeText(this@NicNameActivity, "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+                    Log.e("닉네임 API 실패", t.toString())
+                }
+            })
     }
+
+
 }
