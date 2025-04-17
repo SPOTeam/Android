@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -55,12 +56,12 @@
             android:id="@+id/interest_study_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="19dp"
             android:layout_marginTop="108dp"
+            android:fontFamily="@font/suit_bold"
             android:text="@string/interest_study"
-            android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -68,87 +69,104 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginHorizontal="8dp"
             android:clipToPadding="false"
             android:background="@drawable/tab_indicator"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/interest_study_bold"
+            app:tabTextColor="@color/black"
+            app:tabSelectedTextColor="@color/black"
             app:tabMode="scrollable"
-            android:textFontWeight="800"
             app:tabIndicatorColor="#186AFF"
             app:tabIndicatorFullWidth="false"
-            app:tabIndicatorHeight="2dp"
             app:tabMinWidth="0dp"
-            app:tabGravity="fill" />
+            app:tabGravity="fill"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/interest_study_bold"/>
 
 
         <TextView
             android:id="@+id/check_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="19dp"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/pretendard"
             android:text="--건"
             android:textColor="@color/gray_03"
-            android:textSize="16dp"
-            android:textStyle="bold"
+            android:textFontWeight="700"
+            android:textSize="13dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabs" />
 
 
         <ImageView
             android:id="@+id/ic_filter"
-            android:layout_width="50dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="10dp"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="10dp"
+            android:layout_width="33dp"
+            android:layout_height="27dp"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="7dp"
+            android:layout_marginEnd="15dp"
             android:src="@drawable/interest_fragment_study_setcondition_deactivate"
-            app:layout_constraintBottom_toBottomOf="@+id/filter_toggle"
+            app:layout_constraintBottom_toBottomOf="@+id/filter_toggle_container"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/filter_toggle" />
+            app:layout_constraintTop_toTopOf="@+id/filter_toggle_container" />
 
         <ImageView
             android:id="@+id/ic_filter_active"
-            android:layout_width="50dp"
-            android:layout_height="40dp"
-            android:paddingHorizontal="10dp"
-            android:layout_marginEnd="10dp"
-            android:paddingVertical="10dp"
+            android:layout_width="33dp"
+            android:layout_height="27dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/rounded_blue_background"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="7dp"
             android:src="@drawable/interest_fragment_study_setcondition_active"
-            app:layout_constraintBottom_toBottomOf="@+id/filter_toggle"
+            app:layout_constraintBottom_toBottomOf="@+id/filter_toggle_container"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/filter_toggle" />
+            app:layout_constraintTop_toTopOf="@+id/filter_toggle_container" />
 
-        <Spinner
-            android:id="@+id/filter_toggle"
-            android:layout_width="130dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="60dp"
+        <LinearLayout
+            android:id="@+id/filter_toggle_container"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginEnd="64dp"
             android:background="@drawable/gender_spinner_background"
-            android:clipToOutline="true"
-            android:popupBackground="@android:color/transparent"
-            android:spinnerMode="dropdown"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="@+id/check_amount"
-            app:layout_constraintEnd_toEndOf="@+id/ic_filter"
-            app:layout_constraintTop_toTopOf="@+id/check_amount" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/check_amount">
+
+            <TextView
+                android:id="@+id/filter_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="최신 순"
+                android:textColor="@color/black"
+                android:textFontWeight="700"
+                android:textSize="13dp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:padding="3dp"
+                android:src="@drawable/ic_down_arrow" />
+
+        </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/interest_area_study_reyclerview"
             android:layout_width="match_parent"
             android:layout_height="490dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="15dp"
-            android:overScrollMode="never"
             android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -159,40 +177,97 @@
             android:id="@+id/page_number_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:gravity="center"
             android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/interest_area_study_reyclerview"
-            tools:layout_editor_absoluteX="0dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/previous_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="3dp"
+                android:text="〈"
+                android:textSize="16dp"
+                android:fontFamily="@font/suit_bold"
+                android:textColor="@color/b500"
+                android:layout_marginEnd="10dp"
                 android:padding="10dp"
-                android:text="&lt;"
-                android:textColor="#588FF2"
-                android:textSize="18dp" />
+                android:visibility="visible"/>
 
             <TextView
-                android:id="@+id/current_page"
+                android:id="@+id/page_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="3dp"
                 android:text="1"
-                android:textColor="#186AFF"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/suit_semi_bold"
+                android:padding="10dp"
+                android:layout_marginEnd="5dp"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/page_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2"
+                android:textSize="14dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/suit_semi_bold"
+                android:padding="10dp"
+                android:layout_marginEnd="5dp"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/page_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textSize="14dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/suit_semi_bold"
+                android:padding="10dp"
+                android:layout_marginEnd="5dp"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/page_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4"
+                android:textSize="14dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/suit_semi_bold"
+                android:padding="10dp"
+                android:layout_marginEnd="5dp"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/page_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:textSize="14dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/suit_semi_bold"
+                android:padding="10dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="visible"/>
 
             <TextView
                 android:id="@+id/next_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
+                android:text="〉"
+                android:textSize="16dp"
+                android:fontFamily="@font/suit_bold"
+                android:textColor="@color/b500"
                 android:padding="10dp"
-                android:text="&gt;"
-                android:textColor="#588FF2"
-                android:textSize="18dp" />
+                android:visibility="visible"/>
         </LinearLayout>
 
 

@@ -218,7 +218,6 @@
                 android:layout_marginBottom="20dp"
                 app:haloColor="@android:color/transparent"
                 app:thumbColor="@color/active_blue"
-                app:thumbRadius="8dp"
                 app:tickVisible="false"
                 app:trackColorActive="@color/active_blue"
                 app:trackColorInactive="#D6E5FF" />

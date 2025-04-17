@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="25dp"
     android:background="@drawable/bottomsheetfragment_style"
-    app:layout_behavior="@string/bottom_sheet_behavior"
-    android:tag="MyStudyWriteContent">
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="20dp"
+    android:tag="MyStudyWriteContent"
+    app:layout_behavior="@string/bottom_sheet_behavior">
 
     <TextView
         android:id="@+id/write_content_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="글쓰기"
-        android:textStyle="bold"
-        android:textFontWeight="800"
-        android:textColor="@color/black"
-        android:textSize="20sp"
         android:layout_marginTop="5dp"
+        android:text="글쓰기"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:fontFamily="@font/suit_bold"
+        android:textFontWeight="600"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,10 +29,10 @@
     <!--    X 이미지 변경    -->
     <ImageView
         android:id="@+id/write_content_prev_iv"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_new_close"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_new_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/write_content_title_tv" />
 
@@ -39,39 +40,40 @@
         android:id="@+id/write_content_title_et"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="제목"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
         android:background="@android:color/transparent"
+        android:hint="제목"
+        android:inputType="none"
+        android:maxLines="1"
         android:textColorHint="#C5C5CD"
         android:textFontWeight="800"
-        android:inputType="none"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/write_content_title_tv"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/write_content_title_tv" />
 
     <ImageView
         android:id="@+id/community_sp_iv"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
+        android:layout_marginTop="15dp"
         android:src="@drawable/line_img"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@id/write_content_title_et"
         app:layout_constraintEnd_toEndOf="@id/write_content_title_et"
-        app:layout_constraintTop_toBottomOf="@id/write_content_title_et"/>
+        app:layout_constraintStart_toStartOf="@id/write_content_title_et"
+        app:layout_constraintTop_toBottomOf="@id/write_content_title_et" />
 
     <EditText
         android:id="@+id/write_content_content_et"
         android:layout_width="0dp"
         android:layout_height="250dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:background="@null"
         android:gravity="top"
         android:hint="내용을 입력해주세요"
+        android:inputType="none"
         android:textColorHint="#C5C5CD"
         android:textFontWeight="800"
-        android:inputType="none"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/write_content_title_et"
         app:layout_constraintHorizontal_bias="0.0"
@@ -93,20 +95,20 @@
 
     <ImageView
         android:id="@+id/add_image_iv"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:src="@drawable/camera_ic"
-        app:layout_constraintTop_toTopOf="@id/mystudy_write_content_info_ll"
         app:layout_constraintBottom_toBottomOf="@id/mystudy_write_content_info_ll"
-        app:layout_constraintStart_toStartOf="@id/write_content_content_et"/>
+        app:layout_constraintStart_toStartOf="@id/write_content_content_et"
+        app:layout_constraintTop_toTopOf="@id/mystudy_write_content_info_ll" />
 
     <LinearLayout
         android:id="@+id/mystudy_write_content_info_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_marginTop="80dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@id/write_content_prev_iv"
         app:layout_constraintTop_toBottomOf="@id/write_content_content_et">
 
@@ -114,28 +116,28 @@
             android:id="@+id/check_ic"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/announce_check"/>
+            android:src="@drawable/announce_check" />
 
         <TextView
             android:id="@+id/isAnnount_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="공지"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:textFontWeight="800"
             android:layout_marginStart="12dp"
-            android:layout_marginEnd="20dp"/>
+            android:layout_marginEnd="20dp"
+            android:text="공지"
+            android:fontFamily="@font/suit_semi_bold"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/theme_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:textSize="15sp"
+            android:text="테마"
             android:textColor="#1E1E1E"
-            android:textFontWeight="800"
-            android:text="테마" />
+            android:fontFamily="@font/suit_semi_bold"
+            android:textSize="15sp" />
 
         <Spinner
             android:id="@+id/mystudy_category_spinner"
@@ -145,8 +147,8 @@
             android:layout_marginStart="5dp"
             android:background="@drawable/study_write_content_spinner"
             android:dropDownVerticalOffset="-1dp"
-            android:textFontWeight="800"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            android:textFontWeight="800" />
 
     </LinearLayout>
 
@@ -154,17 +156,17 @@
         android:id="@+id/write_content_finish_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="1dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/selector_category_background"
+        android:elevation="3dp"
         android:enabled="false"
         android:gravity="center"
         android:padding="10dp"
         android:text="완료"
-        android:layout_marginHorizontal="1dp"
-        android:textFontWeight="800"
         android:textColor="@drawable/button_textcolor"
-        android:textSize="20sp"
-        android:elevation="3dp"
+        android:textSize="17sp"
+        android:fontFamily="@font/suit_semi_bold"
         app:layout_constraintEnd_toEndOf="@id/write_content_content_et"
         app:layout_constraintStart_toStartOf="@id/write_content_content_et"
         app:layout_constraintTop_toBottomOf="@id/mystudy_write_content_info_ll" />

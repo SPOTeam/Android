@@ -174,7 +174,7 @@
     <!--    색상 변경   -->
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:src="@drawable/line_img"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"

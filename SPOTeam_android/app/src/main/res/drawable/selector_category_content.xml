@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 버튼 프레스 상태 (가장 우선) -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <stroke android:width="2dp" android:color="@color/selector_blue"/>
+            <solid android:color="@color/selector_blue"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+
+    <!-- 버튼 비활성화 상태 -->
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <stroke android:width="1dp" android:color="@color/g300"/>
+            <solid android:color="@android:color/white"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+
+    <!-- 버튼 기본(활성화) 상태 -->
+    <item>
+        <shape android:shape="rectangle">
+            <stroke android:width="1dp" android:color="@color/selector_blue"/>
+            <solid android:color="@color/white"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+
+</selector>

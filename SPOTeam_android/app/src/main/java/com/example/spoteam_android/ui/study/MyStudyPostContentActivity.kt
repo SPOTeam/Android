@@ -58,6 +58,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     var parentCommentId : Int? = 0
     private var canComment : Boolean = false
     private var currentWriter : Boolean = false
+    private var isScrapOrLike : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,10 +66,12 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         currentStudyId = intent.getStringExtra("myStudyId")!!.toInt()
         postId = intent.getStringExtra("myStudyPostId")!!.toInt()
 
-        Log.d("MyStudyPostInfo", "$currentStudyId, $postId")
-
         binding = ActivityMystudyCommunityContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.writeCommentContentEt.setOnFocusChangeListener { _, hasFocus ->
+            binding.dismissArea.visibility = if (hasFocus) View.VISIBLE else View.GONE
+        }
 
         binding.communityPrevIv.setOnClickListener{
             finish()
@@ -89,11 +92,37 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         }
 
         binding.communityContentLikeNumCheckedIv.setOnClickListener{
+            isScrapOrLike = true
             deleteStudyContentLike()
         }
 
         binding.communityContentLikeNumUncheckedIv.setOnClickListener{
+            isScrapOrLike = true
             postStudyContentLike()
+        }
+
+        binding.dismissArea.setOnClickListener {
+            // 1. parentCommentId 초기화
+            parentCommentId = 0
+
+            // 2. reply 표시 제거
+            binding.replyReplyIv.visibility = View.GONE
+
+            // 3. 포커스 해제
+            binding.writeCommentContentEt.clearFocus()
+
+            // 👉 4. focus를 다른 곳으로 명시적으로 옮기기 (예: dismissArea 자체로)
+            binding.dismissArea.requestFocus()
+
+            // 5. 키보드 내리기
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.writeCommentContentEt.windowToken, 0)
+
+            // 6. adapter 상태 초기화
+            resetAdapterState()
+
+            // 7. dismissArea 숨기기
+            binding.dismissArea.visibility = View.GONE
         }
 
         fetchContentInfo()
@@ -224,6 +253,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(binding.writeCommentContentEt.windowToken, 0)
                         resetAdapterState()
+                        binding.dismissArea.visibility = View.GONE
+
                         fetchContentInfo()
                     } else {
                         Log.d("MyStudyWriteComment", response.body()!!.message)
@@ -268,6 +299,8 @@ class MyStudyPostContentActivity : AppCompatActivity() {
                         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(binding.writeCommentContentEt.windowToken, 0)
                         resetAdapterState()
+                        binding.dismissArea.visibility = View.GONE
+
                         fetchContentInfo()
                     } else {
                         Log.d("MyStudyWriteComment", response.body()!!.message)
@@ -337,11 +370,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         popupWindow.isFocusable = true
         popupWindow.setBackgroundDrawable(view.context.getDrawable(R.drawable.custom_popup_background))
 
-        val location = IntArray(2)
-        view.getLocationOnScreen(location) // 화면 전체 기준 좌표 가져오기
-        val x = location[0]
-        val y = location[1]
-        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y + 100)
+        popupWindow.showAsDropDown(view, 0,0)
     }
 
     private fun deleteStudyPostContent(view: View, fragmentManager: FragmentManager) {
@@ -413,7 +442,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
 
     fun fetchContentInfo() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getStudyPostContent(currentStudyId, postId)
+        service.getStudyPostContent(currentStudyId, postId, isScrapOrLike)
             .enqueue(object : Callback<StudyPostContentResponse> {
                 override fun onResponse(
                     call: Call<StudyPostContentResponse>,
@@ -609,6 +638,13 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         else if(contentInfo.theme == "STUDY_REVIEW") binding.communityContentThemeTv.text = "#스터디후기"
         else if(contentInfo.theme == "QNA") binding.communityContentThemeTv.text = "#Q&A"
 
+//        if (contentInfo.hit > 999) {
+//            val formatted = String.format("%.1fK", contentInfo.scrapCount / 1000.0)
+//            binding.scrapCountTv.text = formatted
+//        } else {
+//            binding.scrapCountTv.text = contentInfo.scrapCount.toString()
+//        }
+
 
         Glide.with(binding.root.context)
             .load(contentInfo.member.profileImage)
@@ -649,15 +685,20 @@ class MyStudyPostContentActivity : AppCompatActivity() {
 
         adapter.itemClick = object : MyStudyContentCommentMultiViewRVAdapter.ItemClick {
             override fun onItemClick(parentId: Int?) {
-                if (parentId != 0) {
+                if(parentId != null) {
+                    binding.replyReplyIv.visibility = View.VISIBLE
                     parentCommentId = parentId
+                } else {
+                    binding.replyReplyIv.visibility = View.GONE
                 }
                 binding.writeCommentContentEt.requestFocus()
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(binding.writeCommentContentEt, InputMethodManager.SHOW_IMPLICIT)
 
-                Log.d("MyStudyWriteComment", "parent : $parentId")
-                Log.d("MyStudyWriteComment", "parent : $parentCommentId")
+//                Log.d("MyStudyWriteComment", "parent : $parentId")
+//                Log.d("MyStudyWriteComment", "parent : $parentCommentId")
+                binding.dismissArea.visibility = View.VISIBLE
+
             }
 
             override fun onLikeClick(view: View, position: Int, commentId: Int) {

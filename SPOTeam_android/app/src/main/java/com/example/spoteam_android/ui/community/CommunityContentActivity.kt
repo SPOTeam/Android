@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,6 +55,10 @@ class CommunityContentActivity : AppCompatActivity()  {
 
         binding = ActivityCommunityContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.writeCommentContentEt.setOnFocusChangeListener { _, hasFocus ->
+            binding.dismissArea.visibility = if (hasFocus) View.VISIBLE else View.GONE
+        }
 
         initTextWatcher()
 
@@ -108,7 +111,10 @@ class CommunityContentActivity : AppCompatActivity()  {
         }
 
         binding.applyCommentIv.setOnClickListener {
-            submitComment()
+            ischecked = true
+            if(canComment) {
+                submitComment()
+            }
         }
 
         binding.communityContentLikeNumCheckedIv.setOnClickListener {
@@ -128,6 +134,30 @@ class CommunityContentActivity : AppCompatActivity()  {
             } else {
                 postContentScrap()
             }
+        }
+
+        binding.dismissArea.setOnClickListener {
+            // 1. parentCommentId 초기화
+            parentCommentId = 0
+
+            // 2. reply 표시 제거
+            binding.replyReplyIv.visibility = View.GONE
+
+            // 3. 포커스 해제
+            binding.writeCommentContentEt.clearFocus()
+
+            // 👉 4. focus를 다른 곳으로 명시적으로 옮기기 (예: dismissArea 자체로)
+            binding.dismissArea.requestFocus()
+
+            // 5. 키보드 내리기
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.writeCommentContentEt.windowToken, 0)
+
+            // 6. adapter 상태 초기화
+            resetAdapterState()
+
+            // 7. dismissArea 숨기기
+            binding.dismissArea.visibility = View.GONE
         }
     }
 
@@ -245,6 +275,7 @@ class CommunityContentActivity : AppCompatActivity()  {
         )
         Log.d("WriteComment", commentContent)
         // 서버에 댓글 전송
+
         sendCommentToServer(requestBody)
     }
 
@@ -264,6 +295,9 @@ class CommunityContentActivity : AppCompatActivity()  {
                         imm.hideSoftInputFromWindow(binding.writeCommentContentEt.windowToken, 0)
                         // 어댑터의 상태 초기화
                         resetAdapterState()
+
+                        binding.dismissArea.visibility = View.GONE
+
                         fetchContentInfo()
                     }
                 }
@@ -312,7 +346,8 @@ class CommunityContentActivity : AppCompatActivity()  {
 
     private fun showPopupMenu(view: View) {
 
-        val popupView = LayoutInflater.from(view.context).inflate(R.layout.modify_study_community_menu, null)
+        val popupView =
+            LayoutInflater.from(view.context).inflate(R.layout.modify_study_community_menu, null)
 
         // PopupWindow 생성
         val popupWindow = PopupWindow(
@@ -335,13 +370,13 @@ class CommunityContentActivity : AppCompatActivity()  {
         val deleteMenuItem = popupView.findViewById<TextView>(R.id.study_content_delete)
         deleteMenuItem.isVisible = createdByThisMember
 
-        reportContentItem.setOnClickListener{
+        reportContentItem.setOnClickListener {
             reportContent(view, supportFragmentManager)
             popupWindow.dismiss()
         }
 
-        editMenuItem.setOnClickListener{
-            if(createdByThisMember) {
+        editMenuItem.setOnClickListener {
+            if (createdByThisMember) {
 
                 // WriteContentFragment 생성 및 데이터 전달
                 val editContext = EditContentFragment().apply {
@@ -358,7 +393,7 @@ class CommunityContentActivity : AppCompatActivity()  {
             popupWindow.dismiss()
         }
 
-        deleteMenuItem.setOnClickListener{
+        deleteMenuItem.setOnClickListener {
             deleteContent(view, supportFragmentManager)
             popupWindow.dismiss()
         }
@@ -367,11 +402,8 @@ class CommunityContentActivity : AppCompatActivity()  {
         popupWindow.isFocusable = true
         popupWindow.setBackgroundDrawable(view.context.getDrawable(R.drawable.custom_popup_background))
 
-        val location = IntArray(2)
-        view.getLocationOnScreen(location) // 화면 전체 기준 좌표 가져오기
-        val x = location[0]
-        val y = location[1]
-        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y + 100)
+        popupWindow.showAsDropDown(view, 0,0)
+
     }
 
     private fun reportContent(view: View, fragmentManager: FragmentManager) {
@@ -414,7 +446,7 @@ class CommunityContentActivity : AppCompatActivity()  {
                         if (contentResponse?.isSuccess == "true") {
                             val contentInfo = contentResponse.result
                             val commentInfo = contentInfo.commentResponses.comments
-                            Log.d("CommunityHomeTest", contentInfo.title)
+//                            Log.d("CommunityHomeTest", contentInfo.title)
                             initContentInfo(contentInfo)
                             val sortedComments = sortComments(commentInfo)
                             initMultiViewRecyclerView(sortedComments)
@@ -566,22 +598,19 @@ class CommunityContentActivity : AppCompatActivity()  {
         binding.communityContentContentTv.text = contentInfo.content
 
         if (contentInfo.likeCount > 999) {
-            val formatted = String.format("%.1fK", contentInfo.likeCount / 1000.0)
-            binding.communityContentLikeNumTv.text = formatted
+            binding.communityContentLikeNumTv.text = "${contentInfo.likeCount}+"
         } else {
             binding.communityContentLikeNumTv.text = contentInfo.likeCount.toString()
         }
 
         if (contentInfo.commentCount > 999) {
-            val formatted = String.format("%.1fK", contentInfo.commentCount / 1000.0)
-            binding.communityContentContentNumTv.text = formatted
+            binding.communityContentContentNumTv.text = "${contentInfo.commentCount}+"
         } else {
             binding.communityContentContentNumTv.text = contentInfo.commentCount.toString()
         }
 
         if (contentInfo.viewCount > 999) {
-            val formatted = String.format("%.1fK", contentInfo.viewCount / 1000.0)
-            binding.communityContentViewNumTv.text = formatted
+            binding.communityContentViewNumTv.text = "${contentInfo.viewCount}+"
         } else {
             binding.communityContentViewNumTv.text = contentInfo.viewCount.toString()
         }
@@ -658,8 +687,12 @@ class CommunityContentActivity : AppCompatActivity()  {
                 imm.showSoftInput(binding.writeCommentContentEt, InputMethodManager.SHOW_IMPLICIT)
 
                 if(parentId != null) {
-                    binding
+                    binding.replyReplyIv.visibility = View.VISIBLE
+                } else {
+                    binding.replyReplyIv.visibility = View.GONE
                 }
+
+                binding.dismissArea.visibility = View.VISIBLE
             }
 
             override fun onLikeClick(view: View, position: Int, commentId: Int) {
@@ -687,6 +720,7 @@ class CommunityContentActivity : AppCompatActivity()  {
     // 어댑터 상태 초기화 함수
     private fun resetAdapterState() {
         val adapter = binding.contentCommentRv.adapter as? ContentCommentMultiViewRVAdapter
+        binding.replyReplyIv.visibility = View.GONE
         adapter?.resetClickedState() // 어댑터 내부의 clickedState 초기화
     }
 

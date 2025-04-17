@@ -23,7 +23,9 @@ interface InterestAreaApiService {
         @Query("maxAge") maxAge: Int?,
         @Query("isOnline") isOnline: Boolean?,
         @Query("hasFee") hasFee: Boolean?,
-        @Query("fee") fee: Int?
+        @Query("maxFee") maxFee: Int?,
+        @Query("minFee") minFee: Int?,
+        @Query("themeTypes") themeTypes: List<String>?
     ): Call<ApiResponse>
 
     @GET("/spot/search/studies/main/interested")
@@ -40,7 +42,8 @@ interface InterestSpecificAreaApiService {
         @Query("maxAge") maxAge: Int?,
         @Query("isOnline") isOnline: Boolean?,
         @Query("hasFee") hasFee: Boolean?,
-        @Query("fee") fee: Int?,
+        @Query("maxFee") maxFee: Int?,
+        @Query("minFee") minFee: Int?,
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sortBy") sortBy: String,

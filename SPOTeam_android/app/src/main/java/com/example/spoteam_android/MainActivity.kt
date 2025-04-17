@@ -19,6 +19,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
 import com.example.spoteam_android.login.LoginApiService
@@ -33,8 +35,13 @@ import com.example.spoteam_android.ui.category.CategoryNavViewFragment
 import com.example.spoteam_android.ui.community.CommunityFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
 import com.example.spoteam_android.ui.community.WriteContentFragment
+import com.example.spoteam_android.ui.interestarea.BottomNavVisibilityController
+import com.example.spoteam_android.ui.interestarea.InterestFilterFragment
+import com.example.spoteam_android.ui.myinterest.MyInterestStudyFilterFragment
+import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
 //import com.example.spoteam_android.ui.mypage.ConsiderAttendanceMemberFragment
 import com.example.spoteam_android.ui.mypage.MyPageFragment
+import com.example.spoteam_android.ui.recruiting.RecruitingStudyFilterFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.MyStudyCommunityFragment
 import com.example.spoteam_android.ui.study.MyStudyWriteContentFragment
@@ -56,12 +63,13 @@ import java.util.Calendar
 import java.util.Locale
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var fab: FloatingActionButton
     private val weatherViewModel: WeatherViewModel by viewModels() // Hilt 사용
     private val viewModel: StudyViewModel by viewModels()
+
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +78,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
+
 
         val baseDate = getUpdatedDate()
         val baseTime = getUpdatedTime()
@@ -139,6 +149,8 @@ class MainActivity : AppCompatActivity() {
         } else {
             Log.d("MainActivity", "토큰 유효함.")
         }
+
+
     }
 
 
@@ -223,6 +235,18 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.main_frm, fragment)
             .addToBackStack(null)
             .commitAllowingStateLoss()
+
+
+        when (fragment) {
+            is InterestFilterFragment,
+            is MyInterestStudyFilterFragment,
+            is RecruitingStudyFilterFragment-> {
+                binding.mainBnv.visibility = View.GONE
+            }
+            else -> {
+                binding.mainBnv.visibility = View.VISIBLE
+            }
+        }
     }
 
 
@@ -274,6 +298,7 @@ class MainActivity : AppCompatActivity() {
 //        // 아무 동작도 하지 않도록 설정
 //        // super.onBackPressed()를 호출하지 않으면 기본 동작(뒤로 가기)이 수행되지 않습니다.
 //    }
+
     private fun logTokens(context: Context) {
         val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
@@ -379,6 +404,14 @@ class MainActivity : AppCompatActivity() {
         } else {
             R.drawable.ic_weather_background // 낮일 경우 기본값 유지
         }
+    }
+
+    override fun hideBottomNav() {
+        binding.mainBnv.visibility = View.GONE
+    }
+
+    override fun showBottomNav() {
+        binding.mainBnv.visibility = View.VISIBLE
     }
 
 }

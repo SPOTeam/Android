@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
@@ -37,6 +38,7 @@ import com.example.spoteam_android.ui.interestarea.MyInterestStudyAllApiService
 import com.example.spoteam_android.ui.interestarea.MyInterestStudySpecificApiService
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.example.spoteam_android.ui.study.FixedRoundedSpinnerAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,8 +51,6 @@ class MyInterestStudyFragment : Fragment() {
     private lateinit var studyApiService: StudyApiService
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var interestBoardAdapter: InterestVPAdapter
-    private var currentPage: Int = 0
-    private var totalPages: Int = 0
     private var gender: String? = "MALE"
     private var minAge: String? = "18"
     private var maxAge: String? = "60"
@@ -62,6 +62,10 @@ class MyInterestStudyFragment : Fragment() {
     private var selectedStudyCategory: String? = "전체"
     private var isFirstSpinnerCall = true
     private val chipViewModel: ChipViewModel by activityViewModels()
+    private var currentPage = 0
+    private val size = 5 // 페이지당 항목 수
+    private var totalPages = 0
+    private var startPage = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,7 +78,7 @@ class MyInterestStudyFragment : Fragment() {
         initArguments()
         setupRecyclerView()
         setupTabs()
-        setupSpinner()
+        setupBottomSheet()
         setupFilterIcon()
         setupPageNavigationButtons()
         setupNavigationClickListeners()
@@ -193,34 +197,44 @@ class MyInterestStudyFragment : Fragment() {
         interestBoardAdapter.updateList(boardItems)
     }
 
-    private fun setupSpinner() {
-        val genderList = listOf("최신 순", "조회수 높은 순", "관심 많은 순")
-        val genderAdapter = FixedRoundedSpinnerAdapter(requireContext(), genderList)
-        binding.filterToggle.adapter = genderAdapter
-        binding.filterToggle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if (isFirstSpinnerCall) {
-                    isFirstSpinnerCall = false
-                    return
-                }
+    private fun setupBottomSheet() {
+        val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_interest_spinner, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.InterestBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(dialogView)
 
-                selectedItem = when (position) {
-                    0 -> "ALL"   // 최신 순
-                    1 -> "HIT"      // 조회수 높은 순
-                    2 -> "LIKED"    // 관심 많은 순
-                    else -> "ALL"
-                }
-                fetchMyInterestAll(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, activityFee01, currentPage)
-            }
+        val recentlyLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_recently)
+        val viewLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_view)
+        val hotLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_hot)
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
+        recentlyLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "최신 순"
+            fetchFilteredStudy("ALL")  // 최신 순
+        }
+
+        viewLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "조회 수 높은 순"
+            fetchFilteredStudy("HIT")
+        }
+
+        hotLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "관심 많은 순"
+            fetchFilteredStudy("LIKED")  // 관심 많은 순
+        }
+
+        binding.filterToggleContainer.setOnClickListener {
+            bottomSheetDialog.show()
+        }
+    }
+
+    private fun fetchFilteredStudy(selectedItem: String) {
+        this.selectedItem = selectedItem
+        if (selectedStudyCategory == "전체") {
+            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, activityFee01, currentPage)
+        } else {
+            fetchMyInterestSpecific(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, selectedStudyCategory, activityFee01, currentPage)
         }
     }
 
@@ -265,14 +279,106 @@ class MyInterestStudyFragment : Fragment() {
     }
 
     private fun updatePageNumberUI() {
-        binding.currentPage.text = (currentPage + 1).toString()
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            textView.setOnClickListener {
+                val selectedPage = startPage + index
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    if (selectedStudyCategory == "전체") {
+                        fetchMyInterestAll(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, activityFee01, currentPage)
+                    } else {
+                        fetchMyInterestSpecific(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, selectedStudyCategory, activityFee01, currentPage)
+                    }
+                }
+            }
+        }
+
+        // 페이지 전환 버튼 설정
+        binding.previousPage.setOnClickListener {
+            if (currentPage > 0) {
+                currentPage--
+                if (selectedStudyCategory == "전체") {
+                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, activityFee01, currentPage)
+                } else {
+                    fetchMyInterestSpecific(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, selectedStudyCategory, activityFee01, currentPage)
+                }
+            }
+        }
+
+        binding.nextPage.setOnClickListener {
+            if (currentPage < getTotalPages() - 1) {
+                currentPage++
+                if (selectedStudyCategory == "전체") {
+                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, activityFee01, currentPage)
+                } else {
+                    fetchMyInterestSpecific(selectedItem, gender, minAge, maxAge, activityFee02, activityFeeAmount, selectedStudyCategory, activityFee01, currentPage)
+                }
+            }
+        }
+    }
+
+    private fun calculateStartPage(): Int {
+        return if (currentPage <= 2) {
+            0
+        } else {
+            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+    }
+
+    private fun getTotalPages(): Int {
+        return totalPages // 올바른 페이지 수 계산
+    }
+
+    private fun updatePageUI() {
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            val pageNum = startPage + index
+            if (pageNum < totalPages) {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(
+                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                )
+                textView.isEnabled = true
+                textView.alpha = 1.0f
+                textView.visibility = View.VISIBLE
+            } else {
+                textView.text = (pageNum + 1).toString()
+                textView.setBackgroundResource(0)
+                textView.isEnabled = false // 클릭 안 되게
+                textView.alpha = 0.3f
+                textView.visibility = View.VISIBLE
+            }
+        }
+
         binding.previousPage.isEnabled = currentPage > 0
         binding.nextPage.isEnabled = currentPage < totalPages - 1
-
-        binding.previousPage.setTextColor(ContextCompat.getColor(requireContext(),
-            if (currentPage > 0) R.color.active_color else R.color.disabled_color))
-        binding.nextPage.setTextColor(ContextCompat.getColor(requireContext(),
-            if (currentPage < totalPages - 1) R.color.active_color else R.color.disabled_color))
     }
 
     private fun fetchMyInterestAll(
@@ -328,13 +434,17 @@ class MyInterestStudyFragment : Fragment() {
                                 isHost = false
                             )
                             boardItems.add(boardItem)
+                            binding.pageNumberLayout.visibility = View.VISIBLE
+                            startPage = calculateStartPage()
+                            updatePageNumberUI()
+                            updatePageUI()
                         }
-                        updatePageNumberUI()
                         binding.myInterestStudyReyclerview.visibility = View.VISIBLE
                         val totalElements = apiResponse.result.totalElements
                         binding.checkAmount.text = totalElements.toString()+"건"
                         updateRecyclerView(boardItems)
                     } else {
+                        binding.pageNumberLayout.visibility = View.GONE
                         binding.checkAmount.text = "0건"
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                         binding.myInterestStudyReyclerview.visibility = View.GONE
@@ -419,13 +529,19 @@ class MyInterestStudyFragment : Fragment() {
                             )
                             boardItems.add(boardItem)
                         }
-                        updatePageNumberUI()
                         binding.myInterestStudyReyclerview.visibility = View.VISIBLE
                         binding.checkAmount.text = "${apiResponse.result.totalElements}건"
                         updateRecyclerView(boardItems)
+
+                        binding.pageNumberLayout.visibility = View.VISIBLE
+                        startPage = calculateStartPage()
+                        updatePageNumberUI()
+                        updatePageUI()
                     } else {
-                        Log.w("API_FAIL", "isSuccess = false, message: ${apiResponse?.message}")
-                        showEmptyState()
+                        binding.pageNumberLayout.visibility = View.GONE
+                        binding.checkAmount.text = "0건"
+                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
+                        binding.myInterestStudyReyclerview.visibility = View.GONE
                     }
                 } else {
                     Log.e("API_ERROR", """

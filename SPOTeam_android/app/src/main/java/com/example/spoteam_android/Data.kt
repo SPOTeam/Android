@@ -662,4 +662,3 @@ data class SpotMemberResult(
     val isSpotMember: Boolean
 )
 
-
