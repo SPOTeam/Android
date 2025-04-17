@@ -92,9 +92,6 @@ object RetrofitInstance {
             .build()
     }
 
-    /**
-     * ✅ Retrofit 객체 생성.
-     */
     var gson = GsonBuilder().setLenient().create()
     val retrofit: Retrofit by lazy {
 
