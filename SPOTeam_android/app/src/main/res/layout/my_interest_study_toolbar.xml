@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="내 관심지역 스터디"
+            android:text="내 관심사 스터디"
             android:fontFamily="@font/pretendard"
             android:textColor="@color/black"
             android:textSize="16sp"
