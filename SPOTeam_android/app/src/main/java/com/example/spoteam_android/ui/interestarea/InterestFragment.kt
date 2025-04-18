@@ -58,7 +58,7 @@ class InterestFragment : Fragment() {
     private var minFee: Int? = null
     private var maxFee: Int? = null
     private var hasFee: Boolean = false
-    private var themeTypes: List<String> = listOf("HOBBY")
+    private var themeTypes: List<String> = listOf("어학", "자격증", "취업", "시사뉴스", "자율학습", "토론", "프로젝트", "공모전", "전공및진로학습", "기타")
     private var source: String? = null
     private var selectedItem: String = "ALL"
     private var selectedRegion: String? = "0000000000"
@@ -331,47 +331,6 @@ class InterestFragment : Fragment() {
         )
     }
 
-
-
-//    private fun setupSpinner() {
-//        val genderList = listOf("최신 순", "조회수 높은 순", "관심 많은 순")
-//        val genderAdapter = FixedRoundedSpinnerAdapter(requireContext(), genderList)
-//        binding.filterToggle.adapter = genderAdapter
-//        binding.filterToggle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(
-//                parent: AdapterView<*>,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//                if (isFirstSpinnerCall) {
-//                    isFirstSpinnerCall = false
-//                    return
-//                }
-//
-//                selectedItem = when (position) {
-//                    0 -> "ALL"   // 최신 순
-//                    1 -> "HIT"      // 조회수 높은 순
-//                    2 -> "LIKED"    // 관심 많은 순
-//                    else -> "ALL"
-//                }
-//                fetchData(
-//                    selectedItem,
-//                    gender = gender,
-//                    minAge = minAge,
-//                    maxAge = maxAge,
-//                    activityFee = activityFee,
-//                    activityFeeAmount = activityFeeAmount,
-//                    selectedStudyTheme = selectedStudyTheme,
-//                    currentPage = currentPage
-//                )
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                TODO("Not yet implemented")
-//            }
-//        }
-//    }
 
 
     private fun fetchData(

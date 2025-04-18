@@ -245,8 +245,6 @@ class MyInterestStudyFragment : Fragment() {
             val filterFragment = MyInterestStudyFilterFragment().apply { arguments = bundle }
             replaceFragment(filterFragment)
         }
-
-
     }
 
     private fun setupPageNavigationButtons() {
