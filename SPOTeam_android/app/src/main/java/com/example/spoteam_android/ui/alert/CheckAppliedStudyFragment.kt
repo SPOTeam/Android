@@ -50,6 +50,11 @@ class CheckAppliedStudyFragment : Fragment(), AttendStudyCompleteListener, Atten
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        fetchStudyAlert()
+    }
+
     private fun fetchStudyAlert() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.getStudyAlert(page, size)
@@ -92,7 +97,10 @@ class CheckAppliedStudyFragment : Fragment(), AttendStudyCompleteListener, Atten
 
         dataRVAdapter.setItemClickListener(object :CheckAppliedStudyFragmentRVAdapter.OnItemClickListener{
             override fun onOKClick(data : AlertStudyDetail) {
-                postStudyAccept(data.studyId)
+//                postStudyAccept(data.studyId)
+                val dlgOK = OkDialog(requireContext(), this@CheckAppliedStudyFragment)
+                dlgOK.setStudyId(data.studyId)
+                dlgOK.start()
 
             }
 

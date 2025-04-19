@@ -6,20 +6,23 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ic_study_iv"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:background="@color/white"
         android:layout_gravity="center"
+        android:src="@drawable/sample_img"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_live_popular"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut1"
+        app:strokeWidth="0.3dp"
         app:strokeColor="@color/g300"
-        app:strokeWidth="1dp" />
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 
     <TextView
         android:id="@+id/study_title_tv"
@@ -44,12 +47,12 @@
         android:layout_marginTop="10dp"
         android:textColor="@color/black"
         android:lineSpacingExtra="3dp"
-        app:layout_constraintStart_toStartOf="@id/study_title_tv"
-        app:layout_constraintTop_toBottomOf="@id/study_title_tv"/>
+        app:layout_constraintBottom_toBottomOf="@id/ic_study_iv"
+        app:layout_constraintStart_toStartOf="@id/study_title_tv" />
 
     <TextView
         android:id="@+id/study_refuse_iv"
-        android:layout_width="135dp"
+        android:layout_width="125dp"
         android:layout_height="30dp"
         android:text="불참"
         android:gravity="center"
@@ -57,18 +60,20 @@
         android:textFontWeight="800"
         android:textSize="13dp"
         android:background="@drawable/button_wrong_backgground"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
+        android:elevation="2dp"
         app:layout_constraintStart_toStartOf="@id/study_content_tv"
         app:layout_constraintTop_toBottomOf="@id/study_content_tv"/>
 
     <TextView
         android:id="@+id/study_ok_iv"
-        android:layout_width="135dp"
+        android:layout_width="125dp"
         android:layout_height="30dp"
         android:text="참여"
         android:gravity="center"
         android:textColor="@drawable/button_textcolor"
         android:textFontWeight="800"
+        android:elevation="2dp"
         android:textSize="13dp"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="10dp"
@@ -88,6 +93,6 @@
         android:background="@color/g300"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/ic_study_iv"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="@id/study_ok_iv"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
