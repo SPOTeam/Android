@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:text="999+"
-                    android:textColor="#005BFF"
+                    android:textColor="@color/b500"
                     android:textFontWeight="700"
                     android:textSize="12sp" />
 
@@ -129,10 +129,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/pretendard"
+                android:fontFamily="@font/suit_semi_bold"
                 android:text="#THEME"
                 android:textAlignment="center"
-                android:textColor="@color/selector_blue"
+                android:textColor="@color/b500"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@id/community_content_profile_iv"
                 app:layout_constraintTop_toBottomOf="@id/community_content_profile_iv" />
@@ -207,7 +207,7 @@
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/content_summary_tv"
-                    app:tint="#005BFF" />
+                    app:tint="@color/b500" />
 
                 <TextView
                     android:id="@+id/community_content_likeNum_tv"
@@ -216,7 +216,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="16dp"
                     android:text="999+"
-                    android:textColor="@color/selector_blue"
+                    android:textColor="@color/b500"
                     android:textFontWeight="700"
                     android:textSize="12sp" />
 
@@ -236,7 +236,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="16dp"
                     android:text="999+"
-                    android:textColor="@color/selector_blue"
+                    android:textColor="@color/b500"
                     android:textFontWeight="700"
                     android:textSize="12sp" />
 
@@ -255,7 +255,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="999+"
-                    android:textColor="@color/selector_blue"
+                    android:textColor="@color/b500"
                     android:textFontWeight="700"
                     android:textSize="12sp" />
 

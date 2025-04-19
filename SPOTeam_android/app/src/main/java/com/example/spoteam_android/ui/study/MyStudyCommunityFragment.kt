@@ -109,31 +109,31 @@ class MyStudyCommunityFragment : Fragment() {
 
 
     private fun initBTN() {
-        binding.allChip.setOnClickListener{
+        binding.allRb.setOnClickListener{
             themeQuery = ""
             fetchPages()
         }
-        binding.notiChip.setOnClickListener{
+        binding.notiRb.setOnClickListener{
             themeQuery = "ANNOUNCEMENT"
             fetchPages()
         }
-        binding.introHelloChip.setOnClickListener{
+        binding.introHelloRb.setOnClickListener{
             themeQuery = "WELCOME"
             fetchPages()
         }
-        binding.shareInfoChip.setOnClickListener{
+        binding.shareInfoRb.setOnClickListener{
             themeQuery = "INFO_SHARING"
             fetchPages()
         }
-        binding.afterStudyChip.setOnClickListener{
+        binding.afterStudyRb.setOnClickListener{
             themeQuery = "STUDY_REVIEW"
             fetchPages()
         }
-        binding.freeTalkChip.setOnClickListener{
+        binding.freeTalkRb.setOnClickListener{
             themeQuery = "FREE_TALK"
             fetchPages()
         }
-        binding.qnaChip.setOnClickListener{
+        binding.qnaRb.setOnClickListener{
             themeQuery = "QNA"
             fetchPages()
         }
