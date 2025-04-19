@@ -242,7 +242,7 @@ class HouseFragment : Fragment() {
         }
 
         binding.houseRecruitCl.setOnClickListener {
-            bundle.putString("source", "HouseFragment")
+            bundle3.putString("source", "HouseFragment")
             activity?.let {
                 it.supportFragmentManager.beginTransaction()
                     .replace(R.id.main_frm, recruitingStudyFragment)

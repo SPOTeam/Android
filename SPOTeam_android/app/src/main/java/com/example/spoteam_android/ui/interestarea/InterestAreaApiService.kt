@@ -73,7 +73,9 @@ interface RecruitingStudyApiService {
         @Query("maxAge") maxAge: Int?,
         @Query("isOnline") isOnline: Boolean?,
         @Query("hasFee") hasFee: Boolean?,
-        @Query("fee") fee: Int?
+        @Query("maxFee") maxFee: Int?,
+        @Query("minFee") minFee: Int?,
+        @Query("themeTypes") themeTypes: List<String>?
     ): Call<ApiResponse>
 }
 
@@ -88,7 +90,8 @@ interface MyInterestStudyAllApiService {
         @Query("maxAge") maxAge: Int?,
         @Query("isOnline") isOnline: Boolean?,
         @Query("hasFee") hasFee: Boolean?,
-        @Query("fee") fee: Int?
+        @Query("maxFee") maxFee: Int?,
+        @Query("minFee") minFee: Int?,
     ): Call<ApiResponse>
 }
 
@@ -109,7 +112,8 @@ interface MyInterestStudySpecificApiService {
         @Query("maxAge") maxAge: Int?,
         @Query("isOnline") isOnline: Boolean?,
         @Query("hasFee") hasFee: Boolean?,
-        @Query("fee") fee: Int?,
+        @Query("maxFee") maxFee: Int?,
+        @Query("minFee") minFee: Int?,
         @Query("theme") theme: String?
     ): Call<ApiResponse>
 }

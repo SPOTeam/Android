@@ -27,7 +27,7 @@ import retrofit2.Response
 class DetailStudyFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailStudyBinding
-    private val tabList = arrayListOf("홈", "캘린더", "게시판", "갤러리", "투두리스트")
+    private val tabList = arrayListOf("홈", "일정", "커뮤니티", "갤러리", "투두쉐어링")
     private var currentTabPosition: Int = 0
     private var startDateTime: String? = null
     private var kakaoNickname: String? = null
@@ -55,10 +55,11 @@ class DetailStudyFragment : Fragment() {
         setupViews()
         setupViewPager()
         setupStudyObservers()
+        tabMargin()
     }
 
     private fun setupViews() {
-        binding.fragmentDetailStudyUsernameTv.text = kakaoNickname
+        binding.fragmentDetailStudyUsernameTv.text = "$kakaoNickname"+"님"
 
         binding.fragmentDetailStudyPreviousBt.setOnClickListener {
             parentFragmentManager.popBackStack()
@@ -235,6 +236,19 @@ class DetailStudyFragment : Fragment() {
                     viewPager.requestLayout()
                 }
             }
+        }
+    }
+    private fun tabMargin(){
+        val tabLayout = binding.fragmentDetailStudyTl
+        val tabStrip = tabLayout.getChildAt(0) as ViewGroup
+
+        for (i in 0 until tabStrip.childCount) {
+            val tab = tabStrip.getChildAt(i)
+            val layoutParams = tab.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.marginEnd = 3
+            layoutParams.marginStart = 0
+            tab.layoutParams = layoutParams
+            tab.requestLayout()
         }
     }
 }

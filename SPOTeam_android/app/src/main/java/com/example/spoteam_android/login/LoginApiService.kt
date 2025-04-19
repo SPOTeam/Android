@@ -6,10 +6,12 @@ import com.example.spoteam_android.IdResponse
 import com.example.spoteam_android.NaverLoginRequest
 import com.example.spoteam_android.NaverResponse
 import com.example.spoteam_android.NaverResult
+import com.example.spoteam_android.NickNameRequest
 import com.example.spoteam_android.NickNameResponse
 import com.example.spoteam_android.ReasonApiResponse
 import com.example.spoteam_android.RegionApiResponse
 import com.example.spoteam_android.RegionsPreferences
+import com.example.spoteam_android.SpotMemberCheckResponse
 import com.example.spoteam_android.StudyReasons
 import com.example.spoteam_android.ThemeApiResponse
 import com.example.spoteam_android.ThemePreferences
@@ -72,17 +74,15 @@ interface LoginApiService {
         @Query("verificationCode") verificationCode: String, @Query("email") email: String)
     :Call<ValidateEmailResponse>
 
-    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @GET("/spot/check")
+    fun checkIsSpotMember(): Call<SpotMemberCheckResponse>
+
+
+
+
     @POST("/spot/sign-up/update")
     fun updateNickName(
-        @Query("nickname") nickname: String,
-        @Query("personalInfo") personalInfo: Boolean,
-        @Query("idInfo") idInfo: Boolean
+        @Body request: NickNameRequest
     ): Call<NickNameResponse>
-
-
-
-
-
 
 }

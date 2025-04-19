@@ -112,12 +112,12 @@ data class ValidateEmailResult(
     val tempTokenExpiresIn: Int
 )
 
-data class  NickNameResponse(
-    val isSuccess: Boolean,
-    val code: String,
-    val message: String,
-    val result: NickNameResult?
+data class NickNameRequest(
+    val nickname: String,
+    val personalInfo: Boolean,
+    val idInfo: Boolean
 )
+
 
 data class NickNameResult(
     val name: String,
@@ -125,6 +125,12 @@ data class NickNameResult(
     val email: String,
     val idInfo: Boolean,
     val personalInfo: Boolean
+)
+data class NickNameResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: NickNameResult
 )
 
 
@@ -645,4 +651,14 @@ data class WithdrawHostRequest(
     val reason: String
 )
 
+data class SpotMemberCheckResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: SpotMemberResult
+)
+
+data class SpotMemberResult(
+    val isSpotMember: Boolean
+)
 

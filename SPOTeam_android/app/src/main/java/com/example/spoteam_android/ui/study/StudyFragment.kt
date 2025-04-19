@@ -37,7 +37,6 @@ class StudyFragment : Fragment() {
     private var startPage = 0
     private val studyViewModel: StudyViewModel by activityViewModels()
 
-    // Retrofit API Service
     private lateinit var studyApiService: StudyApiService
 
     override fun onCreateView(
@@ -47,7 +46,6 @@ class StudyFragment : Fragment() {
         _binding = FragmentStudyBinding.inflate(inflater, container, false)
 
         binding.prevIv.setOnClickListener {
-            // 현재 Fragment를 백스택에서 제거하고 이전 Fragment로 돌아갑니다.
             parentFragmentManager.popBackStack()
         }
 
@@ -77,7 +75,6 @@ class StudyFragment : Fragment() {
             toggleLikeStatus(selectedItem, likeButton)
         })
 
-        // RecyclerView 설정
         binding.fragmentStudyRv.apply {
             adapter = studyAdapter
             layoutManager =
@@ -231,14 +228,11 @@ class StudyFragment : Fragment() {
                     ) {
                         if (response.isSuccessful) {
                             response.body()?.let { likeResponse ->
-                                // 서버에서 반환된 상태에 따라 하트 아이콘 및 StudyItem의 liked 상태 업데이트
                                 val newStatus = likeResponse.result.status
-                                studyItem.liked = newStatus == "LIKE" // Boolean 값으로 업데이트
+                                studyItem.liked = newStatus == "LIKE"
                                 val newIcon =
                                     if (studyItem.liked) R.drawable.ic_heart_filled else R.drawable.study_like
                                 likeButton.setImageResource(newIcon)
-
-                                // heartCount 즉시 증가 또는 감소
                                 studyItem.heartCount =
                                     if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
                                 studyAdapter.notifyItemChanged(itemList.indexOf(studyItem))
