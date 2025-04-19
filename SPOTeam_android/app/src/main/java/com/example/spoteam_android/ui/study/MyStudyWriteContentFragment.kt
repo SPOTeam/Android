@@ -191,35 +191,36 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
         val title = binding.writeContentTitleEt.text.toString().trim()
         val content = binding.writeContentContentEt.text.toString().trim()
 
-        // 여러 이미지 파일을 담을 리스트 생성
-        val imageParts = mutableListOf<MultipartBody.Part>()
+        var imagePart: MultipartBody.Part? = null
 
         if (imageList.isNotEmpty()) {
-            imageList.forEach { item ->
-                when (item) {
-                    is Uri -> { // ✅ 갤러리에서 추가한 이미지
-                        val file = getFileFromUri(item)
-                        if (file != null) {
-                            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                            val imagePart =
-                                MultipartBody.Part.createFormData("images", file.name, requestFile)
-                            imageParts.add(imagePart)
-                        }
-                    }
-                }
+            val item = imageList[0] // 하나만 사용
+            if (item is Uri) {
+                val file = getFileFromUri(item)
+                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                imagePart = MultipartBody.Part.createFormData("image", file.name, requestFile)
             }
         }
-
 
         // 나머지 데이터를 RequestBody로 변환
         val isAnnouncementPart = isAnnouncement.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val themePart = selectedTheme.toRequestBody("text/plain".toMediaTypeOrNull())
         val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
         val contentPart = content.toRequestBody("text/plain".toMediaTypeOrNull())
+        val existingImagePart = "".toRequestBody("text/plain".toMediaTypeOrNull())
 
-        // 서버로 데이터 전송
-        sendContentToServer(studyId, isAnnouncementPart, themePart, titlePart, contentPart, imageParts)
+        // 서버 전송
+        sendContentToServer(
+            studyId,
+            isAnnouncementPart,
+            themePart,
+            titlePart,
+            contentPart,
+            imagePart,
+            existingImagePart
+        )
     }
+
 
     private fun getFileFromUri(uri: Uri): File {
         val inputStream = requireContext().contentResolver.openInputStream(uri)
@@ -243,7 +244,8 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
         themePart: RequestBody,
         titlePart: RequestBody,
         contentPart: RequestBody,
-        imageParts: List<MultipartBody.Part>
+        imagePart: MultipartBody.Part?,
+        existingImage: RequestBody?
     ) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.postStudyPost(
@@ -252,7 +254,8 @@ class MyStudyWriteContentFragment : BottomSheetDialogFragment(), AdapterView.OnI
             themePart,
             titlePart,
             contentPart,
-            imageParts
+            imagePart,
+            existingImage
         ).enqueue(object : Callback<StudyPostResponse> {
             override fun onResponse(call: Call<StudyPostResponse>, response: Response<StudyPostResponse>) {
                 if (response.isSuccessful && response.body()?.isSuccess == "true") {
