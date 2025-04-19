@@ -202,7 +202,7 @@
         app:layout_constraintTop_toBottomOf="@id/horizontalScroll_fl"
         app:layout_constraintBottom_toTopOf="@id/page_number_layout"
         tools:itemCount="5"
-        tools:listitem="@layout/item_community_content"/>
+        tools:listitem="@layout/item_mystudy_community_content"/>
 
     <LinearLayout
         android:id="@+id/page_number_layout"

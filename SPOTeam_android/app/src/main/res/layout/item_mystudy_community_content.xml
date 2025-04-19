@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/content_title_tv"
-            android:layout_width="300dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="카카오 최종합격 카카오 최종합격 카카오 최종합격 카카오 최종합격"
             android:textSize="15sp"
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:layout_gravity="center"
+            android:layout_gravity="end"
             android:text="공지"
             android:textSize="15sp"
             android:textFontWeight="800"

@@ -46,7 +46,6 @@ class CrewSolveQuizFragment : Fragment() {
     private var scheduleId = -1;
     private var question = "";
     private lateinit var answerEt : EditText
-    private lateinit var answerCount : TextView
     private lateinit var sendButton : TextView
     private lateinit var des : TextView
     private var timeInMillis: Long = 0L
@@ -74,7 +73,7 @@ class CrewSolveQuizFragment : Fragment() {
         arguments?.let {
             scheduleId = it.getInt("scheduleId")
             question = it.getString("question").toString()
-            timeInMillis = it.getLong("remainingTime",0L)
+            timeInMillis = it.getLong("remainingTimeMillis",0L)
 
             Log.d("CheckAttendanceFragment", "Received scheduleId: $scheduleId")
         }
@@ -167,14 +166,11 @@ class CrewSolveQuizFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val textLength = s?.length ?: 0
-                answerCount.text = textLength.toString()
 
                 if(textLength > 0) {
                     sendButton.isEnabled = true
-                    des.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.selector_blue))
                 } else {
                     sendButton.isEnabled = false
-                    des.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.button_disabled_text))
                 }
             }
 
@@ -194,6 +190,11 @@ class CrewSolveQuizFragment : Fragment() {
 
 
     private fun startTimer() {
+        // 기존 타이머가 있다면 먼저 종료
+        if (::countDownTimer.isInitialized) {
+            countDownTimer.cancel()
+        }
+
         countDownTimer = object : CountDownTimer(timeInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val minutes = (millisUntilFinished / 1000) / 60
@@ -203,7 +204,11 @@ class CrewSolveQuizFragment : Fragment() {
 
             override fun onFinish() {
                 binding.timerTv.text = "00 : 00"
+                binding.answerFromCrewEt.isEnabled = false
+                binding.sendCrewAnswer.isEnabled = false
             }
+
         }.start()
     }
+
 }

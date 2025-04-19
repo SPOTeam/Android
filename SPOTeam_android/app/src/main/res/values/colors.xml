@@ -49,8 +49,7 @@
     <color name="g200">#F0F0F4</color>
     <color name="g100">#F6F6F9</color>
 
-
-
+    <color name="semi_black_40">#66000000</color>
 
 
 </resources>
