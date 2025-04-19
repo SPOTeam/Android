@@ -131,12 +131,12 @@ class AlertMultiViewRVAdapter(
     inner class LiveViewHolder(private val binding : ItemAlertLiveBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AlertDetail) {
             if(item.isChecked) {
-                binding.root.isEnabled = false
                 binding.icNewAlertLive.visibility = View.GONE
+
             } else {
-                binding.root.isEnabled = true
                 binding.icNewAlertLive.visibility = View.VISIBLE
             }
+            binding.contentCl.isSelected = item.isChecked
             binding.alertLiveContentTv.text = item.studyTitle
         }
     }
@@ -152,12 +152,13 @@ class AlertMultiViewRVAdapter(
 
 
             if(item.isChecked) {
-                binding.root.isEnabled = false
                 binding.icNewAlertUpdate.visibility = View.GONE
             } else {
-                binding.root.isEnabled = true
                 binding.icNewAlertUpdate.visibility = View.VISIBLE
             }
+
+            binding.contentCl.isSelected = item.isChecked
+
             when (item.type) {
                 "ANNOUNCEMENT" -> {
 //                    binding.studyName.text = item.studyTitle

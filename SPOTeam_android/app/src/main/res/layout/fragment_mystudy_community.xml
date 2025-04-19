@@ -34,7 +34,6 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:src="@drawable/write"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -57,119 +56,78 @@
 
         <HorizontalScrollView
             android:id="@+id/category_hsv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:paddingHorizontal="20dp"
             android:scrollbars="none"
             app:layout_constraintStart_toEndOf="@id/write_content_iv"
             app:layout_constraintTop_toTopOf="parent">
 
-            <RadioGroup
-                android:id="@+id/radioGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:orientation="horizontal">
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/category_chip_group"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:singleSelection="true"
+                android:checkableBehavior="single"
+                android:clipToPadding="false">
 
-                <RadioButton
-                    android:checked="true"
-                    android:id="@+id/all_rb"
-                    android:layout_width="45dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
-                    android:textSize="14sp"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/all_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/find_ChipStyle"
                     android:text="전체"
-                    android:fontFamily="@font/pretendard"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:textAlignment="center"/>
+                    android:checkable="true" />
 
-                <RadioButton
-                    android:id="@+id/noti_rb"
-                    android:layout_width="45dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
-                    android:textSize="14sp"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/noti_chip"
+                    style="@style/find_ChipStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="공지"
-                    android:fontFamily="@font/pretendard"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:textAlignment="center"/>
+                    android:checkable="true" />
 
-                <RadioButton
-                    android:id="@+id/intro_hello_rb"
-                    android:layout_width="69dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
-                    android:textSize="14sp"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/intro_hello_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/find_ChipStyle"
                     android:text="가입인사"
-                    android:fontFamily="@font/pretendard"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:textAlignment="center"/>
+                    android:checkable="true" />
 
-                <RadioButton
-                    android:id="@+id/share_info_rb"
-                    android:layout_width="69dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
-                    android:textSize="14sp"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/share_info_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/find_ChipStyle"
                     android:text="정보공유"
-                    android:fontFamily="@font/pretendard"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:textAlignment="center"/>
+                    android:checkable="true" />
 
-                <RadioButton
-                    android:id="@+id/after_study_rb"
-                    android:layout_width="84dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
-                    android:textSize="14sp"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/after_study_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/find_ChipStyle"
                     android:text="스터디후기"
-                    android:fontFamily="@font/pretendard"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:textAlignment="center"/>
+                    android:checkable="true" />
 
-                <RadioButton
-                    android:id="@+id/free_talk_rb"
-                    android:layout_width="45dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
-                    android:textSize="14sp"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/free_talk_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/find_ChipStyle"
                     android:text="자유"
-                    android:fontFamily="@font/pretendard"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:textAlignment="center"/>
+                    android:checkable="true" />
 
-                <RadioButton
-                    android:id="@+id/qna_rb"
-                    android:layout_width="45dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
-                    android:textSize="14sp"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/qna_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/find_ChipStyle"
                     android:text="Q&amp;A"
-                    android:fontFamily="@font/pretendard"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:textAlignment="center"/>
+                    android:checkable="true" />
 
-            </RadioGroup>
+            </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
         <View
