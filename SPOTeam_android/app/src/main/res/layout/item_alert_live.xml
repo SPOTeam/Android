@@ -46,7 +46,7 @@
           android:fontFamily="@font/suit_semi_bold"
           android:textStyle="bold"
           android:textSize="15dp"
-          android:layout_marginStart="10dp"
+          android:layout_marginStart="20dp"
           app:layout_constraintStart_toEndOf="@id/alert_start_iv"
           app:layout_constraintTop_toTopOf="@id/alert_start_iv"/>
 
@@ -55,7 +55,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text= "&quot;카카오 최종 합격 후기 &quot;"
-          android:layout_marginStart="10dp"
+          android:layout_marginStart="20dp"
           android:textFontWeight="800"
           android:textSize="13dp"
           android:textColor="@color/black"

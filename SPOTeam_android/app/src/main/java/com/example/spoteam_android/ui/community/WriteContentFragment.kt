@@ -71,9 +71,9 @@ class WriteContentFragment() : BottomSheetDialogFragment(), AdapterView.OnItemSe
         ArrayAdapter.createFromResource(
             requireContext(),
             R.array.category_list,
-            android.R.layout.simple_spinner_item
+            R.layout.write_spinner_item
         ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.write_spinner_dropdown_item)
             binding.mystudyCategorySpinner.adapter = adapter
         }
 
