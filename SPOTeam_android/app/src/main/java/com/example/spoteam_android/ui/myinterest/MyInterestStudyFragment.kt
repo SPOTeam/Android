@@ -52,14 +52,15 @@ class MyInterestStudyFragment : Fragment() {
     private lateinit var studyApiService: StudyApiService
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var interestBoardAdapter: InterestVPAdapter
-    private lateinit var gender: String
+    private var gender: String? = null
     private var minAge: Int = 18
     private var maxAge: Int = 60
     private var minFee: Int? = null
     private var maxFee: Int? = null
-    private var hasFee: Boolean = false
-    private var isOnline: Boolean = true
+    private var hasFee: Boolean? = null
+    private var isOnline: Boolean? = null
     private var source: String? = null
+    private var regionCodes: String? = null
     private var selectedStudyCategory: String? = "전체"
     private var selectedItem: String = "ALL"
     private var selectedStudyTheme: String ="전체"
@@ -79,6 +80,7 @@ class MyInterestStudyFragment : Fragment() {
         selectedItem = when (viewModel.isRecruiting) {
             true -> "RECRUITING"
             false -> "COMPLETED"
+            null -> "RECRUITING"
         }
 
         initArguments()
@@ -99,9 +101,11 @@ class MyInterestStudyFragment : Fragment() {
         minAge = viewModel.minAge
         maxAge = viewModel.maxAge
         hasFee = viewModel.hasFee
+        regionCodes = viewModel.selectedCode
         minFee = viewModel.finalMinFee
         maxFee = viewModel.finalMaxFee
         isOnline = viewModel.isOnline
+
         source = arguments?.getString("source") // source만 그대로 Bundle에서 받음
     }
 
@@ -116,7 +120,7 @@ class MyInterestStudyFragment : Fragment() {
                 binding.icFilterActive.visibility = View.VISIBLE
             }
         }
-        fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+        fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
     }
 
     private fun setupTabs() {
@@ -163,9 +167,9 @@ class MyInterestStudyFragment : Fragment() {
         selectedStudyTheme = selectedStudyCategory.toString()  // ← 탭 선택값으로 테마 업데이트
 
         if (selectedStudyCategory == "전체") {
-            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
         } else {
-            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
         }
     }
 
@@ -227,9 +231,9 @@ class MyInterestStudyFragment : Fragment() {
     private fun fetchFilteredStudy(selectedItem: String) {
         this.selectedItem = selectedItem
         if (selectedStudyCategory == "전체") {
-            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
         } else {
-            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
         }
     }
 
@@ -265,9 +269,9 @@ class MyInterestStudyFragment : Fragment() {
 
     private fun requestPageUpdate() {
         if (selectedStudyCategory == "전체") {
-            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
         } else {
-            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
         }
     }
 
@@ -292,9 +296,9 @@ class MyInterestStudyFragment : Fragment() {
                 if (currentPage != selectedPage) {
                     currentPage = selectedPage
                     if (selectedStudyCategory == "전체") {
-                        fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+                        fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
                     } else {
-                        fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+                        fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
                     }
                 }
             }
@@ -305,9 +309,9 @@ class MyInterestStudyFragment : Fragment() {
             if (currentPage > 0) {
                 currentPage--
                 if (selectedStudyCategory == "전체") {
-                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
                 } else {
-                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
                 }
             }
         }
@@ -316,9 +320,9 @@ class MyInterestStudyFragment : Fragment() {
             if (currentPage < getTotalPages() - 1) {
                 currentPage++
                 if (selectedStudyCategory == "전체") {
-                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
                 } else {
-                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
                 }
             }
         }
@@ -376,14 +380,15 @@ class MyInterestStudyFragment : Fragment() {
 
     private fun fetchMyInterestAll(
             selectedItem: String,
-            gender: String,
+            gender: String?,
             minAge: Int,
             maxAge: Int,
-            isOnline: Boolean,
-            hasFee: Boolean,
+            isOnline: Boolean?,
+            hasFee: Boolean?,
             minFee: Int?,
             maxFee: Int?,
-            currentPage: Int?= null
+            currentPage: Int?= null,
+            regionCodes: String?
     )
     {
         val boardItems = arrayListOf<BoardItem>()
@@ -391,7 +396,7 @@ class MyInterestStudyFragment : Fragment() {
 
         Log.d("API_REQUEST", "fetchMyInterestAll() called with params: " +
                 "selectedItem=$selectedItem, gender=$gender, minAge=$minAge, maxAge=$maxAge, " +
-                "isOnline=$isOnline, hasFee=$hasFee,minFee=$minFee, maxFee=$maxFee, currentPage=$currentPage")
+                "isOnline=$isOnline, hasFee=$hasFee,minFee=$minFee, maxFee=$maxFee, currentPage=$currentPage,regionCodes = $regionCodes")
         service.GetMyInterestStudy(
             gender = gender,
             minAge = minAge,
@@ -402,7 +407,8 @@ class MyInterestStudyFragment : Fragment() {
             maxFee = maxFee,
             page = currentPage ?: 0 ,
             size = 5,
-            sortBy = selectedItem ?: "ALL"
+            sortBy = selectedItem ?: "ALL",
+            regionCodes = regionCodes,
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
 
@@ -459,14 +465,15 @@ class MyInterestStudyFragment : Fragment() {
     private fun fetchMyInterestSpecific(
         selectedStudyTheme: String?,
         selectedItem: String,
-        gender: String,
+        gender: String?,
         minAge: Int,
         maxAge: Int,
-        isOnline: Boolean,
-        hasFee: Boolean,
+        isOnline: Boolean?,
+        hasFee: Boolean?,
         minFee: Int?,
         maxFee: Int?,
-        currentPage: Int?= null
+        currentPage: Int?= null,
+        regionCodes: String?
     ) {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(MyInterestStudySpecificApiService::class.java)
@@ -474,6 +481,7 @@ class MyInterestStudyFragment : Fragment() {
         Log.d("API_REQUEST", """
         fetchMyInterestSpecific() called
         selectedItem = $selectedItem
+        regionCodes = $regionCodes
         gender = $gender
         minAge = $minAge
         maxAge = $maxAge
@@ -496,7 +504,8 @@ class MyInterestStudyFragment : Fragment() {
             page = currentPage ?: 0,
             size = 5,
             sortBy = selectedItem,
-            theme = selectedStudyTheme
+            theme = selectedStudyTheme,
+            regionCodes = regionCodes
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 Log.d("API_RESPONSE", "HTTP Code: ${response.code()}, isSuccessful: ${response.isSuccessful}")

@@ -88,7 +88,8 @@ class InterestFilterFragment : Fragment() {
                 R.id.chip1_gender -> "UNKNOWN"
                 R.id.chip2_gender -> "MALE"
                 R.id.chip3_gender -> "FEMALE"
-                else -> "MALE"
+                ChipGroup.NO_ID -> null // ✅ 선택 안 됐을 때
+                else -> null
             }
             updateNextButtonState()
         }
@@ -142,9 +143,6 @@ class InterestFilterFragment : Fragment() {
             val maxfee = values[1].toInt()
             val formattedMinFee = NumberFormat.getNumberInstance().format(minfee)
             val formattedMaxFee = NumberFormat.getNumberInstance().format(maxfee)
-            // 코드 변경 필요
-//            viewModel.minAge = minAge
-//            viewModel.maxAge = maxAge
             minValueText.text = "₩$formattedMinFee"
             maxValueText.text = "₩$formattedMaxFee"
         }
@@ -153,51 +151,56 @@ class InterestFilterFragment : Fragment() {
     private fun setupActivityFeeChips() {
         val chipGroup1 = binding.chipGroup1
 
-
         chipGroup1.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId != ChipGroup.NO_ID) {
-                val checkedChip = chipGroup1.findViewById<Chip>(checkedId)
-                if (checkedChip.id == R.id.chip1) {
+            when (checkedId) {
+                R.id.chip1 -> {
                     viewModel.hasFee = true
                     binding.activityfeeSlider.isVisible = true
                     binding.displayfeeFrameLayout.isVisible = true
-                } else {
+                }
+                R.id.chip2 -> {
                     viewModel.hasFee = false
                     binding.activityfeeSlider.isVisible = false
                     binding.displayfeeFrameLayout.isVisible = false
                 }
-            } else {
-                viewModel.hasFee = false
-                binding.activityfeeSlider.isVisible = false
-                binding.displayfeeFrameLayout.isVisible = false
+                ChipGroup.NO_ID -> {
+                    viewModel.hasFee = null
+                    binding.activityfeeSlider.isVisible = false
+                    binding.displayfeeFrameLayout.isVisible = false
+                }
             }
             updateNextButtonState()
         }
-
-
     }
+
 
     private fun setupStudyThemeChips() {
         for (i in 0 until binding.chipGroup2.childCount) {
             val chip = binding.chipGroup2.getChildAt(i) as? Chip ?: continue
 
             chip.setOnClickListener {
-                val theme = chip.text.toString()
-                val themes = viewModel.themeTypes
-
-                if (chip.isChecked) {
-                    if (!themes.contains(theme)) {
-                        themes.add(theme)
-                    }
-                } else {
-                    themes.remove(theme)
+                val originalText = chip.text.toString()
+                val theme = when (originalText) {
+                    "시사/뉴스" -> "시사뉴스"
+                    "전공/진로학습" -> "전공및진로학습"
+                    else -> originalText
                 }
 
-                Log.d("InterestFilterFragment", "Selected study themes: $themes")
+                // themeTypes가 null이면 빈 리스트로 초기화
+                viewModel.themeTypes = (viewModel.themeTypes ?: mutableListOf()).apply {
+                    if (chip.isChecked) {
+                        if (!contains(theme)) add(theme)
+                    } else {
+                        remove(theme)
+                    }
+                }
+
+                Log.d("InterestFilterFragment", "Selected study themes: ${viewModel.themeTypes}")
                 updateNextButtonState()
             }
         }
     }
+
 
     private fun setupSearchButton() {
         //필터 초기화 클릭
@@ -247,7 +250,8 @@ class InterestFilterFragment : Fragment() {
             viewModel.isRecruiting = when (checkedId) {
                 R.id.chip1_recruiting -> true
                 R.id.chip2_recruiting -> false
-                else -> true
+                ChipGroup.NO_ID -> null
+                else -> null
             }
         }
         updateNextButtonState()

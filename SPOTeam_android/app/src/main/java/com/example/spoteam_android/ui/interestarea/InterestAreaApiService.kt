@@ -36,7 +36,7 @@ interface InterestAreaApiService {
 interface InterestSpecificAreaApiService {
     @GET("/spot/search/studies/preferred-region/specific")
     fun InterestSpecificArea(
-        @Query("regionCode") regionCode: String,
+        @Query("regionCode") regionCode: String?,
         @Query("gender") gender: String?,
         @Query("minAge") minAge: Int?,
         @Query("maxAge") maxAge: Int?,
@@ -47,6 +47,7 @@ interface InterestSpecificAreaApiService {
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sortBy") sortBy: String,
+        @Query("themeTypes") themeTypes: List<String>?
     ): Call<ApiResponse>
 }
 
@@ -92,6 +93,7 @@ interface MyInterestStudyAllApiService {
         @Query("hasFee") hasFee: Boolean?,
         @Query("maxFee") maxFee: Int?,
         @Query("minFee") minFee: Int?,
+        @Query("regionCodes") regionCodes: String?
     ): Call<ApiResponse>
 }
 
@@ -114,7 +116,8 @@ interface MyInterestStudySpecificApiService {
         @Query("hasFee") hasFee: Boolean?,
         @Query("maxFee") maxFee: Int?,
         @Query("minFee") minFee: Int?,
-        @Query("theme") theme: String?
+        @Query("theme") theme: String?,
+        @Query("regionCodes") regionCodes: String?
     ): Call<ApiResponse>
 }
 
