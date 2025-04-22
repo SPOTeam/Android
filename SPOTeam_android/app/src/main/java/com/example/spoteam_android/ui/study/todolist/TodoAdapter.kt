@@ -21,9 +21,9 @@ class TodoAdapter(
     private val onCheckTodo: (Int) -> Unit,           // 체크 시 ID를 전달하는 콜백
     private val repository: TodoRepository,
     private val studyId: Int                          // 추가된 스터디 ID
-) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+    ) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
-    inner class TodoViewHolder(val binding: ItemTodoListBinding) : RecyclerView.ViewHolder(binding.root)
+        inner class TodoViewHolder(val binding: ItemTodoListBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -44,7 +44,11 @@ class TodoAdapter(
             holder.binding.etTodo.visibility = View.GONE
             holder.binding.tvTodoText.visibility = View.VISIBLE
             holder.binding.tvTodoText.text = item.content
+
+            updateTodoStyle(holder, item.done)
         }
+
+
 
         // 키보드 "완료" 버튼 처리
         holder.binding.etTodo.setOnEditorActionListener { _, actionId, event ->
@@ -122,12 +126,10 @@ class TodoAdapter(
             if (item.done != isChecked) {
                 item.done = isChecked
                 onCheckTodo(item.id) // 체크 상태 변경 시 콜백 호출
+                updateTodoStyle(holder, isChecked)
             }
         }
     }
-
-
-
 
 
     override fun getItemCount(): Int = todoList.size
@@ -140,6 +142,11 @@ class TodoAdapter(
 
     fun getCurrentData(): List<TodoTask> {
         return todoList
+    }
+
+    private fun updateTodoStyle(holder: TodoViewHolder, isDone: Boolean) {
+        val colorRes = if (isDone) R.color.g400 else R.color.black
+        holder.binding.tvTodoText.setTextColor(ContextCompat.getColor(context, colorRes))
     }
 
     fun addTodo(selectedDate: String) {
@@ -196,14 +203,19 @@ class TodoAdapter(
     }
 
 
-
-
-
     private fun removeTodoFromList(todoTask: TodoTask) {
         val position = todoList.indexOf(todoTask)
         if (position != -1) {
             todoList.removeAt(position)
             notifyItemRemoved(position)
+        }
+    }
+
+    fun cancelIfEditing() {
+        val editingIndex = todoList.indexOfFirst { it.isEditing && it.isNew }
+        if (editingIndex != -1) {
+            todoList.removeAt(editingIndex)
+            notifyItemRemoved(editingIndex)
         }
     }
 }

@@ -3,29 +3,29 @@ package com.example.spoteam_android.ui.interestarea
 import androidx.lifecycle.ViewModel
 
 class InterestFilterViewModel : ViewModel() {
-    var gender: String = "MALE"
+    var gender: String? = null
     var minAge: Int = 18
     var maxAge: Int = 60
-    var isOnline: Boolean = false
-    var hasFee: Boolean = false
+    var isOnline: Boolean? = null
+    var hasFee: Boolean? = null
     var minfee: Int? = null
     var maxfee: Int? = null
-    var themeTypes: MutableList<String> = mutableListOf() // 복수 선택
-    var isRecruiting: Boolean = true
+    var themeTypes: MutableList<String>? = null
+    var isRecruiting: Boolean? = null
 
     val finalMinFee: Int?
-        get() = if (hasFee) minfee else null
+        get() = if (hasFee == true) minfee else null
 
     val finalMaxFee: Int?
-        get() = if (hasFee) maxfee else null
+        get() = if (hasFee == true) minfee else null
 
 
     fun reset() {
-        gender = "MALE"
+        gender = null
         minAge = 18
         maxAge = 60
-        hasFee = false
-        themeTypes.clear()
+        hasFee = null
+        themeTypes?.clear()
         isRecruiting = true
         minfee = null
         maxfee = null

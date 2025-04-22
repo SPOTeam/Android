@@ -66,8 +66,8 @@ class DetailStudyHomeProfileAdapter(
             //다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달용
             if (isSelected) {
                 binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
-                    ColorStateList.valueOf(ContextCompat.getColor(binding.root.context, R.color.active_blue))
-                binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 8f
+                    ColorStateList.valueOf(ContextCompat.getColor(binding.root.context, R.color.b400))
+                binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 3f
             } else {
                 binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
                     ColorStateList.valueOf(ContextCompat.getColor(binding.root.context, android.R.color.transparent))

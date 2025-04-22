@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +29,7 @@ import com.example.spoteam_android.ui.study.calendar.EventAdapter
 import com.example.spoteam_android.ui.study.calendar.EventViewModel
 import com.example.spoteam_android.ui.study.calendar.ScheduleResponse
 import com.example.spoteam_android.ui.study.DetailStudyHomeProfileAdapter
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,7 +45,6 @@ class TodoListFragment : Fragment() {
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var myTodoAdapter: TodoAdapter
     private lateinit var otherTodoAdapter: OtherTodoAdapter
-    private lateinit var layoutManager: LinearLayoutManager
     private lateinit var todoEventAdapter: TodoEventAdapter
     private lateinit var todoDateAdapter: TodoDateAdapter
     private lateinit var selectedDate: String // 멤버 변수로 선언
@@ -52,18 +53,28 @@ class TodoListFragment : Fragment() {
     private lateinit var memberIdMap: Map<ProfileItem, Int>
     private var selectedMemberId: Int? = null
     private lateinit var repository: TodoRepository // repository 선언
-    private lateinit var rvCalendar: RecyclerView
-    private lateinit var btnNextWeek: ImageButton
-    private lateinit var btnPrevWeek: ImageButton
-
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTodoListBinding.inflate(inflater, container, false)
+
+
+        // 투두리스트 EdixText 다른 곳 클릭 시 포커싱 해제
+        binding.root.setOnTouchListener { view, _ ->
+            view.performClick()
+            val focusedView = activity?.currentFocus
+            if (focusedView != null) {
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(focusedView.windowToken, 0)
+                focusedView.clearFocus()
+            }
+
+            myTodoAdapter.cancelIfEditing()
+
+            false
+        }
 
         val studyId = studyViewModel.studyId.value ?: 0
 
@@ -85,13 +96,12 @@ class TodoListFragment : Fragment() {
 
         Log.d("Todo","${getTotalWeeksInMonth(currentYear,currentMonth)}")
 
-        // 현재 월의 날짜 리스트 가져오기
         val daysOfCurrentMonth = getDaysOfMonthWithPadding(currentYear, currentMonth)
 
-// 선택된 날짜 기본값 설정 (1일)
+
         var selectedDate2 = 1
 
-// Adapter 설정
+
          todoDateAdapter = TodoDateAdapter(daysOfCurrentMonth, selectedDate2) { newSelectedDate ->
             selectedDate2 = newSelectedDate
             todoDateAdapter.updateDates(daysOfCurrentMonth, selectedDate2)
@@ -165,9 +175,15 @@ class TodoListFragment : Fragment() {
 
             // 어댑터 데이터 갱신
             todoEventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
+
+
+            // ✅ 선택한 날짜에 이벤트가 있는지 확인
+            val hasEvent = todoEventAdapter.hasEventOnDay(today)
+            binding.txScheduledEvent.visibility = if (hasEvent) View.VISIBLE else View.GONE
         }
 
-        var selectedDateInt = today // 현재 날짜로 초기화
+
+
 
         // ✅ 기존 selectedDate 변수를 그대로 사용
         todoDateAdapter = TodoDateAdapter(daysOfCurrentMonth, today) { newSelectedDate ->
@@ -184,6 +200,10 @@ class TodoListFragment : Fragment() {
                 eventViewModel.loadEvents(currentYear, currentMonth, newSelectedDate)
                 todoEventAdapter.updateSelectedDate(selectedDate)
                 todoEventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
+
+
+                val hasEvent = todoEventAdapter.hasEventOnDay(today)
+                binding.txScheduledEvent.visibility = if (hasEvent) View.VISIBLE else View.GONE
             }
 
             // ✅ 기존의 otherTodoList 초기화
@@ -237,9 +257,9 @@ class TodoListFragment : Fragment() {
         //스터디원 프로필 조회 API 호출
         fetchStudyMembers(studyId)
 
-
         return binding.root
     }
+
 
     // 내 투두리스트 조회
     private fun fetchTodoList(studyId: Int, date:String) {
@@ -338,6 +358,8 @@ class TodoListFragment : Fragment() {
                     }
                 }
             }
+
+
 
             override fun onFailure(call: Call<ScheduleResponse>, t: Throwable) {
                 TODO("Not yet implemented")

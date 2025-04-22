@@ -3,34 +3,34 @@ package com.example.spoteam_android.ui.recruiting
 import androidx.lifecycle.ViewModel
 
 class RecruitingChipViewModel : ViewModel() {
-    var gender: String = "MALE"
+    var gender: String? = null
     var minAge: Int = 18
     var maxAge: Int = 60
-    var isOnline: Boolean = false
-    var hasFee: Boolean = false
+    var isOnline: Boolean? = null
+    var hasFee: Boolean? = null
     var minfee: Int? = null
     var maxfee: Int? = null
-    var selectedAddress: String? = null
-    var selectedCode: String? = null
-    var themeTypes: MutableList<String> = mutableListOf() // 복수 선택
+    var selectedAddress: MutableList<String>? = null
+    var selectedCode: MutableList<String>? = null
+    var themeTypes: MutableList<String>? = null
 
     val finalMinFee: Int?
-        get() = if (hasFee) minfee else null
+        get() = if (hasFee == true) minfee else null
 
     val finalMaxFee: Int?
-        get() = if (hasFee) maxfee else null
+        get() = if (hasFee == true) maxfee else null
 
 
     fun reset() {
-        gender = "MALE"
+        gender = null
         minAge = 18
         maxAge = 60
-        hasFee = false
-        isOnline= true
+        hasFee = null
+        isOnline = null
         minfee = null
         maxfee = null
-        themeTypes.clear()
-        selectedAddress = null
-        selectedCode = null
+        themeTypes?.clear()
+        selectedAddress?.clear()
+        selectedCode?.clear()
     }
 }

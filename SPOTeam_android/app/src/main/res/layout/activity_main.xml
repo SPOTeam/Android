@@ -64,6 +64,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:visibility="gone"/>
 
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_bnv"
             android:layout_width="match_parent"
