@@ -5,6 +5,7 @@ import StudyViewModel
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -91,6 +92,7 @@ class MyInterestStudyFragment : Fragment() {
         setupNavigationClickListeners()
 
         initialFetch()
+        updatePageUI()
 
         return binding.root
     }
@@ -275,11 +277,9 @@ class MyInterestStudyFragment : Fragment() {
     }
 
     private fun updatePageNumberUI() {
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
+
+        startPage = calculateStartPage()
+        Log.d("PageDebug", "📄 페이지 번호 UI 업데이트 - currentPage: $currentPage, startPage: $startPage")
 
         val pageButtons = listOf(
             binding.page1,
@@ -328,10 +328,11 @@ class MyInterestStudyFragment : Fragment() {
     }
 
     private fun calculateStartPage(): Int {
-        return if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        return when {
+            totalPages <= 5 -> 0
+            currentPage <= 2 -> 0
+            currentPage >= totalPages - 3 -> totalPages - 5
+            else -> currentPage - 2
         }
     }
 
@@ -340,11 +341,7 @@ class MyInterestStudyFragment : Fragment() {
     }
 
     private fun updatePageUI() {
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
+        startPage = calculateStartPage()
 
         val pageButtons = listOf(
             binding.page1,

@@ -191,11 +191,7 @@ class RecruitingStudyFragment : Fragment() {
     }
 
     private fun updatePageNumberUI() {
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
+        startPage = calculateStartPage()
 
         val pageButtons = listOf(
             binding.page1,
@@ -232,10 +228,11 @@ class RecruitingStudyFragment : Fragment() {
     }
 
     private fun calculateStartPage(): Int {
-        return if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        return when {
+            totalPages <= 5 -> 0
+            currentPage <= 2 -> 0
+            currentPage >= totalPages - 3 -> totalPages - 5
+            else -> currentPage - 2
         }
     }
 
@@ -244,11 +241,7 @@ class RecruitingStudyFragment : Fragment() {
     }
 
     private fun updatePageUI() {
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
+        startPage = calculateStartPage()
 
         val pageButtons = listOf(
             binding.page1,
