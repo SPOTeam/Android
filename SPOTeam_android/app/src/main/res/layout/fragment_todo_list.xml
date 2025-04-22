@@ -17,52 +17,30 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="20dp"
-            android:paddingHorizontal="50dp"
+            android:paddingHorizontal="11dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/item_calendar_day" />
 
-<!--        <ImageButton-->
-<!--            android:id="@+id/btnPrevWeek"-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:background="@null"-->
-<!--            android:scaleType="centerInside"-->
-<!--            android:src="@drawable/left_arrow"-->
-<!--            android:layout_marginLeft="10dp"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/rv_calendar" />-->
-
-<!--        <ImageButton-->
-<!--            android:id="@+id/btnNextWeek"-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:background="@null"-->
-<!--            android:layout_marginRight="10dp"-->
-<!--            android:scaleType="centerInside"-->
-<!--            android:src="@drawable/right_arrow"-->
-<!--            app:layout_constraintEnd_toEndOf="@+id/rv_calendar"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/rv_calendar" />-->
-
-
         <TextView
             android:id="@+id/tx_scheduled_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="14dp"
             android:fontFamily="@font/suit_bold"
             android:text="예정된 일정"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_calendar" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/eventrecyclerviewto"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,11 +65,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="26dp"
             android:fontFamily="@font/suit_bold"
-            android:text="My Todo-List"
+            android:text="사용자님의 TODO"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eventrecyclerviewto" />
 
@@ -111,11 +89,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="26dp"
             android:fontFamily="@font/suit_bold"
-            android:text="Other's Todo-List"
+            android:text="스터디 파트너들의 TODO"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_my_todo_list" />
 
@@ -133,6 +111,7 @@
         android:id="@+id/rv_other_todo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingBottom="36dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_detail_study_home_profile_rv" />

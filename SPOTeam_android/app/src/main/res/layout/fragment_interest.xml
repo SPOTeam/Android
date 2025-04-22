@@ -59,10 +59,9 @@
             android:layout_marginStart="19dp"
             android:layout_marginTop="108dp"
             android:fontFamily="@font/suit_bold"
+            android:textSize="16dp"
             android:text="@string/interest_study"
             android:textColor="@color/black"
-            android:textSize="16dp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

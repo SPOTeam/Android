@@ -1,6 +1,7 @@
 package com.example.spoteam_android.ui.study.todolist
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,10 @@ class TodoDateAdapter(
     private var dates: List<Triple<Int?, Boolean, Boolean>>, // (날짜, 현재 달 여부, 클릭 가능 여부)
     private var selectedDate: Int,
     private val onDateSelected: (Int) -> Unit
+
 ) : RecyclerView.Adapter<TodoDateAdapter.CalendarViewHolder>() {
+
+    private var eventDays: Set<Int> = emptySet()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -37,7 +41,7 @@ class TodoDateAdapter(
 
         val dayOfWeek = localDate?.dayOfWeek?.getDisplayName(TextStyle.SHORT, Locale.KOREAN) ?: ""
 
-        holder.bind(date, isCurrentMonth, isClickable, selectedDate, onDateSelected)
+        holder.bind(date, isCurrentMonth, isClickable, selectedDate, onDateSelected, eventDays)
     }
 
 
@@ -53,15 +57,22 @@ class TodoDateAdapter(
         return dates.indexOfFirst { it.first == day }
     }
 
+    fun updateEventDays(eventDays: Set<Int>) {
+        this.eventDays = eventDays
+        notifyDataSetChanged()
+    }
+
     class CalendarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvDayNumber: TextView = itemView.findViewById(R.id.tv_day_number)
         private val tvDayOfWeek: TextView = itemView.findViewById(R.id.tv_day_of_week)
         private val todayIndicator: View = itemView.findViewById(R.id.todayIndicator)
 
-        fun bind(date: Int?, isCurrentMonth: Boolean, isClickable: Boolean, selectedDate: Int, onDateSelected: (Int) -> Unit) {
+        fun bind(date: Int?, isCurrentMonth: Boolean, isClickable: Boolean, selectedDate: Int, onDateSelected: (Int) -> Unit,eventDays: Set<Int>) {
             val context = itemView.context
             val currentYear = LocalDate.now().year
             val currentMonth = LocalDate.now().monthValue
+
+
 
             if (date == null) {
                 // 빈 칸 처리 (숫자 & 요일 숨김)
@@ -124,6 +135,18 @@ class TodoDateAdapter(
                 if (isCurrentMonth) {
                     onDateSelected(date) // ✅ 선택한 날짜를 콜백으로 전달
                 }
+            }
+
+            todayIndicator.visibility = if ((date == today && isCurrentMonth) || eventDays.contains(date)) {
+                if (date == today && isCurrentMonth) {
+                    Log.d("TodoCalendar", "📅 오늘 날짜: $date → 파란 점 표시됨")
+                } else if (eventDays.contains(date)) {
+                    Log.d("TodoCalendar", "📌 이벤트 날짜: $date → 파란 점 표시됨")
+                }
+                View.VISIBLE
+            } else {
+                Log.d("TodoCalendar", "❌ 날짜: $date → 파란 점 없음")
+                View.GONE
             }
 
         }

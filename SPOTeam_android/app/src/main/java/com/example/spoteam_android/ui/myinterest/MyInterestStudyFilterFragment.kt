@@ -313,7 +313,7 @@ class MyInterestStudyFilterFragment : Fragment() {
                 setChipDrawable(chipDrawable)
 
                 text = truncatedAddress
-                textSize = 12f  // ✅ 텍스트 사이즈 통일
+                textSize = 14f  // ✅ 텍스트 사이즈 통일
                 setTextColor(ContextCompat.getColor(requireContext(), R.color.search_chip_text))
                 isCloseIconVisible = true
 

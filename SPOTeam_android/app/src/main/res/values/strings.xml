@@ -14,7 +14,7 @@
     <string name="complete1_message">내 스터디에서 신청자들을 수락해주세요.</string>
 
 
-    <string name="interest_study">관심 지역 스터디</string>
+    <string name="interest_study">내 지역 스터디</string>
     <string-array name="signup_select_region">
         <item>누구나</item>
         <item>남성</item>
