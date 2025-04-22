@@ -53,7 +53,6 @@
 
 
 
-    <!-- GridLayout을 ChipGroup 바깥으로 이동 -->
     <GridLayout
         android:id="@+id/fragment_register_study_chipgroup"
         android:layout_width="match_parent"
@@ -70,7 +69,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_register_study_chip_language"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="66.67dp"
             app:chipMinHeight="66.67dp"
@@ -83,7 +82,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_register_study_chip_license"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="66.67dp"
             app:chipMinHeight="66.67dp"
@@ -96,7 +95,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_register_study_chip_job"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="66.67dp"
             app:chipMinHeight="66.67dp"
@@ -111,7 +110,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_register_study_chip_discussion"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="66.67dp"
             app:chipMinHeight="66.67dp"
@@ -126,7 +125,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_register_study_chip_news"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="66.67dp"
             app:chipMinHeight="66.67dp"
@@ -141,7 +140,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_register_study_chip_selfstudy"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="66.67dp"
             app:chipMinHeight="66.67dp"
@@ -156,7 +155,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_register_study_chip_project"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="66.67dp"
             app:chipMinHeight="66.67dp"
@@ -171,7 +170,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_register_study_chip_exhibit"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="66.67dp"
             app:chipMinHeight="66.67dp"
@@ -186,7 +185,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_register_study_chip_major"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="66.67dp"
             app:chipMinHeight="66.67dp"
@@ -201,7 +200,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_register_study_chip_etc"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="66.67dp"
             app:chipMinHeight="66.67dp"
