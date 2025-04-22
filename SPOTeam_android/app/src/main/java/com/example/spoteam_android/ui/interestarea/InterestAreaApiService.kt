@@ -93,7 +93,7 @@ interface MyInterestStudyAllApiService {
         @Query("hasFee") hasFee: Boolean?,
         @Query("maxFee") maxFee: Int?,
         @Query("minFee") minFee: Int?,
-        @Query("regionCodes") regionCodes: String?
+        @Query("regionCodes") regionCodes: MutableList<String>
     ): Call<ApiResponse>
 }
 
@@ -117,7 +117,7 @@ interface MyInterestStudySpecificApiService {
         @Query("maxFee") maxFee: Int?,
         @Query("minFee") minFee: Int?,
         @Query("theme") theme: String?,
-        @Query("regionCodes") regionCodes: String?
+        @Query("regionCodes") regionCodes: MutableList<String>
     ): Call<ApiResponse>
 }
 

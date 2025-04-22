@@ -5,6 +5,7 @@ import com.example.spoteam_android.databinding.FragmentMyInerestStudyFilterLocat
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -128,14 +129,24 @@ class MyInterestStudyFilterLocationFragment : Fragment() {
 
     private fun openOnlineStudyFragment(address: String) {
         val fragment = MyInterestStudyFilterFragment()
-        val selectedItemCode = locationSearchAdapter.getSelectedItem()?.code
+        val selectedAddress = locationSearchAdapter.getSelectedItem()!!.address
+        val selectedItemCode = locationSearchAdapter.getSelectedItem()!!.code
 
-        viewModel.selectedAddress = selectedItemCode
+        if (!viewModel.selectedAddress.contains(selectedAddress)) {
+            viewModel.selectedAddress.add(selectedAddress)
+            viewModel.selectedCode.add(selectedItemCode)
+            Log.d("LocationFragment", "✅ 지역 추가됨: $selectedItemCode")
+        } else {
+            Log.d("LocationFragment", "⚠️ 이미 추가된 지역: $selectedItemCode")
+        }
+
+        Log.d("LocationFragment", "📌 현재 selectedAddress 리스트: ${viewModel.selectedAddress}")
+
+
         val bundle = Bundle().apply {
-            putString("ADDRESS", address)
-            putBoolean("IS_OFFLINE", true) // "오프라인" 버튼 클릭 상태로 설정
-            val selectedItemCode = locationSearchAdapter.getSelectedItem()?.code
-            putString("CODE", selectedItemCode)
+            putStringArrayList("ADDRESS_LIST", ArrayList(viewModel.selectedAddress))
+            putStringArrayList("CODE_LIST", ArrayList(viewModel.selectedCode))
+            putBoolean("IS_OFFLINE", true)
         }
         fragment.arguments = bundle
         parentFragmentManager.beginTransaction()

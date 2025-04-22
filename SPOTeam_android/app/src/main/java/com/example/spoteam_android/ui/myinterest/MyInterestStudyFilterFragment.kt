@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.icu.text.NumberFormat
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentInterestFilterBinding
 import com.example.spoteam_android.databinding.FragmentMyInterestStudyFilterBinding
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 
 
@@ -75,21 +77,26 @@ class MyInterestStudyFilterFragment : Fragment() {
         }
 
         arguments?.let {
-            // 전달된 주소와 코드가 있을 경우 ViewModel에 저장
-            viewModel.selectedAddress = it.getString("ADDRESS")
-            viewModel.selectedCode = it.getString("CODE")
+            // 여러 개의 주소/코드를 리스트 형태로 받기
+            val addressList = it.getStringArrayList("ADDRESS_LIST")?.toMutableList() ?: mutableListOf()
+            val codeList = it.getStringArrayList("CODE_LIST")?.toMutableList() ?: mutableListOf()
 
-            val address = viewModel.selectedAddress
+            viewModel.selectedAddress = addressList
+            viewModel.selectedCode = codeList
+
+            Log.d("address","${viewModel.selectedAddress}")
+
             val isOffline = it.getBoolean("IS_OFFLINE", false)
 
-            address?.let { addr ->
-                updateChip(addr)
+            // 주소 리스트를 Chip으로 업데이트
+            if (addressList.isNotEmpty()) {
+                updateChip(addressList)
             }
 
             setChipState(isOffline)
-            setupChipCloseListener()
             isLocationPlusVisible = isOffline
         }
+
 
     }
 
@@ -217,7 +224,6 @@ class MyInterestStudyFilterFragment : Fragment() {
             binding.activityfeeMinValueText.text = "₩ 1,000"
             binding.activityfeeMaxValueText.text = "₩ 10,000"
             binding.chipGroupNew.clearCheck()
-            binding.locationChip.visibility = View.GONE
             binding.lvAddArea.visibility = View.GONE
         }
 
@@ -269,16 +275,15 @@ class MyInterestStudyFilterFragment : Fragment() {
             when (checkedId) {
                 R.id.chip01 -> {
                     viewModel.isOnline = true
-                    binding.locationChip.visibility = View.GONE
                     binding.lvAddArea.visibility = View.GONE
                 }
                 R.id.chip02 -> {
                     viewModel.isOnline = false
                     binding.lvAddArea.visibility = View.VISIBLE
 
-                    // 선택된 주소가 있다면 chip도 보여줌
-                    if (!viewModel.selectedAddress.isNullOrEmpty()) {
-                        binding.locationChip.visibility = View.VISIBLE
+                    // ✅ 선택된 주소가 있다면 ChipGroup 보여주기
+                    if (viewModel.selectedAddress.isNotEmpty()) {
+                        binding.locationChipGroup.visibility = View.VISIBLE
                     }
                 }
             }
@@ -292,28 +297,81 @@ class MyInterestStudyFilterFragment : Fragment() {
             binding.chipGroupNew.check(R.id.chip02)
         }
     }
-    private fun setupChipCloseListener() {
-        binding.locationChip.setOnCloseIconClickListener {
-            binding.locationChip.visibility = View.GONE
-            binding.lvAddArea.visibility = View.VISIBLE
+    fun updateChip(addressList: MutableList<String>) {
+        val chipGroup = binding.locationChipGroup
+        chipGroup.removeAllViews()
+
+        Log.d("updateChip", "📌 받은 addressList: $addressList")
+
+        for (address in addressList) {
+            val truncatedAddress = extractAddressUntilDong(address)
+            Log.d("updateChip", "➡ Chip 생성: $truncatedAddress")
+
+            val chip = Chip(requireContext()).apply {
+                val chipDrawable = ChipDrawable.createFromAttributes(
+                    requireContext(),
+                    null,
+                    0,
+                    R.style.CustomChipCloseStyle2
+                )
+                setChipDrawable(chipDrawable)
+
+                text = truncatedAddress
+                textSize = 12f  // ✅ 텍스트 사이즈 통일
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.search_chip_text))
+                isCloseIconVisible = true
+
+                val widthInPx = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    260f,
+                    resources.displayMetrics
+                ).toInt()
+
+                layoutParams = ViewGroup.MarginLayoutParams(
+                    widthInPx,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    marginStart = 15
+                    marginEnd = 15
+                    topMargin = 25
+                }
+
+                setOnCloseIconClickListener {
+                    chipGroup.removeView(this)
+                    viewModel.selectedAddress.remove(address)
+                    Log.d("updateChip", "❌ Chip 제거: $truncatedAddress")
+
+                    if (chipGroup.childCount == 0) {
+                        binding.lvAddArea.visibility = View.VISIBLE
+                    }
+
+                    updateNextButtonState()
+                }
+            }
+
+            chipGroup.addView(chip)
         }
+
+
+        chipGroup.visibility = View.VISIBLE
+        updateNextButtonState()
+
+        Log.d("updateChip", "✅ ChipGroup child count: ${chipGroup.childCount}")
     }
 
+
+
+
     private fun extractAddressUntilDong(address: String): String {
-        val index = address.indexOf("동")
-        return if (index != -1) {
-            address.substring(0, index + 1)
+        val regex = Regex("(\\S+(동|읍|면))")
+        val match = regex.findAll(address).lastOrNull() // 가장 마지막 동/읍/면 추출
+
+        return if (match != null) {
+            val endIndex = match.range.last + 1
+            address.substring(0, endIndex)
         } else {
             address
         }
     }
 
-    fun updateChip(address: String) {
-        val truncatedAddress = extractAddressUntilDong(address)
-        binding.locationChip.apply {
-            visibility = View.VISIBLE
-            text = truncatedAddress
-        }
-        updateNextButtonState()
-    }
 }

@@ -60,7 +60,7 @@ class MyInterestStudyFragment : Fragment() {
     private var hasFee: Boolean? = null
     private var isOnline: Boolean? = null
     private var source: String? = null
-    private var regionCodes: String? = null
+    private var regionCodes: MutableList<String> = mutableListOf()
     private var selectedStudyCategory: String? = "전체"
     private var selectedItem: String = "ALL"
     private var selectedStudyTheme: String ="전체"
@@ -388,7 +388,7 @@ class MyInterestStudyFragment : Fragment() {
             minFee: Int?,
             maxFee: Int?,
             currentPage: Int?= null,
-            regionCodes: String?
+            regionCodes: MutableList<String>
     )
     {
         val boardItems = arrayListOf<BoardItem>()
@@ -473,7 +473,7 @@ class MyInterestStudyFragment : Fragment() {
         minFee: Int?,
         maxFee: Int?,
         currentPage: Int?= null,
-        regionCodes: String?
+        regionCodes: MutableList<String>
     ) {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(MyInterestStudySpecificApiService::class.java)
