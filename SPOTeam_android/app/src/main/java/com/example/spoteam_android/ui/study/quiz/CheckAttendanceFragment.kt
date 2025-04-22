@@ -205,7 +205,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
                     if (response.isSuccessful) {
                         val scheduleResponse = response.body()
                         if (scheduleResponse?.isSuccess == "true") {
-                            if(scheduleResponse.result.studyMembers[0].isOwned) {
+                            if(scheduleResponse.result.studyMembers[0].isOwned) { // ! 붙이면 만들기, 풀기 왔다갔다 가능
                                 Log.d("checkIng", "initHostAlreadyMakeQuiz")
                                 initHostAlreadyMakeQuiz()
                             } else {
@@ -234,7 +234,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     private fun initMemberRecyclerView(studyMembers: List<MembersDetail>) {
         binding.memberTl.layoutManager = GridLayoutManager(context, 5)
 
-        val dataRVAdapter = HostMakeQuizMemberRVAdapter(studyMembers)
+        val dataRVAdapter = HostMakeQuizMemberRVAdapter(studyMembers,currentMemberId)
         //리스너 객체 생성 및 전달
 
         binding.memberTl.adapter = dataRVAdapter

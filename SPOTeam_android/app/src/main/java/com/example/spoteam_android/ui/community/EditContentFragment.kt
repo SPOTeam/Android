@@ -61,6 +61,9 @@ class EditContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelec
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMystudyWriteContentBinding.inflate(inflater, container, false)
+
+        isCancelable = false // 외부 클릭으로 닫히지 않도록 설정
+
         // 전달된 데이터 받아와서 UI에 반영
         arguments?.let {
             val postId = it.getInt("postId")
@@ -87,9 +90,9 @@ class EditContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelec
         ArrayAdapter.createFromResource(
             requireContext(),
             R.array.category_list,
-            android.R.layout.simple_spinner_item
+            R.layout.write_spinner_item
         ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.write_spinner_dropdown_item)
             binding.mystudyCategorySpinner.adapter = adapter
         }
 
@@ -188,7 +191,7 @@ class EditContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelec
 
             } else {
                 binding.checkIc.setColorFilter(
-                    ContextCompat.getColor(requireContext(), R.color.selector_blue),
+                    ContextCompat.getColor(requireContext(), R.color.b500),
                     PorterDuff.Mode.SRC_IN
                 )
                 isAnonymous = true
@@ -226,7 +229,7 @@ class EditContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelec
 
         if (isAnonymous) {
             binding.checkIc.setColorFilter(
-                ContextCompat.getColor(requireContext(), R.color.selector_blue),
+                ContextCompat.getColor(requireContext(), R.color.b500),
                 PorterDuff.Mode.SRC_IN
             )
         } else {
@@ -278,21 +281,23 @@ class EditContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelec
 
         lifecycleScope.launch {
             var imagePart: MultipartBody.Part? = null
+            var existingImage: RequestBody? = null
 
             if (imageList.isNotEmpty()) {
-                val firstImage = imageList[0]
+                val item = imageList[0]
 
-                val file = when (firstImage) {
-                    is Uri -> getFileFromUri(firstImage)
-                    is String -> withContext(Dispatchers.IO) {
-                        downloadImageFromUrl(firstImage)
+                when (item) {
+                    is Uri -> {
+                        val file = getFileFromUri(item)
+                        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                        imagePart = MultipartBody.Part.createFormData("image", file.name, requestFile)
+                        existingImage = "".toRequestBody("text/plain".toMediaTypeOrNull()) // 새 이미지 업로드니까 기존 이미지 제거
                     }
-                    else -> null
-                }
-
-                file?.let {
-                    val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
-                    imagePart = MultipartBody.Part.createFormData("image", it.name, requestFile)
+                    is String -> {
+                        // 서버 이미지 URL (기존 이미지 유지)
+                        imagePart = null
+                        existingImage = item.toRequestBody("text/plain".toMediaTypeOrNull())
+                    }
                 }
             }
 
@@ -301,29 +306,7 @@ class EditContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelec
             val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
             val contentPart = content.toRequestBody("text/plain".toMediaTypeOrNull())
 
-            sendContentToServer(isAnonymousPart, themePart, titlePart, contentPart, imagePart)
-        }
-    }
-
-
-    private fun downloadImageFromUrl(imageUrl: String): File? {
-        return try {
-            val url = java.net.URL(imageUrl)
-            val connection = url.openConnection()
-            connection.connect()
-
-            val inputStream = connection.getInputStream()
-            val file = File(requireContext().cacheDir, "image_${UUID.randomUUID()}.jpg")
-            val outputStream = FileOutputStream(file)
-
-            inputStream.use { input ->
-                outputStream.use { output ->
-                    input.copyTo(output)
-                }
-            }
-            file
-        } catch (e: Exception) {
-            null
+            sendContentToServer(isAnonymousPart, themePart, titlePart, contentPart, imagePart, existingImage)
         }
     }
 
@@ -332,10 +315,11 @@ class EditContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelec
         themePart: RequestBody,
         titlePart: RequestBody,
         contentPart: RequestBody,
-        imageParts: MultipartBody.Part?
+        imagePart: MultipartBody.Part?,
+        existingImage : RequestBody?
     ) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.editContent(postId, titlePart, contentPart, themePart, imageParts, isAnonymous)
+        service.editContent(postId, titlePart, contentPart, themePart, imagePart, existingImage, isAnonymous)
             .enqueue(object : Callback<WriteContentResponse> {
                 override fun onResponse(call: Call<WriteContentResponse>, response: Response<WriteContentResponse>) {
                     if (response.isSuccessful && response.body()?.isSuccess == "true") {
@@ -348,6 +332,7 @@ class EditContentFragment : BottomSheetDialogFragment(), AdapterView.OnItemSelec
                 }
                 override fun onFailure(call: Call<WriteContentResponse>, t: Throwable) {
                     Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    Log.e("sendContentToServer", "onFailure: ${t.localizedMessage}", t)
                 }
             })
     }

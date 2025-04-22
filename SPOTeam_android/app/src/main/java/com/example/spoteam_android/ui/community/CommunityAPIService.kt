@@ -51,6 +51,7 @@ interface CommunityAPIService {
         @Part("content") contentPart: RequestBody,
         @Part("type") themePart: RequestBody,
         @Part image: MultipartBody.Part?,
+        @Part("existingImage") existingImage: RequestBody?,
         @Part("anonymous") isAnonymousPart: RequestBody
     ): Call<WriteContentResponse>
 
@@ -123,7 +124,8 @@ interface CommunityAPIService {
         @Part("theme") themePart: RequestBody,
         @Part("title") titlePart: RequestBody,
         @Part("content") contentPart: RequestBody,
-        @Part images: List<MultipartBody.Part> // 여기에 `images`라는 이름을 사용해야 합니다.
+        @Part image: MultipartBody.Part?, // 여기에 `images`라는 이름을 사용해야 합니다.
+        @Part("existingImage") existingImage: RequestBody? // 새 글 작성 시 null
     ): Call<StudyPostResponse>
 
     @Multipart
@@ -135,7 +137,8 @@ interface CommunityAPIService {
         @Part("theme") themePart: RequestBody,
         @Part("title") titlePart: RequestBody,
         @Part("content") contentPart: RequestBody,
-        @Part images: List<MultipartBody.Part> // 여기에 `images`라는 이름을 사용해야 합니다.
+        @Part image: MultipartBody.Part?, // ✅ 하나만 보내도록
+        @Part("existingImage") existingImage: RequestBody?
     ): Call<StudyPostResponse>
 
     @GET("/spot/studies/{studyId}/posts")

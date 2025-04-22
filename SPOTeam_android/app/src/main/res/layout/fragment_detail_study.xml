@@ -271,7 +271,7 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/fragment_detail_study_tl"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 app:tabTextAppearance="@style/CustomTabText"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_group_ll"
                 app:tabTextColor="@color/black"

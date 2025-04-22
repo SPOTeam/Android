@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
+import com.example.spoteam_android.databinding.ActivityCommunityContentBinding
 import com.example.spoteam_android.databinding.ActivityMystudyCommunityContentBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.DeleteStudyPostContentResponse
@@ -52,7 +53,7 @@ import java.util.Locale
 
 class MyStudyPostContentActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMystudyCommunityContentBinding
+    private lateinit var binding: ActivityCommunityContentBinding
     private var currentStudyId : Int = -1
     var postId : Int = -1
     var parentCommentId : Int? = 0
@@ -63,11 +64,14 @@ class MyStudyPostContentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding = ActivityCommunityContentBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         currentStudyId = intent.getStringExtra("myStudyId")!!.toInt()
         postId = intent.getStringExtra("myStudyPostId")!!.toInt()
 
-        binding = ActivityMystudyCommunityContentBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        binding.communityTitle.text = "게시판"
 
         binding.writeCommentContentEt.setOnFocusChangeListener { _, hasFocus ->
             binding.dismissArea.visibility = if (hasFocus) View.VISIBLE else View.GONE
@@ -150,7 +154,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         if (comment.isEmpty()) {
             // 입력이 있으면 비활성화
             binding.applyCommentIv.setColorFilter(
-                ContextCompat.getColor(this, R.color.g300),  // 🔥 빨간색 적용
+                ContextCompat.getColor(this, R.color.g300),
                 PorterDuff.Mode.SRC_IN
             )
             canComment = false
@@ -158,7 +162,7 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         } else {
             // 입력이 있으면 활성화
             binding.applyCommentIv.setColorFilter(
-                ContextCompat.getColor(this, R.color.selector_blue),  // 🔥 원래 색상 적용
+                ContextCompat.getColor(this, R.color.b500),
                 PorterDuff.Mode.SRC_IN
             )
 

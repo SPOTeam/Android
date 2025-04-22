@@ -59,7 +59,13 @@ class MyStudyPostRVAdapter(private var dataList: List<PostDetail>) : RecyclerVie
             binding.contentCommentNumTv.text = data.commentNum.toString()
             binding.contentViewNumTv.text = data.hitNum.toString()
             binding.contentDateTv.text = formatWrittenTime(data.createdAt)
-            binding.categoryTv.text = categoryFormat(data.theme)
+
+            if(data.isAnnouncement) {
+                binding.categoryTv.text = "공지"
+            } else {
+                binding.categoryTv.text = categoryFormat(data.theme)
+            }
+
             if (data.isLiked) {
                 binding.contentLikeNumCheckedIv.visibility = View.VISIBLE
                 binding.contentLikeNumUncheckedIv.visibility = View.GONE
@@ -71,7 +77,6 @@ class MyStudyPostRVAdapter(private var dataList: List<PostDetail>) : RecyclerVie
 
         private fun categoryFormat(theme: String): String {
             return when (theme) {
-                "ANNOUNCEMENT" -> "공지"
                 "WELCOME" -> "가입인사"
                 "INFO_SHARING" -> "정보공유"
                 "FREE_TALK" -> "자유"
