@@ -4,7 +4,6 @@ import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,16 +41,17 @@ class RecruitingStudyFragment : Fragment() {
     private lateinit var studyApiService: StudyApiService
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var recruitingStudyAdapter: InterestVPAdapter
-    private lateinit var gender: String
+    private var gender: String? = null
     private var minAge: Int = 18
     private var maxAge: Int = 60
     private var minFee: Int? = null
     private var maxFee: Int? = null
-    private var hasFee: Boolean = false
-    private var isOnline: Boolean = true
+    private var hasFee: Boolean? = null
+    private var isOnline: Boolean? = null
     private var source: String? = null
     private var selectedItem: String = "ALL"
-    private var themeTypes: List<String> = listOf("어학", "자격증", "취업", "시사뉴스", "자율학습", "토론", "프로젝트", "공모전", "전공및진로학습", "기타")
+    private var regionCodes: MutableList<String>? = null
+    private var themeTypes: List<String>? = null
     private val viewModel: RecruitingChipViewModel by activityViewModels()
     private var currentPage = 0
     private var totalPages = 0
@@ -103,7 +103,7 @@ class RecruitingStudyFragment : Fragment() {
                 binding.icFilterActive.visibility = View.VISIBLE
             }
         }
-        fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage)
+        fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage, regionCodes)
     }
 
     private fun setupRecyclerView() {
@@ -157,7 +157,7 @@ class RecruitingStudyFragment : Fragment() {
     }
 
     private fun fetchFilteredStudy(selectedItem: String) {
-        fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage)
+        fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage, regionCodes)
     }
 
     private fun setupFilterIcon() {
@@ -178,14 +178,14 @@ class RecruitingStudyFragment : Fragment() {
         binding.previousPage.setOnClickListener {
             if (currentPage > 0) {
                 currentPage--
-                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage)
+                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage,regionCodes)
             }
         }
 
         binding.nextPage.setOnClickListener {
             if (currentPage < totalPages - 1) {
                 currentPage++
-                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage)
+                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage,regionCodes)
             }
         }
     }
@@ -210,7 +210,7 @@ class RecruitingStudyFragment : Fragment() {
                 val selectedPage = startPage + index
                 if (currentPage != selectedPage) {
                     currentPage = selectedPage
-                    fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage)
+                    fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage,regionCodes)
                 }
             }
         }
@@ -219,14 +219,14 @@ class RecruitingStudyFragment : Fragment() {
         binding.previousPage.setOnClickListener {
             if (currentPage > 0) {
                 currentPage--
-                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage)
+                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage,regionCodes)
             }
         }
 
         binding.nextPage.setOnClickListener {
             if (currentPage < getTotalPages() - 1) {
                 currentPage++
-                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage)
+                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage,regionCodes)
             }
         }
     }
@@ -283,26 +283,20 @@ class RecruitingStudyFragment : Fragment() {
 
     private fun fetchRecruitingStudy(
         selectedItem: String,
-        gender: String,
+        gender: String?,
         minAge: Int,
         maxAge: Int,
-        isOnline: Boolean,
-        hasFee: Boolean,
+        isOnline: Boolean?,
+        hasFee: Boolean?,
         minFee: Int?,
         maxFee: Int?,
-        themeTypes: List<String>,
-        currentPage: Int?= null
+        themeTypes: List<String>?,
+        currentPage: Int?= null,
+        regionCodes: MutableList<String>?
     ) {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(RecruitingStudyApiService::class.java)
 
-        Log.d("fetchStudy", "selectedItem: $selectedItem")
-        Log.d("fetchStudy", "gender: $gender")
-        Log.d("fetchStudy", "minAge: $minAge, maxAge: $maxAge")
-        Log.d("fetchStudy", "minAge: $minAge, maxAge: $maxAge")
-        Log.d("fetchStudy", "hasFee: $hasFee, minFee: $minFee, maxFee: $maxFee")
-        Log.d("fetchStudy", "themeTypes: $themeTypes")
-        Log.d("fetchStudy", "currentPage: ${currentPage ?: 0}")
 
         service.GetRecruitingStudy(
             gender = gender,
@@ -315,7 +309,8 @@ class RecruitingStudyFragment : Fragment() {
             themeTypes = themeTypes,
             page = currentPage ?: 0,
             size = 5,
-            sortBy = selectedItem
+            sortBy = selectedItem,
+            regionCodes = regionCodes
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
@@ -351,14 +346,6 @@ class RecruitingStudyFragment : Fragment() {
                         updatePageNumberUI()
                         updatePageUI()
 
-
-                        Log.d("fetchStudy", "총 개수: $totalElements")
-                        Log.d("fetchStudy", "totalPages: $totalPages")
-                        Log.d("fetchStudy", "불러온 스터디 개수: ${boardItems.size}")
-                        boardItems.forEach {
-                            Log.d("fetchStudyItem", "스터디 ID: ${it.studyId}, 제목: ${it.title}")
-                        }
-
                         updateRecyclerView(boardItems)
                     } else {
                         binding.checkAmount.text = "00건"
@@ -367,13 +354,11 @@ class RecruitingStudyFragment : Fragment() {
                     }
                 } else {
                     val errorMsg = response.errorBody()?.string()
-                    Log.e("fetchStudy", "API 오류: $errorMsg")
                     showError(errorMsg)
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                Log.e("fetchStudy", "API 실패: ${t.message}")
                 showError(t.message)
             }
         })

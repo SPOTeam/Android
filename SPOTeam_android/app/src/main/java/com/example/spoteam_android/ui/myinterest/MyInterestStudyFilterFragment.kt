@@ -8,7 +8,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.icu.text.NumberFormat
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -56,7 +55,6 @@ class MyInterestStudyFilterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("BottomNav", "InterestFilterFragment에서 hideBottomNav() 호출")
         navVisibilityController?.hideBottomNav()
 
         setupToolbar()
@@ -84,7 +82,6 @@ class MyInterestStudyFilterFragment : Fragment() {
             viewModel.selectedAddress = addressList
             viewModel.selectedCode = codeList
 
-            Log.d("address","${viewModel.selectedAddress}")
 
             val isOffline = it.getBoolean("IS_OFFLINE", false)
 
@@ -101,7 +98,6 @@ class MyInterestStudyFilterFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        Log.d("BottomNav", "MyInterestFilterFragment에서 showBottomNav() 호출 - onDestroyView")
         navVisibilityController?.showBottomNav()
         super.onDestroyView()
     }
@@ -213,6 +209,8 @@ class MyInterestStudyFilterFragment : Fragment() {
             binding.chipGroupRecruiting.clearCheck()
             binding.chipGroupGender.clearCheck()
             binding.chipGroup1.clearCheck()
+            binding.chipGroupNew.clearCheck()
+
 
             // ✅ RangeSlider 초기화
             binding.ageRangeSlider.values = listOf(18f, 60f)
@@ -223,8 +221,9 @@ class MyInterestStudyFilterFragment : Fragment() {
             binding.maxValueText.text = "60"
             binding.activityfeeMinValueText.text = "₩ 1,000"
             binding.activityfeeMaxValueText.text = "₩ 10,000"
-            binding.chipGroupNew.clearCheck()
+
             binding.lvAddArea.visibility = View.GONE
+            binding.locationChipGroup.visibility = View.GONE
         }
 
     }
@@ -276,15 +275,15 @@ class MyInterestStudyFilterFragment : Fragment() {
                 R.id.chip01 -> {
                     viewModel.isOnline = true
                     binding.lvAddArea.visibility = View.GONE
+                    val chipGroup = binding.locationChipGroup
+                    chipGroup.removeAllViews()
+                    viewModel.selectedCode?.clear()
+                    viewModel.selectedAddress?.clear()
                 }
                 R.id.chip02 -> {
                     viewModel.isOnline = false
                     binding.lvAddArea.visibility = View.VISIBLE
 
-                    // ✅ 선택된 주소가 있다면 ChipGroup 보여주기
-                    if (viewModel.selectedAddress.isNotEmpty()) {
-                        binding.locationChipGroup.visibility = View.VISIBLE
-                    }
                 }
             }
             updateNextButtonState()
@@ -301,11 +300,8 @@ class MyInterestStudyFilterFragment : Fragment() {
         val chipGroup = binding.locationChipGroup
         chipGroup.removeAllViews()
 
-        Log.d("updateChip", "📌 받은 addressList: $addressList")
-
         for (address in addressList) {
             val truncatedAddress = extractAddressUntilDong(address)
-            Log.d("updateChip", "➡ Chip 생성: $truncatedAddress")
 
             val chip = Chip(requireContext()).apply {
                 val chipDrawable = ChipDrawable.createFromAttributes(
@@ -338,8 +334,7 @@ class MyInterestStudyFilterFragment : Fragment() {
 
                 setOnCloseIconClickListener {
                     chipGroup.removeView(this)
-                    viewModel.selectedAddress.remove(address)
-                    Log.d("updateChip", "❌ Chip 제거: $truncatedAddress")
+                    viewModel.selectedAddress?.remove(address)
 
                     if (chipGroup.childCount == 0) {
                         binding.lvAddArea.visibility = View.VISIBLE
@@ -356,7 +351,6 @@ class MyInterestStudyFilterFragment : Fragment() {
         chipGroup.visibility = View.VISIBLE
         updateNextButtonState()
 
-        Log.d("updateChip", "✅ ChipGroup child count: ${chipGroup.childCount}")
     }
 
 

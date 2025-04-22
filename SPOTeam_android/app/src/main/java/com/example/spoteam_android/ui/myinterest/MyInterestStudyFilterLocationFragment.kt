@@ -5,7 +5,6 @@ import com.example.spoteam_android.databinding.FragmentMyInerestStudyFilterLocat
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -132,16 +131,10 @@ class MyInterestStudyFilterLocationFragment : Fragment() {
         val selectedAddress = locationSearchAdapter.getSelectedItem()!!.address
         val selectedItemCode = locationSearchAdapter.getSelectedItem()!!.code
 
-        if (!viewModel.selectedAddress.contains(selectedAddress)) {
-            viewModel.selectedAddress.add(selectedAddress)
-            viewModel.selectedCode.add(selectedItemCode)
-            Log.d("LocationFragment", "✅ 지역 추가됨: $selectedItemCode")
-        } else {
-            Log.d("LocationFragment", "⚠️ 이미 추가된 지역: $selectedItemCode")
+        if (!viewModel.selectedAddress?.contains(selectedAddress)!!) {
+            viewModel.selectedAddress?.add(selectedAddress)
+            viewModel.selectedCode?.add(selectedItemCode)
         }
-
-        Log.d("LocationFragment", "📌 현재 selectedAddress 리스트: ${viewModel.selectedAddress}")
-
 
         val bundle = Bundle().apply {
             putStringArrayList("ADDRESS_LIST", ArrayList(viewModel.selectedAddress))

@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.icu.text.NumberFormat
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,8 +47,6 @@ class InterestFilterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Log.d("BottomNav", "InterestFilterFragment에서 hideBottomNav() 호출")
         navVisibilityController?.hideBottomNav()
 
         setupToolbar()
@@ -64,7 +61,6 @@ class InterestFilterFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        Log.d("BottomNav", "InterestFilterFragment에서 showBottomNav() 호출 - onDestroyView")
         navVisibilityController?.showBottomNav()
         super.onDestroyView()
     }
@@ -194,8 +190,6 @@ class InterestFilterFragment : Fragment() {
                         remove(theme)
                     }
                 }
-
-                Log.d("InterestFilterFragment", "Selected study themes: ${viewModel.themeTypes}")
                 updateNextButtonState()
             }
         }

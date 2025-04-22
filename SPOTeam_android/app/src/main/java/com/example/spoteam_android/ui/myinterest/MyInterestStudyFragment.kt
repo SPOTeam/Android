@@ -5,7 +5,6 @@ import StudyViewModel
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -60,7 +59,7 @@ class MyInterestStudyFragment : Fragment() {
     private var hasFee: Boolean? = null
     private var isOnline: Boolean? = null
     private var source: String? = null
-    private var regionCodes: MutableList<String> = mutableListOf()
+    private var regionCodes: MutableList<String>? = null
     private var selectedStudyCategory: String? = "전체"
     private var selectedItem: String = "ALL"
     private var selectedStudyTheme: String ="전체"
@@ -388,15 +387,12 @@ class MyInterestStudyFragment : Fragment() {
             minFee: Int?,
             maxFee: Int?,
             currentPage: Int?= null,
-            regionCodes: MutableList<String>
+            regionCodes: MutableList<String>?
     )
     {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(MyInterestStudyAllApiService::class.java)
 
-        Log.d("API_REQUEST", "fetchMyInterestAll() called with params: " +
-                "selectedItem=$selectedItem, gender=$gender, minAge=$minAge, maxAge=$maxAge, " +
-                "isOnline=$isOnline, hasFee=$hasFee,minFee=$minFee, maxFee=$maxFee, currentPage=$currentPage,regionCodes = $regionCodes")
         service.GetMyInterestStudy(
             gender = gender,
             minAge = minAge,
@@ -415,7 +411,6 @@ class MyInterestStudyFragment : Fragment() {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse?.isSuccess == true) {
-                        Log.d("API_RESPONSE", "fetchMyInterestALL()22 response: ${response.body()}")
                         boardItems.clear()
                         apiResponse.result.content.forEach { study ->
                             totalPages = apiResponse.result.totalPages
@@ -473,25 +468,10 @@ class MyInterestStudyFragment : Fragment() {
         minFee: Int?,
         maxFee: Int?,
         currentPage: Int?= null,
-        regionCodes: MutableList<String>
+        regionCodes: MutableList<String>?
     ) {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(MyInterestStudySpecificApiService::class.java)
-
-        Log.d("API_REQUEST", """
-        fetchMyInterestSpecific() called
-        selectedItem = $selectedItem
-        regionCodes = $regionCodes
-        gender = $gender
-        minAge = $minAge
-        maxAge = $maxAge
-        isOnline = $isOnline
-        hasFee = $hasFee
-        minFee = $minFee
-        maxFee = $maxFee
-        selectedStudyTheme = $selectedStudyTheme
-        currentPage = $currentPage
-    """.trimIndent())
 
         service.GetMyInterestStudys(
             gender = gender,
@@ -508,14 +488,11 @@ class MyInterestStudyFragment : Fragment() {
             regionCodes = regionCodes
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                Log.d("API_RESPONSE", "HTTP Code: ${response.code()}, isSuccessful: ${response.isSuccessful}")
 
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
-                    Log.d("API_RESPONSE_BODY", apiResponse.toString())
 
                     if (apiResponse?.isSuccess == true) {
-                        Log.d("API_SUCCESS", "스터디 목록 수: ${apiResponse.result?.content?.size}")
                         boardItems.clear()
                         apiResponse.result?.content?.forEach { study ->
                             totalPages = apiResponse.result.totalPages
@@ -552,32 +529,10 @@ class MyInterestStudyFragment : Fragment() {
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                         binding.myInterestStudyReyclerview.visibility = View.GONE
                     }
-                } else {
-                    Log.e("API_ERROR", """
-                    API 호출 실패
-                    HTTP code: ${response.code()}
-                    errorBody: ${response.errorBody()?.string()}
-                    message: ${response.message()}
-                """.trimIndent())
-                    showErrorToast()
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                when (t) {
-                    is java.net.SocketTimeoutException -> {
-                        Log.e("API_EXCEPTION", "타임아웃 발생")
-                    }
-                    is java.net.UnknownHostException -> {
-                        Log.e("API_EXCEPTION", "서버 주소가 잘못되었거나 인터넷 연결 없음")
-                    }
-                    is com.google.gson.JsonSyntaxException -> {
-                        Log.e("API_EXCEPTION", "JSON 파싱 실패: ${t.message}")
-                    }
-                    else -> {
-                        Log.e("API_EXCEPTION", "기타 예외: ${t.javaClass.simpleName}")
-                    }
-                }
                 showErrorToast()
             }
         })
