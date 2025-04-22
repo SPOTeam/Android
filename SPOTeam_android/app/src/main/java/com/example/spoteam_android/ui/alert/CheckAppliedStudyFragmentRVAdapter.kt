@@ -3,6 +3,8 @@ package com.example.spoteam_android.ui.alert
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.spoteam_android.R
 import com.example.spoteam_android.StudyInfo
 import com.example.spoteam_android.databinding.ItemAppliedStudyBinding
 import com.example.spoteam_android.ui.community.AlertStudyDetail
@@ -42,6 +44,13 @@ class CheckAppliedStudyFragmentRVAdapter(private val dataList: List<AlertStudyDe
     inner class ViewHolder(val binding : ItemAppliedStudyBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: AlertStudyDetail){
             binding.studyTitleTv.text = data.studyTitle
+
+            Glide.with(binding.root.context)
+                .load(data.studyProfileImage)
+                .error(R.drawable.fragment_calendar_spot_logo) // URL이 잘못되었거나 404일 경우 기본 이미지
+                .fallback(R.drawable.fragment_calendar_spot_logo) // URL이 null일 경우 기본 이미지
+                .into(binding.icStudyIv)
+
         }
     }
 }

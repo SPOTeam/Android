@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="368dp"
-    android:layout_height="280dp"
+    android:layout_width="360dp"
+    android:layout_height="255dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingHorizontal="20dp"
     android:paddingTop="18dp"
-    android:paddingBottom="16dp"
     android:background="@drawable/alert_background">
 
     <ImageView
         android:id="@+id/attend_close"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
         android:src="@drawable/ic_x_button"
         app:tint="@color/black"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/ic_check_iv"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/aftercheck"
-        android:scaleType="centerCrop"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_check_new"
+        android:scaleType="centerInside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/attend_close" />
@@ -33,11 +31,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="참여 완료"
-        android:textSize="20sp"
-        android:fontFamily="@font/pretendard"
+        android:textSize="21dp"
+        android:fontFamily="@font/suit_semi_bold"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ic_check_iv"/>
@@ -47,15 +45,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:text="참여가 완료되었습니다!\n내스터디에서 스터디 일정을 확인해주세요"
+        android:text="참여가 완료되었어요.\n이제 스터디를 진행해봅시다!"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:fontFamily="@font/pretendard"
+        android:textFontWeight="800"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/alert_tv"
-        android:lineSpacingExtra="4dp"/>
+        android:lineSpacingExtra="5dp"/>
 
     <TextView
         android:id="@+id/move_to_study_tv"
@@ -63,15 +61,14 @@
         android:layout_height="wrap_content"
         android:text="내 스터디로 이동"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
+        android:fontFamily="@font/suit_semi_bold"
         android:background="@drawable/button_background"
-        app:layout_constraintStart_toStartOf="parent"
         android:textColor="@drawable/button_textcolor"
-        android:paddingHorizontal="62dp"
-        android:paddingVertical="15dp"
+        android:paddingHorizontal="65dp"
+        android:paddingVertical="12dp"
         android:layout_marginTop="20dp"
-        android:elevation="4dp"
+        android:elevation="2dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/description_tv"/>
 

@@ -121,6 +121,7 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
         charCountTextAnswerView = binding.etCount2Tv
         startButton = binding.startAttendanceTv
         description = binding.quizDesTv
+//        startButton.isEnabled = false
 
         var quiz = false
         var answer = false
@@ -134,12 +135,18 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
 
                 quiz = textLength > 0
 
+                if(quiz) {
+                    binding.makeQuestionEt.isSelected = true
+                } else {
+                    binding.makeQuestionEt.isSelected = false
+                }
+
                 if(quiz && answer) {
                     startButton.isEnabled = true
-                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.selector_blue))
+                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.b500))
                 } else {
                     startButton.isEnabled = false
-                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.button_disabled_text))
+                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g400))
                 }
             }
 
@@ -161,12 +168,19 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
                 // 버튼 활성화/비활성화
                 answer = textLength > 0
 
+                if(answer) {
+                    binding.makeAnswerEt.isSelected = true
+                } else {
+                    binding.makeAnswerEt.isSelected = false
+                }
+
+
                 if(quiz && answer) {
                     startButton.isEnabled = true
-                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.selector_blue))
+                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.b500))
                 } else {
                     startButton.isEnabled = false
-                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.button_disabled_text))
+                    description.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g400))
 
                 }
             }

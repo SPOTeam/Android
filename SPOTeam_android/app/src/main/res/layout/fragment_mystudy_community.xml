@@ -31,10 +31,10 @@
 
     <ImageView
         android:id="@+id/write_content_iv"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="30dp"
         android:src="@drawable/write"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -42,129 +42,130 @@
     <FrameLayout
         android:id="@+id/horizontalScroll_fl"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="30dp"
         app:layout_constraintStart_toEndOf="@id/write_content_iv"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/write_content_iv"
+        app:layout_constraintBottom_toBottomOf="@id/write_content_iv"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- 왼쪽 그라디언트 -->
-        <View
-            android:id="@+id/left_shadow"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/gradient_left"
-            android:layout_gravity="start"/>
 
         <HorizontalScrollView
             android:id="@+id/category_hsv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scrollbars="none"
             app:layout_constraintStart_toEndOf="@id/write_content_iv"
             app:layout_constraintTop_toTopOf="parent">
 
             <RadioGroup
                 android:id="@+id/radioGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:layout_gravity="center|fill_horizontal"
                 android:orientation="horizontal">
 
                 <RadioButton
                     android:checked="true"
                     android:id="@+id/all_rb"
-                    android:layout_width="45dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
-                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/selector_radio_background"
+                    android:textColor="@drawable/selector_radio_text"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:text="전체"
-                    android:fontFamily="@font/pretendard"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
 
                 <RadioButton
                     android:id="@+id/noti_rb"
-                    android:layout_width="45dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="7dp"
+                    android:paddingHorizontal="8dp"
+                    android:fontFamily="@font/suit_semi_bold"
+                    android:background="@drawable/selector_radio_background"
+                    android:textColor="@drawable/selector_radio_text"
                     android:textSize="14sp"
                     android:text="공지"
-                    android:fontFamily="@font/pretendard"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
 
                 <RadioButton
                     android:id="@+id/intro_hello_rb"
-                    android:layout_width="69dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="7dp"
+                    android:paddingHorizontal="10dp"
+                    android:background="@drawable/selector_radio_background"
+                    android:textColor="@drawable/selector_radio_text"
                     android:textSize="14sp"
                     android:text="가입인사"
-                    android:fontFamily="@font/pretendard"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
 
                 <RadioButton
                     android:id="@+id/share_info_rb"
-                    android:layout_width="69dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="7dp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/selector_radio_background"
+                    android:textColor="@drawable/selector_radio_text"
                     android:textSize="14sp"
                     android:text="정보공유"
-                    android:fontFamily="@font/pretendard"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
 
                 <RadioButton
                     android:id="@+id/after_study_rb"
-                    android:layout_width="84dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="7dp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/selector_radio_background"
+                    android:textColor="@drawable/selector_radio_text"
                     android:textSize="14sp"
                     android:text="스터디후기"
-                    android:fontFamily="@font/pretendard"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
 
                 <RadioButton
                     android:id="@+id/free_talk_rb"
-                    android:layout_width="45dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="7dp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/selector_radio_background"
+                    android:textColor="@drawable/selector_radio_text"
                     android:textSize="14sp"
                     android:text="자유"
-                    android:fontFamily="@font/pretendard"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
 
                 <RadioButton
                     android:id="@+id/qna_rb"
-                    android:layout_width="45dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/selector_button_background"
-                    android:textColor="@drawable/selector_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="7dp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/selector_radio_background"
+                    android:textColor="@drawable/selector_radio_text"
                     android:textSize="14sp"
                     android:text="Q&amp;A"
-                    android:fontFamily="@font/pretendard"
+                    android:fontFamily="@font/suit_semi_bold"
                     android:button="@null"
                     android:gravity="center"
                     android:textAlignment="center"/>
@@ -172,6 +173,15 @@
             </RadioGroup>
         </HorizontalScrollView>
 
+        <!-- 왼쪽 그라디언트 -->
+        <View
+            android:id="@+id/left_shadow"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_left"
+            android:layout_gravity="start"/>
+
+        <!-- 오른쪽 그라디언트 -->
         <View
             android:id="@+id/right_shadow"
             android:layout_width="30dp"
@@ -191,6 +201,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/horizontalScroll_fl"
         app:layout_constraintBottom_toTopOf="@id/page_number_layout"
+        tools:itemCount="5"
         tools:listitem="@layout/item_mystudy_community_content"/>
 
     <LinearLayout

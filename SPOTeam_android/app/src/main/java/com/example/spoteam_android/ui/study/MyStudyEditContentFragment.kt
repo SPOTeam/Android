@@ -23,14 +23,11 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMystudyWriteContentBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
-import com.example.spoteam_android.ui.community.PostImages
 import com.example.spoteam_android.ui.community.StudyPostContentInfo
 import com.example.spoteam_android.ui.community.StudyPostContentResponse
 import com.example.spoteam_android.ui.community.StudyPostResponse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -61,6 +58,7 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMystudyWriteContentBinding.inflate(inflater, container, false)
+        isCancelable = false // 외부 클릭으로 닫히지 않도록 설정
 
         arguments?.let {
             val postId = it.getInt("MyStudyPostId",-1)
@@ -70,7 +68,16 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
             this.studyId = studyId
         }
 
-        getStudyPostContent()
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.thema_list,
+            R.layout.write_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(R.layout.write_spinner_dropdown_item)
+            binding.mystudyCategorySpinner.adapter = adapter
+        }
+
+            getStudyPostContent()
 
         binding.writeContentTitleTv.text = "글수정"
 
@@ -82,15 +89,6 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
 
         binding.writeContentFinishBtn.setOnClickListener{
             submitContent()
-        }
-
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.thema_list,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.mystudyCategorySpinner.adapter = adapter
         }
 
         binding.checkIc.setOnClickListener{
@@ -107,7 +105,7 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
 
             } else {
                 binding.checkIc.setColorFilter(
-                    ContextCompat.getColor(requireContext(), R.color.selector_blue),
+                    ContextCompat.getColor(requireContext(), R.color.b500),
                     PorterDuff.Mode.SRC_IN
                 )
                 currentAnnouncement = true
@@ -165,13 +163,6 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
                         if (contentResponse?.isSuccess == "true") {
                             val contentInfo = contentResponse.result
                             currentAnnouncement = contentInfo.isAnnouncement
-                            if(currentAnnouncement) {
-                                binding.themeTv.visibility = View.GONE
-                                binding.mystudyCategorySpinner.visibility = View.GONE
-                            } else {
-                                binding.themeTv.visibility = View.VISIBLE
-                                binding.mystudyCategorySpinner.visibility = View.VISIBLE
-                            }
 
                             initContentInfo(contentInfo)
 
@@ -219,21 +210,25 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
         imageAdapter.notifyDataSetChanged() // RecyclerView 갱신
 
         if (!currentAnnouncement) {
-            // Spinner 어댑터 설정
-            ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.thema_list,
-                android.R.layout.simple_spinner_item
-            ).also { adapter ->
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.mystudyCategorySpinner.adapter = adapter
+            binding.themeTv.visibility = View.VISIBLE
+            binding.mystudyCategorySpinner.visibility = View.VISIBLE
+            binding.checkIc.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.gray),
+                PorterDuff.Mode.SRC_IN
+            )
 
-                // Spinner의 초기값 설정
-                val position = getCategoryPosition(contentInfo.theme)
-                if (position != -1) {
-                    binding.mystudyCategorySpinner.setSelection(position)
-                }
-            }
+        } else {
+            binding.themeTv.visibility = View.GONE
+            binding.mystudyCategorySpinner.visibility = View.GONE
+            binding.checkIc.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.b500),
+                PorterDuff.Mode.SRC_IN
+            )
+        }
+
+        val position = getCategoryPosition(contentInfo.theme)
+        if (position != -1) {
+            binding.mystudyCategorySpinner.setSelection(position)
         }
     }
 
@@ -294,22 +289,23 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
         val content = binding.writeContentContentEt.text.toString().trim()
 
         lifecycleScope.launch {
-            val imageParts = mutableListOf<MultipartBody.Part>()
+            var imagePart: MultipartBody.Part? = null
+            var existingImage: RequestBody? = null
 
             if (imageList.isNotEmpty()) {
-                for (item in imageList) {
-                    val file = when (item) {
-                        is Uri -> getFileFromUri(item)
-                        is String -> withContext(Dispatchers.IO) {
-                            downloadImageFromUrl(item)
-                        }
-                        else -> null
+                val item = imageList[0] // 첫 번째 하나만 사용
+
+                when (item) {
+                    is Uri -> {
+                        val file = getFileFromUri(item)
+                        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                        imagePart = MultipartBody.Part.createFormData("image", file.name, requestFile)
+                        existingImage = "".toRequestBody("text/plain".toMediaTypeOrNull())
+
                     }
 
-                    file?.let {
-                        val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
-                        val imagePart = MultipartBody.Part.createFormData("images", it.name, requestFile)
-                        imageParts.add(imagePart)
+                    is String -> {
+                        existingImage = item.toRequestBody("text/plain".toMediaTypeOrNull())
                     }
                 }
             }
@@ -319,28 +315,14 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
             val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
             val contentPart = content.toRequestBody("text/plain".toMediaTypeOrNull())
 
-            sendContentToServer(isAnnouncementPart, themePart, titlePart, contentPart, imageParts)
-        }
-    }
-
-    private fun downloadImageFromUrl(imageUrl: String): File? {
-        return try {
-            val url = java.net.URL(imageUrl)
-            val connection = url.openConnection()
-            connection.connect()
-
-            val inputStream = connection.getInputStream()
-            val file = File(requireContext().cacheDir, "image_${UUID.randomUUID()}.jpg")
-            val outputStream = FileOutputStream(file)
-
-            inputStream.use { input ->
-                outputStream.use { output ->
-                    input.copyTo(output)
-                }
-            }
-            file
-        } catch (e: Exception) {
-            null
+            sendContentToServer(
+                isAnnouncementPart,
+                themePart,
+                titlePart,
+                contentPart,
+                imagePart,
+                existingImage
+            )
         }
     }
 
@@ -365,7 +347,8 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
         themePart: RequestBody,
         titlePart: RequestBody,
         contentPart: RequestBody,
-        imageParts: List<MultipartBody.Part>
+        imagePart: MultipartBody.Part?,
+        existingImage: RequestBody?
     ) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.patchStudyPost(
@@ -375,7 +358,8 @@ class MyStudyEditContentFragment : BottomSheetDialogFragment(), AdapterView.OnIt
             themePart,
             titlePart,
             contentPart,
-            imageParts
+            imagePart,
+            existingImage
         ).enqueue(object : Callback<StudyPostResponse> {
             override fun onResponse(call: Call<StudyPostResponse>, response: Response<StudyPostResponse>) {
                 if (response.isSuccessful && response.body()?.isSuccess == "true") {

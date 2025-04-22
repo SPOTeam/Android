@@ -9,8 +9,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentCheckAppliedStudyBinding
+import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.community.AcceptedAlertStudyResponse
 import com.example.spoteam_android.ui.community.AlertStudyDetail
 import com.example.spoteam_android.ui.community.AlertStudyResponse
@@ -32,15 +34,25 @@ class CheckAppliedStudyFragment : Fragment(), AttendStudyCompleteListener, Atten
     ): View {
         binding = FragmentCheckAppliedStudyBinding.inflate(inflater, container, false)
 
-        (context as MainActivity).isOnAlertFragment(CheckAppliedStudyFragment())
-
         binding.communityPrevIv.setOnClickListener{
             parentFragmentManager.popBackStack()
+        }
+
+        binding.lookAroundStudyTv.setOnClickListener{
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, CategoryFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
         }
 
         fetchStudyAlert()
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchStudyAlert()
     }
 
     private fun fetchStudyAlert() {
@@ -55,9 +67,13 @@ class CheckAppliedStudyFragment : Fragment(), AttendStudyCompleteListener, Atten
                         val studyAlertResponse = response.body()
                         if (studyAlertResponse?.isSuccess == "true") {
                             val studyAlertInfo = studyAlertResponse.result.notifications
+                            binding.emptyAttendStudy.visibility = View.GONE
                             initRecyclerview(studyAlertInfo)
+                        } else {
+                            binding.emptyAttendStudy.visibility = View.VISIBLE
                         }
                     } else {
+                        binding.emptyAttendStudy.visibility = View.VISIBLE
                         showError(response.code().toString())
                     }
                 }
@@ -81,7 +97,10 @@ class CheckAppliedStudyFragment : Fragment(), AttendStudyCompleteListener, Atten
 
         dataRVAdapter.setItemClickListener(object :CheckAppliedStudyFragmentRVAdapter.OnItemClickListener{
             override fun onOKClick(data : AlertStudyDetail) {
-                postStudyAccept(data.studyId)
+//                postStudyAccept(data.studyId)
+                val dlgOK = OkDialog(requireContext(), this@CheckAppliedStudyFragment)
+                dlgOK.setStudyId(data.studyId)
+                dlgOK.start()
 
             }
 

@@ -6,20 +6,21 @@
 
     <TextView
         android:id="@+id/timer_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:text="00:00"
-        android:textSize="30sp"
+        android:text="00 : 00"
+        android:textSize="30dp"
         android:textStyle="bold"
         android:textColor="@color/white"
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
         android:background="@drawable/background_timer"
         android:layout_marginTop="30dp"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:elevation="4dp"/>
+        android:elevation="2dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

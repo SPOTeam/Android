@@ -521,7 +521,7 @@ data class AlertStudyDetail(
     val notificationId: Int,
     val studyId: Int,
     val studyTitle : String,
-    val notifierName : String,
+    val studyProfileImage : String,
     val type : String,
     val isChecked : Boolean,
     val createdAt : String

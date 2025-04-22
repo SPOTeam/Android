@@ -41,7 +41,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
+
         android:background="@android:color/transparent"
         android:hint="제목"
         android:inputType="none"
@@ -49,7 +49,7 @@
         android:textColorHint="#C5C5CD"
         android:textFontWeight="800"
         android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/write_content_prev_iv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/write_content_title_tv" />
 
@@ -74,7 +74,7 @@
         android:inputType="none"
         android:textColorHint="#C5C5CD"
         android:textFontWeight="800"
-        android:textSize="14sp"
+        android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="@id/write_content_title_et"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/write_content_title_et"
@@ -82,7 +82,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/added_images_rv"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="75dp"
         android:layout_marginBottom="10dp"
         android:nestedScrollingEnabled="false"
@@ -105,7 +105,7 @@
     <LinearLayout
         android:id="@+id/mystudy_write_content_info_ll"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_marginTop="80dp"
         android:gravity="center"
         android:orientation="horizontal"
@@ -156,18 +156,17 @@
         android:id="@+id/write_content_finish_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="1dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/selector_category_background"
-        android:elevation="3dp"
         android:enabled="false"
         android:gravity="center"
-        android:padding="10dp"
+        android:padding="13dp"
         android:text="완료"
         android:textColor="@drawable/button_textcolor"
-        android:textSize="17sp"
-        android:fontFamily="@font/suit_semi_bold"
-        app:layout_constraintEnd_toEndOf="@id/write_content_content_et"
+        android:textSize="17dp"
+        android:fontFamily="@font/suit_bold"
+        android:textFontWeight="700"
+        app:layout_constraintEnd_toEndOf="@id/mystudy_write_content_info_ll"
         app:layout_constraintStart_toStartOf="@id/write_content_content_et"
         app:layout_constraintTop_toBottomOf="@id/mystudy_write_content_info_ll" />
 

@@ -103,26 +103,21 @@ class AlertMultiViewRVAdapter(
 
 
     inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val cardView: MaterialCardView = view.findViewById(R.id.alert_header_card)
+        private val container: View = view.findViewById(R.id.header_cl)
 
         init {
-            cardView.setOnClickListener {
+            container.setOnClickListener {
                 headerClickListener?.invoke()
             }
         }
 
         fun bind() {
-            cardView.isVisible = true
-            cardView.isEnabled = true
-            cardView.alpha = 1.0f
+            container.isVisible = true
+            container.isEnabled = true
+            container.alpha = 1.0f
 
-            val color = if (isExistAlert) {
-                ContextCompat.getColor(cardView.context, R.color.transparent_blue) // 파란색
-            } else {
-                ContextCompat.getColor(cardView.context, R.color.white)   // 흰색
-            }
-
-            cardView.setCardBackgroundColor(color)
+            // 상태만 변경하면 selector가 알아서 배경 적용!
+            container.isSelected = !isExistAlert
         }
     }
 
@@ -131,12 +126,12 @@ class AlertMultiViewRVAdapter(
     inner class LiveViewHolder(private val binding : ItemAlertLiveBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AlertDetail) {
             if(item.isChecked) {
-                binding.root.isEnabled = false
                 binding.icNewAlertLive.visibility = View.GONE
+
             } else {
-                binding.root.isEnabled = true
                 binding.icNewAlertLive.visibility = View.VISIBLE
             }
+            binding.contentCl.isSelected = item.isChecked
             binding.alertLiveContentTv.text = item.studyTitle
         }
     }
@@ -152,12 +147,13 @@ class AlertMultiViewRVAdapter(
 
 
             if(item.isChecked) {
-                binding.root.isEnabled = false
                 binding.icNewAlertUpdate.visibility = View.GONE
             } else {
-                binding.root.isEnabled = true
                 binding.icNewAlertUpdate.visibility = View.VISIBLE
             }
+
+            binding.contentCl.isSelected = item.isChecked
+
             when (item.type) {
                 "ANNOUNCEMENT" -> {
 //                    binding.studyName.text = item.studyTitle

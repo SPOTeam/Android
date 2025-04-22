@@ -46,7 +46,7 @@ class RefuseDialog(private val context: Context, private val listener : AttendSt
 
         val btnReject = dlg.findViewById<TextView>(R.id.attendance_reject_tv)
         btnReject.setOnClickListener {
-            postStudyAccept(studyId)
+//            postStudyAccept(studyId)
             dlg.dismiss()
         }
 

@@ -77,7 +77,6 @@ class HouseFragment : Fragment() {
 
         val mainActivity = requireActivity() as MainActivity
         mainActivity.isOnCommunityHome(this@HouseFragment)
-        mainActivity.isOnAlertFragment(this@HouseFragment)
     }
 
     override fun onPause() {
