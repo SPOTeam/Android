@@ -92,7 +92,7 @@ class TodoListFragment : Fragment() {
         val currentYear = LocalDate.now().year // 현재 연도
         val currentMonth = LocalDate.now().monthValue // 현재 월
 
-        Log.d("Todo","$currentYear,$currentMonth")
+        Log.d("Todo","1111")
 
         Log.d("Todo","${getTotalWeeksInMonth(currentYear,currentMonth)}")
 
@@ -176,6 +176,12 @@ class TodoListFragment : Fragment() {
             // 어댑터 데이터 갱신
             todoEventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
 
+            todoEventAdapter.updateSelectedDate(selectedDate)
+            eventViewModel.events.value?.let { todoEventAdapter.updateEvents(it) }
+
+            val updatedEventDays = getEventDaysForMonth(currentYear, currentMonth)
+            todoDateAdapter.updateEventDays(updatedEventDays)
+
 
             // ✅ 선택한 날짜에 이벤트가 있는지 확인
             val hasEvent = todoEventAdapter.hasEventOnDay(today)
@@ -199,8 +205,12 @@ class TodoListFragment : Fragment() {
             fetchGetSchedule(studyId, currentYear, currentMonth) {
                 eventViewModel.loadEvents(currentYear, currentMonth, newSelectedDate)
                 todoEventAdapter.updateSelectedDate(selectedDate)
-                todoEventAdapter.updateEvents(eventViewModel.events.value ?: emptyList())
+                eventViewModel.events.value?.let { todoEventAdapter.updateEvents(it) }
 
+                Log.d("checkList", "📦 이벤트 리스트: ${eventViewModel.events.value}")
+
+                val updatedEventDays = getEventDaysForMonth(currentYear, currentMonth)
+                todoDateAdapter.updateEventDays(updatedEventDays)
 
                 val hasEvent = todoEventAdapter.hasEventOnDay(today)
                 binding.txScheduledEvent.visibility = if (hasEvent) View.VISIBLE else View.GONE
@@ -230,12 +240,14 @@ class TodoListFragment : Fragment() {
             } ?: run {
                 myTodoAdapter.updateData(emptyList<TodoTask>().toMutableList())
             }
+
         }
 
         // 스터디원 투두리스트 조회 API
         todoViewModel.otherTodoListResponse.observe(viewLifecycleOwner) { response ->
             response?.result?.content?.let { todos ->
                 Log.d("TodoFramgment_other","${todos}")
+
                 if (todos.isNotEmpty()) {
                     otherTodoAdapter.updateData(todos.toMutableList())
                 } else {
@@ -256,6 +268,11 @@ class TodoListFragment : Fragment() {
 
         //스터디원 프로필 조회 API 호출
         fetchStudyMembers(studyId)
+
+        val eventDays = getEventDaysForMonth(currentYear, currentMonth)
+        todoDateAdapter.updateEventDays(eventDays)
+
+
 
         return binding.root
     }
@@ -351,6 +368,7 @@ class TodoListFragment : Fragment() {
                         }
                         // ViewModel 및 Adapter에 데이터 업데이트
                         eventViewModel.updateEvents(EventItems)
+
                         todoEventAdapter.updateEvents(EventItems)
 
                         // 콜백 호출
@@ -477,6 +495,23 @@ class TodoListFragment : Fragment() {
             })
         }
     }
+
+    fun getEventDaysForMonth(year: Int, month: Int): Set<Int> {
+        val days = mutableSetOf<Int>()
+
+        // ✅ ViewModel의 이벤트 전체 날짜에서 현재 월에 해당하는 것만 필터링
+        val allEventDays = eventViewModel.getEventDates()
+
+        allEventDays.forEach { calendarDay ->
+            if (calendarDay.year == year && calendarDay.month == month) {
+                days.add(calendarDay.day)
+            }
+        }
+
+        Log.d("eventDaySet", "📅 ${year}년 ${month}월 기준 파란 점 찍힐 날짜들: $days")
+        return days
+    }
+
 
 
 }
