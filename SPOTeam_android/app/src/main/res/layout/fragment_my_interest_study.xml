@@ -156,7 +156,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/my_interest_study_reyclerview"
             android:layout_width="match_parent"
-            android:layout_height="490dp"
+            android:layout_height="600dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="15dp"

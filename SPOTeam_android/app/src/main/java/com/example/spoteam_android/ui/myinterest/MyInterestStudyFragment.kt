@@ -52,14 +52,15 @@ class MyInterestStudyFragment : Fragment() {
     private lateinit var studyApiService: StudyApiService
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var interestBoardAdapter: InterestVPAdapter
-    private lateinit var gender: String
+    private var gender: String? = null
     private var minAge: Int = 18
     private var maxAge: Int = 60
     private var minFee: Int? = null
     private var maxFee: Int? = null
-    private var hasFee: Boolean = false
-    private var isOnline: Boolean = true
+    private var hasFee: Boolean? = null
+    private var isOnline: Boolean? = null
     private var source: String? = null
+    private var regionCodes: MutableList<String>? = null
     private var selectedStudyCategory: String? = "전체"
     private var selectedItem: String = "ALL"
     private var selectedStudyTheme: String ="전체"
@@ -79,6 +80,7 @@ class MyInterestStudyFragment : Fragment() {
         selectedItem = when (viewModel.isRecruiting) {
             true -> "RECRUITING"
             false -> "COMPLETED"
+            null -> "RECRUITING"
         }
 
         initArguments()
@@ -90,6 +92,7 @@ class MyInterestStudyFragment : Fragment() {
         setupNavigationClickListeners()
 
         initialFetch()
+        updatePageUI()
 
         return binding.root
     }
@@ -99,9 +102,11 @@ class MyInterestStudyFragment : Fragment() {
         minAge = viewModel.minAge
         maxAge = viewModel.maxAge
         hasFee = viewModel.hasFee
+        regionCodes = viewModel.selectedCode
         minFee = viewModel.finalMinFee
         maxFee = viewModel.finalMaxFee
         isOnline = viewModel.isOnline
+
         source = arguments?.getString("source") // source만 그대로 Bundle에서 받음
     }
 
@@ -116,7 +121,7 @@ class MyInterestStudyFragment : Fragment() {
                 binding.icFilterActive.visibility = View.VISIBLE
             }
         }
-        fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+        fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
     }
 
     private fun setupTabs() {
@@ -163,9 +168,9 @@ class MyInterestStudyFragment : Fragment() {
         selectedStudyTheme = selectedStudyCategory.toString()  // ← 탭 선택값으로 테마 업데이트
 
         if (selectedStudyCategory == "전체") {
-            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
         } else {
-            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
         }
     }
 
@@ -227,9 +232,9 @@ class MyInterestStudyFragment : Fragment() {
     private fun fetchFilteredStudy(selectedItem: String) {
         this.selectedItem = selectedItem
         if (selectedStudyCategory == "전체") {
-            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
         } else {
-            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
         }
     }
 
@@ -265,18 +270,16 @@ class MyInterestStudyFragment : Fragment() {
 
     private fun requestPageUpdate() {
         if (selectedStudyCategory == "전체") {
-            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
         } else {
-            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
         }
     }
 
     private fun updatePageNumberUI() {
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
+
+        startPage = calculateStartPage()
+        Log.d("PageDebug", "📄 페이지 번호 UI 업데이트 - currentPage: $currentPage, startPage: $startPage")
 
         val pageButtons = listOf(
             binding.page1,
@@ -292,9 +295,9 @@ class MyInterestStudyFragment : Fragment() {
                 if (currentPage != selectedPage) {
                     currentPage = selectedPage
                     if (selectedStudyCategory == "전체") {
-                        fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+                        fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
                     } else {
-                        fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+                        fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
                     }
                 }
             }
@@ -305,9 +308,9 @@ class MyInterestStudyFragment : Fragment() {
             if (currentPage > 0) {
                 currentPage--
                 if (selectedStudyCategory == "전체") {
-                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
                 } else {
-                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
                 }
             }
         }
@@ -316,19 +319,20 @@ class MyInterestStudyFragment : Fragment() {
             if (currentPage < getTotalPages() - 1) {
                 currentPage++
                 if (selectedStudyCategory == "전체") {
-                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage)
+                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
                 } else {
-                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage)
+                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
                 }
             }
         }
     }
 
     private fun calculateStartPage(): Int {
-        return if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        return when {
+            totalPages <= 5 -> 0
+            currentPage <= 2 -> 0
+            currentPage >= totalPages - 3 -> totalPages - 5
+            else -> currentPage - 2
         }
     }
 
@@ -337,11 +341,7 @@ class MyInterestStudyFragment : Fragment() {
     }
 
     private fun updatePageUI() {
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
+        startPage = calculateStartPage()
 
         val pageButtons = listOf(
             binding.page1,
@@ -376,22 +376,20 @@ class MyInterestStudyFragment : Fragment() {
 
     private fun fetchMyInterestAll(
             selectedItem: String,
-            gender: String,
+            gender: String?,
             minAge: Int,
             maxAge: Int,
-            isOnline: Boolean,
-            hasFee: Boolean,
+            isOnline: Boolean?,
+            hasFee: Boolean?,
             minFee: Int?,
             maxFee: Int?,
-            currentPage: Int?= null
+            currentPage: Int?= null,
+            regionCodes: MutableList<String>?
     )
     {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(MyInterestStudyAllApiService::class.java)
 
-        Log.d("API_REQUEST", "fetchMyInterestAll() called with params: " +
-                "selectedItem=$selectedItem, gender=$gender, minAge=$minAge, maxAge=$maxAge, " +
-                "isOnline=$isOnline, hasFee=$hasFee,minFee=$minFee, maxFee=$maxFee, currentPage=$currentPage")
         service.GetMyInterestStudy(
             gender = gender,
             minAge = minAge,
@@ -402,14 +400,14 @@ class MyInterestStudyFragment : Fragment() {
             maxFee = maxFee,
             page = currentPage ?: 0 ,
             size = 5,
-            sortBy = selectedItem ?: "ALL"
+            sortBy = selectedItem ?: "ALL",
+            regionCodes = regionCodes,
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
 
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse?.isSuccess == true) {
-                        Log.d("API_RESPONSE", "fetchMyInterestALL()22 response: ${response.body()}")
                         boardItems.clear()
                         apiResponse.result.content.forEach { study ->
                             totalPages = apiResponse.result.totalPages
@@ -459,31 +457,18 @@ class MyInterestStudyFragment : Fragment() {
     private fun fetchMyInterestSpecific(
         selectedStudyTheme: String?,
         selectedItem: String,
-        gender: String,
+        gender: String?,
         minAge: Int,
         maxAge: Int,
-        isOnline: Boolean,
-        hasFee: Boolean,
+        isOnline: Boolean?,
+        hasFee: Boolean?,
         minFee: Int?,
         maxFee: Int?,
-        currentPage: Int?= null
+        currentPage: Int?= null,
+        regionCodes: MutableList<String>?
     ) {
         val boardItems = arrayListOf<BoardItem>()
         val service = RetrofitInstance.retrofit.create(MyInterestStudySpecificApiService::class.java)
-
-        Log.d("API_REQUEST", """
-        fetchMyInterestSpecific() called
-        selectedItem = $selectedItem
-        gender = $gender
-        minAge = $minAge
-        maxAge = $maxAge
-        isOnline = $isOnline
-        hasFee = $hasFee
-        minFee = $minFee
-        maxFee = $maxFee
-        selectedStudyTheme = $selectedStudyTheme
-        currentPage = $currentPage
-    """.trimIndent())
 
         service.GetMyInterestStudys(
             gender = gender,
@@ -496,17 +481,15 @@ class MyInterestStudyFragment : Fragment() {
             page = currentPage ?: 0,
             size = 5,
             sortBy = selectedItem,
-            theme = selectedStudyTheme
+            theme = selectedStudyTheme,
+            regionCodes = regionCodes
         ).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                Log.d("API_RESPONSE", "HTTP Code: ${response.code()}, isSuccessful: ${response.isSuccessful}")
 
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
-                    Log.d("API_RESPONSE_BODY", apiResponse.toString())
 
                     if (apiResponse?.isSuccess == true) {
-                        Log.d("API_SUCCESS", "스터디 목록 수: ${apiResponse.result?.content?.size}")
                         boardItems.clear()
                         apiResponse.result?.content?.forEach { study ->
                             totalPages = apiResponse.result.totalPages
@@ -543,32 +526,10 @@ class MyInterestStudyFragment : Fragment() {
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                         binding.myInterestStudyReyclerview.visibility = View.GONE
                     }
-                } else {
-                    Log.e("API_ERROR", """
-                    API 호출 실패
-                    HTTP code: ${response.code()}
-                    errorBody: ${response.errorBody()?.string()}
-                    message: ${response.message()}
-                """.trimIndent())
-                    showErrorToast()
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                when (t) {
-                    is java.net.SocketTimeoutException -> {
-                        Log.e("API_EXCEPTION", "타임아웃 발생")
-                    }
-                    is java.net.UnknownHostException -> {
-                        Log.e("API_EXCEPTION", "서버 주소가 잘못되었거나 인터넷 연결 없음")
-                    }
-                    is com.google.gson.JsonSyntaxException -> {
-                        Log.e("API_EXCEPTION", "JSON 파싱 실패: ${t.message}")
-                    }
-                    else -> {
-                        Log.e("API_EXCEPTION", "기타 예외: ${t.javaClass.simpleName}")
-                    }
-                }
                 showErrorToast()
             }
         })

@@ -28,6 +28,7 @@ class TodoEventAdapter(
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
         holder.bind(event, selectedDate)
+
     }
 
     override fun getItemCount(): Int = events.size
@@ -42,10 +43,6 @@ class TodoEventAdapter(
         notifyDataSetChanged()
     }
 
-    fun hideCheckIcons() {
-        isTodoList = true  // true로 설정하면 아이콘이 숨겨짐
-        notifyDataSetChanged()
-    }
 
     class EventViewHolder(
         itemView: View,
@@ -109,8 +106,24 @@ class TodoEventAdapter(
                     event.startMonth == event.endMonth &&
                     event.startDay == event.endDay
         }
-
-
     }
+
+    fun hasEventOnDay(day: Int): Boolean {
+        return try {
+            val selected = LocalDate.parse(selectedDate)
+            val year = selected.year
+            val month = selected.monthValue
+
+            events.any { event ->
+                val startDate = LocalDate.of(event.startYear, event.startMonth, event.startDay)
+                val endDate = LocalDate.of(event.endYear, event.endMonth, event.endDay)
+                val currentDate = LocalDate.of(year, month, day)
+                !currentDate.isBefore(startDate) && !currentDate.isAfter(endDate)
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
 
 }

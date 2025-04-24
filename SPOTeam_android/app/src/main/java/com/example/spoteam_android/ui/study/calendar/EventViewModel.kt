@@ -50,12 +50,15 @@ class EventViewModel : ViewModel() {
             }
         }
 
+        Log.d("EventDates", "✅ 최종 이벤트 날짜 목록: ${eventDates.joinToString()}")
+
         return eventDates
     }
 
     // 주어진 날짜에 맞는 이벤트를 필터링하여 _events에 반영
     fun loadEvents(year: Int, month: Int, day: Int) {
         Log.d("EventViewModel", "Loading events for: Year=$year, Month=$month, Day=$day")
+        Log.d("EventViewModel", "$allEvents")
         _events.value = filterEventsByDate(allEvents, year, month, day)
     }
 

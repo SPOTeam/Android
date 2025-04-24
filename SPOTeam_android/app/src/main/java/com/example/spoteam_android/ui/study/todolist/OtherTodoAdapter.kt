@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemTodoListBinding
 import com.example.spoteam_android.databinding.ItemViewTodoListBinding
 
@@ -36,6 +37,9 @@ class OtherTodoAdapter(
             holder.binding.todoCheckbox.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
 
+        val textColorRes = if (item.done) R.color.g400 else R.color.black
+        holder.binding.todoContent.setTextColor(context.getColor(textColorRes))
+
         holder.binding.todoCheckbox.isChecked = item.done
         holder.binding.todoCheckbox.isEnabled = false
     }
@@ -55,6 +59,7 @@ class OtherTodoAdapter(
         Log.d("OtherTodoAdapter","clearData 실행")
         notifyDataSetChanged()
     }
+
 
 
 }

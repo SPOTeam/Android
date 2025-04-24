@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
@@ -28,6 +29,7 @@ class MyInterestStudyFilterLocationFragment : Fragment() {
     private lateinit var binding: FragmentMyInerestStudyFilterLocationBinding
     private lateinit var locationSearchAdapter: LocationSearchAdapter
     private val locationItemList = mutableListOf<LocationItem>()
+    private val viewModel: MyInterestChipViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -126,11 +128,18 @@ class MyInterestStudyFilterLocationFragment : Fragment() {
 
     private fun openOnlineStudyFragment(address: String) {
         val fragment = MyInterestStudyFilterFragment()
+        val selectedAddress = locationSearchAdapter.getSelectedItem()!!.address
+        val selectedItemCode = locationSearchAdapter.getSelectedItem()!!.code
+
+        if (!viewModel.selectedAddress?.contains(selectedAddress)!!) {
+            viewModel.selectedAddress?.add(selectedAddress)
+            viewModel.selectedCode?.add(selectedItemCode)
+        }
+
         val bundle = Bundle().apply {
-            putString("ADDRESS", address)
-            putBoolean("IS_OFFLINE", true) // "오프라인" 버튼 클릭 상태로 설정
-            val selectedItemCode = locationSearchAdapter.getSelectedItem()?.code
-            putString("CODE", selectedItemCode)
+            putStringArrayList("ADDRESS_LIST", ArrayList(viewModel.selectedAddress))
+            putStringArrayList("CODE_LIST", ArrayList(viewModel.selectedCode))
+            putBoolean("IS_OFFLINE", true)
         }
         fragment.arguments = bundle
         parentFragmentManager.beginTransaction()

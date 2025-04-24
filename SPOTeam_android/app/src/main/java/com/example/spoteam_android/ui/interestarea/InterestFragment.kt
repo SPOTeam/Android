@@ -9,7 +9,6 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -52,13 +51,13 @@ class InterestFragment : Fragment() {
     private val studyViewModel: StudyViewModel by activityViewModels()
     private lateinit var studyApiService: StudyApiService
     private lateinit var interestBoardAdapter: InterestVPAdapter
-    private lateinit var gender: String
+    private var gender: String? = null
     private var minAge: Int = 18
     private var maxAge: Int = 60
     private var minFee: Int? = null
     private var maxFee: Int? = null
-    private var hasFee: Boolean = false
-    private var themeTypes: List<String> = listOf("어학", "자격증", "취업", "시사뉴스", "자율학습", "토론", "프로젝트", "공모전", "전공및진로학습", "기타")
+    private var hasFee: Boolean? = null
+    private var themeTypes: List<String>? = null
     private var source: String? = null
     private var selectedItem: String = "ALL"
     private var selectedRegion: String? = "0000000000"
@@ -80,6 +79,7 @@ class InterestFragment : Fragment() {
         selectedItem = when (viewModel.isRecruiting) {
             true -> "RECRUITING"
             false -> "COMPLETED"
+            null -> "RECRUITING"
         }
 
         setupRecyclerView()
@@ -108,7 +108,6 @@ class InterestFragment : Fragment() {
 
         setupBottomSheet()
 
-        Log.d("InterestFragment","$gender, $minAge, $maxAge,$hasFee,$themeTypes,$minFee,$maxFee,$source")
 
         tabLayout = binding.tabs
 
@@ -159,6 +158,7 @@ class InterestFragment : Fragment() {
         binding.icFilterActive.setOnClickListener {
             (activity as MainActivity).switchFragment(InterestFilterFragment())
         }
+        updatePageUI()
 
         return binding.root
     }
@@ -198,8 +198,6 @@ class InterestFragment : Fragment() {
 
 
         regions?.let {
-            // "전체" 탭 로그
-            Log.d(TAG, "Adding '전체' tab")
             val allTab = tabLayout.newTab().apply {
                 customView = LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null).apply {
                     val textView = findViewById<TextView>(R.id.tabText)
@@ -214,7 +212,6 @@ class InterestFragment : Fragment() {
 
             // 지역별 탭 로그
             regions.forEach { region ->
-                Log.d(TAG, "Adding tab for region: ${region.neighborhood}, code: ${region.code}")
                 val tab = tabLayout.newTab().apply {
                     customView = LayoutInflater.from(context).inflate(R.layout.custom_tab_text, null).apply {
                         findViewById<TextView>(R.id.tabText).text = region.neighborhood
@@ -229,9 +226,7 @@ class InterestFragment : Fragment() {
                 override fun onTabSelected(tab: TabLayout.Tab) {
 
                     val selectedRegionCode = tab.tag as String
-                    Log.d(TAG, "Tab selected: ${tab.tag}, region code: $selectedRegionCode")
                     if (selectedRegionCode == "0000000000") {
-                        Log.d(TAG, "Fetching data for '전체'")
                         selectedRegion = "0000000000"
                         fetchData(
                             selectedItem,
@@ -245,7 +240,6 @@ class InterestFragment : Fragment() {
                             currentPage = currentPage
                         )
                     } else {
-                        Log.d(TAG, "Fetching data for region code: $selectedRegionCode")
                         selectedRegion = selectedRegionCode
                         fetchData(
                             selectedItem,
@@ -263,15 +257,12 @@ class InterestFragment : Fragment() {
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
-                    Log.d(TAG, "Tab unselected: ${tab?.tag}")
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
-                    Log.d(TAG, "Tab reselected: ${tab?.tag}")
                 }
             })
         } ?: run {
-            Log.w(TAG, "Regions list is null or empty")
         }
     }
 
@@ -336,18 +327,20 @@ class InterestFragment : Fragment() {
     private fun fetchData(
         selectedItem: String,
         regionCode: String? = null,
-        gender: String,
+        gender: String?,
         minAge: Int,
         maxAge: Int,
-        hasFee: Boolean,
+        hasFee: Boolean?,
         minFee: Int?,
         maxFee: Int?,
-        themeTypes: List<String>,
+        themeTypes: List<String>?,
         currentPage: Int?= null
     ) {
         val boardItems = arrayListOf<BoardItem>()
         val interestAreaBoard = binding.interestAreaStudyReyclerview
         val checkcount: TextView = binding.checkAmount
+
+        val theme = if (themeTypes.isNullOrEmpty()) null else themeTypes
 
         val call: Call<ApiResponse> = if (regionCode != null) {
             val service = RetrofitInstance.retrofit.create(InterestSpecificAreaApiService::class.java)
@@ -360,6 +353,7 @@ class InterestFragment : Fragment() {
                 hasFee = hasFee,
                 maxFee = maxFee,
                 minFee = minFee,
+                themeTypes = theme,
                 page = currentPage ?: 0,
                 size = 5,
                 sortBy = selectedItem
@@ -374,7 +368,7 @@ class InterestFragment : Fragment() {
                 hasFee = hasFee,
                 maxFee = maxFee,
                 minFee = minFee,
-                themeTypes = themeTypes,
+                themeTypes = theme,
                 page = currentPage ?: 0,
                 size = 5,
                 sortBy = selectedItem
@@ -383,7 +377,6 @@ class InterestFragment : Fragment() {
         call.enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
-                    Log.d("InterestFragment","${response.body()}")
                     boardItems.clear()
                     val apiResponse = response.body()
                     if (apiResponse?.isSuccess == true) {
@@ -424,12 +417,10 @@ class InterestFragment : Fragment() {
                     }
                 } else {
                     val errorBody = response.errorBody()?.string()
-                    Log.e("InterestFragment", "Response failed: $errorBody")
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                Log.e("InterestFragment", "API 호출 실패", t)
             }
         })
     }
@@ -440,11 +431,7 @@ class InterestFragment : Fragment() {
 
 
     private fun updatePageNumberUI() {
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
+        startPage = calculateStartPage()
 
         val pageButtons = listOf(
             binding.page1,
@@ -556,10 +543,11 @@ class InterestFragment : Fragment() {
     }
 
     private fun calculateStartPage(): Int {
-        return if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        return when {
+            totalPages <= 5 -> 0
+            currentPage <= 2 -> 0
+            currentPage >= totalPages - 3 -> totalPages - 5
+            else -> currentPage - 2
         }
     }
 
@@ -568,11 +556,7 @@ class InterestFragment : Fragment() {
     }
 
     private fun updatePageUI() {
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
+        startPage = calculateStartPage()
 
         val pageButtons = listOf(
             binding.page1,
@@ -613,16 +597,13 @@ class InterestFragment : Fragment() {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     val regions = response.body()?.result?.regions
-                    Log.d("InterestFragment","$regions")
                     callback(regions)
                 } else {
-                    Log.e("InterestFragment", "fetchDataGetInterestArea: Response failed")
                     callback(null)
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                Log.e("InterestFragment", "fetchDataGetInterestArea: API 호출 실패", t)
                 callback(null)
             }
         })

@@ -3,34 +3,34 @@ package com.example.spoteam_android.ui.myinterest
 import androidx.lifecycle.ViewModel
 
 class MyInterestChipViewModel : ViewModel() {
-    var gender: String = "MALE"
+    var gender: String? = null
     var minAge: Int = 18
     var maxAge: Int = 60
-    var isOnline: Boolean = false
-    var hasFee: Boolean = false
+    var isOnline: Boolean? = null
+    var hasFee: Boolean? = null
     var minfee: Int? = null
     var maxfee: Int? = null
-    var isRecruiting: Boolean = true
-    var selectedAddress: String? = null
-    var selectedCode: String? = null
+    var isRecruiting: Boolean? = null
+    var selectedAddress: MutableList<String>? = null
+    var selectedCode: MutableList<String>? = null
 
     val finalMinFee: Int?
-        get() = if (hasFee) minfee else null
+        get() = if (hasFee == true) minfee else null
 
     val finalMaxFee: Int?
-        get() = if (hasFee) maxfee else null
+        get() = if (hasFee == true) maxfee else null
 
 
     fun reset() {
-        gender = "MALE"
+        gender = null
         minAge = 18
         maxAge = 60
-        hasFee = false
+        hasFee = null
         isOnline= true
-        isRecruiting = true
+        isRecruiting = null
         minfee = null
         maxfee = null
-        selectedAddress = null
-        selectedCode = null
+        selectedAddress?.clear()
+        selectedCode?.clear()
     }
 }

@@ -8,7 +8,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.icu.text.NumberFormat
 import android.os.Bundle
-import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +22,7 @@ import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.FragmentRecruitingStudyFilterBinding
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 
 
@@ -53,7 +54,6 @@ class RecruitingStudyFilterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("BottomNav", "InterestFilterFragment에서 hideBottomNav() 호출")
         navVisibilityController?.hideBottomNav()
 
         setupToolbar()
@@ -65,6 +65,7 @@ class RecruitingStudyFilterFragment : Fragment() {
         setupOnlineOfflineChips()
         setupResetButton()
         setupStudyThemeChips()
+        updateNextButtonState()
 
         binding.lvAddArea.setOnClickListener{
             (activity as MainActivity).supportFragmentManager.beginTransaction()
@@ -74,26 +75,27 @@ class RecruitingStudyFilterFragment : Fragment() {
         }
 
         arguments?.let {
-            // 전달된 주소와 코드가 있을 경우 ViewModel에 저장
-            viewModel.selectedAddress = it.getString("ADDRESS")
-            viewModel.selectedCode = it.getString("CODE")
+            // 여러 개의 주소/코드를 리스트 형태로 받기
+            val addressList = it.getStringArrayList("ADDRESS_LIST")?.toMutableList() ?: mutableListOf()
+            val codeList = it.getStringArrayList("CODE_LIST")?.toMutableList() ?: mutableListOf()
 
-            val address = viewModel.selectedAddress
+            viewModel.selectedAddress = addressList
+            viewModel.selectedCode = codeList
+
             val isOffline = it.getBoolean("IS_OFFLINE", false)
 
-            address?.let { addr ->
-                updateChip(addr)
+            // 주소 리스트를 Chip으로 업데이트
+            if (addressList.isNotEmpty()) {
+                updateChip(addressList)
             }
 
             setChipState(isOffline)
-            setupChipCloseListener()
             isLocationPlusVisible = isOffline
         }
 
     }
 
     override fun onDestroyView() {
-        Log.d("BottomNav", "MyInterestFilterFragment에서 showBottomNav() 호출 - onDestroyView")
         navVisibilityController?.showBottomNav()
         super.onDestroyView()
     }
@@ -119,7 +121,6 @@ class RecruitingStudyFilterFragment : Fragment() {
                 R.id.chip3_gender -> "FEMALE"
                 else -> "MALE"
             }
-            updateNextButtonState()
         }
     }
 
@@ -193,7 +194,6 @@ class RecruitingStudyFilterFragment : Fragment() {
                 binding.activityfeeSlider.isVisible = false
                 binding.displayfeeFrameLayout.isVisible = false
             }
-            updateNextButtonState()
         }
     }
 
@@ -202,18 +202,22 @@ class RecruitingStudyFilterFragment : Fragment() {
             val chip = binding.chipGroup2.getChildAt(i) as? Chip ?: continue
 
             chip.setOnClickListener {
-                val theme = chip.text.toString()
-                val themes = viewModel.themeTypes
-
-                if (chip.isChecked) {
-                    if (!themes.contains(theme)) {
-                        themes.add(theme)
-                    }
-                } else {
-                    themes.remove(theme)
+                val originalText = chip.text.toString()
+                val theme = when (originalText) {
+                    "시사/뉴스" -> "시사뉴스"
+                    "전공/진로학습" -> "전공및진로학습"
+                    else -> originalText
                 }
 
-                Log.d("InterestFilterFragment", "Selected study themes: $themes")
+                // themeTypes가 null이면 빈 리스트로 초기화
+                viewModel.themeTypes = (viewModel.themeTypes ?: mutableListOf()).apply {
+                    if (chip.isChecked) {
+                        if (!contains(theme)) add(theme)
+                    } else {
+                        remove(theme)
+                    }
+                }
+
                 updateNextButtonState()
             }
         }
@@ -227,6 +231,7 @@ class RecruitingStudyFilterFragment : Fragment() {
             binding.chipGroupGender.clearCheck()
             binding.chipGroup1.clearCheck()
             binding.chipGroup2.clearCheck()
+            binding.chipGroupNew.clearCheck()
 
             // ✅ RangeSlider 초기화
             binding.ageRangeSlider.values = listOf(18f, 60f)
@@ -237,8 +242,7 @@ class RecruitingStudyFilterFragment : Fragment() {
             binding.maxValueText.text = "60"
             binding.activityfeeMinValueText.text = "₩ 1,000"
             binding.activityfeeMaxValueText.text = "₩ 10,000"
-            binding.chipGroupNew.clearCheck()
-            binding.locationChip.visibility = View.GONE
+            binding.locationChipGroup.visibility = View.GONE
             binding.lvAddArea.visibility = View.GONE
         }
 
@@ -279,20 +283,18 @@ class RecruitingStudyFilterFragment : Fragment() {
             when (checkedId) {
                 R.id.chip01 -> {
                     viewModel.isOnline = true
-                    binding.locationChip.visibility = View.GONE
                     binding.lvAddArea.visibility = View.GONE
+                    val chipGroup = binding.locationChipGroup
+                    chipGroup.removeAllViews()
+                    viewModel.selectedCode?.clear()
+                    viewModel.selectedAddress?.clear()
                 }
                 R.id.chip02 -> {
                     viewModel.isOnline = false
                     binding.lvAddArea.visibility = View.VISIBLE
 
-                    // 선택된 주소가 있다면 chip도 보여줌
-                    if (!viewModel.selectedAddress.isNullOrEmpty()) {
-                        binding.locationChip.visibility = View.VISIBLE
-                    }
                 }
             }
-            updateNextButtonState()
         }
     }
 
@@ -302,28 +304,74 @@ class RecruitingStudyFilterFragment : Fragment() {
             binding.chipGroupNew.check(R.id.chip02)
         }
     }
-    private fun setupChipCloseListener() {
-        binding.locationChip.setOnCloseIconClickListener {
-            binding.locationChip.visibility = View.GONE
-            binding.lvAddArea.visibility = View.VISIBLE
+
+    fun updateChip(addressList: MutableList<String>) {
+        val chipGroup = binding.locationChipGroup
+        chipGroup.removeAllViews()
+
+        for (address in addressList) {
+            val truncatedAddress = extractAddressUntilDong(address)
+
+            val chip = Chip(requireContext()).apply {
+                val chipDrawable = ChipDrawable.createFromAttributes(
+                    requireContext(),
+                    null,
+                    0,
+                    R.style.CustomChipCloseStyle2
+                )
+                setChipDrawable(chipDrawable)
+
+                text = truncatedAddress
+                textSize = 14f  // ✅ 텍스트 사이즈 통일
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.search_chip_text))
+                isCloseIconVisible = true
+
+                val widthInPx = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    260f,
+                    resources.displayMetrics
+                ).toInt()
+
+                layoutParams = ViewGroup.MarginLayoutParams(
+                    widthInPx,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    marginStart = 15
+                    marginEnd = 15
+                    topMargin = 25
+                }
+
+                setOnCloseIconClickListener {
+                    chipGroup.removeView(this)
+                    viewModel.selectedAddress?.remove(address)
+
+                    if (chipGroup.childCount == 0) {
+                        binding.lvAddArea.visibility = View.VISIBLE
+                    }
+
+                }
+            }
+
+            chipGroup.addView(chip)
         }
+
+
+        chipGroup.visibility = View.VISIBLE
+
     }
 
+
+
+
     private fun extractAddressUntilDong(address: String): String {
-        val index = address.indexOf("동")
-        return if (index != -1) {
-            address.substring(0, index + 1)
+        val regex = Regex("(\\S+(동|읍|면))")
+        val match = regex.findAll(address).lastOrNull() // 가장 마지막 동/읍/면 추출
+
+        return if (match != null) {
+            val endIndex = match.range.last + 1
+            address.substring(0, endIndex)
         } else {
             address
         }
-    }
-
-    fun updateChip(address: String) {
-        val truncatedAddress = extractAddressUntilDong(address)
-        binding.locationChip.apply {
-            visibility = View.VISIBLE
-            text = truncatedAddress
-        }
-        updateNextButtonState()
     }
 }

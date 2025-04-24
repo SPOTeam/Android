@@ -8,4 +8,5 @@
     <dimen name="chip_spacing_horizontal">12dp</dimen>
     <dimen name="chip_spacing_search">0dp</dimen>
     <dimen name="dialog_fixed_height">360dp</dimen>
+    <dimen name="chip_max_width">240dp</dimen>
 </resources>

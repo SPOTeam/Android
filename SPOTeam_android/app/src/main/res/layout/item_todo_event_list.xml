@@ -24,8 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="Event Title"
-        android:textSize="16dp"
-        android:textStyle="bold"
+        android:textSize="14dp"
+        android:fontFamily="@font/suit_semi_bold"
         app:layout_constraintBottom_toBottomOf="@+id/ic_bar"
         app:layout_constraintStart_toEndOf="@id/ic_bar"
         app:layout_constraintTop_toTopOf="@+id/ic_bar"
@@ -33,8 +33,8 @@
 
     <ImageView
         android:id="@+id/ic_date"
-        android:layout_width="34dp"
-        android:layout_height="20dp"
+        android:layout_width="29dp"
+        android:layout_height="19dp"
         android:layout_marginEnd="5dp"
         android:scaleType="fitCenter"
         android:src="@drawable/fragment_calendar_text_date"
@@ -49,7 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
         android:textColor="#555555"
-        android:textSize="14dp"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ic_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ic_date"
         tools:text="10:00am - 12:00pm" />
