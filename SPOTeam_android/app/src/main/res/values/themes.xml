@@ -132,7 +132,7 @@
         <item name="chipBackgroundColor">@color/custom_chip</item>
         <item name="chipStrokeColor">@color/interest_custom_chip_stroke</item>
         <item name="chipStrokeWidth">1dp</item>
-        <item name="chipCornerRadius">8dp</item>
+        <item name="chipCornerRadius">12dp</item>
         <item name="android:elevation">1dp</item>
         <item name="android:textColor">@color/custom_chip_text</item>
         <item name="windowActionBar">false</item>

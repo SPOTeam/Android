@@ -4,11 +4,13 @@
     import MemberStudyFragment
     import StudyRequest
     import StudyViewModel
+    import android.content.res.Resources
     import android.os.Bundle
     import android.util.Log
     import android.view.LayoutInflater
     import android.view.View
     import android.view.ViewGroup
+    import androidx.constraintlayout.widget.ConstraintSet
     import androidx.fragment.app.Fragment
     import androidx.fragment.app.activityViewModels
     import com.bumptech.glide.Glide
@@ -163,6 +165,8 @@
 
 
         private fun updateChip(address: String) {
+            binding.fragmentOnlineStudyLocationPlusCl.visibility = View.VISIBLE
+
             binding.locationChip.apply {
                 visibility = View.VISIBLE
                 text = address
@@ -172,6 +176,7 @@
                 updateNextButtonState()
             }
         }
+
 
         private fun setupChipGroupListener() {
             binding.fragmentOnlineStudyChipOnline.setOnClickListener {
@@ -261,19 +266,53 @@
         }
 
         private fun updateLocationPlusLayoutVisibility(visible: Boolean) {
-            binding.fragmentOnlineStudyLocationPlusCl.visibility = if (visible) View.VISIBLE else View.GONE
-            binding.fragmentOnlineStudyBt.visibility = if (visible) View.GONE else View.VISIBLE
-            binding.fragmentOnlineStudyLocationPlusBt.visibility = if (visible) View.VISIBLE else View.GONE
+            val locationBtn = binding.fragmentOnlineStudyLocationPlusBt
+            val nextBtn = binding.fragmentOnlineStudyBt
+            val params = nextBtn.layoutParams as ViewGroup.MarginLayoutParams
+
+            if (visible) {
+                locationBtn.visibility = View.VISIBLE
+                params.marginStart = 6.dpToPx()
+                nextBtn.layoutParams = params
+
+
+                val constraintSet = ConstraintSet()
+                constraintSet.clone(binding.fragmentOnlineStudyButtonContainer)
+
+                constraintSet.connect(locationBtn.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+                constraintSet.connect(locationBtn.id, ConstraintSet.END, nextBtn.id, ConstraintSet.START)
+
+                constraintSet.connect(nextBtn.id, ConstraintSet.START, locationBtn.id, ConstraintSet.END)
+                constraintSet.connect(nextBtn.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+
+                constraintSet.applyTo(binding.fragmentOnlineStudyButtonContainer)
+            } else {
+                locationBtn.visibility = View.GONE
+                params.marginStart = 0
+                nextBtn.layoutParams = params
+
+                val constraintSet = ConstraintSet()
+                constraintSet.clone(binding.fragmentOnlineStudyButtonContainer)
+
+                constraintSet.connect(nextBtn.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+                constraintSet.connect(nextBtn.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+
+                constraintSet.clear(locationBtn.id)
+
+                constraintSet.applyTo(binding.fragmentOnlineStudyButtonContainer)
+            }
         }
+
 
         private fun updateNextButtonState() {
             val isOnline = binding.fragmentOnlineStudyChipOnline.isChecked
             val hasChip = binding.locationChip.visibility == View.VISIBLE
 
+            binding.fragmentOnlineStudyBt.visibility = View.VISIBLE
             binding.fragmentOnlineStudyBt.isEnabled = isOnline || hasChip
-            binding.fragmentOnlineStudyBt.visibility = if (isOnline || hasChip) View.VISIBLE else View.GONE
-            binding.fragmentOnlineStudyLocationPlusBt.visibility = if (isOnline || hasChip) View.GONE else View.VISIBLE
+            binding.fragmentOnlineStudyLocationPlusBt.visibility = if (isOnline) View.GONE else View.VISIBLE
         }
+
 
         private fun saveData() {
             val current = viewModel.studyRequest.value ?: return
@@ -322,4 +361,6 @@
                 .replace(R.id.main_frm, LocationStudyFragment())
                 .commit()
         }
+        fun Int.dpToPx(): Int =
+            (this * Resources.getSystem().displayMetrics.density).toInt()
     }

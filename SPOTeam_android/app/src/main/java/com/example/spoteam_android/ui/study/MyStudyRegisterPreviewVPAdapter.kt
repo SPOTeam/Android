@@ -11,7 +11,6 @@ class MyStudyRegisterPreviewVPAdapter(fragment: Fragment) : FragmentStateAdapter
     }
 
     override fun createFragment(position: Int): Fragment {
-        // 각 탭에 맞는 Fragment를 반환
         return when (position) {
             0 -> IntroduceStudyShortFragment()
             1 -> HomeFragment()

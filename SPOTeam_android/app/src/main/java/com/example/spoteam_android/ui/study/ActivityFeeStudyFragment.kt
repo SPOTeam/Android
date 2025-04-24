@@ -63,14 +63,21 @@ class ActivityFeeStudyFragment : Fragment() {
             if (viewModel.mode.value == StudyFormMode.CREATE && request != null) {
                 setChipState(request.hasFee)
 
-                if (request.hasFee) {
+                if (request.hasFee == true) {
+                    binding.fragmentActivityFeeStudyChipTrue.isChecked = true
                     binding.fragmentActivityFeeStudyNumFl.visibility = View.VISIBLE
-                    binding.fragmentActivityFeeStudyEt.setText(request.fee.toString())
-                    checkFeeInput()
+                } else if (request.hasFee == false) {
+                    binding.fragmentActivityFeeStudyChipFalse.isChecked = true
                     binding.fragmentActivityFeeStudyNumFl.visibility = View.GONE
-                    binding.fragmentActivityFeeStudyPreviewBt.isEnabled = true
+                } else {
+                    // 아무 것도 선택하지 않은 상태
+                    binding.fragmentActivityFeeStudyChipTrue.isChecked = false
+                    binding.fragmentActivityFeeStudyChipFalse.isChecked = false
+                    binding.fragmentActivityFeeStudyNumFl.visibility = View.GONE
                 }
+
             }
+
         }
         viewModel.patchSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
