@@ -1,75 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="360dp"
-    android:layout_height="255dp"
+    android:layout_width="351dp"
+    android:layout_height="266dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="18dp"
+    android:padding="19dp"
     android:background="@drawable/alert_background">
 
-    <ImageView
-        android:id="@+id/attend_close"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:src="@drawable/ic_x_button"
-        app:tint="@color/black"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <ImageView
-        android:id="@+id/ic_check_iv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/ic_check_new"
-        android:scaleType="centerInside"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/attend_close" />
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <TextView
-        android:id="@+id/alert_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="참여 완료"
-        android:textSize="21dp"
-        android:fontFamily="@font/suit_semi_bold"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ic_check_iv"/>
+        <LinearLayout
+            android:id="@+id/header_ll"
+            android:layout_width="match_parent"
+            android:layout_height="27dp"
+            android:orientation="horizontal"
+            android:gravity="end|center">
 
-    <TextView
-        android:id="@+id/description_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:text="참여가 완료되었어요.\n이제 스터디를 진행해봅시다!"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:textFontWeight="800"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/alert_tv"
-        android:lineSpacingExtra="5dp"/>
+            <ImageView
+                android:id="@+id/attend_close"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_x_button"
+                app:tint="@color/black" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/move_to_study_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="내 스터디로 이동"
-        android:textSize="16sp"
-        android:fontFamily="@font/suit_semi_bold"
-        android:background="@drawable/button_background"
-        android:textColor="@drawable/button_textcolor"
-        android:paddingHorizontal="65dp"
-        android:paddingVertical="12dp"
-        android:layout_marginTop="20dp"
-        android:elevation="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/description_tv"/>
+        <ImageView
+            android:id="@+id/ic_check_iv"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/ic_check_new"
+            android:scaleType="centerInside" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="29dp"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/alert_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="참여 완료"
+                android:textSize="21dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="700"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/description_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:text="참여가 완료되었어요.\n이제 스터디를 진행해봅시다!"
+            android:layout_marginTop="21dp"
+            android:gravity="center"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:textColor="@color/black"
+            android:lineSpacingExtra="5dp"/>
+
+        <TextView
+            android:id="@+id/move_to_study_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:text="내 스터디로 이동"
+            android:textSize="16dp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:background="@drawable/button_background"
+            android:textColor="@drawable/button_textcolor"
+            android:paddingHorizontal="65dp"
+            android:paddingVertical="12dp"
+            android:layout_marginTop="22dp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

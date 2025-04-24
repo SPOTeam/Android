@@ -48,7 +48,7 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
 
 //        val parent = parentFragment as? CheckAttendanceFragment
         scheduleId = arguments?.getInt("scheduleId")!!
-        Log.d("HostMakeQuizFragment", "Received scheduleId from parentFragment: $scheduleId")
+//        Log.d("HostMakeQuizFragment", "Received scheduleId from parentFragment: $scheduleId")
 
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
 //            Log.d("MakeQuiz", "Received studyId from ViewModel: $studyId")
@@ -137,8 +137,16 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
 
                 if(quiz) {
                     binding.makeQuestionEt.isSelected = true
+                    binding.bracketLeft1Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g400))
+                    binding.etCount1Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g400))
+                    binding.maxChar1Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g400))
+                    binding.bracketRight1Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g400))
                 } else {
                     binding.makeQuestionEt.isSelected = false
+                    binding.bracketLeft1Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g300))
+                    binding.etCount1Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g300))
+                    binding.maxChar1Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g300))
+                    binding.bracketRight1Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g300))
                 }
 
                 if(quiz && answer) {
@@ -170,8 +178,16 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
 
                 if(answer) {
                     binding.makeAnswerEt.isSelected = true
+                    binding.bracketLeft2Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g400))
+                    binding.etCount2Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g400))
+                    binding.maxChar2Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g400))
+                    binding.bracketRight2Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g400))
                 } else {
                     binding.makeAnswerEt.isSelected = false
+                    binding.bracketLeft2Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g300))
+                    binding.etCount2Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g300))
+                    binding.maxChar2Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g300))
+                    binding.bracketRight2Tv.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.g300))
                 }
 
 

@@ -197,10 +197,12 @@
         android:id="@+id/community_category_content_rv"
         android:layout_width="0dp"
         android:layout_height="620dp"
+        android:layout_marginTop="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/horizontalScroll_fl"
         app:layout_constraintBottom_toTopOf="@id/page_number_layout"
+        android:layout_marginHorizontal="20dp"
         tools:itemCount="5"
         tools:listitem="@layout/item_mystudy_community_content"/>
 

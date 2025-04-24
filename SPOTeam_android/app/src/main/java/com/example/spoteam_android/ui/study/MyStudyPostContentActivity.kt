@@ -65,6 +65,9 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityCommunityContentBinding.inflate(layoutInflater)
+
+        binding.scrapIv.visibility = View.GONE
+        binding.scrapCountTv.visibility = View.GONE
         setContentView(binding.root)
 
         currentStudyId = intent.getStringExtra("myStudyId")!!.toInt()
@@ -641,14 +644,6 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         else if(contentInfo.theme == "FREE_TALK") binding.communityContentThemeTv.text = "#자유"
         else if(contentInfo.theme == "STUDY_REVIEW") binding.communityContentThemeTv.text = "#스터디후기"
         else if(contentInfo.theme == "QNA") binding.communityContentThemeTv.text = "#Q&A"
-
-//        if (contentInfo.hit > 999) {
-//            val formatted = String.format("%.1fK", contentInfo.scrapCount / 1000.0)
-//            binding.scrapCountTv.text = formatted
-//        } else {
-//            binding.scrapCountTv.text = contentInfo.scrapCount.toString()
-//        }
-
 
         Glide.with(binding.root.context)
             .load(contentInfo.member.profileImage)

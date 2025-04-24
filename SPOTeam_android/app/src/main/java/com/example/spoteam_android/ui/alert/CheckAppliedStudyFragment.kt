@@ -68,12 +68,15 @@ class CheckAppliedStudyFragment : Fragment(), AttendStudyCompleteListener, Atten
                         if (studyAlertResponse?.isSuccess == "true") {
                             val studyAlertInfo = studyAlertResponse.result.notifications
                             binding.emptyAttendStudy.visibility = View.GONE
+                            binding.communityCategoryContentRv.visibility = View.VISIBLE
                             initRecyclerview(studyAlertInfo)
                         } else {
                             binding.emptyAttendStudy.visibility = View.VISIBLE
+                            binding.communityCategoryContentRv.visibility = View.GONE
                         }
                     } else {
                         binding.emptyAttendStudy.visibility = View.VISIBLE
+                        binding.communityCategoryContentRv.visibility = View.GONE
                         showError(response.code().toString())
                     }
                 }
@@ -97,10 +100,10 @@ class CheckAppliedStudyFragment : Fragment(), AttendStudyCompleteListener, Atten
 
         dataRVAdapter.setItemClickListener(object :CheckAppliedStudyFragmentRVAdapter.OnItemClickListener{
             override fun onOKClick(data : AlertStudyDetail) {
-//                postStudyAccept(data.studyId)
-                val dlgOK = OkDialog(requireContext(), this@CheckAppliedStudyFragment)
-                dlgOK.setStudyId(data.studyId)
-                dlgOK.start()
+                postStudyAccept(data.studyId)
+//                val dlgOK = OkDialog(requireContext(), this@CheckAppliedStudyFragment)
+//                dlgOK.setStudyId(data.studyId)
+//                dlgOK.start()
 
             }
 
