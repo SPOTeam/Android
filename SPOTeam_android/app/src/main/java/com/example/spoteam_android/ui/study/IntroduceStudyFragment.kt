@@ -67,8 +67,8 @@ class IntroduceStudyFragment : Fragment() {
                         .load(imageUrl)
                         .into(binding.fragmentIntroduceStudyIv)
                     profileImage = imageUrl
+                    checkButtonState()
                 }
-
                 checkButtonState()
             }
         }
@@ -154,30 +154,39 @@ class IntroduceStudyFragment : Fragment() {
     }
 
     private fun setupTextWatchers() {
-        val editTextList = listOf(
-            binding.fragmentIntroduceStudynameEt,
-            binding.fragmentIntroduceStudypurposeEt,
-            binding.fragmentIntroduceStudyEt
-        )
+        binding.fragmentIntroduceStudynameEt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val visible = s.isNullOrBlank()
+                binding.hintLeftStudyName.visibility = if (visible) View.VISIBLE else View.GONE
+                binding.hintRightStudyName.visibility = if (visible) View.VISIBLE else View.GONE
+                checkButtonState()
+            }
 
-        for (editText in editTextList) {
-            editText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    checkButtonState()
-                }
+        binding.fragmentIntroduceStudypurposeEt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val visible = s.isNullOrBlank()
+                binding.hintLeftStudyGoal.visibility = if (visible) View.VISIBLE else View.GONE
+                binding.hintRightStudyGoal.visibility = if (visible) View.VISIBLE else View.GONE
+                checkButtonState()
+            }
 
-                override fun afterTextChanged(s: Editable?) {}
-            })
-        }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+        binding.fragmentIntroduceStudyEt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                checkButtonState()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
+
 
     private fun checkButtonState() {
         val isEditTextFilled = binding.fragmentIntroduceStudynameEt.text.isNotEmpty() &&

@@ -29,7 +29,7 @@ class LocationStudyFragment : Fragment() {
         binding = FragmentLocationStudyBinding.inflate(inflater, container, false)
         setupRecyclerView()
         setupSearchFunctionality()
-        loadLocalTsvFile() // TSV 파일을 읽어 데이터 초기화
+        loadLocalTsvFile()
 
         binding.fragmentIntroduceStudyBackBt.setOnClickListener {
             goToPreviusFragment()
@@ -98,7 +98,6 @@ class LocationStudyFragment : Fragment() {
 
         locationSearchAdapter.notifyDataSetChanged()
 
-        // 검색 결과가 있을 때 RecyclerView를 보이게 함
         binding.activityLocationRv.visibility = if (locationSearchAdapter.itemCount > 0) View.VISIBLE else View.GONE
     }
 
@@ -116,22 +115,20 @@ class LocationStudyFragment : Fragment() {
         val fragment = OnlineStudyFragment()
         val bundle = Bundle().apply {
             putString("ADDRESS", address)
-            putBoolean("IS_OFFLINE", true) // "오프라인" 버튼 클릭 상태로 설정
-            // 선택된 아이템의 code를 전달
+            putBoolean("IS_OFFLINE", true)
             val selectedItemCode = locationSearchAdapter.getSelectedItem()?.code
             putString("CODE", selectedItemCode)
         }
         fragment.arguments = bundle
         parentFragmentManager.beginTransaction()
             .replace(R.id.main_frm, fragment)
-            .addToBackStack(null)
             .commit()
     }
 
     private fun goToPreviusFragment() {
         val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_frm, OnlineStudyFragment()) // 변경할 Fragment로 교체
-        transaction.addToBackStack(null) // 백스택에 추가
+        transaction.replace(R.id.main_frm, OnlineStudyFragment())
+        transaction.addToBackStack(null)
         transaction.commit()
     }
 }

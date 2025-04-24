@@ -39,7 +39,7 @@ import java.io.FileOutputStream
 class MyStudyRegisterPreviewFragment : Fragment() {
 
     private lateinit var binding: FragmentMyStudyRegisterPreviewBinding
-    private val tabList = arrayListOf("홈", "캘린더", "게시판", "갤러리", "투표")
+    private val tabList = arrayListOf("홈", "일정", "커뮤니티", "갤러리", "투두쉐어링")
     private val viewModel: StudyViewModel by activityViewModels()
     private var imageUri: Uri? = null
 
@@ -49,7 +49,6 @@ class MyStudyRegisterPreviewFragment : Fragment() {
     ): View? {
         binding = FragmentMyStudyRegisterPreviewBinding.inflate(inflater, container, false)
 
-        // ViewModel에서 이미지 URI를 가져옵니다.
         val profileImageUriString = viewModel.profileImageUri.value
         imageUri = profileImageUriString?.let { Uri.parse(it) }
 
@@ -116,7 +115,7 @@ class MyStudyRegisterPreviewFragment : Fragment() {
         val currentEmail = sharedPreferences.getString("currentEmail", null)
         val kakaoNickname = sharedPreferences.getString("${currentEmail}_nickname", "Unknown")
 
-        binding.fragmentMyStudyRegisterPreviewUsernameTv.text = kakaoNickname
+        binding.fragmentDetailStudyUsernameTv.text = kakaoNickname
         // 스터디 제목 설정
         binding.fragmentMyStudyRegisterPreviewTitleTv.text = viewModel.studyRequest.value?.title
 
@@ -189,23 +188,31 @@ class MyStudyRegisterPreviewFragment : Fragment() {
         }
     }
 
-    private fun saveUriAsPng(uri: Uri): File? {
+    private fun saveUriAsFile(uri: Uri): File? {
         return try {
-            // openInputStream이 null이면 오류 발생 → 예외 처리 필요
-            val inputStream = requireContext().contentResolver.openInputStream(uri)
-                ?: return null
-
+            val inputStream = requireContext().contentResolver.openInputStream(uri) ?: return null
             val bitmap = BitmapFactory.decodeStream(inputStream)
-            inputStream.close() // 스트림 닫기
+            inputStream.close()
 
-            // 임시 캐시 파일 생성 (확장자는 png지만 실제 포맷은 content에 따라 다름)
-            val tempFile = File.createTempFile("temp_image", ".png", requireContext().cacheDir)
+            // MIME 타입 추출
+            val mimeType = requireContext().contentResolver.getType(uri) ?: "image/jpeg"
+            val extension = when (mimeType) {
+                "image/png" -> ".png"
+                "image/webp" -> ".webp"
+                else -> ".jpg" // 기본 jpeg
+            }
 
+            val format = when (mimeType) {
+                "image/png" -> Bitmap.CompressFormat.PNG
+                "image/webp" -> Bitmap.CompressFormat.WEBP
+                else -> Bitmap.CompressFormat.JPEG
+            }
+
+            val tempFile = File.createTempFile("temp_image", extension, requireContext().cacheDir)
             val outputStream = FileOutputStream(tempFile)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            bitmap.compress(format, 100, outputStream)
             outputStream.flush()
             outputStream.close()
-
             tempFile
         } catch (e: Exception) {
             e.printStackTrace()
@@ -214,13 +221,14 @@ class MyStudyRegisterPreviewFragment : Fragment() {
     }
 
 
+
     private fun prepareImagePart(uri: Uri): MultipartBody.Part? {
-        val file = saveUriAsPng(uri)
-        return file?.let {
-            val requestFile = it.asRequestBody("image/png".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("images", it.name, requestFile)
-        }
+        val file = saveUriAsFile(uri) ?: return null
+        val mimeType = requireContext().contentResolver.getType(uri) ?: "image/jpeg"
+        val requestFile = file.asRequestBody(mimeType.toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("images", file.name, requestFile)
     }
+
 
 
 
