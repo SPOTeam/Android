@@ -139,13 +139,13 @@ class TodoDateAdapter(
 
             todayIndicator.visibility = if ((date == today && isCurrentMonth) || eventDays.contains(date)) {
                 if (date == today && isCurrentMonth) {
-                    Log.d("TodoCalendar", "📅 오늘 날짜: $date → 파란 점 표시됨")
+                    Log.d("TodoCalendar", "📌 오늘 날짜 $date → 점 표시")
                 } else if (eventDays.contains(date)) {
-                    Log.d("TodoCalendar", "📌 이벤트 날짜: $date → 파란 점 표시됨")
+                    Log.d("TodoCalendar", "📍 이벤트 날짜 $date → 점 표시")
                 }
                 View.VISIBLE
             } else {
-                Log.d("TodoCalendar", "❌ 날짜: $date → 파란 점 없음")
+                Log.d("TodoCalendar", "❌ 날짜 $date → 점 없음")
                 View.GONE
             }
 
