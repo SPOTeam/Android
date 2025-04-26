@@ -89,6 +89,19 @@ interface CommunityAPIService {
         @Query("sortBy") sortBy: String
     ): Call<CategoryStudyResponse>
 
+    @GET("/spot/search/studies/all")
+    fun getAllStudyWithDetail(
+        @Query("gender") gender: String?,
+        @Query("minAge") minAge: Int?,
+        @Query("maxAge") maxAge: Int?,
+        @Query("hasFee") hasFee: Boolean?,
+        @Query("maxFee") maxFee: Int?,
+        @Query("minFee") minFee: Int?,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sortBy") sortBy: String
+    ): Call<CategoryStudyResponse>
+
     @GET("/spot/search/studies/all/no-conditions")
     fun getAllStudy(
         @Query("page") page: Int,

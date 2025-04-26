@@ -30,15 +30,15 @@ class CategoryFragment : Fragment() {
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
 
         val categoryAdapter = CategoryVPAdapter(this)
-        binding.categoryContentVp.adapter = categoryAdapter
+//        binding.categoryContentVp.adapter = categoryAdapter
 
-        TabLayoutMediator(binding.categoryTl, binding.categoryContentVp) { tab, position ->
-            val tabView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_tab_text, null)
-            val textView = tabView.findViewById<TextView>(R.id.tabText)
-            textView.text = tabList[position]
-            textView.setTextColor(Color.BLACK) // 초기엔 모두 검정색
-            tab.customView = tabView
-        }.attach()
+//        TabLayoutMediator(binding.categoryTl, binding.categoryContentVp) { tab, position ->
+//            val tabView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_tab_text, null)
+//            val textView = tabView.findViewById<TextView>(R.id.tabText)
+//            textView.text = tabList[position]
+//            textView.setTextColor(Color.BLACK) // 초기엔 모두 검정색
+//            tab.customView = tabView
+//        }.attach()
 
         val tabLayout = binding.categoryTl
         val tabStrip = tabLayout.getChildAt(0) as ViewGroup
@@ -67,7 +67,7 @@ class CategoryFragment : Fragment() {
 
         val categoryType = arguments?.getInt("categoryType", 0) ?: 0
 
-        binding.categoryContentVp.setCurrentItem(categoryType, false)
+//        binding.categoryContentVp.setCurrentItem(categoryType, false)
 
         return binding.root
     }
