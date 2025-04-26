@@ -302,7 +302,8 @@ data class StudyPostListResponse(
 
 data class StudyPostListInfo (
     val studyId : Int,
-    val posts : List<PostDetail>
+    val posts : List<PostDetail>,
+    val totalPages : Int
 )
 
 data class PostDetail (

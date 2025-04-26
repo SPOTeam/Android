@@ -46,7 +46,7 @@ class RefuseDialog(private val context: Context, private val listener : AttendSt
 
         val btnReject = dlg.findViewById<TextView>(R.id.attendance_reject_tv)
         btnReject.setOnClickListener {
-            postStudyAccept(studyId)
+            postStudyDeny(studyId)
             dlg.dismiss()
         }
 
@@ -59,7 +59,7 @@ class RefuseDialog(private val context: Context, private val listener : AttendSt
         dlg.show()
     }
 
-    private fun postStudyAccept(studyId : Int) {
+    private fun postStudyDeny(studyId : Int) {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.postAcceptedStudyAlert(studyId, false)
             .enqueue(object : Callback<AcceptedAlertStudyResponse> {
@@ -72,8 +72,8 @@ class RefuseDialog(private val context: Context, private val listener : AttendSt
                         val studyAlertResponse = response.body()
 //                        Log.d("MyStudyAttendance", "responseBody: ${studyAlertResponse?.isSuccess}")
                         if (studyAlertResponse?.isSuccess == "true") {
-                            dlg.dismiss()
                             listener.onAttendRejected()
+                            dlg.dismiss()
                         }
                     } else {
                         showError(response.code().toString())

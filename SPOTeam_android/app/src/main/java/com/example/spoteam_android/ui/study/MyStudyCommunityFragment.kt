@@ -33,8 +33,8 @@ class MyStudyCommunityFragment : Fragment() {
 
     private var itemList = ArrayList<PostDetail>()
     private var currentPage = 0
-    private var nextPage = 1
     private val size = 5 // 페이지당 항목 수
+    private var totalPages = 0
     private var startPage = 0
 
     private var themeQuery : String = ""
@@ -61,7 +61,6 @@ class MyStudyCommunityFragment : Fragment() {
                 val selectedPage = startPage + index
                 if (currentPage != selectedPage) {
                     currentPage = selectedPage
-                    nextPage = currentPage+1
                     fetchPages()
                 }
             }
@@ -71,15 +70,15 @@ class MyStudyCommunityFragment : Fragment() {
         binding.previousPage.setOnClickListener {
             if (currentPage > 0) {
                 currentPage--
-                nextPage--
                 fetchPages() // 이전 페이지 데이터를 가져옴
             }
         }
 
         binding.nextPage.setOnClickListener {
-            currentPage++
-            nextPage++
-            fetchPages() // 다음 페이지 데이터를 가져옴
+            if (currentPage < getTotalPages() - 1) {
+                currentPage++
+                fetchPages() // 다음 페이지 데이터를 가져옴
+            }
         }
 
         binding.writeContentIv.setOnClickListener{
@@ -106,7 +105,9 @@ class MyStudyCommunityFragment : Fragment() {
         return binding.root
     }
 
-
+    private fun getTotalPages(): Int {
+        return totalPages // 올바른 페이지 수 계산
+    }
 
     private fun initBTN() {
         binding.allRb.setOnClickListener{
@@ -166,9 +167,12 @@ class MyStudyCommunityFragment : Fragment() {
                                 itemList.clear()
                                 itemList.addAll(posts)
 
+                                totalPages = pagesResponse.result.totalPages
+
+
                                 initRecyclerview()
 
-                                checkNextPageAvailable()
+                                updatePageUI()
                             } else {
                                 binding.fileNoneIv.visibility = View.VISIBLE
                                 binding.noneMemberAlertTv.visibility = View.VISIBLE
@@ -190,26 +194,6 @@ class MyStudyCommunityFragment : Fragment() {
 
                 override fun onFailure(call: Call<StudyPostListResponse>, t: Throwable) {
                     Log.e("ALL", "Failure: ${t.message}", t)
-                }
-            })
-    }
-
-    private fun checkNextPageAvailable() {
-        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getStudyPost(currentStudyId, themeQuery, nextPage, size)
-            .enqueue(object : Callback<StudyPostListResponse> {
-                override fun onResponse(
-                    call: Call<StudyPostListResponse>,
-                    response: Response<StudyPostListResponse>
-                ) {
-                    val hasNext = response.body()?.result?.posts?.isNotEmpty() == true
-                    binding.nextPage.isEnabled = hasNext
-                    updatePageUI(hasNext)
-                }
-
-                override fun onFailure(call: Call<StudyPostListResponse>, t: Throwable) {
-                    binding.nextPage.isEnabled = false
-                    updatePageUI(false)
                 }
             })
     }
@@ -301,17 +285,20 @@ class MyStudyCommunityFragment : Fragment() {
         })
     }
 
-    private fun updatePageUI(hasNext: Boolean) {
+    private fun updatePageUI() {
         val pageButtons = listOf(
             binding.page1, binding.page2, binding.page3, binding.page4, binding.page5
         )
 
-        startPage = maxOf(0, currentPage - 2)
-        val maxAvailablePage = if (hasNext) currentPage + 1 else currentPage
+        startPage = if (currentPage <= 2) {
+            0
+        } else {
+            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
+        }
 
         pageButtons.forEachIndexed { index, textView ->
             val pageNum = startPage + index
-            if (pageNum <= maxAvailablePage) {
+            if (pageNum < totalPages) {
                 textView.text = (pageNum + 1).toString()
                 textView.setBackgroundResource(
                     if (pageNum == currentPage) R.drawable.btn_page_bg else 0
@@ -329,5 +316,6 @@ class MyStudyCommunityFragment : Fragment() {
         }
 
         binding.previousPage.isEnabled = currentPage > 0
+        binding.nextPage.isEnabled = currentPage < totalPages - 1
     }
 }
