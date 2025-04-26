@@ -168,18 +168,20 @@
             app:layout_constraintTop_toBottomOf="@id/communityHome_BestPopularity_content_rv"
             app:layout_constraintStart_toStartOf="@id/communityHome_BestPopularity_content_rv"/>
 
-        <!--    이동 화살표 추가-->
+        
+
         <ImageView
             android:id="@+id/community_move_community_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="35dp"
+            android:layout_height="27dp"
+            android:background="@drawable/selector_community_home_background"
             android:src="@drawable/ic_new_right"
-            android:padding="5dp"
+            android:paddingVertical="12dp"
+            android:paddingStart="13dp"
+            android:paddingEnd="11dp"
             android:scaleType="centerCrop"
-            android:layout_marginTop="4dp"
             app:layout_constraintTop_toTopOf="@id/communityHome_Community_tv"
             app:layout_constraintEnd_toEndOf="@id/communityHome_Community_content_rv"/>
-
         <!--    SPOT 공지  -->
 
         <androidx.recyclerview.widget.RecyclerView
@@ -217,12 +219,14 @@
         <!--    이동 화살표 추가-->
         <ImageView
             android:id="@+id/community_move_notification_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="35dp"
+            android:layout_height="27dp"
+            android:background="@drawable/selector_community_home_background"
             android:src="@drawable/ic_new_right"
-            android:padding="5dp"
+            android:paddingVertical="12dp"
+            android:paddingStart="13dp"
+            android:paddingEnd="11dp"
             android:scaleType="centerCrop"
-            android:layout_marginTop="4dp"
             app:layout_constraintEnd_toEndOf="@id/communityHome_Notification_content_rv"
             app:layout_constraintTop_toTopOf="@id/communityHome_Notification_tv" />
 
