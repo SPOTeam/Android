@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -24,6 +25,7 @@ import com.example.spoteam_android.ui.community.CategoryStudyDetail
 import com.example.spoteam_android.ui.community.CategoryStudyResponse
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,7 +41,8 @@ class ContestFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var totalPages = 0
     private var startPage = 0
     private var isLoading = false
-    private var selectedCategory: String = "ALL"
+    private var selectedSortBy: String = "ALL"
+    private val theme :String = "공모전"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,18 +51,7 @@ class ContestFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding = FragmentCategoryStudyContentBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
-        binding.contentFilterSp.onItemSelectedListener = this
 
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.filter_list,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.contentFilterSp.adapter = adapter
-        }
-
-        // 어댑터 초기화 및 클릭 리스너 설정
         val categoryStudyAdapter = CategoryStudyContentRVAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
         })
@@ -78,12 +70,50 @@ class ContestFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     ?.commit()
             }
         })
+        binding.communityCategoryContentRv.adapter = categoryStudyAdapter
         binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(requireContext())
 
 
-        fetchBestCommunityContent("공모전", currentPage, size, selectedCategory)
 
+
+        fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
+        initBottomFilterView()
         return binding.root
+    }
+
+    private fun initBottomFilterView() {
+        val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_interest_spinner, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.InterestBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(dialogView)
+
+        val recentlyLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_recently)
+        val viewLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_view)
+        val hotLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_hot)
+
+        recentlyLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "최신 순"
+            selectedSortBy="ALL"  // 최신 순
+            fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
+        }
+
+        viewLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "조회 수 높은 순"
+            selectedSortBy="HIT"
+            fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
+        }
+
+        hotLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "관심 많은 순"
+            selectedSortBy="LIKED"  // 관심 많은 순
+            fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
+        }
+
+        binding.contentFilterToggleContainer.setOnClickListener {
+            bottomSheetDialog.show()
+        }
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -101,7 +131,7 @@ class ContestFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 val selectedPage = startPage + index
                 if (currentPage != selectedPage) {
                     currentPage = selectedPage
-                    fetchBestCommunityContent("공모전", currentPage, size, selectedCategory)
+                    fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
                 }
             }
         }
@@ -109,17 +139,17 @@ class ContestFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.previousPage.setOnClickListener {
             if (currentPage > 0) {
                 currentPage--
-                fetchBestCommunityContent("공모전", currentPage, size, selectedCategory)
+                fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
             }
         }
 
         binding.nextPage.setOnClickListener {
             if (currentPage < totalPages - 1) {
                 currentPage++
-                fetchBestCommunityContent("공모전", currentPage, size, selectedCategory)
+                fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
             }
         }
-        fetchBestCommunityContent("공모전", currentPage, size, selectedCategory)
+        fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
     }
 
 
@@ -166,9 +196,20 @@ class ContestFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun updateRecyclerView(contentList: List<CategoryStudyDetail>) {
-        val adapter = binding.communityCategoryContentRv.adapter as? CategoryStudyContentRVAdapter
-        adapter?.updateList(contentList)
+        // 어댑터가 초기화되지 않은 경우 초기화
+        if (binding.communityCategoryContentRv.adapter == null) {
+            val categoryStudyAdapter = CategoryStudyContentRVAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
+                toggleLikeStatus(selectedItem, likeButton)
+            })
+            binding.communityCategoryContentRv.adapter = categoryStudyAdapter
+            binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        // 어댑터가 이미 존재하는 경우 데이터를 추가
+        val adapter = binding.communityCategoryContentRv.adapter as CategoryStudyContentRVAdapter
+        adapter.updateList(contentList)
     }
+
 
     private fun updatePageUI() {
         startPage = if (currentPage <= 2) {
@@ -209,12 +250,12 @@ class ContestFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun showLog(message: String?) {
-        Toast.makeText(requireContext(), "ContestFragment: $message", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "DiscussionFragment: $message", Toast.LENGTH_SHORT).show()
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val selectedItem = parent?.getItemAtPosition(position).toString()
-        selectedCategory = when (selectedItem) {
+        selectedSortBy = when (selectedItem) {
             "전체" -> "ALL"
             "모집중" -> "RECRUITING"
             "모집완료" -> "COMPLETED"
@@ -223,7 +264,7 @@ class ContestFragment : Fragment(), AdapterView.OnItemSelectedListener {
             else -> "ALL"
         }
         currentPage = 0
-        fetchBestCommunityContent("공모전", currentPage, size, selectedCategory)
+        fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
     }
 
     private fun toggleLikeStatus(studyItem: CategoryStudyDetail, likeButton: ImageView) {
@@ -266,7 +307,8 @@ class ContestFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        selectedCategory = "ALL"
+        selectedSortBy = "ALL"
     }
 }
