@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -23,6 +24,7 @@ import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.category.CategoryFragment_1
+import com.example.spoteam_android.ui.category.CategoryInterestViewModel
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.CommunityContentActivity
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
@@ -57,6 +59,8 @@ class HouseFragment : Fragment() {
     private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var presentTemperature: TextView
     private val viewModel: InterestFilterViewModel by activityViewModels()
+    private val categoryViewModel : CategoryInterestViewModel by activityViewModels()
+
 
 
     override fun onResume() {
@@ -270,6 +274,9 @@ class HouseFragment : Fragment() {
             val categoryFragment = CategoryFragment_1().apply {
                 arguments = bundle4
             }
+
+            categoryViewModel.reset()
+
             activity?.let {
                 it.supportFragmentManager.beginTransaction()
                     .replace(R.id.main_frm, categoryFragment)

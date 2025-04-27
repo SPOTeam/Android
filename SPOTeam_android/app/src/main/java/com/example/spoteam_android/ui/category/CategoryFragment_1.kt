@@ -69,6 +69,8 @@ class CategoryFragment_1 : Fragment() {
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)  // ← 이거 추가
 
+
+
         initArguments()
         setupRecyclerView()
         setupTabs()
