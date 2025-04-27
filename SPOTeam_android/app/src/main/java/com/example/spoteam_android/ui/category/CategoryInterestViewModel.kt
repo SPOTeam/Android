@@ -12,6 +12,7 @@ class CategoryInterestViewModel : ViewModel() {
     var maxfee: Int? = null
     var isRecruiting: String? = null
     var selectedItem : String = "ALL"
+    var theme : String = "전체"
 
     val finalMinFee: Int?
         get() = if (hasFee == true) minfee else null

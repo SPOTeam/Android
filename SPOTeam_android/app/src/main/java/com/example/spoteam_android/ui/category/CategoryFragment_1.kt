@@ -67,6 +67,7 @@ class CategoryFragment_1 : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
+        studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)  // ← 이거 추가
 
         initArguments()
         setupRecyclerView()
@@ -91,6 +92,7 @@ class CategoryFragment_1 : Fragment() {
         maxFee = viewModel.finalMaxFee
         selectedItem = viewModel.selectedItem
         source = viewModel.source
+        selectedStudyTheme = viewModel.theme
     }
 
     private fun initialFetch() {
@@ -111,8 +113,14 @@ class CategoryFragment_1 : Fragment() {
     }
 
     private fun setupTabsWithThemes(themes: List<String>) {
-        themes.forEach { theme ->
-            tabLayout.addTab(createTab(theme))
+        themes.forEachIndexed { index, theme ->
+            val tab = createTab(theme)
+            tabLayout.addTab(tab)
+
+            // ✨ viewModel.theme에 맞는 탭 자동 선택
+            if (theme == viewModel.theme) {
+                tabLayout.selectTab(tab)  // ← 여기 추가
+            }
         }
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -120,12 +128,11 @@ class CategoryFragment_1 : Fragment() {
                 handleTabSelected(tab)
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
     }
+
 
     private fun createTab(text: String): TabLayout.Tab {
         return tabLayout.newTab().apply {
@@ -140,6 +147,7 @@ class CategoryFragment_1 : Fragment() {
     private fun handleTabSelected(tab: TabLayout.Tab) {
         selectedStudyCategory = tab.tag as String
         selectedStudyTheme = selectedStudyCategory.toString()  // ← 탭 선택값으로 테마 업데이트
+        viewModel.theme = selectedStudyTheme
 
         if (selectedStudyCategory == "전체") {
             fetchMyInterestAll(selectedItem, gender, minAge, maxAge,hasFee,minFee,maxFee,currentPage)
