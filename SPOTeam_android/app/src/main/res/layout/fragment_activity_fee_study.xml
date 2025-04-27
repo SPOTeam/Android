@@ -77,25 +77,27 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_activity_fee_study_chip_true"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="90dp"
             android:layout_columnWeight="1"
             android:text="있어요"
             android:textAlignment="center"
-            android:textSize="16dp"
+            android:textSize="17dp"
+            android:fontFamily="@font/suit_bold"
             android:layout_marginEnd="5dp"/>
 
 
         <com.google.android.material.chip.Chip
             android:id="@+id/fragment_activity_fee_study_chip_false"
-            style="@style/CustomChipStyle"
+            style="@style/CustomChipStyle2"
             android:layout_width="0dp"
             android:layout_height="90dp"
             android:layout_columnWeight="1"
             android:text="없어요"
             android:textAlignment="center"
-            android:textSize="16dp"
+            android:textSize="17dp"
+            android:fontFamily="@font/suit_bold"
             android:layout_marginStart="5dp"/>
 
 
@@ -121,10 +123,10 @@
             android:layout_centerVertical="true"
             android:layout_gravity="start|center"
             android:layout_marginStart="15dp"
-            android:text="설정한 활동비"
-            android:fontFamily="@font/suit_bold"
+            android:text="총 활동비"
+            android:fontFamily="@font/suit_semi_bold"
             android:textColor="@color/black"
-            android:textSize="16dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/fragment_activity_fee_study_front_tv"
@@ -150,7 +152,7 @@
             android:ems="10"
             android:inputType="number"
             android:textSize="14dp"
-            android:fontFamily="@font/suit_semi_bold"
+            android:fontFamily="@font/suit_bold"
             android:textColor="@color/black"
             android:padding="10dp"/>
     </FrameLayout>

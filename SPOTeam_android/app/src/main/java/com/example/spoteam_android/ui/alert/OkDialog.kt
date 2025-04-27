@@ -40,19 +40,19 @@ class OkDialog(private val context: Context, private val listener : AttendStudyC
             val bundle = Bundle().apply {
                 putInt("FromOKToDetailStudy", studyId)
             }
-
             fragment.arguments = bundle
-
+            listener.onAttendComplete()
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
             dlg.dismiss()
-            listener.onAttendComplete()
+
         }
 
         val btnClose = dlg.findViewById<ImageView>(R.id.attend_close)
         btnClose.setOnClickListener{
+            listener.onAttendComplete()
             dlg.dismiss()
         }
 

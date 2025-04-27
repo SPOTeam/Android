@@ -41,10 +41,16 @@ class CrewTakeAttendanceFragment : Fragment() {
             question = it.getString("question").toString()
 //            Log.d("CheckAttendanceFragment", "Received scheduleId: $scheduleId")
         }
+        timeInMillis = calculateTimeLeftInMillis(createdAt)
 
         if(question != "") {
-            binding.startAttendanceTv.isEnabled = true;
+            if (timeInMillis <= 0L) {
+                binding.startAttendanceTv.isEnabled = false
+            } else {
+                binding.startAttendanceTv.isEnabled = true
+            }
         }
+
 
         // parentFragment 접근 후 수정
         parentFragment?.let { parent ->
