@@ -68,17 +68,16 @@
         android:id="@+id/retry_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="다시 풀기"
-        android:textSize="25sp"
+        android:layout_marginBottom="28dp"
         android:background="@drawable/button_background"
-        android:textColor="@drawable/button_textcolor"
         android:gravity="center"
-        android:paddingVertical="10dp"
-        android:fontFamily="@font/suit_semi_bold"
-        android:layout_marginBottom="30dp"
-        android:elevation="2dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:paddingVertical="12dp"
+        android:fontFamily="@font/suit_bold"
+        android:textSize="17dp"
+        android:text="다시 풀기"
+        android:textColor="@drawable/button_textcolor"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
