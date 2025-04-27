@@ -1,45 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="55dp"
     android:layout_height="73dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginEnd="10dp"
-    android:gravity="center">
+    android:layout_marginEnd="10dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/fragment_detail_study_home_hostuser_iv"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:src="@drawable/ic_host_profile"
-        android:scaleType="centerCrop"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:padding="2dp"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_host_profile"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/fragment_consider_attendance_member_host_iv"
-        android:layout_width="23dp"
-        android:layout_height="23dp"
+        android:layout_width="19dp"
+        android:layout_height="19dp"
         android:src="@drawable/host_mark"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/fragment_detail_study_home_hostuser_iv"
+        app:layout_constraintTop_toTopOf="@id/fragment_detail_study_home_hostuser_iv"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:visibility="gone"/>
 
     <TextView
         android:id="@+id/profile_nickname"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:text="닉네임"
         android:textSize="13dp"
         android:textColor="@color/black"
         android:fontFamily="@font/suit_semi_bold"
-        android:layout_below="@id/fragment_detail_study_home_hostuser_iv"
-        android:layout_centerHorizontal="true"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:maxWidth="60dp"
         android:gravity="center"
-        android:layout_marginTop="3dp"/>
-</RelativeLayout>
+        android:maxLines="2"
+        android:ellipsize="middle"
+        android:maxWidth="50dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_hostuser_iv"
+        app:layout_constraintStart_toStartOf="@id/fragment_detail_study_home_hostuser_iv"
+        app:layout_constraintEnd_toEndOf="@id/fragment_detail_study_home_hostuser_iv"
+        android:layout_marginTop="3dp" />
 
+</androidx.constraintlayout.widget.ConstraintLayout>

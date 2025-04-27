@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="20dp"
-            android:paddingHorizontal="11dp"
+            android:paddingHorizontal="19dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
             android:id="@+id/tx_scheduled_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="19dp"
             android:layout_marginTop="14dp"
             android:fontFamily="@font/suit_bold"
             android:text="예정된 일정"
@@ -64,31 +64,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="19dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tx_scheduled_event"
             android:nestedScrollingEnabled="false"
             tools:listitem="@layout/item_todo_event_list" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_my_todo_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tx_my_todo_list"
-        android:nestedScrollingEnabled="false"
-        tools:listitem="@layout/item_todo_list" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_my_todo_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            android:paddingStart="26dp"
+            android:paddingEnd="22dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tx_my_todo_list"
+            tools:listitem="@layout/item_todo_list" />
 
         <TextView
             android:id="@+id/tx_my_todo_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="19dp"
             android:layout_marginTop="26dp"
             android:fontFamily="@font/suit_bold"
             android:text="사용자님의 TODO"
@@ -97,22 +100,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eventrecyclerviewto" />
 
-    <ImageView
-        android:id="@+id/imgbtn_plus_todolist"
-        android:layout_width="32dp"
-        android:layout_height="28dp"
-        android:layout_marginEnd="20dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/fragment_my_todo_list_imgbtn_plus_todolist"
-        app:layout_constraintBottom_toBottomOf="@+id/tx_my_todo_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tx_my_todo_list" />
+        <ImageView
+            android:id="@+id/imgbtn_plus_todolist"
+            android:layout_width="32dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="19dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/fragment_my_todo_list_imgbtn_plus_todolist"
+            app:layout_constraintBottom_toBottomOf="@+id/tx_my_todo_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tx_my_todo_list" />
 
         <TextView
             android:id="@+id/tx_others_todo_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="19dp"
             android:layout_marginTop="26dp"
             android:fontFamily="@font/suit_bold"
             android:text="스터디 파트너들의 TODO"
@@ -125,7 +128,7 @@
             android:id="@+id/fragment_detail_study_home_profile_rv"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="19dp"
             android:layout_marginTop="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tx_others_todo_list"
@@ -136,11 +139,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingBottom="36dp"
+        android:paddingStart="26dp"
+        android:paddingEnd="22dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_detail_study_home_profile_rv"
         android:nestedScrollingEnabled="false"/>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

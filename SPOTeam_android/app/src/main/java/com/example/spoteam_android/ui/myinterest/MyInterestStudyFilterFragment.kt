@@ -159,9 +159,9 @@ class MyInterestStudyFilterFragment : Fragment() {
         val maxValueText = binding.activityfeeMaxValueText
 
         activityfeeSlider.valueFrom = 1000f
-        activityfeeSlider.valueTo = 10000f
+        activityfeeSlider.valueTo = 500000f
         activityfeeSlider.stepSize = 100f
-        activityfeeSlider.values = listOf(1000f, 10000f)
+        activityfeeSlider.values = listOf(1000f, 500000f)
         val customThumb = ContextCompat.getDrawable(requireContext(),R.drawable.custom_thumb)
         if (customThumb != null) {
             activityfeeSlider.setCustomThumbDrawable(customThumb)
@@ -214,13 +214,13 @@ class MyInterestStudyFilterFragment : Fragment() {
 
             // ✅ RangeSlider 초기화
             binding.ageRangeSlider.values = listOf(18f, 60f)
-            binding.activityfeeSlider.values = listOf(1000f, 10000f)
+            binding.activityfeeSlider.values = listOf(1000f, 500000f)
 
             // ✅ 텍스트뷰 값도 초기화 (선택사항)
             binding.minValueText.text = "18"
             binding.maxValueText.text = "60"
             binding.activityfeeMinValueText.text = "₩ 1,000"
-            binding.activityfeeMaxValueText.text = "₩ 10,000"
+            binding.activityfeeMaxValueText.text = "₩ 500,000"
 
             binding.lvAddArea.visibility = View.GONE
             binding.locationChipGroup.visibility = View.GONE
