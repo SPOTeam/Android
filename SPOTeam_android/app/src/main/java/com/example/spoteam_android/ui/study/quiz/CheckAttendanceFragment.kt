@@ -39,6 +39,8 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     private var quiz : String = ""
     private var createdAt : String = ""
 
+    private val timerViewModel: TimerViewModel by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,15 +58,15 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
 
         // memberId 가져오기
         currentMemberId = if (email != null) sharedPreferences.getInt("${email}_memberId", -1) else -1
-        Log.d("CurrentMemberId",  currentMemberId.toString())
+//        Log.d("CurrentMemberId",  currentMemberId.toString())
 
         arguments?.let {
             scheduleId = it.getInt("scheduleId")
-            Log.d("CheckAttendanceFragment", "Received scheduleId: $scheduleId")
+//            Log.d("CheckAttendanceFragment", "Received scheduleId: $scheduleId")
         }
 
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
-            Log.d("CheckAttendanceFragment", "Received studyId from ViewModel: $studyId and $scheduleId")
+//            Log.d("CheckAttendanceFragment", "Received studyId from ViewModel: $studyId and $scheduleId")
             if (studyId != null) {
                 this.studyId = studyId
                 fetchStudyMember()
@@ -80,7 +82,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     }
 
     private fun makeHostMakeQuizFragment() {
-        Log.d("makeHostMakeQuizFragment", scheduleId.toString())
+//        Log.d("makeHostMakeQuizFragment", scheduleId.toString())
         val hostMakeQuizFirstFragment = HostMakeQuizFirstFragment().apply {
             arguments = Bundle().apply {
                 putInt("scheduleId", scheduleId) // scheduleId 전달
@@ -112,8 +114,9 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
                     if (response.isSuccessful) {
                         val quizResponse = response.body()
                         if(quizResponse?.isSuccess == "true") {
-                            quiz = quizResponse.result.question
-                            createdAt = quizResponse.result.createdAt
+                            timerViewModel.quiz = quizResponse.result.question
+                            timerViewModel.startTimer(quizResponse.result.createdAt)
+
                             fetchScheduleMember()
                         } else {
                             if(members[0].memberId == currentMemberId) {
@@ -156,9 +159,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     private fun initCrewFragment() {
         val crewTakeAttendanceFragment = CrewTakeAttendanceFragment().apply {
             arguments = Bundle().apply {
-                putString("createdAt", createdAt)
                 putInt("scheduleId", scheduleId)
-                putString("question", quiz)
             }
         }
 
@@ -209,10 +210,11 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
 //                                Log.d("checkIng", "initHostAlreadyMakeQuiz")
                                 initHostAlreadyMakeQuiz()
                             } else {
-                                Log.d("checkIng", "initCrewFragment")
+//                                Log.d("checkIng", "initCrewFragment")
                                 val m = scheduleResponse.result.studyMembers.find { it.memberId == currentMemberId }
                                 if(m?.isAttending == false) {
                                     initCrewFragment()
+//                                    Log.d("Timer", "현재 초: ${timerViewModel.timerSeconds.value}")
                                 } else {
                                     initCrewFinishFragment()
                                 }
