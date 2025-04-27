@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:paddingVertical="5dp"
+android:background="#F9FBFF">
+
+<!-- 체크박스 -->
+<CheckBox
+    android:id="@+id/todoCheckbox"
+    android:layout_width="15dp"
+    android:layout_height="15dp"
+    android:layout_marginHorizontal="0dp"
+    android:layout_marginVertical="5dp"
+    android:background="@drawable/todolist_custom_checkbox"
+    android:button="@android:color/transparent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+<!-- 텍스트뷰 -->
+<TextView
+    android:id="@+id/todoContent"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
-    android:layout_marginHorizontal="10dp"
-    android:background="#F9FBFF">
+    android:layout_marginStart="10dp"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:text="오늘의 할 일을 입력해주세요."
+    android:textColor="@color/black"
+    android:textFontWeight="900"
+    android:fontFamily="@font/suit_variable"
+    android:textSize="13dp"
+    app:layout_constraintBottom_toBottomOf="@id/todoCheckbox"
+    app:layout_constraintStart_toEndOf="@id/todoCheckbox"
+    app:layout_constraintTop_toTopOf="@id/todoCheckbox" />
 
-    <CheckBox
-        android:id="@+id/todoCheckbox"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="5dp"
-        android:background="@drawable/todolist_custom_checkbox"
-        android:button="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/todoContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textSize="13dp"
-        android:textFontWeight="700"
-        android:textColor="@color/black"
-        android:text="투두 리스트입니다."
-        app:layout_constraintBottom_toBottomOf="@id/todoCheckbox"
-        app:layout_constraintStart_toEndOf="@id/todoCheckbox"
-        app:layout_constraintTop_toTopOf="@id/todoCheckbox"
-        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
