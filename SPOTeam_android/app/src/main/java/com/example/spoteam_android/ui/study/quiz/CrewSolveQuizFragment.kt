@@ -60,7 +60,7 @@ class CrewSolveQuizFragment : Fragment() {
     ): View? {
 
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
-            Log.d("CrewSolveQuizFragment", "Received studyId from ViewModel: $studyId")
+//            Log.d("CrewSolveQuizFragment", "Received studyId from ViewModel: $studyId")
             if (studyId != null) {
                 this.studyId = studyId
             } else {
@@ -75,7 +75,7 @@ class CrewSolveQuizFragment : Fragment() {
             question = it.getString("question").toString()
             timeInMillis = it.getLong("remainingTimeMillis",0L)
 
-            Log.d("CheckAttendanceFragment", "Received scheduleId: $scheduleId")
+//            Log.d("CheckAttendanceFragment", "Received scheduleId: $scheduleId")
         }
         initContent()
         initTextWatcher()

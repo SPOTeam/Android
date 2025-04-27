@@ -222,8 +222,6 @@ class MyPageFragment : Fragment() {
         }
     }
 
-
-
     private fun logoutFromNaver() {
         NaverIdLoginSDK.logout()
 
@@ -234,9 +232,6 @@ class MyPageFragment : Fragment() {
         Toast.makeText(requireContext(), "네이버 로그아웃 성공", Toast.LENGTH_SHORT).show()
         navigateToLoginScreen()
     }
-
-
-
 
     private fun fetchStudyData() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)

@@ -31,6 +31,7 @@ import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 //import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 //import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
+import com.example.spoteam_android.ui.category.CategoryFragment_1
 import com.example.spoteam_android.ui.category.CategoryNavViewFragment
 import com.example.spoteam_android.ui.community.CommunityFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
@@ -176,10 +177,15 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_category -> {
+                    val bundle2 = Bundle()
+                    val categoryFragment = CategoryFragment_1()
+                    categoryFragment.arguments = bundle2
+                    bundle2.putString("source", "HouseFragment")
+
 //                    isOnCommunityHome(CategoryFragment())
 //                    addCategoryFragmentOnTop()
 //                    showBlur()
-                    switchFragment(CategoryFragment()) // categoryFragment 바로 이동
+                    switchFragment(categoryFragment) // categoryFragment 바로 이동
                     isOnCommunityHome(CategoryFragment())
                     isOnAlertFragment(CategoryFragment())
                     return@setOnItemSelectedListener true

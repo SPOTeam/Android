@@ -2,20 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="300dp">
 
     <TextView
         android:id="@+id/timer_tv"
-        android:layout_width="140dp"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:text="00 : 00"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="10dp"
         android:background="@drawable/background_timer"
+        android:text="05 : 00"
+        android:paddingVertical="9dp"
+        android:paddingHorizontal="10dp"
+        android:textColor="@color/white"
         android:layout_marginTop="30dp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="600"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

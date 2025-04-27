@@ -133,10 +133,10 @@ class AlertFragment : Fragment() {
             override fun onStateUpdateClick(data: AlertDetail) {
                 if(!data.isChecked) {
                     updateState(data)
-                    Log.d("StudyIdInAlert", data.studyId.toString())
-                    isChanged = true
-                    studyViewModel.fetchStudyDetail(data.studyId)
                 }
+                Log.d("StudyIdInAlert", data.studyId.toString())
+                isChanged = true
+                studyViewModel.fetchStudyDetail(data.studyId)
             }
         }
 

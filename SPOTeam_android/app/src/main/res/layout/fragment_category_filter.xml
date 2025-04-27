@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/fragment_category_interest_toolbar" />
+
+            <FrameLayout
+                android:id="@+id/frameLayout_recruiting"
+                android:layout_width="match_parent"
+                android:layout_height="151dp"
+                android:paddingBottom="57dp"
+                android:paddingTop="14dp"
+                app:layout_constraintBottom_toTopOf="@+id/frameLayout_gender"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+                <TextView
+                    android:id="@+id/tv_recruiting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:fontFamily="@font/suit_bold"
+                    android:text="모집 상태"
+                    android:textColor="#000000"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_recruiting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|bottom"
+                    android:layout_marginLeft="20dp"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip1_recruiting"
+                        style="@style/CustomChipStyle2"
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:text="모집 중"
+                        android:textAlignment="center"
+                        android:textSize="14dp"
+                        app:checkedIconVisible="false"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip2_recruiting"
+                        style="@style/CustomChipStyle2"
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:text="모집 완료"
+                        android:textAlignment="center"
+                        android:textSize="14dp"
+                        app:checkedIconVisible="false"
+                        app:chipStrokeWidth="1dp" />
+                </com.google.android.material.chip.ChipGroup>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frameLayout_gender"
+                android:layout_width="match_parent"
+                android:layout_height="137dp"
+                android:paddingBottom="57dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout_recruiting">
+
+                <TextView
+                    android:id="@+id/tv_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/suit_bold"
+                    android:text="성별"
+                    android:textColor="#000000"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|bottom"
+                    android:layout_marginLeft="20dp"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip1_gender"
+                        style="@style/CustomChipStyle2"
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:text="누구나"
+                        android:textAlignment="center"
+                        android:textSize="14dp"
+                        app:checkedIconVisible="false"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip2_gender"
+                        style="@style/CustomChipStyle2"
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:text="남성"
+                        android:textAlignment="center"
+                        android:textSize="14dp"
+                        app:checkedIconVisible="false"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip3_gender"
+                        style="@style/CustomChipStyle2"
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:text="여성"
+                        android:textAlignment="center"
+                        android:textSize="14dp"
+                        app:checkedIconVisible="false"
+                        app:chipStrokeWidth="1dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frameLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:paddingBottom="57dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout_gender">
+
+                <TextView
+                    android:id="@+id/ageRangeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|top"
+                    android:layout_marginStart="20dp"
+                    android:fontFamily="@font/suit_bold"
+                    android:text="연령대"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/ageRangeSlider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|bottom"
+                    app:haloColor="@android:color/transparent"
+                    android:layout_marginHorizontal="15dp"
+                    app:labelBehavior="gone"
+                    app:thumbColor="@color/white"
+                    app:thumbRadius="10dp"
+                    app:tickVisible="false"
+                    app:trackColorActive="@color/b400"
+                    app:trackColorInactive="#D6E5FF" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|top"
+                    android:layout_marginEnd="22dp">
+
+                    <TextView
+                        android:id="@+id/minValueText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/suit_semi_bold"
+                        android:text="18"
+                        android:textColor="@color/b400"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/wave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="3dp"
+                        android:fontFamily="@font/suit_semi_bold"
+                        android:text="-"
+                        android:textColor="@color/b400"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/maxValueText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/suit_semi_bold"
+                        android:text="60"
+                        android:textColor="@color/b400"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/age_bird"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/suit_semi_bold"
+                        android:text="세"
+                        android:textColor="@color/b400"
+                        android:textSize="13dp" />
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frameLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
+
+                <TextView
+                    android:id="@+id/activityfee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:fontFamily="@font/suit_bold"
+                    android:text="활동비"
+                    android:textColor="#000000"
+                    android:textSize="14dp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|bottom"
+                    android:layout_marginLeft="20dp"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip1"
+                        style="@style/CustomChipStyle2"
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:text="유료"
+                        android:textAlignment="center"
+                        android:textSize="14dp"
+                        app:checkedIconVisible="false"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip2"
+                        style="@style/CustomChipStyle2"
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:text="무료"
+                        android:textAlignment="center"
+                        android:textSize="14dp"
+                        app:checkedIconVisible="false"
+                        app:chipStrokeWidth="1dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <LinearLayout
+                    android:id="@+id/displayfee_frameLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|top"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="22dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/activityfee_minValueText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/suit_semi_bold"
+                        android:text="₩ 1,000"
+                        android:textColor="@color/b400"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/activityfee_wave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="3dp"
+                        android:fontFamily="@font/suit_semi_bold"
+                        android:text="-"
+                        android:textColor="@color/b400"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/activityfee_maxValueText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/suit_semi_bold"
+                        android:text="₩ 10,000"
+                        android:textColor="@color/b400"
+                        android:textSize="13dp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frameLayout_activityfee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout3">
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/activityfeeSlider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="end|bottom"
+                    app:haloColor="@android:color/transparent"
+                    app:thumbColor="@color/white"
+                    android:layout_marginHorizontal="15dp"
+                    app:labelBehavior="gone"
+                    app:thumbRadius="10dp"
+                    android:visibility="gone"
+                    app:tickVisible="false"
+                    app:trackColorActive="@color/b400"
+                    app:trackColorInactive="#D6E5FF" />
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/framelayout_reset_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="140dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout_activityfee">
+
+                <TextView
+                    android:id="@+id/tx_reset_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="36dp"
+                    android:fontFamily="@font/suit_bold"
+                    android:padding="0dp"
+                    android:text="@string/tx_reset_fliter"
+                    android:textColor="@color/g400"
+                    android:textSize="14dp" />
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <android.widget.Button
+        android:id="@+id/fragment_introduce_study_bt"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="19dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/button_background"
+        android:enabled="false"
+        android:fontFamily="@font/suit_bold"
+        android:text="검색 결과 보기"
+        android:textColor="@drawable/button_textcolor"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

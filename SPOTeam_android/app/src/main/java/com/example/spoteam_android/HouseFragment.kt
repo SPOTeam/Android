@@ -16,14 +16,13 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.databinding.FragmentHouseBinding
 import com.example.spoteam_android.search.SearchFragment
 import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
+import com.example.spoteam_android.ui.category.CategoryFragment_1
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.CommunityContentActivity
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
@@ -38,7 +37,6 @@ import com.example.spoteam_android.ui.interestarea.RecommendStudyApiService
 import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
 import com.example.spoteam_android.ui.recruiting.RecruitingStudyFragment
 import com.example.spoteam_android.ui.study.DetailStudyFragment
-import com.example.spoteam_android.ui.study.DetailStudyHomeFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import com.example.spoteam_android.weather.WeatherViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -269,7 +267,7 @@ class HouseFragment : Fragment() {
             val bundle4 = Bundle().apply {
                 putInt("categoryType", 0)
             }
-            val categoryFragment = CategoryFragment().apply {
+            val categoryFragment = CategoryFragment_1().apply {
                 arguments = bundle4
             }
             activity?.let {

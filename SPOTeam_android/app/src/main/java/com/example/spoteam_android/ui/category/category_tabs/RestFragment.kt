@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -24,6 +25,7 @@ import com.example.spoteam_android.ui.community.CategoryStudyDetail
 import com.example.spoteam_android.ui.community.CategoryStudyResponse
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,6 +42,7 @@ class RestFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var startPage = 0
     private var isLoading = false
     private var selectedSortBy: String = "ALL"
+    private val theme :String = "기타"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,16 +51,6 @@ class RestFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding = FragmentCategoryStudyContentBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
-        binding.contentFilterSp.onItemSelectedListener = this
-
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.filter_list,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.contentFilterSp.adapter = adapter
-        }
 
         val categoryStudyAdapter = CategoryStudyContentRVAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
@@ -82,12 +75,46 @@ class RestFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
 
 
-        fetchBestCommunityContent("기타", currentPage, size, selectedSortBy)
 
+        fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
+        initBottomFilterView()
         return binding.root
     }
 
+    private fun initBottomFilterView() {
+        val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_interest_spinner, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.InterestBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(dialogView)
 
+        val recentlyLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_recently)
+        val viewLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_view)
+        val hotLayout = dialogView.findViewById<FrameLayout>(R.id.framelayout_hot)
+
+        recentlyLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "최신 순"
+            selectedSortBy="ALL"  // 최신 순
+            fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
+        }
+
+        viewLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "조회 수 높은 순"
+            selectedSortBy="HIT"
+            fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
+        }
+
+        hotLayout.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            binding.filterToggle.text = "관심 많은 순"
+            selectedSortBy="LIKED"  // 관심 많은 순
+            fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
+        }
+
+        binding.contentFilterToggleContainer.setOnClickListener {
+            bottomSheetDialog.show()
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -104,7 +131,7 @@ class RestFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 val selectedPage = startPage + index
                 if (currentPage != selectedPage) {
                     currentPage = selectedPage
-                    fetchBestCommunityContent("기타", currentPage, size, selectedSortBy)
+                    fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
                 }
             }
         }
@@ -112,18 +139,21 @@ class RestFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.previousPage.setOnClickListener {
             if (currentPage > 0) {
                 currentPage--
-                fetchBestCommunityContent("기타", currentPage, size, selectedSortBy)
+                fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
             }
         }
 
         binding.nextPage.setOnClickListener {
             if (currentPage < totalPages - 1) {
                 currentPage++
-                fetchBestCommunityContent("기타", currentPage, size, selectedSortBy)
+                fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
             }
         }
-        fetchBestCommunityContent("기타", currentPage, size, selectedSortBy)
+        fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
     }
+
+
+
     private fun fetchBestCommunityContent(theme: String, page: Int, size: Int, sortBy: String) {
         isLoading = true
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
@@ -234,7 +264,7 @@ class RestFragment : Fragment(), AdapterView.OnItemSelectedListener {
             else -> "ALL"
         }
         currentPage = 0
-        fetchBestCommunityContent("기타", currentPage, size, selectedSortBy)
+        fetchBestCommunityContent(theme, currentPage, size, selectedSortBy)
     }
 
     private fun toggleLikeStatus(studyItem: CategoryStudyDetail, likeButton: ImageView) {

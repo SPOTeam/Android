@@ -93,7 +93,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     }
 
     fun changeDescription() {
-        binding.description.text = "퀴즈의 정답을 맞추면 출석됩니다."
+        binding.description.text = "퀴즈의 정답을 맞추면 출석이 인증됩니다."
 
     }
 
@@ -117,10 +117,10 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
                             fetchScheduleMember()
                         } else {
                             if(members[0].memberId == currentMemberId) {
-                                Log.d("checkIng", "makeHostMakeQuizFragment")
+//                                Log.d("checkIng", "makeHostMakeQuizFragment")
                                 makeHostMakeQuizFragment()
                             } else {
-                                Log.d("checkIng", "disableCrew")
+//                                Log.d("checkIng", "disableCrew")
                                 initCrewFragment()
                             }
                         }
@@ -205,8 +205,8 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
                     if (response.isSuccessful) {
                         val scheduleResponse = response.body()
                         if (scheduleResponse?.isSuccess == "true") {
-                            if(scheduleResponse.result.studyMembers[0].isOwned) { // ! 붙이면 만들기, 풀기 왔다갔다 가능
-                                Log.d("checkIng", "initHostAlreadyMakeQuiz")
+                            if(!scheduleResponse.result.studyMembers[0].isOwned) { // ! 붙이면 만들기, 풀기 왔다갔다 가능
+//                                Log.d("checkIng", "initHostAlreadyMakeQuiz")
                                 initHostAlreadyMakeQuiz()
                             } else {
                                 Log.d("checkIng", "initCrewFragment")

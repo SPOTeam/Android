@@ -2,25 +2,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="300dp">
 
     <TextView
         android:id="@+id/start_attendance_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:background="@drawable/button_background"
         android:gravity="center"
-        android:paddingVertical="10dp"
-        android:text="퀴즈 만들기"
+        android:paddingVertical="12dp"
         android:textColor="@drawable/button_textcolor"
-        android:textSize="24dp"
-        android:fontFamily="@font/suit_semi_bold"
+        android:fontFamily="@font/suit_bold"
+        android:textSize="17dp"
+        android:text="퀴즈 만들기"
         android:layout_marginBottom="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:elevation="2dp"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
