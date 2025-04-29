@@ -116,8 +116,6 @@ class TodoDateAdapter(
 
             val today = LocalDate.now().dayOfMonth
 
-            // 오늘 날짜라면 파란 점 표시
-            todayIndicator.visibility = if (date == today && isCurrentMonth) View.VISIBLE else View.GONE
 
             // 일요일이면 파란색 적용, 단 이전/다음 달일 경우 회색 적용
             if (localDate.dayOfWeek == DayOfWeek.SUNDAY) {
@@ -137,10 +135,8 @@ class TodoDateAdapter(
                 }
             }
 
-            todayIndicator.visibility = if ((date == today && isCurrentMonth) || eventDays.contains(date)) {
-                if (date == today && isCurrentMonth) {
-                    Log.d("TodoCalendar", "📌 오늘 날짜 $date → 점 표시")
-                } else if (eventDays.contains(date)) {
+            todayIndicator.visibility = if (eventDays.contains(date)) {
+                if (eventDays.contains(date)) {
                     Log.d("TodoCalendar", "📍 이벤트 날짜 $date → 점 표시")
                 }
                 View.VISIBLE
