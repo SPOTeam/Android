@@ -15,8 +15,6 @@ class HostFinishMakeQuizFragment : Fragment() {
     private var createdAt: String = ""
     private val timerViewModel: TimerViewModel by activityViewModels()
 
-    private val totalTimeMillis = 5 * 60 * 1000L // 5 minutes in milliseconds
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,7 +24,7 @@ class HostFinishMakeQuizFragment : Fragment() {
 
         arguments?.let {
             createdAt = it.getString("createdAt").toString()
-            Log.d("HostFinishMakeQuizFragment", "Received createdAt: $createdAt")
+//            Log.d("HostFinishMakeQuizFragment", "Received createdAt: $createdAt")
         }
 
         initTimerObserve()
@@ -37,17 +35,14 @@ class HostFinishMakeQuizFragment : Fragment() {
     private fun initTimerObserve() {
         binding.timerTv.visibility = View.VISIBLE
 
-        timerViewModel.timerSeconds.observe(viewLifecycleOwner) { elapsedSeconds ->
-            val elapsedMillis = elapsedSeconds * 1000
-            val remainingMillis = totalTimeMillis - elapsedMillis
-
+        timerViewModel.remainingMillis.observe(viewLifecycleOwner) { remainingMillis ->
             if (remainingMillis > 0) {
                 val minutes = (remainingMillis / 1000) / 60
                 val seconds = (remainingMillis / 1000) % 60
                 binding.timerTv.text = String.format("%02d : %02d", minutes, seconds)
             } else {
                 binding.timerTv.text = "00 : 00"
-                // 필요하면 여기서 시간 만료 처리 추가 가능
+                // 필요하면 여기서 시간 만료 시 처리 추가 가능
             }
         }
     }

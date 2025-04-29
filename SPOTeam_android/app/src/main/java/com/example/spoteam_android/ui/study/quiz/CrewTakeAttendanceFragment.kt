@@ -1,7 +1,6 @@
 package com.example.spoteam_android.ui.study.quiz
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,6 @@ class CrewTakeAttendanceFragment : Fragment() {
     private lateinit var binding: FragmentCrewTakeAttendanceBinding
     private var scheduleId = -1
     private val timerViewModel: TimerViewModel by activityViewModels()
-
-    private val totalTimeMillis = 5 * 60 * 1000L // 5 minutes
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,12 +48,7 @@ class CrewTakeAttendanceFragment : Fragment() {
     private fun initTimerObserve() {
         binding.timerTv.visibility = View.VISIBLE
 
-        timerViewModel.timerSeconds.observe(viewLifecycleOwner) { elapsedSeconds ->
-            val elapsedMillis = elapsedSeconds * 1000
-            val remainingMillis = totalTimeMillis - elapsedMillis
-
-            Log.d("TimerDebug", "elapsedSeconds: $elapsedSeconds, remainingMillis: $remainingMillis")
-
+        timerViewModel.remainingMillis.observe(viewLifecycleOwner) { remainingMillis ->
             if (remainingMillis > 0) {
                 val minutes = (remainingMillis / 1000) / 60
                 val seconds = (remainingMillis / 1000) % 60
@@ -67,12 +59,5 @@ class CrewTakeAttendanceFragment : Fragment() {
                 binding.startAttendanceTv.isEnabled = false
             }
         }
-    }
-
-
-    private fun calculateRemainingMillis(): Long {
-        val lastElapsedSeconds = timerViewModel.timerSeconds.value ?: 0L
-        val remainingMillis = totalTimeMillis - (lastElapsedSeconds * 1000)
-        return if (remainingMillis > 0) remainingMillis else 0L
     }
 }

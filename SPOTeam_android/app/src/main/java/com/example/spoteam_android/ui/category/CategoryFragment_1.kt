@@ -335,9 +335,11 @@ class CategoryFragment_1 : Fragment() {
             val pageNum = startPage + index
             if (pageNum < totalPages) {
                 textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(
-                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
-                )
+                if (pageNum == currentPage) {
+                    textView.setTextColor(resources.getColor(R.color.b500, null)) // ✅ 선택된 페이지: 강조색
+                } else {
+                    textView.setTextColor(resources.getColor(R.color.g400, null)) // ✅ 기본 페이지: 회색
+                }
                 textView.isEnabled = true
                 textView.alpha = 1.0f
                 textView.visibility = View.VISIBLE

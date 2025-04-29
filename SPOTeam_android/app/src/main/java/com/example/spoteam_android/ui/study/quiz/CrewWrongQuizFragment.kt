@@ -15,7 +15,6 @@ class CrewWrongQuizFragment : Fragment() {
     private val timerViewModel: TimerViewModel by activityViewModels()
 
     private var wrongCount = 0
-    private var timeInMillis: Long = 0L // 추가
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,21 +32,14 @@ class CrewWrongQuizFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-        initTimerObserve() // 타이머 관찰 시작
+        initTimerObserve()
 
         return binding.root
     }
 
     private fun initTimerObserve() {
-
-        timerViewModel.timerSeconds.observe(viewLifecycleOwner) { elapsedSeconds ->
-            val elapsedMillis = elapsedSeconds * 1000
-            val remainingMillis = timeInMillis - elapsedMillis
-
-            if (remainingMillis > 0) {
-
-            } else {
-
+        timerViewModel.remainingMillis.observe(viewLifecycleOwner) { remainingMillis ->
+            if (remainingMillis <= 0L) {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.child_fragment, CrewTimeOutFragment())
                     .commitAllowingStateLoss()

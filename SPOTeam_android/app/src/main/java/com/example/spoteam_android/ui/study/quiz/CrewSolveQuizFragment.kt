@@ -23,6 +23,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.Instant
+import kotlin.concurrent.timer
 
 class CrewSolveQuizFragment : Fragment() {
 
@@ -33,13 +34,10 @@ class CrewSolveQuizFragment : Fragment() {
     private var studyId = -1
     private var scheduleId = -1
     private var question = ""
-    private var timeInMillis: Long = 0L
 
     private lateinit var answerEt: EditText
     private lateinit var sendButton: TextView
     private lateinit var des: TextView
-
-    private val totalMillis = 5 * 60 * 1000L
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,7 +71,7 @@ class CrewSolveQuizFragment : Fragment() {
     }
 
     private fun initContent() {
-        binding.quizTv.text = question
+        binding.quizTv.text = timerViewModel.quiz
     }
 
     private fun initTextWatcher() {
@@ -100,10 +98,7 @@ class CrewSolveQuizFragment : Fragment() {
     private fun initTimerObserve() {
         binding.timerTv.visibility = View.VISIBLE
 
-        timerViewModel.timerSeconds.observe(viewLifecycleOwner) { elapsedSeconds ->
-            val elapsedMillis = elapsedSeconds * 1000
-            val remainingMillis = timeInMillis - elapsedMillis
-
+        timerViewModel.remainingMillis.observe(viewLifecycleOwner) { remainingMillis ->
             if (remainingMillis > 0) {
                 val minutes = (remainingMillis / 1000) / 60
                 val seconds = (remainingMillis / 1000) % 60
@@ -112,6 +107,8 @@ class CrewSolveQuizFragment : Fragment() {
                 binding.sendCrewAnswer.isEnabled = binding.answerFromCrewEt.text.isNotBlank()
             } else {
                 binding.timerTv.text = "00 : 00"
+                binding.answerFromCrewEt.isEnabled = false
+                binding.sendCrewAnswer.isEnabled = false
 
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.child_fragment, CrewTimeOutFragment())

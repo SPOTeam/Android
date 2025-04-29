@@ -140,7 +140,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
 
     private fun initCrewFinishFragment() {
         childFragmentManager.beginTransaction()
-            .replace(R.id.child_fragment, CrewCorrectQuizFragment())
+            .replace(R.id.child_fragment, CrewTimeOutFragment())
             .commitAllowingStateLoss()
     }
 
