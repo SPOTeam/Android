@@ -67,7 +67,7 @@ class DetailStudyHomeProfileAdapter(
             if (isSelected) {
                 binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
                     ColorStateList.valueOf(ContextCompat.getColor(binding.root.context, R.color.b400))
-                binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 3f
+                binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 6f
             } else {
                 binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
                     ColorStateList.valueOf(ContextCompat.getColor(binding.root.context, android.R.color.transparent))

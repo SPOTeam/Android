@@ -106,6 +106,7 @@
             android:layout_height="28dp"
             android:layout_marginEnd="19dp"
             android:scaleType="fitCenter"
+            android:padding="3dp"
             android:src="@drawable/fragment_my_todo_list_imgbtn_plus_todolist"
             app:layout_constraintBottom_toBottomOf="@+id/tx_my_todo_list"
             app:layout_constraintEnd_toEndOf="parent"
