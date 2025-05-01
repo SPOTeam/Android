@@ -71,14 +71,14 @@ class EventAdapter(
             val eventTimeText = when (event.period) {
                 "NONE" -> {
                     if (isSingleDayEvent(event)) {
-                        "${event.startDateTime} ~ ${event.endDateTime}"
+                        "${event.startDateTime} - ${event.endDateTime}"
                     } else {
                         when {
                             selectedDate == eventStartDate -> {
-                                "${event.startDateTime} 시작"
+                                "${event.startDateTime} - 하루종일"
                             }
                             selectedDate == eventEndDate -> {
-                                "${event.endDateTime} 종료"
+                                "- ${event.endDateTime} 까지"
                             }
                             selectedDate > eventStartDate && selectedDate < eventEndDate -> {
                                 "하루종일"
@@ -90,10 +90,10 @@ class EventAdapter(
                     }
                 }
                 "DAILY", "WEEKLY", "BIWEEKLY", "MONTHLY" -> {
-                    "${event.startDateTime} ~ ${event.endDateTime}"
+                    "${event.startDateTime} - ${event.endDateTime}"
                 }
                 else -> {
-                    "${event.startDateTime} ~ ${event.endDateTime}"
+                    "${event.startDateTime} - ${event.endDateTime}"
                 }
             }
 
