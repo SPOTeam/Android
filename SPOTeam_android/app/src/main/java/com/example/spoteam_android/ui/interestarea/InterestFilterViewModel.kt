@@ -17,7 +17,7 @@ class InterestFilterViewModel : ViewModel() {
         get() = if (hasFee == true) minfee else null
 
     val finalMaxFee: Int?
-        get() = if (hasFee == true) minfee else null
+        get() = if (hasFee == true) maxfee else null
 
 
     fun reset() {
