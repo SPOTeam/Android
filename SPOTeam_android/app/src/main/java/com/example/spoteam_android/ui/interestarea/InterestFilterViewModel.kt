@@ -26,7 +26,7 @@ class InterestFilterViewModel : ViewModel() {
         maxAge = 60
         hasFee = null
         themeTypes?.clear()
-        isRecruiting = true
+        isRecruiting = null
         minfee = null
         maxfee = null
     }

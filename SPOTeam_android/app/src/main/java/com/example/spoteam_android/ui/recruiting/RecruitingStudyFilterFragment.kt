@@ -79,8 +79,8 @@ class RecruitingStudyFilterFragment : Fragment() {
 
         arguments?.let {
             // 여러 개의 주소/코드를 리스트 형태로 받기
-            val addressList = it.getStringArrayList("ADDRESS_LIST")?.toMutableList() ?: mutableListOf()
-            val codeList = it.getStringArrayList("CODE_LIST")?.toMutableList() ?: mutableListOf()
+            val addressList = it.getStringArrayList("ADDRESS_LIST")?.toMutableList() ?: viewModel.selectedAddress
+            val codeList = it.getStringArrayList("CODE_LIST")?.toMutableList() ?: viewModel.selectedCode
 
             viewModel.selectedAddress = addressList
             viewModel.selectedCode = codeList
@@ -88,8 +88,8 @@ class RecruitingStudyFilterFragment : Fragment() {
             val isOffline = it.getBoolean("IS_OFFLINE", false)
 
             // 주소 리스트를 Chip으로 업데이트
-            if (addressList.isNotEmpty()) {
-                updateChip(addressList)
+            if (!addressList.isNullOrEmpty() && !codeList.isNullOrEmpty()) {
+                updateChip(addressList, codeList)
             }
 
             setChipState(isOffline)
@@ -312,11 +312,11 @@ class RecruitingStudyFilterFragment : Fragment() {
         }
     }
 
-    fun updateChip(addressList: MutableList<String>) {
+    fun updateChip(addressList: MutableList<String>, codeList: MutableList<String>) {
         val chipGroup = binding.locationChipGroup
         chipGroup.removeAllViews()
 
-        for (address in addressList) {
+        addressList.forEachIndexed { index, address ->
             val truncatedAddress = extractAddressUntilDong(address)
 
             val chip = Chip(requireContext()).apply {
@@ -329,7 +329,7 @@ class RecruitingStudyFilterFragment : Fragment() {
                 setChipDrawable(chipDrawable)
 
                 text = truncatedAddress
-                textSize = 14f  // ✅ 텍스트 사이즈 통일
+                textSize = 14f
                 setTextColor(ContextCompat.getColor(requireContext(), R.color.search_chip_text))
                 isCloseIconVisible = true
 
@@ -350,9 +350,12 @@ class RecruitingStudyFilterFragment : Fragment() {
 
                 setOnCloseIconClickListener {
                     chipGroup.removeView(this)
-                    viewModel.removeAddress(address)
-                    viewModel.selectedAddress?.let { it1 -> updateChip(it1) }
 
+                    // 인덱스를 기준으로 주소와 코드 모두 제거
+                    viewModel.selectedAddress?.removeAt(index)
+                    viewModel.selectedCode?.removeAt(index)
+
+                    // 남은 chip이 없으면 버튼 보이게
                     if (chipGroup.childCount == 0) {
                         binding.lvAddArea.visibility = View.VISIBLE
                     }
@@ -364,10 +367,8 @@ class RecruitingStudyFilterFragment : Fragment() {
             chipGroup.addView(chip)
         }
 
-
         chipGroup.visibility = View.VISIBLE
         updateNextButtonState()
-
     }
 
 
@@ -454,9 +455,10 @@ class RecruitingStudyFilterFragment : Fragment() {
         }
 
         val addressList = viewModel.selectedAddress ?: mutableListOf()
+        val codeList = viewModel.selectedCode ?: mutableListOf()
 
-        if (addressList.isNotEmpty()) {
-            updateChip(addressList)
+        if (addressList.isNotEmpty() && codeList.isNotEmpty()) {
+            updateChip(addressList, codeList)
         }
     }
 

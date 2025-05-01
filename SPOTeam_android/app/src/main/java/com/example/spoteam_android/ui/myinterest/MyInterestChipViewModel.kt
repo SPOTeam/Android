@@ -34,7 +34,4 @@ class MyInterestChipViewModel : ViewModel() {
         selectedCode?.clear()
     }
 
-    fun removeAddress(address: String) {
-        selectedAddress?.remove(address)
-    }
 }

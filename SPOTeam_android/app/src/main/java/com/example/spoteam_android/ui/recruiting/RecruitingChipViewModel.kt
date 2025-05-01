@@ -10,7 +10,7 @@ class RecruitingChipViewModel : ViewModel() {
     var hasFee: Boolean? = null
     var minfee: Int? = null
     var maxfee: Int? = null
-    var selectedAddress: MutableList<String>? = null
+    var selectedAddress: MutableList<String>? = mutableListOf()
     var selectedCode: MutableList<String>? = mutableListOf()
     var themeTypes: MutableList<String>? = mutableListOf()
 
@@ -34,7 +34,4 @@ class RecruitingChipViewModel : ViewModel() {
         selectedCode?.clear()
     }
 
-    fun removeAddress(address: String) {
-        selectedAddress?.remove(address)
-    }
 }
