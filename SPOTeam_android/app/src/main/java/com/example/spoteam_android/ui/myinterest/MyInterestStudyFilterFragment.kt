@@ -48,7 +48,6 @@ class MyInterestStudyFilterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMyInterestStudyFilterBinding.inflate(inflater, container, false)
-        viewModel.reset()
         return binding.root
     }
 
@@ -67,6 +66,8 @@ class MyInterestStudyFilterFragment : Fragment() {
         setupOnlineOfflineChips()
         setupResetButton()
 
+        restoreViewFromViewModel()
+
         binding.lvAddArea.setOnClickListener{
             (activity as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, MyInterestStudyFilterLocationFragment())
@@ -74,24 +75,25 @@ class MyInterestStudyFilterFragment : Fragment() {
                 .commit()
         }
 
+
         arguments?.let {
-            // 여러 개의 주소/코드를 리스트 형태로 받기
-            val addressList = it.getStringArrayList("ADDRESS_LIST")?.toMutableList() ?: mutableListOf()
-            val codeList = it.getStringArrayList("CODE_LIST")?.toMutableList() ?: mutableListOf()
+            // arguments가 있는 경우에만, ViewModel에 값이 없을 때만 설정
+            if (viewModel.selectedAddress!!.isEmpty() && viewModel.selectedCode!!.isEmpty()) {
+                val addressList = it.getStringArrayList("ADDRESS_LIST")?.toMutableList() ?: mutableListOf()
+                val codeList = it.getStringArrayList("CODE_LIST")?.toMutableList() ?: mutableListOf()
 
-            viewModel.selectedAddress = addressList
-            viewModel.selectedCode = codeList
+                viewModel.selectedAddress = addressList
+                viewModel.selectedCode = codeList
 
+                // 주소 리스트를 Chip으로 업데이트
+                if (addressList.isNotEmpty()) {
+                    updateChip(addressList)
+                }
 
-            val isOffline = it.getBoolean("IS_OFFLINE", false)
-
-            // 주소 리스트를 Chip으로 업데이트
-            if (addressList.isNotEmpty()) {
-                updateChip(addressList)
+                val isOffline = it.getBoolean("IS_OFFLINE", false)
+                setChipState(isOffline)
+                isLocationPlusVisible = isOffline
             }
-
-            setChipState(isOffline)
-            isLocationPlusVisible = isOffline
         }
 
 
@@ -104,7 +106,6 @@ class MyInterestStudyFilterFragment : Fragment() {
 
     private fun setupToolbar() {
         binding.toolbar.icBack.setOnClickListener {
-            viewModel.reset() // 1. ViewModel 값 초기화
             val bundle = Bundle().apply {
                 putString("source", "HouseFragment")
             }
@@ -283,7 +284,6 @@ class MyInterestStudyFilterFragment : Fragment() {
                 R.id.chip02 -> {
                     viewModel.isOnline = false
                     binding.lvAddArea.visibility = View.VISIBLE
-
                 }
             }
             updateNextButtonState()
@@ -334,7 +334,8 @@ class MyInterestStudyFilterFragment : Fragment() {
 
                 setOnCloseIconClickListener {
                     chipGroup.removeView(this)
-                    viewModel.selectedAddress?.remove(address)
+                    viewModel.removeAddress(address)
+                    viewModel.selectedAddress?.let { it1 -> updateChip(it1) }
 
                     if (chipGroup.childCount == 0) {
                         binding.lvAddArea.visibility = View.VISIBLE
@@ -365,6 +366,76 @@ class MyInterestStudyFilterFragment : Fragment() {
             address.substring(0, endIndex)
         } else {
             address
+        }
+    }
+
+    private fun restoreViewFromViewModel() {
+        // 모집 여부
+        when (viewModel.isRecruiting) {
+            true -> binding.chipGroupRecruiting.check(R.id.chip1_recruiting)
+            false -> binding.chipGroupRecruiting.check(R.id.chip2_recruiting)
+            null -> binding.chipGroupRecruiting.clearCheck()
+        }
+
+        // 성별
+        when (viewModel.gender) {
+            "UNKNOWN" -> binding.chipGroupGender.check(R.id.chip1_gender)
+            "MALE" -> binding.chipGroupGender.check(R.id.chip2_gender)
+            "FEMALE" -> binding.chipGroupGender.check(R.id.chip3_gender)
+            null -> binding.chipGroupGender.clearCheck()
+        }
+
+        // 참가비 여부
+        when (viewModel.hasFee) {
+            true -> {
+                binding.chipGroup1.check(R.id.chip1)
+                binding.activityfeeSlider.isVisible = true
+                binding.displayfeeFrameLayout.isVisible = true
+            }
+            false -> {
+                binding.chipGroup1.check(R.id.chip2)
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
+            }
+            null -> {
+                binding.chipGroup1.clearCheck()
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
+            }
+        }
+
+        // 참가비 슬라이더
+        val minFee = viewModel.finalMinFee?.toFloat() ?: 1000f
+        val maxFee = viewModel.finalMaxFee?.toFloat() ?: 500000f
+        binding.activityfeeSlider.values = listOf(minFee, maxFee)
+
+        val formattedMin = NumberFormat.getNumberInstance().format(minFee.toInt())
+        val formattedMax = NumberFormat.getNumberInstance().format(maxFee.toInt())
+        binding.activityfeeMinValueText.text = "₩$formattedMin"
+        binding.activityfeeMaxValueText.text = "₩$formattedMax"
+
+        // 연령 슬라이더
+        binding.ageRangeSlider.values = listOf(
+            viewModel.minAge.toFloat(),
+            viewModel.maxAge.toFloat()
+        )
+        binding.minValueText.text = viewModel.minAge.toString()
+        binding.maxValueText.text = viewModel.maxAge.toString()
+
+        // 온라인/오프라인 상태
+        if (viewModel.isOnline == true) {
+            binding.chipGroupNew.check(R.id.chip01)
+            binding.lvAddArea.visibility = View.GONE
+        } else if (viewModel.isOnline == false){
+            binding.chipGroupNew.check(R.id.chip02)
+            binding.lvAddArea.visibility = View.VISIBLE
+        }
+
+        // 지역 Chip 복원
+        viewModel.selectedAddress?.let { addressList ->
+            if (addressList.isNotEmpty()) {
+                updateChip(addressList)
+            }
         }
     }
 

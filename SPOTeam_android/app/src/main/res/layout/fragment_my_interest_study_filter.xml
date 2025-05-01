@@ -311,6 +311,7 @@
 
                 <LinearLayout
                     android:id="@+id/lv_add_area"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackgroundBorderless"

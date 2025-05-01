@@ -248,7 +248,6 @@ class InterestFilterFragment : Fragment() {
             viewModel.isRecruiting = when (checkedId) {
                 R.id.chip1_recruiting -> true
                 R.id.chip2_recruiting -> false
-                ChipGroup.NO_ID -> null
                 else -> null
             }
         }
