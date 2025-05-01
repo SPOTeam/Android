@@ -318,13 +318,11 @@ class RecruitingStudyFilterFragment : Fragment() {
 
         addressList.forEachIndexed { index, address ->
             val truncatedAddress = extractAddressUntilDong(address)
+            val code = codeList.getOrNull(index)
 
             val chip = Chip(requireContext()).apply {
                 val chipDrawable = ChipDrawable.createFromAttributes(
-                    requireContext(),
-                    null,
-                    0,
-                    R.style.CustomChipCloseStyle2
+                    requireContext(), null, 0, R.style.CustomChipCloseStyle2
                 )
                 setChipDrawable(chipDrawable)
 
@@ -334,14 +332,11 @@ class RecruitingStudyFilterFragment : Fragment() {
                 isCloseIconVisible = true
 
                 val widthInPx = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    260f,
-                    resources.displayMetrics
+                    TypedValue.COMPLEX_UNIT_DIP, 260f, resources.displayMetrics
                 ).toInt()
 
                 layoutParams = ViewGroup.MarginLayoutParams(
-                    widthInPx,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    widthInPx, ViewGroup.LayoutParams.WRAP_CONTENT
                 ).apply {
                     marginStart = 15
                     marginEnd = 15
@@ -351,11 +346,9 @@ class RecruitingStudyFilterFragment : Fragment() {
                 setOnCloseIconClickListener {
                     chipGroup.removeView(this)
 
-                    // 인덱스를 기준으로 주소와 코드 모두 제거
-                    viewModel.selectedAddress?.removeAt(index)
-                    viewModel.selectedCode?.removeAt(index)
+                    viewModel.selectedAddress?.remove(address)
+                    if (code != null) viewModel.selectedCode?.remove(code)
 
-                    // 남은 chip이 없으면 버튼 보이게
                     if (chipGroup.childCount == 0) {
                         binding.lvAddArea.visibility = View.VISIBLE
                     }
@@ -370,6 +363,7 @@ class RecruitingStudyFilterFragment : Fragment() {
         chipGroup.visibility = View.VISIBLE
         updateNextButtonState()
     }
+
 
 
 
