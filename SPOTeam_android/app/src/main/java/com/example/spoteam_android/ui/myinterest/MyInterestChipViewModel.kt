@@ -11,8 +11,8 @@ class MyInterestChipViewModel : ViewModel() {
     var minfee: Int? = null
     var maxfee: Int? = null
     var isRecruiting: Boolean? = null
-    var selectedAddress: MutableList<String>? = null
-    var selectedCode: MutableList<String>? = null
+    var selectedAddress: MutableList<String>? = mutableListOf()
+    var selectedCode: MutableList<String>? = mutableListOf()
 
     val finalMinFee: Int?
         get() = if (hasFee == true) minfee else null
@@ -26,11 +26,12 @@ class MyInterestChipViewModel : ViewModel() {
         minAge = 18
         maxAge = 60
         hasFee = null
-        isOnline= true
+        isOnline= null
         isRecruiting = null
         minfee = null
         maxfee = null
         selectedAddress?.clear()
         selectedCode?.clear()
     }
+
 }

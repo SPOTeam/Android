@@ -115,6 +115,7 @@ class InterestFragment : Fragment() {
             "HouseFragment" -> {
                 binding.icFilter.visibility = View.VISIBLE
                 binding.icFilterActive.visibility = View.GONE
+                viewModel.reset()
                 fetchData(
                     selectedItem,
                     gender = gender,

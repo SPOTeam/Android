@@ -1,9 +1,7 @@
+
 package com.example.spoteam_android.ui.recruiting
 
-import com.example.spoteam_android.ui.myinterest.MyInterestStudyFilterFragment
-
 import LocationSearchAdapter
-import com.example.spoteam_android.databinding.FragmentMyInerestStudyFilterLocationBinding
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,7 +20,6 @@ import com.example.spoteam_android.databinding.FragmentRecruitingStudyFilterBind
 import com.example.spoteam_android.databinding.FragmentRecruitingStudyFilterLocationBinding
 import com.example.spoteam_android.login.LocationItem
 import com.example.spoteam_android.ui.interestarea.InterestFragment
-import com.example.spoteam_android.ui.myinterest.MyInterestChipViewModel
 import com.example.spoteam_android.ui.study.IntroduceStudyFragment
 import com.example.spoteam_android.ui.study.OnlineStudyFragment
 import com.example.spoteam_android.ui.study.RegisterStudyFragment
@@ -34,7 +31,7 @@ class RecruitingStudyFilterLocationFragment : Fragment() {
     private lateinit var binding: FragmentRecruitingStudyFilterLocationBinding
     private lateinit var locationSearchAdapter: LocationSearchAdapter
     private val locationItemList = mutableListOf<LocationItem>()
-    private val viewModel: MyInterestChipViewModel by activityViewModels()
+    private val viewModel: RecruitingChipViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +49,6 @@ class RecruitingStudyFilterLocationFragment : Fragment() {
         toolbar.icBack.setOnClickListener {
             (activity as MainActivity).switchFragment(RecruitingStudyFilterFragment())
         }
-
 
         return binding.root
     }
@@ -133,7 +129,7 @@ class RecruitingStudyFilterLocationFragment : Fragment() {
     }
 
     private fun openOnlineStudyFragment(address: String) {
-        val fragment = MyInterestStudyFilterFragment()
+        val fragment = RecruitingStudyFilterFragment()
         val selectedAddress = locationSearchAdapter.getSelectedItem()!!.address
         val selectedItemCode = locationSearchAdapter.getSelectedItem()!!.code
 
@@ -141,7 +137,6 @@ class RecruitingStudyFilterLocationFragment : Fragment() {
             viewModel.selectedAddress?.add(selectedAddress)
             viewModel.selectedCode?.add(selectedItemCode)
         }
-
 
         val bundle = Bundle().apply {
             putStringArrayList("ADDRESS_LIST", ArrayList(viewModel.selectedAddress))
