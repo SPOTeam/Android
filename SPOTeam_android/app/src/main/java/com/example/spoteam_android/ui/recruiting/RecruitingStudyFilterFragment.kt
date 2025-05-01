@@ -47,7 +47,6 @@ class RecruitingStudyFilterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRecruitingStudyFilterBinding.inflate(inflater, container, false)
-        viewModel.reset()
         return binding.root
     }
 
@@ -55,6 +54,8 @@ class RecruitingStudyFilterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         navVisibilityController?.hideBottomNav()
+
+
 
         setupToolbar()
         setupGenderChips()
@@ -66,6 +67,8 @@ class RecruitingStudyFilterFragment : Fragment() {
         setupResetButton()
         setupStudyThemeChips()
         updateNextButtonState()
+
+        restoreViewFromViewModel()
 
         binding.lvAddArea.setOnClickListener{
             (activity as MainActivity).supportFragmentManager.beginTransaction()
@@ -102,7 +105,6 @@ class RecruitingStudyFilterFragment : Fragment() {
 
     private fun setupToolbar() {
         binding.toolbar.icBack.setOnClickListener {
-            viewModel.reset() // 1. ViewModel 값 초기화
             val bundle = Bundle().apply {
                 putString("source", "HouseFragment")
             }
@@ -119,7 +121,7 @@ class RecruitingStudyFilterFragment : Fragment() {
                 R.id.chip1_gender -> "UNKNOWN"
                 R.id.chip2_gender -> "MALE"
                 R.id.chip3_gender -> "FEMALE"
-                else -> "MALE"
+                else -> null
             }
         }
     }
@@ -184,13 +186,13 @@ class RecruitingStudyFilterFragment : Fragment() {
                     viewModel.hasFee = true
                     binding.activityfeeSlider.isVisible = true
                     binding.displayfeeFrameLayout.isVisible = true
-                } else {
+                } else if (checkedChip.id == R.id.chip2) {
                     viewModel.hasFee = false
                     binding.activityfeeSlider.isVisible = false
                     binding.displayfeeFrameLayout.isVisible = false
                 }
             } else {
-                viewModel.hasFee = false
+                viewModel.hasFee = null
                 binding.activityfeeSlider.isVisible = false
                 binding.displayfeeFrameLayout.isVisible = false
             }
@@ -241,7 +243,7 @@ class RecruitingStudyFilterFragment : Fragment() {
             binding.minValueText.text = "18"
             binding.maxValueText.text = "60"
             binding.activityfeeMinValueText.text = "₩ 1,000"
-            binding.activityfeeMaxValueText.text = "₩ 500,000f"
+            binding.activityfeeMaxValueText.text = "₩ 500,000"
             binding.locationChipGroup.visibility = View.GONE
             binding.lvAddArea.visibility = View.GONE
         }
@@ -258,7 +260,7 @@ class RecruitingStudyFilterFragment : Fragment() {
 
             // ViewModel 값 → Bundle
             val bundle = Bundle().apply {
-                putString("source", "MyInterestStudyFilterFragment")
+                putString("source", "RecruitingStudyFilterFragment")
             }
 
             val recruitingStudyFragment = RecruitingStudyFragment().apply {
@@ -294,6 +296,11 @@ class RecruitingStudyFilterFragment : Fragment() {
                     binding.lvAddArea.visibility = View.VISIBLE
 
                 }
+                else -> {
+                    viewModel.isOnline = null
+                    binding.lvAddArea.visibility = View.GONE
+                }
+
             }
         }
     }
@@ -343,12 +350,14 @@ class RecruitingStudyFilterFragment : Fragment() {
 
                 setOnCloseIconClickListener {
                     chipGroup.removeView(this)
-                    viewModel.selectedAddress?.remove(address)
+                    viewModel.removeAddress(address)
+                    viewModel.selectedAddress?.let { it1 -> updateChip(it1) }
 
                     if (chipGroup.childCount == 0) {
                         binding.lvAddArea.visibility = View.VISIBLE
                     }
 
+                    updateNextButtonState()
                 }
             }
 
@@ -357,8 +366,10 @@ class RecruitingStudyFilterFragment : Fragment() {
 
 
         chipGroup.visibility = View.VISIBLE
+        updateNextButtonState()
 
     }
+
 
 
 
@@ -374,4 +385,79 @@ class RecruitingStudyFilterFragment : Fragment() {
             address
         }
     }
+
+    private fun restoreViewFromViewModel() {
+        // 성별
+        when (viewModel.gender) {
+            "UNKNOWN" -> binding.chipGroupGender.check(R.id.chip1_gender)
+            "MALE" -> binding.chipGroupGender.check(R.id.chip2_gender)
+            "FEMALE" -> binding.chipGroupGender.check(R.id.chip3_gender)
+            else -> binding.chipGroupGender.clearCheck()
+        }
+
+        // 연령 슬라이더
+        binding.ageRangeSlider.values = listOf(
+            viewModel.minAge.toFloat(),
+            viewModel.maxAge.toFloat()
+        )
+        binding.minValueText.text = viewModel.minAge.toString()
+        binding.maxValueText.text = viewModel.maxAge.toString()
+
+        // 참가비
+        when (viewModel.hasFee) {
+            true -> {
+                binding.chipGroup1.check(R.id.chip1)
+                binding.activityfeeSlider.isVisible = true
+                binding.displayfeeFrameLayout.isVisible = true
+            }
+            false -> {
+                binding.chipGroup1.check(R.id.chip2)
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
+            }
+            null -> {
+                binding.chipGroup1.clearCheck()
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
+            }
+        }
+
+        val minFee = viewModel.finalMinFee?.toFloat() ?: 1000f
+        val maxFee = viewModel.finalMaxFee?.toFloat() ?: 500000f
+        binding.activityfeeSlider.values = listOf(minFee, maxFee)
+        binding.activityfeeMinValueText.text = "₩${NumberFormat.getNumberInstance().format(minFee.toInt())}"
+        binding.activityfeeMaxValueText.text = "₩${NumberFormat.getNumberInstance().format(maxFee.toInt())}"
+
+        // 온라인 / 오프라인
+        when (viewModel.isOnline) {
+            true -> {
+                binding.chipGroupNew.check(R.id.chip01)
+                binding.lvAddArea.visibility = View.GONE
+            }
+            false -> {
+                binding.chipGroupNew.check(R.id.chip02)
+                binding.lvAddArea.visibility = View.VISIBLE
+            }
+            null -> binding.chipGroupNew.clearCheck()
+        }
+
+        // 테마
+        val selectedThemes = viewModel.themeTypes ?: emptyList()
+        for (i in 0 until binding.chipGroup2.childCount) {
+            val chip = binding.chipGroup2.getChildAt(i) as? Chip ?: continue
+            val theme = when (chip.text.toString()) {
+                "시사/뉴스" -> "시사뉴스"
+                "전공/진로학습" -> "전공및진로학습"
+                else -> chip.text.toString()
+            }
+            chip.isChecked = selectedThemes.contains(theme)
+        }
+
+        val addressList = viewModel.selectedAddress ?: mutableListOf()
+
+        if (addressList.isNotEmpty()) {
+            updateChip(addressList)
+        }
+    }
+
 }

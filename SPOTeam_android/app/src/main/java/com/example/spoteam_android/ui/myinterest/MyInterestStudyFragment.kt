@@ -98,14 +98,15 @@ class MyInterestStudyFragment : Fragment() {
     }
 
     private fun initArguments() {
+
         gender = viewModel.gender
         minAge = viewModel.minAge
         maxAge = viewModel.maxAge
         hasFee = viewModel.hasFee
-        regionCodes = viewModel.selectedCode
         minFee = viewModel.finalMinFee
         maxFee = viewModel.finalMaxFee
         isOnline = viewModel.isOnline
+        regionCodes = viewModel.selectedCode
 
         source = arguments?.getString("source") // source만 그대로 Bundle에서 받음
     }
@@ -115,6 +116,7 @@ class MyInterestStudyFragment : Fragment() {
             "HouseFragment" -> {
                 binding.icFilter.visibility = View.VISIBLE
                 binding.icFilterActive.visibility = View.GONE
+                viewModel.reset()
             }
             "MyInterestStudyFilterFragment" -> {
                 binding.icFilter.visibility = View.GONE

@@ -77,23 +77,22 @@ class MyInterestStudyFilterFragment : Fragment() {
 
 
         arguments?.let {
-            // arguments가 있는 경우에만, ViewModel에 값이 없을 때만 설정
-            if (viewModel.selectedAddress!!.isEmpty() && viewModel.selectedCode!!.isEmpty()) {
-                val addressList = it.getStringArrayList("ADDRESS_LIST")?.toMutableList() ?: mutableListOf()
-                val codeList = it.getStringArrayList("CODE_LIST")?.toMutableList() ?: mutableListOf()
+            // 여러 개의 주소/코드를 리스트 형태로 받기
+            val addressList = it.getStringArrayList("ADDRESS_LIST")?.toMutableList() ?: mutableListOf()
+            val codeList = it.getStringArrayList("CODE_LIST")?.toMutableList() ?: mutableListOf()
 
-                viewModel.selectedAddress = addressList
-                viewModel.selectedCode = codeList
+            viewModel.selectedAddress = addressList
+            viewModel.selectedCode = codeList
 
-                // 주소 리스트를 Chip으로 업데이트
-                if (addressList.isNotEmpty()) {
-                    updateChip(addressList)
-                }
+            val isOffline = it.getBoolean("IS_OFFLINE", false)
 
-                val isOffline = it.getBoolean("IS_OFFLINE", false)
-                setChipState(isOffline)
-                isLocationPlusVisible = isOffline
+            // 주소 리스트를 Chip으로 업데이트
+            if (addressList.isNotEmpty()) {
+                updateChip(addressList)
             }
+
+            setChipState(isOffline)
+            isLocationPlusVisible = isOffline
         }
 
 
@@ -122,7 +121,7 @@ class MyInterestStudyFilterFragment : Fragment() {
                 R.id.chip1_gender -> "UNKNOWN"
                 R.id.chip2_gender -> "MALE"
                 R.id.chip3_gender -> "FEMALE"
-                else -> "MALE"
+                else -> null
             }
             updateNextButtonState()
         }
@@ -188,20 +187,18 @@ class MyInterestStudyFilterFragment : Fragment() {
                     viewModel.hasFee = true
                     binding.activityfeeSlider.isVisible = true
                     binding.displayfeeFrameLayout.isVisible = true
-                } else {
+                } else if (checkedChip.id == R.id.chip2) {
                     viewModel.hasFee = false
                     binding.activityfeeSlider.isVisible = false
                     binding.displayfeeFrameLayout.isVisible = false
                 }
             } else {
-                viewModel.hasFee = false
+                viewModel.hasFee = null
                 binding.activityfeeSlider.isVisible = false
                 binding.displayfeeFrameLayout.isVisible = false
             }
-            updateNextButtonState()
         }
     }
-
     private fun setupResetButton(){
         //필터 초기화 클릭
         binding.txResetFilter.setOnClickListener {
@@ -263,7 +260,7 @@ class MyInterestStudyFilterFragment : Fragment() {
             viewModel.isRecruiting = when (checkedId) {
                 R.id.chip1_recruiting -> true
                 R.id.chip2_recruiting -> false
-                else -> true
+                else -> null
             }
         }
         updateNextButtonState()
@@ -285,8 +282,11 @@ class MyInterestStudyFilterFragment : Fragment() {
                     viewModel.isOnline = false
                     binding.lvAddArea.visibility = View.VISIBLE
                 }
+                else ->{
+                    viewModel.isOnline = null
+                    binding.lvAddArea.visibility = View.GONE
+                }
             }
-            updateNextButtonState()
         }
     }
 
@@ -369,23 +369,31 @@ class MyInterestStudyFilterFragment : Fragment() {
         }
     }
 
+
     private fun restoreViewFromViewModel() {
-        // 모집 여부
+
         when (viewModel.isRecruiting) {
             true -> binding.chipGroupRecruiting.check(R.id.chip1_recruiting)
             false -> binding.chipGroupRecruiting.check(R.id.chip2_recruiting)
             null -> binding.chipGroupRecruiting.clearCheck()
         }
-
         // 성별
         when (viewModel.gender) {
             "UNKNOWN" -> binding.chipGroupGender.check(R.id.chip1_gender)
             "MALE" -> binding.chipGroupGender.check(R.id.chip2_gender)
             "FEMALE" -> binding.chipGroupGender.check(R.id.chip3_gender)
-            null -> binding.chipGroupGender.clearCheck()
+            else -> binding.chipGroupGender.clearCheck()
         }
 
-        // 참가비 여부
+        // 연령 슬라이더
+        binding.ageRangeSlider.values = listOf(
+            viewModel.minAge.toFloat(),
+            viewModel.maxAge.toFloat()
+        )
+        binding.minValueText.text = viewModel.minAge.toString()
+        binding.maxValueText.text = viewModel.maxAge.toString()
+
+        // 참가비
         when (viewModel.hasFee) {
             true -> {
                 binding.chipGroup1.check(R.id.chip1)
@@ -404,38 +412,30 @@ class MyInterestStudyFilterFragment : Fragment() {
             }
         }
 
-        // 참가비 슬라이더
         val minFee = viewModel.finalMinFee?.toFloat() ?: 1000f
         val maxFee = viewModel.finalMaxFee?.toFloat() ?: 500000f
         binding.activityfeeSlider.values = listOf(minFee, maxFee)
+        binding.activityfeeMinValueText.text = "₩${NumberFormat.getNumberInstance().format(minFee.toInt())}"
+        binding.activityfeeMaxValueText.text = "₩${NumberFormat.getNumberInstance().format(maxFee.toInt())}"
 
-        val formattedMin = NumberFormat.getNumberInstance().format(minFee.toInt())
-        val formattedMax = NumberFormat.getNumberInstance().format(maxFee.toInt())
-        binding.activityfeeMinValueText.text = "₩$formattedMin"
-        binding.activityfeeMaxValueText.text = "₩$formattedMax"
-
-        // 연령 슬라이더
-        binding.ageRangeSlider.values = listOf(
-            viewModel.minAge.toFloat(),
-            viewModel.maxAge.toFloat()
-        )
-        binding.minValueText.text = viewModel.minAge.toString()
-        binding.maxValueText.text = viewModel.maxAge.toString()
-
-        // 온라인/오프라인 상태
-        if (viewModel.isOnline == true) {
-            binding.chipGroupNew.check(R.id.chip01)
-            binding.lvAddArea.visibility = View.GONE
-        } else if (viewModel.isOnline == false){
-            binding.chipGroupNew.check(R.id.chip02)
-            binding.lvAddArea.visibility = View.VISIBLE
+        // 온라인 / 오프라인
+        when (viewModel.isOnline) {
+            true -> {
+                binding.chipGroupNew.check(R.id.chip01)
+                binding.lvAddArea.visibility = View.GONE
+            }
+            false -> {
+                binding.chipGroupNew.check(R.id.chip02)
+                binding.lvAddArea.visibility = View.VISIBLE
+            }
+            null -> binding.chipGroupNew.clearCheck()
         }
 
-        // 지역 Chip 복원
-        viewModel.selectedAddress?.let { addressList ->
-            if (addressList.isNotEmpty()) {
-                updateChip(addressList)
-            }
+
+        val addressList = viewModel.selectedAddress ?: mutableListOf()
+
+        if (addressList.isNotEmpty()) {
+            updateChip(addressList)
         }
     }
 

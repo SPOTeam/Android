@@ -88,6 +88,7 @@ class RecruitingStudyFragment : Fragment() {
         maxFee = viewModel.finalMaxFee
         isOnline = viewModel.isOnline
         themeTypes = viewModel.themeTypes
+        regionCodes = viewModel.selectedCode
 
         source = arguments?.getString("source") // source만 그대로 Bundle에서 받음
     }
@@ -97,6 +98,7 @@ class RecruitingStudyFragment : Fragment() {
             "HouseFragment" -> {
                 binding.icFilter.visibility = View.VISIBLE
                 binding.icFilterActive.visibility = View.GONE
+                viewModel.reset()
             }
             "RecruitingStudyFilterFragment" -> {
                 binding.icFilter.visibility = View.GONE

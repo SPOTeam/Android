@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/my_interest_study_location_toolbar" />
+        layout="@layout/recruiting_study_toolbar" />
 
 
     <TextView
