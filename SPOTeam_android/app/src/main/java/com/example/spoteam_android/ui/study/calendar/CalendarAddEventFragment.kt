@@ -53,6 +53,8 @@ class CalendarAddEventFragment : Fragment() {
     private lateinit var eventPositionEditText: EditText
     private lateinit var startDateTimeTextView: TextView
     private lateinit var endDateTimeTextView: TextView
+    private lateinit var charTitleCountText: TextView
+    private lateinit var charPostionCountText: TextView
     private lateinit var saveButton: Button
     private lateinit var closeButton: ImageView
     private lateinit var spinner: Spinner
@@ -89,16 +91,9 @@ class CalendarAddEventFragment : Fragment() {
         eventPositionEditText = binding.eventPositionEditText
         startDateTimeTextView = binding.startDateTimeTextView
         endDateTimeTextView = binding.endDateTimeTextView
-
         saveButton = binding.fragmentIntroduceStudyBt
-
-        eventTitleEditText = binding.eventTitleEditText
         closeButton = binding.writeContentPrevIv
-
-        eventTitleEditText = binding.eventTitleEditText
-        eventTitleEditText = binding.eventTitleEditText
         spinner = binding.routineSpinner
-
         checkBox = binding.checkBoxEveryDay
         startYearTx = binding.txStartYear
         startTimeTx = binding.txStartTime
@@ -106,6 +101,8 @@ class CalendarAddEventFragment : Fragment() {
         endTimeTx = binding.txEndTime
         txEndGuide = binding.txEndGuide
         txEveryDay = binding.txEveryDay
+        charTitleCountText = binding.charTitleCountText
+        charPostionCountText = binding.charPositionCountText
 
         studyId = arguments?.getInt("studyId") ?: 0
 
@@ -152,7 +149,10 @@ class CalendarAddEventFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 updateSaveButtonState()
             }
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+                val length = s?.length ?: 0
+                charTitleCountText.text = "($length/20)"
+            }
         })
 
         eventPositionEditText.addTextChangedListener(object : TextWatcher {
@@ -160,7 +160,10 @@ class CalendarAddEventFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 updateSaveButtonState()
             }
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+                val length = s?.length ?: 0
+                charPostionCountText.text = "($length/20)"
+            }
         })
 
 
@@ -203,7 +206,6 @@ class CalendarAddEventFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                Log.d("SpinnerDebug", "Item selected at position $position")
 
                 try {
                     // null-safe 처리
@@ -224,12 +226,10 @@ class CalendarAddEventFragment : Fragment() {
 
                     if (newPeriod != period) {
                         period = newPeriod
-                        Log.d("SpinnerDebug", "Period changed to $period, resetting fields")
                         resetDateTimeFields()
                     }
 
                 } catch (e: Exception) {
-                    Log.e("SpinnerError", "Exception in onItemSelected: ${e.message}", e)
                 }
             }
 
@@ -240,6 +240,7 @@ class CalendarAddEventFragment : Fragment() {
             }
         }
     }
+
 
 
 
