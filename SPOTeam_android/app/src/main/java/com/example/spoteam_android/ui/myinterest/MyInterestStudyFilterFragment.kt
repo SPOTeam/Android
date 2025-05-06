@@ -48,7 +48,6 @@ class MyInterestStudyFilterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMyInterestStudyFilterBinding.inflate(inflater, container, false)
-        viewModel.reset()
         return binding.root
     }
 
@@ -67,6 +66,8 @@ class MyInterestStudyFilterFragment : Fragment() {
         setupOnlineOfflineChips()
         setupResetButton()
 
+        restoreViewFromViewModel()
+
         binding.lvAddArea.setOnClickListener{
             (activity as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, MyInterestStudyFilterLocationFragment())
@@ -74,27 +75,25 @@ class MyInterestStudyFilterFragment : Fragment() {
                 .commit()
         }
 
+
         arguments?.let {
             // 여러 개의 주소/코드를 리스트 형태로 받기
-            val addressList = it.getStringArrayList("ADDRESS_LIST")?.toMutableList() ?: mutableListOf()
-            val codeList = it.getStringArrayList("CODE_LIST")?.toMutableList() ?: mutableListOf()
+            val addressList = it.getStringArrayList("ADDRESS_LIST")?.toMutableList() ?: viewModel.selectedAddress
+            val codeList = it.getStringArrayList("CODE_LIST")?.toMutableList() ?: viewModel.selectedCode
 
             viewModel.selectedAddress = addressList
             viewModel.selectedCode = codeList
 
-
             val isOffline = it.getBoolean("IS_OFFLINE", false)
 
             // 주소 리스트를 Chip으로 업데이트
-            if (addressList.isNotEmpty()) {
-                updateChip(addressList)
+            if (!addressList.isNullOrEmpty() && !codeList.isNullOrEmpty()) {
+                updateChip(addressList, codeList)
             }
 
             setChipState(isOffline)
             isLocationPlusVisible = isOffline
         }
-
-
     }
 
     override fun onDestroyView() {
@@ -104,7 +103,6 @@ class MyInterestStudyFilterFragment : Fragment() {
 
     private fun setupToolbar() {
         binding.toolbar.icBack.setOnClickListener {
-            viewModel.reset() // 1. ViewModel 값 초기화
             val bundle = Bundle().apply {
                 putString("source", "HouseFragment")
             }
@@ -121,7 +119,7 @@ class MyInterestStudyFilterFragment : Fragment() {
                 R.id.chip1_gender -> "UNKNOWN"
                 R.id.chip2_gender -> "MALE"
                 R.id.chip3_gender -> "FEMALE"
-                else -> "MALE"
+                else -> null
             }
             updateNextButtonState()
         }
@@ -187,20 +185,18 @@ class MyInterestStudyFilterFragment : Fragment() {
                     viewModel.hasFee = true
                     binding.activityfeeSlider.isVisible = true
                     binding.displayfeeFrameLayout.isVisible = true
-                } else {
+                } else if (checkedChip.id == R.id.chip2) {
                     viewModel.hasFee = false
                     binding.activityfeeSlider.isVisible = false
                     binding.displayfeeFrameLayout.isVisible = false
                 }
             } else {
-                viewModel.hasFee = false
+                viewModel.hasFee = null
                 binding.activityfeeSlider.isVisible = false
                 binding.displayfeeFrameLayout.isVisible = false
             }
-            updateNextButtonState()
         }
     }
-
     private fun setupResetButton(){
         //필터 초기화 클릭
         binding.txResetFilter.setOnClickListener {
@@ -262,7 +258,7 @@ class MyInterestStudyFilterFragment : Fragment() {
             viewModel.isRecruiting = when (checkedId) {
                 R.id.chip1_recruiting -> true
                 R.id.chip2_recruiting -> false
-                else -> true
+                else -> null
             }
         }
         updateNextButtonState()
@@ -283,10 +279,12 @@ class MyInterestStudyFilterFragment : Fragment() {
                 R.id.chip02 -> {
                     viewModel.isOnline = false
                     binding.lvAddArea.visibility = View.VISIBLE
-
+                }
+                else ->{
+                    viewModel.isOnline = null
+                    binding.lvAddArea.visibility = View.GONE
                 }
             }
-            updateNextButtonState()
         }
     }
 
@@ -296,36 +294,32 @@ class MyInterestStudyFilterFragment : Fragment() {
             binding.chipGroupNew.check(R.id.chip02)
         }
     }
-    fun updateChip(addressList: MutableList<String>) {
+
+    fun updateChip(addressList: MutableList<String>, codeList: MutableList<String>) {
         val chipGroup = binding.locationChipGroup
         chipGroup.removeAllViews()
 
-        for (address in addressList) {
+        addressList.forEachIndexed { index, address ->
             val truncatedAddress = extractAddressUntilDong(address)
+            val code = codeList.getOrNull(index)
 
             val chip = Chip(requireContext()).apply {
                 val chipDrawable = ChipDrawable.createFromAttributes(
-                    requireContext(),
-                    null,
-                    0,
-                    R.style.CustomChipCloseStyle2
+                    requireContext(), null, 0, R.style.CustomChipCloseStyle2
                 )
                 setChipDrawable(chipDrawable)
 
                 text = truncatedAddress
-                textSize = 14f  // ✅ 텍스트 사이즈 통일
+                textSize = 14f
                 setTextColor(ContextCompat.getColor(requireContext(), R.color.search_chip_text))
                 isCloseIconVisible = true
 
                 val widthInPx = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    260f,
-                    resources.displayMetrics
+                    TypedValue.COMPLEX_UNIT_DIP, 260f, resources.displayMetrics
                 ).toInt()
 
                 layoutParams = ViewGroup.MarginLayoutParams(
-                    widthInPx,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    widthInPx, ViewGroup.LayoutParams.WRAP_CONTENT
                 ).apply {
                     marginStart = 15
                     marginEnd = 15
@@ -334,7 +328,9 @@ class MyInterestStudyFilterFragment : Fragment() {
 
                 setOnCloseIconClickListener {
                     chipGroup.removeView(this)
+
                     viewModel.selectedAddress?.remove(address)
+                    if (code != null) viewModel.selectedCode?.remove(code)
 
                     if (chipGroup.childCount == 0) {
                         binding.lvAddArea.visibility = View.VISIBLE
@@ -347,11 +343,10 @@ class MyInterestStudyFilterFragment : Fragment() {
             chipGroup.addView(chip)
         }
 
-
         chipGroup.visibility = View.VISIBLE
         updateNextButtonState()
-
     }
+
 
 
 
@@ -365,6 +360,77 @@ class MyInterestStudyFilterFragment : Fragment() {
             address.substring(0, endIndex)
         } else {
             address
+        }
+    }
+
+
+    private fun restoreViewFromViewModel() {
+
+        when (viewModel.isRecruiting) {
+            true -> binding.chipGroupRecruiting.check(R.id.chip1_recruiting)
+            false -> binding.chipGroupRecruiting.check(R.id.chip2_recruiting)
+            null -> binding.chipGroupRecruiting.clearCheck()
+        }
+        // 성별
+        when (viewModel.gender) {
+            "UNKNOWN" -> binding.chipGroupGender.check(R.id.chip1_gender)
+            "MALE" -> binding.chipGroupGender.check(R.id.chip2_gender)
+            "FEMALE" -> binding.chipGroupGender.check(R.id.chip3_gender)
+            else -> binding.chipGroupGender.clearCheck()
+        }
+
+        // 연령 슬라이더
+        binding.ageRangeSlider.values = listOf(
+            viewModel.minAge.toFloat(),
+            viewModel.maxAge.toFloat()
+        )
+        binding.minValueText.text = viewModel.minAge.toString()
+        binding.maxValueText.text = viewModel.maxAge.toString()
+
+        // 참가비
+        when (viewModel.hasFee) {
+            true -> {
+                binding.chipGroup1.check(R.id.chip1)
+                binding.activityfeeSlider.isVisible = true
+                binding.displayfeeFrameLayout.isVisible = true
+            }
+            false -> {
+                binding.chipGroup1.check(R.id.chip2)
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
+            }
+            null -> {
+                binding.chipGroup1.clearCheck()
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
+            }
+        }
+
+        val minFee = viewModel.finalMinFee?.toFloat() ?: 1000f
+        val maxFee = viewModel.finalMaxFee?.toFloat() ?: 500000f
+        binding.activityfeeSlider.values = listOf(minFee, maxFee)
+        binding.activityfeeMinValueText.text = "₩${NumberFormat.getNumberInstance().format(minFee.toInt())}"
+        binding.activityfeeMaxValueText.text = "₩${NumberFormat.getNumberInstance().format(maxFee.toInt())}"
+
+        // 온라인 / 오프라인
+        when (viewModel.isOnline) {
+            true -> {
+                binding.chipGroupNew.check(R.id.chip01)
+                binding.lvAddArea.visibility = View.GONE
+            }
+            false -> {
+                binding.chipGroupNew.check(R.id.chip02)
+                binding.lvAddArea.visibility = View.VISIBLE
+            }
+            null -> binding.chipGroupNew.clearCheck()
+        }
+
+
+        val addressList = viewModel.selectedAddress ?: mutableListOf()
+        val codeList = viewModel.selectedCode ?: mutableListOf()
+
+        if (addressList.isNotEmpty() && codeList.isNotEmpty()) {
+            updateChip(addressList, codeList)
         }
     }
 

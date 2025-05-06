@@ -29,7 +29,7 @@
         android:maxLines="1"
         android:text="오늘의 할 일을 입력해주세요."
         android:textColor="@color/black"
-        android:textFontWeight="700"
+        android:textFontWeight="900"
         android:fontFamily="@font/suit_variable"
         android:textSize="13dp"
         app:layout_constraintBottom_toBottomOf="@id/cbTodo"

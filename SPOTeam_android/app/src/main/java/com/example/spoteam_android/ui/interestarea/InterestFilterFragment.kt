@@ -41,7 +41,7 @@ class InterestFilterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentInterestFilterBinding.inflate(inflater, container, false)
-        viewModel.reset()
+
         return binding.root
     }
 
@@ -58,6 +58,8 @@ class InterestFilterFragment : Fragment() {
         setupStudyThemeChips()
         setupSearchButton()
 
+        restoreViewFromViewModel()
+
     }
 
     override fun onDestroyView() {
@@ -67,7 +69,6 @@ class InterestFilterFragment : Fragment() {
 
     private fun setupToolbar() {
         binding.toolbar.icBack.setOnClickListener {
-            viewModel.reset() // 1. ViewModel 값 초기화
             val bundle = Bundle().apply {
                 putString("source", "HouseFragment")
             }
@@ -99,7 +100,7 @@ class InterestFilterFragment : Fragment() {
         ageRangeSlider.valueFrom = 18f
         ageRangeSlider.valueTo = 60f
         ageRangeSlider.stepSize = 1f
-        ageRangeSlider.values = listOf(18f, 60f)
+        ageRangeSlider.values = listOf(viewModel.minAge.toFloat(), viewModel.maxAge.toFloat())
 
         val customThumb = ContextCompat.getDrawable(requireContext(),R.drawable.custom_thumb)
         if (customThumb != null) {
@@ -119,28 +120,33 @@ class InterestFilterFragment : Fragment() {
 
     private fun setupActivityFeeSlider() {
         val activityfeeSlider = binding.activityfeeSlider
-        val minValueText = binding.activityfeeMinValueText
-        val maxValueText = binding.activityfeeMaxValueText
 
         activityfeeSlider.valueFrom = 1000f
         activityfeeSlider.valueTo = 500000f
         activityfeeSlider.stepSize = 100f
-        activityfeeSlider.values = listOf(1000f, 500000f)
-        val customThumb = ContextCompat.getDrawable(requireContext(),R.drawable.custom_thumb)
+        val minFee = (viewModel.finalMinFee ?: 1000).toFloat()
+        val maxFee = (viewModel.finalMaxFee ?: 500000).toFloat()
+
+        activityfeeSlider.values = listOf(minFee, maxFee)
+
+        val customThumb = ContextCompat.getDrawable(requireContext(), R.drawable.custom_thumb)
         if (customThumb != null) {
             activityfeeSlider.setCustomThumbDrawable(customThumb)
         }
-
-
 
         activityfeeSlider.addOnChangeListener { slider, _, _ ->
             val values = slider.values
             val minfee = values[0].toInt()
             val maxfee = values[1].toInt()
+
+            // ViewModel에도 저장
+            viewModel.minfee = minfee
+            viewModel.maxfee = maxfee
+
             val formattedMinFee = NumberFormat.getNumberInstance().format(minfee)
             val formattedMaxFee = NumberFormat.getNumberInstance().format(maxfee)
-            minValueText.text = "₩$formattedMinFee"
-            maxValueText.text = "₩$formattedMaxFee"
+            binding.activityfeeMinValueText.text = "₩$formattedMinFee"
+            binding.activityfeeMaxValueText.text = "₩$formattedMaxFee"
         }
     }
 
@@ -200,15 +206,13 @@ class InterestFilterFragment : Fragment() {
         //필터 초기화 클릭
         binding.txResetFilter.setOnClickListener {
             viewModel.reset()
-
             binding.chipGroupRecruiting.clearCheck()
             binding.chipGroupGender.clearCheck()
             binding.chipGroup1.clearCheck()
             binding.chipGroup2.clearCheck()
 
-            // ✅ RangeSlider 초기화
             binding.ageRangeSlider.values = listOf(18f, 60f)
-            binding.activityfeeSlider.values = listOf(1000f, 500000f)
+            binding.activityfeeSlider.values = listOf(1000f, 5000000f)
 
             // ✅ 텍스트뷰 값도 초기화 (선택사항)
             binding.minValueText.text = "18"
@@ -244,11 +248,81 @@ class InterestFilterFragment : Fragment() {
             viewModel.isRecruiting = when (checkedId) {
                 R.id.chip1_recruiting -> true
                 R.id.chip2_recruiting -> false
-                ChipGroup.NO_ID -> null
                 else -> null
             }
         }
         updateNextButtonState()
+    }
+
+    private fun restoreViewFromViewModel() {
+        // 모집 상태
+        when (viewModel.isRecruiting) {
+            true -> binding.chipGroupRecruiting.check(R.id.chip1_recruiting)
+            false -> binding.chipGroupRecruiting.check(R.id.chip2_recruiting)
+            null -> binding.chipGroupRecruiting.clearCheck()
+        }
+
+        // 성별
+        when (viewModel.gender) {
+            "UNKNOWN" -> binding.chipGroupGender.check(R.id.chip1_gender)
+            "MALE" -> binding.chipGroupGender.check(R.id.chip2_gender)
+            "FEMALE" -> binding.chipGroupGender.check(R.id.chip3_gender)
+            null -> binding.chipGroupGender.clearCheck()
+        }
+
+        // 참가비 여부
+        when (viewModel.hasFee) {
+            true -> {
+                binding.chipGroup1.check(R.id.chip1)
+                binding.activityfeeSlider.isVisible = true
+                binding.displayfeeFrameLayout.isVisible = true
+            }
+            false -> {
+                binding.chipGroup1.check(R.id.chip2)
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
+            }
+            null -> {
+                binding.chipGroup1.clearCheck()
+                binding.activityfeeSlider.isVisible = false
+                binding.displayfeeFrameLayout.isVisible = false
+            }
+        }
+
+        // 연령 슬라이더
+        binding.ageRangeSlider.values = listOf(
+            viewModel.minAge.toFloat() ?: 18f,
+            viewModel.maxAge.toFloat() ?: 60f
+        )
+        binding.minValueText.text = viewModel.minAge.toString()
+        binding.maxValueText.text = viewModel.maxAge.toString()
+
+        val minFee = viewModel.finalMinFee?.toFloat() ?: 1000f
+        val maxFee = viewModel.finalMaxFee?.toFloat() ?: 500000f
+
+
+        val formattedMin = NumberFormat.getNumberInstance().format(minFee.toInt())
+        val formattedMax = NumberFormat.getNumberInstance().format(maxFee.toInt())
+
+        binding.activityfeeMinValueText.text = "₩$formattedMin"
+        binding.activityfeeMaxValueText.text = "₩$formattedMax"
+
+// hasFee 여부에 따라 슬라이더 영역 표시 여부 결정
+        binding.activityfeeSlider.isVisible = viewModel.hasFee == true
+        binding.displayfeeFrameLayout.isVisible = viewModel.hasFee == true
+
+        // 테마 (ChipGroup2)
+        val selectedThemes = viewModel.themeTypes ?: emptyList()
+        for (i in 0 until binding.chipGroup2.childCount) {
+            val chip = binding.chipGroup2.getChildAt(i) as? Chip ?: continue
+            val chipText = chip.text.toString()
+            val theme = when (chipText) {
+                "시사/뉴스" -> "시사뉴스"
+                "전공/진로학습" -> "전공및진로학습"
+                else -> chipText
+            }
+            chip.isChecked = selectedThemes.contains(theme)
+        }
     }
 
 }
