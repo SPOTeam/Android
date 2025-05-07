@@ -10,6 +10,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +35,10 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.ScheduleRequest
 import com.example.spoteam_android.ScheduleResponse
+import com.example.spoteam_android.databinding.FragmentCalendarAddEventBinding
+import com.example.spoteam_android.databinding.FragmentMemberStudyBinding
 import com.example.spoteam_android.ui.study.CompleteScheduleDialog
+import com.example.spoteam_android.ui.study.FixedRoundedSpinnerAdapter
 import com.example.spoteam_android.ui.study.StudyFragment
 import com.google.gson.Gson
 import retrofit2.Call
@@ -44,11 +48,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class CalendarAddEventFragment : Fragment() {
-
+    private lateinit var binding: FragmentCalendarAddEventBinding
     private lateinit var eventTitleEditText: EditText
     private lateinit var eventPositionEditText: EditText
     private lateinit var startDateTimeTextView: TextView
     private lateinit var endDateTimeTextView: TextView
+    private lateinit var charTitleCountText: TextView
+    private lateinit var charPostionCountText: TextView
     private lateinit var saveButton: Button
     private lateinit var closeButton: ImageView
     private lateinit var spinner: Spinner
@@ -74,41 +80,32 @@ class CalendarAddEventFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_calendar_add_event, container, false)
+    ): View {
+        binding = FragmentCalendarAddEventBinding.inflate(inflater, container, false)
+
+        setupSpinners()
 
         checkBoxViewModel = ViewModelProvider(this).get(CheckBoxViewModel::class.java)
 
-        eventTitleEditText = view.findViewById(R.id.eventTitleEditText)
-        eventPositionEditText = view.findViewById(R.id.eventPositionEditText)
-        startDateTimeTextView = view.findViewById(R.id.startDateTimeTextView)
-        endDateTimeTextView = view.findViewById(R.id.endDateTimeTextView)
-
-        saveButton = view.findViewById(R.id.fragment_introduce_study_bt)
-        closeButton = view.findViewById(R.id.write_content_prev_iv)
-        spinner = view.findViewById(R.id.routine_spinner)
-        checkBox = view.findViewById(R.id.checkBox_every_day)
-        startYearTx = view.findViewById(R.id.tx_start_year)
-        startTimeTx = view.findViewById(R.id.tx_start_time)
-        endYearTx = view.findViewById(R.id.tx_end_year)
-        endTimeTx = view.findViewById(R.id.tx_end_time)
-        txEndGuide = view.findViewById(R.id.tx_end_guide)
-        txEveryDay = view.findViewById(R.id.tx_every_day)
-
-
-
+        eventTitleEditText = binding.eventTitleEditText
+        eventPositionEditText = binding.eventPositionEditText
+        startDateTimeTextView = binding.startDateTimeTextView
+        endDateTimeTextView = binding.endDateTimeTextView
+        saveButton = binding.fragmentIntroduceStudyBt
+        closeButton = binding.writeContentPrevIv
+        spinner = binding.routineSpinner
+        checkBox = binding.checkBoxEveryDay
+        startYearTx = binding.txStartYear
+        startTimeTx = binding.txStartTime
+        endYearTx = binding.txEndYear
+        endTimeTx = binding.txEndTime
+        txEndGuide = binding.txEndGuide
+        txEveryDay = binding.txEveryDay
+        charTitleCountText = binding.charTitleCountText
+        charPostionCountText = binding.charPositionCountText
 
         studyId = arguments?.getInt("studyId") ?: 0
 
-
-
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.routine_array,
-            R.layout.spinner_item
-        )
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-        spinner.adapter = adapter
 
         //'하루종일' 텍스트 클릭 시 체크박스 상태 변경 반영
         txEveryDay.setOnClickListener {
@@ -144,43 +141,6 @@ class CalendarAddEventFragment : Fragment() {
             }
         }
 
-        // Spinner의 onItemSelectedListener 설정
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                // Spinner가 비활성화 상태면 기본 period 값 설정 후 동작을 무시
-                if (checkBoxViewModel.isCheckBoxChecked.value == false) {
-                    period = "NONE"
-                    return
-                }
-
-                // Spinner의 선택에 따라 period 값을 설정
-                val newPeriod = when (position) {
-                    0 -> "NONE"
-                    1 -> "DAILY"
-                    2 -> "WEEKLY"
-                    3 -> "BIWEEKLY"
-                    4 -> "MONTHLY"
-                    else -> "NONE"
-                }
-
-                // period가 변경되었는지 확인
-                if (newPeriod != period) {
-                    period = newPeriod
-                    resetDateTimeFields() // 날짜 및 시간 관련 View 초기화
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // 선택되지 않았을 때 기본값 설정
-                period = "NONE"
-                resetDateTimeFields() // 기본값으로 초기화
-            }
-        }
 
 
 
@@ -189,7 +149,10 @@ class CalendarAddEventFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 updateSaveButtonState()
             }
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+                val length = s?.length ?: 0
+                charTitleCountText.text = "($length/20)"
+            }
         })
 
         eventPositionEditText.addTextChangedListener(object : TextWatcher {
@@ -197,7 +160,10 @@ class CalendarAddEventFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 updateSaveButtonState()
             }
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+                val length = s?.length ?: 0
+                charPostionCountText.text = "($length/20)"
+            }
         })
 
 
@@ -219,13 +185,64 @@ class CalendarAddEventFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-        view.setOnTouchListener { _, _ ->
+        view?.setOnTouchListener { _, _ ->
             clearFocusFromEditTexts()
             true
         }
 
-        return view
+
+
+        return return binding.root
     }
+
+    private fun setupSpinners() {
+        val periodList = listOf("안함", "매일", "매주", "격주", "매월")
+        val periodAdapter = FixedRoundedSpinnerAdapter(requireContext(), periodList)
+        binding.routineSpinner.adapter = periodAdapter
+        binding.routineSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+
+                try {
+                    // null-safe 처리
+                    val isChecked = checkBoxViewModel.isCheckBoxChecked.value ?: false
+                    if (!isChecked) {
+                        period = "NONE"
+                        return
+                    }
+
+                    val newPeriod = when (position) {
+                        0 -> "NONE"
+                        1 -> "DAILY"
+                        2 -> "WEEKLY"
+                        3 -> "BIWEEKLY"
+                        4 -> "MONTHLY"
+                        else -> "NONE"
+                    }
+
+                    if (newPeriod != period) {
+                        period = newPeriod
+                        resetDateTimeFields()
+                    }
+
+                } catch (e: Exception) {
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // 안전하게 기본값 설정
+                period = "NONE"
+                resetDateTimeFields()
+            }
+        }
+    }
+
+
+
 
 
     private fun showDateTimePickerDialog(txYear: TextView, txTime: TextView, isStart: Boolean) {

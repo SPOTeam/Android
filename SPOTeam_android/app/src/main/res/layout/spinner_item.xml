@@ -8,4 +8,5 @@
     android:fontFamily="@font/suit_semi_bold"
     android:textColor="@color/black"
     android:drawableEnd="@drawable/ic_down_arrow"
+    android:drawablePadding="4dp"
     android:gravity="center_vertical" />
