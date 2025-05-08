@@ -40,7 +40,6 @@ class StudyViewModel : ViewModel() {
     private val _memberCount = MutableLiveData<Int>()
     val memberCount: LiveData<Int> = _memberCount
 
-    // 내부용 (private)
     private val _studyOwner = MutableLiveData<String>()
 
     private val _locationList = mutableListOf<LocationItem>()
@@ -84,7 +83,6 @@ class StudyViewModel : ViewModel() {
 
 
     fun setStudyData(id: Int, imageUrl: String, studyIntroduction: String) {
-        Log.d("StudyViewModel", "setStudyData 호출: studyId = $studyId, imageUrl = $imageUrl, introduction = $studyIntroduction")
         _studyId.value = id
         _studyImageUrl.value = imageUrl
         _studyIntroduction.value = studyIntroduction
@@ -134,9 +132,8 @@ class StudyViewModel : ViewModel() {
 
     fun setStudyData(
         title: String, goal: String, introduction: String, isOnline: Boolean, profileImage: String?,
-        regions: List<String>?, maxPeople: Int, gender: Gender, minAge: Int, maxAge: Int, fee: Int
+        regions: List<String>?, maxPeople: Int, gender: Gender, minAge: Int, maxAge: Int, fee: Int,   hasFee: Boolean?
     ) {
-        val hasFee = fee > 0
 
         val newRequest = StudyRequest(
             themes = _themes.value ?: listOf(),
@@ -154,14 +151,9 @@ class StudyViewModel : ViewModel() {
             hasFee = hasFee
         )
 
-        if (_studyRequest.value != newRequest) {
-            Log.d("StudyViewModel", "✅ studyRequest 값 변경됨. 옵저버 갱신")
-            _studyRequest.value = newRequest
-        } else {
-            Log.d("StudyViewModel", "⚠️ studyRequest 값이 같아서 옵저버 미호출됨")
-        }
         _studyRequest.value = newRequest
     }
+
 
 
 

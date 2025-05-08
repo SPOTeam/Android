@@ -62,8 +62,8 @@
             android:fontFamily="@font/suit_bold"
             android:textColor="@color/black"
             android:textSize="17dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="15dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_pb"/>
 
@@ -77,8 +77,8 @@
             android:textSize="15dp"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_wantstudy_tv"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"/>
 
         <ImageView
             android:id="@+id/fragment_introduce_essential_iv"
@@ -87,7 +87,7 @@
             android:src="@drawable/img"
             android:background="@drawable/fragment_introduce_study_background"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="55dp"
+            android:layout_marginTop="45dp"
             android:clipToOutline="true"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toEndOf="@id/fragment_introduce_main_img_tv"
@@ -99,7 +99,7 @@
             android:layout_height="80dp"
             android:src="@drawable/fragment_introduce_study_gallery_ic"
             android:background="@drawable/fragment_introduce_study_background"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:clipToOutline="true"
             android:scaleType="centerCrop"
@@ -116,8 +116,8 @@
             android:textSize="15dp"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_iv"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"/>
 
         <ImageView
             android:id="@+id/fragment_introduce_essential2_iv"
@@ -126,7 +126,7 @@
             android:src="@drawable/img"
             android:background="@drawable/fragment_introduce_study_background"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="45dp"
             android:clipToOutline="true"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toEndOf="@id/fragment_introduce_study_name_tv"
@@ -137,8 +137,8 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_name_tv">
@@ -197,7 +197,7 @@
             android:textColor="@color/g400"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_studyname_fl"
-            android:layout_marginStart="17dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"/>
 
         <TextView
@@ -210,7 +210,7 @@
             android:textSize="15dp"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_min_length_tv"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"/>
 
         <ImageView
@@ -231,8 +231,8 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_goal_tv">
@@ -289,7 +289,7 @@
             android:textSize="15dp"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_studypurpose_fl"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"/>
 
         <ImageView
@@ -312,7 +312,7 @@
             android:inputType="textMultiLine"
             android:padding="10dp"
             android:textSize="14dp"
-            android:lineSpacingExtra="2dp"
+            android:lineSpacingExtra="2.3dp"
             android:hint="@string/introudce_hint"
             android:textColorHint="#C5C5CD"
             android:fontFamily="@font/suit_bold"
@@ -320,8 +320,8 @@
             android:background="@drawable/edittext_rounded_corner_rectangle"
             android:gravity="top"
             android:layout_marginTop="10dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_real_goal_tv"/>
 
@@ -329,8 +329,8 @@
             android:id="@+id/fragment_introduce_study_bt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="50dp"
             android:background="@drawable/button_background"
@@ -339,6 +339,8 @@
             android:fontFamily="@font/suit_bold"
             android:textColor="@drawable/button_textcolor"
             android:textSize="17dp"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_et"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

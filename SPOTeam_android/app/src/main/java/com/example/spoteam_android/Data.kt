@@ -228,7 +228,7 @@ data class StudyDetailsResult( //StudyFragment에서 detail하게 들어갔을�
     val themes: List<String>,
     val regions: List<String>,
     val goal: String,
-    val introduction: String
+    val introduction: String,
 )
 
 data class Owner(

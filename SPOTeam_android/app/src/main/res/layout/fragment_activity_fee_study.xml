@@ -54,7 +54,7 @@
         android:textColor="@color/black"
         android:textSize="18dp"
         android:fontFamily="@font/suit_bold"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_activity_fee_study_pb"/>
@@ -63,7 +63,7 @@
         android:id="@+id/fragment_online_study_chipgroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         app:chipSpacingHorizontal="12dp"
@@ -111,7 +111,7 @@
         android:layout_height="56dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/fragment_online_study_chipgroup">
 
@@ -166,6 +166,8 @@
         android:background="@drawable/button_background"
         android:enabled="false"
         android:text="미리보기"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
         android:fontFamily="@font/suit_bold"
         android:textColor="@drawable/button_textcolor"
         android:textSize="17dp"
