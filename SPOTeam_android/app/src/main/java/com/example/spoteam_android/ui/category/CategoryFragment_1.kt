@@ -3,6 +3,7 @@ package com.example.spoteam_android.ui.category
 import StudyApiService
 import StudyViewModel
 import android.content.Context
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -68,8 +70,6 @@ class CategoryFragment_1 : Fragment() {
     ): View {
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)  // ← 이거 추가
-
-
 
         initArguments()
         setupRecyclerView()
@@ -149,7 +149,11 @@ class CategoryFragment_1 : Fragment() {
     private fun handleTabSelected(tab: TabLayout.Tab) {
         selectedStudyCategory = tab.tag as String
         selectedStudyTheme = selectedStudyCategory.toString()  // ← 탭 선택값으로 테마 업데이트
+        if (selectedStudyTheme == "전공/진로") {
+            selectedStudyTheme = "전공및진로학습"
+        }
         viewModel.theme = selectedStudyTheme
+        currentPage = 0  // ⭐ 페이지 초기화
 
         if (selectedStudyCategory == "전체") {
             fetchMyInterestAll(selectedItem, gender, minAge, maxAge,hasFee,minFee,maxFee,currentPage)
@@ -234,17 +238,13 @@ class CategoryFragment_1 : Fragment() {
 
     private fun setupPageNavigationButtons() {
         binding.previousPage.setOnClickListener {
-            if (currentPage > 0) {
-                currentPage--
+            currentPage = if (currentPage > 0) currentPage - 1 else totalPages - 1
                 requestPageUpdate()
-            }
         }
 
         binding.nextPage.setOnClickListener {
-            if (currentPage < totalPages - 1) {
-                currentPage++
+            currentPage = if (currentPage < totalPages - 1) currentPage + 1 else 0
                 requestPageUpdate()
-            }
         }
     }
 
@@ -282,29 +282,6 @@ class CategoryFragment_1 : Fragment() {
                 }
             }
         }
-
-        // 페이지 전환 버튼 설정
-        binding.previousPage.setOnClickListener {
-            if (currentPage > 0) {
-                currentPage--
-                if (selectedStudyCategory == "전체") {
-                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge,hasFee,minFee,maxFee,currentPage)
-                } else {
-                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, hasFee, minFee, maxFee, currentPage)
-                }
-            }
-        }
-
-        binding.nextPage.setOnClickListener {
-            if (currentPage < getTotalPages() - 1) {
-                currentPage++
-                if (selectedStudyCategory == "전체") {
-                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge,hasFee,minFee,maxFee,currentPage)
-                } else {
-                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, hasFee, minFee, maxFee, currentPage)
-                }
-            }
-        }
     }
 
     private fun calculateStartPage(): Int {
@@ -316,44 +293,61 @@ class CategoryFragment_1 : Fragment() {
         }
     }
 
-    private fun getTotalPages(): Int {
-        return totalPages // 올바른 페이지 수 계산
-    }
-
     private fun updatePageUI() {
-        startPage = calculateStartPage()
-
         val pageButtons = listOf(
-            binding.page1,
-            binding.page2,
-            binding.page3,
-            binding.page4,
-            binding.page5
+            binding.page1, binding.page2, binding.page3, binding.page4, binding.page5
         )
+
+        startPage = when {
+            totalPages <= 5 -> 0
+            currentPage >= totalPages - 3 -> totalPages - 5
+            currentPage >= 2 -> currentPage - 2
+            else -> 0
+        }
 
         pageButtons.forEachIndexed { index, textView ->
             val pageNum = startPage + index
             if (pageNum < totalPages) {
                 textView.text = (pageNum + 1).toString()
-                if (pageNum == currentPage) {
-                    textView.setTextColor(resources.getColor(R.color.b500, null)) // ✅ 선택된 페이지: 강조색
-                } else {
-                    textView.setTextColor(resources.getColor(R.color.g400, null)) // ✅ 기본 페이지: 회색
-                }
+                textView.setTextColor(
+                    if (pageNum == currentPage)
+                        resources.getColor(R.color.b500, null)
+                    else
+                        resources.getColor(R.color.g400, null)
+                )
                 textView.isEnabled = true
                 textView.alpha = 1.0f
                 textView.visibility = View.VISIBLE
             } else {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(0)
-                textView.isEnabled = false // 클릭 안 되게
-                textView.alpha = 0.3f
-                textView.visibility = View.VISIBLE
+                // 페이지 수가 5개 미만일 경우는 완전히 숨김 처리
+                textView.visibility = View.GONE
             }
         }
 
-        binding.previousPage.isEnabled = currentPage > 0
-        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        // 페이지가 하나뿐이면 좌우 버튼 모두 비활성화
+        if (totalPages <= 1) {
+            binding.previousPage.isEnabled = false
+            binding.previousPage.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.g300),
+                PorterDuff.Mode.SRC_IN
+            )
+            binding.nextPage.isEnabled = false
+            binding.nextPage.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.g300),
+                PorterDuff.Mode.SRC_IN
+            )
+        } else {
+            binding.previousPage.isEnabled = true
+            binding.previousPage.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.b500),
+                PorterDuff.Mode.SRC_IN
+            )
+            binding.nextPage.isEnabled = true
+            binding.nextPage.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.b500),
+                PorterDuff.Mode.SRC_IN
+            )
+        }
     }
 
     private fun fetchMyInterestAll(
