@@ -49,21 +49,38 @@
         android:layout_marginEnd="25dp"
         android:background="@drawable/edittext_rounded_corner_rectangle"
         android:hint="제목"
-        android:maxLength="15"
+        android:maxLength="20"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
         android:padding="10dp"
-        android:textSize="14sp"
+        android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tx_schedule" />
+
+    <TextView
+        android:id="@+id/charTitleCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="(0/20)"
+        android:textColor="#8F8F99"
+        android:textSize="12dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="800"
+        app:layout_constraintBottom_toBottomOf="@+id/eventTitleEditText"
+        app:layout_constraintEnd_toEndOf="@+id/eventTitleEditText"
+        app:layout_constraintTop_toTopOf="@+id/eventTitleEditText" />
 
     <ImageView
         android:id="@+id/ic_filter_active"
         android:layout_width="5dp"
         android:layout_height="5dp"
-        android:layout_marginBottom="3dp"
-        android:src="@drawable/interest_fragment_study_setcondition_active"
-        app:layout_constraintBottom_toTopOf="@+id/eventTitleEditText"
-        app:layout_constraintEnd_toEndOf="@+id/eventTitleEditText" />
+        android:src="@drawable/dot_red"
+        android:layout_marginEnd="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/charTitleCountText"
+        app:layout_constraintEnd_toStartOf="@+id/charTitleCountText"
+        app:layout_constraintTop_toTopOf="@+id/charTitleCountText" />
 
     <EditText
         android:id="@+id/eventPositionEditText"
@@ -75,10 +92,28 @@
         android:background="@drawable/edittext_rounded_corner_rectangle"
         android:hint="위치 메모"
         android:padding="10dp"
-        android:textSize="14sp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
+        android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventTitleEditText" />
+
+    <TextView
+        android:id="@+id/charPositionCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="(0/20)"
+        android:textColor="#8F8F99"
+        android:textSize="12dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="800"
+        app:layout_constraintBottom_toBottomOf="@+id/eventPositionEditText"
+        app:layout_constraintEnd_toEndOf="@+id/eventPositionEditText"
+        app:layout_constraintTop_toTopOf="@+id/eventPositionEditText" />
+
+
 
     <TextView
         android:id="@+id/tx_start_date_time"
@@ -103,7 +138,9 @@
         android:background="@drawable/edittext_rounded_corner_rectangle"
         android:padding="10dp"
         android:textColor="@color/gray_03"
-        android:textSize="14sp"
+        android:textSize="14dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -116,7 +153,9 @@
         android:padding="10dp"
         android:text="시작"
         android:textColor="@color/gray_03"
-        android:textSize="14sp"
+        android:textSize="14dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
         app:layout_constraintStart_toStartOf="@+id/startDateTimeTextView"
         app:layout_constraintTop_toTopOf="@+id/startDateTimeTextView" />
 
@@ -132,7 +171,9 @@
         android:text="날짜"
         android:visibility="gone"
         android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textSize="12dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
         app:layout_constraintBottom_toBottomOf="@+id/startDateTimeTextView"
         app:layout_constraintEnd_toEndOf="@+id/startDateTimeTextView"
         app:layout_constraintTop_toTopOf="@+id/startDateTimeTextView" />
@@ -148,7 +189,9 @@
         android:text="시간"
         android:visibility="gone"
         android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textSize="12dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
         app:layout_constraintBottom_toBottomOf="@+id/startDateTimeTextView"
         app:layout_constraintEnd_toEndOf="@+id/startDateTimeTextView"
         app:layout_constraintTop_toTopOf="@+id/startDateTimeTextView" />
@@ -163,7 +206,9 @@
         android:background="@drawable/edittext_rounded_corner_rectangle"
         android:padding="10dp"
         android:textColor="@color/gray_03"
-        android:textSize="14sp"
+        android:textSize="14dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startDateTimeTextView" />
@@ -175,7 +220,9 @@
         android:padding="10dp"
         android:text="종료"
         android:textColor="@color/gray_03"
-        android:textSize="14sp"
+        android:textSize="14dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
         app:layout_constraintStart_toStartOf="@+id/endDateTimeTextView"
         app:layout_constraintTop_toTopOf="@+id/endDateTimeTextView" />
 
@@ -191,7 +238,9 @@
         android:text="날짜"
         android:visibility="gone"
         android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textSize="12dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
         app:layout_constraintBottom_toBottomOf="@+id/endDateTimeTextView"
         app:layout_constraintEnd_toEndOf="@+id/endDateTimeTextView"
         app:layout_constraintTop_toTopOf="@+id/endDateTimeTextView" />
@@ -207,7 +256,9 @@
         android:text="시간"
         android:visibility="gone"
         android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textSize="12dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
         app:layout_constraintBottom_toBottomOf="@+id/endDateTimeTextView"
         app:layout_constraintEnd_toEndOf="@+id/endDateTimeTextView"
         app:layout_constraintTop_toTopOf="@+id/endDateTimeTextView" />
@@ -224,6 +275,8 @@
         android:text="하루종일"
         android:textColor="#2D2D2D"
         android:textSize="16dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintEnd_toStartOf="@+id/tx_routine"
@@ -248,19 +301,23 @@
         android:text="반복"
         android:textColor="#2D2D2D"
         android:textSize="16dp"
+        android:fontFamily="@font/suit_variable"
+        android:textFontWeight="900"
         app:layout_constraintEnd_toStartOf="@+id/routine_spinner"
         app:layout_constraintTop_toTopOf="@+id/tx_every_day" />
 
     <Spinner
         android:id="@+id/routine_spinner"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
+        android:layout_width="72dp"
+        android:layout_height="34dp"
         android:layout_gravity="end|center"
         android:layout_marginEnd="25dp"
         android:background="@drawable/gender_spinner_background"
+        android:popupBackground="@drawable/spinner_popup_bg"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tx_routine" />
+
 
     <android.widget.Button
         android:id="@+id/fragment_introduce_study_bt"
@@ -273,7 +330,7 @@
         android:enabled="false"
         android:text="추가"
         android:textColor="@drawable/button_textcolor"
-        android:textSize="17sp"
+        android:textSize="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
