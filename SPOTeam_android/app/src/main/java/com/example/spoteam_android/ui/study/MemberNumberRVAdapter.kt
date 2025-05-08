@@ -35,7 +35,7 @@ class MemberNumberRVAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_member_number, parent, false)
 
-        val itemWidth = parent.context.resources.displayMetrics.widthPixels / 8
+        val itemWidth = parent.context.resources.displayMetrics.widthPixels / 7
         view.layoutParams = RecyclerView.LayoutParams(itemWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
 
         return ViewHolder(view as ViewGroup)
@@ -47,7 +47,6 @@ class MemberNumberRVAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val number = items[position]
-        val context = holder.itemView.context
 
         holder.textView.text = number.toString()
 

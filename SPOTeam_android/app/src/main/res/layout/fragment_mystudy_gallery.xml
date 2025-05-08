@@ -4,20 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/community_category_content_rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/page_number_layout"
+        app:layout_constraintBottom_toTopOf="@id/page_number_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_goneMarginBottom="16dp"
         tools:listitem="@layout/item_gallery_picture" />
+
+
+
 
     <ImageView
         android:id="@+id/image_none_iv"
@@ -45,6 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"/>
 
+
     <LinearLayout
         android:id="@+id/page_number_layout"
         android:layout_width="match_parent"
@@ -52,11 +55,11 @@
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/community_category_content_rv"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/community_category_content_rv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
 
         <TextView
             android:id="@+id/previous_page"

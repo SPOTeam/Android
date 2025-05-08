@@ -9,31 +9,68 @@
         android:id="@+id/fragment_introduce_study_short_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="스터디 소개"
+        android:text="우리 스터디를 소개해요"
         android:textColor="#2D2D2D"
         android:textSize="16dp"
         android:fontFamily="@font/suit_bold"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/fragment_introduce_study_short_tv"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="120dp"
         android:hint="스터디를 소개해봅시다 ! 자유롭게 작성해봐요"
         android:inputType="textMultiLine"
         android:padding="10dp"
-        android:textSize="15dp"
+        android:textSize="12dp"
         android:fontFamily="@font/suit_semi_bold"
         android:background="@drawable/edittext_rounded_corner_rectangle"
         android:gravity="top"
         android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_short_title_tv"/>
+
+    <TextView
+        android:id="@+id/fragment_detail_study_home_member_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="함께하는 스터 파트너들"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        android:fontFamily="@font/suit_semi_bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_short_tv"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_profile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_preview_profile"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerFamily.Cut"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_member_tv"/>
+    <ImageView
+        android:id="@+id/fragment_consider_attendance_member_host_iv"
+        android:layout_width="19dp"
+        android:layout_height="19dp"
+        android:src="@drawable/host_mark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_home_member_tv"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="40dp"
+        android:visibility="visible"/>
 
 
 

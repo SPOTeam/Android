@@ -41,10 +41,24 @@ class MemberStudyFragment : Fragment() {
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.rvMemberStudyNum)
 
+        binding.rvMemberStudyNum.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                updateChildAlpha()
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    updateChildAlpha()
+                }
+            }
+        })
 
 
 
-        binding.rvMemberStudyNum.adapter = memberAdapter
+
+
+
+                binding.rvMemberStudyNum.adapter = memberAdapter
         binding.rvMemberStudyNum.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
 
@@ -112,7 +126,7 @@ class MemberStudyFragment : Fragment() {
     }
 
     private fun saveData() {
-        val maxPeople = memberAdapter.getSelectedNumber()  // 👈 새로 만든 함수로 가져오기
+        val maxPeople = memberAdapter.getSelectedNumber()
 
         val selectedGender = binding.fragmentMemberStudyGenderSpinner.selectedItem.toString()
         val gender = when (selectedGender) {
@@ -126,6 +140,7 @@ class MemberStudyFragment : Fragment() {
         val maxAge = ageRangeSlider.values[1].toInt()
 
         val profileImage = viewModel.studyRequest.value?.profileImage
+        val hasFee = viewModel.studyRequest.value?.hasFee
 
         viewModel.setStudyData(
             title = viewModel.studyRequest.value?.title.orEmpty(),
@@ -138,30 +153,11 @@ class MemberStudyFragment : Fragment() {
             minAge = minAge,
             maxAge = maxAge,
             fee = viewModel.studyRequest.value?.fee ?: 0,
-            profileImage = profileImage // profileImage 파라미터 추가
+            profileImage = profileImage,
+            hasFee = hasFee
         )
 
     }
-
-//    private fun updateNextButtonState() {
-//        val isChecked = binding.
-//
-//        if (isOnline) {
-//            binding.fragmentOnlineStudyBt.isEnabled = true
-//            binding.fragmentOnlineStudyBt.visibility = View.VISIBLE
-//            binding.fragmentOnlineStudyLocationPlusBt.visibility = View.GONE
-//        } else {
-//            if (hasChip) {
-//                binding.fragmentOnlineStudyBt.isEnabled = true
-//                binding.fragmentOnlineStudyBt.visibility = View.VISIBLE
-//                binding.fragmentOnlineStudyLocationPlusBt.visibility = View.GONE
-//            } else {
-//                binding.fragmentOnlineStudyBt.isEnabled = false
-//                binding.fragmentOnlineStudyBt.visibility = View.GONE
-//                binding.fragmentOnlineStudyLocationPlusBt.visibility = View.VISIBLE
-//            }
-//        }
-//    }
 
     private fun goToNextFragment() {
         val nextFragment = ActivityFeeStudyFragment().apply {
@@ -188,16 +184,34 @@ class MemberStudyFragment : Fragment() {
             binding.rvMemberStudyNum.smoothScrollBy(scrollBy, 0)
         } else {
             binding.rvMemberStudyNum.scrollToPosition(position)
-            binding.rvMemberStudyNum.post {
-                val v = layoutManager.findViewByPosition(position)
-                v?.let {
-                    val rvCenterX = binding.rvMemberStudyNum.width / 2
-                    val viewCenterX = it.left + it.width / 2
-                    val scrollBy = viewCenterX - rvCenterX
-                    binding.rvMemberStudyNum.smoothScrollBy(scrollBy, 0)
-                }
-            }
+        }
+
+        binding.rvMemberStudyNum.postDelayed({
+            updateChildAlpha()
+        }, 200)
+    }
+
+    private fun updateChildAlpha() {
+
+        for (i in 0 until binding.rvMemberStudyNum.childCount) {
+            val child = binding.rvMemberStudyNum.getChildAt(i) ?: continue
+
+            val location = IntArray(2)
+            child.getLocationInWindow(location)
+            val childCenterX = location[0] + child.width / 2
+
+            val rvLocation = IntArray(2)
+            binding.rvMemberStudyNum.getLocationInWindow(rvLocation)
+            val rvCenterX = rvLocation[0] + binding.rvMemberStudyNum.width / 2
+
+            val distanceFromCenter = kotlin.math.abs(rvCenterX - childCenterX)
+            val maxDistance = binding.rvMemberStudyNum.width / 2
+            val ratio = distanceFromCenter.toFloat() / maxDistance
+            val alpha = 1f - ratio.coerceIn(0f, 0.7f)
+
+            child.alpha = alpha
         }
     }
+
 
 }

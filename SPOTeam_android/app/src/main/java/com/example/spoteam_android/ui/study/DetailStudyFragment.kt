@@ -180,6 +180,7 @@ class DetailStudyFragment : Fragment() {
             fragmentDetailStudyViewTv.text = getString(R.string.hit_num_format, details.hitNum)
             fragmentDetailStudyMemberMaxTv.text = getString(R.string.max_people_format, details.maxPeople)
             fragmentDetailStudyOnlineTv.text = if (details.isOnline) "온라인" else "오프라인"
+            fragmentDetailStudyFeeTv.text = if (details.fee >0) "${details.fee}원" else "무료"
             fragmentDetailStudyAgeTv.text = "${details.maxAge}세 이하"
             fragmentDetailStudyChipTv.text = details.themes.take(3).joinToString("/")
 

@@ -115,8 +115,7 @@
                 android:text="1"
                 android:textSize="13dp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/suit_variable"
-                android:textFontWeight="600"
+                android:fontFamily="@font/suit_regular"
                 android:layout_marginStart="5dp"/>
             <TextView
                 android:id="@+id/fragment_detail_study_member_slash_tv"
@@ -125,8 +124,8 @@
                 android:text="/"
                 android:textSize="13dp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/suit_variable"
-                android:textFontWeight="600"/>
+                android:fontFamily="@font/suit_regular"
+                android:layout_marginStart="5dp" />
             <TextView
                 android:id="@+id/fragment_detail_study_member_max_tv"
                 android:layout_width="wrap_content"
@@ -134,8 +133,8 @@
                 android:text="10"
                 android:textSize="13dp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/suit_variable"
-                android:textFontWeight="600"/>
+                android:fontFamily="@font/suit_regular"
+                android:layout_marginStart="5dp" />
             <ImageView
                 android:layout_width="13dp"
                 android:layout_height="13dp"
@@ -149,8 +148,7 @@
                 android:text="15"
                 android:textSize="13dp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/suit_variable"
-                android:textFontWeight="600"
+                android:fontFamily="@font/suit_regular"
                 android:layout_marginStart="5dp"/>
 
             <ImageView
@@ -167,8 +165,7 @@
                 android:text="1"
                 android:textSize="13dp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/suit_variable"
-                android:textFontWeight="600"/>
+                android:fontFamily="@font/suit_regular" />
         </LinearLayout>
 
 
@@ -269,6 +266,8 @@
             android:layout_height="wrap_content"
             app:tabTextAppearance="@style/CustomTabText"
             app:layout_constraintTop_toBottomOf="@id/fragment_my_study_register_preview_group_ll"
+            app:tabMode="scrollable"
+            app:tabGravity="fill"
             android:layout_marginTop="15dp"
             app:tabIndicatorColor="#186AFF"
             app:tabIndicatorFullWidth="false"
@@ -299,6 +298,8 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/button_background"
             android:enabled="true"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
             android:text="스터디 만들기"
             android:fontFamily="@font/suit_bold"
             android:textColor="@drawable/button_textcolor"

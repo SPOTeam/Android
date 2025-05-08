@@ -211,6 +211,7 @@ class IntroduceStudyFragment : Fragment() {
         val minAge = viewModel.studyRequest.value?.minAge ?: 0
         val maxAge = viewModel.studyRequest.value?.maxAge ?: 0
         val fee = viewModel.studyRequest.value?.fee ?: 0
+        val hasFee = viewModel.studyRequest.value?.hasFee
 
         viewModel.setStudyData(
             title = title,
@@ -223,7 +224,9 @@ class IntroduceStudyFragment : Fragment() {
             gender = gender,
             minAge = minAge,
             maxAge = maxAge,
-            fee = fee
+            fee = fee,
+            hasFee = hasFee
+
         )
     }
 
