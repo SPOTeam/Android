@@ -132,7 +132,15 @@ class CalendarFragment : Fragment() {
 
         // 월이 넘어가면 event 초기화
         calendarView.setOnMonthChangedListener { _, date ->
-            eventAdapter.updateEvents(emptyList())
+            val year = date.year
+            val month = date.month
+            val studyId = studyViewModel.studyId.value ?: 0
+
+            fetchGetSchedule(studyId, year, month) {
+                eventViewModel.loadEvents(year, month, -1) // day는 선택 안 되었으므로 -1 또는 null로
+            }
+
+            calendarView.setDateTextAppearance(R.style.CustomDateTextAppearance)
         }
 
         calendarView.setOnDateChangedListener  { _, date, selected ->
@@ -161,10 +169,6 @@ class CalendarFragment : Fragment() {
             eventAdapter.updateEvents(events)
         })
 
-        calendarView.setOnMonthChangedListener { widget, date ->
-            // 원하는 메서드 호출
-            calendarView.setDateTextAppearance(R.style.CustomDateTextAppearance)
-        }
 
         return binding.root
     }
