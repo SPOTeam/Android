@@ -76,8 +76,6 @@ class CalendarFragment : Fragment() {
             // 어댑터와 데코레이터 갱신 추가
             val selectedDate = String.format("%04d-%02d-%02d", year, month, day)
             eventAdapter.updateSelectedDate(selectedDate)
-
-
             customRectangleDecorator.setSelectedDate(date)
             calendarView.invalidateDecorators() // 데코레이터 갱신
 
@@ -98,7 +96,6 @@ class CalendarFragment : Fragment() {
             (activity as MainActivity).switchFragment(fragment)
         }
 
-        binding.addButton.visibility = View.GONE // 기본값을 GONE으로 설정하여 버튼 숨기기
 
         studyViewModel.studyOwner.observe(viewLifecycleOwner) { studyOwner ->
             val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -106,9 +103,9 @@ class CalendarFragment : Fragment() {
             val kakaoNickname = sharedPreferences.getString("${currentEmail}_nickname", "Unknown")
 
             if (kakaoNickname == studyOwner) {
-                binding.addButton.visibility = View.VISIBLE // 닉네임이 일치할 경우 버튼 보이기
+//                binding.addButton.visibility = View.VISIBLE
             } else {
-                binding.addButton.visibility = View.GONE // 닉네임이 일치하지 않을 경우 버튼 숨기기
+//                binding.addButton.visibility = View.GONE
             }
         }
 
@@ -135,7 +132,15 @@ class CalendarFragment : Fragment() {
 
         // 월이 넘어가면 event 초기화
         calendarView.setOnMonthChangedListener { _, date ->
-            eventAdapter.updateEvents(emptyList())
+            val year = date.year
+            val month = date.month
+            val studyId = studyViewModel.studyId.value ?: 0
+
+            fetchGetSchedule(studyId, year, month) {
+                eventViewModel.loadEvents(year, month, -1) // day는 선택 안 되었으므로 -1 또는 null로
+            }
+
+            calendarView.setDateTextAppearance(R.style.CustomDateTextAppearance)
         }
 
         calendarView.setOnDateChangedListener  { _, date, selected ->
