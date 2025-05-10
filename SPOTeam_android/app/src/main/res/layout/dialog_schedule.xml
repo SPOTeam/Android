@@ -56,10 +56,9 @@
         android:paddingEnd="90dp"
         android:background="@drawable/button_background"
         android:text="확인"
-        android:fontFamily="@font/pretendard"
-        android:textColor="#186AFF"
+        android:fontFamily="@font/suit_semi_bold"
+        android:textColor="@drawable/button_textcolor"
         android:textSize="16dp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
