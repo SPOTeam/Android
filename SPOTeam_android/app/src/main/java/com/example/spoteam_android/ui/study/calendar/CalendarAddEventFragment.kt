@@ -40,6 +40,7 @@ import com.example.spoteam_android.databinding.FragmentMemberStudyBinding
 import com.example.spoteam_android.ui.study.CompleteScheduleDialog
 import com.example.spoteam_android.ui.study.FixedRoundedSpinnerAdapter
 import com.example.spoteam_android.ui.study.StudyFragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,7 +48,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CalendarAddEventFragment : Fragment() {
+class CalendarAddEventFragment  : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentCalendarAddEventBinding
     private lateinit var eventTitleEditText: EditText
     private lateinit var eventPositionEditText: EditText
@@ -74,6 +75,24 @@ class CalendarAddEventFragment : Fragment() {
     private var isStartDateSet = false
     private var isEndDateSet = false
 
+    override fun getTheme(): Int = R.style.InterestBottomSheetDialogTheme
+
+    override fun onStart() {
+        super.onStart()
+        val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+
+        bottomSheet?.let {
+            val displayMetrics = resources.displayMetrics
+            val screenHeight = displayMetrics.heightPixels
+            val targetHeight = (screenHeight * 0.8).toInt() // 화면의 70%
+
+            it.layoutParams.height = targetHeight
+
+            val behavior = com.google.android.material.bottomsheet.BottomSheetBehavior.from(it)
+            behavior.state = com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+        }
+    }
+
 
     private val eventViewModel: EventViewModel by activityViewModels()
 
@@ -92,7 +111,7 @@ class CalendarAddEventFragment : Fragment() {
         startDateTimeTextView = binding.startDateTimeTextView
         endDateTimeTextView = binding.endDateTimeTextView
         saveButton = binding.fragmentIntroduceStudyBt
-        closeButton = binding.writeContentPrevIv
+        closeButton = binding.icClose
         spinner = binding.routineSpinner
         checkBox = binding.checkBoxEveryDay
         startYearTx = binding.txStartYear
@@ -182,7 +201,7 @@ class CalendarAddEventFragment : Fragment() {
         }
 
         closeButton.setOnClickListener{
-            parentFragmentManager.popBackStack()
+            dismiss()
         }
 
         view?.setOnTouchListener { _, _ ->

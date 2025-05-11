@@ -92,8 +92,8 @@ class CalendarFragment : Fragment() {
 
         addButton.setOnClickListener {
             val studyId = studyViewModel.studyId.value ?: 0
-            val fragment = CalendarAddEventFragment.newInstance(studyId)
-            (activity as MainActivity).switchFragment(fragment)
+            val bottomSheet = CalendarAddEventFragment.newInstance(studyId)
+            bottomSheet.show(parentFragmentManager, "CalendarAddEventBottomSheet")
         }
 
 
