@@ -205,7 +205,7 @@
     </style>
 
     <style name="CustomBottomSheet" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@android:color/transparent</item>
+        <item name="android:background">@color/white</item>
     </style>
 
     <style name="Theme.SPOTeam_android.SplashScreen" parent="Theme.SplashScreen">
@@ -287,7 +287,7 @@
     </style>
 
     <style name="InterestBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+        <item name="bottomSheetStyle">@style/InterestBottomSheet</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.5</item> <!-- 여기가 투명도 -->
     </style>
