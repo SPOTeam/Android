@@ -114,6 +114,7 @@
 
                     val current = viewModel.studyRequest.value
                     val isOnlineSelected = binding.fragmentOnlineStudyChipOnline.isChecked.not() // 오프라인 칩이 선택되어야 true
+                    val hasFee = viewModel.studyRequest.value?.hasFee
 
                     if (viewModel.mode.value == StudyFormMode.EDIT && current != null) {
                         val updated = current.copy(
@@ -132,7 +133,8 @@
                             gender = updated.gender,
                             minAge = updated.minAge,
                             maxAge = updated.maxAge,
-                            fee = updated.fee
+                            fee = updated.fee,
+                            hasFee = hasFee
                         )
                     }
                 }
@@ -222,7 +224,8 @@
                 gender = current.gender,
                 minAge = current.minAge,
                 maxAge = current.maxAge,
-                fee = current.fee
+                fee = current.fee,
+                hasFee = current.hasFee
             )
 
             updateLocationPlusLayoutVisibility(isLocationPlusVisible)
@@ -250,7 +253,8 @@
                             gender = it.gender,
                             minAge = it.minAge,
                             maxAge = it.maxAge,
-                            fee = it.fee
+                            fee = it.fee,
+                            hasFee = it.hasFee
                         )
                     }
                 }
@@ -330,7 +334,8 @@
                 gender = current.gender,
                 minAge = current.minAge,
                 maxAge = current.maxAge,
-                fee = current.fee
+                fee = current.fee,
+                hasFee = current.hasFee
             )
         }
         private fun clearChipSelection() {

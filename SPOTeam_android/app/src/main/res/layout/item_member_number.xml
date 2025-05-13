@@ -9,7 +9,7 @@
         android:layout_height="48dp"
         android:gravity="center"
         android:textSize="16dp"
-        android:paddingHorizontal="6dp"
+        android:paddingHorizontal="5dp"
         android:textColor="@color/black"
         android:background="@android:color/transparent"
         android:fontFamily="@font/suit_bold" />

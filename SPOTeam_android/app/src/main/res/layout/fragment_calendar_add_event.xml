@@ -23,20 +23,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="100dp"
-        android:padding="8dp"
+        android:paddingVertical="8dp"
         android:text="일정"
         android:fontFamily="@font/suit_bold"
         android:textColor="@color/black"
-        android:textSize="16dp"
+        android:textSize="14dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/write_content_prev_iv"
+        android:id="@+id/ic_close"
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:layout_marginEnd="22dp"
-        android:src="@drawable/ic_x_button"
+        android:src="@drawable/ic_calendar_close"
         app:layout_constraintBottom_toBottomOf="@+id/tx_new_schedule"
         app:layout_constraintEnd_toEndOf="@+id/tx_new_schedule"
         app:layout_constraintTop_toTopOf="@+id/tx_new_schedule" />
@@ -114,17 +114,17 @@
         app:layout_constraintTop_toTopOf="@+id/eventPositionEditText" />
 
 
-
     <TextView
         android:id="@+id/tx_start_date_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:padding="8dp"
+        android:layout_marginTop="14dp"
+        android:fontFamily="@font/suit_bold"
+        android:paddingVertical="8dp"
         android:text="일시"
         android:textColor="@color/black"
-        android:textSize="16dp"
-        android:fontFamily="@font/suit_bold"
+        android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventPositionEditText" />
@@ -267,18 +267,16 @@
     <TextView
         android:id="@+id/tx_every_day"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
-        android:paddingHorizontal="4dp"
-        android:paddingVertical="8dp"
-        android:text="하루종일"
-        android:textColor="#2D2D2D"
-        android:textSize="16dp"
-        android:fontFamily="@font/suit_variable"
-        android:textFontWeight="900"
         android:clickable="true"
         android:focusable="true"
+        android:fontFamily="@font/suit_variable"
+        android:text="하루종일"
+        android:textColor="#2D2D2D"
+        android:textFontWeight="900"
+        android:textSize="13dp"
         app:layout_constraintEnd_toStartOf="@+id/tx_routine"
         app:layout_constraintTop_toBottomOf="@+id/endDateTimeTextView" />
 
@@ -286,9 +284,9 @@
         android:id="@+id/checkBox_every_day"
         android:layout_width="25dp"
         android:layout_height="25dp"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/calendar_custom_checkbox"
         android:button="@android:color/transparent"
-        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/tx_every_day"
         app:layout_constraintEnd_toStartOf="@+id/tx_every_day"
         app:layout_constraintTop_toTopOf="@+id/tx_every_day" />
@@ -296,25 +294,27 @@
     <TextView
         android:id="@+id/tx_routine"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:padding="8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:fontFamily="@font/suit_variable"
         android:text="반복"
         android:textColor="#2D2D2D"
-        android:textSize="16dp"
-        android:fontFamily="@font/suit_variable"
         android:textFontWeight="900"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tx_every_day"
         app:layout_constraintEnd_toStartOf="@+id/routine_spinner"
         app:layout_constraintTop_toTopOf="@+id/tx_every_day" />
 
     <Spinner
         android:id="@+id/routine_spinner"
-        android:layout_width="72dp"
-        android:layout_height="34dp"
+        android:layout_width="84dp"
+        android:layout_height="28dp"
         android:layout_gravity="end|center"
         android:layout_marginEnd="25dp"
         android:background="@drawable/gender_spinner_background"
         android:popupBackground="@drawable/spinner_popup_bg"
         android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="@+id/tx_routine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tx_routine" />
 
@@ -326,11 +326,13 @@
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/button_background"
         android:enabled="false"
         android:text="추가"
+        android:elevation="0dp"
+        android:background="@drawable/button_background"
         android:textColor="@drawable/button_textcolor"
         android:textSize="17dp"
+        android:fontFamily="@font/suit_semi_bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

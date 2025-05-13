@@ -205,7 +205,7 @@
     </style>
 
     <style name="CustomBottomSheet" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@android:color/transparent</item>
+        <item name="android:background">@color/white</item>
     </style>
 
     <style name="Theme.SPOTeam_android.SplashScreen" parent="Theme.SplashScreen">
@@ -221,8 +221,9 @@
     </style>
 
     <style name="CustomDateTextAppearance" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">#000000</item> <!-- 검정색 텍스트 -->
-        <item name="android:textSize">12sp</item> <!-- 텍스트 크기 -->
+        <item name="android:fontFamily">@font/suit_semi_bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">13dp</item> <!-- 텍스트 크기 -->
     </style>
 
     <style name="CustomCheckBoxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
@@ -260,13 +261,13 @@
 
     <style name="CalendarTitleTextStyle" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/suit_bold</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/g500</item>
     </style>
 
     <style name="CalendarWeekDayTextStyle" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">15sp</item>
-        <item name="android:fontWeight">500</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:fontFamily">@font/suit_semi_bold</item>
         <item name="android:textColor">@color/black</item>
     </style>
     <style name="Widget.My.Spinner" parent="Widget.AppCompat.Spinner">
@@ -286,7 +287,7 @@
     </style>
 
     <style name="InterestBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+        <item name="bottomSheetStyle">@style/InterestBottomSheet</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.5</item> <!-- 여기가 투명도 -->
     </style>

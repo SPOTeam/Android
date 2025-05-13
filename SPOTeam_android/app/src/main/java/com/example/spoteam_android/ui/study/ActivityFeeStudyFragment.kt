@@ -44,41 +44,41 @@ class ActivityFeeStudyFragment : Fragment() {
         })
 
         viewModel.studyRequest.observe(viewLifecycleOwner) { request ->
-            if (viewModel.mode.value == StudyFormMode.EDIT && request != null) {
-                binding.fragmentActivityFeeStudyTv.text = "스터디 정보 수정"
-                binding.fragmentActivityFeeStudyPreviewBt.text = "수정완료"
-                setChipState(request.hasFee)
+            if (request == null) return@observe
 
-                if (request.hasFee) {
-                    binding.fragmentActivityFeeStudyNumFl.visibility = View.VISIBLE
-                    binding.fragmentActivityFeeStudyEt.setText(request.fee.toString())
-                    binding.fragmentActivityFeeStudyPreviewBt.isEnabled = true
-                } else {
-                    binding.fragmentActivityFeeStudyNumFl.visibility = View.GONE
+            val hasFee = request.hasFee
+
+            when (viewModel.mode.value) {
+                StudyFormMode.EDIT -> {
+                    binding.fragmentActivityFeeStudyTv.text = "스터디 정보 수정"
+                    binding.fragmentActivityFeeStudyPreviewBt.text = "수정완료"
+
+                    setChipState(hasFee)
+
+                    if (hasFee == true) {
+                        binding.fragmentActivityFeeStudyNumFl.visibility = View.VISIBLE
+                        binding.fragmentActivityFeeStudyEt.setText(request.fee.toString())
+                    } else {
+                        binding.fragmentActivityFeeStudyNumFl.visibility = View.GONE
+                    }
+
                     binding.fragmentActivityFeeStudyPreviewBt.isEnabled = true
                 }
 
+                StudyFormMode.CREATE -> {
+                    setChipState(hasFee)
 
-            }
-            if (viewModel.mode.value == StudyFormMode.CREATE && request != null) {
-                setChipState(request.hasFee)
-
-                if (request.hasFee == true) {
-                    binding.fragmentActivityFeeStudyChipTrue.isChecked = true
-                    binding.fragmentActivityFeeStudyNumFl.visibility = View.VISIBLE
-                } else if (request.hasFee == false) {
-                    binding.fragmentActivityFeeStudyChipFalse.isChecked = true
-                    binding.fragmentActivityFeeStudyNumFl.visibility = View.GONE
-                } else {
-                    // 아무 것도 선택하지 않은 상태
-                    binding.fragmentActivityFeeStudyChipTrue.isChecked = false
-                    binding.fragmentActivityFeeStudyChipFalse.isChecked = false
-                    binding.fragmentActivityFeeStudyNumFl.visibility = View.GONE
+                    if (hasFee == true) {
+                        binding.fragmentActivityFeeStudyNumFl.visibility = View.VISIBLE
+                    } else {
+                        binding.fragmentActivityFeeStudyNumFl.visibility = View.GONE
+                    }
                 }
 
+                else -> Unit
             }
-
         }
+
         viewModel.patchSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 showCompletionDialog()
@@ -123,9 +123,9 @@ class ActivityFeeStudyFragment : Fragment() {
         }
     }
 
-    private fun setChipState(hasFee: Boolean) {
-        binding.fragmentActivityFeeStudyChipTrue.isChecked = hasFee
-        binding.fragmentActivityFeeStudyChipFalse.isChecked = !hasFee
+    private fun setChipState(hasFee: Boolean?) {
+        binding.fragmentActivityFeeStudyChipTrue.isChecked = hasFee == true
+        binding.fragmentActivityFeeStudyChipFalse.isChecked = hasFee == false
     }
 
 
@@ -151,8 +151,13 @@ class ActivityFeeStudyFragment : Fragment() {
         val feeText = binding.fragmentActivityFeeStudyEt.text.toString()
         val fee = feeText.toIntOrNull() ?: 0
 
-        if (fee > 10000) {
-            binding.fragmentActivityFeeStudyEt.error = "최대 10,000원까지 입력 가능합니다."
+        if (fee > 100000) {
+            binding.fragmentActivityFeeStudyEt.error = "최대 100,000원까지 입력 가능합니다."
+            binding.fragmentActivityFeeStudyPreviewBt.isEnabled = false
+            return
+        }
+        if (fee < 1000) {
+            binding.fragmentActivityFeeStudyEt.error = "최소 1,000원부터 입력 가능합니다."
             binding.fragmentActivityFeeStudyPreviewBt.isEnabled = false
             return
         }
@@ -179,7 +184,12 @@ class ActivityFeeStudyFragment : Fragment() {
 
 
     private fun saveStudyData(fee: Int) {
-        // ViewModel에 필요한 데이터를 저장합니다
+        val hasFee = when {
+            binding.fragmentActivityFeeStudyChipTrue.isChecked -> true
+            binding.fragmentActivityFeeStudyChipFalse.isChecked -> false
+            else -> null // 사용자가 아무 칩도 선택하지 않은 경우
+        }
+
         viewModel.setStudyData(
             title = viewModel.studyRequest.value?.title.orEmpty(),
             goal = viewModel.studyRequest.value?.goal.orEmpty(),
@@ -191,9 +201,11 @@ class ActivityFeeStudyFragment : Fragment() {
             gender = viewModel.studyRequest.value?.gender ?: Gender.UNKNOWN,
             minAge = viewModel.studyRequest.value?.minAge ?: 0,
             maxAge = viewModel.studyRequest.value?.maxAge ?: 0,
-            fee = fee
+            fee = fee,
+            hasFee = hasFee
         )
     }
+
 
     private fun goToNextFragment() {
         val transaction = parentFragmentManager.beginTransaction()

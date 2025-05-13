@@ -57,6 +57,25 @@ class MyStudyGalleryFragment : Fragment() {
                 showNoImagesText()
             }
         }
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            textView.setOnClickListener {
+                val selectedPage = startPage + index
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    nextPage = currentPage + 1
+                    fetchGalleryImages()
+                }
+            }
+        }
+
 
         // 페이지 버튼 설정
         binding.previousPage.setOnClickListener {
@@ -99,10 +118,10 @@ class MyStudyGalleryFragment : Fragment() {
                             }
 
                             showGallery()
-                            checkNextPageAvailable() // ✅ 추가
+                            checkNextPageAvailable()
                         } else {
                             showNoImagesText()
-                            updatePageUI(false) // ✅ 변경
+                            updatePageUI(false)
                         }
                     } ?: run {
                         Log.e("MyStudyGalleryFragment", "GalleryResponse is null")
@@ -153,7 +172,6 @@ class MyStudyGalleryFragment : Fragment() {
         binding.noImagesText.visibility = View.GONE
         binding.imageNoneIv.visibility = View.GONE
         binding.pageNumberLayout.visibility = View.VISIBLE
-        Log.d("MyStudyGalleryFragment", "Images loaded, hiding no images text")
     }
 
     private fun showNoImagesText() {
@@ -161,7 +179,6 @@ class MyStudyGalleryFragment : Fragment() {
         binding.noImagesText.visibility = View.VISIBLE
         binding.imageNoneIv.visibility = View.VISIBLE
         binding.pageNumberLayout.visibility = View.GONE
-        Log.d("MyStudyGalleryFragment", "No images found, showing no images text")
     }
 
     private fun updatePageUI(hasNext: Boolean) {

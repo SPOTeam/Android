@@ -55,7 +55,7 @@
         android:textColor="@color/black"
         android:textSize="17dp"
         android:fontFamily="@font/suit_bold"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_member_study_pb"/>
@@ -80,7 +80,7 @@
             android:fontFamily="@font/suit_semi_bold"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:text="참여인원"
+            android:text="참여인원 수"
             android:textColor="@color/black"
             android:textSize="15dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00명"
-            android:fontFamily="@font/suit_semi_bold"
+            android:fontFamily="@font/suit_medium"
             android:textColor="@color/b500"
             android:textSize="16dp"
             android:layout_marginEnd="20dp"
@@ -107,8 +107,8 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:orientation="horizontal"
-            android:layout_marginStart="51dp"
-            android:layout_marginEnd="51dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragment_member_study_num_tv" />
@@ -121,7 +121,7 @@
         android:layout_height="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintTop_toBottomOf="@id/fragment_member_study_num_frameLayout">
 
         <TextView
@@ -154,7 +154,7 @@
         android:id="@+id/fragment_member_study_age_fl"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_member_study_gender_frameLayout">
@@ -167,7 +167,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:text="연령대"
-            android:fontFamily="@font/suit_semi_bold"
+            android:fontFamily="@font/suit_medium"
             android:textColor="@color/black"
             android:textSize="15dp" />
 
@@ -196,7 +196,7 @@
             android:layout_marginEnd="60dp"
             android:layout_marginTop="20dp"
             android:text="18"
-            android:textFontWeight="700"
+            android:fontFamily="@font/suit_medium"
             android:textColor="@color/b500"
             android:textSize="13dp" />
 
@@ -209,7 +209,7 @@
             android:layout_marginTop="20dp"
             android:text="-"
             android:textColor="@color/b500"
-            android:textFontWeight="700"
+            android:fontFamily="@font/suit_medium"
             android:textSize="13dp" />
 
         <TextView
@@ -221,7 +221,7 @@
             android:layout_marginTop="20dp"
             android:text="60"
             android:textColor="@color/b500"
-            android:textFontWeight="700"
+            android:fontFamily="@font/suit_medium"
             android:textSize="13dp" />
 
         <TextView
@@ -233,7 +233,7 @@
             android:layout_marginTop="20dp"
             android:text="세"
             android:textColor="@color/b500"
-            android:textFontWeight="700"
+            android:fontFamily="@font/suit_medium"
             android:textSize="13dp" />
 
     </FrameLayout>
@@ -252,6 +252,8 @@
         android:fontFamily="@font/suit_bold"
         android:textColor="@drawable/button_textcolor"
         android:textSize="17dp"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

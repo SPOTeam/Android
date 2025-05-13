@@ -18,6 +18,7 @@ class FixedRoundedSpinnerAdapter(
         val binding = SpinnerDropdownItemBinding.inflate(LayoutInflater.from(context), parent, false)
 
         binding.spinnerText.text = items[position]
+        binding.spinnerText.textSize = 13f
 
             val background = when (position) {
             0 -> R.drawable.spinner_item_top
@@ -28,4 +29,5 @@ class FixedRoundedSpinnerAdapter(
         binding.itemContainer.setBackgroundResource(background)
         return binding.root
     }
+
 }

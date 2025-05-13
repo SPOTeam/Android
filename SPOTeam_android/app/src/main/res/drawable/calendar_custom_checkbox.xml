@@ -2,9 +2,10 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Unchecked 상태에서는 아무 UI도 표시되지 않음 -->
     <item android:state_checked="false">
-        <shape>
-            <solid android:color="@android:color/transparent" />
-        </shape>
+        <layer-list>
+            <item
+                android:drawable="@drawable/unchecked" />
+        </layer-list>
     </item>
 
     <!-- Checked 상태에서 체크 이미지 표시 -->

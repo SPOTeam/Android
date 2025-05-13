@@ -115,32 +115,43 @@ class MyStudyRegisterPreviewFragment : Fragment() {
         val currentEmail = sharedPreferences.getString("currentEmail", null)
         val kakaoNickname = sharedPreferences.getString("${currentEmail}_nickname", "Unknown")
 
-        binding.fragmentDetailStudyUsernameTv.text = kakaoNickname
+        binding.fragmentDetailStudyUsernameTv.text = "${kakaoNickname}님"
         // 스터디 제목 설정
         binding.fragmentMyStudyRegisterPreviewTitleTv.text = viewModel.studyRequest.value?.title
 
         // 스터디 목표 설정
         binding.fragmentMyStudyRegisterPreviewGoalTv.text = viewModel.studyRequest.value?.goal
 
-        // 스터디 프로필 이미지 설정
-        val profileImageUriString = viewModel.profileImageUri.value
-        profileImageUriString?.let { uri ->
-            Glide.with(this)
-                .load(Uri.parse(uri))
-                .into(binding.fragmentMyStudyRegisterPreviewUserIv)
+        val email = sharedPreferences.getString("currentEmail", null)
+        val loginPlatform = sharedPreferences.getString("loginPlatform", null)
+
+        val profileImageUrl = when (loginPlatform) {
+            "kakao" -> sharedPreferences.getString("${email}_kakaoProfileImageUrl", null)
+            "naver" -> sharedPreferences.getString("${email}_naverProfileImageUrl", null)
+            else -> viewModel.profileImageUri.value
         }
+
+        Glide.with(this)
+            .load(profileImageUrl)
+            .error(R.drawable.fragment_calendar_spot_logo)
+            .fallback(R.drawable.fragment_calendar_spot_logo)
+            .into(binding.fragmentMyStudyRegisterPreviewUserIv)
+
 
         // 온라인/오프라인 설정
         binding.fragmentMyStudyRegisterPreviewOnlineTv.text = if (viewModel.studyRequest.value?.isOnline == true) "온라인" else "오프라인"
 
         // 유료/무료 설정
-        binding.fragmentMyStudyRegisterPreviewFeeTv.text = if (viewModel.studyRequest.value?.hasFee == true) "${viewModel.studyRequest.value?.fee}원" else "무료"
+        binding.fragmentMyStudyRegisterPreviewFeeTv.text = if (viewModel.studyRequest.value?.hasFee == true) "유료" else "무료"
 
         // 나이대 설정
         binding.fragmentMyStudyRegisterPreviewAgeTv.text = "${viewModel.studyRequest.value?.minAge}-${viewModel.studyRequest.value?.maxAge}세"
 
         // 스터디 멤버 수 설정
-        binding.fragmentDetailStudyMemberMaxTv.text = "1/${viewModel.studyRequest.value?.maxPeople}"
+        binding.fragmentDetailStudyMemberMaxTv.text = "${viewModel.studyRequest.value?.maxPeople}"
+
+        binding.fragmentDetailStudyBookmarkTv.text = "0"
+
 
         // 스터디 테마 설정 (chip으로 나열)
         val themes = viewModel.studyRequest.value?.themes?.take(3)?.joinToString("/") ?:"테마 없음" // 예: "취업/프로젝트"
@@ -168,7 +179,7 @@ class MyStudyRegisterPreviewFragment : Fragment() {
                                 viewModel.setProfileImageUri(imageUrl)
                                 Log.d("MyStudy", "imageUrl: $imageUrl")
                             }
-                            viewModel.submitStudyData(memberId)  // memberId를 사용하여 데이터 전송
+                            viewModel.submitStudyData(memberId)
 
                             showCompletionDialog()
                         } else {
@@ -194,25 +205,14 @@ class MyStudyRegisterPreviewFragment : Fragment() {
             val bitmap = BitmapFactory.decodeStream(inputStream)
             inputStream.close()
 
-            // MIME 타입 추출
-            val mimeType = requireContext().contentResolver.getType(uri) ?: "image/jpeg"
-            val extension = when (mimeType) {
-                "image/png" -> ".png"
-                "image/webp" -> ".webp"
-                else -> ".jpg" // 기본 jpeg
-            }
-
-            val format = when (mimeType) {
-                "image/png" -> Bitmap.CompressFormat.PNG
-                "image/webp" -> Bitmap.CompressFormat.WEBP
-                else -> Bitmap.CompressFormat.JPEG
-            }
-
-            val tempFile = File.createTempFile("temp_image", extension, requireContext().cacheDir)
+            // 강제로 JPEG으로 저장
+            val tempFile = File.createTempFile("temp_image", ".jpg", requireContext().cacheDir)
             val outputStream = FileOutputStream(tempFile)
-            bitmap.compress(format, 100, outputStream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             outputStream.flush()
             outputStream.close()
+
+            Log.d("Upload", "Saved file at: ${tempFile.absolutePath}")
             tempFile
         } catch (e: Exception) {
             e.printStackTrace()
@@ -220,14 +220,12 @@ class MyStudyRegisterPreviewFragment : Fragment() {
         }
     }
 
-
-
     private fun prepareImagePart(uri: Uri): MultipartBody.Part? {
         val file = saveUriAsFile(uri) ?: return null
-        val mimeType = requireContext().contentResolver.getType(uri) ?: "image/jpeg"
-        val requestFile = file.asRequestBody(mimeType.toMediaTypeOrNull())
+        val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData("images", file.name, requestFile)
     }
+
 
 
 
