@@ -15,7 +15,8 @@ import com.example.spoteam_android.databinding.ItemDetailStudyHomeMemberBinding
 
 class DetailStudyHomeProfileAdapter(
     private var profiles: MutableList<ProfileItem>,
-    private val onItemClick: ((ProfileItem) -> Unit)? = null // 다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달용
+    private val onItemClick: ((ProfileItem) -> Unit)? = null, // 다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달용
+    private val isTodo: Boolean = false // 투두 프래그먼트 여부 플래그
 ) :
     RecyclerView.Adapter<DetailStudyHomeProfileAdapter.ProfileViewHolder>() {
 
@@ -33,7 +34,7 @@ class DetailStudyHomeProfileAdapter(
     override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
         val profile = profiles[position]
         val isSelected = position == selectedPosition
-        holder.bind(profile, position == 0, isSelected)
+        holder.bind(profile, position == 0, isSelected, isTodo)
     }
 
     override fun getItemCount(): Int = profiles.size
@@ -41,7 +42,7 @@ class DetailStudyHomeProfileAdapter(
     inner class ProfileViewHolder(private val binding: ItemDetailStudyHomeMemberBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(profile: ProfileItem, isHost: Boolean, isSelected: Boolean) {
+        fun bind(profile: ProfileItem, isHost: Boolean, isSelected: Boolean, isTodo: Boolean) {
             // Glide를 사용하여 프로필 이미지 로드
             Glide.with(binding.root.context)
                 .load(profile.profileImage)
@@ -62,39 +63,51 @@ class DetailStudyHomeProfileAdapter(
             } else {
                 binding.fragmentConsiderAttendanceMemberHostIv.visibility = View.GONE
             }
-
-            //다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달용
-            if (isSelected) {
-                binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
-                    ColorStateList.valueOf(ContextCompat.getColor(binding.root.context, R.color.b400))
-                binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 6f
-                binding.fragmentDetailStudyHomeHostuserIv.alpha = 1f
-                binding.profileNickname.alpha = 1f
-                if (isHost){
-                    binding.fragmentConsiderAttendanceMemberHostIv.alpha = 1f
+            // 투두리스트 FRAGMENT 일 때만, 프로필에 투명도, Clickable 적용
+            if (isTodo) {
+                //다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달용
+                if (isSelected) {
+                    binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
+                        ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                binding.root.context,
+                                R.color.b400
+                            )
+                        )
+                    binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 6f
+                    binding.fragmentDetailStudyHomeHostuserIv.alpha = 1f
+                    binding.profileNickname.alpha = 1f
+                    if (isHost) {
+                        binding.fragmentConsiderAttendanceMemberHostIv.alpha = 1f
+                    }
+                } else {
+                    binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
+                        ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                binding.root.context,
+                                android.R.color.transparent
+                            )
+                        )
+                    binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 0f
+                    binding.fragmentDetailStudyHomeHostuserIv.alpha = 0.5f
+                    binding.fragmentConsiderAttendanceMemberHostIv.alpha = 0.5f
+                    binding.profileNickname.alpha = 0.5f
                 }
-            } else {
-                binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
-                    ColorStateList.valueOf(ContextCompat.getColor(binding.root.context, android.R.color.transparent))
-                binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 0f
-                binding.fragmentDetailStudyHomeHostuserIv.alpha = 0.5f
-                binding.fragmentConsiderAttendanceMemberHostIv.alpha = 0.5f
-                binding.profileNickname.alpha = 0.5f
-            }
 
-            // 다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달 후 테두리 표시
-            binding.root.setOnClickListener {
-                // 기존 선택된 위치와 현재 선택된 위치가 다를 경우 업데이트
-                if (selectedPosition != bindingAdapterPosition) {
-                    val previousPosition = selectedPosition
-                    selectedPosition = bindingAdapterPosition
+                // 다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달 후 테두리 표시
+                binding.root.setOnClickListener {
+                    // 기존 선택된 위치와 현재 선택된 위치가 다를 경우 업데이트
+                    if (selectedPosition != bindingAdapterPosition) {
+                        val previousPosition = selectedPosition
+                        selectedPosition = bindingAdapterPosition
 
-                    // 이전 선택된 항목과 현재 선택된 항목 UI 갱신
-                    previousPosition?.let { notifyItemChanged(it) }
-                    notifyItemChanged(bindingAdapterPosition)
+                        // 이전 선택된 항목과 현재 선택된 항목 UI 갱신
+                        previousPosition?.let { notifyItemChanged(it) }
+                        notifyItemChanged(bindingAdapterPosition)
+                    }
+                    // 콜백 실행
+                    onItemClick?.invoke(profile)
                 }
-                // 콜백 실행
-                onItemClick?.invoke(profile)
             }
         }
     }
