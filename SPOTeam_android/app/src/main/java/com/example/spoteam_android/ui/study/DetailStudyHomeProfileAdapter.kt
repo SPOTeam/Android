@@ -68,10 +68,18 @@ class DetailStudyHomeProfileAdapter(
                 binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
                     ColorStateList.valueOf(ContextCompat.getColor(binding.root.context, R.color.b400))
                 binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 6f
+                binding.fragmentDetailStudyHomeHostuserIv.alpha = 1f
+                binding.profileNickname.alpha = 1f
+                if (isHost){
+                    binding.fragmentConsiderAttendanceMemberHostIv.alpha = 1f
+                }
             } else {
                 binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
                     ColorStateList.valueOf(ContextCompat.getColor(binding.root.context, android.R.color.transparent))
                 binding.fragmentDetailStudyHomeHostuserIv.strokeWidth = 0f
+                binding.fragmentDetailStudyHomeHostuserIv.alpha = 0.5f
+                binding.fragmentConsiderAttendanceMemberHostIv.alpha = 0.5f
+                binding.profileNickname.alpha = 0.5f
             }
 
             // 다른 스터디원 투두리스트 조회할 때, 클릭 이벤트 전달 후 테두리 표시

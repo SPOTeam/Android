@@ -221,8 +221,9 @@
     </style>
 
     <style name="CustomDateTextAppearance" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:fontFamily">@font/suit_semi_bold</item>
+        <item name="android:fontFamily">@font/suit_variable_font</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:fontWeight">500</item>
         <item name="android:textSize">13dp</item> <!-- 텍스트 크기 -->
     </style>
 
@@ -260,14 +261,16 @@
     </style>
 
     <style name="CalendarTitleTextStyle" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/suit_bold</item>
+        <item name="android:fontFamily">@font/suit_variable_font</item>
+        <item name="android:fontWeight">700</item>
         <item name="android:textSize">18dp</item>
         <item name="android:textColor">@color/g500</item>
     </style>
 
     <style name="CalendarWeekDayTextStyle" parent="TextAppearance.AppCompat">
         <item name="android:textSize">15dp</item>
-        <item name="android:fontFamily">@font/suit_semi_bold</item>
+        <item name="android:fontFamily">@font/suit_variable_font</item>
+        <item name="android:fontWeight">500</item>
         <item name="android:textColor">@color/black</item>
     </style>
     <style name="Widget.My.Spinner" parent="Widget.AppCompat.Spinner">
