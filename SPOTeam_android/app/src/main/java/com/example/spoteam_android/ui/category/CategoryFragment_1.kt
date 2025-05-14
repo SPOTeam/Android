@@ -28,8 +28,6 @@ import com.example.spoteam_android.ui.alert.AlertFragment
 import com.example.spoteam_android.ui.community.CategoryStudyResponse
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.interestarea.ApiResponse
-import com.example.spoteam_android.ui.interestarea.GetInterestCategoryApiService
-import com.example.spoteam_android.ui.interestarea.InterestVPAdapter
 import com.example.spoteam_android.ui.interestarea.MyInterestStudySpecificApiService
 import com.example.spoteam_android.ui.study.DetailStudyFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -44,7 +42,7 @@ class CategoryFragment_1 : Fragment() {
     private lateinit var tabLayout: TabLayout
     private lateinit var studyApiService: StudyApiService
     private val studyViewModel: StudyViewModel by activityViewModels()
-    private lateinit var interestBoardAdapter: InterestVPAdapter
+    private lateinit var interestBoardAdapter: CategoryVPAdapter
     private var gender: String? = null
     private var minAge: Int = 18
     private var maxAge: Int = 60
@@ -76,11 +74,9 @@ class CategoryFragment_1 : Fragment() {
         setupTabs()
         setupBottomSheet()
         setupFilterIcon()
-        setupPageNavigationButtons()
         setupNavigationClickListeners()
 
         initialFetch()
-        updatePageUI()
 
         return binding.root
     }
@@ -164,11 +160,27 @@ class CategoryFragment_1 : Fragment() {
 
 
     private fun setupRecyclerView() {
-        interestBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { item, btn ->
-            toggleLikeStatus(item, btn)
-        }, studyViewModel)
+        interestBoardAdapter = CategoryVPAdapter(
+            dataList = ArrayList(),
+            onLikeClick = { item, btn -> toggleLikeStatus(item, btn) },
+            studyViewModel = studyViewModel,
+            onPageSelected = { selectedPage ->
+                currentPage = selectedPage
+                requestPageUpdate()
+            },
+            onNextPrevClicked = { isNext ->
+                currentPage = when {
+                    isNext && currentPage < totalPages - 1 -> currentPage + 1
+                    !isNext && currentPage > 0 -> currentPage - 1
+                    else -> currentPage
+                }
+                requestPageUpdate()
+            },
+            getCurrentPage = { currentPage },
+            getTotalPages = { totalPages }
+        )
 
-        interestBoardAdapter.setItemClickListener(object : InterestVPAdapter.OnItemClickListeners {
+        interestBoardAdapter.setItemClickListener(object : CategoryVPAdapter.OnItemClickListeners {
             override fun onItemClick(data: BoardItem) {
                 studyViewModel.setStudyData(data.studyId, data.imageUrl, data.introduction)
                 replaceFragment(DetailStudyFragment())
@@ -180,6 +192,7 @@ class CategoryFragment_1 : Fragment() {
             adapter = interestBoardAdapter
         }
     }
+
 
     private fun updateRecyclerView(boardItems: List<BoardItem>) {
         interestBoardAdapter.updateList(boardItems)
@@ -236,51 +249,11 @@ class CategoryFragment_1 : Fragment() {
         }
     }
 
-    private fun setupPageNavigationButtons() {
-        binding.previousPage.setOnClickListener {
-            currentPage = if (currentPage > 0) currentPage - 1 else totalPages - 1
-                requestPageUpdate()
-        }
-
-        binding.nextPage.setOnClickListener {
-            currentPage = if (currentPage < totalPages - 1) currentPage + 1 else 0
-                requestPageUpdate()
-        }
-    }
-
     private fun requestPageUpdate() {
         if (selectedStudyCategory == "전체") {
             fetchMyInterestAll(selectedItem, gender, minAge, maxAge,hasFee,minFee,maxFee,currentPage)
         } else {
             fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, hasFee, minFee, maxFee, currentPage)
-        }
-    }
-
-    private fun updatePageNumberUI() {
-
-        startPage = calculateStartPage()
-//        Log.d("PageDebug", "📄 페이지 번호 UI 업데이트 - currentPage: $currentPage, startPage: $startPage")
-
-        val pageButtons = listOf(
-            binding.page1,
-            binding.page2,
-            binding.page3,
-            binding.page4,
-            binding.page5
-        )
-
-        pageButtons.forEachIndexed { index, textView ->
-            textView.setOnClickListener {
-                val selectedPage = startPage + index
-                if (currentPage != selectedPage) {
-                    currentPage = selectedPage
-                    if (selectedStudyCategory == "전체") {
-                        fetchMyInterestAll(selectedItem, gender, minAge, maxAge,hasFee,minFee,maxFee,currentPage)
-                    } else {
-                        fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, hasFee, minFee, maxFee, currentPage)
-                    }
-                }
-            }
         }
     }
 
@@ -290,63 +263,6 @@ class CategoryFragment_1 : Fragment() {
             currentPage <= 2 -> 0
             currentPage >= totalPages - 3 -> totalPages - 5
             else -> currentPage - 2
-        }
-    }
-
-    private fun updatePageUI() {
-        val pageButtons = listOf(
-            binding.page1, binding.page2, binding.page3, binding.page4, binding.page5
-        )
-
-        startPage = when {
-            totalPages <= 5 -> 0
-            currentPage >= totalPages - 3 -> totalPages - 5
-            currentPage >= 2 -> currentPage - 2
-            else -> 0
-        }
-
-        pageButtons.forEachIndexed { index, textView ->
-            val pageNum = startPage + index
-            if (pageNum < totalPages) {
-                textView.text = (pageNum + 1).toString()
-                textView.setTextColor(
-                    if (pageNum == currentPage)
-                        resources.getColor(R.color.b500, null)
-                    else
-                        resources.getColor(R.color.g400, null)
-                )
-                textView.isEnabled = true
-                textView.alpha = 1.0f
-                textView.visibility = View.VISIBLE
-            } else {
-                // 페이지 수가 5개 미만일 경우는 완전히 숨김 처리
-                textView.visibility = View.GONE
-            }
-        }
-
-        // 페이지가 하나뿐이면 좌우 버튼 모두 비활성화
-        if (totalPages <= 1) {
-            binding.previousPage.isEnabled = false
-            binding.previousPage.setColorFilter(
-                ContextCompat.getColor(requireContext(), R.color.g300),
-                PorterDuff.Mode.SRC_IN
-            )
-            binding.nextPage.isEnabled = false
-            binding.nextPage.setColorFilter(
-                ContextCompat.getColor(requireContext(), R.color.g300),
-                PorterDuff.Mode.SRC_IN
-            )
-        } else {
-            binding.previousPage.isEnabled = true
-            binding.previousPage.setColorFilter(
-                ContextCompat.getColor(requireContext(), R.color.b500),
-                PorterDuff.Mode.SRC_IN
-            )
-            binding.nextPage.isEnabled = true
-            binding.nextPage.setColorFilter(
-                ContextCompat.getColor(requireContext(), R.color.b500),
-                PorterDuff.Mode.SRC_IN
-            )
         }
     }
 
@@ -399,17 +315,14 @@ class CategoryFragment_1 : Fragment() {
                                 isHost = false
                             )
                             boardItems.add(boardItem)
-                            binding.pageNumberLayout.visibility = View.VISIBLE
                             startPage = calculateStartPage()
-                            updatePageNumberUI()
-                            updatePageUI()
+
                         }
                         binding.communityCategoryContentRv.visibility = View.VISIBLE
                         val totalElements = apiResponse.result.totalElements
                         binding.contentCountTv.text = String.format("%02d", totalElements)
                         updateRecyclerView(boardItems)
                     } else {
-                        binding.pageNumberLayout.visibility = View.GONE
                         binding.contentCountTv.text = "00"
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                         binding.communityCategoryContentRv.visibility = View.GONE
@@ -485,14 +398,11 @@ class CategoryFragment_1 : Fragment() {
                         binding.contentCountTv.text = String.format("%02d", totalElements)
                         updateRecyclerView(boardItems)
 
-                        binding.pageNumberLayout.visibility = View.VISIBLE
                         startPage = calculateStartPage()
-                        updatePageNumberUI()
-                        updatePageUI()
+
                     } else {
-                        binding.pageNumberLayout.visibility = View.GONE
                         binding.contentCountTv.text = "00"
-                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                         binding.communityCategoryContentRv.visibility = View.GONE
                     }
                 }
@@ -504,40 +414,8 @@ class CategoryFragment_1 : Fragment() {
         })
     }
 
-    private fun showEmptyState() {
-        binding.contentCountTv.text = "00"
-        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
-        binding.communityCategoryContentRv.visibility = View.GONE
-    }
-
     private fun showErrorToast() {
         Toast.makeText(requireContext(), "API 호출 실패", Toast.LENGTH_SHORT).show()
-    }
-
-
-    private fun fetchDataGetInterestCategory(callback: (List<String>?) -> Unit) {
-        val service = RetrofitInstance.retrofit.create(GetInterestCategoryApiService::class.java)
-        service.GetMyInterestStudy(
-        ).enqueue(object : Callback<ApiResponse> {
-            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    apiResponse?.let {
-                        if (it.isSuccess) {
-                            callback(it.result.themes)
-                        } else {
-                            callback(null)
-                        }
-                    }
-                } else {
-                    callback(null)
-                }
-            }
-
-            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                callback(null)
-            }
-        })
     }
 
     private fun toggleLikeStatus(studyItem: BoardItem, likeButton: ImageView) {
@@ -560,7 +438,7 @@ class CategoryFragment_1 : Fragment() {
                                 studyItem.heartCount = if (studyItem.liked) studyItem.heartCount + 1 else studyItem.heartCount - 1
 
                                 // 변경된 항목을 어댑터에 알림
-                                val adapter = binding.communityCategoryContentRv.adapter as InterestVPAdapter
+                                val adapter = binding.communityCategoryContentRv.adapter as CategoryVPAdapter
                                 val position = adapter.dataList.indexOf(studyItem)
                                 if (position != -1) {
                                     adapter.notifyItemChanged(position)
@@ -580,22 +458,11 @@ class CategoryFragment_1 : Fragment() {
         }
     }
 
-    private fun updateLikeButtonUI(likeButton: ImageView, isLiked: Boolean) {
-        val newIcon = if (isLiked) R.drawable.ic_heart_filled else R.drawable.study_like
-        likeButton.setImageResource(newIcon)
-    }
-
     private fun replaceFragment(fragment: Fragment) {
         (requireActivity() as MainActivity).supportFragmentManager.beginTransaction()
             .replace(R.id.main_frm, fragment)
             .addToBackStack(null)
             .commitAllowingStateLoss()
-    }
-
-    private fun getMemberId(context: Context): Int {
-        val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val currentEmail = sharedPreferences.getString("currentEmail", null)
-        return if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
     }
 
     private fun setupNavigationClickListeners() {

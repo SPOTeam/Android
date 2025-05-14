@@ -175,7 +175,12 @@ class CategoryInterestFilterFragment : Fragment() {
         ageRangeSlider.valueFrom = 18f
         ageRangeSlider.valueTo = 60f
         ageRangeSlider.stepSize = 1f
-        ageRangeSlider.values = listOf(18f, 60f)
+
+        // 🔽 valueFrom/to 설정 후 값 적용해야 함!
+        val minAge = viewModel.minAge.coerceIn(18, 60)
+        val maxAge = viewModel.maxAge.coerceIn(18, 60)
+
+        ageRangeSlider.values = listOf(minAge.toFloat(), maxAge.toFloat())
 
         val customThumb = ContextCompat.getDrawable(requireContext(),R.drawable.custom_thumb)
         if (customThumb != null) {
@@ -184,12 +189,12 @@ class CategoryInterestFilterFragment : Fragment() {
 
         ageRangeSlider.addOnChangeListener { slider, _, _ ->
             val values = slider.values
-            val minAge = values[0].toInt()
-            val maxAge = values[1].toInt()
-            viewModel.minAge = minAge
-            viewModel.maxAge = maxAge
-            minValueText.text = minAge.toString()
-            maxValueText.text = maxAge.toString()
+            val updatedMinAge = values[0].toInt()
+            val updatedMaxAge = values[1].toInt()
+            viewModel.minAge = updatedMinAge
+            viewModel.maxAge = updatedMaxAge
+            minValueText.text = updatedMinAge.toString()
+            maxValueText.text = updatedMaxAge.toString()
         }
     }
 
