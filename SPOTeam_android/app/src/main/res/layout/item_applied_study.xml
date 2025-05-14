@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="351dp"
     android:layout_height="127dp"
@@ -63,13 +62,13 @@
 
         <TextView
             android:id="@+id/study_refuse_iv"
-            android:layout_width="129dp"
+            android:layout_width="130dp"
             android:layout_height="27dp"
             android:text="불참"
             android:gravity="center"
             android:textColor="@drawable/button_red_text_color"
             android:fontFamily="@font/suit_variable_font"
-            android:textFontWeight="400"
+            android:textFontWeight="500"
             android:textSize="13dp"
             android:background="@drawable/button_wrong_backgground"
             android:layout_marginTop="14dp"
@@ -78,13 +77,13 @@
 
         <TextView
             android:id="@+id/study_ok_iv"
-            android:layout_width="129dp"
+            android:layout_width="130dp"
             android:layout_height="27dp"
             android:text="참여"
             android:gravity="center"
             android:textColor="@drawable/button_textcolor"
             android:fontFamily="@font/suit_variable_font"
-            android:textFontWeight="400"
+            android:textFontWeight="500"
             android:textSize="13dp"
             android:layout_marginStart="4dp"
             android:background="@drawable/button_background"
@@ -96,7 +95,7 @@
     <View
     android:id="@+id/divider"
     android:layout_width="0dp"
-    android:layout_height="1dp"
+    android:layout_height="0.5dp"
     android:background="@color/g300"
     android:layout_marginHorizontal="8dp"
     app:layout_constraintBottom_toTopOf="@id/space"

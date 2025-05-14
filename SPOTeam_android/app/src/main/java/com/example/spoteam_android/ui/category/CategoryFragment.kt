@@ -29,7 +29,7 @@ class CategoryFragment : Fragment() {
     ): View {
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
 
-        val categoryAdapter = CategoryVPAdapter(this)
+//        val categoryAdapter = CategoryVPAdapter(this)
 //        binding.categoryContentVp.adapter = categoryAdapter
 
 //        TabLayoutMediator(binding.categoryTl, binding.categoryContentVp) { tab, position ->

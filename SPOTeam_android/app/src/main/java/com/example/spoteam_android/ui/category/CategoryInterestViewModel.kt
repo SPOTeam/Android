@@ -22,6 +22,8 @@ class CategoryInterestViewModel : ViewModel() {
 
 
     fun reset() {
+        theme = "전체"
+        selectedItem = "ALL"
         source = false
         gender = null
         minAge = 18

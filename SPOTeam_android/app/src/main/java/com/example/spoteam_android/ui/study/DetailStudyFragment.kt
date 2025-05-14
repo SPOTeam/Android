@@ -18,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.*
 import com.example.spoteam_android.databinding.FragmentDetailStudyBinding
+import com.example.spoteam_android.ui.category.CategoryFragment_1
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import retrofit2.Call
@@ -217,8 +218,7 @@ class DetailStudyFragment : Fragment() {
         val dialog = ApplyStudyDialog(requireContext(), this)
         dialog.start {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, HouseFragment())
-                .addToBackStack(null)
+                .replace(R.id.main_frm, CategoryFragment_1())
                 .commit()
         }
     }

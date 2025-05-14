@@ -2,12 +2,14 @@ package com.example.spoteam_android.ui.study
 
 import StudyViewModel
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -159,6 +161,7 @@ class MyStudyCommunityFragment : Fragment() {
                             val posts = pagesResponse.result.posts
                             if (posts.isNotEmpty()) {
 
+                                Log.d("MyStudyFragment", "IsIn")
                                 binding.fileNoneIv.visibility = View.GONE
                                 binding.noneMemberAlertTv.visibility = View.GONE
                                 binding.communityCategoryContentRv.visibility = View.VISIBLE
@@ -263,7 +266,7 @@ class MyStudyCommunityFragment : Fragment() {
         val dataRVAdapter = MyStudyPostRVAdapter(itemList)
         //리스너 객체 생성 및 전달
 
-        Log.d("MYSTUDYCOMMUNITY", "${itemList}")
+//        Log.d("MYSTUDYCOMMUNITY", "${itemList}")
 
         binding.communityCategoryContentRv.adapter = dataRVAdapter
 
@@ -300,6 +303,12 @@ class MyStudyCommunityFragment : Fragment() {
             val pageNum = startPage + index
             if (pageNum < totalPages) {
                 textView.text = (pageNum + 1).toString()
+                textView.setTextColor(
+                    if (pageNum == currentPage)
+                        resources.getColor(R.color.blue, null)
+                    else
+                        resources.getColor(R.color.black, null)
+                )
                 textView.setBackgroundResource(
                     if (pageNum == currentPage) R.drawable.btn_page_bg else 0
                 )
@@ -307,15 +316,37 @@ class MyStudyCommunityFragment : Fragment() {
                 textView.alpha = 1.0f
                 textView.visibility = View.VISIBLE
             } else {
-                textView.text = (pageNum + 1).toString()
+                textView.text = ""
                 textView.setBackgroundResource(0)
                 textView.isEnabled = false
                 textView.alpha = 0.3f
-                textView.visibility = View.VISIBLE
+                textView.visibility = View.INVISIBLE
             }
         }
 
-        binding.previousPage.isEnabled = currentPage > 0
-        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        // 페이지가 하나뿐이면 좌우 버튼 모두 비활성화
+        if (totalPages <= 1) {
+            binding.previousPage.isEnabled = false
+            binding.previousPage.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.g300),
+                PorterDuff.Mode.SRC_IN
+            )
+            binding.nextPage.isEnabled = false
+            binding.nextPage.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.g300),
+                PorterDuff.Mode.SRC_IN
+            )
+        } else {
+            binding.previousPage.isEnabled = true
+            binding.previousPage.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.b500),
+                PorterDuff.Mode.SRC_IN
+            )
+            binding.nextPage.isEnabled = true
+            binding.nextPage.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.b500),
+                PorterDuff.Mode.SRC_IN
+            )
+        }
     }
 }

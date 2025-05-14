@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentAttendanceDefaultBinding
@@ -39,6 +40,8 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     private var quiz : String = ""
     private var createdAt : String = ""
 
+    private val timerViewModel: TimerViewModel by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,15 +59,15 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
 
         // memberId 가져오기
         currentMemberId = if (email != null) sharedPreferences.getInt("${email}_memberId", -1) else -1
-        Log.d("CurrentMemberId",  currentMemberId.toString())
+//        Log.d("CurrentMemberId",  currentMemberId.toString())
 
         arguments?.let {
             scheduleId = it.getInt("scheduleId")
-            Log.d("CheckAttendanceFragment", "Received scheduleId: $scheduleId")
+//            Log.d("CheckAttendanceFragment", "Received scheduleId: $scheduleId")
         }
 
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
-            Log.d("CheckAttendanceFragment", "Received studyId from ViewModel: $studyId and $scheduleId")
+//            Log.d("CheckAttendanceFragment", "Received studyId from ViewModel: $studyId and $scheduleId")
             if (studyId != null) {
                 this.studyId = studyId
                 fetchStudyMember()
@@ -80,7 +83,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     }
 
     private fun makeHostMakeQuizFragment() {
-        Log.d("makeHostMakeQuizFragment", scheduleId.toString())
+//        Log.d("makeHostMakeQuizFragment", scheduleId.toString())
         val hostMakeQuizFirstFragment = HostMakeQuizFirstFragment().apply {
             arguments = Bundle().apply {
                 putInt("scheduleId", scheduleId) // scheduleId 전달
@@ -112,8 +115,9 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
                     if (response.isSuccessful) {
                         val quizResponse = response.body()
                         if(quizResponse?.isSuccess == "true") {
-                            quiz = quizResponse.result.question
-                            createdAt = quizResponse.result.createdAt
+                            timerViewModel.quiz = quizResponse.result.question
+                            timerViewModel.startTimer(quizResponse.result.createdAt)
+
                             fetchScheduleMember()
                         } else {
                             if(members[0].memberId == currentMemberId) {
@@ -137,7 +141,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
 
     private fun initCrewFinishFragment() {
         childFragmentManager.beginTransaction()
-            .replace(R.id.child_fragment, CrewCorrectQuizFragment())
+            .replace(R.id.child_fragment, CrewTimeOutFragment())
             .commitAllowingStateLoss()
     }
 
@@ -156,9 +160,7 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     private fun initCrewFragment() {
         val crewTakeAttendanceFragment = CrewTakeAttendanceFragment().apply {
             arguments = Bundle().apply {
-                putString("createdAt", createdAt)
                 putInt("scheduleId", scheduleId)
-                putString("question", quiz)
             }
         }
 
@@ -209,10 +211,11 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
 //                                Log.d("checkIng", "initHostAlreadyMakeQuiz")
                                 initHostAlreadyMakeQuiz()
                             } else {
-                                Log.d("checkIng", "initCrewFragment")
+//                                Log.d("checkIng", "initCrewFragment")
                                 val m = scheduleResponse.result.studyMembers.find { it.memberId == currentMemberId }
                                 if(m?.isAttending == false) {
                                     initCrewFragment()
+//                                    Log.d("Timer", "현재 초: ${timerViewModel.timerSeconds.value}")
                                 } else {
                                     initCrewFinishFragment()
                                 }
@@ -234,9 +237,37 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     private fun initMemberRecyclerView(studyMembers: List<MembersDetail>) {
         binding.memberTl.layoutManager = GridLayoutManager(context, 5)
 
-        val dataRVAdapter = HostMakeQuizMemberRVAdapter(studyMembers,currentMemberId)
-        //리스너 객체 생성 및 전달
-
+        val dataRVAdapter = HostMakeQuizMemberRVAdapter(studyMembers, currentMemberId)
         binding.memberTl.adapter = dataRVAdapter
+
+        // 중복 추가 방지
+        if (binding.memberTl.itemDecorationCount == 0) {
+            binding.memberTl.addItemDecoration(GridSpacingItemDecoration(5, dpToPx(10)))
+        }
+    }
+
+    class GridSpacingItemDecoration(
+        private val spanCount: Int,
+        private val spacing: Int
+    ) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: android.graphics.Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            val position = parent.getChildAdapterPosition(view)
+            val column = position % spanCount
+
+            outRect.left = spacing - column * spacing / spanCount
+            outRect.right = (column + 1) * spacing / spanCount
+
+            // 아래 간격도 필요하면 추가
+            outRect.bottom = spacing
+        }
+    }
+    private fun dpToPx(dp: Int): Int {
+        val density = resources.displayMetrics.density
+        return (dp * density).toInt()
     }
 }

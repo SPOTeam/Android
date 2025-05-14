@@ -7,20 +7,20 @@
     app:layout_behavior="@string/bottom_sheet_behavior">
 
     <ImageView
-        android:id="@+id/correct_iv"
-        android:layout_width="25dp"
-        android:layout_height="20dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_check_new"
-        android:layout_marginTop="20dp"
+        android:id="@+id/wrong_iv"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:src="@drawable/ic_new_wrong"
+        android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
+        android:id="@+id/wrong_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="출석 완료"
+        android:text="출석 인정 시간이 지났어요"
         android:paddingVertical="12dp"
         android:fontFamily="@font/suit_bold"
         android:textSize="17dp"
@@ -28,6 +28,7 @@
         android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/correct_iv"/>
+        app:layout_constraintTop_toBottomOf="@id/wrong_iv"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

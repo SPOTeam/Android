@@ -3,14 +3,12 @@ package com.example.spoteam_android.ui.alert
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
 import android.view.Window
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
-import com.example.spoteam_android.ui.study.DetailStudyFragment
+import com.example.spoteam_android.ui.study.StudyFragment
 
 interface AttendStudyCompleteListener {
     fun onAttendComplete()
@@ -35,19 +33,12 @@ class OkDialog(private val context: Context, private val listener : AttendStudyC
 
         val btnMove = dlg.findViewById<TextView>(R.id.move_to_study_tv)
         btnMove.setOnClickListener {
-            val fragment = DetailStudyFragment()
-
-            val bundle = Bundle().apply {
-                putInt("FromOKToDetailStudy", studyId)
-            }
-            fragment.arguments = bundle
             listener.onAttendComplete()
             (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, fragment)
+                .replace(R.id.main_frm, StudyFragment())
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
             dlg.dismiss()
-
         }
 
         val btnClose = dlg.findViewById<ImageView>(R.id.attend_close)

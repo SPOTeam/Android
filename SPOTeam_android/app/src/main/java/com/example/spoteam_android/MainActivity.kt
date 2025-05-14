@@ -32,6 +32,7 @@ import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 //import com.example.spoteam_android.ui.bookMark.BookmarkFragment
 import com.example.spoteam_android.ui.category.CategoryFragment
 import com.example.spoteam_android.ui.category.CategoryFragment_1
+import com.example.spoteam_android.ui.category.CategoryInterestViewModel
 import com.example.spoteam_android.ui.category.CategoryNavViewFragment
 import com.example.spoteam_android.ui.community.CommunityFragment
 import com.example.spoteam_android.ui.community.CommunityHomeFragment
@@ -69,6 +70,7 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
     private lateinit var binding: ActivityMainBinding
     private lateinit var fab: FloatingActionButton
     private val weatherViewModel: WeatherViewModel by viewModels() // Hilt 사용
+    private val categoryViewModel : CategoryInterestViewModel by viewModels()
     private val viewModel: StudyViewModel by viewModels()
 
 
@@ -181,6 +183,7 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
                     val categoryFragment = CategoryFragment_1()
                     categoryFragment.arguments = bundle2
                     bundle2.putString("source", "HouseFragment")
+                    categoryViewModel.reset()
 
 //                    isOnCommunityHome(CategoryFragment())
 //                    addCategoryFragmentOnTop()

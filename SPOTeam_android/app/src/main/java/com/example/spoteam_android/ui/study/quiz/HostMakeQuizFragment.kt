@@ -30,6 +30,7 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentHostMakeQuizBinding
     val studyViewModel: StudyViewModel by activityViewModels()
+    val timerViewModel: TimerViewModel by activityViewModels()
     var studyId : Int = -1
     private var scheduleId : Int = -1
     private lateinit var quizEditText: EditText
@@ -64,8 +65,12 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
             val input1 = binding.makeQuestionEt.text.toString()
             val input2 = binding.makeAnswerEt.text.toString()
 
+            val now = java.time.ZonedDateTime.now(java.time.ZoneId.of("Asia/Seoul"))
+            val formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
+            val createdAt = now.format(formatter)
+
             val requestBody = QuizContentRequest(
-                createdAt = Instant.now().toString(),
+                createdAt = createdAt,
                 question = input1,
                 answer = input2
             )
@@ -75,8 +80,8 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
-    private fun postAttendanceQuiz(requestBody : QuizContentRequest) {
-        Log.d("CreatedAt", requestBody.createdAt)
+    private fun postAttendanceQuiz(requestBody: QuizContentRequest) {
+//        Log.d("CreatedAt", requestBody.createdAt)
         RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
             .makeQuiz(studyId, scheduleId, requestBody)
             .enqueue(object : Callback<QuizContentResponse> {
@@ -87,10 +92,15 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
                     if (response.isSuccessful) {
                         val likeResponse = response.body()
                         if (likeResponse?.isSuccess == "true") {
+                            val result = likeResponse.result
 
-                            val hostFinishMakeQuizFragment =  HostFinishMakeQuizFragment().apply {
+                            // ✅ 여기 추가: TimerViewModel 세팅
+                            timerViewModel.quiz = result.question
+                            timerViewModel.startTimer(result.createdAt)
+
+                            val hostFinishMakeQuizFragment = HostFinishMakeQuizFragment().apply {
                                 arguments = Bundle().apply {
-                                    putString("createdAt", likeResponse.result.createdAt)
+                                    putString("createdAt", result.createdAt)
                                 }
                             }
 
@@ -110,6 +120,7 @@ class HostMakeQuizFragment : BottomSheetDialogFragment() {
                 }
             })
     }
+
     private fun showError(message: String?) {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
     }
