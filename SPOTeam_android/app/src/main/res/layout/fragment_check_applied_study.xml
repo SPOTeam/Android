@@ -7,14 +7,13 @@
 
     <ImageView
         android:id="@+id/community_prev_iv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_arrow"
         android:layout_marginTop="30dp"
         android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/community_title"
@@ -39,8 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
             android:layout_width="40dp"
@@ -54,9 +52,9 @@
             android:layout_height="wrap_content"
             android:text="신청한 스터디가 아직 없어요!"
             android:textSize="18dp"
-            android:fontFamily="@font/suit_semi_bold"
-            android:textFontWeight="800"
-            android:textColor="@color/selector_blue"/>
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="700"
+            android:textColor="@color/b500"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -89,7 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="30dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginHorizontal="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

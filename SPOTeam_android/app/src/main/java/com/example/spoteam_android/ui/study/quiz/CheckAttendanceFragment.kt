@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentAttendanceDefaultBinding
@@ -236,9 +237,37 @@ class CheckAttendanceFragment : BottomSheetDialogFragment() {
     private fun initMemberRecyclerView(studyMembers: List<MembersDetail>) {
         binding.memberTl.layoutManager = GridLayoutManager(context, 5)
 
-        val dataRVAdapter = HostMakeQuizMemberRVAdapter(studyMembers,currentMemberId)
-        //리스너 객체 생성 및 전달
-
+        val dataRVAdapter = HostMakeQuizMemberRVAdapter(studyMembers, currentMemberId)
         binding.memberTl.adapter = dataRVAdapter
+
+        // 중복 추가 방지
+        if (binding.memberTl.itemDecorationCount == 0) {
+            binding.memberTl.addItemDecoration(GridSpacingItemDecoration(5, dpToPx(10)))
+        }
+    }
+
+    class GridSpacingItemDecoration(
+        private val spanCount: Int,
+        private val spacing: Int
+    ) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: android.graphics.Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            val position = parent.getChildAdapterPosition(view)
+            val column = position % spanCount
+
+            outRect.left = spacing - column * spacing / spanCount
+            outRect.right = (column + 1) * spacing / spanCount
+
+            // 아래 간격도 필요하면 추가
+            outRect.bottom = spacing
+        }
+    }
+    private fun dpToPx(dp: Int): Int {
+        val density = resources.displayMetrics.density
+        return (dp * density).toInt()
     }
 }
