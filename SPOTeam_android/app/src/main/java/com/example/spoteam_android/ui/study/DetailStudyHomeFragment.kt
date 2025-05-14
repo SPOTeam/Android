@@ -90,7 +90,7 @@ class DetailStudyHomeFragment : Fragment() {
     private fun setupViews() {
         //프로필 업데이트
         binding.fragmentDetailStudyHomeProfileRv.visibility = View.INVISIBLE
-        profileAdapter = DetailStudyHomeProfileAdapter(ArrayList())
+        profileAdapter = DetailStudyHomeProfileAdapter(ArrayList(),null,false)
         binding.fragmentDetailStudyHomeProfileRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.fragmentDetailStudyHomeProfileRv.adapter = profileAdapter
 

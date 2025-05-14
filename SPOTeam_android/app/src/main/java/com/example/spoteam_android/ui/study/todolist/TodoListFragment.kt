@@ -122,14 +122,17 @@ class TodoListFragment : Fragment() {
         binding.eventrecyclerviewto.layoutManager = LinearLayoutManager(requireContext())
         binding.eventrecyclerviewto.adapter = todoEventAdapter
 
-        profileAdapter = DetailStudyHomeProfileAdapter(ArrayList()) { profileItem ->
-            val memberId = memberIdMap[profileItem]
-
-            if (memberId != null) {
-                selectedMemberId = memberId
-                fetchOtherTodoList(studyId,memberId,selectedDate)
-            }
-        }
+        profileAdapter = DetailStudyHomeProfileAdapter(
+            ArrayList(),
+            { profileItem ->
+                val memberId = memberIdMap[profileItem]
+                if (memberId != null) {
+                    selectedMemberId = memberId
+                    fetchOtherTodoList(studyId, memberId, selectedDate)
+                }
+            },
+            isTodo = true // ← 여기 true로 넘김
+        )
 
         binding.fragmentDetailStudyHomeProfileRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.fragmentDetailStudyHomeProfileRv.adapter = profileAdapter
