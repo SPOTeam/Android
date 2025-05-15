@@ -56,10 +56,10 @@
             android:layout_height="wrap_content"
             android:text="아직 알림이 없어요."
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/suit_semi_bold"
+            android:fontFamily="@font/suit_variable_font"
             android:textSize="18dp"
-            android:textFontWeight="800"
-            android:textColor="@color/selector_blue"/>
+            android:textFontWeight="700"
+            android:textColor="@color/b500"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -67,7 +67,8 @@
             android:text="스팟에서 내 목표를 이뤄봐요."
             android:layout_marginTop="5dp"
             android:textColor="@color/g400"
-            android:fontFamily="@font/suit_semi_bold"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
             android:textSize="16dp" />
 
     </LinearLayout>
