@@ -5,9 +5,7 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,12 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMystudyCommunityBinding
-import com.example.spoteam_android.ui.community.CategoryPagesDetail
-import com.example.spoteam_android.ui.community.CommunityAPIService
-import com.example.spoteam_android.ui.community.PostDetail
-import com.example.spoteam_android.ui.community.StudyContentLikeResponse
-import com.example.spoteam_android.ui.community.StudyContentUnLikeResponse
-import com.example.spoteam_android.ui.community.StudyPostListResponse
+import com.example.spoteam_android.ui.community.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,116 +23,77 @@ import retrofit2.Response
 class MyStudyCommunityFragment : Fragment() {
 
     private lateinit var binding: FragmentMystudyCommunityBinding
-    private var currentStudyId : Int = -1
     private val studyViewModel: StudyViewModel by activityViewModels()
 
     private var itemList = ArrayList<PostDetail>()
     private var currentPage = 0
-    private val size = 5 // 페이지당 항목 수
     private var totalPages = 0
-    private var startPage = 0
+    private var currentStudyId: Int = -1
+    private var themeQuery: String = ""
 
-    private var themeQuery : String = ""
+    private lateinit var adapter: MyStudyPostRVAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        binding = FragmentMystudyCommunityBinding.inflate(inflater,container,false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentMystudyCommunityBinding.inflate(inflater, container, false)
 
-        binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.communityCategoryContentRv.layoutManager = LinearLayoutManager(context)
 
-        val pageButtons = listOf(
-            binding.page1,
-            binding.page2,
-            binding.page3,
-            binding.page4,
-            binding.page5
+        adapter = MyStudyPostRVAdapter(itemList,
+            onItemClick = { post ->
+                val intent = Intent(requireContext(), MyStudyPostContentActivity::class.java)
+                intent.putExtra("myStudyId", currentStudyId.toString())
+                intent.putExtra("myStudyPostId", post.postId.toString())
+                startActivity(intent)
+            },
+            onLikeClick = { post -> deleteStudyContentLike(post.postId) },
+            onUnLikeClick = { post -> postStudyContentLike(post.postId) },
+            onPageSelected = { page ->
+                currentPage = page
+                fetchPages()
+            },
+            onNextPrevClicked = { isNext ->
+                currentPage = when {
+                    isNext && currentPage < totalPages - 1 -> currentPage + 1
+                    !isNext && currentPage > 0 -> currentPage - 1
+                    isNext -> 0
+                    else -> totalPages - 1
+                }
+                fetchPages()
+            },
+            getCurrentPage = { currentPage },
+            getTotalPages = { totalPages }
         )
 
-        pageButtons.forEachIndexed { index, textView ->
-            textView.setOnClickListener {
-                val selectedPage = startPage + index
-                if (currentPage != selectedPage) {
-                    currentPage = selectedPage
-                    fetchPages()
-                }
-            }
-        }
+        binding.communityCategoryContentRv.adapter = adapter
 
-        // 페이지 전환 버튼 설정
-        binding.previousPage.setOnClickListener {
-            if (currentPage > 0) {
-                currentPage--
-                fetchPages() // 이전 페이지 데이터를 가져옴
-            }
-        }
-
-        binding.nextPage.setOnClickListener {
-            if (currentPage < getTotalPages() - 1) {
-                currentPage++
-                fetchPages() // 다음 페이지 데이터를 가져옴
-            }
-        }
-
-        binding.writeContentIv.setOnClickListener{
+        binding.writeContentIv.setOnClickListener {
             val fragment = MyStudyWriteContentFragment().apply {
-                setStyle(
-                    BottomSheetDialogFragment.STYLE_NORMAL,
-                    R.style.AppBottomSheetDialogBorder20WhiteTheme
-                )
+                setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
             }
-            fragment.show(parentFragmentManager,"MyStudyWriteContent")
+            fragment.show(parentFragmentManager, "MyStudyWriteContent")
         }
 
-        // ViewModel에서 studyId를 관찰하고 변경될 때마다 fetchStudyMembers 호출
         studyViewModel.studyId.observe(viewLifecycleOwner) { studyId ->
             if (studyId != null) {
                 currentStudyId = studyId
                 fetchPages()
-            } else {
-                Toast.makeText(requireContext(), "Study ID is missing", Toast.LENGTH_SHORT).show()
             }
         }
 
-        initBTN()
+        initCategoryButtons()
+
+        fetchPages()
         return binding.root
     }
 
-    private fun getTotalPages(): Int {
-        return totalPages // 올바른 페이지 수 계산
-    }
-
-    private fun initBTN() {
-        binding.allRb.setOnClickListener{
-            themeQuery = ""
-            fetchPages()
-        }
-        binding.notiRb.setOnClickListener{
-            themeQuery = "ANNOUNCEMENT"
-            fetchPages()
-        }
-        binding.introHelloRb.setOnClickListener{
-            themeQuery = "WELCOME"
-            fetchPages()
-        }
-        binding.shareInfoRb.setOnClickListener{
-            themeQuery = "INFO_SHARING"
-            fetchPages()
-        }
-        binding.afterStudyRb.setOnClickListener{
-            themeQuery = "STUDY_REVIEW"
-            fetchPages()
-        }
-        binding.freeTalkRb.setOnClickListener{
-            themeQuery = "FREE_TALK"
-            fetchPages()
-        }
-        binding.qnaRb.setOnClickListener{
-            themeQuery = "QNA"
-            fetchPages()
-        }
+    private fun initCategoryButtons() {
+        binding.allRb.setOnClickListener { themeQuery = ""; fetchPages() }
+        binding.notiRb.setOnClickListener { themeQuery = "ANNOUNCEMENT"; fetchPages() }
+        binding.introHelloRb.setOnClickListener { themeQuery = "WELCOME"; fetchPages() }
+        binding.shareInfoRb.setOnClickListener { themeQuery = "INFO_SHARING"; fetchPages() }
+        binding.afterStudyRb.setOnClickListener { themeQuery = "STUDY_REVIEW"; fetchPages() }
+        binding.freeTalkRb.setOnClickListener { themeQuery = "FREE_TALK"; fetchPages() }
+        binding.qnaRb.setOnClickListener { themeQuery = "QNA"; fetchPages() }
     }
 
     override fun onResume() {
@@ -149,204 +103,91 @@ class MyStudyCommunityFragment : Fragment() {
 
     private fun fetchPages() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getStudyPost(currentStudyId, themeQuery, currentPage, size)
+        service.getStudyPost(currentStudyId, themeQuery, currentPage, 5)
             .enqueue(object : Callback<StudyPostListResponse> {
-                override fun onResponse(
-                    call: Call<StudyPostListResponse>,
-                    response: Response<StudyPostListResponse>
-                ) {
+                override fun onResponse(call: Call<StudyPostListResponse>, response: Response<StudyPostListResponse>) {
                     if (response.isSuccessful) {
-                        val pagesResponse = response.body()
-                        if (pagesResponse?.isSuccess == "true") {
-                            val posts = pagesResponse.result.posts
-                            if (posts.isNotEmpty()) {
+                        val body = response.body()
+                        if (body?.isSuccess == "true") {
+                            val posts = body.result.posts
+                            itemList.clear()
+                            itemList.addAll(posts)
+                            totalPages = body.result.totalPages
 
-                                Log.d("MyStudyFragment", "IsIn")
-                                binding.fileNoneIv.visibility = View.GONE
-                                binding.noneMemberAlertTv.visibility = View.GONE
-                                binding.communityCategoryContentRv.visibility = View.VISIBLE
-                                binding.pageNumberLayout.visibility = View.VISIBLE
+                            adapter.updateList(itemList)
 
-                                itemList.clear()
-                                itemList.addAll(posts)
-
-                                totalPages = pagesResponse.result.totalPages
-
-
-                                initRecyclerview()
-
-                                updatePageUI()
+                            if (posts.isEmpty()) {
+                                showEmptyState()
                             } else {
-                                binding.fileNoneIv.visibility = View.VISIBLE
-                                binding.noneMemberAlertTv.visibility = View.VISIBLE
-                                binding.communityCategoryContentRv.visibility = View.GONE
-                                binding.pageNumberLayout.visibility = View.GONE
+                                showContentState()
                             }
                         } else {
-                            binding.fileNoneIv.visibility = View.VISIBLE
-                            binding.noneMemberAlertTv.visibility = View.VISIBLE
-                            binding.writeContentIv.visibility = View.GONE
-                            binding.pageNumberLayout.visibility = View.GONE
-                            Log.d("OtherStudy1", "PASS")
-                            showError(pagesResponse?.message)
+                            showError(body?.message)
+                            showEmptyState()
                         }
                     } else {
-                        showError(response.code().toString())
+                        showError("응답 오류: ${response.code()}")
+                        showEmptyState()
                     }
                 }
 
                 override fun onFailure(call: Call<StudyPostListResponse>, t: Throwable) {
-                    Log.e("ALL", "Failure: ${t.message}", t)
+                    Log.e("MyStudyCommunity", "Error: ${t.message}", t)
+                    showError("네트워크 오류: ${t.message}")
+                    showEmptyState()
                 }
             })
     }
 
+    private fun showContentState() {
+        binding.fileNoneIv.visibility = View.GONE
+        binding.noneMemberAlertTv.visibility = View.GONE
+        binding.communityCategoryContentRv.visibility = View.VISIBLE
+    }
+
+    private fun showEmptyState() {
+        binding.fileNoneIv.visibility = View.VISIBLE
+        binding.noneMemberAlertTv.visibility = View.VISIBLE
+        binding.communityCategoryContentRv.visibility = View.GONE
+    }
+
     private fun postStudyContentLike(postId: Int) {
-        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postStudyContentLike(currentStudyId, postId)
+        RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+            .postStudyContentLike(currentStudyId, postId)
             .enqueue(object : Callback<StudyContentLikeResponse> {
-                override fun onResponse(
-                    call: Call<StudyContentLikeResponse>,
-                    response: Response<StudyContentLikeResponse>
-                ) {
-//                    Log.d("StudyLikeContent", "response: ${response.isSuccessful}")
+                override fun onResponse(call: Call<StudyContentLikeResponse>, response: Response<StudyContentLikeResponse>) {
                     if (response.isSuccessful) {
-                        val likeResponse = response.body()
-                        Log.d("StudyLikeContent", "responseBody: ${likeResponse?.isSuccess}")
-                        if (likeResponse?.isSuccess == "true") {
-                            fetchPages()
-                        } else {
-                            showError(likeResponse?.message)
-                        }
+                        fetchPages()
                     } else {
-                        showError(response.code().toString())
+                        showError("좋아요 실패: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<StudyContentLikeResponse>, t: Throwable) {
-                    Log.e("StudyLikeContent", "Failure: ${t.message}", t)
+                    showError("네트워크 오류: ${t.message}")
                 }
             })
     }
 
     private fun deleteStudyContentLike(postId: Int) {
-        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.deleteStudyContentLike(currentStudyId, postId)
+        RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+            .deleteStudyContentLike(currentStudyId, postId)
             .enqueue(object : Callback<StudyContentUnLikeResponse> {
-                override fun onResponse(
-                    call: Call<StudyContentUnLikeResponse>,
-                    response: Response<StudyContentUnLikeResponse>
-                ) {
-                    Log.d("StudyUnLikeContent", "response: ${response.isSuccessful}")
+                override fun onResponse(call: Call<StudyContentUnLikeResponse>, response: Response<StudyContentUnLikeResponse>) {
                     if (response.isSuccessful) {
-                        val unLikeResponse = response.body()
-                        Log.d("StudyUnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
-                        if (unLikeResponse?.isSuccess == "true") {
-                            fetchPages()
-                        } else {
-                            showError(unLikeResponse?.message)
-                        }
+                        fetchPages()
                     } else {
-                        showError(response.code().toString())
+                        showError("좋아요 취소 실패: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<StudyContentUnLikeResponse>, t: Throwable) {
-                    Log.e("StudyUnLikeContent", "Failure: ${t.message}", t)
+                    showError("네트워크 오류: ${t.message}")
                 }
             })
     }
 
     private fun showError(message: String?) {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun initRecyclerview(){
-
-        val dataRVAdapter = MyStudyPostRVAdapter(itemList)
-        //리스너 객체 생성 및 전달
-
-//        Log.d("MYSTUDYCOMMUNITY", "${itemList}")
-
-        binding.communityCategoryContentRv.adapter = dataRVAdapter
-
-        dataRVAdapter.setItemClickListener(object : MyStudyPostRVAdapter.OnItemClickListener {
-            override fun onItemClick(data: PostDetail) {
-                val intent = Intent(requireContext(), MyStudyPostContentActivity::class.java)
-                intent.putExtra("myStudyId", currentStudyId.toString())
-                intent.putExtra("myStudyPostId", data.postId.toString())
-                startActivity(intent)
-            }
-
-            override fun onLikeClick(data: PostDetail) {
-                deleteStudyContentLike(data.postId)
-            }
-
-            override fun onUnLikeClick(data: PostDetail) {
-                postStudyContentLike(data.postId)
-            }
-        })
-    }
-
-    private fun updatePageUI() {
-        val pageButtons = listOf(
-            binding.page1, binding.page2, binding.page3, binding.page4, binding.page5
-        )
-
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
-
-        pageButtons.forEachIndexed { index, textView ->
-            val pageNum = startPage + index
-            if (pageNum < totalPages) {
-                textView.text = (pageNum + 1).toString()
-                textView.setTextColor(
-                    if (pageNum == currentPage)
-                        resources.getColor(R.color.blue, null)
-                    else
-                        resources.getColor(R.color.black, null)
-                )
-                textView.setBackgroundResource(
-                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
-                )
-                textView.isEnabled = true
-                textView.alpha = 1.0f
-                textView.visibility = View.VISIBLE
-            } else {
-                textView.text = ""
-                textView.setBackgroundResource(0)
-                textView.isEnabled = false
-                textView.alpha = 0.3f
-                textView.visibility = View.INVISIBLE
-            }
-        }
-
-        // 페이지가 하나뿐이면 좌우 버튼 모두 비활성화
-        if (totalPages <= 1) {
-            binding.previousPage.isEnabled = false
-            binding.previousPage.setColorFilter(
-                ContextCompat.getColor(requireContext(), R.color.g300),
-                PorterDuff.Mode.SRC_IN
-            )
-            binding.nextPage.isEnabled = false
-            binding.nextPage.setColorFilter(
-                ContextCompat.getColor(requireContext(), R.color.g300),
-                PorterDuff.Mode.SRC_IN
-            )
-        } else {
-            binding.previousPage.isEnabled = true
-            binding.previousPage.setColorFilter(
-                ContextCompat.getColor(requireContext(), R.color.b500),
-                PorterDuff.Mode.SRC_IN
-            )
-            binding.nextPage.isEnabled = true
-            binding.nextPage.setColorFilter(
-                ContextCompat.getColor(requireContext(), R.color.b500),
-                PorterDuff.Mode.SRC_IN
-            )
-        }
     }
 }
