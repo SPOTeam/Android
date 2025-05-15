@@ -4,114 +4,88 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.spoteam_android.R
 import com.example.spoteam_android.databinding.ItemCommunityContentBinding
 import com.example.spoteam_android.ui.community.CategoryPagesDetail
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
-class CommunityCategoryContentRVAdapter(private var dataList: List<CategoryPagesDetail>) : RecyclerView.Adapter<CommunityCategoryContentRVAdapter.ViewHolder>() {
+class CommunityCategoryContentRVAdapter(
+    private var dataList: List<CategoryPagesDetail>,
+    private val onItemClick: (CategoryPagesDetail) -> Unit,
+    private val onLikeClick: (CategoryPagesDetail) -> Unit,
+    private val onUnLikeClick: (CategoryPagesDetail) -> Unit,
+    private val onBookmarkClick: (CategoryPagesDetail) -> Unit,
+    private val onUnBookmarkClick: (CategoryPagesDetail) -> Unit,
+    private val onPageSelected: (Int) -> Unit,
+    private val onNextPrevClicked: (Boolean) -> Unit,
+    private val getCurrentPage: () -> Int,
+    private val getTotalPages: () -> Int
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    interface OnItemClickListener {
-        fun onItemClick(data: CategoryPagesDetail)
-        fun onLikeClick(data: CategoryPagesDetail)
-        fun onUnLikeClick(data: CategoryPagesDetail)
-        fun onBookMarkClick(data: CategoryPagesDetail)
-        fun onUnBookMarkClick(data: CategoryPagesDetail)
+    companion object {
+        private const val TYPE_ITEM = 0
+        private const val TYPE_FOOTER = 1
     }
 
-    private lateinit var itemClickListener: OnItemClickListener
-
-    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
-        this.itemClickListener = onItemClickListener
+    override fun getItemViewType(position: Int): Int {
+        return if (position < dataList.size) TYPE_ITEM else TYPE_FOOTER
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val binding: ItemCommunityContentBinding = ItemCommunityContentBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
-        return ViewHolder(binding)
+    override fun getItemCount(): Int {
+        return if (dataList.isEmpty()) 0 else dataList.size + 1
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (position < dataList.size) {
-            holder.bind(dataList[position])
-        }
-
-        holder.itemView.setOnClickListener {
-            itemClickListener.onItemClick(dataList[position])
-        }
-
-        holder.binding.contentLikeNumCheckedIv.setOnClickListener {
-            itemClickListener.onUnLikeClick(dataList[position])
-        }
-
-        holder.binding.contentLikeNumUncheckedIv.setOnClickListener {
-            itemClickListener.onLikeClick(dataList[position])
-        }
-
-        holder.binding.contentBookmarkCheckedIv.setOnClickListener {
-            itemClickListener.onBookMarkClick(dataList[position])
-        }
-        holder.binding.contentBookmarkUncheckedIv.setOnClickListener {
-            itemClickListener.onUnBookMarkClick(dataList[position])
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == TYPE_ITEM) {
+            val binding = ItemCommunityContentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemViewHolder(binding)
+        } else {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_footer_paging, parent, false)
+            FooterViewHolder(view)
         }
     }
 
-    override fun getItemCount() = dataList.size
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is ItemViewHolder) {
+            val item = dataList[position]
+            holder.bind(item)
+            holder.itemView.setOnClickListener { onItemClick(item) }
+            holder.binding.contentLikeNumCheckedIv.setOnClickListener { onUnLikeClick(item) }
+            holder.binding.contentLikeNumUncheckedIv.setOnClickListener { onLikeClick(item) }
+            holder.binding.contentBookmarkCheckedIv.setOnClickListener { onBookmarkClick(item) }
+            holder.binding.contentBookmarkUncheckedIv.setOnClickListener { onUnBookmarkClick(item) }
+        } else if (holder is FooterViewHolder) {
+            holder.bind()
+        }
+    }
 
-    inner class ViewHolder(val binding: ItemCommunityContentBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ItemViewHolder(val binding: ItemCommunityContentBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(data: CategoryPagesDetail) {
             binding.contentTitleTv.text = data.title
-
-            if (data.scrapCount > 999) {
-                val formatted = String.format("%.1fK", data.scrapCount / 1000.0)
-                binding.contentSaveNumTv.text = formatted
-            } else {
-                binding.contentSaveNumTv.text = data.scrapCount.toString()
-            }
-
             binding.contentSummaryTv.text = data.content
-
-            if (data.likeCount > 999) {
-                val formatted = String.format("%.1fK", data.likeCount / 1000.0)
-                binding.contentLikeNumTv.text = formatted
-            } else {
-                binding.contentLikeNumTv.text = data.likeCount.toString()
-            }
-
-            if (data.commentCount > 999) {
-                val formatted = String.format("%.1fK", data.commentCount / 1000.0)
-                binding.contentCommentNumTv.text = formatted
-            } else {
-                binding.contentCommentNumTv.text = data.commentCount.toString()
-            }
-
-            if (data.viewCount > 999) {
-                val formatted = String.format("%.1fK", data.viewCount / 1000.0)
-                binding.contentViewNumTv.text = formatted
-            } else {
-                binding.contentViewNumTv.text = data.viewCount.toString()
-            }
-
+            binding.contentSaveNumTv.text = formatNumber(data.scrapCount)
+            binding.contentLikeNumTv.text = formatNumber(data.likeCount)
+            binding.contentCommentNumTv.text = formatNumber(data.commentCount)
+            binding.contentViewNumTv.text = formatNumber(data.viewCount)
             binding.contentWriterTv.text = data.writer
             binding.contentDateTv.text = formatWrittenTime(data.writtenTime)
 
-            if (data.likedByCurrentUser) {
-                binding.contentLikeNumCheckedIv.visibility = View.VISIBLE
-                binding.contentLikeNumUncheckedIv.visibility = View.GONE
-            } else {
-                binding.contentLikeNumCheckedIv.visibility = View.GONE
-                binding.contentLikeNumUncheckedIv.visibility = View.VISIBLE
-            }
+            binding.contentLikeNumCheckedIv.visibility = if (data.likedByCurrentUser) View.VISIBLE else View.GONE
+            binding.contentLikeNumUncheckedIv.visibility = if (data.likedByCurrentUser) View.GONE else View.VISIBLE
 
-            if(data.scrapedByCurrentUser) {
-                binding.contentBookmarkCheckedIv.visibility = View.VISIBLE
-                binding.contentBookmarkUncheckedIv.visibility = View.GONE
-            } else {
-                binding.contentBookmarkCheckedIv.visibility = View.GONE
-                binding.contentBookmarkUncheckedIv.visibility = View.VISIBLE
-            }
+            binding.contentBookmarkCheckedIv.visibility = if (data.scrapedByCurrentUser) View.VISIBLE else View.GONE
+            binding.contentBookmarkUncheckedIv.visibility = if (data.scrapedByCurrentUser) View.GONE else View.VISIBLE
+        }
+
+        private fun formatNumber(value: Int): String {
+            return if (value > 999) String.format("%.1fK", value / 1000.0) else value.toString()
         }
 
         private fun formatWrittenTime(writtenTime: String): String {
@@ -131,8 +105,88 @@ class CommunityCategoryContentRVAdapter(private var dataList: List<CategoryPages
             return if (date != null) {
                 SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault()).format(date)
             } else {
-                writtenTime // 원본 문자열 반환
+                writtenTime
             }
         }
+    }
+
+    inner class FooterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind() {
+            val context = itemView.context
+            val pageButtons = listOf(
+                itemView.findViewById<TextView>(R.id.page_1),
+                itemView.findViewById<TextView>(R.id.page_2),
+                itemView.findViewById<TextView>(R.id.page_3),
+                itemView.findViewById<TextView>(R.id.page_4),
+                itemView.findViewById<TextView>(R.id.page_5)
+            )
+            val prev = itemView.findViewById<ImageView>(R.id.previous_page)
+            val next = itemView.findViewById<ImageView>(R.id.next_page)
+
+            val currentPage = getCurrentPage()
+            val totalPages = getTotalPages()
+
+            val startPage = when {
+                totalPages <= 5 -> 0
+                currentPage >= totalPages - 3 -> totalPages - 5
+                currentPage >= 2 -> currentPage - 2
+                else -> 0
+            }
+
+            pageButtons.forEachIndexed { index, button ->
+                val pageNum = startPage + index
+                if (pageNum < totalPages) {
+                    button.visibility = View.VISIBLE
+                    button.text = (pageNum + 1).toString()
+                    button.setTextColor(
+                        if (pageNum == currentPage)
+                            context.getColor(R.color.b500)
+                        else
+                            context.getColor(R.color.g400)
+                    )
+                    button.setOnClickListener {
+                        if (pageNum != currentPage) onPageSelected(pageNum)
+                    }
+                } else {
+                    button.visibility = View.GONE
+                }
+            }
+
+            val gray = ContextCompat.getColor(context, R.color.g300)
+            val blue = ContextCompat.getColor(context, R.color.b500)
+
+            if (totalPages <= 1) {
+                prev.isEnabled = false
+                next.isEnabled = false
+                prev.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+                next.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+            } else {
+                prev.isEnabled = true
+                next.isEnabled = true
+                prev.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+                next.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+
+                prev.setOnClickListener {
+                    if (currentPage == 0) {
+                        onPageSelected(totalPages - 1)
+                    } else {
+                        onPageSelected(currentPage - 1)
+                    }
+                }
+
+                next.setOnClickListener {
+                    if (currentPage == totalPages - 1) {
+                        onPageSelected(0)
+                    } else {
+                        onPageSelected(currentPage + 1)
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateList(newList: List<CategoryPagesDetail>) {
+        dataList = newList
+        notifyDataSetChanged()
     }
 }
