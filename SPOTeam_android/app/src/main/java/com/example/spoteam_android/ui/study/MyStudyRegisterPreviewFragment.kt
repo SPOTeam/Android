@@ -112,17 +112,16 @@ class MyStudyRegisterPreviewFragment : Fragment() {
 
     private fun updateUIWithData() {
         val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val currentEmail = sharedPreferences.getString("currentEmail", null)
-        val kakaoNickname = sharedPreferences.getString("${currentEmail}_nickname", "Unknown")
+        val email = sharedPreferences.getString("currentEmail", null)
+        val kakaoNickname = sharedPreferences.getString("${email}_nickname", "Unknown")
 
         binding.fragmentDetailStudyUsernameTv.text = "${kakaoNickname}님"
         // 스터디 제목 설정
-        binding.fragmentMyStudyRegisterPreviewTitleTv.text = viewModel.studyRequest.value?.title
+        binding.fragmentDetailStudyPreviewTitleTv.text = viewModel.studyRequest.value?.title
 
         // 스터디 목표 설정
-        binding.fragmentMyStudyRegisterPreviewGoalTv.text = viewModel.studyRequest.value?.goal
+        binding.fragmentDetailStudyGoalTv.text = viewModel.studyRequest.value?.goal
 
-        val email = sharedPreferences.getString("currentEmail", null)
         val loginPlatform = sharedPreferences.getString("loginPlatform", null)
 
         val profileImageUrl = when (loginPlatform) {
@@ -139,13 +138,13 @@ class MyStudyRegisterPreviewFragment : Fragment() {
 
 
         // 온라인/오프라인 설정
-        binding.fragmentMyStudyRegisterPreviewOnlineTv.text = if (viewModel.studyRequest.value?.isOnline == true) "온라인" else "오프라인"
+        binding.fragmentDetailStudyOnlineTv.text = if (viewModel.studyRequest.value?.isOnline == true) "온라인" else "오프라인"
 
         // 유료/무료 설정
-        binding.fragmentMyStudyRegisterPreviewFeeTv.text = if (viewModel.studyRequest.value?.hasFee == true) "유료" else "무료"
+        binding.fragmentDetailStudyFeeTv.text = if (viewModel.studyRequest.value?.hasFee == true) "유료" else "무료"
 
         // 나이대 설정
-        binding.fragmentMyStudyRegisterPreviewAgeTv.text = "${viewModel.studyRequest.value?.minAge}-${viewModel.studyRequest.value?.maxAge}세"
+        binding.fragmentDetailStudyAgeTv.text = "${viewModel.studyRequest.value?.minAge}-${viewModel.studyRequest.value?.maxAge}세"
 
         // 스터디 멤버 수 설정
         binding.fragmentDetailStudyMemberMaxTv.text = "${viewModel.studyRequest.value?.maxPeople}"
@@ -155,7 +154,7 @@ class MyStudyRegisterPreviewFragment : Fragment() {
 
         // 스터디 테마 설정 (chip으로 나열)
         val themes = viewModel.studyRequest.value?.themes?.take(3)?.joinToString("/") ?:"테마 없음" // 예: "취업/프로젝트"
-        binding.fragmentMyStudyRegisterPreviewChipTv.text = themes
+        binding.fragmentDetailStudyChipTv.text = themes
 
     }
 

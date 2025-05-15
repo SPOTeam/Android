@@ -1,39 +1,18 @@
 package com.example.spoteam_android.login
 
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.spoteam_android.KaKaoResult
 import com.example.spoteam_android.MainActivity
-import com.example.spoteam_android.NaverResult
-import com.example.spoteam_android.RetrofitInstance
-import com.example.spoteam_android.ThemeApiResponse
-import com.example.spoteam_android.checklist.CheckListCategoryActivity
 import com.example.spoteam_android.databinding.ActivityStartLoginBinding
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.AuthErrorCause
-import com.kakao.sdk.user.UserApiClient
-import com.navercorp.nid.NaverIdLoginSDK
-import com.navercorp.nid.oauth.NidOAuthLogin
-import com.navercorp.nid.oauth.OAuthLoginCallback
-import com.navercorp.nid.profile.NidProfileCallback
-import com.navercorp.nid.profile.data.NidProfileResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
+
 
 class StartLoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartLoginBinding
@@ -66,7 +45,6 @@ class StartLoginActivity : AppCompatActivity() {
         setupObservers()
 
         binding.itemLogoKakaoIb.setOnClickListener {
-            getKeyHash()
             loginViewModel.startKakaoLogin(this)
             }
         binding.itemLogoNaverIb.setOnClickListener { loginViewModel.startNaverLogin(this) }
@@ -144,20 +122,6 @@ class StartLoginActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    fun getKeyHash() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
-            for (signature in packageInfo.signingInfo.apkContentsSigners) {
-                try {
-                    val md = MessageDigest.getInstance("SHA")
-                    md.update(signature.toByteArray())
-                    Log.d("getKeyHash", "key hash: ${Base64.encodeToString(md.digest(), Base64.NO_WRAP)}")
-                } catch (e: NoSuchAlgorithmException) {
-                    Log.w("getKeyHash", "Unable to get MessageDigest. signature=$signature", e)
-                }
-            }
-        }
-    }
 
 
 

@@ -31,7 +31,7 @@ class AuthInterceptor(private val context: Context) : Interceptor {
         var response = chain.proceed(request)
 
         // 토큰 만료 처리: 401 또는 400 상태 코드 확인
-        if (response.code == 400 || response.code == 401) {
+        if (response.code == 401) {
             Log.d("AuthInterceptor", "Token expired. Attempting to refresh token...")
 
             synchronized(this) {

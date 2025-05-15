@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.RegionsPreferences
@@ -29,15 +30,12 @@ class RegisterInformation : ComponentActivity() {
 
         val mode = intent.getStringExtra("mode") ?: "START"
 
-        if (mode == "START") {
-            navigateToCheckList()
-            return
-        }
-
         if (mode == "FINAL") {
             val selectedThemes = intent.getStringArrayListExtra("selectedThemes") ?: listOf()
             val selectedPurpose = intent.getIntegerArrayListExtra("selectedPurpose") ?: listOf()
             val selectedLocations = intent.getStringArrayListExtra("selectedLocations") ?: listOf()
+
+            binding.registerMsgTv.text = "체크리스트 등록 중.."
 
             val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
             val email = sharedPreferences.getString("currentEmail", null)
@@ -54,10 +52,11 @@ class RegisterInformation : ComponentActivity() {
                 purposes = selectedPurpose,
                 regions = selectedLocations
             )
-
-            setupProgressBar()
         }
+
+        setupProgressBar(mode)
     }
+
 
     private fun navigateToCheckList() {
         val intent = Intent(this, CheckListCategoryActivity::class.java)
@@ -65,16 +64,25 @@ class RegisterInformation : ComponentActivity() {
         finish()
     }
 
-    private fun setupProgressBar() {
+    private fun setupProgressBar(mode: String) {
         lifecycleScope.launch {
             val totalSteps = 5
             for (i in 1..totalSteps) {
                 delay(500)
                 updateProgressBar(i * 20)
             }
-            navigateToMainScreen()
+
+            if (mode == "FINAL") {
+                binding.registerMsgTv.text = "내 정보 등록 완료!"
+                delay(500)
+                navigateToMainScreen()
+            } else if (mode == "START") {
+                navigateToCheckList()
+            }
         }
     }
+
+
 
     private fun updateProgressBar(progress: Int) {
         binding.activityRegisterProgressbar.progress = progress

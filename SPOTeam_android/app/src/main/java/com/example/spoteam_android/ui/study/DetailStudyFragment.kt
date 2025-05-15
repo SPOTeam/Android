@@ -4,9 +4,9 @@ import ApplyStudyDialog
 import StudyApiService
 import StudyViewModel
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,12 +39,17 @@ class DetailStudyFragment : Fragment() {
         currentTabPosition = arguments?.getInt("tab_position", 0) ?: 0
         startDateTime = arguments?.getString("startDateTime")
 
-        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val currentEmail = sharedPreferences.getString("currentEmail", null)
         kakaoNickname = sharedPreferences.getString("${currentEmail}_nickname", "Unknown")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentDetailStudyBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -59,7 +64,7 @@ class DetailStudyFragment : Fragment() {
     }
 
     private fun setupViews() {
-        binding.fragmentDetailStudyUsernameTv.text = "$kakaoNickname"+"님"
+        binding.fragmentDetailStudyUsernameTv.text = "$kakaoNickname" + "님"
 
         binding.fragmentDetailStudyPreviousBt.setOnClickListener {
             parentFragmentManager.popBackStack()
@@ -71,7 +76,8 @@ class DetailStudyFragment : Fragment() {
 
         binding.fragmentDetailStudyTl.tabMode = TabLayout.MODE_SCROLLABLE
 
-        binding.fragmentDetailStudyVp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.fragmentDetailStudyVp.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val fragment = childFragmentManager.findFragmentByTag("f$position")
@@ -85,7 +91,10 @@ class DetailStudyFragment : Fragment() {
             val detailStudyAdapter = DetailStudyVPAdapter(this, studyId, startDateTime)
             binding.fragmentDetailStudyVp.adapter = detailStudyAdapter
 
-            TabLayoutMediator(binding.fragmentDetailStudyTl, binding.fragmentDetailStudyVp) { tab, position ->
+            TabLayoutMediator(
+                binding.fragmentDetailStudyTl,
+                binding.fragmentDetailStudyVp
+            ) { tab, position ->
                 tab.text = tabList[position]
             }.attach()
 
@@ -93,7 +102,8 @@ class DetailStudyFragment : Fragment() {
             binding.fragmentDetailStudyVp.offscreenPageLimit = tabList.size
             binding.fragmentDetailStudyVp.isUserInputEnabled = false
 
-            binding.fragmentDetailStudyTl.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            binding.fragmentDetailStudyTl.addOnTabSelectedListener(object :
+                TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     currentTabPosition = tab?.position ?: 0
                 }
@@ -116,7 +126,10 @@ class DetailStudyFragment : Fragment() {
         RetrofitInstance.retrofit.create(StudyApiService::class.java)
             .getStudyDetails(studyId)
             .enqueue(object : Callback<StudyDetailsResponse> {
-                override fun onResponse(call: Call<StudyDetailsResponse>, response: Response<StudyDetailsResponse>) {
+                override fun onResponse(
+                    call: Call<StudyDetailsResponse>,
+                    response: Response<StudyDetailsResponse>
+                ) {
                     response.body()?.result?.let {
                         studyViewModel.setMaxPeople(it.maxPeople)
                         studyViewModel.setMemberCount(it.memberCount)
@@ -125,33 +138,44 @@ class DetailStudyFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<StudyDetailsResponse>, t: Throwable) {
-                    Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT)
+                        .show()
                 }
             })
     }
 
     private fun fetchStudyMembers(studyId: Int) {
-        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val currentMemberId = sharedPreferences.getInt("${sharedPreferences.getString("currentEmail", "")}_memberId", -1)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val currentMemberId = sharedPreferences.getInt(
+            "${sharedPreferences.getString("currentEmail", "")}_memberId",
+            -1
+        )
 
         RetrofitInstance.retrofit.create(StudyApiService::class.java)
             .getStudyMembers(studyId)
             .enqueue(object : Callback<MemberResponse> {
-                override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
+                override fun onResponse(
+                    call: Call<MemberResponse>,
+                    response: Response<MemberResponse>
+                ) {
                     val members = response.body()?.result?.members ?: emptyList()
                     val isMember = members.any { it.memberId == currentMemberId }
 
-                    binding.fragmentDetailStudyFl.visibility = if (isMember) View.VISIBLE else View.GONE
+                    binding.fragmentDetailStudyFl.visibility =
+                        if (isMember) View.VISIBLE else View.GONE
                     if (!isMember) binding.fragmentDetailStudyLl.setPadding(0, 50, 0, 50)
 
                     val shouldHideButton = isMember || (studyViewModel.maxPeople.value != null &&
                             studyViewModel.memberCount.value != null &&
                             studyViewModel.memberCount.value!! >= studyViewModel.maxPeople.value!!)
-                    binding.fragmentDetailStudyHomeRegisterBt.visibility = if (shouldHideButton) View.GONE else View.VISIBLE
+                    binding.fragmentDetailStudyHomeRegisterBt.visibility =
+                        if (shouldHideButton) View.GONE else View.VISIBLE
                 }
 
                 override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
-                    Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT)
+                        .show()
                 }
             })
     }
@@ -160,13 +184,17 @@ class DetailStudyFragment : Fragment() {
         RetrofitInstance.retrofit.create(StudyApiService::class.java)
             .getIsApplied(studyId)
             .enqueue(object : Callback<IsAppliedResponse> {
-                override fun onResponse(call: Call<IsAppliedResponse>, response: Response<IsAppliedResponse>) {
+                override fun onResponse(
+                    call: Call<IsAppliedResponse>,
+                    response: Response<IsAppliedResponse>
+                ) {
                     val isApplied = response.body()?.result?.applied ?: false
                     updateRegisterButton(isApplied)
                 }
 
                 override fun onFailure(call: Call<IsAppliedResponse>, t: Throwable) {
-                    Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT)
+                        .show()
                 }
             })
     }
@@ -175,24 +203,39 @@ class DetailStudyFragment : Fragment() {
         with(binding) {
             fragmentDetailStudyTitleTv.text = details.studyName
             fragmentDetailStudyGoalTv.text = details.goal
-            fragmentDetailStudyMemberTv.text = getString(R.string.member_count_format, details.memberCount)
-            fragmentDetailStudyBookmarkTv.text = getString(R.string.heart_count_format, details.heartCount)
-            fragmentDetailStudyViewTv.text = getString(R.string.hit_num_format, details.hitNum)
-            fragmentDetailStudyMemberMaxTv.text = getString(R.string.max_people_format, details.maxPeople)
+            fragmentDetailStudyMemberTv.text =
+                getString(R.string.member_count_format, details.memberCount)
+            fragmentDetailStudyBookmarkTv.text =
+                getString(R.string.heart_count_format, details.heartCount)
+            fragmentDetailStudyViewTv.text = getString(
+                R.string.hit_num_format,
+                if (details.hitNum > 999) "999+" else details.hitNum.toString()
+            )
+            fragmentDetailStudyMemberMaxTv.text =
+                getString(R.string.max_people_format, details.maxPeople)
             fragmentDetailStudyOnlineTv.text = if (details.isOnline) "온라인" else "오프라인"
-            fragmentDetailStudyFeeTv.text = if (details.fee >0) "${details.fee}원" else "무료"
+            fragmentDetailStudyFeeTv.text = if (details.fee > 0) "유료" else "무료"
             fragmentDetailStudyAgeTv.text = "${details.maxAge}세 이하"
             fragmentDetailStudyChipTv.text = details.themes.take(3).joinToString("/")
 
             studyViewModel.setStudyOwner(details.studyOwner.ownerName)
+            val sharedPreferences =
+                requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
-            studyViewModel.studyImageUrl.observe(viewLifecycleOwner) { imageUrl ->
-                Glide.with(root.context)
-                    .load(imageUrl)
-                    .error(R.drawable.sample_img)
-                    .fallback(R.drawable.sample_img)
-                    .into(fragmentDetailStudyUserIv)
+            val email = sharedPreferences.getString("currentEmail", null)
+            val loginPlatform = sharedPreferences.getString("loginPlatform", null)
+
+            val profileImageUrl = when (loginPlatform) {
+                "kakao" -> sharedPreferences.getString("${email}_kakaoProfileImageUrl", null)
+                "naver" -> sharedPreferences.getString("${email}_naverProfileImageUrl", null)
+                else -> R.drawable.fragment_calendar_spot_logo
             }
+
+            Glide.with(this@DetailStudyFragment)
+                .load(profileImageUrl)
+                .error(R.drawable.fragment_calendar_spot_logo)
+                .fallback(R.drawable.fragment_calendar_spot_logo)
+                .into(binding.fragmentDetailStudyUserIv)
         }
     }
 
@@ -202,13 +245,24 @@ class DetailStudyFragment : Fragment() {
             shape = GradientDrawable.RECTANGLE
             cornerRadius = 16f
             setColor(ContextCompat.getColor(requireContext(), R.color.white))
-            setStroke(3, ContextCompat.getColor(requireContext(), if (isApplied) R.color.button_disabled_text else R.color.button_enabled_text))
+            setStroke(
+                3,
+                ContextCompat.getColor(
+                    requireContext(),
+                    if (isApplied) R.color.button_disabled_text else R.color.button_enabled_text
+                )
+            )
         }
 
         button.apply {
             isEnabled = !isApplied
             text = if (isApplied) "신청완료" else "신청하기"
-            setTextColor(ContextCompat.getColor(requireContext(), if (isApplied) R.color.button_disabled_text else R.color.MainColor_01))
+            setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    if (isApplied) R.color.button_disabled_text else R.color.MainColor_01
+                )
+            )
             background = drawable
         }
     }
@@ -227,7 +281,8 @@ class DetailStudyFragment : Fragment() {
         viewPager.post {
             val view = currentFragment.view
             view?.post {
-                val widthSpec = View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
+                val widthSpec =
+                    View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
                 val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
                 view.measure(widthSpec, heightSpec)
 
@@ -239,7 +294,8 @@ class DetailStudyFragment : Fragment() {
             }
         }
     }
-    private fun tabMargin(){
+
+    private fun tabMargin() {
         val tabLayout = binding.fragmentDetailStudyTl
         val tabStrip = tabLayout.getChildAt(0) as ViewGroup
 

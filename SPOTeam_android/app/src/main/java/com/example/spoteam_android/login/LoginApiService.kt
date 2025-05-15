@@ -8,6 +8,7 @@ import com.example.spoteam_android.NaverResponse
 import com.example.spoteam_android.NaverResult
 import com.example.spoteam_android.NickNameRequest
 import com.example.spoteam_android.NickNameResponse
+import com.example.spoteam_android.NicknameCheckResponse
 import com.example.spoteam_android.ReasonApiResponse
 import com.example.spoteam_android.RegionApiResponse
 import com.example.spoteam_android.RegionsPreferences
@@ -77,7 +78,10 @@ interface LoginApiService {
     @GET("/spot/check")
     fun checkIsSpotMember(): Call<SpotMemberCheckResponse>
 
-
+    @GET("/spot/check/nickname")
+    fun checkNickname(
+        @Query("nickname") nickname: String
+    ): Call<NicknameCheckResponse>
 
 
     @POST("/spot/sign-up/update")

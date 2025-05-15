@@ -122,14 +122,13 @@ class RegionPreferenceFragment : Fragment() {
 
         for (region in regions) {
             val regionText = "${region.province} ${region.district} ${region.neighborhood}"
-            val regionCode = "${region.code}" // region.code를 String으로 변환
+            val regionCode = "${region.code}"
 
-            // `selectedRegions`와 `selectedCodes` 리스트에 지역 정보와 코드 추가
             selectedRegions.add(regionText)
             selectedCodes.add(regionCode)
 
             val textView = TextView(requireContext()).apply {
-                text = regionText // 서버에서 받은 지역 데이터를 그대로 사용
+                text = regionText
                 textSize = 12f
                 setPadding(30, 35, 50, 35) // 패딩 설정
                 setTextColor(resources.getColor(R.color.b500, null))

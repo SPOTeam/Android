@@ -4,7 +4,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="studystart">당신의 스터디 파트너\n스팟, SPOT</string>
+    <string name="studystart">당신의 스터디 파트너\n스팟,SPOT</string>
     <string name ="emailstart">반가워요!\n회원가입하고, 스팟과 함께해요!</string>
     <string name="locationcaution">위치 노출의 위험을 방지하기 위해 구체적인 지역은\n스터디원 확정 후 협의하시기 바랍니다.</string>
     <string name= "nick_name">한글, 영문, 숫자 입력 가능, 최대 8자까지 입력해주세요.\n공백, 이모지, 특수문자(‘_’, ‘/’ 제외)는 사용할 수 없습니다.</string>
@@ -37,7 +37,7 @@
 
     <string name="member_count_format">%d</string>
     <string name="heart_count_format">%d</string>
-    <string name="hit_num_format">%d</string>
+    <string name="hit_num_format">%1$s</string>
     <string name="max_people_format">%d</string>
 
     <string name="delete_account_text"><u>회원 탈퇴</u></string>

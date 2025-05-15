@@ -133,42 +133,6 @@ data class NickNameResponse(
     val result: NickNameResult
 )
 
-
-data class IndexData(
-    val index : String,
-    val content : String,
-    val commentNum : String
-)
-
-data class CategoryData(
-    val category : String,
-    val content : String,
-    val commentNum : String
-)
-
-data class CommunityData(
-    val title : String,
-    val content : String,
-    val likeNum : String,
-    val commentNum : String,
-    val viewNum : String,
-    val bookmarkNum : String,
-    val writer : String,
-    val date : String
-)
-
-
-data class BoardItems (
-    val studyId: Int,
-    val studyName : String,
-    val studyObject : String,
-    val studyTO : Int,
-    val studyPO : Int,
-    val like: Int,
-    val watch : Int
-)
-
-
 data class BoardItem (
     val studyId: Int,
     val title: String,
@@ -661,4 +625,16 @@ data class SpotMemberCheckResponse(
 data class SpotMemberResult(
     val isSpotMember: Boolean
 )
+data class NicknameCheckResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: NicknameCheckResult
+)
+
+data class NicknameCheckResult(
+    val nickname: String,
+    val duplicate: Boolean
+)
+
 

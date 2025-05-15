@@ -62,7 +62,7 @@
             android:fontFamily="@font/suit_bold"
             android:textColor="@color/black"
             android:textSize="17dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="36dp"
             android:layout_marginStart="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_pb"/>
@@ -72,13 +72,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="스터디 대표 이미지"
-            android:fontFamily="@font/suit_semi_bold"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
             android:textColor="@color/black"
-            android:textSize="15dp"
+            android:textSize="14.4dp"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_wantstudy_tv"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"/>
+            android:layout_marginTop="43.2dp"/>
 
         <ImageView
             android:id="@+id/fragment_introduce_essential_iv"
@@ -87,7 +88,7 @@
             android:src="@drawable/img"
             android:background="@drawable/fragment_introduce_study_background"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="49dp"
             android:clipToOutline="true"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toEndOf="@id/fragment_introduce_main_img_tv"
@@ -95,12 +96,12 @@
 
         <ImageView
             android:id="@+id/fragment_introduce_study_iv"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="86.4dp"
+            android:layout_height="86.4dp"
             android:src="@drawable/fragment_introduce_study_gallery_ic"
             android:background="@drawable/fragment_introduce_study_background"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7.2dp"
             android:clipToOutline="true"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,13 +112,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="스터디 이름"
-            android:fontFamily="@font/suit_semi_bold"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
             android:textColor="@color/black"
-            android:textSize="15dp"
+            android:textSize="14.4dp"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_study_iv"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"/>
+            android:layout_marginTop="28.8dp"/>
 
         <ImageView
             android:id="@+id/fragment_introduce_essential2_iv"
@@ -126,7 +128,7 @@
             android:src="@drawable/img"
             android:background="@drawable/fragment_introduce_study_background"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="35dp"
             android:clipToOutline="true"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toEndOf="@id/fragment_introduce_study_name_tv"
@@ -136,7 +138,7 @@
             android:id="@+id/fragment_introduce_studyname_fl"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7.2dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -170,7 +172,8 @@
                     android:text="Sample Study"
                     android:textColor="#C5C5CD"
                     android:textSize="14dp"
-                    android:fontFamily="@font/suit_bold"/>
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="600"/>
 
                 <TextView
                     android:id="@+id/hintRightStudyName"
@@ -205,13 +208,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="스터디의 한 줄 목표"
-            android:fontFamily="@font/suit_semi_bold"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
             android:textColor="@color/black"
-            android:textSize="15dp"
+            android:textSize="14.4dp"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_min_length_tv"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="28.8dp"/>
 
         <ImageView
             android:id="@+id/fragment_introduce_essential3_iv"
@@ -230,7 +234,7 @@
             android:id="@+id/fragment_introduce_studypurpose_fl"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7.2dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -264,7 +268,8 @@
                     android:text="Sample Goal"
                     android:textColor="#C5C5CD"
                     android:textSize="14dp"
-                    android:fontFamily="@font/suit_bold"/>
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="600"/>
 
                 <TextView
                     android:id="@+id/hintRightStudyGoal"
@@ -284,13 +289,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="스터디 소개"
-            android:fontFamily="@font/suit_semi_bold"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
             android:textColor="@color/black"
-            android:textSize="15dp"
+            android:textSize="14.4dp"
             app:layout_constraintTop_toBottomOf="@id/fragment_introduce_studypurpose_fl"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="28.8dp"/>
 
         <ImageView
             android:id="@+id/fragment_introduce_essential4_iv"
@@ -311,15 +317,16 @@
             android:layout_height="130dp"
             android:inputType="textMultiLine"
             android:padding="10dp"
-            android:textSize="14dp"
+            android:textSize="14.4dp"
             android:lineSpacingExtra="2.3dp"
             android:hint="@string/introudce_hint"
             android:textColorHint="#C5C5CD"
-            android:fontFamily="@font/suit_bold"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
             android:maxLength="280"
             android:background="@drawable/edittext_rounded_corner_rectangle"
             android:gravity="top"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7.2dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintStart_toStartOf="parent"
