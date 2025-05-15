@@ -51,7 +51,7 @@
             <FrameLayout
                 android:id="@+id/fragment_detail_study_fl"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
@@ -62,8 +62,8 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/fragment_detail_study_user_iv"
-                    android:layout_width="59dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_gravity="bottom"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_preview_profile"
@@ -76,9 +76,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="반가워요, "
-                    android:fontFamily="@font/suit_bold"
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="600"
                     android:textColor="@color/black"
-                    android:textSize="16dp"
+                    android:textSize="14.4dp"
                     android:layout_marginStart="80dp"
                     android:layout_marginBottom="10dp"
                     android:layout_gravity="bottom"/>
@@ -89,8 +90,9 @@
                     android:layout_height="wrap_content"
                     android:text="훈님"
                     android:textColor="@color/black"
-                    android:textSize="16dp"
-                    android:fontFamily="@font/suit_bold"
+                    android:textSize="14.4dp"
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="600"
                     android:layout_marginStart="140dp"
                     android:layout_marginBottom="10dp"
                     android:layout_gravity="bottom" />
@@ -100,7 +102,7 @@
                 android:id="@+id/fragment_detail_study_member_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="14.4dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -119,8 +121,8 @@
                     android:text="1"
                     android:textSize="13dp"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/suit_variable"
-                    android:textFontWeight="600"
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="400"
                     android:layout_marginStart="5dp"/>
                 <TextView
                     android:id="@+id/fragment_detail_study_member_slash_tv"
@@ -129,8 +131,9 @@
                     android:text="/"
                     android:textSize="13dp"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/suit_variable"
-                    android:textFontWeight="600"/>
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="400"
+                    android:layout_marginStart="0.5dp"/>
                 <TextView
                     android:id="@+id/fragment_detail_study_member_max_tv"
                     android:layout_width="wrap_content"
@@ -138,8 +141,9 @@
                     android:text="10"
                     android:textSize="13dp"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/suit_variable"
-                    android:textFontWeight="600"/>
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="400"
+                    android:layout_marginStart="0.5dp"/>
                 <ImageView
                     android:layout_width="13dp"
                     android:layout_height="13dp"
@@ -153,8 +157,8 @@
                     android:text="15"
                     android:textSize="13dp"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/suit_variable"
-                    android:textFontWeight="600"
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="400"
                     android:layout_marginStart="5dp"/>
 
                 <ImageView
@@ -171,8 +175,8 @@
                     android:text="1"
                     android:textSize="13dp"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/suit_variable"
-                    android:textFontWeight="600"/>
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="400" />
             </LinearLayout>
 
             <TextView
@@ -181,9 +185,10 @@
                 android:layout_height="wrap_content"
                 android:text="토익 스피킹 IH 스터디"
                 android:textColor="@color/black"
-                android:textSize="17.3dp"
-                android:fontFamily="@font/suit_bold"
-                android:layout_marginTop="10dp"
+                android:textSize="18.7dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="700"
+                android:layout_marginTop="7.2dp"
                 android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_member_ll"/>
@@ -193,17 +198,17 @@
             <TextView
                 android:id="@+id/fragment_detail_study_goal_tv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="우리 스터디의 목표 한 문장"
-                android:textSize="13dp"
-                android:padding="7dp"
+                android:textSize="11.5dp"
+                android:padding="8dp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/suit_semi_bold"
+                android:fontFamily="@font/suit_variable_font"
                 android:textFontWeight="600"
                 android:background="@drawable/detail_study_background"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="7.2dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_title_tv"/>
@@ -212,8 +217,8 @@
                 android:id="@+id/fragment_detail_study_group_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="7.2dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_goal_tv">
 
@@ -225,8 +230,8 @@
                     android:textSize="10.3dp"
                     android:padding="7dp"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/suit_semi_bold"
-                    android:textFontWeight="600"
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="500"
                     android:background="@drawable/detail_study_background"/>
 
                 <TextView
@@ -237,8 +242,8 @@
                     android:textSize="10.3dp"
                     android:padding="7dp"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/suit_semi_bold"
-                    android:textFontWeight="600"
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="500"
                     android:background="@drawable/detail_study_background"
                     android:layout_marginStart="5dp"/>
 
@@ -249,8 +254,8 @@
                     android:text="무료"
                     android:textSize="10.3dp"
                     android:padding="7dp"
-                    android:fontFamily="@font/suit_semi_bold"
-                    android:textFontWeight="600"
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="500"
                     android:textColor="@color/black"
                     android:background="@drawable/detail_study_background"
                     android:layout_marginStart="5dp"/>
@@ -260,10 +265,10 @@
                     android:layout_height="wrap_content"
                     android:text="25세 이하"
                     android:textSize="10.3dp"
-                    android:fontFamily="@font/suit_semi_bold"
+                    android:fontFamily="@font/suit_variable_font"
                     android:padding="7dp"
                     android:textColor="@color/black"
-                    android:textFontWeight="600"
+                    android:textFontWeight="500"
                     android:background="@drawable/detail_study_background"
                     android:layout_marginStart="5dp"/>
             </LinearLayout>
@@ -275,7 +280,7 @@
                 app:tabTextAppearance="@style/CustomTabText"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_study_group_ll"
                 app:tabTextColor="@color/black"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="18.72dp"
                 app:tabIndicatorColor="#186AFF"
                 app:tabIndicatorFullWidth="false"
                 app:tabRippleColor="#FFFFFFFF"

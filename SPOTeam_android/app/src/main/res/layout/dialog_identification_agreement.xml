@@ -8,13 +8,12 @@
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/dialog_close_btn"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="21.6dp"
+        android:layout_height="21.6dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_close"
+        android:src="@drawable/ic_new_close"
         android:scaleType="centerInside"
         android:contentDescription="닫기"
-        app:tint="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="10dp"/>
@@ -25,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="고유식별정보 처리 동의"
-        android:textSize="17dp"
+        android:textSize="18.72dp"
         android:textColor="@color/black"
         android:fontFamily="@font/suit_bold"
         android:layout_marginTop="30dp"
@@ -36,12 +35,13 @@
     <ScrollView
         android:id="@+id/agreement_content_sv"
         android:layout_width="0dp"
-        android:layout_height="230dp"
+        android:layout_height="252dp"
         android:layout_marginTop="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/normal_login_edittext_corner_rectangle"
         android:fillViewport="true"
+        android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@id/dialog_agreement_title_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -54,14 +54,14 @@
             android:padding="10dp"
             android:textColor="@color/black">
 
-            <!-- 제1조 -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/identification_agreement_title01_text"
                 android:textColor="@color/black"
-                android:textFontWeight="600"
-                android:textSize="14dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
+                android:textSize="12.96dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -73,17 +73,18 @@
                 android:paddingTop="8dp"
                 android:text="@string/identification_agreement_body01_text"
                 android:textColor="@color/black"
-                android:textFontWeight="600"
-                android:textSize="12dp" />
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
+                android:textSize="11.52dp" />
 
-            <!-- 제2조 -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/identification_agreement_title02_text"
                 android:textColor="@color/black"
-                android:textFontWeight="600"
-                android:textSize="14dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
+                android:textSize="12.96dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -93,10 +94,11 @@
                 android:lineSpacingExtra="3dp"
                 android:text="@string/identification_agreement_body02_text"
                 android:textColor="@color/black"
-                android:textFontWeight="600"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
                 android:paddingLeft="30dp"
                 android:paddingTop="8dp"
-                android:textSize="12dp" />
+                android:textSize="11.52dp" />
 
             <!-- 제3조 -->
             <TextView
@@ -104,8 +106,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/identification_agreement_title03_text"
                 android:textColor="@color/black"
-                android:textFontWeight="600"
-                android:textSize="14dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
+                android:textSize="12.96dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -115,10 +118,11 @@
                 android:lineSpacingExtra="3dp"
                 android:text="@string/identification_agreement_body03_text"
                 android:textColor="@color/black"
-                android:textFontWeight="600"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
                 android:paddingLeft="30dp"
                 android:paddingTop="8dp"
-                android:textSize="12dp" />
+                android:textSize="11.52dp" />
 
             <!-- 제4조 -->
             <TextView
@@ -126,8 +130,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/identification_agreement_title04_text"
                 android:textColor="@color/black"
-                android:textFontWeight="600"
-                android:textSize="14dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
+                android:textSize="12.96dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -137,19 +142,20 @@
                 android:lineSpacingExtra="3dp"
                 android:text="@string/identification_agreement_body04_text"
                 android:textColor="@color/black"
-                android:textFontWeight="600"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
                 android:paddingLeft="30dp"
                 android:paddingTop="8dp"
-                android:textSize="12dp" />
+                android:textSize="11.52dp" />
 
-            <!-- 제5조 -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/identification_agreement_title05_text"
                 android:textColor="@color/black"
-                android:textFontWeight="600"
-                android:textSize="14dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
+                android:textSize="12.96dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -157,11 +163,12 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="3dp"
                 android:text="@string/identification_agreement_body05_text"
+                android:fontFamily="@font/suit_variable_font"
                 android:textColor="@color/black"
-                android:textFontWeight="600"
+                android:textFontWeight="500"
                 android:paddingLeft="30dp"
                 android:paddingTop="8dp"
-                android:textSize="12dp" />
+                android:textSize="11.52dp" />
 
         </LinearLayout>
     </ScrollView>
@@ -174,10 +181,13 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
+        android:stateListAnimator="@null"
+        android:elevation="0dp"
         android:background="@drawable/button_background"
         android:text="동의"
+        android:fontFamily="@font/suit_variable_font"
         android:textColor="@color/b500"
-        android:textSize="13dp"
+        android:textSize="14.4dp"
         android:textFontWeight="600"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -4,22 +4,27 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.Window
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.spoteam_android.NickNameRequest
 import com.example.spoteam_android.NickNameResponse
+import com.example.spoteam_android.NicknameCheckResponse
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.ActivityNicNameBinding
 import com.example.spoteam_android.databinding.DialogAgreementBinding
 import com.example.spoteam_android.databinding.DialogIdentificationAgreementBinding
-import com.navercorp.nid.oauth.NidOAuthPreferencesManager.accessToken
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,10 +38,19 @@ class NicNameActivity : AppCompatActivity() {
         binding = ActivityNicNameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Toolbar 클릭 시 이전 화면 이동
         binding.activityNicknameLoginTb.setOnClickListener {
-            startActivity(Intent(this, NormalLoginActivity::class.java))
+            startActivity(Intent(this, StartLoginActivity::class.java))
         }
+        binding.activityNickNameNicknameEt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val nickname = s.toString().trim()
+                checkNicknameDuplicate(nickname)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
 
         binding.activityStartloginCheckBox1.isClickable = false
         binding.activityStartloginCheckBox1.isFocusable = false
@@ -63,38 +77,30 @@ class NicNameActivity : AppCompatActivity() {
             sendNicknameToServer(nickname, personalInfo, idInfo)
         }
 
-        binding.activityNickNameNicknameEt.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) = validateNextButtonState()
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
 
-        validateNextButtonState()
     }
 
-    private fun validateNextButtonState() {
-        val nickname = binding.activityNickNameNicknameEt.text.toString().trim()
-        val isAllChecked = binding.activityStartloginCheckBox1.isChecked && binding.activityStartloginCheckBox2.isChecked
-        binding.activityStartloginLoginwithspotNextBt.isEnabled = nickname.isNotEmpty() && isAllChecked
-    }
 
     private fun showAgreementDialog() {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val dialogBinding = DialogAgreementBinding.inflate(LayoutInflater.from(this))
         dialog.setContentView(dialogBinding.root)
-        dialog.setCancelable(false)
-        dialog.window?.apply {
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            setLayout(
-                (resources.displayMetrics.widthPixels * 0.9).toInt(),
-                resources.getDimensionPixelSize(R.dimen.dialog_fixed_height)
-            )
-        }
+        dialog.window?.setLayout(
+            (325 * resources.displayMetrics.density).toInt(),
+            (400 * resources.displayMetrics.density).toInt()
+        )
+
+
         dialogBinding.dialogAgreementAcceptBtn.setOnClickListener {
             binding.activityStartloginCheckBox1.isChecked = true
             binding.activityStartloginCheckBox1Ll.setBackgroundResource(R.drawable.agreement_background)
-            validateNextButtonState()
+            val nickname = binding.activityNickNameNicknameEt.text.toString().trim()
+            checkNicknameDuplicate(nickname)
+            dialog.dismiss()
+        }
+        dialogBinding.dialogCloseBtn.setOnClickListener {
             dialog.dismiss()
         }
         dialog.show()
@@ -103,20 +109,23 @@ class NicNameActivity : AppCompatActivity() {
     private fun showIdentifyAgreementDialog() {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val dialogBinding = DialogIdentificationAgreementBinding.inflate(LayoutInflater.from(this))
         dialog.setContentView(dialogBinding.root)
-        dialog.setCancelable(false)
-        dialog.window?.apply {
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            setLayout(
-                (resources.displayMetrics.widthPixels * 0.9).toInt(),
-                resources.getDimensionPixelSize(R.dimen.dialog_fixed_height)
-            )
-        }
+        dialog.window?.setLayout(
+            (325 * resources.displayMetrics.density).toInt(),
+            (400 * resources.displayMetrics.density).toInt()
+        )
+
+
         dialogBinding.dialogAgreementAcceptBtn.setOnClickListener {
             binding.activityStartloginCheckBox2.isChecked = true
             binding.activityStartloginCheckBox2Ll.setBackgroundResource(R.drawable.agreement_background)
-            validateNextButtonState()
+            val nickname = binding.activityNickNameNicknameEt.text.toString().trim()
+            checkNicknameDuplicate(nickname)
+            dialog.dismiss()
+        }
+        dialogBinding.dialogCloseBtn.setOnClickListener {
             dialog.dismiss()
         }
         dialog.show()
@@ -137,34 +146,31 @@ class NicNameActivity : AppCompatActivity() {
 
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
-
-        val api = RetrofitInstance.retrofit.newBuilder()
-            .client(
-                RetrofitInstance.okHttpClient.newBuilder()
-                    .addInterceptor(logging)
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer $token")
-                            .build()
-                        chain.proceed(request)
-                    }.build()
-            )
-            .build()
-            .create(LoginApiService::class.java)
-
+        RetrofitInstance.setAuthToken(token)
+        val api = RetrofitInstance.retrofit.create(LoginApiService::class.java)
         api.updateNickName(nicknameRequest)
             .enqueue(object : Callback<NickNameResponse> {
                 override fun onResponse(call: Call<NickNameResponse>, response: Response<NickNameResponse>) {
-                    Log.d("닉네임 API", "nickname=$nickname, personalInfo=$personalInfo, idInfo=$idInfo")
                     if (response.isSuccessful && response.body()?.isSuccess == true) {
                         val intent = Intent(this@NicNameActivity, RegisterInformation::class.java)
-                        intent.putExtra("mode", "PREFERENCE")
+                        intent.putExtra("mode", "START")
                         startActivity(intent)
                         finish()
                     } else {
-                        Toast.makeText(this@NicNameActivity, "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
                         val errorMsg = response.errorBody()?.string()
                         Log.e("서버 응답", "code=${response.code()}, error=$errorMsg")
+
+                        if (errorMsg?.contains("만료된 JWT token") == true) {
+                            val tokenManager = TokenManager(this@NicNameActivity)
+                            tokenManager.clearTokens()
+                            Toast.makeText(this@NicNameActivity, "로그인이 만료되었습니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this@NicNameActivity, StartLoginActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            Toast.makeText(this@NicNameActivity, "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
 
@@ -174,6 +180,108 @@ class NicNameActivity : AppCompatActivity() {
                 }
             })
     }
+    private fun checkNicknameDuplicate(nickname: String) {
+        if (nickname.isBlank()) {
+            binding.activityNickNameValidMessageTv.apply {
+                text = getString(R.string.nick_name) // 원래 문구 복원
+                setTextColor(ContextCompat.getColor(this@NicNameActivity, R.color.g400))
+                visibility = View.VISIBLE
+            }
+            binding.activityNickNameNicknameEt.setCompoundDrawables(null, null, null, null)
+            binding.activityNickNameNicknameEt.background =
+                ContextCompat.getDrawable(this, R.drawable.normal_login_edittext_corner_rectangle)
+            binding.activityStartloginLoginwithspotNextBt.isEnabled = false
+            return
+        }
+        if (!isNicknameValidFormat(nickname)) {
+            updateValidationUI(
+                isValid = false,
+                editText = binding.activityNickNameNicknameEt,
+                errorTextView = binding.activityNickNameValidMessageTv,
+                successMessage = "",
+                errorMessage = "사용 가능한 닉네임입니다."
+            )
+            return
+        }
+
+        RetrofitInstance.retrofit.create(LoginApiService::class.java)
+            .checkNickname(nickname)
+            .enqueue(object : Callback<NicknameCheckResponse> {
+                override fun onResponse(
+                    call: Call<NicknameCheckResponse>,
+                    response: Response<NicknameCheckResponse>
+                ) {
+                    val isDuplicate = response.body()?.result?.duplicate ?: false
+
+                    if (isDuplicate) {
+                        updateValidationUI(
+                            isValid = false,
+                            editText = binding.activityNickNameNicknameEt,
+                            errorTextView = binding.activityNickNameValidMessageTv,
+                            successMessage = "",
+                            errorMessage = "사용 불가능한 닉네임입니다."
+                        )
+                    } else {
+                        updateValidationUI(
+                            isValid = true,
+                            editText = binding.activityNickNameNicknameEt,
+                            errorTextView = binding.activityNickNameValidMessageTv,
+                            successMessage = "사용 가능한 닉네임입니다.",
+                            errorMessage = ""
+                        )
+                    }
+
+                }
+
+                override fun onFailure(call: Call<NicknameCheckResponse>, t: Throwable) {
+                    Log.e("닉네임 중복 확인 실패", t.toString())
+                }
+            })
+    }
+    private fun updateValidationUI(
+        isValid: Boolean,
+        editText: EditText,
+        errorTextView: TextView,
+        successMessage: String,
+        errorMessage: String
+    ) {
+        val icon = if (isValid) R.drawable.aftercheck else R.drawable.after_alert
+        val background = if (isValid) R.drawable.normal_login_edittext_corner_rectangle else R.drawable.error_edittext_background
+
+
+        // 아이콘 설정
+        ContextCompat.getDrawable(this, icon)?.let { drawable ->
+            val iconDrawable = ContextCompat.getDrawable(this, icon)
+            val insetDrawable = InsetDrawable(iconDrawable, 0, 0, 30, 0)
+            val iconSize = (binding.activityNickNameNicknameEt.textSize * 2).toInt()
+            insetDrawable.setBounds(0, 0, iconSize, iconSize)
+            binding.activityNickNameNicknameEt.setCompoundDrawables(null, null, insetDrawable, null)
+
+        }
+
+        // 텍스트 메시지 설정
+        errorTextView.apply {
+            visibility = View.VISIBLE
+            text = if (isValid) successMessage else errorMessage
+            setTextColor(ContextCompat.getColor(context, if (isValid) R.color.b500 else R.color.r500))
+        }
+
+        // EditText 배경 변경
+        editText.background = ContextCompat.getDrawable(this, background)
+
+        // 다음 버튼 활성화 여부 갱신
+        val allAgreed = binding.activityStartloginCheckBox1.isChecked && binding.activityStartloginCheckBox2.isChecked
+        binding.activityStartloginLoginwithspotNextBt.isEnabled = isValid && allAgreed
+    }
+
+    private val nicknameRegex = Regex("^[가-힣a-zA-Z0-9_/]{1,8}$")
+    private fun isNicknameValidFormat(nickname: String): Boolean {
+        return nicknameRegex.matches(nickname)
+    }
+
+
+
+
 
 
 }

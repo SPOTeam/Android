@@ -36,8 +36,6 @@ class CheckListLocationActivity : AppCompatActivity() {
         val selectedThemes = intent.getStringArrayListExtra("selectedThemes")
         val selectedPurpose = intent.getIntegerArrayListExtra("selectedPurpose")
 
-        Log.d("CheckListLocationActivity", "Received Themes: $selectedThemes")
-        Log.d("CheckListLocationActivity", "Received Purpose: $selectedPurpose")
 
         setSupportActionBar(binding.activityChecklistLocationTb)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

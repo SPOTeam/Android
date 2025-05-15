@@ -40,6 +40,8 @@ class IntroduceStudyShortFragment : Fragment() {
             "naver" -> sharedPreferences.getString("${email}_naverProfileImageUrl", null)
             else -> null
         }
+        val kakaoNickname = sharedPreferences.getString("${email}_nickname", "Unknown")
+        binding.profileNickname.text = "${kakaoNickname}"
 
         viewModel.studyRequest.value?.let { studyData ->
             binding.fragmentIntroduceStudyShortTv.text = studyData.introduction
@@ -48,9 +50,9 @@ class IntroduceStudyShortFragment : Fragment() {
 
         Glide.with(this)
             .load(profileImageUrl)
-            .error(R.drawable.ic_preview_profile) // 실패 시 기본 이미지
-            .fallback(R.drawable.ic_preview_profile) // null일 때 기본 이미지
-            .into(binding.ivProfile)
+            .error(R.drawable.ic_preview_profile)
+            .fallback(R.drawable.ic_preview_profile)
+            .into(binding.fragmentDetailStudyHomeHostuserIv)
     }
 
 
