@@ -36,7 +36,7 @@ class StudyAdapter(
         return if (position < itemList.size) TYPE_ITEM else TYPE_FOOTER
     }
 
-    override fun getItemCount(): Int = itemList.size + 1 // +1 for footer
+    override fun getItemCount(): Int = if (itemList.isEmpty()) 0 else itemList.size + 1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == TYPE_ITEM) {
