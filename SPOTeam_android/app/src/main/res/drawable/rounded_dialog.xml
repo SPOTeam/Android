@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- res/drawable/rounded_dialog.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/b100"/>
+    <stroke android:width="1dp" android:color="@color/b200" />
+    <solid android:color="@color/b100" />
     <corners android:radius="16dp" />
 </shape>
