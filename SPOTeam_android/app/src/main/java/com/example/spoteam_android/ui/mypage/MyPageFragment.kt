@@ -15,17 +15,24 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.spoteam_android.FinishedStudyItem
+import com.example.spoteam_android.FinishedStudyResponse
 import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
+import com.example.spoteam_android.ReasonApiResponse
+import com.example.spoteam_android.RegionApiResponse
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.StudyResponse
+import com.example.spoteam_android.ThemeApiResponse
 import com.example.spoteam_android.databinding.FragmentMypageBinding
+import com.example.spoteam_android.login.LoginApiService
 import com.example.spoteam_android.login.StartLoginActivity
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MyPageStudyNumInfo
 import com.example.spoteam_android.ui.community.MyPageStudyNumResponse
 import com.example.spoteam_android.ui.community.ScrapFragment
+import com.example.spoteam_android.ui.interestarea.FinishedStudyApiService
 import com.example.spoteam_android.ui.mypage.cancel.CancelSPOTFragment
 import com.example.spoteam_android.ui.mypage.rule.CommunityPrivacyPolicyFragment
 import com.example.spoteam_android.ui.mypage.rule.CommunityRestrictionsFragment
@@ -42,8 +49,7 @@ class MyPageFragment : Fragment() {
     private lateinit var binding: FragmentMypageBinding
     private var memberId: Int = -1
     private lateinit var myStudyAdapter: MyStudyAdapter
-    private val studyList = mutableListOf<StudyItem>()
-    private val studyApiService: StudyApiService by lazy { RetrofitInstance.retrofit.create(StudyApiService::class.java) }
+    private val studyList = mutableListOf<FinishedStudyItem>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +62,10 @@ class MyPageFragment : Fragment() {
         setNickname()
         fetchMyPageInfo()
         setupRecyclerView()
-        fetchStudyData()
+        fetchFinishedStudyData()
+        fetchThemes()
+        fetchRegions()
+        fetchReasons()
 
         return binding.root
     }
@@ -95,10 +104,9 @@ class MyPageFragment : Fragment() {
     private fun setupRecyclerView() {
         myStudyAdapter = MyStudyAdapter(studyList)
         binding.recyclerViewMyStudies.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = myStudyAdapter
         }
-        binding.recyclerViewMyStudies.setOnTouchListener { _, _ -> true }
     }
 
 
@@ -233,55 +241,52 @@ class MyPageFragment : Fragment() {
         navigateToLoginScreen()
     }
 
-    private fun fetchStudyData() {
+    private fun fetchFinishedStudyData() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val email = sharedPreferences.getString("currentEmail", null)
+
+        val service = RetrofitInstance.retrofit.create(FinishedStudyApiService::class.java)
 
         if (email != null) {
             val memberId = sharedPreferences.getInt("${email}_memberId", -1)
 
             if (memberId != -1) {
-                studyApiService.getStudies(0, 5)
-                    .enqueue(object : Callback<StudyResponse> {
+                service.GetFinshedStudy(0, 5)
+                    .enqueue(object : Callback<FinishedStudyResponse> {
                         override fun onResponse(
-                            call: Call<StudyResponse>,
-                            response: Response<StudyResponse>
+                            call: Call<FinishedStudyResponse>,
+                            response: Response<FinishedStudyResponse>
                         ) {
                             if (response.isSuccessful) {
-                                response.body()?.result?.let { result ->
+                                response.body()?.result?.studyHistories?.let { studyHistories ->
 
-                                    val content = result.content
-                                    Log.d("fetchStudyData", "Received data: $content") // 추가된 로그
+                                    val content = studyHistories.content
+                                    Log.d("fetchFinishedStudyData", "Received data: $content")
+
                                     if (!content.isNullOrEmpty()) {
                                         requireActivity().runOnUiThread {
-                                            myStudyAdapter.updateList(content.map {
-                                                StudyItem(
-                                                    studyId = it.studyId,
+                                            val studyItems = content.map {
+                                                FinishedStudyItem(
+                                                    studyId = it.studyId, // 만약 StudyItem에서 Long이라면 toLong() 해주세요
                                                     title = it.title,
-                                                    goal = it.goal,
-                                                    introduction = it.introduction,
-                                                    memberCount = it.memberCount,
-                                                    heartCount = it.heartCount,
-                                                    hitNum = it.hitNum,
-                                                    maxPeople = it.maxPeople,
-                                                    studyState = it.studyState,
-                                                    themeTypes = it.themeTypes,
-                                                    regions = it.regions,
-                                                    imageUrl = it.imageUrl,
-                                                    liked = it.liked
+                                                    performance = it.performance,
+                                                    createdAt = it.createdAt,
+                                                    finishedAt = it.finishedAt
                                                 )
-                                            })
+                                            }
+
+                                            myStudyAdapter.updateList(studyItems)
                                         }
                                         binding.recyclerViewMyStudies.visibility = View.VISIBLE
-
                                     }
+
                                 }
                             } else {
                                 Toast.makeText(requireContext(), "마지막 페이지입니다", Toast.LENGTH_SHORT).show()
                             }
                         }
 
-                        override fun onFailure(call: Call<StudyResponse>, t: Throwable) {
+                        override fun onFailure(call: Call<FinishedStudyResponse>, t: Throwable) {
                             Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
                         }
                     })
@@ -293,8 +298,98 @@ class MyPageFragment : Fragment() {
         }
     }
 
+    private fun fetchThemes() {
+        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
+        service.getThemes().enqueue(object : Callback<ThemeApiResponse> {
+            override fun onResponse(call: Call<ThemeApiResponse>, response: Response<ThemeApiResponse>) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse != null && apiResponse.isSuccess) {
+                        val themes = apiResponse.result.themes
+                        if (themes.isNotEmpty()) {
+                            binding.tvField.text = themes.joinToString(" ")
+                        }
+                    }
+                } else {
+                    Log.e("ThemePreferenceFragment", "테마 가져오기 실패: ${response.errorBody()?.string()}")
+                }
+            }
 
+            override fun onFailure(call: Call<ThemeApiResponse>, t: Throwable) {
+                Log.e("ThemePreferenceFragment", "테마 가져오기 오류", t)
+            }
+        })
+    }
 
+    private fun fetchRegions() {
+        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
+
+        service.getRegion().enqueue(object : Callback<RegionApiResponse> {
+            override fun onResponse(
+                call: Call<RegionApiResponse>,
+                response: Response<RegionApiResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse != null && apiResponse.isSuccess) {
+                        val regions = apiResponse.result.regions // 서버에서 받아오는 지역 리스트
+                        if (regions.isNotEmpty()) {
+                            if (regions.isNotEmpty()) {
+                                val fullRegionNames = regions.joinToString(" ") {
+                                    "${it.province} ${it.district} ${it.neighborhood}"
+                                }
+                                binding.tvRegion.text = fullRegionNames
+                            }
+                        }
+                    } else {
+                        val errorMessage = apiResponse?.message ?: "알 수 없는 오류 발생"
+                        Log.e("RegionPreferenceFragment", "지역 가져오기 실패: $errorMessage")
+                        Toast.makeText(
+                            requireContext(),
+                            "지역 가져오기 실패: $errorMessage",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "응답 실패"
+                    Log.e("RegionPreferenceFragment", "지역 가져오기 실패: $errorMessage")
+                    Toast.makeText(requireContext(), "지역 가져오기 실패: $errorMessage", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+
+            override fun onFailure(call: Call<RegionApiResponse>, t: Throwable) {
+                Log.e("RegionPreferenceFragment", "네트워크 오류: ${t.message}")
+                Toast.makeText(requireContext(), "네트워크 오류 발생", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    private fun fetchReasons() {
+        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
+
+        service.getReasons().enqueue(object : Callback<ReasonApiResponse> {
+            override fun onResponse(call: Call<ReasonApiResponse>, response: Response<ReasonApiResponse>) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse != null && apiResponse.isSuccess) {
+                        val reasons = apiResponse.result.reasons // 🔥 API에서 받은 문자열 리스트
+                        binding.tvGoal.text = reasons
+                            .map { it.replace("_", " ") }
+                            .joinToString(" ")
+                    } else {
+                        Log.e("PurposePreferenceFragment", "이유 가져오기 실패: ${apiResponse?.message}")
+                    }
+                } else {
+                    Log.e("PurposePreferenceFragment", "이유 가져오기 실패: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ReasonApiResponse>, t: Throwable) {
+                Log.e("PurposePreferenceFragment", "이유 가져오기 오류", t)
+            }
+        })
+    }
 
 
     private fun clearSharedPreferences() {
