@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.interestarea
 
+import com.example.spoteam_android.FinishedStudyResponse
 import com.example.spoteam_android.HostApiResponse
 import com.example.spoteam_android.HostWithDrawl
 import com.example.spoteam_android.WithdrawHostRequest
@@ -142,6 +143,13 @@ interface GetHostInterface {
     ): Call<HostWithDrawl>
 }
 
+interface FinishedStudyApiService {
+    @GET("/spot/search/studies/finished-studies")
+    fun GetFinshedStudy(
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): Call<FinishedStudyResponse>
+}
 
 
 

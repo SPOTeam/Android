@@ -83,7 +83,7 @@ class DetailStudyHomeProfileAdapter(
                 } else {
                     binding.fragmentDetailStudyHomeHostuserIv.strokeColor =
                         ColorStateList.valueOf(
-                            ContextCompat.getColor(
+                                ContextCompat.getColor(
                                 binding.root.context,
                                 android.R.color.transparent
                             )

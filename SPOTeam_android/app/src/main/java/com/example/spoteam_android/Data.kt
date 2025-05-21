@@ -638,3 +638,34 @@ data class NicknameCheckResult(
 )
 
 
+data class FinishedStudyResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: FinishedStudyResult
+)
+
+data class FinishedStudyResult(
+    val studyHistories: StudyHistories
+)
+
+data class StudyHistories(
+    val totalPages: Int,
+    val totalElements: Int,
+    val size: Int,
+    val content: List<FinishedStudyItem>,
+    val number: Int,
+    val first: Boolean,
+    val last: Boolean,
+    val empty: Boolean
+)
+
+data class FinishedStudyItem(
+    val studyId: Int,
+    val title: String,
+    val performance: String?,
+    val createdAt: String,
+    val finishedAt: String?
+)
+
+
