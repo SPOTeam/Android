@@ -19,8 +19,8 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/ic_new_scrab"
             app:tint="@color/g400"
             android:layout_marginBottom="30dp"/>
@@ -28,13 +28,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="스크랩한 글이 없습니다."
-            android:textColor="@color/selector_blue"/>
+            android:text="스크랩한 글이 아직 없어요."
+            android:fontFamily="@font/suit_variable_font"
+            android:textSize="18dp"
+            android:textFontWeight="700"
+            android:textColor="@color/b500"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SPOT에서의 이야기들을 둘러보세요"
+            android:text="스팟의 이야기들을 먼저 둘러볼까요?"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="16dp"
+            android:layout_marginTop="10dp"
             android:textColor="@color/g400" />
 
         <TextView
@@ -42,12 +49,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:background="@drawable/selector_category_background"
+            android:background="@drawable/button_background"
             android:paddingHorizontal="40dp"
             android:paddingVertical="10dp"
-            android:textSize="15sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:text="게시판 둘러보기"
-            android:textColor="@color/selector_blue" />
+            android:textColor="@drawable/button_textcolor" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -55,108 +64,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:nestedScrollingEnabled="false"
-        app:layout_constraintBottom_toTopOf="@id/page_number_layout"
+        android:layout_marginHorizontal="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/item_community_content"
         android:visibility="gone"/>
-
-    <LinearLayout
-        android:id="@+id/page_number_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/previous_page"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="〈"
-            android:textSize="16dp"
-            android:fontFamily="@font/suit_bold"
-            android:textColor="@color/b500"
-            android:layout_marginEnd="10dp"
-            android:padding="10dp"
-            android:visibility="visible"/>
-
-        <TextView
-            android:id="@+id/page_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1"
-            android:textSize="14dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/suit_semi_bold"
-            android:padding="10dp"
-            android:layout_marginEnd="5dp"
-            android:visibility="visible"/>
-
-        <TextView
-            android:id="@+id/page_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2"
-            android:textSize="14dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/suit_semi_bold"
-            android:padding="10dp"
-            android:layout_marginEnd="5dp"
-            android:visibility="visible"/>
-
-        <TextView
-            android:id="@+id/page_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3"
-            android:textSize="14dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/suit_semi_bold"
-            android:padding="10dp"
-            android:layout_marginEnd="5dp"
-            android:visibility="visible"/>
-
-        <TextView
-            android:id="@+id/page_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4"
-            android:textSize="14dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/suit_semi_bold"
-            android:padding="10dp"
-            android:layout_marginEnd="5dp"
-            android:visibility="visible"/>
-
-        <TextView
-            android:id="@+id/page_5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5"
-            android:textSize="14dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/suit_semi_bold"
-            android:padding="10dp"
-            android:layout_marginEnd="10dp"
-            android:visibility="visible"/>
-
-        <TextView
-            android:id="@+id/next_page"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="〉"
-            android:textSize="16dp"
-            android:fontFamily="@font/suit_bold"
-            android:textColor="@color/b500"
-            android:padding="10dp"
-            android:visibility="visible"/>
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

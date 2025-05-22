@@ -53,7 +53,7 @@ class ReportStudyCrewMemberRVAdapter(
 
             // ✅ 선택된 상태에서 테두리 적용
             if (selectedPosition == position) {
-                imageView.strokeWidth = 6f  // 두께 설정
+                imageView.strokeWidth = 2f  // 두께 설정
                 imageView.strokeColor = binding.root.context.getColorStateList(R.color.red)  // 빨간색 테두리
                 textView.setTextColor(Color.RED)
             } else {

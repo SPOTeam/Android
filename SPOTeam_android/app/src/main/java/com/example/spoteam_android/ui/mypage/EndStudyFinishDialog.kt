@@ -24,14 +24,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class EndStudyFinishDialog(val context: Context) {
+interface fetchProgressStudy {
+    fun fetchProgress()
+}
+
+class EndStudyFinishDialog(
+    val context: Context,
+    val onComplete: (() -> Unit)? = null // 🔹 콜백 추가
+) {
 
     private val dlg = android.app.Dialog(context)
-    private var resultContext : String = ""
-
-    fun setContext(text : String) {
-        resultContext = text
-    }
 
 
     fun start() {
@@ -42,12 +44,14 @@ class EndStudyFinishDialog(val context: Context) {
         val okButton = dlg.findViewById<Button>(R.id.dialog_complete_study_finish_bt)
         okButton.setOnClickListener {
 //            Toast.makeText(context, resultContext,Toast.LENGTH_SHORT).show()
+            onComplete?.invoke() // ✅ 여기서 fetchProgress() 실행
             dlg.dismiss()
         }
 
         val closeButton = dlg.findViewById<ImageView>(R.id.cancel_x_finish_study_iv)
         closeButton.setOnClickListener {
 //            Toast.makeText(context, resultContext,Toast.LENGTH_SHORT).show()
+            onComplete?.invoke() // ✅ 여기서 fetchProgress() 실행
             dlg.dismiss()
         }
 

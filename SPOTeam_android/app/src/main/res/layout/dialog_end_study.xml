@@ -4,16 +4,15 @@
     android:layout_width="350dp"
     android:layout_height="420dp"
     android:layout_gravity="center"
+    android:padding="20dp"
     android:background="@drawable/dialog_rounded_background">
 
     <ImageView
         android:id="@+id/end_study_close"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:src="@drawable/ic_x_button"
         app:tint="@color/black"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -22,14 +21,12 @@
         android:id="@+id/dialog_end_study_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/pretendard"
-        android:text="스터디를 끝내시겠습니까?"
-        android:textColor="#000000"
-        android:textSize="21sp"
-        android:textStyle="bold"
-        android:layout_marginTop="5dp"
+        android:text="스터디를 마무리할까요?"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="700"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/end_study_close" />
 
@@ -37,11 +34,12 @@
         android:id="@+id/dialog_end_study_content_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="팀원들과 함께한 스터디를 마무리합니다."
+        android:layout_marginTop="15dp"
+        android:text="팀원들과 함께한 스터디를 끝냅니다."
         android:textColor="@color/black"
-        android:fontFamily="@font/pretendard"
-        android:textSize="14sp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="500"
+        android:textSize="13dp"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,11 +50,12 @@
         android:id="@+id/dialog_end_study_result_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:text="우리 스터디의 성과"
         android:textColor="@color/black"
-        android:fontFamily="@font/pretendard"
-        android:textSize="14sp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="600"
+        android:textSize="15dp"
         android:textStyle="bold"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="@id/dialog_study_result_et"
@@ -75,17 +74,15 @@
         android:id="@+id/dialog_study_result_et"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:textColorHint="#D8D8D8"
         android:inputType="textMultiLine"
         android:padding="10dp"
-        android:textSize="15sp"
-        android:fontFamily="@font/pretendard"
+        android:textSize="15dp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="600"
         android:maxLength="30"
         android:background="@drawable/edittext_rounded_corner_rectangle"
-        android:gravity="center"
         android:layout_marginTop="5dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:gravity="start|top"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialog_end_study_result_tv"/>
 
@@ -103,8 +100,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="("
-            android:textSize="12sp"
-            android:fontFamily="@font/pretendard"
+            android:textSize="12dp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:textColor="@color/g300"
             android:gravity="center" />
 
 
@@ -113,8 +112,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:textSize="12sp"
-            android:fontFamily="@font/pretendard"
+            android:textSize="12dp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:textColor="@color/g300"
             android:gravity="center" />
 
         <TextView
@@ -122,8 +123,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" / 30"
-            android:textSize="12sp"
-            android:fontFamily="@font/pretendard"
+            android:textSize="12dp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:textColor="@color/g300"
             android:gravity="center" />
 
 
@@ -132,8 +135,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=")"
-            android:textSize="12sp"
-            android:fontFamily="@font/pretendard"
+            android:textSize="12dp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:textColor="@color/g300"
             android:gravity="center" />
     </LinearLayout>
 
@@ -143,8 +148,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="작성한 우리 스터디의 성과는 모든 팀원들의 히스토리로\n공통적으로 저장됩니다."
-        android:fontFamily="@font/pretendard"
-        android:textSize="12sp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="500"
+        android:textSize="12dp"
         android:textColor="@color/button_disabled_text"
         app:layout_constraintStart_toStartOf="@id/dialog_study_result_et"
         app:layout_constraintTop_toBottomOf="@id/dialog_study_result_et" />
@@ -155,9 +161,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:text="@string/end_study_warn"
-        android:fontFamily="@font/pretendard"
-        android:textColor="@color/red"
-        android:textSize="12sp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="400"
+        android:textColor="@color/r500"
+        android:textSize="12dp"
+        android:textAlignment="center"
+        android:lineSpacingExtra="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialog_end_study_additional_comment_tv" />
@@ -165,38 +174,36 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/dialog_apply_end_study_bt"
-        android:layout_width="160dp"
-        android:layout_height="38dp"
-        android:text="끝내기"
+        android:layout_width="150dp"
+        android:layout_height="44dp"
+        android:text="마무리하기"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="600"
         android:background="@drawable/button_background"
         android:textColor="@drawable/button_textcolor"
         android:gravity="center"
-        android:layout_marginStart="10dp"
         android:enabled="false"
-        android:layout_marginTop="15dp"
-        android:elevation="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_end_study_additional_warn_tv"/>
+        android:layout_marginBottom="1dp"
+        app:layout_constraintStart_toStartOf="@id/dialog_study_result_et"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/dialog_cancel_end_study_bt"
-        android:layout_width="160dp"
-        android:layout_height="38dp"
+        android:layout_width="150dp"
+        android:layout_height="44dp"
         android:text="취소"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="600"
         android:background="@drawable/button_cancel"
         android:textColor="@color/black"
+        android:paddingHorizontal="30dp"
         android:gravity="center"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="15dp"
-        android:elevation="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_end_study_additional_warn_tv"/>
+        android:layout_marginBottom="1dp"
+        app:layout_constraintEnd_toEndOf="@id/dialog_study_result_et"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
