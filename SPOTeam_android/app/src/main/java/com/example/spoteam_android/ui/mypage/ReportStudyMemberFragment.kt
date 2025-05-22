@@ -1,63 +1,60 @@
 package com.example.spoteam_android
 
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.util.TypedValue
 import android.view.Window
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.spoteam_android.databinding.FragmentReportStudymemberBinding
+import com.example.spoteam_android.databinding.DialogReportStudymemberBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MembersDetail
 import com.example.spoteam_android.ui.community.StudyMemberResponse
 import com.example.spoteam_android.ui.mypage.ReportStudyCrewMemberRVAdapter
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ReportStudyMemberFragment(private val context: Context, private val studyId: Int) : ReportCompleteListener {
-    private val dlg = BottomSheetDialog(context, R.style.CustomBottomSheetDialogTheme)
-    private var binding: FragmentReportStudymemberBinding? = null // ✅ nullable 변경
+class ReportStudyMemberFragment(
+    private val context: Context,
+    private val studyId: Int
+) {
+
+    private val dlg = Dialog(context) // ✅ 일반 Dialog로 변경
+    private var binding: DialogReportStudymemberBinding? = null
     private var selectedCrewMember: Int = -1
 
     fun start() {
-        Log.d("ReportStudyCrewDialog", "StudyId : $studyId")
+//        Log.d("ReportStudyCrewDialog", "StudyId : $studyId")
 
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        // ✅ 바인딩 초기화
-        binding = FragmentReportStudymemberBinding.inflate(dlg.layoutInflater)
-        dlg.setContentView(binding!!.root) // ✅ null 체크 후 사용
-
-        val heightInPx = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            700f,
-            context.resources.displayMetrics
-        ).toInt()
+        binding = DialogReportStudymemberBinding.inflate(dlg.layoutInflater)
+        dlg.setContentView(binding!!.root)
 
         dlg.window?.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            heightInPx
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 350f, context.resources.displayMetrics
+            ).toInt(),
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 420f, context.resources.displayMetrics
+            ).toInt()
         )
 
-        val btnExit = binding?.reportCrewPrevIv
-        btnExit?.setOnClickListener {
+
+        dlg.setCanceledOnTouchOutside(true) // 바깥 터치 시 닫기 허용
+
+        binding?.reportCrewPrevIv?.setOnClickListener {
             dlg.dismiss()
         }
 
-        val btnClose = binding?.cancelReportCrewTv
-        btnClose?.setOnClickListener {
-            dlg.dismiss()
-        }
+        fetchStudyMember()
 
-        fetchStudyMember() // ✅ 멤버 리스트 가져오기
-
-        binding?.reportCrewTv?.setOnClickListener{
+        binding?.reportCrewTv?.setOnClickListener {
             startReportContentDialog(studyId)
         }
 
@@ -65,8 +62,9 @@ class ReportStudyMemberFragment(private val context: Context, private val studyI
     }
 
     private fun startReportContentDialog(studyId: Int) {
-        val reportContentDialog = ReportStudyMemberContentFragment(context, studyId, selectedCrewMember, this)
+        val reportContentDialog = ReportStudyMemberContentFragment(context, studyId, selectedCrewMember)
         reportContentDialog.start()
+        dlg.dismiss()
     }
 
     private fun fetchStudyMember() {
@@ -81,7 +79,7 @@ class ReportStudyMemberFragment(private val context: Context, private val studyI
                         val studyMemberResponse = response.body()
                         if (studyMemberResponse?.isSuccess == "true") {
                             val studyMembers = studyMemberResponse.result.members
-                            initMembersRecycler(studyMembers)  // ✅ 멤버 데이터 설정
+                            initMembersRecycler(studyMembers)
                         }
                     } else {
                         showError(response.code().toString())
@@ -110,17 +108,12 @@ class ReportStudyMemberFragment(private val context: Context, private val studyI
     }
 
     private fun checkMemberId() {
-        if(selectedCrewMember != -1) {
+        if (selectedCrewMember != -1) {
             binding?.reportCrewTv?.isEnabled = true
         }
     }
 
-
     private fun showError(message: String?) {
         Toast.makeText(context, "Error: $message", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onReportCompleted() {
-        dlg.dismiss()
     }
 }

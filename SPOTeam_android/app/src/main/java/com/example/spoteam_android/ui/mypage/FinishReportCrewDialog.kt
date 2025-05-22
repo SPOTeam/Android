@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.Image
 import android.util.Log
+import android.util.TypedValue
 import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
@@ -24,6 +25,7 @@ class FinishReportCrewDialog(private val context: Context) {
     private val dlg = android.app.Dialog(context)
 
     fun start() {
+
         // 타이틀바 제거
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
         // 커스텀 다이얼로그 radius 적용
@@ -31,6 +33,16 @@ class FinishReportCrewDialog(private val context: Context) {
 
         // 다이얼로그 레이아웃 설정
         dlg.setContentView(R.layout.dialog_crew_report_finish)
+
+        dlg.window?.setLayout(
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 350f, context.resources.displayMetrics
+            ).toInt(),
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 266f, context.resources.displayMetrics
+            ).toInt()
+        )
+
 
         val btnMove1 = dlg.findViewById<ImageView>(R.id.report_crew_finish_prev_iv)
         btnMove1.setOnClickListener {
