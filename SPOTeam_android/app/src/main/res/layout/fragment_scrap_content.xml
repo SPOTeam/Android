@@ -19,8 +19,8 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/ic_new_scrab"
             app:tint="@color/g400"
             android:layout_marginBottom="30dp"/>
@@ -28,13 +28,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="스크랩한 글이 없습니다."
-            android:textColor="@color/selector_blue"/>
+            android:text="스크랩한 글이 아직 없어요."
+            android:fontFamily="@font/suit_variable_font"
+            android:textSize="18dp"
+            android:textFontWeight="700"
+            android:textColor="@color/b500"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SPOT에서의 이야기들을 둘러보세요"
+            android:text="스팟의 이야기들을 먼저 둘러볼까요?"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="16dp"
+            android:layout_marginTop="10dp"
             android:textColor="@color/g400" />
 
         <TextView
@@ -42,12 +49,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:background="@drawable/selector_category_background"
+            android:background="@drawable/button_background"
             android:paddingHorizontal="40dp"
             android:paddingVertical="10dp"
-            android:textSize="15sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:text="게시판 둘러보기"
-            android:textColor="@color/selector_blue" />
+            android:textColor="@drawable/button_textcolor" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

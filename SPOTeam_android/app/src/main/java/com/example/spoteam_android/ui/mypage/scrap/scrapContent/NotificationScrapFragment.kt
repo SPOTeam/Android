@@ -229,9 +229,4 @@ class NotificationScrapFragment : Fragment() {
     private fun showError(message: String?) {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }
