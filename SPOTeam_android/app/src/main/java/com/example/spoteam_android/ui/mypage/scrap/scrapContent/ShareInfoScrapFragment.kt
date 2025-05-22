@@ -14,13 +14,8 @@ import com.example.spoteam_android.MainActivity
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentScrapContentBinding
-import com.example.spoteam_android.ui.community.CategoryPagesDetail
-import com.example.spoteam_android.ui.community.CommunityAPIService
-import com.example.spoteam_android.ui.community.CommunityContentActivity
-import com.example.spoteam_android.ui.community.CommunityFragment
-import com.example.spoteam_android.ui.community.ContentLikeResponse
-import com.example.spoteam_android.ui.community.ContentUnLikeResponse
-import com.example.spoteam_android.ui.community.GetScrapResponse
+import com.example.spoteam_android.ui.community.*
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,7 +26,6 @@ class ShareInfoScrapFragment : Fragment() {
     private val binding get() = _binding!!
     private var memberId: Int = -1
     private val type = "INFORMATION_SHARING"
-    private var startPage = 0
     private var currentPage = 0
     private val size = 5 // 페이지당 항목 수
     private var totalPages = 0
@@ -45,8 +39,30 @@ class ShareInfoScrapFragment : Fragment() {
     ): View {
         _binding = FragmentScrapContentBinding.inflate(inflater, container, false)
 
-        // RecyclerView 초기화
-        scrapRVAdapter = ScrapContentRVAdapter(scrapItemList)
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val currentEmail = sharedPreferences.getString("currentEmail", null)
+        memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
+
+        setupRecyclerView()
+        setupFragmentResultListener()
+        setupLookAroundButton()
+
+        fetchPages()
+
+        return binding.root
+    }
+
+    private fun setupRecyclerView() {
+        scrapRVAdapter = ScrapContentRVAdapter(
+            dataList = scrapItemList,
+            onPageClick = { selectedPage ->
+                currentPage = selectedPage
+                fetchPages()
+            },
+            currentPageProvider = { currentPage },
+            totalPagesProvider = { totalPages }
+        )
+
         binding.communityCategoryContentRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
@@ -54,11 +70,10 @@ class ShareInfoScrapFragment : Fragment() {
             adapter = scrapRVAdapter
         }
 
-        // 클릭 리스너 설정
         scrapRVAdapter.setItemClickListener(object : ScrapContentRVAdapter.OnItemClickListener {
             override fun onItemClick(data: CategoryPagesDetail) {
                 val intent = Intent(requireContext(), CommunityContentActivity::class.java)
-                intent.putExtra("postInfo", data.postId.toString())
+                intent.putExtra("postInfo", data.postId)
                 startActivity(intent)
             }
 
@@ -78,160 +93,24 @@ class ShareInfoScrapFragment : Fragment() {
                 postContentScrap(data.postId)
             }
         })
+    }
 
-        // SharedPreferences 사용
-        val sharedPreferences =
-            requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val currentEmail = sharedPreferences.getString("currentEmail", null)
-        memberId = if (currentEmail != null) sharedPreferences.getInt(
-            "${currentEmail}_memberId",
-            -1
-        ) else -1
-
+    private fun setupFragmentResultListener() {
         parentFragmentManager.setFragmentResultListener("requestKey", this) { _, bundle ->
             val result = bundle.getString("resultKey")
             if (result == "SUCCESS") {
                 fetchPages()
             }
         }
+    }
 
+    private fun setupLookAroundButton() {
         binding.lookAroundTv.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
+            (requireActivity() as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, CommunityFragment())
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
         }
-
-        return binding.root
-    }
-
-    private fun deleteContentScrap(postId: Int) {
-        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.deleteContentScrap(postId)
-            .enqueue(object : Callback<ContentUnLikeResponse> {
-                override fun onResponse(
-                    call: Call<ContentUnLikeResponse>,
-                    response: Response<ContentUnLikeResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val unLikeResponse = response.body()
-                        if (unLikeResponse?.isSuccess == "true") {
-                            onResume()
-                        } else {
-                            showError(unLikeResponse?.message)
-                        }
-                    } else {
-                        showError(response.code().toString())
-                    }
-                }
-
-                override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
-                    Log.e("UnLikeContent", "Failure: ${t.message}", t)
-                }
-            })
-    }
-
-    private fun postContentScrap(postId: Int) {
-        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postContentScrap(postId)
-            .enqueue(object : Callback<ContentLikeResponse> {
-                override fun onResponse(
-                    call: Call<ContentLikeResponse>,
-                    response: Response<ContentLikeResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val likeResponse = response.body()
-                        if (likeResponse?.isSuccess == "true") {
-                            onResume()
-                        } else {
-                            showError(likeResponse?.message)
-                        }
-                    } else {
-                        showError(response.code().toString())
-                    }
-                }
-
-                override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
-                    Log.e("LikeContent", "Failure: ${t.message}", t)
-                }
-            })
-    }
-
-    private fun postLike(postId: Int) {
-        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.postContentLike(postId)
-            .enqueue(object : Callback<ContentLikeResponse> {
-                override fun onResponse(
-                    call: Call<ContentLikeResponse>,
-                    response: Response<ContentLikeResponse>
-                ) {
-//                    Log.d("LikeContent", "response: ${response.isSuccessful}")
-                    if (response.isSuccessful) {
-                        val likeResponse = response.body()
-//                        Log.d("LikeContent", "responseBody: ${likeResponse?.isSuccess}")
-                        if (likeResponse?.isSuccess == "true") {
-                            onResume()
-                        } else {
-                            showError(likeResponse?.message)
-                        }
-                    } else {
-                        showError(response.code().toString())
-                    }
-                }
-
-                override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
-                    Log.e("LikeContent", "Failure: ${t.message}", t)
-                }
-            })
-    }
-
-    private fun deleteLike(postId: Int) {
-        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.deleteContentLike(postId)
-            .enqueue(object : Callback<ContentUnLikeResponse> {
-                override fun onResponse(
-                    call: Call<ContentUnLikeResponse>,
-                    response: Response<ContentUnLikeResponse>
-                ) {
-//                    Log.d("UnLikeContent", "response: ${response.isSuccessful}")
-                    if (response.isSuccessful) {
-                        val unLikeResponse = response.body()
-//                        Log.d("UnLikeContent", "responseBody: ${unLikeResponse?.isSuccess}")
-                        if (unLikeResponse?.isSuccess == "true") {
-                            onResume()
-                        } else {
-                            showError(unLikeResponse?.message)
-                        }
-                    } else {
-                        showError(response.code().toString())
-                    }
-                }
-
-                override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
-                    Log.e("UnLikeContent", "Failure: ${t.message}", t)
-                }
-            })
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val pageButtons = listOf(
-            binding.page1, binding.page2, binding.page3, binding.page4, binding.page5
-        )
-
-        pageButtons.forEachIndexed { index, textView ->
-            textView.setOnClickListener {
-                val selectedPage = startPage + index
-                if (currentPage != selectedPage) {
-                    currentPage = selectedPage
-                    fetchPages()
-                }
-            }
-        }
-
-        setupPageNavigationButtons()
-        fetchPages()
     }
 
     override fun onResume() {
@@ -250,27 +129,22 @@ class ShareInfoScrapFragment : Fragment() {
                     if (response.isSuccessful) {
                         val pagesResponse = response.body()
                         if (pagesResponse?.isSuccess == "true") {
-                            val pagesResponseList = pagesResponse.result.postResponses ?: listOf()
+                            val pagesResponseList = pagesResponse.result.postResponses ?: emptyList()
                             scrapItemList.clear()
                             scrapItemList.addAll(pagesResponseList)
-
                             totalPages = pagesResponse.result.totalPage
 
                             if (scrapItemList.isNotEmpty()) {
                                 scrapRVAdapter.updateList(scrapItemList)
-                                updatePageUI()
                                 binding.emptyScrap.visibility = View.GONE
-                                binding.pageNumberLayout.visibility = View.VISIBLE
                                 binding.communityCategoryContentRv.visibility = View.VISIBLE
                             } else {
                                 binding.emptyScrap.visibility = View.VISIBLE
-                                binding.pageNumberLayout.visibility = View.GONE
                                 binding.communityCategoryContentRv.visibility = View.GONE
                             }
                         } else {
                             showError(pagesResponse?.message)
                             binding.emptyScrap.visibility = View.VISIBLE
-                            binding.pageNumberLayout.visibility = View.GONE
                             binding.communityCategoryContentRv.visibility = View.GONE
                         }
                     } else {
@@ -284,62 +158,80 @@ class ShareInfoScrapFragment : Fragment() {
             })
     }
 
-    private fun setupPageNavigationButtons() {
-        binding.previousPage.setOnClickListener {
-            if (currentPage > 0) {
-                currentPage--
-                fetchPages()
+    private fun postLike(postId: Int) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postContentLike(postId).enqueue(object : Callback<ContentLikeResponse> {
+            override fun onResponse(call: Call<ContentLikeResponse>, response: Response<ContentLikeResponse>) {
+                if (response.isSuccessful && response.body()?.isSuccess == "true") {
+                    fetchPages()
+                } else {
+                    showError(response.body()?.message)
+                }
             }
-        }
 
-        binding.nextPage.setOnClickListener {
-            if (currentPage < totalPages - 1) {
-                currentPage++
-                fetchPages()
+            override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
+                Log.e("LikeContent", "Failure: ${t.message}", t)
             }
-        }
+        })
     }
 
-    private fun updatePageUI() {
-        // ✅ 추가된 부분
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
-        Log.d("AllFragment", "totalPages : ${totalPages}, currentPage : ${currentPage}")
-        val pageButtons = listOf(
-            binding.page1,
-            binding.page2,
-            binding.page3,
-            binding.page4,
-            binding.page5
-        )
-
-        pageButtons.forEachIndexed { index, textView ->
-            val pageNum = startPage + index
-            if (pageNum < totalPages) {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(
-                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
-                )
-                textView.isEnabled = true
-                textView.alpha = 1.0f
-                textView.visibility = View.VISIBLE
-            } else {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(0)
-                textView.isEnabled = false // 클릭 안 되게
-                textView.alpha = 0.3f
-                textView.visibility = View.VISIBLE
+    private fun deleteLike(postId: Int) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deleteContentLike(postId).enqueue(object : Callback<ContentUnLikeResponse> {
+            override fun onResponse(call: Call<ContentUnLikeResponse>, response: Response<ContentUnLikeResponse>) {
+                if (response.isSuccessful && response.body()?.isSuccess == "true") {
+                    fetchPages()
+                } else {
+                    showError(response.body()?.message)
+                }
             }
-        }
 
-        binding.previousPage.isEnabled = currentPage > 0
-        binding.nextPage.isEnabled = currentPage < totalPages - 1
+            override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
+                Log.e("UnLikeContent", "Failure: ${t.message}", t)
+            }
+        })
+    }
+
+    private fun postContentScrap(postId: Int) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.postContentScrap(postId).enqueue(object : Callback<ContentLikeResponse> {
+            override fun onResponse(call: Call<ContentLikeResponse>, response: Response<ContentLikeResponse>) {
+                if (response.isSuccessful && response.body()?.isSuccess == "true") {
+                    fetchPages()
+                } else {
+                    showError(response.body()?.message)
+                }
+            }
+
+            override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
+                Log.e("ScrapContent", "Failure: ${t.message}", t)
+            }
+        })
+    }
+
+    private fun deleteContentScrap(postId: Int) {
+        val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
+        service.deleteContentScrap(postId).enqueue(object : Callback<ContentUnLikeResponse> {
+            override fun onResponse(call: Call<ContentUnLikeResponse>, response: Response<ContentUnLikeResponse>) {
+                if (response.isSuccessful && response.body()?.isSuccess == "true") {
+                    fetchPages()
+                } else {
+                    showError(response.body()?.message)
+                }
+            }
+
+            override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
+                Log.e("ScrapContent", "Failure: ${t.message}", t)
+            }
+        })
     }
 
     private fun showError(message: String?) {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
