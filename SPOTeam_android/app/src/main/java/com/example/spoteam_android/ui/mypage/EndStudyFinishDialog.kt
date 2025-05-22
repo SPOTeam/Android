@@ -34,11 +34,6 @@ class EndStudyFinishDialog(
 ) {
 
     private val dlg = android.app.Dialog(context)
-    private var resultContext : String = ""
-
-    fun setContext(text : String) {
-        resultContext = text
-    }
 
 
     fun start() {

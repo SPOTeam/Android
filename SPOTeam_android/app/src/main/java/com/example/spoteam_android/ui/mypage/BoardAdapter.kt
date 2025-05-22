@@ -127,8 +127,8 @@ class BoardAdapter(
                         view1.visibility = View.GONE
                         endStudy.visibility = View.GONE
                         view2.visibility = View.GONE
-                        reportMember.visibility = View.GONE
-                        view3.visibility = View.GONE
+                        reportMember.visibility = View.VISIBLE
+                        view3.visibility = View.VISIBLE
                         leaveStudy.visibility = View.VISIBLE
                     }
 
@@ -202,7 +202,7 @@ class BoardAdapter(
                     view.getLocationOnScreen(location) // 화면 전체 기준 좌표 가져오기
                     val x = location[0]
                     val y = location[1]
-                    popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y + 100)
+                    popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x-100, y + 100)
                 }
             }
         }
