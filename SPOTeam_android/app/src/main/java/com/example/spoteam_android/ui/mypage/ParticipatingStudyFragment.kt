@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -80,36 +81,14 @@ class ParticipatingStudyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pageButtons = listOf(
-            binding.page1,
-            binding.page2,
-            binding.page3,
-            binding.page4,
-            binding.page5
-        )
-
-        pageButtons.forEachIndexed { index, textView ->
-            textView.setOnClickListener {
-                val selectedPage = startPage + index
-                if (currentPage != selectedPage) {
-                    currentPage = selectedPage
-                    fetchInProgressStudy()
-                }
-            }
-        }
-
         binding.previousPage.setOnClickListener {
-            if (currentPage > 0) {
-                currentPage--
-                fetchInProgressStudy()
-            }
+            currentPage = if (currentPage == 0) totalPages - 1 else currentPage - 1
+            fetchInProgressStudy()
         }
 
         binding.nextPage.setOnClickListener {
-            if (currentPage < totalPages - 1) {
-                currentPage++
-                fetchInProgressStudy()
-            }
+            currentPage = if (currentPage == totalPages - 1) 0 else currentPage + 1
+            fetchInProgressStudy()
         }
         fetchInProgressStudy()
     }
@@ -131,6 +110,7 @@ class ParticipatingStudyFragment : Fragment() {
                             totalPages = inProgressResponse.result.totalPages
 
                             if (studyInfo.isNotEmpty()) {
+                                updatePageUI() // 페이지 번호 UI 갱신
                                 binding.emptyWaiting.visibility = View.GONE
                                 binding.participatingStudyReyclerview.visibility = View.VISIBLE
                                 initRecyclerView(studyInfo)
@@ -139,7 +119,6 @@ class ParticipatingStudyFragment : Fragment() {
                                 binding.participatingStudyReyclerview.visibility = View.GONE
                             }
 
-                            updatePageUI() // 페이지 번호 UI 갱신
                         } else {
                             showError(inProgressResponse?.message)
                         }
@@ -203,12 +182,6 @@ class ParticipatingStudyFragment : Fragment() {
     }
 
     private fun updatePageUI() {
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPages - 5, maxOf(0, currentPage - 2))
-        }
-
         val pageButtons = listOf(
             binding.page1,
             binding.page2,
@@ -217,33 +190,65 @@ class ParticipatingStudyFragment : Fragment() {
             binding.page5
         )
 
-        pageButtons.forEachIndexed { index, textView ->
+        val prev = binding.previousPage
+        val next = binding.nextPage
+        val grayColor = ContextCompat.getColor(requireContext(), R.color.g300)
+        val blueColor = ContextCompat.getColor(requireContext(), R.color.b500)
+        val g400Color = ContextCompat.getColor(requireContext(), R.color.g400)
+
+        // 🔵 시작 페이지 계산
+        startPage = when {
+            totalPages <= 5 -> 0
+            currentPage >= totalPages - 3 -> totalPages - 5
+            currentPage >= 2 -> currentPage - 2
+            else -> 0
+        }
+
+        // 🔵 페이지 번호 버튼 처리
+        pageButtons.forEachIndexed { index, button ->
             val pageNum = startPage + index
             if (pageNum < totalPages) {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(
-                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                button.visibility = View.VISIBLE
+                button.text = (pageNum + 1).toString()
+                button.setTextColor(
+                    if (pageNum == currentPage) blueColor else g400Color
                 )
-                textView.isEnabled = true
-                textView.alpha = 1.0f
-                textView.visibility = View.VISIBLE
+                button.setBackgroundResource(0)
+                button.isEnabled = true
+                button.setOnClickListener {
+                    if (pageNum != currentPage) {
+                        currentPage = pageNum
+                        fetchInProgressStudy() // 또는 fetch함수명 맞게 호출
+                    }
+                }
             } else {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(0)
-                textView.isEnabled = false // 클릭 안 되게
-                textView.alpha = 0.3f
-                textView.visibility = View.VISIBLE
+                button.visibility = View.GONE
             }
         }
 
-        binding.previousPage.isEnabled = currentPage > 0
-        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        // 🔵 이전/다음 버튼 처리
+        if (totalPages <= 1) {
+            prev.isEnabled = false
+            next.isEnabled = false
+            prev.setColorFilter(grayColor, android.graphics.PorterDuff.Mode.SRC_IN)
+            next.setColorFilter(grayColor, android.graphics.PorterDuff.Mode.SRC_IN)
+        } else {
+            prev.isEnabled = true
+            next.isEnabled = true
+            prev.setColorFilter(blueColor, android.graphics.PorterDuff.Mode.SRC_IN)
+            next.setColorFilter(blueColor, android.graphics.PorterDuff.Mode.SRC_IN)
+
+            prev.setOnClickListener {
+                currentPage = if (currentPage == 0) totalPages - 1 else currentPage - 1
+                fetchInProgressStudy()
+            }
+
+            next.setOnClickListener {
+                currentPage = if (currentPage == totalPages - 1) 0 else currentPage + 1
+                fetchInProgressStudy()
+            }
+        }
     }
-
-
-
-
-
 }
 
 

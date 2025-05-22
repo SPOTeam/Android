@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -74,19 +75,14 @@ class PermissionWaitFragment : Fragment() {
                 .commitAllowingStateLoss()
         }
 
-
         binding.previousPage.setOnClickListener {
-            if (currentPage > 0) {
-                currentPage--
-                fetchInProgressStudy()
-            }
+            currentPage = if (currentPage == 0) totalPage - 1 else currentPage - 1
+            fetchInProgressStudy()
         }
 
         binding.nextPage.setOnClickListener {
-            if (currentPage < totalPage - 1) {
-                currentPage++
-                fetchInProgressStudy()
-            }
+            currentPage = if (currentPage == totalPage - 1) 0 else currentPage + 1
+            fetchInProgressStudy()
         }
 
         return binding.root
@@ -108,18 +104,19 @@ class PermissionWaitFragment : Fragment() {
                         if (inProgressResponse?.isSuccess == "true") {
                             val studyInfo = inProgressResponse.result.content
                             Log.d("StudyInfo","${inProgressResponse.result.content}")
+                            totalPage = inProgressResponse.result.totalPages
 
                             if(studyInfo.isNotEmpty()) {
+                                updatePageUI()
+
                                 binding.emptyWaiting.visibility = View.GONE
                                 binding.participatingStudyReyclerview.visibility = View.VISIBLE
 
-                                totalPage = inProgressResponse.result.totalPages
 
                                 itemList.clear()
                                 itemList.addAll(studyInfo)
 
                                 initRecyclerView()
-                                updatePageUI()
                                 interestBoardAdapter.notifyDataSetChanged()
                             } else {
                                 binding.emptyWaiting.visibility = View.VISIBLE
@@ -176,7 +173,7 @@ class PermissionWaitFragment : Fragment() {
             toggleLikeStatus(selectedItem, likeButton)
         }, studyViewModel = studyViewModel)
 
-                    // RecyclerView에 어댑터 및 레이아웃 매니저 설정
+        // RecyclerView에 어댑터 및 레이아웃 매니저 설정
         participatingboard.adapter = interestBoardAdapter
         participatingboard.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -249,14 +246,6 @@ class PermissionWaitFragment : Fragment() {
     }
 
     private fun updatePageUI() {
-        // ✅ 추가된 부분
-        startPage = if (currentPage <= 2) {
-            0
-        } else {
-            maxOf(totalPage - 5, maxOf(0, currentPage - 2))
-        }
-
-        Log.d("AllFragment", "totalPages : ${totalPage}, currentPage : ${currentPage}")
         val pageButtons = listOf(
             binding.page1,
             binding.page2,
@@ -265,27 +254,64 @@ class PermissionWaitFragment : Fragment() {
             binding.page5
         )
 
-        pageButtons.forEachIndexed { index, textView ->
+        val prev = binding.previousPage
+        val next = binding.nextPage
+        val grayColor = ContextCompat.getColor(requireContext(), R.color.g300)
+        val blueColor = ContextCompat.getColor(requireContext(), R.color.b500)
+        val g400Color = ContextCompat.getColor(requireContext(), R.color.g400)
+
+        // 🔵 시작 페이지 계산
+        startPage = when {
+            totalPage <= 5 -> 0
+            currentPage >= totalPage - 3 -> totalPage - 5
+            currentPage >= 2 -> currentPage - 2
+            else -> 0
+        }
+
+        // 🔵 페이지 번호 버튼 처리
+        pageButtons.forEachIndexed { index, button ->
             val pageNum = startPage + index
             if (pageNum < totalPage) {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(
-                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                button.visibility = View.VISIBLE
+                button.text = (pageNum + 1).toString()
+                button.setTextColor(
+                    if (pageNum == currentPage) blueColor else g400Color
                 )
-                textView.isEnabled = true
-                textView.alpha = 1.0f
-                textView.visibility = View.VISIBLE
+                button.setBackgroundResource(0)
+                button.isEnabled = true
+                button.setOnClickListener {
+                    if (pageNum != currentPage) {
+                        currentPage = pageNum
+                        fetchInProgressStudy() // 또는 fetch함수명 맞게 호출
+                    }
+                }
             } else {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(0)
-                textView.isEnabled = false // 클릭 안 되게
-                textView.alpha = 0.3f
-                textView.visibility = View.VISIBLE
+                button.visibility = View.GONE
             }
         }
 
-        binding.previousPage.isEnabled = currentPage > 0
-        binding.nextPage.isEnabled = currentPage < totalPage - 1
+        // 🔵 이전/다음 버튼 처리
+        if (totalPage <= 1) {
+            prev.isEnabled = false
+            next.isEnabled = false
+            prev.setColorFilter(grayColor, android.graphics.PorterDuff.Mode.SRC_IN)
+            next.setColorFilter(grayColor, android.graphics.PorterDuff.Mode.SRC_IN)
+        } else {
+            prev.isEnabled = true
+            next.isEnabled = true
+            prev.setColorFilter(blueColor, android.graphics.PorterDuff.Mode.SRC_IN)
+            next.setColorFilter(blueColor, android.graphics.PorterDuff.Mode.SRC_IN)
+
+            prev.setOnClickListener {
+                currentPage = if (currentPage == 0) totalPage - 1 else currentPage - 1
+                fetchInProgressStudy()
+            }
+
+            next.setOnClickListener {
+                currentPage = if (currentPage == totalPage - 1) 0 else currentPage + 1
+                fetchInProgressStudy()
+            }
+        }
     }
 }
 
