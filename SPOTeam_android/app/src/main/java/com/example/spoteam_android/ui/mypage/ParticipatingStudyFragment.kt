@@ -24,7 +24,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ParticipatingStudyFragment : Fragment() {
+class ParticipatingStudyFragment : Fragment(), fetchProgressStudy {
 
     lateinit var binding: FragmentParticipatingStudyBinding
     val studyViewModel: StudyViewModel by activityViewModels()
@@ -164,7 +164,17 @@ class ParticipatingStudyFragment : Fragment() {
         })
 
         // 어댑터 초기화
-        val boardAdapter = BoardAdapter(itemList, onItemClick = { selectedItem -> }, onLikeClick = { _, _ -> })
+        val boardAdapter = BoardAdapter(
+            itemList,
+            onItemClick = {
+                selectedItem ->
+
+            },
+            onLikeClick = {
+                  _, _ ->
+            },
+            listener = this // 🔹 fetchProgressStudy 구현체 전달
+        )
 
         participatingboard.post {
             for (i in 0 until boardAdapter.itemCount) {
@@ -248,6 +258,10 @@ class ParticipatingStudyFragment : Fragment() {
                 fetchInProgressStudy()
             }
         }
+    }
+
+    override fun fetchProgress() {
+        fetchInProgressStudy()
     }
 }
 

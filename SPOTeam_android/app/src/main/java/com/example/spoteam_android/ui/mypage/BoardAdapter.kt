@@ -1,8 +1,8 @@
 package com.example.spoteam_android.ui.mypage
 
-import android.app.AlertDialog
-import android.os.Bundle
+import StudyFormMode
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -11,9 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -24,11 +22,8 @@ import com.example.spoteam_android.R
 import com.example.spoteam_android.ReportStudyMemberFragment
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.ItemRecyclerViewPlusToggleBinding
-import com.example.spoteam_android.ui.community.CommunityAPIService
-import com.example.spoteam_android.ui.community.GetHostResponse
-import com.example.spoteam_android.ui.study.RegisterStudyFragment
-import com.example.spoteam_android.ui.community.MyRecruitingStudyDetail
 import com.example.spoteam_android.ui.interestarea.GetHostInterface
+import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,7 +31,8 @@ import retrofit2.Response
 class BoardAdapter(
     private val itemList: ArrayList<BoardItem>,
     private val onItemClick: (BoardItem) -> Unit,
-    private val onLikeClick: (BoardItem, ImageView) -> Unit // onLikeClick 추가
+    private val onLikeClick: (BoardItem, ImageView) -> Unit, // onLikeClick 추가
+    private val listener: fetchProgressStudy? = null // 🔹추가
 ) : RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {
 
     private lateinit var context : Context
@@ -132,7 +128,7 @@ class BoardAdapter(
                         endStudy.visibility = View.GONE
                         view2.visibility = View.GONE
                         reportMember.visibility = View.GONE
-                        view3.visibility = View.VISIBLE
+                        view3.visibility = View.GONE
                         leaveStudy.visibility = View.VISIBLE
                     }
 
@@ -155,10 +151,11 @@ class BoardAdapter(
             }
 
                     endStudy.setOnClickListener {
-                        // 스터디 종료 다이얼로그 띄우기
-                        val exitDialog =
-                            ExitStudyPopupFragment(view.context, this@BoardAdapter, adapterPosition)
-                        exitDialog.start()
+                        // 스터디 끝내기 다이얼로그 띄우기
+                        val endStudyDialog = EndStudyDialog(view.context, studyId, onComplete = {
+                            listener?.fetchProgress() // ✅ 여기서 호출
+                        })
+                        endStudyDialog.start()
                         popupWindow.dismiss()
                     }
 

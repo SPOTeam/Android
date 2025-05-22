@@ -3,8 +3,6 @@ package com.example.spoteam_android.ui.mypage
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.media.Image
-import android.provider.CalendarContract.Colors
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -18,15 +16,16 @@ import androidx.core.content.ContextCompat
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.ui.community.CommunityAPIService
-import com.example.spoteam_android.ui.community.ContentResponse
 import com.example.spoteam_android.ui.community.EndStudyResponse
-import com.example.spoteam_android.ui.community.MemberAcceptResponse
-import com.example.spoteam_android.ui.community.MemberIntroInfo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class EndStudyDialog(val context: Context, val studyId : Int) {
+class EndStudyDialog(
+    val context: Context,
+    val studyId : Int,
+    private val onComplete: (() -> Unit)? = null // 🔹 콜백 추가
+) {
 
     private val dlg = android.app.Dialog(context)
     private lateinit var editText: EditText
@@ -80,7 +79,7 @@ class EndStudyDialog(val context: Context, val studyId : Int) {
                     if (response.isSuccessful) {
                         val contentResponse = response.body()
                         if (contentResponse?.isSuccess == "true") {
-                            val lastDlg =  EndStudyFinishDialog(context)
+                            val lastDlg =  EndStudyFinishDialog(context, onComplete)
 //                            lastDlg.setContext(result)
                             lastDlg.start()
                         } else {
