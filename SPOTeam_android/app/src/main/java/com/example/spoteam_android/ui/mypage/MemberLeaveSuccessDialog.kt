@@ -12,7 +12,10 @@ import androidx.fragment.app.FragmentManager
 import com.example.spoteam_android.R
 
 
-class MemberLeaveSuccessDialog(private val context: Context){
+class MemberLeaveSuccessDialog(
+    private val context: Context,
+    private val onComplete: (() -> Unit)? = null // 🔹 콜백 추가
+){
 
     private val dlg = Dialog(context)
 
@@ -30,11 +33,13 @@ class MemberLeaveSuccessDialog(private val context: Context){
         // X 버튼 클릭 시 다이얼로그 닫기
         val ivClose: ImageView = dlg.findViewById(R.id.iv_close)
         ivClose.setOnClickListener {
+            onComplete?.invoke() // ✅ 여기서 fetchProgress() 실행
             dlg.dismiss() // 다이얼로그 닫기
         }
 
         val btnTakeCharge: Button = dlg.findViewById(R.id.btn_take_charge)
         btnTakeCharge.setOnClickListener {
+            onComplete?.invoke() // ✅ 여기서 fetchProgress() 실행
             dlg.dismiss() // 다이얼로그 닫기
         }
 

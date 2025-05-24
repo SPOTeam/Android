@@ -43,7 +43,7 @@
     <string name="delete_account_text"><u>회원 탈퇴</u></string>
 
     <string name="delete_noti_text">탈퇴하시면 아래 정보들은 모두 파기되며 모든 데이터들은\n복구가 <font color="#FF0000">불가능</font>합니다.</string>
-    <string name="end_study_warn">팀원들의 사전 동의 없이 스터디를 끝낼 경우,\n스터디 만들기 권한이 일시 정지 될 수 있습니다</string>
+    <string name="end_study_warn">팀원들의 사전 동의 없이 스터디를 끝낸 것이 신고될 경우,\n스터디 만들기 권한이 정지될 수 있습니다.</string>
 
     <string name="agreement_title01_text">제1조 (개인정보 수집 및 이용 목적)</string>
     <string name="agreement_body01_text">SPOT은 이용자의 개인정보를 다음 목적을 위해\n 수집 및 이용합니다.\n1. 회원 가입 및 관리: 본인 확인, 회원 서비스 제공\n2. 서비스 제공 및 운영: 커뮤니티 기능 제공, 맞춤형 콘텐츠 추천\n3. 고객지원: 문의사항 응대 및 서비스 개선\n4. 서비스 개선 및 분석: 이용 통계 분석, 부정 이용 방지</string>

@@ -24,10 +24,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-interface fetchProgressStudy {
-    fun fetchProgress()
-}
-
 class EndStudyFinishDialog(
     val context: Context,
     val onComplete: (() -> Unit)? = null // 🔹 콜백 추가

@@ -32,7 +32,8 @@ class BoardAdapter(
     private val itemList: ArrayList<BoardItem>,
     private val onItemClick: (BoardItem) -> Unit,
     private val onLikeClick: (BoardItem, ImageView) -> Unit, // onLikeClick 추가
-    private val listener: fetchProgressStudy? = null // 🔹추가
+    private val listener: fetchProgressStudy? = null, // 🔹추가
+
 ) : RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {
 
     private lateinit var context : Context
@@ -94,6 +95,8 @@ class BoardAdapter(
             getHost(studyId) { hostResult ->
                 if (hostResult != null) {
                     val isHost = hostResult.isOwned  // ✅ 호스트 여부 확인
+
+                    Log.d("BoardAdapter", "StudyId : ${studyId}")
 
                     val popupView = LayoutInflater.from(view.context)
                         .inflate(R.layout.modify_study_popup_menu, null)
@@ -169,25 +172,21 @@ class BoardAdapter(
                     leaveStudy.setOnClickListener {
                         // 스터디 탈퇴 다이얼로그 띄우기
                         if (isHost) { // 호스트 탈퇴
-                            val hostLeaveDialog = HostLeaveStudyDialog(view.context, studyId)
+                            val hostLeaveDialog = HostLeaveStudyDialog(view.context, studyId, onComplete = {
+                                listener?.fetchProgress() // ✅ 여기서 호출
+                            })
                             hostLeaveDialog.start()
                             popupWindow.dismiss()
                         } else { //
                             // 스터디 탈퇴 다이얼로그 띄우기
                             val hostLeaveDialog = MemberLeaveStudyDialog(
                                 context = view.context,
-                                studyID = studyId,
-                                listener = object :
-                                    MemberLeaveStudyDialog.OnWithdrawSuccessListener {
-                                    override fun onWithdrawSuccess() {
-                                        // ✅ 여기서 원하는 동작 수행
-                                        // 예: 로그, 토스트, FragmentResult 등
-                                        (view.context as? FragmentActivity)?.supportFragmentManager?.setFragmentResult(
-                                            "study_withdraw_success", Bundle()
-                                        )
-                                    }
+                                studyID = studyId
+                                , onComplete = {
+                                    listener?.fetchProgress() // ✅ 여기서 호출
                                 }
                             )
+
                             hostLeaveDialog.start()
                             popupWindow.dismiss()
                         }

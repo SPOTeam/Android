@@ -26,7 +26,8 @@
             android:text="모집 중인 스터디"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:fontFamily="@font/pretendard"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp" />
@@ -55,12 +56,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="모집 중인 스터디가 없습니다."
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="700"
             android:textColor="@color/selector_blue"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SPOT에서 새로운 스터디를 만들어보세요."
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
             android:textColor="@color/g400" />
 
         <TextView
@@ -73,6 +78,8 @@
             android:paddingVertical="10dp"
             android:textSize="15sp"
             android:text="스터디 만들기"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
             android:textColor="@color/selector_blue" />
     </LinearLayout>
 
@@ -88,6 +95,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:itemCount="6"
         app:layout_constraintTop_toBottomOf="@id/fragment_consider_attendance_ll"
-        tools:listitem="@layout/item_consider_attendance"/>
+        tools:listitem="@layout/item_consider_attendance" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,6 +24,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+interface fetchProgressStudy {
+    fun fetchProgress()
+}
+
 class ParticipatingStudyFragment : Fragment(), fetchProgressStudy {
 
     lateinit var binding: FragmentParticipatingStudyBinding

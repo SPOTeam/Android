@@ -1,119 +1,148 @@
 package com.example.spoteam_android.ui.mypage
 
 import android.app.Dialog
-import android.os.Bundle
+import android.content.Context
+import android.graphics.Color
+import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
-import android.view.LayoutInflater
+import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
+import android.view.Window
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.spoteam_android.R
+import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentMandateStudyOwnerBinding
 import com.example.spoteam_android.ui.community.CommunityAPIService
 import com.example.spoteam_android.ui.community.MembersDetail
-import com.example.spoteam_android.ui.community.ReportCrewRequest
-import com.example.spoteam_android.ui.community.ReportCrewResponse
 import com.example.spoteam_android.ui.community.StudyMemberResponse
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class MandateStudyOwnerFragment(private val studyId: Int) : BottomSheetDialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return BottomSheetDialog(requireContext(), R.style.CustomBottomSheetDialogTheme)
-
-    }
-
-    private var _binding: FragmentMandateStudyOwnerBinding? = null
-    private val binding get() = _binding!!
+class MandateStudyOwnerFragment(
+    private val context: Context,
+    private val studyId: Int,
+    private val onComplete: (() -> Unit)? = null
+) {
+    private val dlg = Dialog(context)
+    private var binding: FragmentMandateStudyOwnerBinding? = null
     private var selectedMember: MembersDetail? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMandateStudyOwnerBinding.inflate(inflater, container, false)
+    fun start() {
+        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        binding.btnTakeCharge.isEnabled = false
-        // 닫기 버튼 클릭 시 프래그먼트 종료
-        binding.ivClose.setOnClickListener {
-            dismiss()
+        binding = FragmentMandateStudyOwnerBinding.inflate(dlg.layoutInflater)
+        dlg.setContentView(binding!!.root)
+
+        dlg.window?.setLayout(
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 350f, context.resources.displayMetrics
+            ).toInt(),
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 350f, context.resources.displayMetrics
+            ).toInt()
+        )
+        dlg.setCanceledOnTouchOutside(true)
+
+        binding?.btnTakeCharge?.isEnabled = false
+
+        binding?.ivClose?.setOnClickListener {
+            dlg.dismiss()
         }
 
-//        // 완료 버튼 활성화 로직 (예시: EditText 입력 감지)
-//        binding.popupEditText.addTextChangedListener {
-//            binding.tvComplete.isEnabled = !it.isNullOrBlank()
-//        }
-//
-//        // 완료 버튼 클릭 시 처리
-//        binding.tvComplete.setOnClickListener {
-//            // 여기에 위임 로직 추가 (예: API 호출 또는 데이터 전달)
-//            binding.ivSuccess.visibility = View.VISIBLE
-//            binding.finishReportTv.visibility = View.VISIBLE
-//            binding.tvComplete.isEnabled = false // 완료 후 비활성화
-//        }
-        fetchStudyMember() // ✅ 멤버 리스트 가져오기
-        binding.btnTakeCharge.setOnClickListener{
+        binding?.btnTakeCharge?.setOnClickListener {
             selectedMember?.let { member ->
-                openMandateStudyOwnerReasonFragment(studyId, member.memberId)
-                dismiss()
+                openMandateStudyOwnerReasonDialog(studyId, member.memberId)
+                dlg.dismiss()
             }
         }
 
-        return binding.root
+        fetchStudyMember()
+        dlg.show()
     }
 
     private fun fetchStudyMember() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
         service.getStudyMembers(studyId)
-            .enqueue(object : Callback<StudyMemberResponse> {
+            .enqueue(object : retrofit2.Callback<StudyMemberResponse> {
                 override fun onResponse(
-                    call: Call<StudyMemberResponse>,
-                    response: Response<StudyMemberResponse>
+                    call: retrofit2.Call<StudyMemberResponse>,
+                    response: retrofit2.Response<StudyMemberResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val studyMemberResponse = response.body()
-                        if (studyMemberResponse?.isSuccess == "true") {
-                            val studyMembers = studyMemberResponse.result.members
-                            initMembersRecycler(studyMembers)  // ✅ 멤버 데이터 설정
+                        val body = response.body()
+                        if (body?.isSuccess == "true") {
+                            initMembersRecycler(body.result.members)
+                        } else {
+                            showError("불러오기 실패")
                         }
+                    } else {
+                        showError("오류 코드: ${response.code()}")
                     }
                 }
 
-                override fun onFailure(call: Call<StudyMemberResponse>, t: Throwable) {
-                    Log.e("ReportStudyCrewDialog", "Failure: ${t.message}", t)
+                override fun onFailure(call: retrofit2.Call<StudyMemberResponse>, t: Throwable) {
+                    Log.e("MandateDialog", "Failure: ${t.message}", t)
+                    showError("네트워크 오류")
                 }
             })
     }
 
-    private fun initMembersRecycler(studyMembers: List<MembersDetail>) {
-        binding?.rvMandateHost?.layoutManager = GridLayoutManager(context, 5)
+    private fun initMembersRecycler(members: List<MembersDetail>) {
+        val spanCount = 5
+        val spacingDp = 8
 
-        val dataRVAdapter = ReportStudyCrewMemberRVAdapter(studyMembers, object :
+        val layoutManager = GridLayoutManager(context, spanCount)
+        binding?.rvMandateHost?.layoutManager = layoutManager
+
+        // 이미 데코레이션이 여러 번 중첩되지 않도록 기존 데코레이션 제거
+        binding?.rvMandateHost?.itemDecorationCount?.let { count ->
+            for (i in count - 1 downTo 0) {
+                binding?.rvMandateHost?.removeItemDecorationAt(i)
+            }
+        }
+
+        binding?.rvMandateHost?.addItemDecoration(
+            GridSpacingItemDecoration(spanCount, dpToPx(spacingDp))
+        )
+
+        val adapter = ReportStudyCrewMemberRVAdapter(members, object :
             ReportStudyCrewMemberRVAdapter.OnMemberClickListener {
             override fun onProfileClick(member: MembersDetail) {
-                Log.d("MandateStudyOwner", "Clicked memberId: ${member.memberId}")
-                selectedMember = member  // 선택된 멤버 저장
-                binding.btnTakeCharge.isEnabled = true  // 버튼 활성화
-
+                selectedMember = member
+                binding?.btnTakeCharge?.isEnabled = true
             }
         })
-
-        binding?.rvMandateHost?.adapter = dataRVAdapter
+        binding?.rvMandateHost?.adapter = adapter
     }
 
-    private fun openMandateStudyOwnerReasonFragment(studyId: Int,memberId: Int) {
-        val mandateReasonFragment = MandateStudyOwnerReasonFragment(studyId,memberId)
-        mandateReasonFragment.show(parentFragmentManager, "MandateStudyOwnerReasonFragment")
+
+    private fun openMandateStudyOwnerReasonDialog(studyId: Int, memberId: Int) {
+        val reasonDialog = MandateStudyOwnerReasonFragment(context, studyId, memberId, onComplete)
+        reasonDialog.start()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun showError(msg: String) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
+    class GridSpacingItemDecoration(
+        private val spanCount: Int,
+        private val spacing: Int
+    ) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+
+            outRect.bottom = spacing
+        }
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        val density = context.resources.displayMetrics.density
+        return (dp * density).toInt()
+    }
 }
