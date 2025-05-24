@@ -21,15 +21,12 @@ import retrofit2.Response
 import androidx.fragment.app.setFragmentResult
 
 
-class MemberLeaveStudyDialog(private val context: Context,
-                           private val studyID: Int,
-                             private val listener: OnWithdrawSuccessListener){
-
+class MemberLeaveStudyDialog(
+    private val context: Context,
+    private val studyID: Int,
+    private val onComplete: (() -> Unit)? = null // 🔹 콜백 추가
+) {
     private val dlg = Dialog(context)
-
-    interface OnWithdrawSuccessListener {
-        fun onWithdrawSuccess()
-    }
 
     fun start() {
         // 타이틀바 제거
@@ -51,7 +48,6 @@ class MemberLeaveStudyDialog(private val context: Context,
         val btnTakeCharge: Button = dlg.findViewById(R.id.btn_take_charge)
         btnTakeCharge.setOnClickListener {
             withdrawFromStudy(studyID)
-            showMemberLeaveSuccessDialog() // ✅ 새로운 다이얼로그 호출
         }
 
 
@@ -64,23 +60,15 @@ class MemberLeaveStudyDialog(private val context: Context,
     }
 
     private fun showMemberLeaveSuccessDialog() {
-        val successDialog = MemberLeaveSuccessDialog(context)  // ✅ 다이얼로그 객체 생성
+        val successDialog = MemberLeaveSuccessDialog(context, onComplete)  // ✅ 다이얼로그 객체 생성
         successDialog.start()  // ✅ 다이얼로그 표시
     }
 
     private fun withdrawFromStudy(studyId: Int) {
         val service = RetrofitInstance.retrofit.create(GetHostInterface::class.java)
 
-        val call = service.withDrawlMember(studyId)
 
-        Log.d("WithdrawStudy", """
-        ▶️ [스터디 탈퇴 요청 시작]
-        - 요청 URL: ${call.request().url}
-        - Method: ${call.request().method}
-        - studyId: $studyId
-    """.trimIndent())
-
-        call.enqueue(object : Callback<HostWithDrawl> {
+        service.withDrawlMember(studyId).enqueue(object : Callback<HostWithDrawl> {
             override fun onResponse(call: Call<HostWithDrawl>, response: Response<HostWithDrawl>) {
                 if (response.isSuccessful && response.body()?.isSuccess == true) {
                     Log.d("WithdrawStudy", """
@@ -89,10 +77,10 @@ class MemberLeaveStudyDialog(private val context: Context,
                     - 메시지: ${response.body()?.message}
                 """.trimIndent())
                     // 예: 결과 전달 또는 화면 이동
-                    listener.onWithdrawSuccess() // ✅ 콜백 호출
                     (context as? FragmentActivity)?.supportFragmentManager?.setFragmentResult(
                         "study_withdraw_success", Bundle()
                     )
+                    showMemberLeaveSuccessDialog() // ✅ 새로운 다이얼로그 호출
                     dlg.dismiss()
                 } else {
                     val errorBody = response.errorBody()?.string()
@@ -114,5 +102,4 @@ class MemberLeaveStudyDialog(private val context: Context,
             }
         })
     }
-
 }

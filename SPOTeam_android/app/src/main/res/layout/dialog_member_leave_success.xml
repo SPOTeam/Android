@@ -2,42 +2,42 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="330dp"
-    android:layout_height="220dp"
+    android:layout_width="350dp"
+    android:layout_height="266dp"
     android:layout_gravity="center"
+    android:padding="20dp"
     android:background="@drawable/dialog_rounded_background">
 
 
     <ImageView
         android:id="@+id/iv_close"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:padding="8dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/ic_new_close"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:src="@drawable/ic_x_button"
+        app:tint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_check"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="25dp"
-        android:src="@drawable/img_check_box_checked"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/aftercheck"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/iv_close" />
 
     <TextView
         android:id="@+id/tv_dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/suit_bold"
         android:text="탈퇴 완료"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        android:layout_marginTop="8dp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="700"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,42 +47,33 @@
         android:id="@+id/tv_dialog_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="스터디에서 탈퇴되었습니다.\n 마이페이지에서 히스토리를 확인해보세요."
-        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:text="스터디에서 탈퇴되었어요.\n 마이페이지에서 히스토리를 확인해보세요."
         android:textColor="@color/black"
-        android:textSize="12dp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="500"
+        android:textSize="14dp"
+        android:gravity="center"
+        android:lineSpacingExtra="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_dialog_title" />
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_title"  />
 
-    <LinearLayout
-        android:id="@+id/button_layout"
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_take_charge"
+        android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:orientation="horizontal"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:paddingStart="90dp"
+        android:paddingEnd="90dp"
+        android:background="@drawable/button_background"
+        android:text="확인"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="600"
+        android:textColor="@drawable/button_textcolor"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_take_charge"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="50dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_background"
-            android:enabled="true"
-            android:text="확인"
-            android:textColor="@drawable/button_textcolor"
-            android:textFontWeight="700"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 

@@ -63,7 +63,7 @@
         android:background="@drawable/report_crew_selector"
         android:textColor="@color/selector_report_crew"
         android:gravity="center"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:fontFamily="@font/suit_variable_font"
         android:textFontWeight="600"
         android:text="신고"

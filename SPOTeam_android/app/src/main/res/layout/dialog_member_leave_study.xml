@@ -2,32 +2,29 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="330dp"
-    android:layout_height="220dp"
+    android:layout_width="350dp"
+    android:layout_height="266dp"
     android:layout_gravity="center"
+    android:padding="20dp"
     android:background="@drawable/dialog_rounded_background">
-
-
     <ImageView
         android:id="@+id/iv_close"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:padding="8dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/ic_new_close"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:src="@drawable/ic_x_button"
+        app:tint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_sad_emoji"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="25dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:src="@drawable/ic_sad"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/iv_close" />
 
     <TextView
         android:id="@+id/tv_dialog_title"
@@ -36,34 +33,50 @@
         android:layout_marginTop="8dp"
         android:text="정말 탈퇴하시겠습니까?"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        android:fontFamily="@font/suit_bold"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="700"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_sad_emoji" />
 
     <TextView
-        android:id="@+id/tv_dialog_content"
+        android:id="@+id/tv_dialog_content_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="탈퇴 시, 다시 이 스터디에 들어올 수 없으며 \n 스터디를 통해 얻은 성과를 저장할 수 없습니다."
+        android:layout_marginTop="15dp"
+        android:text="탈퇴 시, 다시 이 스터디에 들어올 수 없으며"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="12dp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="500"
+        android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_dialog_title" />
+
+
+    <TextView
+        android:id="@+id/tv_dialog_content_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="탈퇴 시, 다시 이 스터디에 신청할 수 없고\n이 스터디의 성과를 저장할 수 없어요."
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="500"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_content_1" />
 
     <LinearLayout
         android:id="@+id/button_layout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:orientation="horizontal"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -77,7 +90,8 @@
             android:background="@drawable/button_wrong_backgground"
             android:enabled="true"
             android:text="탈퇴"
-            android:textFontWeight="700"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
             android:textColor="@drawable/button_red_text_color"
             android:textSize="15dp"
             android:textStyle="bold" />
@@ -87,13 +101,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/button_background"
-            android:enabled="false"
+            android:background="@drawable/button_cancel_selector"
             android:text="취소"
-            android:textFontWeight="700"
-            android:textColor="@drawable/button_textcolor"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textColor="@color/button_cancel_text_color"
+            android:textSize="15dp" />
     </LinearLayout>
 
 

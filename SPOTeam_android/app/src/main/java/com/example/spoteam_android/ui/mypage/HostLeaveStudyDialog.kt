@@ -12,8 +12,11 @@ import androidx.fragment.app.FragmentManager
 import com.example.spoteam_android.R
 
 
-class HostLeaveStudyDialog(private val context: Context,
-                           private val studyID: Int, ){
+class HostLeaveStudyDialog (
+    private val context: Context,
+    private val studyID: Int,
+    private val onComplete: (() -> Unit)? = null // 🔹 콜백 추가
+){
 
     private val dlg = Dialog(context)
 
@@ -52,8 +55,8 @@ class HostLeaveStudyDialog(private val context: Context,
     private fun showMandateFragment(studyId: Int) {
         val fragmentManager: FragmentManager? = (context as? FragmentActivity)?.supportFragmentManager
         if (fragmentManager != null) {
-            val mandateFragment = MandateStudyOwnerFragment(studyId)
-            mandateFragment.show(fragmentManager, "DelegateHostFragment")
+            val mandateFragment = MandateStudyOwnerFragment(context, studyId, onComplete)
+            mandateFragment.start()
         } else {
             throw IllegalStateException("FragmentManager를 가져올 수 없습니다.")
         }

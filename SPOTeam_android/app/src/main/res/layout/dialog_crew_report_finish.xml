@@ -50,7 +50,7 @@
         android:textColor="@color/black"
         android:fontFamily="@font/suit_variable_font"
         android:textFontWeight="500"
-        android:textSize="14sp"
+        android:textSize="14dp"
         android:gravity="center"
         android:lineSpacingExtra="5dp"
         app:layout_constraintEnd_toEndOf="parent"
