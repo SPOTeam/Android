@@ -17,6 +17,9 @@ import com.example.spoteam_android.ui.mypage.ReportStudyCrewMemberRVAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import android.graphics.Rect
 
 class ReportStudyMemberFragment(
     private val context: Context,
@@ -93,19 +96,26 @@ class ReportStudyMemberFragment(
     }
 
     private fun initMembersRecycler(studyMembers: List<MembersDetail>) {
-        binding?.reportMemberRv?.layoutManager = GridLayoutManager(context, 5)
+        val spanCount = 5
+        binding?.reportMemberRv?.layoutManager = GridLayoutManager(context, spanCount)
+
+        val spacingInDp = 20
+        binding?.reportMemberRv?.addItemDecoration(
+            GridSpacingItemDecoration(spanCount, dpToPx(spacingInDp))
+        )
 
         val dataRVAdapter = ReportStudyCrewMemberRVAdapter(studyMembers, object :
             ReportStudyCrewMemberRVAdapter.OnMemberClickListener {
             override fun onProfileClick(member: MembersDetail) {
                 selectedCrewMember = member.memberId
-                Log.d("ReportCrew", "ReportCrewMember : $selectedCrewMember")
+//                Log.d("ReportCrew", "ReportCrewMember : $selectedCrewMember")
                 checkMemberId()
             }
         })
 
         binding?.reportMemberRv?.adapter = dataRVAdapter
     }
+
 
     private fun checkMemberId() {
         if (selectedCrewMember != -1) {
@@ -116,4 +126,25 @@ class ReportStudyMemberFragment(
     private fun showError(message: String?) {
         Toast.makeText(context, "Error: $message", Toast.LENGTH_SHORT).show()
     }
+
+    class GridSpacingItemDecoration(
+        private val spanCount: Int,
+        private val spacing: Int
+    ) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+
+            outRect.bottom = spacing
+        }
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        val density = context.resources.displayMetrics.density
+        return (dp * density).toInt()
+    }
+
 }

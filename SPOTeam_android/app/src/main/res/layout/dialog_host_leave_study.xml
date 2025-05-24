@@ -52,6 +52,8 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="12dp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_dialog_title" />

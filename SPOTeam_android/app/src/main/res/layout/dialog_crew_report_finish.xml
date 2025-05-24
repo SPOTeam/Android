@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="스터디원 신고가 완료되었습니다.\n 쾌적한 서비스 이용을 위해 노력하겠습니다."
+        android:text="스터디원 신고가 완료되었습니다.\n 쾌적한 서비스 이용을 위해 항상 노력하겠습니다."
         android:textColor="@color/black"
         android:fontFamily="@font/suit_variable_font"
         android:textFontWeight="500"
