@@ -18,9 +18,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AttendanceContentDialog(private val context: Context) {
+class AttendanceContentDialog(
+    private val context: Context
+) {
 
     private val dlg = android.app.Dialog(context)
+    private var callback: fetchData? = null // ✅ 콜백 필드 추가
+
+    fun setCallback(cb: fetchData) {
+        callback = cb
+    }
 
     fun start() {
         // 타이틀바 제거
@@ -33,11 +40,13 @@ class AttendanceContentDialog(private val context: Context) {
 
         val btnMove1 = dlg.findViewById<ImageView>(R.id.accept_close)
         btnMove1.setOnClickListener {
+            callback?.fetchAttendedData()
             dlg.dismiss()
         }
 
         val btnMove2 = dlg.findViewById<TextView>(R.id.accept_tv)
         btnMove2.setOnClickListener {
+            callback?.fetchAttendedData()
             dlg.dismiss()
         }
 

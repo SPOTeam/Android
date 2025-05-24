@@ -18,11 +18,19 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AttendanceDenyDialog(private val context: Context) {
+class AttendanceDenyDialog(
+    private val context: Context
+) {
 
     private val dlg = android.app.Dialog(context)
     private var memberId : Int? = null
     private var studyId : Int? = null
+    private var callback: fetchData? = null // ✅ 콜백 필드 추가
+
+
+    fun setCallback(cb: fetchData) {
+        callback = cb
+    }
 
     fun setStudyId(studyId : Int) {
         this.studyId = studyId
@@ -45,16 +53,17 @@ class AttendanceDenyDialog(private val context: Context) {
         val btnMove1 = dlg.findViewById<TextView>(R.id.reject_tv)
         btnMove1.setOnClickListener {
             denyMemberAttendance()
-            dlg.dismiss()
         }
 
         val btnMove2 = dlg.findViewById<TextView>(R.id.cancel_tv)
         btnMove2.setOnClickListener {
+            callback?.fetchAttendedData()
             dlg.dismiss()
         }
 
         val btnMove3 = dlg.findViewById<ImageView>(R.id.close_button)
         btnMove3.setOnClickListener {
+            callback?.fetchAttendedData()
             dlg.dismiss()
         }
 
@@ -74,7 +83,8 @@ class AttendanceDenyDialog(private val context: Context) {
                         val memberAttendanceResponse = response.body()
                         Log.d("MyStudyAttendance", "responseBody: ${memberAttendanceResponse?.isSuccess}")
                         if (memberAttendanceResponse?.isSuccess == "true") {
-                            Log.d("MyStudyAttendance", "deny")
+                            callback?.fetchAttendedData()
+                            dlg.dismiss()
                         } else {
                             showError(memberAttendanceResponse?.message)
                         }

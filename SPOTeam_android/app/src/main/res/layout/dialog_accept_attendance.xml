@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="400dp"
-    android:layout_height="292dp"
+    android:layout_width="350dp"
+    android:layout_height="240dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:gravity="center"
     android:padding="20dp"
     android:background="@drawable/alert_background">
 
     <ImageView
         android:id="@+id/accept_close"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:src="@drawable/ic_x_button"
         app:tint="@color/black"
-        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/ic_check_iv"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:src="@drawable/ic_accept_member_new"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,12 +30,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="수락 완료"
-        android:textSize="26sp"
-        android:fontFamily="@font/pretendard"
         android:textColor="@color/black"
-        android:layout_marginEnd="5dp"
-        android:textStyle="bold"
-        android:layout_marginTop="13dp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="700"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ic_check_iv" />
@@ -48,9 +45,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="수락이 완료되었습니다."
-        android:textSize="18sp"
         android:textColor="@color/black"
-        android:layout_marginTop="30dp"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="500"
+        android:textSize="14dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_accept"/>
@@ -59,20 +59,17 @@
     <TextView
         android:id="@+id/accept_tv"
         android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:text="확인"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
+        android:layout_height="45dp"
         android:background="@drawable/button_background"
+        android:text="확인"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="600"
         android:textColor="@drawable/button_textcolor"
+        android:textSize="16sp"
         android:gravity="center"
-        android:paddingVertical="12dp"
-        android:layout_marginTop="20dp"
-        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/content_accept"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

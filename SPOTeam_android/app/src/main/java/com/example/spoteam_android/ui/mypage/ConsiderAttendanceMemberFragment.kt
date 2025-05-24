@@ -19,7 +19,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ConsiderAttendanceMemberFragment : Fragment() {
+interface fetchData {
+    fun fetchAttendedData()
+}
+
+class ConsiderAttendanceMemberFragment : Fragment(), fetchData {
 
     private lateinit var binding: FragmentConsiderAttendanceMemberBinding
     private var studyId: Int = -1
@@ -33,7 +37,7 @@ class ConsiderAttendanceMemberFragment : Fragment() {
     ): View {
         binding = FragmentConsiderAttendanceMemberBinding.inflate(inflater, container, false)
         studyId = arguments?.getInt("recruitingStudyId")!!
-        Log.d("ConsiderAttendanceMemberFragment", "$studyId")
+//        Log.d("ConsiderAttendanceMemberFragment", "$studyId")
 
         attendanceMemberList = ArrayList() // ✅ 리스트 초기화
 
@@ -150,6 +154,7 @@ class ConsiderAttendanceMemberFragment : Fragment() {
                 val dlg = AttendanceDenyDialog(requireContext())
                 dlg.setMemberId(data.memberId)
                 dlg.setStudyId(studyId)
+                dlg.setCallback(this@ConsiderAttendanceMemberFragment) // ✅ 콜백 넘기기
                 dlg.start()
             }
 
@@ -173,6 +178,7 @@ class ConsiderAttendanceMemberFragment : Fragment() {
                         Log.d("MyStudyAttendance", "responseBody: ${memberAttendanceResponse?.isSuccess}")
                         if (memberAttendanceResponse?.isSuccess == "true") {
                             val dlg = AttendanceContentDialog(requireContext())
+                            dlg.setCallback(this@ConsiderAttendanceMemberFragment)
                             dlg.start()
                         } else {
                             showError(memberAttendanceResponse?.message)
@@ -189,5 +195,9 @@ class ConsiderAttendanceMemberFragment : Fragment() {
 
     private fun showError(message: String?) {
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun fetchAttendedData() {
+        fetchStudyAttendanceMembers()
     }
 }
