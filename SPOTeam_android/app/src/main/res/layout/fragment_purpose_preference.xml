@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="15dp">
+        android:layout_marginStart="20dp">
 
         <ImageView
             android:id="@+id/fragment_reason_preference_back_bt"
@@ -41,12 +41,12 @@
         android:id="@+id/fragment_reason_preference_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="내가 스터디를 하는 목표는"
+        android:text="내가 스터디를 하는 이유는 무엇인가요?"
         android:textColor="@color/black"
-        android:textSize="18dp"
+        android:textSize="17.28dp"
         android:fontFamily="@font/suit_bold"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginTop="54dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_reason_preference_ll"/>
 
@@ -58,86 +58,92 @@
         android:id="@+id/flexbox_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="43.2dp"
         android:layout_marginEnd="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_reason_preference_tv"
         app:flexDirection="column"
+        app:flexWrap="nowrap"
         app:justifyContent="flex_start"
-        app:flexWrap="nowrap">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_reason_preference_tv">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_studypurpose_chip_habit"
             style="@style/CustomChipStyle"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="47.52dp"
+            android:fontFamily="@font/suit_variable_font"
             android:text="꾸준한 학습, 습관이 필요해요."
-            android:textSize="14sp"
             android:textAlignment="center"
-            app:chipMinHeight="43dp"
-            android:layout_marginBottom="7dp"/>
+            android:textFontWeight="600"
+            android:textSize="17.2dp"
+            app:chipMinHeight="47.52dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_studypurpose_chip_feedback"
             style="@style/CustomChipStyle"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="47.52dp"
+            android:layout_marginTop="18.72dp"
+            android:fontFamily="@font/suit_variable_font"
             android:text="상호 피드백이 필요해요."
-            android:textSize="14sp"
             android:textAlignment="center"
-            app:chipMinHeight="43dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"/>
+            android:textFontWeight="600"
+            android:textSize="17.2dp"
+            app:chipMinHeight="47.52dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_studypurpose_chip_network"
             style="@style/CustomChipStyle"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="47.52dp"
+            android:layout_marginTop="18.72dp"
+            android:fontFamily="@font/suit_variable_font"
             android:text="네트워킹을 하고 싶어요."
-            android:textSize="14sp"
             android:textAlignment="center"
-            app:chipMinHeight="43dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"/>
+            android:textFontWeight="600"
+            android:textSize="17.2dp"
+            app:chipMinHeight="47.52dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_studypurpose_chip_license"
             style="@style/CustomChipStyle"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="47.52dp"
+            android:layout_marginTop="18.72dp"
+            android:fontFamily="@font/suit_variable_font"
             android:text="자격증을 취득하고 싶어요."
-            android:textSize="14sp"
             android:textAlignment="center"
-            app:chipMinHeight="43dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"/>
+            android:textFontWeight="600"
+            android:textSize="17.2dp"
+            app:chipMinHeight="47.52dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_studypurpose_chip_contest"
             style="@style/CustomChipStyle"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="47.52dp"
+            android:layout_marginTop="18.72dp"
+            android:fontFamily="@font/suit_variable_font"
             android:text="대회에 참가하여 수상하고 싶어요."
-            android:textSize="14sp"
             android:textAlignment="center"
-            app:chipMinHeight="43dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"/>
+            android:textFontWeight="600"
+            android:textSize="17.2dp"
+            app:chipMinHeight="47.52dp" />
 
 
         <com.google.android.material.chip.Chip
             android:id="@+id/activity_checklist_studypurpose_chip_opinion"
             style="@style/CustomChipStyle"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="47.52dp"
+            android:layout_marginTop="18.72dp"
+            android:fontFamily="@font/suit_variable_font"
             android:text="다양한 의견을 나누고 싶어요."
-            android:textSize="14sp"
             android:textAlignment="center"
-            app:chipMinHeight="43dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"/>
+            android:textFontWeight="600"
+            android:textSize="17.2dp"
+            app:chipMinHeight="47.52dp" />
     </com.google.android.flexbox.FlexboxLayout>
 
     <LinearLayout
@@ -189,15 +195,16 @@
         android:text="수정"
         android:fontFamily="@font/suit_bold"
         android:textColor="@color/b500"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textStyle="bold"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

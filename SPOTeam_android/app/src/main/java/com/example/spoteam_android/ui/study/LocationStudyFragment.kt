@@ -31,7 +31,7 @@ class LocationStudyFragment : Fragment() {
         setupSearchFunctionality()
         loadLocalTsvFile()
 
-        binding.fragmentIntroduceStudyBackBt.setOnClickListener {
+        binding.fragmentLocationStudyBackBt.setOnClickListener {
             goToPreviusFragment()
         }
         return binding.root

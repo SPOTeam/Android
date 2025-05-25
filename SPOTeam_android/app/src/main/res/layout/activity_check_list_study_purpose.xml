@@ -132,7 +132,6 @@
             app:chipMinHeight="47.52dp" />
     </com.google.android.flexbox.FlexboxLayout>
 
-    <!-- 다음 버튼 -->
     <android.widget.Button
         android:id="@+id/activity_checklist_studypurpose_checklistspot_next_bt"
         android:layout_width="0dp"
