@@ -192,26 +192,17 @@ class MemberStudyFragment : Fragment() {
     }
 
     private fun updateChildAlpha() {
+        val layoutManager = binding.rvMemberStudyNum.layoutManager as LinearLayoutManager
+        val firstVisible = layoutManager.findFirstVisibleItemPosition()
+        val lastVisible = layoutManager.findLastVisibleItemPosition()
 
-        for (i in 0 until binding.rvMemberStudyNum.childCount) {
-            val child = binding.rvMemberStudyNum.getChildAt(i) ?: continue
-
-            val location = IntArray(2)
-            child.getLocationInWindow(location)
-            val childCenterX = location[0] + child.width / 2
-
-            val rvLocation = IntArray(2)
-            binding.rvMemberStudyNum.getLocationInWindow(rvLocation)
-            val rvCenterX = rvLocation[0] + binding.rvMemberStudyNum.width / 2
-
-            val distanceFromCenter = kotlin.math.abs(rvCenterX - childCenterX)
-            val maxDistance = binding.rvMemberStudyNum.width / 2
-            val ratio = distanceFromCenter.toFloat() / maxDistance
-            val alpha = 1f - ratio.coerceIn(0f, 0.7f)
-
-            child.alpha = alpha
+        for (i in firstVisible..lastVisible) {
+            val view = layoutManager.findViewByPosition(i) ?: continue
+            val alpha = if (i == firstVisible || i == lastVisible) 0.4f else 1f
+            view.alpha = alpha
         }
     }
+
 
 
 }

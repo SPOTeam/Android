@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="수정이 완료되었습니다.\n사용자 님을 응원해요! 화이팅!"
+        android:text="수정이 완료되었어요.\n사용자 님의 목표를 응원해요!"
         android:textColor="@color/black"
         android:gravity="center"
         android:lineSpacingExtra="4dp"

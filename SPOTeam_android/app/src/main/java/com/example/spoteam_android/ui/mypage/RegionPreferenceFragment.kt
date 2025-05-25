@@ -64,7 +64,7 @@ class RegionPreferenceFragment : Fragment() {
             transaction.commit()
         }
 
-        binding.editReasonCancelBt.setOnClickListener {
+        binding.checklistspotLocationPlusBt.setOnClickListener {
             goToLocationFragment()
         }
         binding.fragmentRegionPreferenceBackBt.setOnClickListener {
@@ -129,7 +129,7 @@ class RegionPreferenceFragment : Fragment() {
 
             val textView = TextView(requireContext()).apply {
                 text = regionText
-                textSize = 12f
+                textSize = 14.4f
                 setPadding(30, 35, 50, 35) // 패딩 설정
                 setTextColor(resources.getColor(R.color.b500, null))
                 setBackgroundResource(R.drawable.button_background) // 커스텀 배경 적용
@@ -140,8 +140,8 @@ class RegionPreferenceFragment : Fragment() {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
-                    marginStart = 15
-                    marginEnd = 15
+                    marginStart = 20
+                    marginEnd = 20
                     topMargin = 25
                 }
                 layoutParams = params

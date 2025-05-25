@@ -44,7 +44,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activity_checklist_tb"/>
 
-    <!-- GridLayout을 ChipGroup 바깥으로 이동 -->
     <GridLayout
         android:id="@+id/activity_checklist_chipGroup"
         android:layout_width="match_parent"

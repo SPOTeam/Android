@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.FinishedStudyItem
 import com.example.spoteam_android.StudyItem
+import com.example.spoteam_android.databinding.ItemCardMyStudyBinding
 import com.example.spoteam_android.databinding.ItemMyStudyBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -15,7 +16,7 @@ class MyStudyAdapter(private val studyList: MutableList<FinishedStudyItem>) :
     RecyclerView.Adapter<MyStudyAdapter.StudyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyViewHolder {
-        val binding = ItemMyStudyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemCardMyStudyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return StudyViewHolder(binding)
     }
 
@@ -26,16 +27,16 @@ class MyStudyAdapter(private val studyList: MutableList<FinishedStudyItem>) :
 
     override fun getItemCount(): Int = studyList.size
 
-    class StudyViewHolder(private val binding: ItemMyStudyBinding) : RecyclerView.ViewHolder(binding.root) {
+    class StudyViewHolder(private val binding: ItemCardMyStudyBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FinishedStudyItem) {
             binding.tvTitle.text = item.title
             binding.tvSubtitle.text = item.performance ?: "목표 없음"
-            binding.tvStartTime.text = "${formatDate(item.createdAt)} - "
+            binding.tvStartTime.text = "${formatDate(item.createdAt)}"
             if (item.finishedAt.isNullOrEmpty()) {
                 binding.tvEndTime.visibility = View.GONE
             } else {
                 binding.tvEndTime.visibility = View.VISIBLE
-                binding.tvEndTime.text = "End: ${formatDate(item.finishedAt)}"
+                binding.tvEndTime.text = "- ${formatDate(item.finishedAt)}"
             }
         }
 
@@ -44,7 +45,7 @@ class MyStudyAdapter(private val studyList: MutableList<FinishedStudyItem>) :
                 try {
                     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
                     val parsed = LocalDateTime.parse(isoString, formatter)
-                    parsed.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
+                    parsed.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
                 } catch (e: Exception) {
                     "-"
                 }

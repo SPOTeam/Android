@@ -2,9 +2,9 @@
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="19dp"
     android:fillViewport="true"
     android:scrollbars="none">
 
@@ -19,24 +19,26 @@
             android:orientation="horizontal"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="30dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="3dp"
             app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/prev_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:src="@drawable/ic_arrow"/>
 
             <TextView
                 android:id="@+id/fragment_consider_attendance_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:fontFamily="@font/pretendard"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="600"
                 android:text= "커뮤니티 이용 규칙"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="15dp" />
         </LinearLayout>
 
         <TextView
@@ -44,9 +46,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rule_title"
-            android:fontFamily="@font/pretendard"
-            android:textStyle="bold"
-            android:textSize="17sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="700"
+            android:textSize="18dp"
             android:textColor="@color/black"
             android:layout_marginTop="50dp"
             app:layout_constraintStart_toStartOf="@id/fragment_waiting_attendance_ll"
@@ -58,8 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rule_first_title"
-            android:fontFamily="@font/pretendard"
-            android:textSize="17sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:textColor="@color/black"
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="@id/rule_title_tv"
@@ -67,17 +70,19 @@
 
         <TextView
             android:id="@+id/rule_first_content_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/rule_first_content"
-            android:fontFamily="@font/pretendard"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="9dp"
             android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="@id/rule_first_title_tv"
-            app:layout_constraintTop_toBottomOf="@id/rule_first_title_tv"
-            android:lineSpacingExtra="4dp"/>
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/rule_first_content"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rule_first_title_tv" />
 
         <!--    2. 회원 기본 원칙    -->
         <TextView
@@ -85,8 +90,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rule_second_title"
-            android:fontFamily="@font/pretendard"
-            android:textSize="17sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:textColor="@color/black"
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="@id/rule_first_title_tv"
@@ -94,17 +100,18 @@
 
         <TextView
             android:id="@+id/rule_second_content_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/rule_second_content"
-            android:fontFamily="@font/pretendard"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="9dp"
             android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="@id/rule_second_title_tv"
-            app:layout_constraintTop_toBottomOf="@id/rule_second_title_tv"
-            android:lineSpacingExtra="4dp"/>
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/rule_second_content"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="@+id/rule_first_content_tv"
+            app:layout_constraintTop_toBottomOf="@id/rule_second_title_tv" />
 
         <!--    3. 게시글 작성 원칙    -->
         <TextView
@@ -112,8 +119,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rule_third_title"
-            android:fontFamily="@font/pretendard"
-            android:textSize="17sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:textColor="@color/black"
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="@id/rule_second_title_tv"
@@ -121,17 +129,18 @@
 
         <TextView
             android:id="@+id/rule_third_content_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/rule_third_content"
-            android:fontFamily="@font/pretendard"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="9dp"
             android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="@id/rule_third_title_tv"
-            app:layout_constraintTop_toBottomOf="@id/rule_third_title_tv"
-            android:lineSpacingExtra="4dp"/>
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/rule_third_content"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="@+id/rule_first_content_tv"
+            app:layout_constraintTop_toBottomOf="@id/rule_third_title_tv" />
 
         <!--    4. 댓글 및 소통 원칙    -->
         <TextView
@@ -139,8 +148,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rule_fourth_title"
-            android:fontFamily="@font/pretendard"
-            android:textSize="17sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:textColor="@color/black"
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="@id/rule_third_title_tv"
@@ -148,17 +158,18 @@
 
         <TextView
             android:id="@+id/rule_fourth_content_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/rule_fourth_content"
-            android:fontFamily="@font/pretendard"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="9dp"
             android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="@id/rule_fourth_title_tv"
-            app:layout_constraintTop_toBottomOf="@id/rule_fourth_title_tv"
-            android:lineSpacingExtra="4dp"/>
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/rule_fourth_content"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="@+id/rule_first_content_tv"
+            app:layout_constraintTop_toBottomOf="@id/rule_fourth_title_tv" />
 
         <!--    5. 경고 및 제재    -->
         <TextView
@@ -166,8 +177,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rule_fifth_title"
-            android:fontFamily="@font/pretendard"
-            android:textSize="17sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:textColor="@color/black"
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="@id/rule_fourth_title_tv"
@@ -175,17 +187,18 @@
 
         <TextView
             android:id="@+id/rule_fifth_content_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/rule_fifth_content"
-            android:fontFamily="@font/pretendard"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="9dp"
             android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="@id/rule_fifth_title_tv"
-            app:layout_constraintTop_toBottomOf="@id/rule_fifth_title_tv"
-            android:lineSpacingExtra="4dp"/>
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/rule_fifth_content"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="@+id/rule_first_content_tv"
+            app:layout_constraintTop_toBottomOf="@id/rule_fifth_title_tv" />
 
         <!--    6. 운영진 권한    -->
         <TextView
@@ -193,8 +206,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rule_sixth_title"
-            android:fontFamily="@font/pretendard"
-            android:textSize="17sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:textColor="@color/black"
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="@id/rule_fifth_title_tv"
@@ -202,17 +216,18 @@
 
         <TextView
             android:id="@+id/rule_sixth_content_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/rule_sixth_content"
-            android:fontFamily="@font/pretendard"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="9dp"
             android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="@id/rule_sixth_title_tv"
-            app:layout_constraintTop_toBottomOf="@id/rule_sixth_title_tv"
-            android:lineSpacingExtra="4dp"/>
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/rule_sixth_content"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="@id/rule_fifth_title_tv"
+            app:layout_constraintTop_toBottomOf="@id/rule_sixth_title_tv" />
 
         <!--    7. 문의 및 신고    -->
         <TextView
@@ -220,8 +235,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rule_seventh_title"
-            android:fontFamily="@font/pretendard"
-            android:textSize="17sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:textColor="@color/black"
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="@id/rule_sixth_title_tv"
@@ -229,17 +245,18 @@
 
         <TextView
             android:id="@+id/rule_seventh_content_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/rule_seventh_content"
-            android:fontFamily="@font/pretendard"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="9dp"
             android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="@id/rule_seventh_title_tv"
-            app:layout_constraintTop_toBottomOf="@id/rule_seventh_title_tv"
-            android:lineSpacingExtra="4dp"/>
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/rule_seventh_content"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="@id/rule_fifth_title_tv"
+            app:layout_constraintTop_toBottomOf="@id/rule_seventh_title_tv" />
 
         <View
             android:layout_width="wrap_content"

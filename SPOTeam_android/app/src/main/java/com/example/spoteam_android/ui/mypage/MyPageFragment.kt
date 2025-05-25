@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -88,7 +89,7 @@ class MyPageFragment : Fragment() {
 
             detailScrapIv.setOnClickListener { navigateToFragment(ScrapFragment()) }
 
-            tvCommunity02.setOnClickListener{navigateToFragment(CommunityRuleFragment())}
+            framelayout6.setOnClickListener{navigateToFragment(CommunityRuleFragment())}
             framelayout5.setOnClickListener{navigateToFragment(CommunityRestrictionsFragment())}
             framelayout9.setOnClickListener{navigateToFragment(CommunityPrivacyPolicyFragment())}
             framelayout10.setOnClickListener{navigateToFragment(CommunityTermsOfUseFragment())}
@@ -100,8 +101,13 @@ class MyPageFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun setupRecyclerView() {
         myStudyAdapter = MyStudyAdapter(studyList)
+
+        val spacingDp = 12 // 오른쪽 마진
+        val spacingPx = (spacingDp * Resources.getSystem().displayMetrics.density).toInt()
+        binding.recyclerViewMyStudies.addItemDecoration(RightSpaceItemDecoration(spacingPx))
+
         binding.recyclerViewMyStudies.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = myStudyAdapter
         }
     }
@@ -304,7 +310,7 @@ class MyPageFragment : Fragment() {
                     if (apiResponse != null && apiResponse.isSuccess) {
                         val themes = apiResponse.result.themes
                         if (themes.isNotEmpty()) {
-                            binding.tvField.text = themes.joinToString(" ")
+                            binding.tvField.text = themes.joinToString(" ") { "#$it" }
                         }
                     }
                 } else {
@@ -333,8 +339,8 @@ class MyPageFragment : Fragment() {
                         if (regions.isNotEmpty()) {
                             if (regions.isNotEmpty()) {
                                 val fullRegionNames = regions.joinToString(" ") {
-                                    "${it.province} ${it.district} ${it.neighborhood}"
-                                }
+                                    "#${it.province} ${it.district} ${it.neighborhood}"
+                               }
                                 binding.tvRegion.text = fullRegionNames
                             }
                         }
