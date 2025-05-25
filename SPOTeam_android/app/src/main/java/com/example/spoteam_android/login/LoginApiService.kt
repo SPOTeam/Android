@@ -17,6 +17,7 @@ import com.example.spoteam_android.StudyReasons
 import com.example.spoteam_android.ThemeApiResponse
 import com.example.spoteam_android.ThemePreferences
 import com.example.spoteam_android.ValidateEmailResponse
+import com.example.spoteam_android.WithdrawResponse
 import com.example.spoteam_android.YourResponse
 import retrofit2.Call
 import retrofit2.Response
@@ -26,6 +27,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -88,5 +90,11 @@ interface LoginApiService {
     fun updateNickName(
         @Body request: NickNameRequest
     ): Call<NickNameResponse>
+
+    //회원 탈퇴
+    @PATCH("spot/withdraw")
+    fun withdraw(): Call<WithdrawResponse>
+
+
 
 }

@@ -1,4 +1,4 @@
-package com.example.spoteam_android.ui.mypage.cancel
+package com.example.spoteam_android.ui.mypage
 
 import android.app.Dialog
 import android.content.Context
@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import com.example.spoteam_android.R
 
-class CancelDialog(
+class LogOutCompleteDialog(
     private val context: Context,
     private val onConfirm: () -> Unit
 ) {
@@ -18,19 +18,20 @@ class CancelDialog(
     fun start() {
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dlg.setContentView(R.layout.dialog_cancel_spot)
+        dlg.setContentView(R.layout.dialog_logout_complete)
 
-        val withdrawBtn: Button = dlg.findViewById(R.id.logout_bt)
-        val cancelBtn: Button = dlg.findViewById(R.id.cancel_bt)
-        val closeIv: ImageView = dlg.findViewById(R.id.close_iv)
+        val confirmButton: Button = dlg.findViewById(R.id.dialog_complete_bt)
+        val closeButton: ImageView = dlg.findViewById(R.id.close_iv)
 
-        withdrawBtn.setOnClickListener {
+        confirmButton.setOnClickListener {
             onConfirm()
             dlg.dismiss()
         }
 
-        cancelBtn.setOnClickListener { dlg.dismiss() }
-        closeIv.setOnClickListener { dlg.dismiss() }
+        closeButton.setOnClickListener {
+            onConfirm()
+            dlg.dismiss()
+        }
 
         dlg.show()
     }

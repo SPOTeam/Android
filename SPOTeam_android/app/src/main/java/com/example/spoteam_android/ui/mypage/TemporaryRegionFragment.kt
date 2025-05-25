@@ -111,6 +111,28 @@ class TemporaryRegionFragment : Fragment() {
         binding.editReasonFinishBt.isEnabled = selectedRegions.isNotEmpty()
     }
 
+    private fun createStyledRegionView(regionText: String): TextView {
+        return TextView(requireContext()).apply {
+            text = regionText
+            textSize = 14.4f
+            setPadding(30, 35, 50, 35)
+            setTextColor(resources.getColor(R.color.b500, null))
+            setBackgroundResource(R.drawable.button_background)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.suit_semi_bold)
+
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                marginStart = 20
+                marginEnd = 20
+                topMargin = 25
+            }
+            layoutParams = params
+        }
+    }
+
+
     private fun displaySelectedRegions() {
         val chipContainer = binding.chipContainer
         chipContainer.removeAllViews()
@@ -121,58 +143,14 @@ class TemporaryRegionFragment : Fragment() {
             if (!uniqueRegions.contains(regionText)) {
                 uniqueRegions.add(regionText)
 
-                val chip = createStyledChip(regionText)
-                chipContainer.addView(chip)
+                val regionView = createStyledRegionView(regionText)
+                chipContainer.addView(regionView)
             }
         }
         updateAddButtonState()
+        updateFinishButtonState()
     }
 
-
-    private fun createStyledChip(address: String): Chip {
-        return Chip(requireContext()).apply {
-            text = address
-            setTextColor(resources.getColor(R.color.b500, null))
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f) // sp 단위 사용
-            typeface = ResourcesCompat.getFont(requireContext(), R.font.suit_semi_bold)
-
-
-
-            // Custom Chip 스타일 적용
-            setChipDrawable(
-                ChipDrawable.createFromAttributes(
-                    requireContext(),
-                    null,
-                    0,
-                    R.style.CustomChipCloseStyle
-                )
-            )
-
-            // Chip의 marginTop을 조정
-            val params = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                topMargin = 10
-            }
-            layoutParams = params
-
-            isCloseIconVisible = true
-            setOnCloseIconClickListener {
-                val chipContainer = binding.chipContainer
-                chipContainer.removeView(this)
-
-                val index = selectedRegions.indexOf(address)
-                if (index != -1) {
-                    selectedRegions.removeAt(index)
-                    selectedRegionsCode.removeAt(index)
-                }
-
-                updateAddButtonState()
-                updateFinishButtonState()
-            }
-        }
-    }
 
     private fun updateAddButtonState() {
         binding.editReasonCancelBt.isEnabled = selectedRegions.size < 10 // ✅ 10개 이상이면 비활성화

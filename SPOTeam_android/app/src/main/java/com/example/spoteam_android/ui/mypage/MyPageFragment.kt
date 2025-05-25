@@ -26,6 +26,7 @@ import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.StudyItem
 import com.example.spoteam_android.StudyResponse
 import com.example.spoteam_android.ThemeApiResponse
+import com.example.spoteam_android.WithdrawResponse
 import com.example.spoteam_android.databinding.FragmentMypageBinding
 import com.example.spoteam_android.login.LoginApiService
 import com.example.spoteam_android.login.StartLoginActivity
@@ -34,7 +35,7 @@ import com.example.spoteam_android.ui.community.MyPageStudyNumInfo
 import com.example.spoteam_android.ui.community.MyPageStudyNumResponse
 import com.example.spoteam_android.ui.community.ScrapFragment
 import com.example.spoteam_android.ui.interestarea.FinishedStudyApiService
-import com.example.spoteam_android.ui.mypage.cancel.CancelSPOTFragment
+import com.example.spoteam_android.ui.mypage.cancel.CancelDialog
 import com.example.spoteam_android.ui.mypage.rule.CommunityPrivacyPolicyFragment
 import com.example.spoteam_android.ui.mypage.rule.CommunityRestrictionsFragment
 import com.example.spoteam_android.ui.mypage.rule.CommunityRuleFragment
@@ -76,7 +77,6 @@ class MyPageFragment : Fragment() {
             frameLayoutInProgress.setOnClickListener { navigateToFragment(ParticipatingStudyFragment()) }
             frameLayoutRecruiting.setOnClickListener { navigateToFragment(ConsiderAttendanceFragment()) }
             framelayoutApplied.setOnClickListener { navigateToFragment(PermissionWaitFragment()) }
-            framelayoutDeleteAccount.setOnClickListener { showConfirmationDialog("회원 탈퇴", "정말로 회원 탈퇴를 진행하시겠습니까? 탈퇴 시 모든 데이터가 삭제됩니다.") { performAccountDeletion() } }
             framelayoutLogout.setOnClickListener {
                 val  dialog = LogOutDialog(requireContext()){
                     performLogout()
@@ -94,7 +94,10 @@ class MyPageFragment : Fragment() {
             framelayout9.setOnClickListener{navigateToFragment(CommunityPrivacyPolicyFragment())}
             framelayout10.setOnClickListener{navigateToFragment(CommunityTermsOfUseFragment())}
 
-            tvDeleteAccount.setOnClickListener{navigateToFragment(CancelSPOTFragment())}
+            framelayoutDeleteAccount.setOnClickListener{ val dialog = CancelDialog(requireContext()) {
+                performWithdrawal()
+            }
+                dialog.start()}
         }
     }
 
@@ -206,7 +209,7 @@ class MyPageFragment : Fragment() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val loginPlatform = sharedPreferences.getString("loginPlatform", null)
 
-        when (loginPlatform) { //플랫폼별 로그인 구현. 일반로그인은 아직 구현중
+        when (loginPlatform) {
             "kakao" -> logoutFromKakao()
             "naver" -> logoutFromNaver()
             else -> {
@@ -218,7 +221,6 @@ class MyPageFragment : Fragment() {
     private fun logoutFromKakao() {
         UserApiClient.instance.logout { error ->
             if (error != null) {
-                // 🔸 이미 로그아웃된 상태라면 에러가 나올 수 있음
                 Log.w("MyPageFragment", "카카오 로그아웃 실패 또는 이미 로그아웃됨: ${error.message}")
             } else {
                 Log.i("MyPageFragment", "카카오 로그아웃 성공")
@@ -228,10 +230,10 @@ class MyPageFragment : Fragment() {
             clearSharedPreferences()
             RetrofitInstance.setAuthToken(null)
 
-            Toast.makeText(requireContext(), "로그아웃되었습니다", Toast.LENGTH_SHORT).show()
-            navigateToLoginScreen()
+            showLogoutCompleteDialog()
         }
     }
+
 
     private fun logoutFromNaver() {
         NaverIdLoginSDK.logout()
@@ -240,8 +242,7 @@ class MyPageFragment : Fragment() {
 
         RetrofitInstance.setAuthToken(null)
 
-        Toast.makeText(requireContext(), "네이버 로그아웃 성공", Toast.LENGTH_SHORT).show()
-        navigateToLoginScreen()
+        showLogoutCompleteDialog()
     }
 
     private fun fetchFinishedStudyData() {
@@ -409,12 +410,39 @@ class MyPageFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun showConfirmationDialog(title: String, message: String, onConfirm: () -> Unit) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("확인") { _, _ -> onConfirm() }
-            .setNegativeButton("취소", null)
-            .show()
+    //스터디 탈퇴 로직은 도입전.
+    private fun performWithdrawal() {
+        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
+
+        service.withdraw().enqueue(object : Callback<WithdrawResponse> {
+            override fun onResponse(call: Call<WithdrawResponse>, response: Response<WithdrawResponse>) {
+                if (response.isSuccessful && response.body()?.isSuccess == true) {
+                    RetrofitInstance.setAuthToken(null)
+                    clearSharedPreferences()
+                    showWithdrawCompleteDialog()
+                } else {
+                    Log.e("탈퇴 실패", response.errorBody()?.string() ?: "알 수 없는 오류")
+                }
+            }
+
+            override fun onFailure(call: Call<WithdrawResponse>, t: Throwable) {
+                Log.e("탈퇴 실패", t.message ?: "네트워크 오류")
+            }
+        })
     }
+
+    private fun showLogoutCompleteDialog() {
+        val dialog = LogOutCompleteDialog(requireContext()) {
+            navigateToLoginScreen()
+        }
+        dialog.start()
+    }
+    private fun showWithdrawCompleteDialog() {
+        val dialog = CancelFinishDialog(requireContext()) {
+            navigateToLoginScreen()
+        }
+        dialog.start()
+    }
+
+
 }

@@ -64,6 +64,8 @@
         android:paddingEnd="35dp"
         android:background="@drawable/button_background"
         android:text="확인"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
         android:fontFamily="@font/suit_semi_bold"
         android:textColor="@color/b500"
         android:textSize="16dp"
