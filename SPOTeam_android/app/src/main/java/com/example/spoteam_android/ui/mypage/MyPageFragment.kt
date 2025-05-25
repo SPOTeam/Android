@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -103,8 +104,13 @@ class MyPageFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun setupRecyclerView() {
         myStudyAdapter = MyStudyAdapter(studyList)
+
+        val spacingDp = 12 // 오른쪽 마진
+        val spacingPx = (spacingDp * Resources.getSystem().displayMetrics.density).toInt()
+        binding.recyclerViewMyStudies.addItemDecoration(RightSpaceItemDecoration(spacingPx))
+
         binding.recyclerViewMyStudies.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = myStudyAdapter
         }
     }
@@ -336,8 +342,8 @@ class MyPageFragment : Fragment() {
                         if (regions.isNotEmpty()) {
                             if (regions.isNotEmpty()) {
                                 val fullRegionNames = regions.joinToString(" ") {
-                                    "${it.province} ${it.district} ${it.neighborhood}"
-                                }
+                                    "${it.province} ${it.district} $" + "{it.neighborhood}"
+                               }
                                 binding.tvRegion.text = fullRegionNames
                             }
                         }

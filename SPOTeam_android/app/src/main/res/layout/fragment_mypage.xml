@@ -97,8 +97,8 @@
 
             <ImageView
                 android:id="@+id/iv_bookmark"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="wrap_content"
+                android:layout_height="14dp"
                 android:src="@drawable/ic_new_scrab"
                 android:layout_marginEnd="5dp"
                 app:layout_constraintEnd_toStartOf="@id/tv_scrab"
@@ -112,7 +112,9 @@
                 android:layout_height="wrap_content"
                 android:text="스크랩"
                 android:textColor="@color/black"
-                android:textSize="14dp"
+                android:textSize="12dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="400"
                 android:layout_marginEnd="5dp"
                 app:layout_constraintEnd_toStartOf="@id/detail_scrap_iv"
                 app:layout_constraintTop_toTopOf="@id/detail_scrap_iv"
@@ -121,7 +123,7 @@
             <ImageView
                 android:id="@+id/detail_scrap_iv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="18dp"
                 android:src="@drawable/right_arrow"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_nickname"
                 app:layout_constraintEnd_toEndOf="@id/frameLayout1"
@@ -345,10 +347,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewMyStudies"
                 android:layout_width="match_parent"
-                android:layout_height="270dp"
-                android:layout_marginTop="30dp"
-                tools:listitem="@layout/item_my_study"
-                app:layout_constraintTop_toBottomOf="@+id/tv_study_nickname" />
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_explain_study"
+                android:layout_marginTop="15dp"
+                tools:listitem="@layout/item_card_my_study" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -357,6 +359,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginHorizontal="19dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/interest_filter_frame_layout_bottom_border">
 
             <ImageView
@@ -492,7 +495,6 @@
             android:paddingVertical="10dp"
             android:orientation="vertical"
             android:layout_marginHorizontal="19dp"
-            android:layout_marginTop="15dp"
             android:background="@drawable/interest_filter_frame_layout_bottom_border">
 
             <LinearLayout
