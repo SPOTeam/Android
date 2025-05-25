@@ -97,13 +97,13 @@
 
             <ImageView
                 android:id="@+id/iv_bookmark"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:src="@drawable/ic_new_scrab"
+                android:layout_width="16dp"
+                android:layout_height="14dp"
                 android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_new_scrab"
+                app:layout_constraintBottom_toBottomOf="@id/detail_scrap_iv"
                 app:layout_constraintEnd_toStartOf="@id/tv_scrab"
-                app:layout_constraintTop_toTopOf="@+id/detail_scrap_iv"
-                app:layout_constraintBottom_toBottomOf="@id/detail_scrap_iv"/>
+                app:layout_constraintTop_toTopOf="@+id/detail_scrap_iv" />
 
 
             <TextView
@@ -112,7 +112,9 @@
                 android:layout_height="wrap_content"
                 android:text="스크랩"
                 android:textColor="@color/black"
-                android:textSize="14dp"
+                android:textSize="12dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="400"
                 android:layout_marginEnd="5dp"
                 android:fontFamily="@font/suit_variable_font"
                 android:textFontWeight="400"
@@ -123,7 +125,7 @@
             <ImageView
                 android:id="@+id/detail_scrap_iv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="18dp"
                 android:src="@drawable/right_arrow"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_nickname"
                 app:layout_constraintEnd_toEndOf="@id/frameLayout1"
@@ -310,10 +312,10 @@
                 android:id="@+id/tv_study_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="29dp"
+                android:fontFamily="@font/suit_variable_font"
                 android:text="사용자"
                 android:textColor="@color/black"
-                android:fontFamily="@font/suit_variable_font"
                 android:textFontWeight="700"
                 android:textSize="17dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -347,10 +349,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewMyStudies"
                 android:layout_width="match_parent"
-                android:layout_height="270dp"
-                android:layout_marginTop="30dp"
-                tools:listitem="@layout/item_my_study"
-                app:layout_constraintTop_toBottomOf="@+id/tv_study_nickname" />
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_explain_study"
+                android:layout_marginTop="15dp"
+                tools:listitem="@layout/item_card_my_study" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -359,6 +361,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginHorizontal="19dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/interest_filter_frame_layout_bottom_border">
 
             <ImageView
@@ -384,18 +387,18 @@
 
             <TextView
                 android:id="@+id/tv_field"
-                android:layout_width="200dp"
+                android:layout_width="230dp"
                 android:layout_height="20dp"
                 android:layout_gravity="start|center"
                 android:layout_marginStart="110dp"
+                android:ellipsize="end"
                 android:fontFamily="@font/suit_variable_font"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:text="ex) 관심 분야"
                 android:textColor="@color/g400"
                 android:textFontWeight="600"
-                android:textSize="15dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:singleLine="true"/>
+                android:textSize="15dp" />
 
         </FrameLayout>
 
@@ -428,18 +431,18 @@
 
             <TextView
                 android:id="@+id/tv_region"
-                android:layout_width="200dp"
+                android:layout_width="230dp"
                 android:layout_height="20dp"
                 android:layout_gravity="start|center"
                 android:layout_marginStart="110dp"
+                android:ellipsize="end"
                 android:fontFamily="@font/suit_variable_font"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:text="ex) 관심 지역"
                 android:textColor="@color/g400"
                 android:textFontWeight="600"
-                android:textSize="15dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:singleLine="true"/>
+                android:textSize="15dp" />
 
         </FrameLayout>
 
@@ -472,7 +475,7 @@
 
             <TextView
                 android:id="@+id/tv_goal"
-                android:layout_width="200dp"
+                android:layout_width="230dp"
                 android:layout_height="20dp"
                 android:layout_gravity="start|center"
                 android:layout_marginStart="110dp"
@@ -494,7 +497,6 @@
             android:paddingVertical="10dp"
             android:orientation="vertical"
             android:layout_marginHorizontal="19dp"
-            android:layout_marginTop="15dp"
             android:background="@drawable/interest_filter_frame_layout_bottom_border">
 
             <LinearLayout
