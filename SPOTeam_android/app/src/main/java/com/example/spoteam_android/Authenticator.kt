@@ -14,10 +14,8 @@ class AuthInterceptor(private val context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
 
-        // 현재 저장된 액세스 토큰 가져오기
         val currentToken = getAccessTokenFromPreferences()
 
-        // 특정 URL에 Authorization 헤더를 제외하고 추가
         if (currentToken != null &&
             !request.url.toString().contains("/spot/check/login-id") &&
             !request.url.toString().contains("/spot/check/email")
@@ -31,8 +29,7 @@ class AuthInterceptor(private val context: Context) : Interceptor {
         var response = chain.proceed(request)
 
         // 토큰 만료 처리: 401 또는 400 상태 코드 확인
-        if (response.code == 401) {
-            Log.d("AuthInterceptor", "Token expired. Attempting to refresh token...")
+        if (response.code == 401 || response.code == 400) {
 
             synchronized(this) {
                 // 갱신된 액세스 토큰 확인
