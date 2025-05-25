@@ -92,7 +92,7 @@ class MyPageFragment : Fragment() {
 
             detailScrapIv.setOnClickListener { navigateToFragment(ScrapFragment()) }
 
-            tvCommunity02.setOnClickListener{navigateToFragment(CommunityRuleFragment())}
+            framelayout6.setOnClickListener{navigateToFragment(CommunityRuleFragment())}
             framelayout5.setOnClickListener{navigateToFragment(CommunityRestrictionsFragment())}
             framelayout9.setOnClickListener{navigateToFragment(CommunityPrivacyPolicyFragment())}
             framelayout10.setOnClickListener{navigateToFragment(CommunityTermsOfUseFragment())}
@@ -313,7 +313,7 @@ class MyPageFragment : Fragment() {
                     if (apiResponse != null && apiResponse.isSuccess) {
                         val themes = apiResponse.result.themes
                         if (themes.isNotEmpty()) {
-                            binding.tvField.text = themes.joinToString(" ")
+                            binding.tvField.text = themes.joinToString(" ") { "#$it" }
                         }
                     }
                 } else {
@@ -342,7 +342,7 @@ class MyPageFragment : Fragment() {
                         if (regions.isNotEmpty()) {
                             if (regions.isNotEmpty()) {
                                 val fullRegionNames = regions.joinToString(" ") {
-                                    "${it.province} ${it.district} $" + "{it.neighborhood}"
+                                    "#${it.province} ${it.district} ${it.neighborhood}"
                                }
                                 binding.tvRegion.text = fullRegionNames
                             }

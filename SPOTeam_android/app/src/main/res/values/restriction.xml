@@ -3,45 +3,61 @@
     <string name="restriction_title" >SPOT 이용 제한 내역에 대한 안내</string>
 
     <string name="restriction_sub_title" >
-        &#160;SPOT 서비스 이용 중 운영 정책을 위반할 경우, 경고 및 이용\n
+        SPOT 서비스 이용 중 운영 정책을 위반할 경우, 경고 및 이용
         제한 조치가 적용될 수 있습니다.
     </string>
 
     <string name="restriction_first_title" > 1. 이용 제한 조치 기준 </string>
 
     <string name="restriction_first_content" >
-        &#160;이용자의 서비스 악용 및 규칙 위반 정도에 따라 단계적으로\n
+        이용자의 서비스 악용 및 규칙 위반 정도에 따라 단계적으로
         조치됩니다.
     </string>
 
     <string name="restriction_second_title" > 2. 이용 제한 조치 상세 </string>
 
-    <string name="restriction_second_content" >
-        &#160;• 이용 제한 조치 상세\n
-        &#160;&#160;&#160;&#160;• 서비스 일부 또는 전체 기능 사용이 일정 기간 제한됩니다.\n
-        &#160;&#160;&#160;&#160;• 제한 기간 동안 계정 로그인이 차단될 수 있습니다.\n
-        • 영구 이용 정지\n
-        &#160;&#160;&#160;&#160;• 지속적인 규칙 위반 또는 중대한 악용 행위가 발견될 경우\n
-        &#160;&#160;&#160;&#160;&#160;&#160;&#160;계정이 영구적으로 정지됩니다.\n
-        &#160;&#160;&#160;&#160;• 동일한 사용자에 의한 재가입이 제한될 수 있습니다.\n
-        • 법적 조치 검토\n
-        &#160;&#160;&#160;&#160;• 악의적인 시스템 해킹, 불법 자료 유포, 타인 명예훼손 등의\n
-        &#160;&#160;&#160;&#160;&#160;&#160;&#160;행위는 관련 법규에 따라 법적 대응이 이루어질 수 있습니다.
+    <string name="restriction_second_title01" >
+        일시적 이용 제한
     </string>
+
+    <string name="restriction_second_content01" >
+        서비스 일부 또는 전체 기능 사용이 일정 기간 제한됩니다.
+       제한 기간 동안 계정 로그인이 차단될 수 있습니다.
+    </string>
+
+    <string name="restriction_second_title02" >
+        영구 이용 정지
+    </string>
+
+    <string name="restriction_second_content02" >
+        지속적인 규칙 위반 또는 중대한 악용 행위가 발견될 경우
+        계정이 영구적으로 정지됩니다.
+        동일한 사용자에 의한 재가입이 제한될 수 있습니다.
+    </string>
+
+    <string name="restriction_second_title03" >
+        법적 조치 검토
+    </string>
+
+    <string name="restriction_second_content03" >
+        악의적인 시스템 해킹, 불법 자료 유포, 타인 명예훼손 등의
+        행위는 관련 법규에 따라 법적 대응이 이루어질 수 있습니다.
+    </string>
+
+
 
     <string name="restriction_third_title" > 3. 이용 제한 해제 요청 </string>
 
     <string name="restriction_third_content" >
-        &#160;• 이용 제한 조치가 부당하다고 판단될 경우, 운영팀에 소명하여\n
-        &#160;&#160;&#160;해제 요청을 할 수 있습니다.\n
-        • 단, 명백한 규칙 위반 사항에 대해서는 해제 요청이 거부될 수\n
-        &#160;&#160;&#160;있습니다.
+        이용 제한 조치가 부당하다고 판단될 경우, 운영팀에 소명하여\n
+        해제 요청을 할 수 있습니다.\n
+        단, 명백한 규칙 위반 사항에 대해서는 해제 요청이 거부될 수\n
+        있습니다.
         <!--   &#160; : 띄어쓰기     -->
     </string>
 
     <string name="restriction_extra_comment" >
-        &#160;서비스를 안전하고 원활하게 운영하기 위해 이용자 여러분의 협조를\n
-        부탁드립니다.
+        서비스를 안전하고 원활하게 운영하기 위해 이용자 여러분의 협조를 부탁드립니다.
     </string>
 
 </resources>

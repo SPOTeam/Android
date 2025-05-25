@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:paddingHorizontal="19dp"
     android:scrollbars="none">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,24 +19,24 @@
             android:orientation="horizontal"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="30dp"
-            android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/prev_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:src="@drawable/ic_arrow"/>
 
             <TextView
                 android:id="@+id/fragment_consider_attendance_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:fontFamily="@font/pretendard"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="600"
                 android:text= "이용 제한 내역"
+                android:layout_marginTop="2dp"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="15dp" />
         </LinearLayout>
 
         <TextView
@@ -43,9 +44,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/restriction_title"
-            android:fontFamily="@font/pretendard"
-            android:textStyle="bold"
-            android:textSize="19sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="700"
+            android:textSize="18dp"
             android:textColor="@color/black"
             android:layout_marginTop="50dp"
             app:layout_constraintStart_toStartOf="@id/fragment_waiting_attendance_ll"
@@ -53,12 +54,12 @@
 
         <TextView
             android:id="@+id/restriction_sub_title_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/restriction_sub_title"
-            android:fontFamily="@font/pretendard"
-            android:textStyle="bold"
-            android:textSize="15sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:textColor="@color/black"
             android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="@id/restriction_title_tv"
@@ -70,8 +71,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/restriction_first_title"
-            android:fontFamily="@font/pretendard"
-            android:textSize="16sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:textColor="@color/black"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@id/restriction_sub_title_tv"
@@ -79,14 +81,15 @@
 
         <TextView
             android:id="@+id/restriction_first_content_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/restriction_first_content"
-            android:fontFamily="@font/pretendard"
-            android:textSize="14sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:textSize="14dp"
             android:textColor="@color/black"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="5dp"
+            android:layout_marginStart="9dp"
             app:layout_constraintStart_toStartOf="@id/restriction_first_title_tv"
             app:layout_constraintTop_toBottomOf="@id/restriction_first_title_tv"
             android:lineSpacingExtra="4dp"/>
@@ -97,26 +100,115 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/restriction_second_title"
-            android:fontFamily="@font/pretendard"
-            android:textSize="17sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15dp"
             android:textColor="@color/black"
             android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="@id/restriction_first_title_tv"
             app:layout_constraintTop_toBottomOf="@id/restriction_first_content_tv"/>
 
-        <TextView
-            android:id="@+id/restriction_second_content_tv"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/restriction_second_content_cl"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/restriction_second_content"
-            android:fontFamily="@font/pretendard"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="5dp"
+            android:layout_marginStart="9dp"
             app:layout_constraintStart_toStartOf="@id/restriction_second_title_tv"
-            app:layout_constraintTop_toBottomOf="@id/restriction_second_title_tv"
-            android:lineSpacingExtra="6dp"/>
+            app:layout_constraintTop_toBottomOf="@id/restriction_second_title_tv">
+
+            <TextView
+                android:id="@+id/restriction_second_title01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/suit_variable_font"
+                android:text="@string/restriction_second_title01"
+                android:textColor="@color/black"
+                android:textFontWeight="500"
+                android:textSize="14dp"
+                android:lineSpacingExtra="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/restriction_second_content_cl" />
+
+            <TextView
+                android:id="@+id/restriction_second_content01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:lineSpacingExtra="4dp"
+                android:text="@string/restriction_second_content01"
+                android:textColor="@color/black"
+                android:textFontWeight="500"
+                android:textSize="14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/restriction_second_title01" />
+
+            <TextView
+                android:id="@+id/restriction_second_title02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:lineSpacingExtra="4dp"
+                android:text="@string/restriction_second_title02"
+                android:textColor="@color/black"
+                android:textFontWeight="500"
+                android:textSize="14dp"
+                app:layout_constraintTop_toBottomOf="@+id/restriction_second_content01" />
+
+            <TextView
+                android:id="@+id/restriction_second_content02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:lineSpacingExtra="4dp"
+                android:text="@string/restriction_second_content02"
+                android:textColor="@color/black"
+                android:textFontWeight="500"
+                android:textSize="14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/restriction_second_title02" />
+
+            <TextView
+                android:id="@+id/restriction_second_title03"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:lineSpacingExtra="4dp"
+                android:text="@string/restriction_second_title03"
+                android:textColor="@color/black"
+                android:textFontWeight="500"
+                android:textSize="14dp"
+                app:layout_constraintTop_toBottomOf="@+id/restriction_second_content02" />
+
+            <TextView
+                android:id="@+id/restriction_second_content03"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/suit_variable_font"
+                android:lineSpacingExtra="4dp"
+                android:text="@string/restriction_second_content03"
+                android:textColor="@color/black"
+                android:textFontWeight="500"
+                android:textSize="14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/restriction_second_title03" />
+
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         <!--    3. 게시글 작성 원칙    -->
         <TextView
@@ -124,34 +216,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/restriction_third_title"
-            android:fontFamily="@font/pretendard"
-            android:textSize="17sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
+            android:textSize="15sp"
             android:textColor="@color/black"
             android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="@id/restriction_second_title_tv"
-            app:layout_constraintTop_toBottomOf="@id/restriction_second_content_tv"/>
+            app:layout_constraintTop_toBottomOf="@id/restriction_second_content_cl"/>
 
         <TextView
             android:id="@+id/restriction_third_content_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/restriction_third_content"
-            android:fontFamily="@font/pretendard"
-            android:textSize="14sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:textSize="14dp"
             android:textColor="@color/black"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="5dp"
+            android:layout_marginStart="9dp"
             app:layout_constraintStart_toStartOf="@id/restriction_third_title_tv"
             app:layout_constraintTop_toBottomOf="@id/restriction_third_title_tv"
             android:lineSpacingExtra="4dp"/>
 
         <TextView
             android:id="@+id/extra_comment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/restriction_extra_comment"
-            android:fontFamily="@font/pretendard"
-            android:textSize="14sp"
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="500"
+            android:textSize="14dp"
             android:textColor="@color/black"
             android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="@id/restriction_third_title_tv"
