@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.study.calendar
 
+import StudyApiService
 import StudyViewModel
 import android.content.Context
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -17,6 +19,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spoteam_android.MainActivity
+import com.example.spoteam_android.MemberResponse
+import com.example.spoteam_android.ProfileItem
 import com.example.spoteam_android.R
 import com.example.spoteam_android.RetrofitInstance
 import com.example.spoteam_android.databinding.FragmentCalendarBinding
@@ -170,6 +174,14 @@ class CalendarFragment : Fragment() {
         })
 
 
+        isCurrentUserStudyMember(studyId) { isMember ->
+            if (isMember) {
+                addButton.visibility = View.VISIBLE
+            } else {
+                addButton.visibility = View.GONE
+            }
+        }
+
         return binding.root
     }
 
@@ -226,4 +238,66 @@ class CalendarFragment : Fragment() {
             }
         })
     }
+
+
+    fun getMemberId(context: Context): Int {
+
+        var memberId: Int = -1
+
+        val sharedPreferences =
+            context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val currentEmail = sharedPreferences.getString("currentEmail", null)
+
+        // 현재 로그인된 사용자 정보를 로그
+        memberId = if (currentEmail != null) sharedPreferences.getInt(
+            "${currentEmail}_memberId",
+            -1
+        ) else -1
+
+        return memberId // 저장된 memberId 없을 시 기본값 -1 반환
+    }
+
+
+    private fun isCurrentUserStudyMember(
+        studyId: Int,
+        onResult: (Boolean) -> Unit
+    ) {
+        val api = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+
+        // SharedPreferences에서 현재 로그인된 memberId 가져오기
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("currentEmail", null)
+        val currentMemberId = if (email != null) {
+            sharedPreferences.getInt("${email}_memberId", -1)
+        } else {
+            -1
+        }
+
+        if (currentMemberId == -1) {
+            onResult(false)
+            return
+        }
+
+        // API 호출
+        api.getStudyMembers(studyId).enqueue(object : Callback<MemberResponse> {
+            override fun onResponse(call: Call<MemberResponse>, response: Response<MemberResponse>) {
+                if (response.isSuccessful) {
+                    val members = response.body()?.result?.members ?: emptyList()
+                    val isMember = members.any { it.memberId == currentMemberId } // ✅ memberId 기준 비교
+                    onResult(isMember)
+                } else {
+                    onResult(false)
+                }
+            }
+
+            override fun onFailure(call: Call<MemberResponse>, t: Throwable) {
+                onResult(false)
+            }
+        })
+    }
+
+
+
+
+
 }
