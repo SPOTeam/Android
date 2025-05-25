@@ -53,7 +53,7 @@
         android:id="@+id/fragment_online_study_activity_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="우리 스터디의 활동은?"
+        android:text="우리 스터디 활동은 주로"
         android:textColor="@color/black"
         android:textSize="18dp"
         android:textStyle="bold"

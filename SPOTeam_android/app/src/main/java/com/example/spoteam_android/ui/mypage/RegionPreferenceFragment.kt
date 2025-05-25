@@ -1,5 +1,6 @@
 package com.example.spoteam_android.ui.mypage
 
+import LocationStudyFragment
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -48,7 +49,6 @@ class RegionPreferenceFragment : Fragment() {
             Toast.makeText(requireContext(), "Email not provided", Toast.LENGTH_SHORT).show()
         }
 
-//         이유 수정 버튼 클릭 시
         binding.checklistspotLocationEditBt.setOnClickListener {
             val fragment = TemporaryRegionFragment()
             val bundle = Bundle().apply {
@@ -116,9 +116,9 @@ class RegionPreferenceFragment : Fragment() {
 
     private fun displayRegions(regions: List<Region>) {
         val linearLayout = binding.fragmentRegionPreferenceLinearLayout
-        linearLayout.removeAllViews() // 기존 TextView를 모두 제거
-        selectedRegions.clear() // 새로운 데이터로 채우기 전에 리스트를 초기화
-        selectedCodes.clear() // 코드 리스트도 초기화
+        linearLayout.removeAllViews()
+        selectedRegions.clear()
+        selectedCodes.clear()
 
         for (region in regions) {
             val regionText = "${region.province} ${region.district} ${region.neighborhood}"
@@ -150,6 +150,27 @@ class RegionPreferenceFragment : Fragment() {
             linearLayout.addView(textView)
         }
     }
+    private fun createStyledRegionView(regionText: String): TextView {
+        return TextView(requireContext()).apply {
+            text = regionText
+            textSize = 14.4f
+            setPadding(30, 35, 50, 35)
+            setTextColor(resources.getColor(R.color.b500, null))
+            setBackgroundResource(R.drawable.button_background)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.suit_semi_bold)
+
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                marginStart = 20
+                marginEnd = 20
+                topMargin = 25
+            }
+            layoutParams = params
+        }
+    }
+
 
 
     private fun goToLocationFragment() {

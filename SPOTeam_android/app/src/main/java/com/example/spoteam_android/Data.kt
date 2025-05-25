@@ -668,4 +668,19 @@ data class FinishedStudyItem(
     val finishedAt: String?
 )
 
+data class WithdrawResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: WithdrawResult?
+)
+
+data class WithdrawResult(
+    val memberId: Int,
+    val name: String,
+    val email: String,
+    val inactive: String
+)
+
+
 

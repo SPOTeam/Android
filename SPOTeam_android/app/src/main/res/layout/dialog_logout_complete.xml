@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="330dp"
-    android:layout_height="270dp"
+    android:layout_height="200dp"
     android:layout_gravity="center"
     android:background="@drawable/dialog_rounded_background">
 
@@ -17,61 +17,48 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/complete_iv"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/aftercheck"
+        android:id="@+id/logout_iv"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="45dp"
+        android:src="@drawable/ic_check_new"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/dialog_complete_title_tv"
+        android:id="@+id/dialog_logout_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="수정 완료"
-        android:textColor="#000000"
-        android:fontFamily="@font/suit_bold"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/complete_iv" />
-    <TextView
-        android:id="@+id/dialog_complete_content_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="수정이 완료되었습니다.\n새로운 관심 분야에 맞는 스터디를 확인해보세요!"
+        android:layout_marginTop="10dp"
+        android:text="로그아웃 처리 완료"
         android:textColor="@color/black"
-        android:gravity="center"
-        android:lineSpacingExtra="4dp"
-        android:fontFamily="@font/suit_semi_bold"
-        android:textSize="13.5dp"
+        android:textSize="19dp"
+        android:fontFamily="@font/suit_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_complete_title_tv" />
+        app:layout_constraintTop_toBottomOf="@id/logout_iv" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/dialog_complete_bt"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="43dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
         android:layout_marginBottom="15dp"
         android:paddingStart="35dp"
         android:paddingEnd="35dp"
         android:background="@drawable/button_background"
+        android:text="확인"
         android:elevation="0dp"
         android:stateListAnimator="@null"
-        android:text="내 관심사 스터디 보기"
         android:fontFamily="@font/suit_semi_bold"
         android:textColor="@color/b500"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
 
 
 

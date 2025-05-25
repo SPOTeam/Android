@@ -1,44 +1,36 @@
-package com.example.spoteam_android.ui.mypage.cancel
+package com.example.spoteam_android.ui.mypage
 
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
 import android.view.Window
+import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.example.spoteam_android.R
-import com.example.spoteam_android.RetrofitInstance
-import com.example.spoteam_android.ui.community.CommunityAPIService
-import com.example.spoteam_android.ui.community.MemberAcceptResponse
-import com.example.spoteam_android.ui.community.MemberIntroInfo
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class CancelFinishDialog(private val context: Context) {
-
-    private val dlg = android.app.Dialog(context)
+class CancelFinishDialog(
+    private val context: Context,
+    private val onConfirm: () -> Unit
+) {
+    private val dlg = Dialog(context)
 
     fun start() {
-        // 타이틀바 제거
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        // 커스텀 다이얼로그 radius 적용
         dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        // 다이얼로그 레이아웃 설정
         dlg.setContentView(R.layout.dialog_cancel_finish_spot)
 
-        val btnMove1 = dlg.findViewById<TextView>(R.id.cancel_finish_bt)
-        btnMove1.setOnClickListener {
+        val confirmButton: Button = dlg.findViewById(R.id.dialog_complete_bt)
+        val closeButton: ImageView = dlg.findViewById(R.id.close_iv)
+
+        confirmButton.setOnClickListener {
             dlg.dismiss()
+            onConfirm()
         }
 
-        val btnMove2 = dlg.findViewById<ImageView>(R.id.cancel_finish_x_iv)
-        btnMove2.setOnClickListener {
+        closeButton.setOnClickListener {
             dlg.dismiss()
+            onConfirm()
         }
 
         dlg.show()
