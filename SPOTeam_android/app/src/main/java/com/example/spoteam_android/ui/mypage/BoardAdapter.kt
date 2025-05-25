@@ -209,7 +209,7 @@ class BoardAdapter(
                         view.resources.displayMetrics
                     ).toInt()
 
-                    popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x - offsetX, y + 50)
+                    popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x - offsetX, y + 55)
                 }
             }
         }
