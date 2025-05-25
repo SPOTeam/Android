@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -377,7 +378,18 @@ class MyStudyPostContentActivity : AppCompatActivity() {
         popupWindow.isFocusable = true
         popupWindow.setBackgroundDrawable(view.context.getDrawable(R.drawable.custom_popup_background))
 
-        popupWindow.showAsDropDown(view, 0,0)
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        val x = location[0]
+        val y = location[1]
+
+        val offsetX = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            75f,
+            view.resources.displayMetrics
+        ).toInt()
+
+        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x - offsetX, y + 50)
     }
 
     private fun deleteStudyPostContent(view: View, fragmentManager: FragmentManager) {

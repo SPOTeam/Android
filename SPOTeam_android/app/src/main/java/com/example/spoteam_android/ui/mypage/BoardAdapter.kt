@@ -4,6 +4,7 @@ import StudyFormMode
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,6 @@ import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.spoteam_android.BoardItem
@@ -27,6 +27,7 @@ import com.example.spoteam_android.ui.study.RegisterStudyFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class BoardAdapter(
     private val itemList: ArrayList<BoardItem>,
@@ -96,7 +97,7 @@ class BoardAdapter(
                 if (hostResult != null) {
                     val isHost = hostResult.isOwned  // ✅ 호스트 여부 확인
 
-                    Log.d("BoardAdapter", "StudyId : ${studyId}")
+//                    Log.d("BoardAdapter", "StudyId : ${studyId}")
 
                     val popupView = LayoutInflater.from(view.context)
                         .inflate(R.layout.modify_study_popup_menu, null)
@@ -198,10 +199,17 @@ class BoardAdapter(
                     popupWindow.setBackgroundDrawable(view.context.getDrawable(R.drawable.custom_popup_background))
 
                     val location = IntArray(2)
-                    view.getLocationOnScreen(location) // 화면 전체 기준 좌표 가져오기
+                    view.getLocationOnScreen(location)
                     val x = location[0]
                     val y = location[1]
-                    popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x-100, y + 100)
+
+                    val offsetX = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        75f,
+                        view.resources.displayMetrics
+                    ).toInt()
+
+                    popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x - offsetX, y + 50)
                 }
             }
         }
