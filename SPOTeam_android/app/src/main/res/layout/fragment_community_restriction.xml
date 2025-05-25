@@ -34,6 +34,7 @@
                 android:fontFamily="@font/suit_variable_font"
                 android:textFontWeight="600"
                 android:text= "이용 제한 내역"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/black"
                 android:textSize="15dp" />
