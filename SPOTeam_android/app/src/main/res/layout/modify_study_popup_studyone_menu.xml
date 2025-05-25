@@ -12,8 +12,10 @@
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:gravity="center"
+        android:gravity="start"
         android:textColor="@color/black"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="500"
         android:padding="6dp"
         android:text="스터디원 신고"
         android:textSize="14dp" />
@@ -29,9 +31,11 @@
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:gravity="center"
+        android:gravity="start"
         android:padding="6dp"
         android:text="스터디 탈퇴"
+        android:fontFamily="@font/suit_variable_font"
+        android:textFontWeight="500"
         android:textColor="@color/r500"
         android:textSize="14dp" />
 </LinearLayout>
