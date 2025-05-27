@@ -59,15 +59,16 @@
 
             <TextView
                 android:id="@+id/community_content_comment_str_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
+                android:gravity="start"
                 android:text="카카오 최종합격"
                 android:textSize="14dp"
                 android:layout_marginTop="10dp"
                 android:textFontWeight="800"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@id/writerInfo_ll"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/writerInfo_ll" />
 
             <ImageView
