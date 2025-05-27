@@ -39,13 +39,12 @@ class LocationStudyFragment : Fragment() {
 
     private fun setupRecyclerView() {
         locationSearchAdapter = LocationSearchAdapter(locationItemList) { item ->
-            // 아이템 클릭 시 처리
             openOnlineStudyFragment(item.address)
         }
         binding.activityLocationRv.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = locationSearchAdapter
-            visibility = View.GONE // 초기에는 RecyclerView를 숨김
+            visibility = View.GONE
         }
     }
 
@@ -65,7 +64,6 @@ class LocationStudyFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                // 텍스트가 변경될 때마다 자동으로 검색 수행
                 performSearch()
             }
         })
@@ -79,7 +77,7 @@ class LocationStudyFragment : Fragment() {
     }
 
     private fun parseTsvData(tsvData: String) {
-        val rows = tsvData.split("\n").drop(1) // 첫 번째 줄은 헤더이므로 제외
+        val rows = tsvData.split("\n").drop(1)
 
         locationItemList.clear()
         for (row in rows) {

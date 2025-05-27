@@ -2,79 +2,78 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="330dp"
-    android:layout_height="220dp"
+    android:layout_height="200dp"
     android:layout_gravity="center"
     android:background="@drawable/dialog_rounded_background">
 
     <ImageView
-        android:id="@+id/cancel_x_iv"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="15dp"
+        android:id="@+id/close_iv"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="15dp"
-        android:src="@drawable/ic_x_button"
-        app:tint="@color/black"
+        android:src="@drawable/ic_new_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/complete_iv"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="5dp"
+        android:id="@+id/logout_iv"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="45dp"
         android:src="@drawable/ic_cancel_spot"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cancel_x_iv" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/dialog_complete_title_tv"
+        android:id="@+id/dialog_logout_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="정말 탈퇴하시겠습니까?"
+        android:text="정말 탈퇴할까요?"
         android:textColor="@color/black"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:fontFamily="@font/pretendard"
+        android:textSize="19dp"
+        android:fontFamily="@font/suit_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/complete_iv" />
+        app:layout_constraintTop_toBottomOf="@id/logout_iv" />
 
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/cancel_ok_bt"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
+        android:orientation="horizontal"
         android:layout_marginBottom="15dp"
-        android:paddingHorizontal="55dp"
-        android:background="@drawable/button_enabled"
-        android:text="확인"
-        android:fontFamily="@font/pretendard"
-        android:textColor="#186AFF"
-        android:textSize="16dp"
-        android:textStyle="bold"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/cancel_cancel_bt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/button_disabled"
-        android:text="취소"
-        android:fontFamily="@font/pretendard"
-        android:paddingHorizontal="55dp"
-        android:textColor="@color/g500"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <android.widget.Button
+            android:id="@+id/logout_bt"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/error_background"
+            android:text="탈퇴"
+            android:textColor="@color/r500"
+            android:textSize="17dp"
+            android:fontFamily="@font/suit_semi_bold" />
+
+        <android.widget.Button
+            android:id="@+id/cancel_bt"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cancel_bg"
+            android:text="취소"
+            android:textColor="@color/g500"
+            android:textSize="17dp"
+            android:fontFamily="@font/suit_semi_bold"/>
+    </LinearLayout>
 
 
 

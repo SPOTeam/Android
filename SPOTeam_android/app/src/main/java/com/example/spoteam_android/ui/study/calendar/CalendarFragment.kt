@@ -107,9 +107,9 @@ class CalendarFragment : Fragment() {
             val kakaoNickname = sharedPreferences.getString("${currentEmail}_nickname", "Unknown")
 
             if (kakaoNickname == studyOwner) {
-//                binding.addButton.visibility = View.VISIBLE
+                binding.addButton.visibility = View.VISIBLE
             } else {
-//                binding.addButton.visibility = View.GONE
+                binding.addButton.visibility = View.GONE
             }
         }
 

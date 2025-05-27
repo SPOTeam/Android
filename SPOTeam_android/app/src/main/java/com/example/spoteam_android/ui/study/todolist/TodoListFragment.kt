@@ -102,7 +102,7 @@ class TodoListFragment : Fragment() {
         var selectedDate2 = 1
 
 
-         todoDateAdapter = TodoDateAdapter(daysOfCurrentMonth, selectedDate2) { newSelectedDate ->
+        todoDateAdapter = TodoDateAdapter(daysOfCurrentMonth, selectedDate2) { newSelectedDate ->
             selectedDate2 = newSelectedDate
             todoDateAdapter.updateDates(daysOfCurrentMonth, selectedDate2)
         }
@@ -429,7 +429,13 @@ class TodoListFragment : Fragment() {
                         val memberCount = studyViewModel.memberCount.value
 
                         // 닉네임이 리스트에 있거나, memberCount와 maxPeople이 일치하면 버튼을 숨김
-                        val shouldHideButton = isNicknameFound || (maxPeople != null && memberCount != null && memberCount >= maxPeople)
+                        val isMember = isNicknameFound
+                        if (isMember){
+                            binding.imgbtnPlusTodolist.visibility = View.VISIBLE
+                        }else{
+                            binding.imgbtnPlusTodolist.visibility = View.GONE
+                        }
+
 
 
                         // RecyclerView의 제약 조건 설정

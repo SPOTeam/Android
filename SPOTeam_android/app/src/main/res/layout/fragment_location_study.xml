@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/fragment_location_study_tv"
-            android:text="스터디 만들기"
+            android:text="관심 지역"
             android:textColor="@color/black"
             android:textSize="15dp"
             android:layout_marginStart="20dp"
@@ -38,28 +38,18 @@
 
 
 
-    <ProgressBar
-        android:id="@+id/fragment_location_study_pb"
-        android:layout_width="match_parent"
-        android:layout_height="2.88dp"
-        android:background="#D8D8D8"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/fragment_location_study_ll"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
     <TextView
         android:id="@+id/fragment_online_study_activity_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="스터디 지역을 추가하세요."
+        android:text="내가 스터디 하고 싶은 지역은?"
         android:textColor="@color/black"
         android:textSize="18dp"
         android:fontFamily="@font/suit_bold"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginTop="54dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_location_study_pb"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_location_study_ll"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/activity_location_search_et"
@@ -74,27 +64,20 @@
         android:textSize="16dp"
         android:textColor="@color/black"
         android:padding="10dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="43.2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_online_study_activity_tv" />
 
-    <View
-        android:id="@+id/activity_location_v"
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:background="#F8F8F8"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/activity_location_search_et"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activity_location_rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/activity_location_v"
+        android:layout_marginTop="64.8dp"
+        app:layout_constraintTop_toBottomOf="@id/activity_location_search_et"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
