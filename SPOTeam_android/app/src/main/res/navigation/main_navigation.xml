@@ -6,9 +6,9 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.spoteam_android.HouseFragment"
+        android:name="com.example.spoteam_android.presentation.home.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_house" />
+        tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/navigation_category"
         android:name="com.example.spoteam_android.CategoryFragment"

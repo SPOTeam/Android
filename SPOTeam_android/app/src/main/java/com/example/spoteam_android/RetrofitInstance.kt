@@ -40,7 +40,7 @@ object RetrofitInstance {
 
 
     private fun loadAuthTokenFromPreferences() {
-        if (!::appContext.isInitialized) {
+        if (!RetrofitInstance::appContext.isInitialized) {
             Log.e("RetrofitInstance", "initialize() 호출 필요!")
             return
         }
@@ -51,7 +51,7 @@ object RetrofitInstance {
 
 
     private fun saveAuthTokenToPreferences(token: String) {
-        if (!::appContext.isInitialized) {
+        if (!RetrofitInstance::appContext.isInitialized) {
             Log.e("RetrofitInstance", "initialize() 호출 필요!")
             return
         }
@@ -67,7 +67,7 @@ object RetrofitInstance {
 
 
     private fun clearAuthTokenFromPreferences() {
-        if (!::appContext.isInitialized) {
+        if (!RetrofitInstance::appContext.isInitialized) {
             Log.e("RetrofitInstance", "initialize() 호출 필요!")
             return
         }
@@ -84,7 +84,7 @@ object RetrofitInstance {
 
     val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(AuthInterceptor(appContext))
+            .addInterceptor(RetrofitInstanceAuthInterceptor(appContext))
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)

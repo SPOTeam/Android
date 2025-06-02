@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
-        android:name=".GlobalApplication"
+        android:name=".SpotApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,69 +16,46 @@
         android:theme="@style/Theme.SPOTeam_android"
         android:usesCleartextTraffic="true"
         tools:targetApi="34">
-        <activity
-            android:name=".login.EmailVerificationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".login.NicNameActivity"
-            android:exported="false" />
-        <activity
-            android:name=".login.NormalLoginActivity"
-            android:exported="false" />
-
-        <service
-            android:name=".ui.study.StudyRegisterApiService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".login.LoginAPiService"
-            android:enabled="true"
-            android:exported="true" />
 
         <activity
-            android:name=".ui.study.MyStudyPostContentActivity"
+            android:name=".presentation.login.checklist.CheckListStudyPurposeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".presentation.login.checklist.CheckListCategoryActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".presentation.login.checklist.LocationSearchActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".presentation.login.checklist.CheckListLocationActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".presentation.login.nickname.NicknameActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+
+        </activity>
+        <activity
+            android:name=".presentation.login.checklist.RegisterInformation"
             android:exported="false" />
-        <activity
-            android:name=".login.LocationSearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".login.LogoutActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ui.community.CommunityContentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".checklist.CheckListLocationActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".checklist.CheckListStudyPurposeActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".checklist.CheckListCategoryActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".login.RegisterInformation"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="false">
@@ -92,14 +69,7 @@
 
         </activity>
         <activity
-            android:name=".login.CellPhoneLoginActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".login.StartLoginActivity"
+            android:name=".presentation.login.StartLoginActivity"
             android:exported="true"
             android:theme="@style/Theme.SPOTeam_android.SplashScreen">
             <meta-data

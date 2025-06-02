@@ -1,0 +1,830 @@
+package com.example.spoteam_android.presentation.community
+
+import com.example.spoteam_android.ProfileItem
+import kotlinx.serialization.Serializable
+
+/*********Best 인기글 조회********/
+@Serializable
+data class CommunityResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: CommunityContentInfo
+)
+@Serializable
+data class CommunityContentInfo(
+    val sortType: String,
+    val postBest5Responses: List<ContentDetailInfo>
+)
+@Serializable
+data class ContentDetailInfo(
+    val postId : Int,
+    val rank: Int,
+    val postTitle: String,
+    val commentCount: Int
+)
+/**********게시판 홈 게시글 조회*************/
+@Serializable
+data class RepresentativeResponse(
+    val isSuccess: Boolean,
+    val code : String,
+    val message : String,
+    val result : RepresentativeContentInfo
+)
+@Serializable
+data class RepresentativeContentInfo(
+    val responses: List<RepresentativeDetailInfo>
+)
+@Serializable
+data class RepresentativeDetailInfo (
+    val postId : Int,
+    val postType : String,
+    val postTitle : String,
+    val commentCount : Int
+)
+/************게시판 공지 조회*************/
+@Serializable
+data class AnnouncementResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: AnnouncementContentInfo
+)
+@Serializable
+data class AnnouncementContentInfo(
+    val responses: List<AnnouncementDetailInfo>
+)
+@Serializable
+data class AnnouncementDetailInfo(
+    val postId : Int,
+    val rank: Int,
+    val postTitle: String,
+    val commentCount: Int
+)
+/************게시글 페이지 조회***********/
+@Serializable
+data class CategoryPagesResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: CategoryPagesInfo
+)
+@Serializable
+data class CategoryPagesInfo(
+    val postType : String,
+    val postResponses: List<CategoryPagesDetail>,
+    val totalPage : Int,
+    val totalElements : Int,
+    val isFirst : Boolean,
+    val isLast : Boolean
+)
+@Serializable
+data class CategoryPagesDetail(
+    val postId : Int,
+    val writer : String,
+    val writtenTime : String,
+    val scrapCount : Int,
+    val title : String,
+    val content : String,
+    val likeCount : Int,
+    val commentCount : Int,
+    val viewCount : Int,
+    val likedByCurrentUser : Boolean,
+    val scrapedByCurrentUser : Boolean
+)
+@Serializable
+/************게시글 단건 조회***********/
+data class ContentResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ContentInfo
+)
+@Serializable
+data class ContentInfo(
+    val type : String,
+    val writer: String,
+    val anonymous: Boolean,
+    val profileImage : String,
+    val writtenTime : String,
+    val scrapCount : Int,
+    val title : String,
+    val content : String,
+    var likeCount : Int,
+    val commentCount : Int,
+    val viewCount : Int,
+    val imageUrl : String,
+    var likedByCurrentUser : Boolean,
+    var scrapedByCurrentUser : Boolean,
+    val createdByCurrentUser : Boolean,
+    val commentResponses : CommentResponse,
+    val reported : Boolean
+)
+@Serializable
+data class CommentResponse(
+    val comments : List<CommentsInfo>
+)
+@Serializable
+data class CommentsInfo(
+    val commentId : Int,
+    val commentContent : String,
+    val parentCommentId : Int,
+    val writer : String,
+    val anonymous: Boolean,
+    val profileImage : String,
+    val writtenTime : String,
+    var likeCount : Int,
+    var likedByCurrentUser : Boolean,
+    var dislikedByCurrentUser : Boolean
+)
+
+/************게시글 작성 완료***********/
+@Serializable
+data class WriteContentResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: WriteContentInfo
+)
+@Serializable
+data class WriteContentInfo (
+    val id : Int,
+    val type : String,
+    val createAt : String
+)
+@Serializable
+/************게시글 좋아요 완료***********/
+data class ContentLikeResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ContentLikeInfo
+)
+@Serializable
+data class ContentLikeInfo (
+    val postId : Int,
+    val likeCount : Int,
+)
+@Serializable
+/************게시글 좋아요 취소***********/
+data class ContentUnLikeResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ContentUnLikeInfo
+)
+@Serializable
+data class ContentUnLikeInfo (
+    val postId : Int,
+    val likeCount : Int,
+)
+@Serializable
+/************댓글 작성 완료***********/
+data class WriteCommentResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: WriteCommentInfo
+)
+@Serializable
+data class WriteCommentInfo (
+    val id : Int,
+    val parentCommentId : Int,
+    val content : String,
+    val writer : String
+)
+@Serializable
+/************카테고리 별 스터디***********/
+data class CategoryStudyResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: CategoryStudyInfo
+)
+@Serializable
+data class CategoryStudyInfo (
+    val totalPages : Int,
+    val totalElements : Int,
+    val first : Boolean,
+    val last : Boolean,
+    val size : Int,
+    val content : List<CategoryStudyDetail>,
+    val number : Int
+)
+@Serializable
+data class CategoryStudyDetail (
+    val studyId : Int,
+    val imageUrl : String,
+    val title : String,
+    val introduction : String,
+    val goal: String,
+    val memberCount : Int,
+    var heartCount : Int,
+    val hitNum : Int,
+    val maxPeople : Int,
+    val studyState : String,
+    val themeTypes : List<String>,
+    val regions : List<String>,
+    val createdAt : String,
+    var liked : Boolean
+)
+@Serializable
+/************댓글 좋아요 완료***********/
+data class LikeCommentResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: LikeCommentInfo
+)
+@Serializable
+data class LikeCommentInfo (
+    val commentId : Int,
+    val likeCount : Int,
+    val disLikeCount : Int
+)
+@Serializable
+/************댓글 좋아요 취소***********/
+data class UnLikeCommentResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: UnLikeCommentInfo
+)
+@Serializable
+data class UnLikeCommentInfo (
+    val commentId : Int,
+    val likeCount : Int,
+    val disLikeCount : Int
+)
+@Serializable
+/************댓글 싫어요 완료***********/
+data class DisLikeCommentResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: DisLikeCommentInfo
+)
+@Serializable
+data class DisLikeCommentInfo (
+    val commentId : Int,
+    val likeCount : Int,
+    val disLikeCount : Int
+)
+@Serializable
+/************댓글 싫어요 취소***********/
+data class UnDisLikeCommentResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: UnDisLikeCommentInfo
+)
+@Serializable
+data class UnDisLikeCommentInfo (
+    val commentId : Int,
+    val likeCount : Int,
+    val disLikeCount : Int
+)
+@Serializable
+/************스터디 게시글 작성***********/
+data class StudyPostResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: StudyPostInfo
+)
+@Serializable
+data class StudyPostInfo (
+    val postId : Int,
+    val title : String
+)
+@Serializable
+/************스터디 게시글들***********/
+data class StudyPostListResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: StudyPostListInfo
+)
+@Serializable
+data class StudyPostListInfo (
+    val studyId : Int,
+    val posts : List<PostDetail>,
+    val totalPages : Int
+)
+@Serializable
+data class PostDetail (
+    val postId : Int,
+    val title : String,
+    val content : String,
+    val theme : String,
+    val isAnnouncement : Boolean,
+    val createdAt : String,
+    val likeNum : Int,
+    val hitNum : Int,
+    val commentNum : Int,
+    val isLiked : Boolean,
+)
+@Serializable
+/************스터디 게시글 내용***********/
+data class StudyPostContentResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: StudyPostContentInfo
+)
+@Serializable
+data class StudyPostContentInfo (
+    val member : MemberInfo,
+    val postId : Int,
+    val title : String,
+    val content : String,
+    val theme : String,
+    val isAnnouncement : Boolean,
+    val createdAt : String,
+    val likeNum : Int,
+    val hitNum : Int,
+    val commentNum : Int,
+    val isLiked : Boolean,
+    val isWriter : Boolean,
+    val studyPostImages : List<PostImages>
+)
+@Serializable
+data class PostImages (
+    val imageId : Int,
+    val imageUrl : String
+)
+@Serializable
+/************스터디 게시글 댓글***********/
+data class StudyPostContentCommentResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: StudyPostContentCommentInfo
+)
+@Serializable
+data class StudyPostContentCommentInfo (
+    val postId : Int,
+    val comments : List<StudyPostContentCommentDetail>
+)
+@Serializable
+data class StudyPostContentCommentDetail(
+    val commentId : Int,
+    val member : MemberInfo,
+    val content : String,
+    val likeCount : Int,
+    val dislikeCount : Int,
+    val isDeleted : Boolean,
+    val isLiked : String,
+    val applies : List<StudyPostContentCommentDetail>
+)
+@Serializable
+data class MemberInfo (
+    val memberId : Int,
+    val name : String,
+    val profileImage : String
+)
+
+@Serializable
+/************마이 페이지 멤버 관련 스터디 갯수***********/
+data class MyPageStudyNumResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: MyPageStudyNumInfo
+)
+@Serializable
+data class MyPageStudyNumInfo (
+    val name : String,
+    val appliedStudies : Int,
+    val ongoingStudies : Int,
+    val myRecruitingStudies : Int
+)
+@Serializable
+/************내가 모집하고 있는 스터디***********/
+data class MyRecruitingStudiesResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: MyRecruitingStudyInfo
+)
+@Serializable
+data class MyRecruitingStudyInfo(
+    val totalPages: Int,
+    val totalElements: Int,
+    val first: Boolean,
+    val last: Boolean,
+    val size: Int,
+    val content: List<MyRecruitingStudyDetail>,
+    val number : Int
+)
+@Serializable
+data class MyRecruitingStudyDetail (
+    val studyId : Int,
+    val imageUrl : String,
+    val title : String,
+    val introduction : String,
+    val goal : String,
+    val memberCount : Int,
+    val heartCount : Int,
+    val hitNum : Int,
+    val maxPeople : Int,
+    val studyState : String,
+    val themeTypes : List<String>,
+    val regions : List<String>,
+    val createdAt : String,
+    val liked : Boolean
+)@Serializable
+/************모집 스터디 참여 신청 멤버들***********/
+data class MyStudyAttendanceMemberResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: MyStudyAttendanceMemberInfo
+)
+@Serializable
+data class MyStudyAttendanceMemberInfo(
+    val totalElements: Int,
+    val members : List<AttendanceMemberInfo>
+)
+@Serializable
+data class AttendanceMemberInfo(
+    val memberId: Int,
+    val nickname : String,
+    val profileImage: String,
+)
+@Serializable
+/************신청자 소개 결과***********/
+data class MemberAttendanceIntroResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: MemberIntroInfo
+)
+@Serializable
+data class MemberIntroInfo(
+    val memberId: Int,
+    val studyId : Int,
+    val nickname: String,
+    val profileImage : String,
+    val introduction : String
+)
+@Serializable
+/************참여 합불 결과***********/
+data class MemberAcceptResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: MemberAcceptInfo
+)
+@Serializable
+data class MemberAcceptInfo(
+    val status: String,
+    val updatedAt : String,
+)
+
+@Serializable
+/************알림 결과***********/
+data class AlertResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: AlertInfo
+)
+@Serializable
+data class AlertInfo(
+    val notifications: List<AlertDetail>,
+    val totalNotificationCount : Int,
+    val uncheckedNotificationCount : Int
+)
+@Serializable
+data class AlertDetail(
+    val notificationId: Int,
+    val studyId: Int,
+    val studyPostId: Int,
+    val studyTitle : String,
+    val studyProfileImage : String,
+    val notifierName : String,
+    val type : String,
+    val isChecked : Boolean,
+    val createdAt : String
+)
+@Serializable
+/************내가 신청한 스터디 알림 결과***********/
+data class AlertStudyResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: AlertStudyInfo
+)@Serializable
+
+data class AlertStudyInfo(
+    val notifications: List<AlertStudyDetail>,
+    val totalNotificationCount : Int,
+    val uncheckedNotificationCount : Int
+)
+@Serializable
+data class AlertStudyDetail(
+    val notificationId: Int,
+    val studyId: Int,
+    val studyTitle : String,
+    val studyProfileImage : String,
+    val type : String,
+    val isChecked : Boolean,
+    val createdAt : String
+)
+@Serializable
+/************내가 신청한 스터디 수락 알림 처리 결과***********/
+data class AcceptedAlertStudyResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: AcceptedAlertStudyInfo
+)
+@Serializable
+data class AcceptedAlertStudyInfo(
+    val processedAt : String,
+    val accept : Boolean
+)
+@Serializable
+/************내가 신청한 스터디 수락 알림 처리 결과***********/
+data class NotificationStateResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: NotificationStateInfo
+)@Serializable
+
+data class NotificationStateInfo(
+    val processedAt : String,
+    val accept : Boolean
+)
+@Serializable
+/************내가 진행중인 스터디***********/
+data class MemberOnStudiesResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: MemberOnStudiesInfo
+)
+@Serializable
+data class MemberOnStudiesInfo(
+    val totalPages : Int,
+    val totalElements : Int,
+    val first : Boolean,
+    val last : Boolean,
+    val size : Int,
+    val content : List<MyRecruitingStudyDetail>,
+    val number : Int
+)
+@Serializable
+/************내가 참여신청한 스터디***********/
+data class MemberAppliedStudiesResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: MemberAppliedStudiesInfo
+)@Serializable
+
+data class MemberAppliedStudiesInfo(
+    val totalPages : Int,
+    val totalElements : Int,
+    val first : Boolean,
+    val last : Boolean,
+    val size : Int,
+    val content : List<MyRecruitingStudyDetail>,
+    val number : Int
+)
+@Serializable
+/************스터디 게시글 좋아요 완료***********/
+data class StudyContentLikeResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: StudyContentLikeInfo
+)
+@Serializable
+data class StudyContentLikeInfo (
+    val postId : Int,
+    val title : String,
+    val likeNum : Int
+)
+@Serializable
+/************스터디 게시글 좋아요 취소***********/
+data class StudyContentUnLikeResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: StudyContentUnLikeInfo
+)
+@Serializable
+data class StudyContentUnLikeInfo (
+    val postId : Int,
+    val title : String,
+    val likeNum : Int
+)
+@Serializable
+/************스터디 게시글 댓글 작성 완료***********/
+data class WriteStudyCommentResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: WriteStudyCommentInfo
+)@Serializable
+
+data class WriteStudyCommentInfo (
+    val isAnonymous : Boolean,
+    val content : String
+)
+@Serializable
+/************스터디 멤버 정보***********/
+data class StudyMemberResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: StudyMemberInfo
+)
+@Serializable
+data class StudyMemberInfo (
+    val totalElements: Int,
+    val members : List<MembersDetail>
+)
+@Serializable
+data class MembersDetail (
+    val memberId : Int,
+    val nickname : String,
+    val profileImage : String
+)
+@Serializable
+/************퀴즈 생성 완료***********/
+data class QuizContentResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: QuizContentInfo
+)
+@Serializable
+data class QuizContentInfo (
+    val createdAt : String,
+    val question: String,
+    val answer : String
+)
+@Serializable
+/************퀴즈 가져오기 완료***********/
+data class GetQuizResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: QuizInfo
+)
+@Serializable
+data class QuizInfo (
+    val quizId : Long,
+    val question: String,
+    val createdAt : String
+)
+@Serializable
+/************ schedule quiz 정보 가져오기 ***********/
+data class GetScheduleResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ScheduleInfo
+)
+@Serializable
+data class ScheduleInfo (
+    val scheduleId : Long,
+    val quizId: Int,
+    val studyMembers : List<ScheduleMemberInfo>,
+)
+@Serializable
+data class ScheduleMemberInfo (
+    val memberId : Int,
+    val name : String,
+    val profileImage: String,
+    val isOwned : Boolean,
+    val isAttending : Boolean
+)
+@Serializable
+/************crew quiz 확인 완료***********/
+data class GetCrewQuizResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: CrewQuizInfo
+)
+@Serializable
+data class CrewQuizInfo (
+    val memberId : Long,
+    val quizId: Int,
+    val attendanceId : Int,
+    val isCorrect : Boolean,
+    val tryNum : Int,
+    val createdAt : String
+)
+@Serializable
+/************ 게시글 삭제 완료 ***********/
+data class DeletePostContentResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: String? = null
+)
+@Serializable
+/************ 스터디 게시글 삭제 완료 ***********/
+data class DeleteStudyPostContentResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: String? = null
+)
+@Serializable
+
+/************ 스터디원 신고 완료 ***********/
+data class ReportCrewResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ReportCrewContent
+)
+@Serializable
+data class ReportCrewContent (
+    val memberId : Int,
+    val name : String
+)
+@Serializable
+/************ 스터디 게시글 신고 완료 ***********/
+data class ReportStudyPostResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ReportStudyPostContent
+)
+@Serializable
+data class ReportStudyPostContent (
+    val postId : Int,
+    val title : String
+)
+@Serializable
+/************ 스크랩 게시글 가져오기 완료 ***********/
+data class GetScrapResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ScrapContent
+)
+@Serializable
+data class ScrapContent (
+    val postType : String,
+    val postResponses : List<CategoryPagesDetail>,
+    val totalPage : Int,
+    val totalElements: Int,
+    val isFirst: Boolean,
+    val isLast: Boolean
+)
+@Serializable
+/************ 스크랩 게시글 가져오기 완료 ***********/
+data class ReportCommunityContentResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ReportInfo
+)@Serializable
+
+data class ReportInfo (
+    val reportPostId : Int,
+    val reporterId : Int,
+    val reportedAt : String
+)
+@Serializable
+/************ 스크랩 게시글 가져오기 완료 ***********/
+data class EndStudyResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: EndStudyInfo
+)
+@Serializable
+data class EndStudyInfo (
+    val studyId : Int,
+    val studyName : String,
+    val status : String
+)
+@Serializable
+/************ 스터디 호스트 정보 가져오기 완료 ***********/
+data class GetHostResponse (
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: HostInfo
+)
+@Serializable
+data class HostInfo (
+    val isOwned: Boolean,
+    val host : HostDetail
+)
+@Serializable
+data class HostDetail (
+    val memberId : Int,
+    val nickname : String
+)
+

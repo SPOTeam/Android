@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ui.home.HomeFragment">
+        tools:context=".presentation.home.HomeFragment">
 
         <LinearLayout
             android:id="@+id/fragment_community_logo_ll"
