@@ -1,65 +1,39 @@
 package com.example.spoteam_android
 
-import StudyViewModel
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import com.example.spoteam_android.data.ApiModels
 import com.example.spoteam_android.databinding.ActivityMainBinding
-import com.example.spoteam_android.login.LoginApiService
-import com.example.spoteam_android.login.TokenUtil
-import com.example.spoteam_android.ui.study.todolist.TodoViewModel
-import com.example.spoteam_android.ui.alert.AlertFragment
-import com.example.spoteam_android.ui.bookMark.BookmarkFragment
-//import com.example.spoteam_android.ui.bookMark.BookmarkFragment
-//import com.example.spoteam_android.ui.bookMark.BookmarkFragment
-import com.example.spoteam_android.ui.category.CategoryFragment
-import com.example.spoteam_android.ui.category.CategoryFragment_1
-import com.example.spoteam_android.ui.category.CategoryInterestViewModel
-import com.example.spoteam_android.ui.category.CategoryNavViewFragment
-import com.example.spoteam_android.ui.community.CommunityFragment
-import com.example.spoteam_android.ui.community.CommunityHomeFragment
-import com.example.spoteam_android.ui.community.WriteContentFragment
-import com.example.spoteam_android.ui.interestarea.BottomNavVisibilityController
-import com.example.spoteam_android.ui.interestarea.InterestFilterFragment
-import com.example.spoteam_android.ui.myinterest.MyInterestStudyFilterFragment
-import com.example.spoteam_android.ui.myinterest.MyInterestStudyFragment
-//import com.example.spoteam_android.ui.mypage.ConsiderAttendanceMemberFragment
-import com.example.spoteam_android.ui.mypage.MyPageFragment
-import com.example.spoteam_android.ui.recruiting.RecruitingStudyFilterFragment
-import com.example.spoteam_android.ui.study.DetailStudyFragment
-import com.example.spoteam_android.ui.study.MyStudyCommunityFragment
-import com.example.spoteam_android.ui.study.MyStudyWriteContentFragment
-import com.example.spoteam_android.ui.study.RegisterStudyFragment
-import com.example.spoteam_android.ui.study.StudyFragment
-import com.example.spoteam_android.weather.WeatherViewModel
-import com.example.spoteam_android.weather.parseCsv
+
+import com.example.spoteam_android.presentation.home.WeatherViewModel
+import com.example.spoteam_android.presentation.alert.AlertFragment
+import com.example.spoteam_android.presentation.bookMark.BookmarkFragment
+import com.example.spoteam_android.presentation.category.CategoryFragment
+import com.example.spoteam_android.presentation.category.CategoryFragment_1
+import com.example.spoteam_android.presentation.category.CategoryNavViewFragment
+import com.example.spoteam_android.presentation.community.CommunityFragment
+import com.example.spoteam_android.presentation.community.CommunityHomeFragment
+import com.example.spoteam_android.presentation.community.WriteContentFragment
+import com.example.spoteam_android.presentation.home.HomeFragment
+import com.example.spoteam_android.presentation.interestarea.BottomNavVisibilityController
+import com.example.spoteam_android.presentation.interestarea.InterestFilterFragment
+import com.example.spoteam_android.presentation.myinterest.MyInterestStudyFilterFragment
+import com.example.spoteam_android.presentation.mypage.MyPageFragment
+import com.example.spoteam_android.presentation.recruiting.RecruitingStudyFilterFragment
+import com.example.spoteam_android.presentation.study.MyStudyWriteContentFragment
+import com.example.spoteam_android.presentation.study.StudyFragment
+import com.example.spoteam_android.presentation.study.StudyViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.sql.Time
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -70,8 +44,9 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
     private lateinit var binding: ActivityMainBinding
     private lateinit var fab: FloatingActionButton
     private val weatherViewModel: WeatherViewModel by viewModels() // Hilt 사용
-    private val categoryViewModel : CategoryInterestViewModel by viewModels()
+    private val categoryViewModel : com.example.spoteam_android.presentation.category.CategoryInterestViewModel by viewModels()
     private val viewModel: StudyViewModel by viewModels()
+
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -87,7 +62,7 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
         val baseDate = getUpdatedDate()
         val baseTime = getUpdatedTime()
 
-        fetchRegions(baseDate.toInt(), baseTime)
+//        fetchRegions(baseDate.toInt(), baseTime)
 
 
 
@@ -125,37 +100,37 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
                 if(it is CommunityFragment) {
                     writeCommunityFragment.show(supportFragmentManager, "Write Content")
                 }
-                if(it is DetailStudyFragment) {
+                if(it is com.example.spoteam_android.presentation.study.DetailStudyFragment) {
                     myStudyWriteCommunityFragment.show(supportFragmentManager, "My Study Write Content")
                 }
             }
         }
 
         init()
-        isOnCommunityHome(HouseFragment())
+        isOnCommunityHome(HomeFragment())
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        val (accessToken, refreshToken) = TokenUtil.getStoredTokens(this)
-
-        if (TokenUtil.isExpired(accessToken)) {
-            val newToken = TokenUtil.refreshTokenSync(this, refreshToken ?: "")
-
-            if (newToken == null) {
-                Log.e("MainActivity", "토큰 갱신 실패. 로그인 화면으로 이동.")
-                return // 이미 이동 처리됨
-            } else {
-                Log.d("MainActivity", "토큰 갱신 성공. 최신 토큰으로 유지됨.")
-            }
-        } else {
-            Log.d("MainActivity", "토큰 유효함.")
-        }
-
-
-    }
-
+//    override fun onResume() {
+//        super.onResume()
+//
+//        val (accessToken, refreshToken) = TokenUtil.getStoredTokens(this)
+//
+//        if (TokenUtil.isExpired(accessToken)) {
+//            val newToken = TokenUtil.refreshTokenSync(this, refreshToken ?: "")
+//
+//            if (newToken == null) {
+//                Log.e("MainActivity", "토큰 갱신 실패. 로그인 화면으로 이동.")
+//                return // 이미 이동 처리됨
+//            } else {
+//                Log.d("MainActivity", "토큰 갱신 성공. 최신 토큰으로 유지됨.")
+//            }
+//        } else {
+//            Log.d("MainActivity", "토큰 유효함.")
+//        }
+//
+//
+//    }
+//
 
     private fun getCurrentFragment(): Fragment? {
         return supportFragmentManager.findFragmentById(R.id.main_frm)
@@ -164,7 +139,7 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
     private fun init() {
         // 초기 화면 설정: 기본으로 HouseFragment를 보이도록 설정
         supportFragmentManager.beginTransaction()
-            .replace(R.id.main_frm, HouseFragment())
+            .replace(R.id.main_frm, HomeFragment())
             .commitAllowingStateLoss()
 
         // BottomNavigationView의 아이템 선택 리스너 설정
@@ -172,9 +147,9 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
             when (item.itemId) {
                 R.id.navigation_home -> {
                     hideBlur()
-                    showFragment(HouseFragment())
-                    isOnCommunityHome(HouseFragment())
-                    isOnAlertFragment(HouseFragment())
+                    showFragment(HomeFragment())
+                    isOnCommunityHome(HomeFragment())
+                    isOnAlertFragment(HomeFragment())
                     logTokens(this)
                     return@setOnItemSelectedListener true
                 }
@@ -249,7 +224,7 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
         when (fragment) {
             is InterestFilterFragment,
             is MyInterestStudyFilterFragment,
-            is RecruitingStudyFilterFragment-> {
+            is RecruitingStudyFilterFragment -> {
                 binding.mainBnv.visibility = View.GONE
             }
             else -> {
@@ -318,53 +293,53 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
         Log.d("TokenLogger", "Current RefreshToken: $refreshToken")
     }
 
-    private fun fetchRegions(myDate: Int, myTime: String) {
-        val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)
-
-        service.getRegion().enqueue(object : Callback<RegionApiResponse> {
-            override fun onResponse(call: Call<RegionApiResponse>, response: Response<RegionApiResponse>) {
-                if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    if (apiResponse != null && apiResponse.isSuccess) {
-                        val regions = apiResponse.result.regions
-                        if (regions.isNotEmpty()) {
-                            Log.d("region", "Received regions: $regions")
-
-                            val regionDataList = parseCsv(this@MainActivity)
-                            regions.firstOrNull()?.let { region ->
-                                val gridCoordinates = findGridByCode(region.code, regionDataList)
-                                if (gridCoordinates != null) {
-                                    val (gridX, gridY) = gridCoordinates
-                                    Log.d("RegionGrid", "Region: ${region.neighborhood}, GridX: $gridX, GridY: $gridY")
-
-                                    // WeatherViewModel을 통해 날씨 데이터 요청
-                                    weatherViewModel.getWeather(
-                                        dataType = "JSON",
-                                        numOfRows = 14,
-                                        pageNo = 1,
-                                        baseDate = myDate,
-                                        baseTime = myTime,
-                                        nx = gridX.toString(),
-                                        ny = gridY.toString()
-                                    )
-                                } else {
-                                    Log.e("RegionGrid", "Grid coordinates not found for region code: ${region.code}")
-                                }
-                            }
-                        }
-                    } else {
-                        Log.e("RegionAPI", "Failed to get region data")
-                    }
-                } else {
-                    Log.e("RegionAPI", "API Response failed")
-                }
-            }
-
-            override fun onFailure(call: Call<RegionApiResponse>, t: Throwable) {
-                Log.e("RegionAPI", "Network error: ${t.message}")
-            }
-        })
-    }
+//    private fun fetchRegions(myDate: Int, myTime: String) {
+//        val service = RetrofitInstance.retrofit.create(LoginService::class.java)
+//
+//        service.getRegion().enqueue(object : Callback<RegionApiResponse> {
+//            override fun onResponse(call: Call<RegionApiResponse>, response: Response<RegionApiResponse>) {
+//                if (response.isSuccessful) {
+//                    val apiResponse = response.body()
+//                    if (apiResponse != null && apiResponse.isSuccess) {
+//                        val regions = apiResponse.result.regions
+//                        if (regions.isNotEmpty()) {
+//                            Log.d("region", "Received regions: $regions")
+//
+//                            val regionDataList = parseCsv(this@MainActivity)
+//                            regions.firstOrNull()?.let { region ->
+//                                val gridCoordinates = findGridByCode(region.code, regionDataList)
+//                                if (gridCoordinates != null) {
+//                                    val (gridX, gridY) = gridCoordinates
+//                                    Log.d("RegionGrid", "Region: ${region.neighborhood}, GridX: $gridX, GridY: $gridY")
+//
+//                                    // WeatherViewModel을 통해 날씨 데이터 요청
+//                                    weatherViewModel.getWeather(
+//                                        dataType = "JSON",
+//                                        numOfRows = 14,
+//                                        pageNo = 1,
+//                                        baseDate = myDate,
+//                                        baseTime = myTime,
+//                                        nx = gridX.toString(),
+//                                        ny = gridY.toString()
+//                                    )
+//                                } else {
+//                                    Log.e("RegionGrid", "Grid coordinates not found for region code: ${region.code}")
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        Log.e("RegionAPI", "Failed to get region data")
+//                    }
+//                } else {
+//                    Log.e("RegionAPI", "API Response failed")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<RegionApiResponse>, t: Throwable) {
+//                Log.e("RegionAPI", "Network error: ${t.message}")
+//            }
+//        })
+//    }
 
     fun findGridByCode(regionCode: String, regionDataList: List<RegionData>): Pair<Int, Int>? {
         val regionData = regionDataList.find { it.administrativeCode == regionCode }
