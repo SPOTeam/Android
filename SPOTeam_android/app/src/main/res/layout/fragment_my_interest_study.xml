@@ -171,97 +171,111 @@
             android:id="@+id/page_number_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="36dp"
+            android:paddingBottom="36dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/my_interest_study_reyclerview"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:gravity="center">
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
+            <ImageView
                 android:id="@+id/previous_page"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="〈"
-                android:textSize="16dp"
-                android:fontFamily="@font/suit_bold"
-                android:textColor="@color/b500"
-                android:layout_marginEnd="10dp"
-                android:padding="10dp"
-                android:visibility="visible"/>
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="11dp"
+                android:rotation="180"
+                android:layout_marginEnd="3dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/border_interest_recyclerv_item"
+                android:src="@drawable/ic_new_right"
+                app:tint="@color/b500" />
 
             <TextView
                 android:id="@+id/page_1"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
+                android:gravity="center"
                 android:text="1"
+                android:textColor="@color/g400"
+                android:background="@drawable/border_interest_recyclerv_item"
+                android:paddingVertical="4dp"
                 android:textSize="14dp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/suit_semi_bold"
-                android:padding="10dp"
-                android:layout_marginEnd="5dp"
-                android:visibility="visible"/>
+                android:layout_marginEnd="3dp"
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/page_2"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
+                android:gravity="center"
                 android:text="2"
+                android:textColor="@color/g400"
+                android:paddingVertical="4dp"
+                android:background="@drawable/border_interest_recyclerv_item"
                 android:textSize="14dp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/suit_semi_bold"
-                android:padding="10dp"
-                android:layout_marginEnd="5dp"
-                android:visibility="visible"/>
+                android:layout_marginEnd="3dp"
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/page_3"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
+                android:gravity="center"
                 android:text="3"
+                android:paddingVertical="4dp"
+                android:textColor="@color/g400"
+                android:background="@drawable/border_interest_recyclerv_item"
                 android:textSize="14dp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/suit_semi_bold"
-                android:padding="10dp"
-                android:layout_marginEnd="5dp"
-                android:visibility="visible"/>
+                android:layout_marginEnd="3dp"
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/page_4"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
+                android:gravity="center"
+                android:background="@drawable/border_interest_recyclerv_item"
                 android:text="4"
+                android:layout_marginEnd="3dp"
+                android:paddingVertical="4dp"
+                android:textColor="@color/g400"
                 android:textSize="14dp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/suit_semi_bold"
-                android:padding="10dp"
-                android:layout_marginEnd="5dp"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/page_5"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/suit_variable_font"
+                android:textFontWeight="500"
+                android:gravity="center"
                 android:text="5"
+                android:paddingVertical="4dp"
+                android:background="@drawable/border_interest_recyclerv_item"
+                android:textColor="@color/g400"
                 android:textSize="14dp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/suit_semi_bold"
-                android:padding="10dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="visible"/>
+                android:layout_marginEnd="3dp"
+                android:visibility="visible" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/next_page"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="〉"
-                android:textSize="16dp"
-                android:fontFamily="@font/suit_bold"
-                android:textColor="@color/b500"
-                android:padding="10dp"
-                android:visibility="visible"/>
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="11dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_new_right"
+                android:background="@drawable/border_interest_recyclerv_item"
+                app:tint="@color/b500" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

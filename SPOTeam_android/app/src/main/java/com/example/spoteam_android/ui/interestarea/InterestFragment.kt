@@ -508,10 +508,6 @@ class InterestFragment : Fragment() {
         }
     }
 
-    private fun getTotalPages(): Int {
-        return totalPages // 올바른 페이지 수 계산
-    }
-
     private fun updatePageUI() {
         startPage = calculateStartPage()
 
