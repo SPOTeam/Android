@@ -150,10 +150,18 @@
             android:elevation="1dp"
             tools:itemCount="5"
             app:layout_constraintStart_toStartOf="@id/communityHome_BestPopularity_tv"
-            app:layout_constraintEnd_toEndOf="@id/radioGroup"
+            app:layout_constraintEnd_toEndOf="@id/fragment_community_logo_ll"
             app:layout_constraintTop_toBottomOf="@id/communityHome_BestPopularity_tv"
             tools:listitem="@layout/item_communityhome_content_with_index"/>
 
+        <View
+            android:id="@+id/blankView_1"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="18dp"
+            app:layout_constraintStart_toStartOf="@id/communityHome_BestPopularity_tv"
+            app:layout_constraintEnd_toEndOf="@id/fragment_community_logo_ll"
+            app:layout_constraintTop_toBottomOf="@id/communityHome_BestPopularity_tv"/>
         <!--    게시판    -->
         <TextView
             android:id="@+id/communityHome_Community_tv"
@@ -165,10 +173,8 @@
             android:fontFamily="@font/suit_semi_bold"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/communityHome_BestPopularity_content_rv"
-            app:layout_constraintStart_toStartOf="@id/communityHome_BestPopularity_content_rv"/>
-
-        
+            app:layout_constraintTop_toBottomOf="@id/blankView_1"
+            app:layout_constraintStart_toStartOf="@id/fragment_community_logo_ll"/>
 
         <ImageView
             android:id="@+id/community_move_community_iv"
@@ -181,7 +187,7 @@
             android:paddingEnd="11dp"
             android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="@id/communityHome_Community_tv"
-            app:layout_constraintEnd_toEndOf="@id/communityHome_Community_content_rv"/>
+            app:layout_constraintEnd_toEndOf="@id/fragment_community_logo_ll"/>
         <!--    SPOT 공지  -->
 
         <androidx.recyclerview.widget.RecyclerView
@@ -196,12 +202,20 @@
             android:overScrollMode="never"
             android:paddingHorizontal="15dp"
             android:paddingVertical="15dp"
-            app:layout_constraintEnd_toEndOf="@id/communityHome_BestPopularity_content_rv"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toEndOf="@id/fragment_community_logo_ll"
             app:layout_constraintStart_toStartOf="@id/communityHome_Community_tv"
             app:layout_constraintTop_toBottomOf="@id/communityHome_Community_tv"
             tools:itemCount="5"
             tools:listitem="@layout/item_communityhome_content_with_category" />
+
+        <View
+            android:id="@+id/blankView_2"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="18dp"
+            app:layout_constraintEnd_toEndOf="@id/fragment_community_logo_ll"
+            app:layout_constraintStart_toStartOf="@id/communityHome_Community_tv"
+            app:layout_constraintTop_toBottomOf="@id/communityHome_Community_tv"/>
 
         <TextView
             android:id="@+id/communityHome_Notification_tv"
@@ -213,8 +227,8 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/communityHome_Community_content_rv"
-            app:layout_constraintStart_toStartOf="@id/communityHome_Community_content_rv"/>
+            app:layout_constraintTop_toBottomOf="@id/blankView_2"
+            app:layout_constraintStart_toStartOf="@id/fragment_community_logo_ll"/>
 
         <!--    이동 화살표 추가-->
         <ImageView
@@ -227,7 +241,7 @@
             android:paddingStart="13dp"
             android:paddingEnd="11dp"
             android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="@id/communityHome_Notification_content_rv"
+            app:layout_constraintEnd_toEndOf="@id/fragment_community_logo_ll"
             app:layout_constraintTop_toTopOf="@id/communityHome_Notification_tv" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -243,16 +257,24 @@
             android:elevation="1dp"
             tools:itemCount="5"
             app:layout_constraintStart_toStartOf="@id/communityHome_Notification_tv"
-            app:layout_constraintEnd_toEndOf="@id/communityHome_BestPopularity_content_rv"
+            app:layout_constraintEnd_toEndOf="@id/fragment_community_logo_ll"
             app:layout_constraintTop_toBottomOf="@id/communityHome_Notification_tv"
             tools:listitem="@layout/item_communityhome_content_with_index"/>
+
+        <View
+            android:id="@+id/blankView_3"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="18dp"
+            app:layout_constraintStart_toStartOf="@id/communityHome_Notification_tv"
+            app:layout_constraintEnd_toEndOf="@id/fragment_community_logo_ll"
+            app:layout_constraintTop_toBottomOf="@id/communityHome_Notification_tv"/>
 
         <View
             android:id="@+id/margin_v"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-
-            app:layout_constraintTop_toBottomOf="@id/communityHome_Notification_content_rv"/>
+            app:layout_constraintTop_toBottomOf="@id/blankView_3"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

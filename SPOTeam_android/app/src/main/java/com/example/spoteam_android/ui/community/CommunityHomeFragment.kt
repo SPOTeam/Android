@@ -115,8 +115,12 @@ class CommunityHomeFragment : Fragment() {
                         if (communityResponse?.isSuccess == "true") {
                             val contentList = communityResponse.result?.postBest5Responses
 //                            Log.d("BestCommunity", "items: $contentList")
-                            if (contentList != null) {
+                            if (!contentList.isNullOrEmpty()) {
+                                binding.communityHomeBestPopularityContentRv.visibility = View.VISIBLE
+
                                 initBestRecyclerview(contentList)
+                            } else {
+                                binding.communityHomeBestPopularityContentRv.visibility = View.GONE
                             }
 
                         } else {
@@ -146,8 +150,11 @@ class CommunityHomeFragment : Fragment() {
                         if (announcementResponse?.isSuccess == "true") {
                             val announcementList = announcementResponse.result?.responses
 //                            Log.d("Announcement", "items: $announcementList")
-                            if (announcementList != null) {
+                            if (!announcementList.isNullOrEmpty()) {
+                                binding.communityHomeNotificationContentRv.visibility = View.VISIBLE
                                 initAnnouncementRecyclerview(announcementList)
+                            } else {
+                                binding.communityHomeNotificationContentRv.visibility = View.GONE
                             }
 
                         } else {
@@ -177,8 +184,11 @@ class CommunityHomeFragment : Fragment() {
                         if (representativeResponse?.isSuccess == "true") {
                             val representativeList = representativeResponse.result?.responses
 //                            Log.d("Representative", "items: $representativeList")
-                            if (representativeList != null) {
+                            if (!representativeList.isNullOrEmpty()) {
+                                binding.communityHomeCommunityContentRv.visibility = View.VISIBLE
                                 initRepresentativeRecyclerview(representativeList)
+                            } else {
+                                binding.communityHomeCommunityContentRv.visibility = View.GONE
                             }
                         } else {
                             showError(representativeResponse?.message)

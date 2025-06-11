@@ -28,7 +28,7 @@ class NotificationFragment : Fragment() {
     private val size = 5
     private var totalPages = 0
 
-    private val type = "SPOT_ANNOUNCEMENT "
+    private val type = "SPOT_ANNOUNCEMENT"
     private lateinit var adapter: CommunityCategoryContentRVAdapter
 
     override fun onCreateView(
