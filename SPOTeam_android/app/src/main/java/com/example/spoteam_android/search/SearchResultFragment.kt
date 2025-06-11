@@ -37,6 +37,11 @@ import retrofit2.Response
 
 class SearchResultFragment : Fragment() {
 
+    private var currentPage = 0
+    private var totalPages = 0
+    private var sortBy = "ALL"
+    private var keyword: String? = null
+
     private lateinit var interestBoardAdapter: InterestVPAdapter
     private lateinit var binding: FragmentSearchResultBinding
     private val studyViewModel: StudyViewModel by activityViewModels()
@@ -48,7 +53,7 @@ class SearchResultFragment : Fragment() {
     ): View? {
         binding = FragmentSearchResultBinding.inflate(inflater, container, false)
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
-
+        setupPagingButtons()
         interestBoardAdapter = InterestVPAdapter(ArrayList(), onLikeClick = { selectedItem, likeButton ->
             toggleLikeStatus(selectedItem, likeButton)
         },studyViewModel = studyViewModel)
@@ -115,21 +120,20 @@ class SearchResultFragment : Fragment() {
         return binding.root
     }
 
-    private fun fetchGetSearchStudy(keyword: String) {
+    private fun fetchGetSearchStudy(keyword: String, page: Int = 0, sortBy: String = "ALL") {
+        this.keyword = keyword
+        this.sortBy = sortBy
 
         val checkcount: TextView = binding.checkAmount
         val service = RetrofitInstance.retrofit.create(SearchApiService::class.java)
 
         service.PostSearchApi(
             keyword = keyword,
-            page = 0,
-            size = 3,
-            sortBy = "ALL"
+            page = page,
+            size = 5,
+            sortBy = sortBy
         ).enqueue(object : Callback<ApiResponse> {
-            override fun onResponse(
-                call: Call<ApiResponse>,
-                response: Response<ApiResponse>
-            ) {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse?.isSuccess == true) {
@@ -151,23 +155,25 @@ class SearchResultFragment : Fragment() {
                                 isHost = false
                             )
                         } ?: emptyList()
+
+                        totalPages = apiResponse.result.totalPages
                         updateRecyclerView(boardItems)
-                        interestBoardAdapter.notifyDataSetChanged()
+                        updatePagingUI()
                         binding.searchResultStudyReyclerview.visibility = View.VISIBLE
-                        val itemcount= boardItems.size
-                        checkcount.text = String.format("%02d 건", itemcount)
+                        checkcount.text = String.format("%02d 건", boardItems.size)
                     } else {
                         checkcount.text = "00 건"
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                     }
-                } else {
-                    val errorBody = response.errorBody()?.string()
                 }
             }
+
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "API 호출 실패", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
     private fun updateRecyclerView(boardItems: List<BoardItem>) {
         interestBoardAdapter.updateList(boardItems)
     }
@@ -209,6 +215,86 @@ class SearchResultFragment : Fragment() {
                 })
         } else {
             Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupPagingButtons() {
+        val pageButtons = listOf(
+            binding.page1, binding.page2, binding.page3, binding.page4, binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            textView.setOnClickListener {
+                val selectedPage = calculateStartPage() + index
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    fetchSearchPage()
+                }
+            }
+        }
+
+        binding.previousPage.setOnClickListener {
+            currentPage = if (currentPage == 0) totalPages - 1 else currentPage - 1
+            fetchSearchPage()
+        }
+
+        binding.nextPage.setOnClickListener {
+            currentPage = if (currentPage == totalPages - 1) 0 else currentPage + 1
+            fetchSearchPage()
+        }
+    }
+
+    private fun updatePagingUI() {
+        val pageButtons = listOf(
+            binding.page1, binding.page2, binding.page3, binding.page4, binding.page5
+        )
+
+        val start = calculateStartPage()
+
+        pageButtons.forEachIndexed { index, button ->
+            val pageNum = start + index
+            if (pageNum < totalPages) {
+                button.visibility = View.VISIBLE
+                button.text = (pageNum + 1).toString()
+                button.setTextColor(
+                    if (pageNum == currentPage)
+                        requireContext().getColor(R.color.b500)
+                    else
+                        requireContext().getColor(R.color.g400)
+                )
+            } else {
+                button.visibility = View.GONE
+            }
+        }
+
+        val gray = requireContext().getColor(R.color.g300)
+        val blue = requireContext().getColor(R.color.b500)
+
+        if (totalPages <= 1) {
+            binding.previousPage.isEnabled = false
+            binding.nextPage.isEnabled = false
+            binding.previousPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+        } else {
+            binding.previousPage.isEnabled = true
+            binding.nextPage.isEnabled = true
+            binding.previousPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+        }
+    }
+
+    private fun calculateStartPage(): Int {
+        return when {
+            totalPages <= 5 -> 0
+            currentPage <= 2 -> 0
+            currentPage >= totalPages - 3 -> totalPages - 5
+            else -> currentPage - 2
+        }
+    }
+
+    private fun fetchSearchPage() {
+        keyword?.let {
+            fetchGetSearchStudy(it, page = currentPage, sortBy = sortBy)
         }
     }
 }
