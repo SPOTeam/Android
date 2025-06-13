@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -70,7 +71,6 @@ class RecruitingStudyFragment : Fragment() {
         setupRecyclerView()
         setupBottomSheet()
         setupFilterIcon()
-        setupPageNavigationButtons()
         setupNavigationClickListeners()
 
         initialFetch()
@@ -176,59 +176,6 @@ class RecruitingStudyFragment : Fragment() {
         }
     }
 
-    private fun setupPageNavigationButtons() {
-        binding.previousPage.setOnClickListener {
-            if (currentPage > 0) {
-                currentPage--
-                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage,regionCodes)
-            }
-        }
-
-        binding.nextPage.setOnClickListener {
-            if (currentPage < totalPages - 1) {
-                currentPage++
-                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage,regionCodes)
-            }
-        }
-    }
-
-    private fun updatePageNumberUI() {
-        startPage = calculateStartPage()
-
-        val pageButtons = listOf(
-            binding.page1,
-            binding.page2,
-            binding.page3,
-            binding.page4,
-            binding.page5
-        )
-
-        pageButtons.forEachIndexed { index, textView ->
-            textView.setOnClickListener {
-                val selectedPage = startPage + index
-                if (currentPage != selectedPage) {
-                    currentPage = selectedPage
-                    fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage,regionCodes)
-                }
-            }
-        }
-
-        // 페이지 전환 버튼 설정
-        binding.previousPage.setOnClickListener {
-            if (currentPage > 0) {
-                currentPage--
-                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage,regionCodes)
-            }
-        }
-
-        binding.nextPage.setOnClickListener {
-            if (currentPage < getTotalPages() - 1) {
-                currentPage++
-                fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage,regionCodes)
-            }
-        }
-    }
-
     private fun calculateStartPage(): Int {
         return when {
             totalPages <= 5 -> 0
@@ -236,10 +183,6 @@ class RecruitingStudyFragment : Fragment() {
             currentPage >= totalPages - 3 -> totalPages - 5
             else -> currentPage - 2
         }
-    }
-
-    private fun getTotalPages(): Int {
-        return totalPages // 올바른 페이지 수 계산
     }
 
     private fun updatePageUI() {
@@ -253,28 +196,55 @@ class RecruitingStudyFragment : Fragment() {
             binding.page5
         )
 
-        pageButtons.forEachIndexed { index, textView ->
+        pageButtons.forEachIndexed { index, button ->
             val pageNum = startPage + index
             if (pageNum < totalPages) {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(
-                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                button.visibility = View.VISIBLE
+                button.text = (pageNum + 1).toString()
+                button.setTextColor(
+                    if (pageNum == currentPage)
+                        requireContext().getColor(R.color.b500)
+                    else
+                        requireContext().getColor(R.color.g400)
                 )
-                textView.isEnabled = true
-                textView.alpha = 1.0f
-                textView.visibility = View.VISIBLE
+                button.setOnClickListener {
+                    currentPage = pageNum
+                    fetchRecruitingStudy(
+                        selectedItem, gender, minAge, maxAge, isOnline,
+                        hasFee, minFee, maxFee, themeTypes, currentPage, regionCodes
+                    )
+                }
             } else {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(0)
-                textView.isEnabled = false // 클릭 안 되게
-                textView.alpha = 0.3f
-                textView.visibility = View.VISIBLE
+                button.visibility = View.GONE
             }
         }
 
-        binding.previousPage.isEnabled = currentPage > 0
-        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        val gray = ContextCompat.getColor(requireContext(), R.color.g300)
+        val blue = ContextCompat.getColor(requireContext(), R.color.b500)
+
+        if (totalPages <= 1) {
+            binding.previousPage.isEnabled = false
+            binding.nextPage.isEnabled = false
+            binding.previousPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+        } else {
+            binding.previousPage.isEnabled = true
+            binding.nextPage.isEnabled = true
+            binding.previousPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+        }
+
+        binding.previousPage.setOnClickListener {
+            currentPage = if (currentPage == 0) totalPages - 1 else currentPage - 1
+            fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage, regionCodes)
+        }
+
+        binding.nextPage.setOnClickListener {
+            currentPage = if (currentPage == totalPages - 1) 0 else currentPage + 1
+            fetchRecruitingStudy(selectedItem,gender, minAge,maxAge,isOnline,hasFee,minFee,maxFee,themeTypes,currentPage, regionCodes)
+        }
     }
+
 
     private fun fetchRecruitingStudy(
         selectedItem: String,
@@ -313,6 +283,7 @@ class RecruitingStudyFragment : Fragment() {
                     if (apiResponse?.isSuccess == true) {
                         boardItems.clear()
                         apiResponse.result?.content?.forEach { study ->
+                            totalPages = apiResponse.result.totalPages
                             val boardItem = BoardItem(
                                 studyId = study.studyId,
                                 title = study.title,
@@ -331,14 +302,11 @@ class RecruitingStudyFragment : Fragment() {
                             )
                             boardItems.add(boardItem)
                         }
-                        totalPages = apiResponse.result.totalPages
-                        updatePageNumberUI()
                         val totalElements = apiResponse.result.totalElements
                         binding.checkAmount.text = String.format("%02d건", totalElements)
                         binding.recruitingStudyReyclerview.visibility = View.VISIBLE
                         binding.pageNumberLayout.visibility = View.VISIBLE
                         startPage = calculateStartPage()
-                        updatePageNumberUI()
                         updatePageUI()
 
                         updateRecyclerView(boardItems)

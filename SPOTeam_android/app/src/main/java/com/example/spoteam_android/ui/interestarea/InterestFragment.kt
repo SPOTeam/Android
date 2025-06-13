@@ -323,8 +323,6 @@ class InterestFragment : Fragment() {
         )
     }
 
-
-
     private fun fetchData(
         selectedItem: String,
         regionCode: String? = null,
@@ -443,117 +441,71 @@ class InterestFragment : Fragment() {
         )
 
         pageButtons.forEachIndexed { index, textView ->
+            val selectedPage = startPage + index
             textView.setOnClickListener {
-                val selectedPage = startPage + index
                 if (currentPage != selectedPage) {
                     currentPage = selectedPage
-                    if (selectedRegion == "0000000000"){
-                        fetchData(
-                            selectedItem,
-                            gender = gender,
-                            minAge = minAge,
-                            maxAge = maxAge,
-                            hasFee = hasFee,
-                            minFee = minFee,
-                            maxFee = maxFee,
-                            themeTypes = themeTypes,
-                            currentPage = currentPage
-                        )
-                    } else{
-                        fetchData(
-                            selectedItem,
-                            regionCode = selectedRegion,
-                            gender = gender,
-                            minAge = minAge,
-                            maxAge = maxAge,
-                            hasFee = hasFee,
-                            minFee = minFee,
-                            maxFee = maxFee,
-                            themeTypes = themeTypes,
-                            currentPage = currentPage
-                        )
-                    }
+                    fetchByCurrentPage()
                 }
             }
         }
 
-        // 페이지 전환 버튼 설정
         binding.previousPage.setOnClickListener {
-            if (currentPage > 0) {
-                currentPage--
-                if (selectedRegion == "0000000000"){
-                    fetchData(
-                        selectedItem,
-                        gender = gender,
-                        minAge = minAge,
-                        maxAge = maxAge,
-                        hasFee = hasFee,
-                        minFee = minFee,
-                        maxFee = maxFee,
-                        themeTypes = themeTypes,
-                        currentPage = currentPage
-                    )
-                } else{
-                    fetchData(
-                        selectedItem,
-                        regionCode = selectedRegion,
-                        gender = gender,
-                        minAge = minAge,
-                        maxAge = maxAge,
-                        hasFee = hasFee,
-                        minFee = minFee,
-                        maxFee = maxFee,
-                        themeTypes = themeTypes,
-                        currentPage = currentPage
-                    )
-                }
+            currentPage = if (currentPage == 0) {
+                totalPages - 1 // 첫 페이지일 경우 마지막 페이지로
+            } else {
+                currentPage - 1
             }
+            fetchByCurrentPage()
         }
 
         binding.nextPage.setOnClickListener {
-            if (currentPage < getTotalPages() - 1) {
-                currentPage++
-                if (selectedRegion == "0000000000"){
-                    fetchData(
-                        selectedItem,
-                        gender = gender,
-                        minAge = minAge,
-                        maxAge = maxAge,
-                        hasFee = hasFee,
-                        minFee = minFee,
-                        maxFee = maxFee,
-                        themeTypes = themeTypes,
-                        currentPage = currentPage
-                    )
-                } else{
-                    fetchData(
-                        selectedItem,
-                        regionCode = selectedRegion,
-                        gender = gender,
-                        minAge = minAge,
-                        maxAge = maxAge,
-                        hasFee = hasFee,
-                        minFee = minFee,
-                        maxFee = maxFee,
-                        themeTypes = themeTypes,
-                        currentPage = currentPage
-                    )
-                }
+            currentPage = if (currentPage == totalPages - 1) {
+                0 // 마지막 페이지일 경우 첫 페이지로
+            } else {
+                currentPage + 1
             }
+            fetchByCurrentPage()
         }
     }
+
+    private fun fetchByCurrentPage() {
+        if (selectedRegion == "0000000000") {
+            fetchData(
+                selectedItem,
+                gender = gender,
+                minAge = minAge,
+                maxAge = maxAge,
+                hasFee = hasFee,
+                minFee = minFee,
+                maxFee = maxFee,
+                themeTypes = themeTypes,
+                currentPage = currentPage
+            )
+        } else {
+            fetchData(
+                selectedItem,
+                regionCode = selectedRegion,
+                gender = gender,
+                minAge = minAge,
+                maxAge = maxAge,
+                hasFee = hasFee,
+                minFee = minFee,
+                maxFee = maxFee,
+                themeTypes = themeTypes,
+                currentPage = currentPage
+            )
+        }
+    }
+
 
     private fun calculateStartPage(): Int {
         return when {
             totalPages <= 5 -> 0
-            currentPage <= 2 -> 0
             currentPage >= totalPages - 3 -> totalPages - 5
-            else -> currentPage - 2
+            currentPage >= 2 -> currentPage - 2
+            else -> 0
         }
-    }
-
-    private fun getTotalPages(): Int {
-        return totalPages // 올바른 페이지 수 계산
     }
 
     private fun updatePageUI() {
@@ -567,28 +519,38 @@ class InterestFragment : Fragment() {
             binding.page5
         )
 
-        pageButtons.forEachIndexed { index, textView ->
+        pageButtons.forEachIndexed { index, button ->
             val pageNum = startPage + index
             if (pageNum < totalPages) {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(
-                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                button.visibility = View.VISIBLE
+                button.text = (pageNum + 1).toString()
+                button.setTextColor(
+                    if (pageNum == currentPage)
+                        requireContext().getColor(R.color.b500)
+                    else
+                        requireContext().getColor(R.color.g400)
                 )
-                textView.isEnabled = true
-                textView.alpha = 1.0f
-                textView.visibility = View.VISIBLE
             } else {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(0)
-                textView.isEnabled = false // 클릭 안 되게
-                textView.alpha = 0.3f
-                textView.visibility = View.VISIBLE
+                button.visibility = View.GONE
             }
         }
 
-        binding.previousPage.isEnabled = currentPage > 0
-        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        val gray = ContextCompat.getColor(requireContext(), R.color.g300)
+        val blue = ContextCompat.getColor(requireContext(), R.color.b500)
+
+        if (totalPages <= 1) {
+            binding.previousPage.isEnabled = false
+            binding.nextPage.isEnabled = false
+            binding.previousPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+        } else {
+            binding.previousPage.isEnabled = true
+            binding.nextPage.isEnabled = true
+            binding.previousPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+        }
     }
+
 
 
     private fun fetchDataGetInterestArea( callback: (List<Region>?) -> Unit) {

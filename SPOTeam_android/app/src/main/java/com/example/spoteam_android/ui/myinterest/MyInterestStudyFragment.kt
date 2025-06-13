@@ -88,7 +88,6 @@ class MyInterestStudyFragment : Fragment() {
         setupTabs()
         setupBottomSheet()
         setupFilterIcon()
-        setupPageNavigationButtons()
         setupNavigationClickListeners()
 
         initialFetch()
@@ -254,32 +253,7 @@ class MyInterestStudyFragment : Fragment() {
         }
     }
 
-    private fun setupPageNavigationButtons() {
-        binding.previousPage.setOnClickListener {
-            if (currentPage > 0) {
-                currentPage--
-                requestPageUpdate()
-            }
-        }
-
-        binding.nextPage.setOnClickListener {
-            if (currentPage < totalPages - 1) {
-                currentPage++
-                requestPageUpdate()
-            }
-        }
-    }
-
-    private fun requestPageUpdate() {
-        if (selectedStudyCategory == "전체") {
-            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
-        } else {
-            fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
-        }
-    }
-
     private fun updatePageNumberUI() {
-
         startPage = calculateStartPage()
         Log.d("PageDebug", "📄 페이지 번호 UI 업데이트 - currentPage: $currentPage, startPage: $startPage")
 
@@ -292,42 +266,44 @@ class MyInterestStudyFragment : Fragment() {
         )
 
         pageButtons.forEachIndexed { index, textView ->
+            val selectedPage = startPage + index
             textView.setOnClickListener {
-                val selectedPage = startPage + index
                 if (currentPage != selectedPage) {
                     currentPage = selectedPage
-                    if (selectedStudyCategory == "전체") {
-                        fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
-                    } else {
-                        fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
-                    }
+                    requestPageUpdate()
                 }
             }
         }
 
-        // 페이지 전환 버튼 설정
+        // 왼쪽 버튼: 첫 페이지면 마지막 페이지로 이동
         binding.previousPage.setOnClickListener {
-            if (currentPage > 0) {
-                currentPage--
-                if (selectedStudyCategory == "전체") {
-                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
-                } else {
-                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
-                }
+            currentPage = if (currentPage == 0) {
+                totalPages - 1
+            } else {
+                currentPage - 1
             }
+            requestPageUpdate()
         }
 
+        // 오른쪽 버튼: 마지막 페이지면 첫 페이지로 이동
         binding.nextPage.setOnClickListener {
-            if (currentPage < getTotalPages() - 1) {
-                currentPage++
-                if (selectedStudyCategory == "전체") {
-                    fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline,hasFee,minFee,maxFee,currentPage,regionCodes)
-                } else {
-                    fetchMyInterestSpecific(selectedStudyTheme,selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage,regionCodes)
-                }
+            currentPage = if (currentPage == totalPages - 1) {
+                0
+            } else {
+                currentPage + 1
             }
+            requestPageUpdate()
         }
     }
+
+    private fun requestPageUpdate() {
+        if (selectedStudyCategory == "전체") {
+            fetchMyInterestAll(selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage, regionCodes)
+        } else {
+            fetchMyInterestSpecific(selectedStudyTheme, selectedItem, gender, minAge, maxAge, isOnline, hasFee, minFee, maxFee, currentPage, regionCodes)
+        }
+    }
+
 
     private fun calculateStartPage(): Int {
         return when {
@@ -353,27 +329,36 @@ class MyInterestStudyFragment : Fragment() {
             binding.page5
         )
 
-        pageButtons.forEachIndexed { index, textView ->
+        pageButtons.forEachIndexed { index, button ->
             val pageNum = startPage + index
             if (pageNum < totalPages) {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(
-                    if (pageNum == currentPage) R.drawable.btn_page_bg else 0
+                button.visibility = View.VISIBLE
+                button.text = (pageNum + 1).toString()
+                button.setTextColor(
+                    if (pageNum == currentPage)
+                        requireContext().getColor(R.color.b500)
+                    else
+                        requireContext().getColor(R.color.g400)
                 )
-                textView.isEnabled = true
-                textView.alpha = 1.0f
-                textView.visibility = View.VISIBLE
             } else {
-                textView.text = (pageNum + 1).toString()
-                textView.setBackgroundResource(0)
-                textView.isEnabled = false // 클릭 안 되게
-                textView.alpha = 0.3f
-                textView.visibility = View.VISIBLE
+                button.visibility = View.GONE
             }
         }
 
-        binding.previousPage.isEnabled = currentPage > 0
-        binding.nextPage.isEnabled = currentPage < totalPages - 1
+        val gray = ContextCompat.getColor(requireContext(), R.color.g300)
+        val blue = ContextCompat.getColor(requireContext(), R.color.b500)
+
+        if (totalPages <= 1) {
+            binding.previousPage.isEnabled = false
+            binding.nextPage.isEnabled = false
+            binding.previousPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+        } else {
+            binding.previousPage.isEnabled = true
+            binding.nextPage.isEnabled = true
+            binding.previousPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+        }
     }
 
     private fun fetchMyInterestAll(

@@ -61,7 +61,7 @@ class PermissionWaitFragment : Fragment() {
         memberId = if (currentEmail != null) sharedPreferences.getInt("${currentEmail}_memberId", -1) else -1
         studyApiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
 
-
+        setupPageButtons()
         fetchInProgressStudy()
 
         binding.prevIv.setOnClickListener{
@@ -245,7 +245,7 @@ class PermissionWaitFragment : Fragment() {
         return memberId // 저장된 memberId 없을 시 기본값 -1 반환
     }
 
-    private fun updatePageUI() {
+    private fun setupPageButtons() {
         val pageButtons = listOf(
             binding.page1,
             binding.page2,
@@ -254,63 +254,77 @@ class PermissionWaitFragment : Fragment() {
             binding.page5
         )
 
-        val prev = binding.previousPage
-        val next = binding.nextPage
-        val grayColor = ContextCompat.getColor(requireContext(), R.color.g300)
-        val blueColor = ContextCompat.getColor(requireContext(), R.color.b500)
-        val g400Color = ContextCompat.getColor(requireContext(), R.color.g400)
+        pageButtons.forEachIndexed { index, button ->
+            button.setOnClickListener {
+                val selectedPage = startPage + index
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    fetchInProgressStudy()
+                }
+            }
+        }
 
-        // 🔵 시작 페이지 계산
-        startPage = when {
+        binding.previousPage.setOnClickListener {
+            currentPage = if (currentPage == 0) totalPage - 1 else currentPage - 1
+            fetchInProgressStudy()
+        }
+
+        binding.nextPage.setOnClickListener {
+            currentPage = if (currentPage == totalPage - 1) 0 else currentPage + 1
+            fetchInProgressStudy()
+        }
+    }
+
+
+    private fun calculateStartPage(): Int {
+        return when {
             totalPage <= 5 -> 0
             currentPage >= totalPage - 3 -> totalPage - 5
             currentPage >= 2 -> currentPage - 2
             else -> 0
         }
+    }
 
-        // 🔵 페이지 번호 버튼 처리
+    private fun updatePageUI() {
+        startPage = calculateStartPage()
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
         pageButtons.forEachIndexed { index, button ->
             val pageNum = startPage + index
             if (pageNum < totalPage) {
                 button.visibility = View.VISIBLE
                 button.text = (pageNum + 1).toString()
                 button.setTextColor(
-                    if (pageNum == currentPage) blueColor else g400Color
+                    if (pageNum == currentPage)
+                        requireContext().getColor(R.color.b500)
+                    else
+                        requireContext().getColor(R.color.g400)
                 )
-                button.setBackgroundResource(0)
-                button.isEnabled = true
-                button.setOnClickListener {
-                    if (pageNum != currentPage) {
-                        currentPage = pageNum
-                        fetchInProgressStudy() // 또는 fetch함수명 맞게 호출
-                    }
-                }
             } else {
                 button.visibility = View.GONE
             }
         }
 
-        // 🔵 이전/다음 버튼 처리
+        val gray = ContextCompat.getColor(requireContext(), R.color.g300)
+        val blue = ContextCompat.getColor(requireContext(), R.color.b500)
+
         if (totalPage <= 1) {
-            prev.isEnabled = false
-            next.isEnabled = false
-            prev.setColorFilter(grayColor, android.graphics.PorterDuff.Mode.SRC_IN)
-            next.setColorFilter(grayColor, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.previousPage.isEnabled = false
+            binding.nextPage.isEnabled = false
+            binding.previousPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
         } else {
-            prev.isEnabled = true
-            next.isEnabled = true
-            prev.setColorFilter(blueColor, android.graphics.PorterDuff.Mode.SRC_IN)
-            next.setColorFilter(blueColor, android.graphics.PorterDuff.Mode.SRC_IN)
-
-            prev.setOnClickListener {
-                currentPage = if (currentPage == 0) totalPage - 1 else currentPage - 1
-                fetchInProgressStudy()
-            }
-
-            next.setOnClickListener {
-                currentPage = if (currentPage == totalPage - 1) 0 else currentPage + 1
-                fetchInProgressStudy()
-            }
+            binding.previousPage.isEnabled = true
+            binding.nextPage.isEnabled = true
+            binding.previousPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
         }
     }
 }

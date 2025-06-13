@@ -15,9 +15,7 @@ class CommunityHomeRVAdapterWithIndex(private val dataList: List<ContentDetailIn
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (position < dataList.size) {
-            holder.bind(dataList[position])
-        }
+        holder.bind(dataList[position])
     }
 
     override fun getItemCount(): Int {
@@ -30,8 +28,6 @@ class CommunityHomeRVAdapterWithIndex(private val dataList: List<ContentDetailIn
             binding.contentTitleTv.text = data.postTitle
             if (data.commentCount > 999) {
                 binding.contentCommentNumTv.text = "${data.commentCount}+"
-//                val formatted = String.format("%.1fK", data.commentCount / 1000.0)
-//                binding.contentCommentNumTv.text = formatted
             } else {
                 binding.contentCommentNumTv.text = data.commentCount.toString()
             }

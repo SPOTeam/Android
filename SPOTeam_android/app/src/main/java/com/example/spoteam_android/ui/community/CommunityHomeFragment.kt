@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spoteam_android.HouseFragment
 import com.example.spoteam_android.MainActivity
@@ -20,9 +21,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class CommunityHomeFragment : Fragment() {
 
     private lateinit var binding: FragmentCommunityHomeBinding
+    private val viewModel: CommunityViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +33,8 @@ class CommunityHomeFragment : Fragment() {
     ): View {
         binding = FragmentCommunityHomeBinding.inflate(inflater, container, false)
 
-        fetchBestCommunityContent(sortType = "")
+        changeTag()
+        fetchBestCommunityContent()
         fetchAnnouncementContent()
         fetchRepresentativeContent()
 
@@ -62,7 +66,7 @@ class CommunityHomeFragment : Fragment() {
                 .commitAllowingStateLoss()
             (context as MainActivity).isOnCommunityHome(HomeFragment())
         }
-    //수정완
+
         binding.icFind.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, SearchFragment())
@@ -72,15 +76,18 @@ class CommunityHomeFragment : Fragment() {
         }
 
         binding.communityHomeRealTimeTv.setOnClickListener {
-            fetchBestCommunityContent(sortType = "REAL_TIME")
+            viewModel.currentSortType = "REAL_TIME"
+            fetchBestCommunityContent()
         }
 
         binding.communityHomeRecommendTv.setOnClickListener {
-            fetchBestCommunityContent(sortType = "RECOMMEND")
+            viewModel.currentSortType = "RECOMMEND"
+            fetchBestCommunityContent()
         }
 
         binding.communityHomeCommentTv.setOnClickListener {
-            fetchBestCommunityContent(sortType = "COMMENT")
+            viewModel.currentSortType = "COMMENT"
+            fetchBestCommunityContent()
         }
 
         binding.icSpotLogo.setOnClickListener{
@@ -96,15 +103,25 @@ class CommunityHomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (context as MainActivity).isOnCommunityHome(CommunityHomeFragment())
-        fetchBestCommunityContent(sortType = "")
-        binding.communityHomeRealTimeTv.isChecked = true
+        changeTag()
+        fetchBestCommunityContent()
         fetchAnnouncementContent()
         fetchRepresentativeContent()
     }
 
-    private fun fetchBestCommunityContent(sortType: String) {
+    private fun changeTag() {
+        if(viewModel.currentSortType == "REAL_TIME") {
+            binding.communityHomeRealTimeTv.isChecked = true
+        } else if (viewModel.currentSortType == "RECOMMEND") {
+            binding.communityHomeRecommendTv.isChecked = true
+        } else if (viewModel.currentSortType == "COMMENT") {
+            binding.communityHomeCommentTv.isChecked = true
+        }
+    }
+
+    private fun fetchBestCommunityContent() {
         val service = RetrofitInstance.retrofit.create(CommunityAPIService::class.java)
-        service.getBestCommunityContent(sortType)
+        service.getBestCommunityContent(viewModel.currentSortType)
             .enqueue(object : Callback<CommunityResponse> {
                 override fun onResponse(
                     call: Call<CommunityResponse>,
@@ -113,9 +130,8 @@ class CommunityHomeFragment : Fragment() {
                     if (response.isSuccessful) {
                         val communityResponse = response.body()
                         if (communityResponse?.isSuccess == "true") {
-                            val contentList = communityResponse.result?.postBest5Responses
-//                            Log.d("BestCommunity", "items: $contentList")
-                            if (contentList != null) {
+                            val contentList = communityResponse.result.postBest5Responses
+                            if (!contentList.isNullOrEmpty()) {
                                 initBestRecyclerview(contentList)
                             }
 
@@ -146,8 +162,15 @@ class CommunityHomeFragment : Fragment() {
                         if (announcementResponse?.isSuccess == "true") {
                             val announcementList = announcementResponse.result?.responses
 //                            Log.d("Announcement", "items: $announcementList")
-                            if (announcementList != null) {
+                            if (!announcementList.isNullOrEmpty()) {
+                                binding.communityHomeNotificationContentRv.visibility = View.VISIBLE
+                                binding.communityMoveNotificationIv.visibility = View.VISIBLE
+                                binding.communityHomeNotificationTv.visibility = View.VISIBLE
                                 initAnnouncementRecyclerview(announcementList)
+                            } else {
+                                binding.communityHomeNotificationContentRv.visibility = View.GONE
+                                binding.communityMoveNotificationIv.visibility = View.GONE
+                                binding.communityHomeNotificationTv.visibility = View.GONE
                             }
 
                         } else {
@@ -177,7 +200,7 @@ class CommunityHomeFragment : Fragment() {
                         if (representativeResponse?.isSuccess == "true") {
                             val representativeList = representativeResponse.result?.responses
 //                            Log.d("Representative", "items: $representativeList")
-                            if (representativeList != null) {
+                            if (!representativeList.isNullOrEmpty()) {
                                 initRepresentativeRecyclerview(representativeList)
                             }
                         } else {

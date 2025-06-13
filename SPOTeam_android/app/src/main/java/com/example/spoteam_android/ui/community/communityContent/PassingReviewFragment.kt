@@ -28,7 +28,7 @@ class PassingReviewFragment : Fragment() {
     private val size = 5
     private var totalPages = 0
 
-    private val type = "PASS_EXPERIENCE "
+    private val type = "PASS_EXPERIENCE"
     private lateinit var adapter: CommunityCategoryContentRVAdapter
 
     override fun onCreateView(
@@ -121,7 +121,7 @@ class PassingReviewFragment : Fragment() {
     }
 
     private fun showError(message: String?) {
-        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
     }
 
     private fun postLike(postId: Int) {
