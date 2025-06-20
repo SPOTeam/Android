@@ -11,17 +11,17 @@ import dagger.hilt.android.HiltAndroidApp
 class GlobalApplication: Application() {
     override fun onCreate() {
         super.onCreate()
-        KakaoSdk.init(this, "7878cb24cec56458df067991de5e7786")
+        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_KEY)
         NaverIdLoginSDK.initialize(
             this,
-            "PgLxwOn8SAdjXBkdilNA",
-            "jx5U6lWiCq",
-            "SPOT",
+            BuildConfig.NAVER_CLIENT_ID,
+            BuildConfig.NAVER_CLIENT_SECRET,
+            "SPOT"
         )
-        var keyHash = Utility.getKeyHash(this)
-
-        Log.i("GlobalApplication", "$keyHash")
-
+        if (BuildConfig.DEBUG) {
+            val keyHash = Utility.getKeyHash(this)
+            Log.i("SpotApplication", "KeyHash: $keyHash")
+        }
         RetrofitInstance.initialize(this)
 
     }

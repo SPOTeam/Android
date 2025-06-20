@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
 
-    private const val BASE_URL = "https://www.teamspot.site/"
     private var authToken: String? = null
     private var isInitialized = false
     private lateinit var appContext: Context
@@ -100,7 +99,7 @@ object RetrofitInstance {
             throw IllegalStateException("RetrofitInstance.initialize()를 먼저 호출하세요!")
         }
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

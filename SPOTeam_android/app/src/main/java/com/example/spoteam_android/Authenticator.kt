@@ -67,7 +67,7 @@ class AuthInterceptor(private val context: Context) : Interceptor {
     // 새로운 액세스 및 리프레시 토큰 요청
     private fun getNewTokens(refreshToken: String): TokenResult? {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/")
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
