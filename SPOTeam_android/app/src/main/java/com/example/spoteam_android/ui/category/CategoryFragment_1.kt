@@ -147,6 +147,8 @@ class CategoryFragment_1 : Fragment() {
         selectedStudyTheme = selectedStudyCategory.toString()  // ← 탭 선택값으로 테마 업데이트
         if (selectedStudyTheme == "전공/진로") {
             selectedStudyTheme = "전공및진로학습"
+        } else if (selectedStudyTheme == "시사/뉴스") {
+            selectedStudyTheme = "시사뉴스"
         }
         viewModel.theme = selectedStudyTheme
         currentPage = 0  // ⭐ 페이지 초기화
@@ -393,6 +395,7 @@ class CategoryFragment_1 : Fragment() {
                             )
                             boardItems.add(boardItem)
                         }
+                        binding.emptyTv.visibility = View.GONE
                         binding.communityCategoryContentRv.visibility = View.VISIBLE
                         val totalElements = apiResponse.result.totalElements
                         binding.contentCountTv.text = String.format("%02d", totalElements)
@@ -404,6 +407,7 @@ class CategoryFragment_1 : Fragment() {
                         binding.contentCountTv.text = "00"
 //                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                         binding.communityCategoryContentRv.visibility = View.GONE
+                        binding.emptyTv.visibility = View.VISIBLE
                     }
                 }
             }
