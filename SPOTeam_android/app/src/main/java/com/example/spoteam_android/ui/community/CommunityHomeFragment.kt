@@ -223,7 +223,11 @@ class CommunityHomeFragment : Fragment() {
 
     private fun initBestRecyclerview(contentList: List<ContentDetailInfo>) {
         binding.communityHomeBestPopularityContentRv.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            object : LinearLayoutManager(context, VERTICAL, false) {
+                override fun canScrollVertically(): Boolean {
+                    return false
+                }
+            }
 
         val dataRVAdapter = CommunityHomeRVAdapterWithIndex(contentList)
         binding.communityHomeBestPopularityContentRv.adapter = dataRVAdapter
@@ -231,7 +235,11 @@ class CommunityHomeFragment : Fragment() {
 
     private fun initRepresentativeRecyclerview(representativeList: List<RepresentativeDetailInfo>) {
         binding.communityHomeCommunityContentRv.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            object : LinearLayoutManager(context, VERTICAL, false) {
+                override fun canScrollVertically(): Boolean {
+                    return false
+                }
+            }
 
         val dataRVAdapter = CommunityHomeRVAdapterWithCategory(representativeList)
         binding.communityHomeCommunityContentRv.adapter = dataRVAdapter
@@ -239,7 +247,11 @@ class CommunityHomeFragment : Fragment() {
 
     private fun initAnnouncementRecyclerview(announcementList: List<AnnouncementDetailInfo>) {
         binding.communityHomeNotificationContentRv.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            object : LinearLayoutManager(context, VERTICAL, false) {
+                override fun canScrollVertically(): Boolean {
+                    return false
+                }
+            }
 
         val dataRVAdapter = CommunityHomeRVAdapterAnnouncement(announcementList)
         binding.communityHomeNotificationContentRv.adapter = dataRVAdapter
