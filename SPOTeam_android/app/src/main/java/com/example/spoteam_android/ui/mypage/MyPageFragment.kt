@@ -265,13 +265,12 @@ class MyPageFragment : Fragment() {
                                 response.body()?.result?.studyHistories?.let { studyHistories ->
 
                                     val content = studyHistories.content
-                                    Log.d("fetchFinishedStudyData", "Received data: $content")
 
-                                    if (!content.isNullOrEmpty()) {
-                                        requireActivity().runOnUiThread {
+                                    requireActivity().runOnUiThread {
+                                        if (!content.isNullOrEmpty()) {
                                             val studyItems = content.map {
                                                 FinishedStudyItem(
-                                                    studyId = it.studyId, // 만약 StudyItem에서 Long이라면 toLong() 해주세요
+                                                    studyId = it.studyId,
                                                     title = it.title,
                                                     performance = it.performance,
                                                     createdAt = it.createdAt,
@@ -280,8 +279,17 @@ class MyPageFragment : Fragment() {
                                             }
 
                                             myStudyAdapter.updateList(studyItems)
+
+                                            binding.recyclerViewMyStudies.visibility = View.VISIBLE
+                                            binding.tvStudyNickname.visibility = View.VISIBLE
+                                            binding.tvBackNickname2.visibility = View.VISIBLE
+                                            binding.tvExplainStudy.visibility = View.VISIBLE
+                                        } else {
+                                            binding.recyclerViewMyStudies.visibility = View.GONE
+                                            binding.tvStudyNickname.visibility = View.GONE
+                                            binding.tvBackNickname2.visibility = View.GONE
+                                            binding.tvExplainStudy.visibility = View.GONE
                                         }
-                                        binding.recyclerViewMyStudies.visibility = View.VISIBLE
                                     }
 
                                 }
@@ -301,6 +309,7 @@ class MyPageFragment : Fragment() {
             Toast.makeText(requireContext(), "Email not provided", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun fetchThemes() {
         val service = RetrofitInstance.retrofit.create(LoginApiService::class.java)

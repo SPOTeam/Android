@@ -501,8 +501,12 @@ class HouseFragment : Fragment() {
                     if (boardItems.isNotEmpty()) {
                         recommendBoardAdapter.updateList(boardItems)
                         binding.rvBoard2.visibility = View.VISIBLE
+                        binding.txRecommendationStudy.visibility= View.VISIBLE
+                        binding.icRecommendationRefresh.visibility= View.VISIBLE
                     } else {
                         binding.rvBoard2.visibility = View.GONE
+                        binding.txRecommendationStudy.visibility= View.GONE
+                        binding.icRecommendationRefresh.visibility= View.GONE
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT)
                             .show()
                     }

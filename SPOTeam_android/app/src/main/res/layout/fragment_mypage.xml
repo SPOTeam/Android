@@ -393,7 +393,7 @@
                 android:fontFamily="@font/suit_variable_font"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="ex) 관심 분야"
+                android:text=""
                 android:textColor="@color/g400"
                 android:textFontWeight="600"
                 android:textSize="15dp" />
@@ -437,7 +437,6 @@
                 android:fontFamily="@font/suit_variable_font"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="ex) 관심 지역"
                 android:textColor="@color/g400"
                 android:textFontWeight="600"
                 android:textSize="15dp" />
@@ -478,7 +477,7 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="110dp"
                 android:fontFamily="@font/suit_variable_font"
-                android:text="ex) 내 목표"
+                android:text=""
                 android:textColor="@color/g400"
                 android:textFontWeight="600"
                 android:textSize="15dp"

@@ -94,12 +94,13 @@
             android:id="@+id/tx_populared_word"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="21dp"
             android:fontFamily="@font/suit_bold"
             android:text="인기 검색어"
             android:textColor="@color/black"
             android:textSize="16dp"
-            app:layout_constraintStart_toStartOf="@+id/tx_recently_searched_word"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chipLayout" />
 
         <LinearLayout
@@ -113,8 +114,8 @@
 
             <TextView
                 android:id="@+id/tx_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="29dp"
+                android:layout_height="match_parent"
                 android:text="03.01"
                 android:textColor="@color/gray_03"
                 android:textFontWeight="700"
@@ -195,13 +196,14 @@
             android:id="@+id/tx_recommendation_study"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="43dp"
             android:fontFamily="@font/suit_variable"
             android:text="당신을 기다리는 추천 스터디"
             android:textColor="@color/black"
             android:textFontWeight="700"
             android:textSize="17dp"
-            app:layout_constraintStart_toStartOf="@+id/tx_populared_word"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_board" />
 
         <ImageView
