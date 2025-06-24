@@ -103,7 +103,6 @@ class StudyFragment : Fragment() {
             val memberId = sharedPreferences.getInt("${email}_memberId", -1)
 
             if (memberId != -1) {
-                Log.d("StudyFragment", "Fetching data for memberId: $memberId, page: $currentPage, size: $size")
 
                 studyApiService.getStudies(currentPage, size)
                     .enqueue(object : Callback<StudyResponse> {

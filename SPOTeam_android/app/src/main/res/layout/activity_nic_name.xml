@@ -11,7 +11,9 @@
         android:id="@+id/activity_nickname_login_tb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintTop_toTopOf="parent" >
 
         <TextView
             android:id="@+id/activity_nickname_login_toolbar_tv"

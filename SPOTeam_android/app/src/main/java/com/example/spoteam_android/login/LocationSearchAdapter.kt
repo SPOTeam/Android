@@ -10,26 +10,30 @@ class LocationSearchAdapter(
 ) : RecyclerView.Adapter<LocationSearchAdapter.ViewHolder>() {
 
     private var filteredList: MutableList<LocationItem> = dataList.toMutableList()
-    private var selectedItem: LocationItem? = null // 선택된 아이템을 저장하는 변수
+    private var selectedItem: LocationItem? = null
 
-    inner class ViewHolder(val binding: ItemLocationSearchBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(val binding: ItemLocationSearchBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: LocationItem) {
             binding.itemLocationConcreteTv.text = item.address
             binding.root.setOnClickListener {
-                selectedItem = item // 아이템 클릭 시 선택된 아이템 저장
+                selectedItem = item
                 onItemClick(item)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemLocationSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemLocationSearchBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = filteredList[position]
-        holder.bind(item)
+        holder.bind(filteredList[position])
     }
 
     override fun getItemCount(): Int = filteredList.size
@@ -39,11 +43,11 @@ class LocationSearchAdapter(
         if (query.isEmpty()) {
             filteredList.addAll(dataList)
         } else {
-            val normalizedQueryWords = normalizeLocationName(query.lowercase()).split(" ")  // ✅ 검색어를 단어별로 분리
+            val normalizedQueryWords = normalizeLocationName(query.lowercase()).split(" ")
 
             for (item in dataList) {
-                val normalizedAddressWords = normalizeLocationName(item.address.lowercase()).split(" ")  // ✅ 주소도 단어별로 분리
-
+                val normalizedAddressWords =
+                    normalizeLocationName(item.address.lowercase()).split(" ")
 
                 if (normalizedQueryWords.all { queryWord ->
                         normalizedAddressWords.any { addressWord -> addressWord.contains(queryWord) }
@@ -55,14 +59,17 @@ class LocationSearchAdapter(
         notifyDataSetChanged()
     }
 
-
-
-
     fun getSelectedItem(): LocationItem? {
         return selectedItem
     }
 
-    fun normalizeLocationName(name: String): String {
+    fun updateList(newList: List<LocationItem>) {
+        filteredList.clear()
+        filteredList.addAll(newList)
+        notifyDataSetChanged()
+    }
+
+    private fun normalizeLocationName(name: String): String {
         return name.replace("특별자치도", "도")
             .replace("특별자치시", "시")
             .replace("광역시", "시")
@@ -74,5 +81,4 @@ class LocationSearchAdapter(
             .replace("\\s+".toRegex(), " ")
             .trim()
     }
-
 }

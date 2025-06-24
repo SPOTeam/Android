@@ -5,6 +5,7 @@
     import android.util.Log
     import android.widget.CompoundButton
     import androidx.appcompat.app.AppCompatActivity
+    import com.example.spoteam_android.MainActivity
     import com.example.spoteam_android.R
     import com.example.spoteam_android.databinding.ActivityCheckListStudyPurposeBinding
     import com.google.android.material.chip.Chip
@@ -25,9 +26,12 @@
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             title = ""
             binding.activityChecklistStudypurposeTb.setNavigationOnClickListener {
-                val intent = Intent(this, CheckListCategoryActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                // 회원가입 마지막 화면 → MainActivity 호출 부분
+                val intent = Intent(this, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
                 startActivity(intent)
+
 
 
             }
