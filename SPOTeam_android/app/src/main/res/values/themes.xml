@@ -163,8 +163,28 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="Theme.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- 상태바와 네비게이션 바 색상 -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:navigationBarColor">@color/white</item>
 
-<!--    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">-->
+        <!-- 상태바 아이콘을 검정색으로 -->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <!-- 상태바 위까지 그림을 확장 -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <!-- 배경은 흰색 -->
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+
+
+
+    <!--    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">-->
 <!--        <item name="itemIconSize">24dp</item> &lt;!&ndash; 아이콘 크기 설정 &ndash;&gt;-->
 <!--        <item name="itemTextAppearanceActive">@style/BottomNavigationViewTextAppearance</item>-->
 <!--        <item name="itemTextAppearanceInactive">@style/BottomNavigationViewTextAppearance</item>-->

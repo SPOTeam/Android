@@ -3,7 +3,7 @@ package com.example.spoteam_android.login
 import android.content.Context
 import android.content.SharedPreferences
 
-class TokenManager(context: Context) {
+class   TokenManager(context: Context) {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
@@ -70,4 +70,6 @@ class TokenManager(context: Context) {
         val refreshToken = getRefreshToken()
         return !accessToken.isNullOrEmpty() || !refreshToken.isNullOrEmpty()
     }
+
+
 }

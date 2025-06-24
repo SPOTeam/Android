@@ -3,6 +3,7 @@ package com.example.spoteam_android.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +23,7 @@ import retrofit2.Response
 
 class RegisterInformation : ComponentActivity() {
     private lateinit var binding: ActivityRegisterInformationBinding
+    private var lastBackPressedTime = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +58,18 @@ class RegisterInformation : ComponentActivity() {
 
         setupProgressBar(mode)
     }
+    @Suppress("MissingSuperCall")
+    override fun onBackPressed() {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastBackPressedTime <= 2000) {
+            // 2초 안에 연속 두 번 누른 경우 앱 종료
+            finishAffinity() // 앱의 모든 액티비티 종료
+        } else {
+            lastBackPressedTime = currentTime
+            Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
 
     private fun navigateToCheckList() {
@@ -89,9 +103,22 @@ class RegisterInformation : ComponentActivity() {
     }
 
     private fun navigateToMainScreen() {
+        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val email = sharedPreferences.getString("currentEmail", null)
+
+        // isSpotMember 상태 true로 저장
+        if (!email.isNullOrEmpty()) {
+            editor.putBoolean("${email}_isSpotMember", true)
+        }
+        editor.apply()
+
+        // 이제 메인 화면으로 이동
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
+
+
 
     private fun postPreferencesToServer(
         memberId: Int,

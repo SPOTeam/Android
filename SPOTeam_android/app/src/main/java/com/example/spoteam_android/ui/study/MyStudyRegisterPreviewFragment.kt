@@ -9,6 +9,7 @@ import android.content.Context.MODE_PRIVATE
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -160,43 +161,44 @@ class MyStudyRegisterPreviewFragment : Fragment() {
 
 
     private fun uploadImage(imageUri: Uri, memberId: Int) {
-        val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
+        Log.d("MyStudyDebug", "uploadImage() 호출됨 - memberId: $memberId, imageUri: $imageUri")
 
+        val apiService = RetrofitInstance.retrofit.create(StudyApiService::class.java)
         val imagePart = prepareImagePart(imageUri)
 
         if (imagePart != null) {
             apiService.uploadImages(listOf(imagePart)).enqueue(object : Callback<UploadResponse> {
                 override fun onResponse(call: Call<UploadResponse>, response: Response<UploadResponse>) {
+                    Log.d("MyStudyDebug", "업로드 onResponse - code: ${response.code()}")
                     if (response.isSuccessful) {
                         val uploadResponse = response.body()
+                        Log.d("MyStudyDebug", "업로드 성공 응답 body: $uploadResponse")
                         if (uploadResponse != null && uploadResponse.isSuccess) {
-                            val imageUrls = uploadResponse.result.imageUrls
-                            val imageUrl = imageUrls.firstOrNull()?.imageUrl
-
-                            // 이미지 URL을 ViewModel의 profileImageUri에 저장
+                            val imageUrl = uploadResponse.result.imageUrls.firstOrNull()?.imageUrl
+                            Log.d("MyStudyDebug", "받은 imageUrl: $imageUrl")
                             if (imageUrl != null) {
                                 viewModel.setProfileImageUri(imageUrl)
-                                Log.d("MyStudy", "imageUrl: $imageUrl")
                             }
                             viewModel.submitStudyData(memberId)
-
                             showCompletionDialog()
                         } else {
-                            println("Upload failed: ${uploadResponse?.message}")
+                            Log.e("MyStudyDebug", "업로드 실패 message: ${uploadResponse?.message}")
                         }
                     } else {
-                        println("Upload failed with response code: ${response.code()}")
+                        Log.e("MyStudyDebug", "업로드 실패 code: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<UploadResponse>, t: Throwable) {
-                    println("Upload error: ${t.message}")
+                    Log.e("MyStudyDebug", "업로드 네트워크 실패: ${t.message}", t)
                 }
             })
         } else {
+            Log.e("MyStudyDebug", "imagePart가 null이라 업로드 중단")
             Toast.makeText(context, "이미지 파일을 준비할 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun saveUriAsFile(uri: Uri): File? {
         return try {
@@ -204,19 +206,36 @@ class MyStudyRegisterPreviewFragment : Fragment() {
             val bitmap = BitmapFactory.decodeStream(inputStream)
             inputStream.close()
 
-            // 강제로 JPEG으로 저장
+            // EXIF 회전값 읽기
+            val exif = requireContext().contentResolver.openInputStream(uri)?.use { ExifInterface(it) }
+            val orientation = exif?.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            ) ?: ExifInterface.ORIENTATION_NORMAL
+
+            val rotatedBitmap = when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> bitmap.rotate(90f)
+                ExifInterface.ORIENTATION_ROTATE_180 -> bitmap.rotate(180f)
+                ExifInterface.ORIENTATION_ROTATE_270 -> bitmap.rotate(270f)
+                else -> bitmap
+            }
+
             val tempFile = File.createTempFile("temp_image", ".jpg", requireContext().cacheDir)
             val outputStream = FileOutputStream(tempFile)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             outputStream.flush()
             outputStream.close()
-
-            Log.d("Upload", "Saved file at: ${tempFile.absolutePath}")
             tempFile
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
+    }
+
+    // Bitmap을 회전시키는 확장 함수
+    fun Bitmap.rotate(degrees: Float): Bitmap {
+        val matrix = android.graphics.Matrix().apply { postRotate(degrees) }
+        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
     }
 
     private fun prepareImagePart(uri: Uri): MultipartBody.Part? {

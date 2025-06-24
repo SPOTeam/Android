@@ -21,19 +21,10 @@
             android:exported="false" />
         <activity
             android:name=".login.NicNameActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".login.NormalLoginActivity"
             android:exported="false" />
-
-        <service
-            android:name=".ui.study.StudyRegisterApiService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".login.LoginAPiService"
-            android:enabled="true"
-            android:exported="true" />
 
         <activity
             android:name=".ui.study.MyStudyPostContentActivity"
@@ -100,15 +91,17 @@
         </activity>
         <activity
             android:name=".login.StartLoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.SPOTeam_android.SplashScreen">
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/Theme.Splash"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

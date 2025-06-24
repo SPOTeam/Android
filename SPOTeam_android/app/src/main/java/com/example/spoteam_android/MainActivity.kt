@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
     private val weatherViewModel: WeatherViewModel by viewModels() // Hilt 사용
     private val categoryViewModel : CategoryInterestViewModel by viewModels()
     private val viewModel: StudyViewModel by viewModels()
+    private var lastBackPressedTime = 0L
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -134,6 +135,20 @@ class MainActivity : AppCompatActivity(), BottomNavVisibilityController {
         init()
         isOnCommunityHome(HouseFragment())
     }
+
+    @Suppress("MissingSuperCall")
+    override fun onBackPressed() {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastBackPressedTime <= 2000) {
+            // 2초 안에 연속 두 번 누른 경우 앱 종료
+            finishAffinity() // 앱의 모든 액티비티 종료
+        } else {
+            lastBackPressedTime = currentTime
+            Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 
     override fun onResume() {
         super.onResume()

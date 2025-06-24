@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.spoteam_android.databinding.ActivityCheckListCategoryBinding
+import com.example.spoteam_android.login.NicNameActivity
 import com.google.android.material.chip.Chip
 
 class CheckListCategoryActivity : AppCompatActivity() {
@@ -21,8 +22,9 @@ class CheckListCategoryActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = ""
         binding.activityChecklistTb.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-
+            val intent = Intent(this, NicNameActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         setChipGroup()
@@ -34,6 +36,14 @@ class CheckListCategoryActivity : AppCompatActivity() {
             startActivity(themeIntent)
         }
     }
+    @Suppress("MissingSuperCall")
+    override fun onBackPressed() {
+        val intent = Intent(this, NicNameActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+
 
     private fun setChipGroup() {
         // 초기 버튼 비활성화
