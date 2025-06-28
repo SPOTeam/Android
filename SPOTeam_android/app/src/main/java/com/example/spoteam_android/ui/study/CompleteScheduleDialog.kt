@@ -13,7 +13,7 @@ class CompleteScheduleDialog (private val context: Context, private val startDat
 
     private val dlg = android.app.Dialog(context)
 
-    fun start(fragmentManager: FragmentManager) {
+    fun start(onComplete: () -> Unit) {
         // 타이틀바 제거
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
         // 커스텀 다이얼로그 radius 적용
@@ -24,18 +24,10 @@ class CompleteScheduleDialog (private val context: Context, private val startDat
 
         val btnMove = dlg.findViewById<Button>(R.id.dialog_complete_bt)
         btnMove.setOnClickListener {
-            val transaction = fragmentManager.beginTransaction()
-            val detailStudyFragment = DetailStudyFragment()
-
-            val args = Bundle()
-            args.putInt("tab_position", 1)
-            args.putString("startDateTime",startDateTime)
-            detailStudyFragment.arguments = args
-
-            transaction.replace(R.id.main_frm, detailStudyFragment)
-            transaction.commit()
-            dlg.dismiss()
+            onComplete.invoke() // 외부 콜백
+            dlg.dismiss()       // 내부 Dialog dismiss
         }
+
 
         // 다이얼로그 표시
         dlg.show()

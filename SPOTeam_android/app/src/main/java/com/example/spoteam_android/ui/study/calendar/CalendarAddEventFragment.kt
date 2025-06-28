@@ -198,6 +198,7 @@ class CalendarAddEventFragment  : BottomSheetDialogFragment() {
         saveButton.setOnClickListener {
             addEventToViewModel(isAllDay)
             uploadScheduleToServer(isAllDay)
+
         }
 
         closeButton.setOnClickListener{
@@ -360,6 +361,20 @@ class CalendarAddEventFragment  : BottomSheetDialogFragment() {
                     if (selectedHourOfDay % 12 == 0) 12 else selectedHourOfDay % 12
                 val formattedTime = String.format("%02d:%02d %s", hourFormatted, selectedMinute, amPm)
 
+                val startParts = startDateTime.split(" ", ":", "-")
+                val startDate = "${startParts[0]}-${startParts[1]}-${startParts[2]}"
+                val startHour = startParts[3].toInt()
+                val startMinute = startParts[4].toInt()
+
+                if (selectedDate == startDate) {
+                    // 같은 날일 때는 종료 시간이 시작 시간 이후인지 체크
+                    if (selectedHourOfDay < startHour || (selectedHourOfDay == startHour && selectedMinute <= startMinute)) {
+                        Toast.makeText(requireContext(), "종료 시간은 시작 시간 이후여야 합니다", Toast.LENGTH_SHORT).show()
+                        resetEndDateTimeFields() // 종료 시간 초기화
+                        return@TimePickerDialog
+                    }
+                }
+
                 if (isStart) {
                     startDateTime = String.format("%s %02d:%02d", selectedDate, selectedHourOfDay, selectedMinute)
                     txTime.text = formattedTime
@@ -388,10 +403,22 @@ class CalendarAddEventFragment  : BottomSheetDialogFragment() {
 
     // 종료 날짜 제한 로직
     private fun applyDateRestrictions(datePickerDialog: DatePickerDialog) {
-        val startParts = startDateTime.split(" ", "-", ":")
+        Log.d("CalendarDebug", "💬 startDateTime = \"$startDateTime\"")  // ✅ 콘솔 출력
+
+        if (startDateTime.isBlank() || !startDateTime.contains("-")) return
+
+        val parts = startDateTime.split("-", " ", ":")
+        if (parts.size < 3) return
+
         val startCalendar = Calendar.getInstance().apply {
-            set(startParts[0].toInt(), startParts[1].toInt() - 1, startParts[2].toInt())
+            set(parts[0].toInt(), parts[1].toInt() - 1, parts[2].toInt())
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
         }
+        // 날짜 제한 설정
+        datePickerDialog.datePicker.minDate = startCalendar.timeInMillis
 
         when (period) {
             "DAILY" -> {
@@ -527,7 +554,10 @@ class CalendarAddEventFragment  : BottomSheetDialogFragment() {
     }
     private fun showCompletionDialog() {
         val dialog = CompleteScheduleDialog(requireContext(),startDateTime)
-        dialog.start(parentFragmentManager)
+        dialog.start{
+            dismiss()
+        }
+
     }
 
     private fun updateSaveButtonState() {
@@ -571,6 +601,20 @@ class CalendarAddEventFragment  : BottomSheetDialogFragment() {
 
         isStartDateSet = false // 초기화
         isEndDateSet = false   // 초기화
+        updateSaveButtonState()
+    }
+
+    private fun resetEndDateTimeFields() {
+        // 종료 날짜 및 시간 초기화
+        endDateTime = ""
+        endYearTx.text = ""
+        endTimeTx.text = ""
+
+        // 종료 날짜 및 시간 관련 View 숨기기
+        endYearTx.visibility = View.GONE
+        endTimeTx.visibility = View.GONE
+
+        isEndDateSet = false // 종료 날짜 설정 초기화
         updateSaveButtonState()
     }
 }
