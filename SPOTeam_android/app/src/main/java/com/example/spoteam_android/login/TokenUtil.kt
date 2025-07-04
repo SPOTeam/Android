@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.example.spoteam_android.AuthApiService
+import com.example.spoteam_android.BuildConfig
 import com.example.spoteam_android.RetrofitInstance
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,7 +25,7 @@ object TokenUtil {
 
     fun refreshTokenSync(context: Context, refreshToken: String): String? {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.teamspot.site/")
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

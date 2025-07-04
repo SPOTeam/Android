@@ -1,5 +1,6 @@
 package com.example.spoteam_android.login
 
+import com.example.spoteam_android.BuildConfig
 import com.example.spoteam_android.RetrofitInstance
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -9,7 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 //Retrofit설정 인스턴스
 object SocialLoginRetrofitInstance {
 
-    private const val BASE_URL = "https://www.teamspot.site/"
     private var authToken: String?= null
 
     fun setToken(token: String){
@@ -32,7 +32,7 @@ object SocialLoginRetrofitInstance {
 
     val retrofit: Retrofit by lazy{
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
