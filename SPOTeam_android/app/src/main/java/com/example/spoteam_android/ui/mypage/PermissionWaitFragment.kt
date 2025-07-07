@@ -111,7 +111,7 @@ class PermissionWaitFragment : Fragment() {
 
                                 binding.emptyWaiting.visibility = View.GONE
                                 binding.participatingStudyReyclerview.visibility = View.VISIBLE
-
+                                binding.pageNumberLayout.visibility = View.VISIBLE
 
                                 itemList.clear()
                                 itemList.addAll(studyInfo)
@@ -127,6 +127,7 @@ class PermissionWaitFragment : Fragment() {
                         } else {
                             binding.emptyWaiting.visibility = View.VISIBLE
                             binding.participatingStudyReyclerview.visibility = View.GONE
+                            binding.pageNumberLayout.visibility = View.GONE
                             showError(inProgressResponse?.message)
                         }
                     } else {

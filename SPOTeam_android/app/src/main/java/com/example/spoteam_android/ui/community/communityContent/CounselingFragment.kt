@@ -121,7 +121,7 @@ class CounselingFragment : Fragment() {
     }
 
     private fun showError(message: String?) {
-        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
     }
 
     private fun postLike(postId: Int) {
@@ -137,7 +137,7 @@ class CounselingFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
-                    Log.e("LikeContent", "Failure: ${t.message}", t)
+//                    Log.e("LikeContent", "Failure: ${t.message}", t)
                 }
             })
     }
@@ -155,7 +155,7 @@ class CounselingFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
-                    Log.e("UnLikeContent", "Failure: ${t.message}", t)
+//                    Log.e("UnLikeContent", "Failure: ${t.message}", t)
                 }
             })
     }
@@ -173,7 +173,7 @@ class CounselingFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<ContentLikeResponse>, t: Throwable) {
-                    Log.e("ScrapContent", "Failure: ${t.message}", t)
+//                    Log.e("ScrapContent", "Failure: ${t.message}", t)
                 }
             })
     }
@@ -191,7 +191,7 @@ class CounselingFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<ContentUnLikeResponse>, t: Throwable) {
-                    Log.e("UnScrapContent", "Failure: ${t.message}", t)
+//                    Log.e("UnScrapContent", "Failure: ${t.message}", t)
                 }
             })
     }
