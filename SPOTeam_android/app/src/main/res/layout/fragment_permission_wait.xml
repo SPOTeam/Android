@@ -56,12 +56,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="신청한 스터디가 없습니다."
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="700"
             android:textColor="@color/selector_blue"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SPOT에서 새로운 스터디와 함께 해보세요."
+            android:fontFamily="@font/suit_variable_font"
+            android:textFontWeight="600"
             android:textColor="@color/g400" />
 
         <TextView

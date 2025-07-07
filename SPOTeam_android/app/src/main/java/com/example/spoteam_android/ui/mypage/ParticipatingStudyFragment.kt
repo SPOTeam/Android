@@ -117,10 +117,12 @@ class ParticipatingStudyFragment : Fragment(), fetchProgressStudy {
                                 updatePageUI() // 페이지 번호 UI 갱신
                                 binding.emptyWaiting.visibility = View.GONE
                                 binding.participatingStudyReyclerview.visibility = View.VISIBLE
+                                binding.pageNumberLayout.visibility - View.VISIBLE
                                 initRecyclerView(studyInfo)
                             } else {
                                 binding.emptyWaiting.visibility = View.VISIBLE
                                 binding.participatingStudyReyclerview.visibility = View.GONE
+                                binding.pageNumberLayout.visibility - View.GONE
                             }
 
                         } else {

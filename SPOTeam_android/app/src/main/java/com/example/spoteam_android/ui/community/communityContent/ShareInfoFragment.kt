@@ -121,7 +121,7 @@ class ShareInfoFragment : Fragment() {
     }
 
     private fun showError(message: String?) {
-        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
     }
 
     private fun postLike(postId: Int) {

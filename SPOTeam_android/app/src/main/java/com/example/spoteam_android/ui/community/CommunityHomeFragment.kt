@@ -218,7 +218,7 @@ class CommunityHomeFragment : Fragment() {
     }
 
     private fun showError(message: String?) {
-        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
     }
 
     private fun initBestRecyclerview(contentList: List<ContentDetailInfo>) {

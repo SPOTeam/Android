@@ -391,8 +391,7 @@ class HouseFragment : Fragment() {
                         binding.rvBoard.visibility = View.VISIBLE
                     } else {
                         binding.rvBoard.visibility = View.GONE
-                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT)
-                            .show()
+//                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -422,16 +421,16 @@ class HouseFragment : Fragment() {
                         fetchDataMostPopular()
                         fetchRecommendStudy()
                     } else {
-                        Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
-                    Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
                 }
             })
         } else {
-            Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
