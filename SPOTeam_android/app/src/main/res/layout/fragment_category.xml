@@ -147,19 +147,42 @@
             app:layout_constraintTop_toTopOf="@+id/content_filter_toggle_container"
             android:visibility="gone"/>
 
-        <TextView
-            android:id="@+id/empty_tv"
+        <LinearLayout
+            android:id="@+id/empty_waiting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="스터디가 존재하지 않습니다."
-            android:textSize="30dp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_marginTop="110dp"
+            android:orientation="vertical"
+            android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_pencil_new"
+                    app:tint="@color/g400"
+                    android:layout_marginBottom="30dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="등록된 스터디가 없습니다."
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="700"
+                    android:textColor="@color/selector_blue"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SPOT에서 새로운 스터디와 함께 해보세요."
+                    android:fontFamily="@font/suit_variable_font"
+                    android:textFontWeight="600"
+                    android:textColor="@color/g400" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/community_category_content_rv"
@@ -173,7 +196,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:itemCount="5"
-            tools:listitem="@layout/item_recycler_view"/>
+            tools:listitem="@layout/item_recycler_view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

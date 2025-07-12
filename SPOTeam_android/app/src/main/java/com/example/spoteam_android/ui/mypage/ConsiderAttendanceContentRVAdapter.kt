@@ -25,7 +25,9 @@ class ConsiderAttendanceContentRVAdapter(
         private const val VIEW_TYPE_FOOTER = 1
     }
 
-    override fun getItemCount(): Int = dataList.size + 1 // +1 for footer
+    override fun getItemCount(): Int {
+        return if (dataList.isEmpty()) 0 else dataList.size + 1  // 데이터 없으면 footer 제거
+    }
 
     override fun getItemViewType(position: Int): Int {
         return if (position == dataList.size) VIEW_TYPE_FOOTER else VIEW_TYPE_ITEM

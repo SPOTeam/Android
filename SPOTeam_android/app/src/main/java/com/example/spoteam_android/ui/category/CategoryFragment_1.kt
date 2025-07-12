@@ -326,18 +326,39 @@ class CategoryFragment_1 : Fragment() {
                         updateRecyclerView(boardItems)
                     } else {
                         binding.contentCountTv.text = "00"
-                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
                         binding.communityCategoryContentRv.visibility = View.GONE
                     }
                 } else {
-                    Toast.makeText(requireContext(), "API111 호출 실패", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(), "API111 호출 실패", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<CategoryStudyResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "API111 호출 실패", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireContext(), "API111 호출 실패", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun visibleUpperTab(isVisible :Boolean) {
+        if(isVisible) {
+            binding.contentCountTv.visibility = View.VISIBLE
+            binding.measureCountTv.visibility = View.VISIBLE
+            binding.contentFilterToggleContainer.visibility = View.VISIBLE
+            binding.icFilter.visibility = View.VISIBLE
+
+            binding.emptyWaiting.visibility = View.GONE
+            binding.communityCategoryContentRv.visibility = View.VISIBLE
+
+        } else {
+            binding.contentCountTv.visibility = View.GONE
+            binding.measureCountTv.visibility = View.GONE
+            binding.contentFilterToggleContainer.visibility = View.GONE
+            binding.icFilter.visibility = View.GONE
+
+            binding.emptyWaiting.visibility = View.VISIBLE
+            binding.communityCategoryContentRv.visibility = View.GONE
+        }
     }
 
     private fun fetchMyInterestSpecific(
@@ -395,8 +416,9 @@ class CategoryFragment_1 : Fragment() {
                             )
                             boardItems.add(boardItem)
                         }
-                        binding.emptyTv.visibility = View.GONE
-                        binding.communityCategoryContentRv.visibility = View.VISIBLE
+
+                        visibleUpperTab(true)
+
                         val totalElements = apiResponse.result.totalElements
                         binding.contentCountTv.text = String.format("%02d", totalElements)
                         updateRecyclerView(boardItems)
@@ -404,10 +426,10 @@ class CategoryFragment_1 : Fragment() {
                         startPage = calculateStartPage()
 
                     } else {
-                        binding.contentCountTv.text = "00"
+                        visibleUpperTab(false)
+//                        binding.contentCountTv.text = "00"
 //                        Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
-                        binding.communityCategoryContentRv.visibility = View.GONE
-                        binding.emptyTv.visibility = View.VISIBLE
+
                     }
                 }
             }
@@ -419,7 +441,7 @@ class CategoryFragment_1 : Fragment() {
     }
 
     private fun showErrorToast() {
-        Toast.makeText(requireContext(), "API 호출 실패", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), "API 호출 실패", Toast.LENGTH_SHORT).show()
     }
 
     private fun toggleLikeStatus(studyItem: BoardItem, likeButton: ImageView) {
@@ -449,16 +471,16 @@ class CategoryFragment_1 : Fragment() {
                                 }
                             }
                         } else {
-                            Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(requireContext(), "찜 상태 업데이트 실패", Toast.LENGTH_SHORT).show()
                         }
                     }
 
                     override fun onFailure(call: Call<LikeResponse>, t: Throwable) {
-                        Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(requireContext(), "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
                     }
                 })
         } else {
-            Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(requireContext(), "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
