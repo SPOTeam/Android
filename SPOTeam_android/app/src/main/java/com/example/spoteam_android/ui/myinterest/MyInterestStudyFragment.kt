@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.util.Log.*
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -255,7 +256,7 @@ class MyInterestStudyFragment : Fragment() {
 
     private fun updatePageNumberUI() {
         startPage = calculateStartPage()
-        Log.d("PageDebug", "📄 페이지 번호 UI 업데이트 - currentPage: $currentPage, startPage: $startPage")
+        d("PageDebug", "📄 페이지 번호 UI 업데이트 - currentPage: $currentPage, startPage: $startPage")
 
         val pageButtons = listOf(
             binding.page1,
@@ -414,6 +415,7 @@ class MyInterestStudyFragment : Fragment() {
                                 liked = study.liked,
                                 isHost = false
                             )
+
                             boardItems.add(boardItem)
                             binding.pageNumberLayout.visibility = View.VISIBLE
                             startPage = calculateStartPage()

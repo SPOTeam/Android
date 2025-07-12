@@ -15,6 +15,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.runtime.key
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +44,7 @@ class SearchResultFragment : Fragment() {
     private var totalPages = 0
     private var sortBy = "ALL"
     private var keyword: String? = null
+    private var startPage = 0
 
     private lateinit var interestBoardAdapter: InterestVPAdapter
     private lateinit var binding: FragmentSearchResultBinding
@@ -200,12 +202,11 @@ class SearchResultFragment : Fragment() {
         this.keyword = keyword
         this.sortBy = sortBy
 
-        val checkcount: TextView = binding.checkAmount
         val service = RetrofitInstance.retrofit.create(SearchApiService::class.java)
 
         service.PostSearchApi(
             keyword = keyword,
-            page = page,
+            page = currentPage ?: 0,
             size = 5,
             sortBy = sortBy
         ).enqueue(object : Callback<ApiResponse> {
@@ -235,10 +236,18 @@ class SearchResultFragment : Fragment() {
                         totalPages = apiResponse.result.totalPages
                         updateRecyclerView(boardItems)
                         binding.searchResultStudyReyclerview.visibility = View.VISIBLE
-                        checkcount.text = String.format("%02d 건", boardItems.size)
+                        val totalElements = apiResponse.result.totalElements
+                        binding.checkAmount.text = String.format("%02d건", totalElements)
+
+                        binding.pageNumberLayout.visibility = View.VISIBLE
+                        startPage = calculateStartPage()
+                        updatePageNumberUI()
+                        updatePageUI()
                     } else {
-                        checkcount.text = "00 건"
+                        binding.pageNumberLayout.visibility = View.GONE
+                        binding.checkAmount.text = "00건"
                         Toast.makeText(requireContext(), "조건에 맞는 항목이 없습니다.", Toast.LENGTH_SHORT).show()
+                        binding.searchResultStudyReyclerview.visibility = View.GONE
                     }
                 }
             }
@@ -247,5 +256,110 @@ class SearchResultFragment : Fragment() {
                 Toast.makeText(requireContext(), "API 호출 실패", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun updatePageNumberUI() {
+        startPage = calculateStartPage()
+        Log.d("PageDebug", "📄 페이지 번호 UI 업데이트 - currentPage: $currentPage, startPage: $startPage")
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, textView ->
+            val selectedPage = startPage + index
+            textView.setOnClickListener {
+                if (currentPage != selectedPage) {
+                    currentPage = selectedPage
+                    requestPageUpdate()
+                }
+            }
+        }
+
+        // 왼쪽 버튼: 첫 페이지면 마지막 페이지로 이동
+        binding.previousPage.setOnClickListener {
+            currentPage = if (currentPage == 0) {
+                totalPages - 1
+            } else {
+                currentPage - 1
+            }
+            requestPageUpdate()
+        }
+
+        // 오른쪽 버튼: 마지막 페이지면 첫 페이지로 이동
+        binding.nextPage.setOnClickListener {
+            currentPage = if (currentPage == totalPages - 1) {
+                0
+            } else {
+                currentPage + 1
+            }
+            requestPageUpdate()
+        }
+    }
+
+    private fun calculateStartPage(): Int {
+        return when {
+            totalPages <= 5 -> 0
+            currentPage <= 2 -> 0
+            currentPage >= totalPages - 3 -> totalPages - 5
+            else -> currentPage - 2
+        }
+    }
+
+    private fun requestPageUpdate() {
+        keyword?.let {
+            fetchGetSearchStudy(keyword=it,sortBy="ALL")
+        }
+    }
+
+    private fun getTotalPages(): Int {
+        return totalPages // 올바른 페이지 수 계산
+    }
+
+    private fun updatePageUI() {
+        startPage = calculateStartPage()
+
+        val pageButtons = listOf(
+            binding.page1,
+            binding.page2,
+            binding.page3,
+            binding.page4,
+            binding.page5
+        )
+
+        pageButtons.forEachIndexed { index, button ->
+            val pageNum = startPage + index
+            if (pageNum < totalPages) {
+                button.visibility = View.VISIBLE
+                button.text = (pageNum + 1).toString()
+                button.setTextColor(
+                    if (pageNum == currentPage)
+                        requireContext().getColor(R.color.b500)
+                    else
+                        requireContext().getColor(R.color.g400)
+                )
+            } else {
+                button.visibility = View.GONE
+            }
+        }
+
+        val gray = ContextCompat.getColor(requireContext(), R.color.g300)
+        val blue = ContextCompat.getColor(requireContext(), R.color.b500)
+
+        if (totalPages <= 1) {
+            binding.previousPage.isEnabled = false
+            binding.nextPage.isEnabled = false
+            binding.previousPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(gray, android.graphics.PorterDuff.Mode.SRC_IN)
+        } else {
+            binding.previousPage.isEnabled = true
+            binding.nextPage.isEnabled = true
+            binding.previousPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+            binding.nextPage.setColorFilter(blue, android.graphics.PorterDuff.Mode.SRC_IN)
+        }
     }
 }
