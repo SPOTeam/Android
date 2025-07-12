@@ -62,6 +62,14 @@ class CommunityCategoryContentRVAdapter(
             holder.binding.contentBookmarkUncheckedIv.setOnClickListener { onUnBookmarkClick(item) }
         } else if (holder is FooterViewHolder) {
             holder.bind()
+
+            val dp80 = (60 * holder.itemView.context.resources.displayMetrics.density).toInt()
+            holder.itemView.setPadding(
+                holder.itemView.paddingLeft,
+                holder.itemView.paddingTop,
+                holder.itemView.paddingRight,
+                dp80
+            )
         }
     }
 

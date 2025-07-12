@@ -159,27 +159,29 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
+                    android:layout_marginEnd="5dp"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:text="인기 게시글이 없습니다"
                     android:textColor="@color/g400"
                     android:fontFamily="@font/suit_variable"
                     android:textFontWeight="600"
                     android:textSize="14dp"
-                    app:layout_constraintEnd_toStartOf="@id/go_popular_content_iv"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/live_popular_tv" />
+                    app:layout_constraintEnd_toStartOf="@id/ic_fire"
+                    app:layout_constraintTop_toBottomOf="@id/live_popular_tv"
+                    app:layout_constraintStart_toStartOf="@id/live_popular_tv" />
 
                 <ImageView
                     android:id="@+id/go_popular_content_iv"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginEnd="12dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/fragment_mypage_ic_arrow"
-                    app:layout_constraintBottom_toBottomOf="@+id/popular_content_tv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginEnd="12dp"
-                    app:layout_constraintTop_toTopOf="@id/popular_content_tv" />
+                    app:layout_constraintTop_toTopOf="@id/popular_content_tv"
+                    app:layout_constraintBottom_toBottomOf="@id/popular_content_tv"
+                    app:layout_constraintStart_toEndOf="@id/popular_content_tv" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
