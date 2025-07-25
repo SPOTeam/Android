@@ -13,7 +13,7 @@
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_marginTop="170dp"
-        android:src="@drawable/spot_homelogo"
+        android:src="@drawable/onboarding_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

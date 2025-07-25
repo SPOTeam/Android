@@ -50,6 +50,8 @@
         android:drawableEnd="@drawable/location_search_resize"
         android:hint="○○시, ○○구,○○동"
         android:maxLines="1"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
         android:textSize="14.4dp"
         android:fontFamily="@font/suit_variable"
         android:textFontWeight="600"

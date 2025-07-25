@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Spot</string>
+    <string name="app_name">스팟</string>
     <string name="title_activity_interest_study">Interest_Study</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
