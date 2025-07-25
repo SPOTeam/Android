@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- 앱 로고 -->
     <ImageView
         android:id="@+id/splash_logo_iv"
         android:src="@mipmap/ic_launcher"

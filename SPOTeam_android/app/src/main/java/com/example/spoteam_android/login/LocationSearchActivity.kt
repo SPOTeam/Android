@@ -1,12 +1,15 @@
 package com.example.spoteam_android.login
 
 import LocationSearchAdapter
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +27,7 @@ class LocationSearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLocationSearchBinding
     private lateinit var locationSearchAdapter: LocationSearchAdapter
     private val locationItemList = mutableListOf<LocationItem>()
-    private var searchTimer: Timer? = null // 디바운스 타이머
+    private var searchTimer: Timer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,14 +44,14 @@ class LocationSearchActivity : AppCompatActivity() {
         setupRecyclerView()
         setupSearchFunctionality()
 
-        // TSV 데이터를 백그라운드에서 파싱
         lifecycleScope.launch(Dispatchers.IO) {
             val data = parseTsvDataFromAssets()
             withContext(Dispatchers.Main) {
                 locationItemList.clear()
                 locationItemList.addAll(data)
                 locationSearchAdapter.notifyDataSetChanged()
-                binding.activityLocationRv.visibility = if (locationSearchAdapter.itemCount > 0) View.VISIBLE else View.GONE
+                binding.activityLocationRv.visibility =
+                    if (locationSearchAdapter.itemCount > 0) View.VISIBLE else View.GONE
             }
         }
     }
@@ -71,27 +74,40 @@ class LocationSearchActivity : AppCompatActivity() {
     }
 
     private fun setupSearchFunctionality() {
-        binding.activityLocationSearchEt.setOnTouchListener { v, event ->
+        binding.activityLocationSearchEt.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 val drawableEnd = binding.activityLocationSearchEt.compoundDrawables[2]
-                if (drawableEnd != null && event.rawX >= (binding.activityLocationSearchEt.right - drawableEnd.bounds.width())) {
+                if (drawableEnd != null &&
+                    event.rawX >= (binding.activityLocationSearchEt.right - drawableEnd.bounds.width())
+                ) {
                     performSearch()
+                    hideKeyboard()
                     return@setOnTouchListener true
                 }
             }
             false
         }
 
+        binding.activityLocationSearchEt.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                performSearch()
+                hideKeyboard()
+                true
+            } else {
+                false
+            }
+        }
         binding.activityLocationSearchEt.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                // 디바운스: 일정 시간 지난 후 검색 실행
                 searchTimer?.cancel()
                 searchTimer = Timer().apply {
                     schedule(object : TimerTask() {
                         override fun run() {
-                            runOnUiThread { performSearch() }
+                            runOnUiThread {
+                                performSearch()
+                            }
                         }
-                    }, 300) // 300ms 후에 검색
+                    }, 300)
                 }
             }
 
@@ -100,9 +116,6 @@ class LocationSearchActivity : AppCompatActivity() {
         })
     }
 
-    /**
-     * Assets에서 TSV 데이터를 읽어 리스트로 반환
-     */
     private suspend fun parseTsvDataFromAssets(): List<LocationItem> {
         return withContext(Dispatchers.IO) {
             val inputStream = assets.open("region_data_processed.tsv")
@@ -129,9 +142,6 @@ class LocationSearchActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * 현재 쿼리를 기준으로 데이터를 필터링
-     */
     private fun performSearch() {
         val query = binding.activityLocationSearchEt.text.toString().trim()
 
@@ -149,8 +159,14 @@ class LocationSearchActivity : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
                 locationSearchAdapter.updateList(filteredList)
-                binding.activityLocationRv.visibility = if (filteredList.isNotEmpty()) View.VISIBLE else View.GONE
+                binding.activityLocationRv.visibility =
+                    if (filteredList.isNotEmpty()) View.VISIBLE else View.GONE
             }
         }
+    }
+
+    private fun hideKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.activityLocationSearchEt.windowToken, 0)
     }
 }

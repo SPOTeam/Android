@@ -35,7 +35,7 @@
         android:layout_marginTop="90.72dp"
         android:fontFamily="@font/suit_bold"
         android:lineSpacingExtra="8dp"
-        android:text="스팟에 활동할\n내 닉네임을 정해볼까요?"
+        android:text="스팟에서 활동할\n내 닉네임을 정해볼까요?"
         android:textColor="@color/b500"
         android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"

@@ -50,7 +50,7 @@ class CheckListLocationActivity : AppCompatActivity() {
 
 
         binding.checklistspotLocationPlusBt.setOnClickListener {
-            if (selectedLocations.size < 5) {
+            if (selectedLocations.size < 10) {
                 val intent = Intent(this, LocationSearchActivity::class.java)
                 startForResult.launch(intent)
             } else {
@@ -104,7 +104,7 @@ class CheckListLocationActivity : AppCompatActivity() {
     }
 
     private fun updateButtonStates() {
-        binding.checklistspotLocationPlusBt.isEnabled = selectedLocations.size < 5
+        binding.checklistspotLocationPlusBt.isEnabled = selectedLocations.size < 10
         binding.checklistspotLocationFinishBt.isEnabled = selectedLocations.isNotEmpty()
     }
 }
