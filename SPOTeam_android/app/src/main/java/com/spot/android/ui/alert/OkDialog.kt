@@ -1,0 +1,53 @@
+package com.spot.android.ui.alert
+
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.Window
+import android.widget.ImageView
+import android.widget.TextView
+import com.spot.android.MainActivity
+import com.spot.android.R
+import com.spot.android.ui.study.StudyFragment
+
+interface AttendStudyCompleteListener {
+    fun onAttendComplete()
+}
+
+class OkDialog(private val context: Context, private val listener : AttendStudyCompleteListener) {
+
+    private val dlg = android.app.Dialog(context)
+    private var studyId : Int = -1
+
+    fun setStudyId(studyId : Int) {
+        this.studyId = studyId
+    }
+    fun start() {
+        // 타이틀바 제거
+        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        // 커스텀 다이얼로그 radius 적용
+        dlg.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        // 다이얼로그 레이아웃 설정
+        dlg.setContentView(R.layout.dialog_attendance_complete)
+
+        val btnMove = dlg.findViewById<TextView>(R.id.move_to_study_tv)
+        btnMove.setOnClickListener {
+            listener.onAttendComplete()
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, StudyFragment())
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+            dlg.dismiss()
+        }
+
+        val btnClose = dlg.findViewById<ImageView>(R.id.attend_close)
+        btnClose.setOnClickListener{
+            listener.onAttendComplete()
+            dlg.dismiss()
+        }
+
+        // 다이얼로그 표시
+        dlg.show()
+    }
+}
