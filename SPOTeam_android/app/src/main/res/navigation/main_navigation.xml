@@ -6,27 +6,27 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.spot.android.HouseFragment"
+        android:name="com.umcspot.android.HouseFragment"
         android:label="Home"
         tools:layout="@layout/fragment_house" />
     <fragment
         android:id="@+id/navigation_category"
-        android:name="com.spot.android.CategoryFragment"
+        android:name="com.umcspot.android.CategoryFragment"
         android:label="Category"
         tools:layout="@layout/fragment_category" />
     <fragment
         android:id="@+id/navigation_study"
-        android:name="com.spot.android.StudyFragment"
+        android:name="com.umcspot.android.StudyFragment"
         android:label="Study"
         tools:layout="@layout/fragment_study" />
     <fragment
         android:id="@+id/navigation_bookmark"
-        android:name="com.spot.android.BookmarkFragment"
+        android:name="com.umcspot.android.BookmarkFragment"
         android:label="Bookmark"
         tools:layout="@layout/fragment_bookmark" />
     <fragment
         android:id="@+id/navigation_mypage"
-        android:name="com.spot.android.MyPageFragment"
+        android:name="com.umcspot.android.MyPageFragment"
         android:label="My Page"
         tools:layout="@layout/fragment_my_page" />
 </navigation>

@@ -13,11 +13,11 @@ val properties = Properties().apply {
 }
 
 android {
-    namespace = "com.spot.android"
+    namespace = "com.umcspot.android"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.spot.android"
+        applicationId = "com.umcspot.android"
         minSdk = 33
         targetSdk = 34
         versionCode = 1
