@@ -20,8 +20,8 @@ android {
         applicationId = "com.umcspot.android"
         minSdk = 31
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
 
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
         buildConfigField("String", "KAKAO_NATIVE_KEY", "\"${properties["kakao.native.key"]}\"")
